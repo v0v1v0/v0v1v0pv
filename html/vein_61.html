@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>emis_long</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimation with long format</h2>
+
+<h3>Description</h3>
+
+<p>Emissions estimates
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">emis_long(x, lkm, ef, tfs, speed, verbose = TRUE, array = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Vehicles data.frame. x repeats down for each hour</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lkm</code></td>
+<td>
+<p>Length of each link in km. lkm repeats down for each hour</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ef</code></td>
+<td>
+<p>data.frame. ef repeats down for each hour</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tfs</code></td>
+<td>
+<p>temporal factor</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>speed</code></td>
+<td>
+<p>Speed data.frame (nrow x)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical to show more info</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>array</code></td>
+<td>
+<p>Logical to return EmissionsArray or not</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>long data.frame
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other China: 
+<code>ef_china_det()</code>,
+<code>ef_china_hu()</code>,
+<code>ef_china_h()</code>,
+<code>ef_china_long()</code>,
+<code>ef_china_speed()</code>,
+<code>ef_china_s()</code>,
+<code>ef_china_te()</code>,
+<code>ef_china_th()</code>,
+<code>ef_china()</code>,
+<code>emis_china()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">{
+data(net)
+net &lt;- net[1:100, ]
+data(pc_profile)
+x &lt;- age_ldv(net$ldv)
+pc_week &lt;- temp_fact(net$ldv+net$hdv, pc_profile[[1]])
+df &lt;- netspeed(pc_week,
+               net$ps,
+               net$ffs,
+               net$capacity,
+               net$lkm,
+               alpha = 1)
+
+s  &lt;- do.call("rbind",lapply(1:ncol(df), function(i) {
+ as.data.frame(replicate(ncol(x), df[, i]))
+}))
+
+ef &lt;- ef_wear(wear = "tyre",
+              type = "PC",
+              pol = "PM10",
+              speed = as.data.frame(s))
+
+e &lt;- emis_long(x = x,
+               lkm = net$lkm,
+               ef = ef,
+               tfs = pc_profile[[1]],
+               speed = df)
+
+ae &lt;- emis_long(x = x,
+               lkm = net$lkm,
+               ef = ef,
+               tfs = pc_profile[[1]],
+               speed = df,
+               array = TRUE)
+}
+</code></pre>
+
+
+</div>

@@ -1,0 +1,228 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rootogram4</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Rootograms (S4 generic)
+for Assessing Goodness of Fit of Probability Models
+</h2>
+
+<h3>Description</h3>
+
+<p>A graphical technique for comparing the observed and
+fitted counts from a probability model, on a
+square root scale.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rootogram4(object, ...)
+rootogram4vglm(object, newdata = NULL, breaks = NULL, max = NULL,
+               xlab = NULL, main = NULL, width = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>an object of class <code>"vglm"</code>.
+This should include  <code>"vgam"</code> because
+<code>"vglm"</code> handles both VGLM and VGAM objects.
+</p>
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p> Data upon which to base the calculations.
+The default is the one used to fit the model.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>breaks</code></td>
+<td>
+<p>numeric. Breaks for the histogram intervals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max</code></td>
+<td>
+<p>maximum count displayed.
+If an error message occurs regarding running out of memory
+then use this argument; it might occur with a very long
+tailed distribution such as <code>gaitdzeta</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab, main</code></td>
+<td>
+<p>graphical parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p>numeric. Widths of the histogram bars.</p>
+</td>
+</tr>
+</table>
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>any additional arguments to
+<code>rootogram.default</code> and
+<code>plot.rootogram</code> in <span class="pkg">countreg</span>.
+Probably the most useful of these are
+<code>style = c("hanging", "standing", "suspended")</code>
+and
+<code>scale = c("sqrt", "raw")</code>.
+</p>
+
+
+
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>Rootograms are a useful graphical technique for
+comparing the observed counts with the expected
+counts given a probability model.
+</p>
+
+<p>This S4 implementation is based very heavily
+on <code>rootogram</code> coming from
+<span class="pkg">countreg</span>. This package is primarily written by
+A. Zeileis and
+C. Kleiber.
+That package is currently on R-Forge but not CRAN, and
+it is based on S3.
+Since <span class="pkg">VGAM</span> is written using S4, it was necessary
+to define an S4 generic function called
+<code>rootogram4()</code> which dispatches appropriately for
+S4 objects.
+</p>
+
+
+
+
+
+
+<p>Currently, only a selected number of <span class="pkg">VGAM</span>
+family functions
+are implemented. Over time, hopefully more and more will be
+completed.
+</p>
+
+
+<h3>Value</h3>
+
+<p>See
+<code>rootogram</code> in <span class="pkg">countreg</span>;
+an object of class <code>"rootogram0"</code>
+inheriting from <code>"data.frame"</code> with
+about 8 variables.
+</p>
+
+
+
+<h3>Warning</h3>
+
+<p>This function is rudimentary and based totally
+on the implementation in <span class="pkg">countreg</span>.
+</p>
+
+
+
+<h3>Note</h3>
+
+<p>The function names used coming from <span class="pkg">countreg</span> have
+been renamed slightly to avoid conflict.
+</p>
+
+
+
+<h3>Author(s)</h3>
+
+<p>Package <span class="pkg">countreg</span> is primarily written by
+A. Zeileis and
+C. Kleiber.
+Function <code>rootogram4()</code> is based very heavily
+on <span class="pkg">countreg</span>.
+T. W. Yee wrote code to unpack variables from
+many various models
+and feed them into the appropriate <code>d</code>-type function.
+</p>
+
+
+
+
+
+
+
+
+
+<h3>References</h3>
+
+<p>Friendly, M. and Meyer, D. (2016).
+<em>Discrete Data Analysis with R: Visualization and
+Modeling Techniques for Categorical and Count Data</em>,
+Boca Raton, FL, USA: Chapman &amp; Hall/CRC Press.
+</p>
+<p>Kleiber, C. and Zeileis, A. (2016)
+“Visualizing Count Data Regressions Using Rootograms.” 
+<em>The American Statistician</em>,
+<b>70</b>(3), 296–303.
+<a href="https://doi.org/10.1080/00031305.2016.1173590">doi:10.1080/00031305.2016.1173590</a>.
+</p>
+<p>Tukey, J. W. (1977)
+<em>Exploratory Data Analysis</em>,
+Reading, MA, USA: Addison-Wesley.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vglm</code>,
+<code>vgam</code>,
+<code>glm</code>,
+<code>zipoisson</code>,
+<code>zapoisson</code>,
+<code>rootogram</code> in <span class="pkg">countreg</span>.
+</p>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data("hspider", package = "VGAM")  # Count responses
+hs.p   &lt;- vglm(Pardlugu ~ CoveHerb,   poissonff, data = hspider)
+hs.nb  &lt;- vglm(Pardlugu ~ CoveHerb, negbinomial, data = hspider)
+hs.zip &lt;- vglm(Pardlugu ~ CoveHerb,   zipoisson, data = hspider)
+hs.zap &lt;- vglm(Pardlugu ~ CoveHerb,   zapoisson, data = hspider)
+
+opar &lt;- par(mfrow = c(2, 2))  # Plot the rootograms
+rootogram4(hs.p,   max = 15, main = "poissonff")
+rootogram4(hs.nb,  max = 15, main = "negbinomial")
+rootogram4(hs.zip, max = 15, main = "zipoisson")
+rootogram4(hs.zap, max = 15, main = "zapoisson")
+par(opar)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>model.vital</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimate models for vital data</h2>
+
+<h3>Description</h3>
+
+<p>Trains specified model definition(s) on a dataset. This function will
+estimate the a set of model definitions (passed via <code>...</code>) to each series
+within <code>.data</code> (as identified by the key structure). The result will be a
+mable (a model table), which neatly stores the estimated models in a tabular
+structure. Rows of the data identify different series within the data, and
+each model column contains all models from that model definition. Each cell
+in the mable identifies a single model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vital'
+model(.data, ..., .safely = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>.data</code></td>
+<td>
+<p>A vital object including an age variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Definitions for the models to be used. All models must share the
+same response variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.safely</code></td>
+<td>
+<p>If a model encounters an error, rather than aborting the process
+a NULL model will be returned instead. This allows for an error
+to occur when computing many models, without losing the results of the successful models.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A mable containing the fitted models.
+</p>
+
+
+<h3>Parallel</h3>
+
+<p>It is possible to estimate models in parallel using the
+<a href="https://cran.r-project.org/package=future">future</a> package. By specifying a
+<code>future::plan()</code> before estimating the models, they will be computed
+according to that plan.
+</p>
+
+
+<h3>Progress</h3>
+
+<p>Progress on model estimation can be obtained by wrapping the code with
+<code>progressr::with_progress()</code>. Further customisation on how progress is
+reported can be controlled using the <code>progressr</code> package.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Rob J Hyndman and Mitchell O'Hara-Wild
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">aus_mortality |&gt;
+  dplyr::filter(State == "Victoria", Sex == "female") |&gt;
+  model(
+    naive = FNAIVE(Mortality),
+    mean = FMEAN(Mortality)
+  )
+</code></pre>
+
+
+</div>

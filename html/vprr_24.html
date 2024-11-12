@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vpr_ctdroisize_merge</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Format CTD and Size data from VPR</h2>
+
+<h3>Description</h3>
+
+<p>Format CTD and Meas data frames into combined data frame for analysis and plotting of size data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vpr_ctdroisize_merge(data, data_mea, taxa_of_interest)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>VPR dataframe from <code>vpr_ctdroi_merge</code>, with calculated variable sigmaT</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data_mea</code></td>
+<td>
+<p>VPR size data frame from <code>vpr_autoid_read</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>taxa_of_interest</code></td>
+<td>
+<p>a list of taxa of interest to be included in output dataframe</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A dataframe containing VPR CTD and size data
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data("ctd_roi_merge")
+data("roimeas_dat_combine")
+category_of_interest = 'Calanus'
+
+ctd_roi_merge$time_hr &lt;- ctd_roi_merge$time_ms /3.6e+06
+
+size_df_f &lt;- vpr_ctdroisize_merge(ctd_roi_merge, data_mea = roimeas_dat_combine,
+ taxa_of_interest = category_of_interest)
+
+</code></pre>
+
+
+</div>

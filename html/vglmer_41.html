@@ -1,0 +1,297 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vglmer_control</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Control for vglmer estimation</h2>
+
+<h3>Description</h3>
+
+<p>This function controls various estimation options for <code>vglmer</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vglmer_control(
+  iterations = 1000,
+  prior_variance = "hw",
+  factorization_method = c("strong", "partial", "weak"),
+  parameter_expansion = "translation",
+  do_SQUAREM = TRUE,
+  tolerance_elbo = 1e-08,
+  tolerance_parameters = 1e-05,
+  force_whole = TRUE,
+  print_prog = NULL,
+  do_timing = FALSE,
+  verbose_time = FALSE,
+  return_data = FALSE,
+  linpred_method = "joint",
+  vi_r_method = "VEM",
+  verify_columns = FALSE,
+  debug_param = FALSE,
+  debug_ELBO = FALSE,
+  debug_px = FALSE,
+  quiet = TRUE,
+  quiet_rho = TRUE,
+  px_method = "dynamic",
+  px_numerical_it = 10,
+  hw_inner = 10,
+  init = "EM_FE"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>iterations</code></td>
+<td>
+<p>Default of 1000; this sets the maximum number of iterations
+used in estimation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prior_variance</code></td>
+<td>
+<p>Prior distribution on the random effect variance
+<code class="reqn">\Sigma_j</code>. Options are <code>hw</code>, <code>jeffreys</code>, <code>mean_exists</code>,
+<code>uniform</code>, and <code>gamma</code>. The default (<code>hw</code>) is the Huang-Wand
+(2013) prior whose hyper-parameters are <code class="reqn">\nu_j</code> = 2 and <code class="reqn">A_{j,k}</code> =
+5. Otherwise, the prior is an Inverse Wishart with the following parameters
+where <code class="reqn">d_j</code> is the dimensionality of the random effect <code class="reqn">j</code>.
+</p>
+
+<ul>
+<li>
+<p> mean_exists: <code class="reqn">IW(d_j + 1, I)</code>
+</p>
+</li>
+<li>
+<p> jeffreys: <code class="reqn">IW(0, 0)</code>
+</p>
+</li>
+<li>
+<p> uniform: <code class="reqn">IW(-[d_j+1], 0)</code>
+</p>
+</li>
+<li>
+<p> limit: <code class="reqn">IW(d_j - 1, 0)</code>
+</p>
+</li>
+</ul>
+<p>Estimation may fail if an improper prior (<code>jeffreys</code>, <code>uniform</code>,
+<code>limit</code>) is used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>factorization_method</code></td>
+<td>
+<p>Factorization assumption for the variational
+approximation. Default of <code>"strong"</code>, i.e. a fully factorized model.
+Described in detail in Goplerud (2022a). <code>"strong"</code>, <code>"partial"</code>,
+and <code>"weak"</code> correspond to Schemes I, II, and III respectively in that
+paper.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parameter_expansion</code></td>
+<td>
+<p>Default of <code>"translation"</code>  (see Goplerud
+2022b). Valid options are <code>"translation"</code>, <code>"mean"</code>, or
+<code>"none"</code>. <code>"mean"</code> should be employed if <code>"translation"</code> is
+not enabled or is too computationally expensive. For negative binomial
+estimation or any estimation where <code>factorization_method != "strong"</code>,
+only <code>"mean"</code> and <code>"none"</code> are available.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>do_SQUAREM</code></td>
+<td>
+<p>Default (<code>TRUE</code>) accelerates estimation using SQUAREM
+(Varadhan and Roland 2008).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tolerance_elbo</code></td>
+<td>
+<p>Default (<code>1e-8</code>) sets a convergence threshold if
+the change in the ELBO is below the tolerance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tolerance_parameters</code></td>
+<td>
+<p>Default (<code>1e-5</code>) sets a convergence
+threshold that is achieved if no parameter changes by more than the
+tolerance from the prior estimated value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>force_whole</code></td>
+<td>
+<p>Default (<code>TRUE</code>) requires integers for observed
+outcome for binomial or count models. <code>FALSE</code> allows for fractional
+responses.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>print_prog</code></td>
+<td>
+<p>Default (<code>NULL</code>) prints a <code>"."</code> to indicate once
+5% of the total iterations have elapsed. Set to a positive integer
+<code>int</code> to print a <code>"."</code> every <code>int</code> iterations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>do_timing</code></td>
+<td>
+<p>Default (<code>FALSE</code>) does not estimate timing of each
+variational update; <code>TRUE</code> requires the package <code>tictoc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose_time</code></td>
+<td>
+<p>Default (<code>FALSE</code>) does not print the time elapsed
+for each parameter update. Set to <code>TRUE</code>, in conjunction with
+<code>do_timing=TRUE</code>, to see the time taken for each parameter update.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>return_data</code></td>
+<td>
+<p>Default (<code>FALSE</code>) does not return the original
+design. Set to <code>TRUE</code> to debug convergence issues.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>linpred_method</code></td>
+<td>
+<p>Default (<code>"joint"</code>) updates the mean parameters
+for the fixed and random effects simultaneously. This can improve the speed
+of estimation but may be costly for large datasets; use <code>"cyclical"</code>
+to update each parameter block separately.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vi_r_method</code></td>
+<td>
+<p>Default (<code>"VEM"</code>) uses a variational EM algorithm for
+updating <code class="reqn">r</code> if <code>family="negbin"</code>. This assumes a point mass
+distribution on <code class="reqn">r</code>. A number can be provided to fix <code class="reqn">r</code>. These are
+the only available options.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verify_columns</code></td>
+<td>
+<p>Default (<code>FALSE</code>) <b>does not</b> verify that all
+columns are drawn from the data.frame itself versus the environment. Set to
+<code>TRUE</code> to debug potential issues.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>debug_param</code></td>
+<td>
+<p>Default (<code>FALSE</code>) does not store parameters before
+the final iteration. Set to <code>TRUE</code> to debug convergence issues.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>debug_ELBO</code></td>
+<td>
+<p>Default (<code>FALSE</code>) does not store the ELBO after each
+parameter update. Set to <code>TRUE</code> to debug convergence issues.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>debug_px</code></td>
+<td>
+<p>Default (<code>FALSE</code>) does not store information about
+whether parameter expansion worked. Set to <code>TRUE</code> to convergence
+issues.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>Default (<code>FALSE</code>) does not print intermediate output about
+convergence. Set to <code>TRUE</code> to debug.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet_rho</code></td>
+<td>
+<p>Default (<code>FALSE</code>) does not print information about
+parameter expansions. Set to <code>TRUE</code> to debug convergence issues.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>px_method</code></td>
+<td>
+<p>When code <code>parameter_expansion="translation"</code>, default
+(<code>"dynamic"</code>) tries a one-step late update and, if this fails, a
+numerical improvement by L-BFGS-B. For an Inverse-Wishart prior on
+<code class="reqn">\Sigma_j</code>, this is set to <code>"osl"</code> that only attempts a
+one-step-late update.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>px_numerical_it</code></td>
+<td>
+<p>Default of 10; if L-BFGS_B is needed for a parameter
+expansion, this sets the number of steps used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hw_inner</code></td>
+<td>
+<p>If <code>prior_variance="hw"</code>, this sets the number of
+repeated iterations between estimating <code class="reqn">\Sigma_j</code> and <code class="reqn">a_{j,k}</code>
+variational distributions at each iteration. A larger number approximates
+jointly updating both parameters. Default (10) typically performs well.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>init</code></td>
+<td>
+<p>Default (<code>"EM_FE"</code>) initializes the mean variational
+parameters for <code class="reqn">q(\beta, \alpha)</code> by setting the random effects to zero
+and estimating the fixed effects using a short-running EM algorithm.
+<code>"EM"</code> initializes the model with a ridge regression with a guess as
+to the random effect variance. <code>"random"</code> initializes the means
+randomly. <code>"zero"</code> initializes them at zero.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function returns a named list with class <code>vglmer_control</code>.
+It is passed to <code>vglmer</code> in the argument <code>control</code>. This argument
+only accepts objects created using <code>vglmer_control</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>Goplerud, Max. 2022a. "Fast and Accurate Estimation of Non-Nested Binomial
+Hierarchical Models Using Variational Inference." <em>Bayesian Analysis</em>.
+17(2): 623-650.
+</p>
+<p>Goplerud, Max. 2022b. "Re-Evaluating Machine Learning for MRP Given the
+Comparable Performance of (Deep) Hierarchical Models." Working Paper.
+</p>
+<p>Huang, Alan, and Matthew P. Wand. 2013. "Simple Marginally Noninformative
+Prior Distributions for Covariance Matrices." <em>Bayesian Analysis</em>.
+8(2):439-452.
+</p>
+<p>Varadhan, Ravi, and Christophe Roland. 2008. "Simple and Globally Convergent
+Methods for Accelerating the Convergence of any EM Algorithm."
+<em>Scandinavian Journal of Statistics</em>. 35(2): 335-353.
+</p>
+
+
+</div>

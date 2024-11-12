@@ -1,0 +1,246 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>WN.InitARMA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimated White Noise (WN) from the autoregressive moving-average model
+of order-(<code class="reqn">p</code>, <code class="reqn">q</code>) [ARMA(<code class="reqn">p</code>, <code class="reqn">q</code>)].
+</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the unobserved white noise of the ARMA(<code class="reqn">p</code>, <code class="reqn">q</code>) 
+model via the corresponding inverted process.
+</p>
+<p>Also, provides the initial values of <code>ARXff</code>,
+<code>MAXff</code>, and
+<code>ARMAXff</code> family functions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">     WN.InitARMA(tsData    = NULL, 
+                 order     = c(1, 0, 1),
+                 whiteN    = FALSE, 
+                 moreOrder = 0,
+                 updateWN  = FALSE)
+              
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>tsData</code></td>
+<td>
+
+<p>A univariate data frame containing the time series to be fitted according 
+to an ARMA(<code class="reqn">p</code>, <code class="reqn">q</code>) process. Data must be of class "<code>ts</code>".
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order</code></td>
+<td>
+
+<p>A vector with three integer components. It is order of the ARMA model to be 
+inverted. These entries, <code class="reqn">c(p, d, q)</code>, are the AR order, the 
+degree of differencing, and the MA order, respectively.
+
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>whiteN</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, then the estimated white noise computed from
+the inverted ARMA model is returned. This option is enabled only for 
+<code>MAXff</code>, <code> ARMAXff </code> family functions.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>moreOrder</code></td>
+<td>
+
+<p>A non-negative integer (might be zero) used to increment the order of 
+the AR model initially fitted to estimate the residuals, i.e.,
+an AR(<code class="reqn">p</code> + <code>moreOrder</code>) model.
+Empirically, values of <code>moreOrder</code> <code class="reqn"> &gt; 2</code> do NOT improve
+accuracy of estimates. This assert, however, may vary for different 
+time series family functions.
+
+
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>updateWN</code></td>
+<td>
+
+<p>Logical. if <code>TRUE</code>, the white noise is <em>updated</em> through a 
+second regression of <code class="reqn">Y_{t}</code> on 
+<code class="reqn">Y_{t -1}, \ldots, Y_{t -p}, \widehat{\varepsilon_{t - 1}}, \ldots,
+  \widehat{\varepsilon_{t - q} }</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Overall, the autoregressive moving average process of order <code class="reqn">c(p, q)</code>, 
+shortly denoted as ARMA(<code class="reqn">p</code>, <code class="reqn">q</code>), with <em>intercept</em> 
+<code class="reqn">\mu</code> can be expressed as
+</p>
+<p style="text-align: center;"><code class="reqn">y_{t} = \mu + \theta_{1} y_{t - 1} + \ldots + \theta_{p} y_{t - p} +
+              \phi_1 \varepsilon_{t - 1} + \ldots + 
+              \phi_q \varepsilon_{t - q} + \varepsilon_{t}.</code>
+</p>
+
+<p>It is well known that it can be expressed in terms of an autoregressive 
+process of infinite order, AR(<code class="reqn">\infty</code>), by
+recursive substitutions. For instance, given a mean-zero ARMA(1, 1),
+</p>
+<p style="text-align: center;"><code class="reqn">y_{t} = \theta_1 y_{t - 1} +  \phi_1 \varepsilon_{t - 1} + 
+               \varepsilon_{t},
+               \quad \quad (1) </code>
+</p>
+
+<p>one may express
+</p>
+<p style="text-align: center;"><code class="reqn">\varepsilon_{t - 1} = Y_{t - 1} - ( \theta_{1} y_{t - 2} + 
+                          \phi_{1} \varepsilon_{t - 2} </code>
+</p>
+
+<p>Substituting this equation in (1) yields the initial inverted process, 
+as follows:
+</p>
+<p style="text-align: center;"><code class="reqn"> y_{t} = \psi_{1} y_{t - 1} + \psi_{2} y_{t - 2} +
+                f(\varepsilon_{t - 2}, \varepsilon_{t} ). </code>
+</p>
+
+<p>where <code class="reqn">f</code> is a function of <code class="reqn">\varepsilon_{t - 2}</code> and
+<code class="reqn">\varepsilon_{t}</code>.
+</p>
+<p>Repeated substitutions as above produces the so-called <em>inverted
+process</em>,
+</p>
+<p style="text-align: center;"><code class="reqn"> y_{t} = \sum_{k = 1}^{\infty} \psi_{k} y_{t - k} + 
+               \varepsilon_{t}. \quad \quad (2) </code>
+</p>
+
+<p><code class="reqn"> k = 1, \ldots, \infty</code>.
+Hence, setting an acceptable order (via the <code>moreOrder</code> 
+argument, <code class="reqn">1</code> or <code class="reqn">2</code> for instance), an 
+AR(<code class="reqn">p</code> + <code>moreOrd</code>) 
+<em>inverted</em> model is internally fitted 
+within <code>WN.InitARMA</code>. Consequently, the unobserved white noise,
+<code class="reqn"> \{ \varepsilon_{t} \} </code>, is estimated by computing 
+the <em>residuals</em> in (2), after regression. 
+<code>whiteN = TRUE</code> enables this option.
+</p>
+<p>Finally, initial values of the <code>MAXff</code>, and 
+<code>ARMAXff</code> family functions can be computed by least squares from 
+the estimated white noise above, <code class="reqn"> \{ \varepsilon_{t} \} </code> 
+and the given data, <code class="reqn"> \{ t_{t} \} </code>. 
+</p>
+<p>Initial values of <code>ARXff</code> 
+are also internally computed using <code class="reqn"> \{ t_{t} \} </code> only.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with the following components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>Coeff</code></td>
+<td>
+<p>The initial values of the VGLM/VGAM family function in turn:
+<code>ARXff</code>, <code>MAXff</code>,
+or <code>ARMAXff</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>whiteN</code></td>
+<td>
+<p>(Optional) Estimated white noise enabled only for 
+<code>MAXff</code>, <code> ARMAXff </code>.
+That sequence is returned if <code>whiteN = TRUE</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Warning</h3>
+
+<p>For some time series family functions, 
+<code>MAXff</code> for instance, values of 
+<code>moreOrder</code> <code class="reqn"> &gt; 3</code> do NOT improve
+the accuracy of estimates, and may lead the algorithm to failure to
+converge. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda and T. W. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>Brockwell, P. and Davis, R. (2002) 
+<em>Introduction to Time Series and Forecasting</em>. 
+Springer, New York, USA.
+</p>
+<p>Durbin, J. (1959) 
+Efficient Estimation of Parameters in Moving-Average Models. 
+<em>Biometrika</em>, <b>46</b>, pp 306–316.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>MAXff</code>, 
+<code>ARMAXff</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+# Generating some data -&gt; an MA(3) 
+set.seed(1004)
+mydata &lt;- arima.sim( n = 200, list(ma = c(0.3, 0.56 , 0.11)) )
+
+# Computing initial values to be passed to MAXff()
+WN.InitARMA(tsData = data.frame(y = mydata), 
+            order = c(0, 0, 3), 
+            moreOrder = 1)
+
+# Returning initial values and white noise.
+initMA &lt;- WN.InitARMA(tsData = data.frame(y = mydata), 
+                      order = c(0, 0, 3), 
+                      moreOrder = 1, 
+                      whiteN = TRUE) 
+                      
+# Initial values passed to MAXff()
+initMA$Coeff
+
+# Estimated white noise
+head(initMA$WhiteNoise)
+                      
+
+</code></pre>
+
+
+</div>

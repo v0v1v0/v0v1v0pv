@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>round2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Rounding of Numbers to Base 2 </h2>
+
+<h3>Description</h3>
+
+<p>'round2' works like 'round' 
+but the rounding has base 2 under consideration so that bits
+(binary digits)
+beyond a certain theshold are zeroed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">round2(x, digits10 = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>Same as <code>round</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits10</code></td>
+<td>
+
+<p>Same as <code>digits</code> in <code>round</code>.
+The <code>"10"</code> is to emphasize the usual base 10
+used by humans.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>round2()</code> is intended to allow reliable and safe for
+<code>==</code> comparisons provided both sides have the function
+applied to the same value of <code>digits10</code>.  Internally a
+numeric has its binary representation (bits)
+past a certain point
+set to all 0s, while retaining a certain degree of accuracy.
+Algorithmically, <code>x</code> is multiplied by <code>2^exponent</code>
+and then rounded, and then divided by <code>2^exponent</code>.
+The value of <code>exponent</code> is approximately <code>3 *
+  digits10</code> when <code>digits10</code> is positive.  If <code>digits10</code>
+is negative then what is returned is <code>round(x, digits10)</code>.
+The value of <code>exponent</code> guarantees that <code>x</code> has been
+rounded to at least <code>digits10</code> decimal places (often around
+<code>digits10 + 1</code> for safety).
+</p>
+
+
+<h3>Value</h3>
+
+<p>Something similar to <code>round</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee. </p>
+
+
+<h3>See Also</h3>
+
+<p><code>round</code>,
+<code>tobit</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(1); x &lt;- sort(rcauchy(10))
+x3 &lt;- round2(x, 3)
+x3 == round2(x, 3)  # Supposed to be reliable (all TRUE)
+rbind(x, x3)  # Comparison
+(x3[1]  * 2^(0:9)) / 2^(0:9)
+print((x3[1]  * 2^(0:11)), digits = 14)
+
+# Round to approx 1 d.p.
+x1 &lt;- round2(x, 1)
+x1 == round2(x, 1)  # Supposed to be reliable (all TRUE)
+rbind(x, x1)
+x1[8] == 0.75  # 3/4
+print((x1[1]  * 2^(0:11)), digits = 9)
+seq(31) / 32
+</code></pre>
+
+
+</div>

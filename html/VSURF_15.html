@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>toys</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>A simulated dataset called toys data</h2>
+
+<h3>Description</h3>
+
+<p><code>toys</code> is a simple simulated dataset of a binary classification
+problem, introduced by Weston et.al..
+</p>
+
+
+<h3>Format</h3>
+
+<p>The format is a list of 2 components:
+</p>
+
+<dl>
+<dt>x</dt>
+<dd>
+<p>a dataframe containing input variables: with 100 obs. of 200
+variables</p>
+</dd>
+<dt>y</dt>
+<dd>
+<p>output variable: a factor with 2 levels "-1" and "1"</p>
+</dd>
+</dl>
+<h3>Details</h3>
+
+<p>It is an equiprobable two class problem, Y belongs to {-1,1}, with six
+true  variables, the others being some noise.
+The simulation model is defined through the conditional distribution
+of the <code class="reqn">X_i</code> for Y=y:
+</p>
+
+<ul>
+<li>
+<p> with probability 0.7, X^j ~ N(yj,1) for j=1,2,3 and
+X^j ~ N(0,1) for j=4,5,6 ;
+</p>
+</li>
+<li>
+<p> with probability 0.3, X^j ~ N(0,1) for j=1,2,3 and
+X^j ~ N(y(j-3),1) for j=4,5,6 ;
+</p>
+</li>
+<li>
+<p> the other variables are noise, X^j ~ N(0,1)
+for j=7,...,p.
+</p>
+</li>
+</ul>
+<p>After simulation, the obtained variables are finally standardized.
+</p>
+
+
+<h3>Source</h3>
+
+<p>Weston, J., Elisseff, A., Schoelkopf, B., Tipping, M. (2003),
+<em>Use of the zero norm with linear models and Kernel methods</em>,
+J. Machine Learn. Res. 3, 1439-1461
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(toys)
+toys.rf &lt;- randomForest::randomForest(toys$x, toys$y)
+toys.rf
+
+## Not run: 
+# VSURF applied for toys data:
+# (a few minutes to execute)
+data(toys)
+toys.vsurf &lt;- VSURF(toys$x, toys$y)
+toys.vsurf
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

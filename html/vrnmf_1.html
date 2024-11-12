@@ -1,0 +1,119 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>AnchorFree</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Non-negative tri-factorization of co-occurence matrix using minimum volume approach.</h2>
+
+<h3>Description</h3>
+
+<p><code>AnchorFree</code> method tri-factorizes (co-occurence) matrix in a product  <code class="reqn">P ~ C*E*t(C)</code> of non-negative matrices <code class="reqn">C</code> and <code class="reqn">E</code>
+such that matrix <code class="reqn">E</code> has mininum volume and columns of matrix <code class="reqn">C</code> equal to 1.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">AnchorFree(
+  vol,
+  n.comp = 3,
+  init = NULL,
+  init.type = "diag",
+  n.iter = 30,
+  err.cut = 1e-30,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vol</code></td>
+<td>
+<p>An output object of vol_preprocess(). The method factorizes co-occurence matrix <code>vol$P</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.comp</code></td>
+<td>
+<p>An integer. Number of components to extract (by default 3). Defines number of columns in matrix <code class="reqn">C</code>. (default=3)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>init</code></td>
+<td>
+<p>A numeric matrix. Initial matrix <code>M</code>. (default=3)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>init.type</code></td>
+<td>
+<p>A character. A strategy to randomly initialize matrix <code>M</code>. (default="diag") Options are to
+</p>
+<p>1) generate diagonal unit matrix ("diag"),
+</p>
+<p>2) use ICA solution as initialization ("ica", "ica.pos").
+</p>
+<p>or sample entries from:
+</p>
+<p>3) uniform distribution <code>[0,1]</code> ("unif.pos"),
+</p>
+<p>4) unform distribution <code>[-1,1]</code>,
+</p>
+<p>5) uniform distribution <code>[0.9,1.1]</code> ("similar"),
+</p>
+<p>6) normal distribution <code>N(0,1)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.iter</code></td>
+<td>
+<p>An integer. Number of iterations. (default=30)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>err.cut</code></td>
+<td>
+<p>A numeric. Relative error in determinant between iterations to stop algorithm (now is not used). (default=1e-30)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>A boolean. Print per-iteration information (default=FALSE)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Implementation closely follows (Fu X <em>et al.</em>, IEEE Trans Pattern Anal Mach Intell., 2019).
+</p>
+
+
+<h3>Value</h3>
+
+<p>List of objects:
+</p>
+<p><code>C</code>, <code>E</code> Factorization matrices.
+</p>
+<p><code>Pest</code> Estimate of <code>vol$P</code> co-occurence matrix <code class="reqn">Pest = C*E*t(C)</code>.
+</p>
+<p><code>M</code>, <code>detM</code> auxiliary matrix <code>M</code> and its determinant.
+</p>
+<p><code>init.type</code> type of initialization of matrix <code>M</code> that was used.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">small_example &lt;- sim_factors(5, 5, 5)
+vol &lt;- vol_preprocess(t(small_example$X))
+vol.anchor &lt;- AnchorFree(vol)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,182 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>viking</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Viking: Variational bayesIan variance tracKING</h2>
+
+<h3>Description</h3>
+
+<p><code>viking</code> is the state-space estimation realized by Viking,
+generalizing the Kalman Filter to variance uncertainty.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">viking(
+  X,
+  y,
+  theta0,
+  P0,
+  hata0,
+  s0,
+  hatb0,
+  Sigma0,
+  n_iter = 2,
+  mc = 10,
+  rho_a = 0,
+  rho_b = 0,
+  learn_sigma = TRUE,
+  learn_Q = TRUE,
+  K = NULL,
+  mode = "diagonal",
+  thresh = TRUE,
+  phi = logt,
+  phi1 = logt1,
+  phi2 = logt2
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>the explanatory variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>the time series</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta0</code></td>
+<td>
+<p>initial <code>theta</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>P0</code></td>
+<td>
+<p>initial <code>P</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hata0</code></td>
+<td>
+<p>initial <code>hata</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s0</code></td>
+<td>
+<p>initial <code>s</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hatb0</code></td>
+<td>
+<p>initial <code>hatb</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Sigma0</code></td>
+<td>
+<p>initial <code>Sigma</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_iter</code></td>
+<td>
+<p>(optional, default <code>2</code>) number of alternate steps</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mc</code></td>
+<td>
+<p>(optional, default <code>10</code>) number of Monte-Carlo samples</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rho_a</code></td>
+<td>
+<p>(optional, default <code>0</code>) learning rate of <code>a</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rho_b</code></td>
+<td>
+<p>(optional, default <code>0</code>) learning rate of <code>b</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>learn_sigma</code></td>
+<td>
+<p>(optional, default <code>TRUE</code>) asserts the estimation of <code>a</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>learn_Q</code></td>
+<td>
+<p>(optional, default <code>TRUE</code>) asserts the estimation of <code>b</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>K</code></td>
+<td>
+<p>(optional, default <code>NULL</code>) if not <code>NULL</code> then it is a multiplicative
+factor of the state in the state update</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mode</code></td>
+<td>
+<p>(optional, default <code>'diagonal'</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thresh</code></td>
+<td>
+<p>(optional, default <code>TRUE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>phi</code></td>
+<td>
+<p>(optional, default <code>logt</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>phi1</code></td>
+<td>
+<p>(optional, default <code>logt1</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>phi2</code></td>
+<td>
+<p>(optional, default <code>logt2</code>)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list composed of the evolving value of all the parameters:
+<code>theta_arr, P_arr, q_arr, hata_arr, s_arr, hatb_arr, Sigma_arr</code>
+</p>
+
+
+<h3>References</h3>
+
+<p>J. de Vilmarest, O. Wintenberger (2021), Viking: Variational Bayesian Variance
+Tracking. &lt;arXiv:2104.10777&gt;
+</p>
+
+
+</div>

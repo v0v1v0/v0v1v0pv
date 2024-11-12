@@ -1,0 +1,166 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>prentice74</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Prentice (1974) Log-gamma Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Estimation of a 3-parameter log-gamma distribution described by
+Prentice (1974).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">prentice74(llocation = "identitylink", lscale = "loglink",
+           lshape = "identitylink", ilocation = NULL, iscale = NULL,
+           ishape = NULL, imethod = 1,
+           glocation.mux = exp((-4:4)/2), gscale.mux = exp((-4:4)/2),
+           gshape = qt(ppoints(6), df = 1), probs.y = 0.3,
+           zero = c("scale", "shape"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>llocation, lscale, lshape</code></td>
+<td>
+
+<p>Parameter link function applied to the
+location parameter <code class="reqn">a</code>,
+positive scale parameter <code class="reqn">b</code>
+and the shape parameter <code class="reqn">q</code>, respectively.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilocation, iscale</code></td>
+<td>
+
+<p>Initial value for <code class="reqn">a</code> and <code class="reqn">b</code>, respectively.
+The defaults mean an initial value is determined internally for each.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape</code></td>
+<td>
+
+<p>Initial value for <code class="reqn">q</code>.
+If failure to converge occurs, try some other value.
+The default means an initial value is determined internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>glocation.mux, gscale.mux, gshape, probs.y</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability density function is given by
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;a,b,q) = |q|\,\exp(w/q^2 - e^w) / (b \, \Gamma(1/q^2)),</code>
+</p>
+
+<p>for shape parameter <code class="reqn">q \ne 0</code>,
+positive scale parameter <code class="reqn">b &gt; 0</code>,
+location parameter <code class="reqn">a</code>,
+and all real <code class="reqn">y</code>.
+Here, <code class="reqn">w = (y-a)q/b+\psi(1/q^2)</code>
+where <code class="reqn">\psi</code> is the digamma function,
+<code>digamma</code>.
+The mean of <code class="reqn">Y</code> is <code class="reqn">a</code> (returned as the fitted values).
+This is a different parameterization compared to <code>lgamma3</code>.
+</p>
+<p>Special cases:
+<code class="reqn">q = 0</code> is the normal distribution with standard deviation <code class="reqn">b</code>,
+<code class="reqn">q = -1</code> is the extreme value distribution for maximums,
+<code class="reqn">q = 1</code> is the extreme value distribution for minima (Weibull).
+If <code class="reqn">q &gt; 0</code> then the distribution is left skew,
+else <code class="reqn">q &lt; 0</code> is right skew.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>The special case <code class="reqn">q = 0</code> is not handled, therefore
+estimates of <code class="reqn">q</code> too close to zero may cause numerical problems.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The notation used here differs from Prentice (1974):
+<code class="reqn">\alpha = a</code>,
+<code class="reqn">\sigma = b</code>.
+Fisher scoring is used.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Prentice, R. L. (1974).
+A log gamma model and its maximum likelihood estimation.
+<em>Biometrika</em>, <b>61</b>, 539–544.
+</p>
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>lgamma3</code>,
+<code>lgamma</code>,
+<code>gengamma.stacy</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+pdata &lt;- transform(pdata, loc = -1 + 2*x2, Scale = exp(1))
+pdata &lt;- transform(pdata, y = rlgamma(nn, loc = loc, scale = Scale, shape = 1))
+fit &lt;- vglm(y ~ x2, prentice74(zero = 2:3), data = pdata, trace = TRUE)
+coef(fit, matrix = TRUE)  # Note the coefficients for location
+</code></pre>
+
+
+</div>

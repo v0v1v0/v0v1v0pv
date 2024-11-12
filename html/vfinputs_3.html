@@ -1,0 +1,145 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>categoricalColorFilter</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add a visual filter input for categorical data</h2>
+
+<h3>Description</h3>
+
+<p>Add a visual filter input for categorical data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">categoricalColorFilter(inputId, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>inputId</code></td>
+<td>
+<p>The <code>input</code> slot that will be used to access the value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Arguments passed on to <code>categoricalLegend</code>
+</p>
+
+<dl>
+<dt><code>label</code></dt>
+<dd>
+<p>Display label for the control, or <code>NULL</code> for no label.</p>
+</dd>
+<dt><code>class</code></dt>
+<dd>
+<p>The CSS class of the input div element to match with any filter toggling functions. Default class is <code>"categorical-color-filter"</code>.</p>
+</dd>
+<dt><code>values</code></dt>
+<dd>
+<p>List of character vectors that will match with the colors or palette in the order provided by both.</p>
+</dd>
+<dt><code>data</code></dt>
+<dd>
+<p>Alternative vector to extract values with <code>"unique()"</code> function.</p>
+</dd>
+<dt><code>colors</code></dt>
+<dd>
+<p>Colours to match with values; must be a valid argument to
+<code>grDevices::col2rgb()</code>. This can be a character vector of
+<code>"#RRGGBB"</code> or  <code>"#RRGGBBAA"</code>, colour names from
+<code>grDevices::colors()</code>, or a positive integer that indexes into
+<code>grDevices::palette()</code>.</p>
+</dd>
+<dt><code>palette</code></dt>
+<dd>
+<p>A function that outputs a list of colors.</p>
+</dd>
+<dt><code>orient</code></dt>
+<dd>
+<p>Orientation of the legend. Can be <code>"bottom"</code> (default, horizontal with labels below), <code>"top"</code> (horizontal with labels above), <code>"left"</code> (vertical with labels on the left)
+and <code>"right"</code> (vertical with labels on the right).</p>
+</dd>
+<dt><code>size</code></dt>
+<dd>
+<p>Absolute length in pixels of the color bar; becomes width or height depending on value of <code>orient</code>. Default is <code>220</code>.</p>
+</dd>
+<dt><code>multiple</code></dt>
+<dd>
+<p>Is selection of multiple items allowed? Default is <code>TRUE</code>. With <code>FALSE</code>, selecting one item will de-select the others.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A visual filter input control that can be added to a UI definition
+</p>
+
+
+<h3>Server value</h3>
+
+<p><code>start</code> and <code>end</code> bounds of a selection. The default value (or empty selection) is <code>NULL</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>categoricalLegend()</code>
+</p>
+<p>Other visual filters: 
+<code>continuousColorFilter()</code>,
+<code>discreteColorFilter()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Only run examples in interactive R sessions
+if (interactive()) {
+
+ui &lt;- fluidPage(
+  categoricalColorFilter("filter", data = sort(mtcars$gear), orient = "right",
+                           palette = RColorBrewer::brewer.pal(8, "Dark2")),
+  verbatimTextOutput("value")
+)
+server &lt;- function(input, output) {
+  output$value &lt;- output$selection &lt;- renderPrint({
+  if (!is.null(input$filter)) {
+    format(input$filter)
+  }
+})
+}
+
+shinyApp(ui, server)
+
+ui &lt;- fluidPage(
+  categoricalColorFilter("filter", label = p("Categorical filter:"),
+                           palette = RColorBrewer::brewer.pal(3, "Accent"),
+                           values = list("a","b","c")),
+  verbatimTextOutput("values")
+)
+server &lt;- function(input, output) {
+  output$value &lt;- output$selection &lt;- renderPrint({
+  if (!is.null(input$filter)) {
+    format(input$filter)
+  }
+})
+}
+shinyApp(ui, server)
+
+}
+
+</code></pre>
+
+
+</div>

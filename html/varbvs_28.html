@@ -1,0 +1,714 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>varbvs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fit variable selection model using variational approximation methods.</h2>
+
+<h3>Description</h3>
+
+<p>Compute fully-factorized variational approximation for
+Bayesian variable selection in linear (family = gaussian) or logistic
+regression (family = binomial). More precisely, find the "best"
+fully-factorized approximation to the posterior distribution of the
+coefficients, with spike-and-slab priors on the coefficients. By
+"best", we mean the approximating distribution that locally minimizes
+the Kullback-Leibler divergence between the approximating distribution
+and the exact posterior.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  varbvs(X, Z, y, family = c("gaussian","binomial"), sigma, sa,
+         logodds, weights, resid.vcov, alpha, mu, eta, update.sigma,
+         update.sa, optimize.eta, initialize.params, update.order,
+         nr = 100, sa0 = 1, n0 = 10, tol = 1e-4, maxiter = 1e4,
+         verbose = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>n x p input matrix, where n is the number of samples,
+and p is the number of variables. X cannot be sparse,
+and cannot have any missing values (NA).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>n x m covariate data matrix, where m is the number of
+covariates. Do not supply an intercept as a covariate (i.e.,
+a column of ones), because an intercept is automatically
+included in the regression model. For no covariates, set
+<code>Z = NULL</code>. The covariates are assigned an improper,
+uniform prior. Although improper priors are generally not
+advisable because they can result in improper posteriors and
+Bayes factors, this choice allows us to easily integrate out
+these covariates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Vector of length n containing observations of binary
+(<code>family = "binomial"</code>) or continuous (<code>family =
+          "gaussian"</code>) outcome. For a binary outcome, all entries
+of y must be 0 or 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>"gaussian" for linear regression model, or "binomial"
+for logistic regression model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma</code></td>
+<td>
+<p>Candidate settings for the residual variance
+parameter. Must be of the same length as inputs sa and logodds (or
+have length equal to the number of columns of logodds). Only used for
+linear regression, and will generate an error if <code>family =
+  "binomial"</code>. If missing, residual variance parameter is automatically
+fitted to data by computing approximate maximum-likelihood (ML)
+estimate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sa</code></td>
+<td>
+<p>Hyperparameter sa is the prior variance of regression
+coefficients for variables that are included in the model. This
+prior variance is always scaled by sigma (for logistic regression,
+we take sigma = 1). Scaling the variance of the coefficients in this
+way is necessary to ensure that this prior is invariant to
+measurement scale (e.g., switching from grams to kilograms). This
+input specifies the candidate settings for sa, of the same length as
+inputs sigma and logodds (or have length equal to the number of
+columns of logodds). If missing, prior variance is automatically
+fitted to data by compute approximate maximum (ML) estimates, or
+maximum a posteriori estimates when <code>n0 &gt; 0</code> and <code>sa0 &gt;
+    0</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logodds</code></td>
+<td>
+<p>Hyperparameter logodds is the prior log-odds that a
+variable is included in the regression model; it is defined as
+<code class="reqn">logodds = log10(q/(1-q)),</code> where q is the prior probability
+that a variable is included in the regression model. Note that we
+use the base-10 logarithm instead of the natural logarithm because
+it is usually more natural to specify prior log-odds settings in
+this way. (To obtain the prior probability from the log-odds, use
+the following formula: <code class="reqn">q = 1/(1 + 10^(-logodds))</code>. The prior
+log-odds may also be specified separately for each variable, which
+is useful is there is prior information about which variables are
+most relevant to the outcome. This is accomplished by setting
+logodds to a p x ns matrix, where p is the number of variables, and
+ns is the number of hyperparameter settings. Note it is not possible
+to fit the logodds parameter; if logodds input is not provided as
+input, then it is set to the default value when sa and sigma are
+missing, and otherwise an error is generated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>Optional vector of weights for weighted linear
+regression; larger weights correspond to smaller variances. It
+should be <code>NULL</code>, or a numeric vector of the same length as
+<code>y</code>. This is equivalent to the <code>weights</code> argument in
+<code>lm</code>. This option is only available for linear
+regression (<code>family = "gaussian"</code>), and cannot be combined with
+<code>resid.vcov</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>resid.vcov</code></td>
+<td>
+<p>Optional matrix specifying the covariance of the
+residual, scaled by sigma. This is useful to allow for observations
+with different variances (similar to <code>weights</code>), or for
+observations that are not independent. It should either be
+<code>NULL</code>, or a symmetric positive definite matrix in which the
+number of rows and columns is equal to the length of <code>y</code>. This
+option is only available for linear regression (<code>family =
+    "gaussian"</code>), and cannot be combined with <code>weights</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Good initial estimate for the variational parameter alpha
+for each hyperparameter setting. Either missing, or a p x ns matrix,
+where p is the number of variables, and ns is the number of
+hyperparameter settings.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu</code></td>
+<td>
+<p>Good initial estimate for the variational parameter mu for
+each hyperparameter setting. Either missing, or a p x ns matrix,
+where p is the number of variables, and ns is the number of
+hyperparameter settings.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eta</code></td>
+<td>
+<p>Good initial estimate of the additional free parameters
+specifying the variational approximation to the logistic regression
+factors. Either missing, or an n x ns matrix, where n is the number
+of samples, and ns is the number of hyperparameter settings.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>update.sigma</code></td>
+<td>
+<p>Setting this to TRUE ensures that sigma is always
+fitted to data, in which case input vector sigma is used to provide
+initial estimates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>update.sa</code></td>
+<td>
+<p>Setting this to TRUE ensures that sa is always fitted
+to data, in which case input vector sa is used to provide initial
+estimates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optimize.eta</code></td>
+<td>
+<p>When <code>optimize.eta = TRUE</code>, eta is fitted to
+the data during the inner loop coordinate ascent updates, even when
+good estimates of eta are provided as input.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>initialize.params</code></td>
+<td>
+<p>If FALSE, the initialization stage of the
+variational inference algorithm (see below) will be skipped, which
+saves computation time for large data sets.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>update.order</code></td>
+<td>
+<p>Order of the co-ordinate ascent updates for
+fitting the variational approximation. The default is
+<code>update.order = 1:p</code>, where <code>p</code> is the number of variables
+(the number of columns of <code>X</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nr</code></td>
+<td>
+<p>Number of samples of "model PVE" to draw from posterior.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sa0</code></td>
+<td>
+<p>Scale parameter for a scaled inverse chi-square prior on
+hyperparameter sa. Must be &gt;= 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n0</code></td>
+<td>
+<p>Number of degrees of freedom for a scaled inverse chi-square
+prior on hyperparameter sa. Must be &gt;= 0. Large settings of
+<code>n0</code> provide greater stability of the parameter estimates for
+cases when the model is "sparse"; that is, when few variables are
+included in the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>Convergence tolerance for inner loop.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxiter</code></td>
+<td>
+<p>Maximum number of inner loop iterations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>If <code>verbose = TRUE</code>, print progress of algorithm
+to console.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object with S3 class <code>c("varbvs","list")</code>.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>Either "gaussian" or "binomial".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma</code></td>
+<td>
+<p>Settings for sigma (family = "gaussian" only).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sa</code></td>
+<td>
+<p>Settings for prior variance parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logodds</code></td>
+<td>
+<p>Prior log-odds settings.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prior.same</code></td>
+<td>
+<p>TRUE if prior is identical for all variables. When
+logodds is a p x ns matrix, <code>prior.same = FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sa0</code></td>
+<td>
+<p>Scale parameter for prior on hyperparameter sa.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n0</code></td>
+<td>
+<p>Degrees of freedom for prior on hyperparameter sa.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>update.sigma</code></td>
+<td>
+<p>If TRUE, sigma was fit to data for each setting of
+prior logodds (<code>family = "gaussian"</code> only).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>update.sa</code></td>
+<td>
+<p>If TRUE, sa was fit to data for each setting of prior
+logodds.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logw</code></td>
+<td>
+<p>An array with ns elements, in which <code>logw[i]</code> is the
+variational lower bound on the marginal log-likelihood for setting i
+of the hyperparameters. These provide approximate values of the
+marginal log-likelihood for each hyperparameter setting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w</code></td>
+<td>
+<p>Normalized weights (posterior probabilities) for each of the
+hyperparameter settings computed from <code>logw</code> using
+<code>normalizelogweights</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Variational estimates of posterior inclusion
+probabilities for each hyperparameter setting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu</code></td>
+<td>
+<p>Variational estimates of posterior mean coefficients for
+each hyperparameter setting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s</code></td>
+<td>
+<p>Variational estimates of posterior variances for each
+hyperparameter setting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pip</code></td>
+<td>
+<p>"Averaged" posterior inclusion probabilities computed as a
+weighted average of the individual PIPs (<code>alpha</code>), with weights
+given by <code>w</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>"Averaged" posterior mean regression coefficients.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu.cov</code></td>
+<td>
+<p>Posterior mean regression coefficients for covariates,
+including intercept, for each hyperparameter setting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta.cov</code></td>
+<td>
+<p>"Averaged" posterior mean regression coefficients for
+covariates, including intercept.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eta</code></td>
+<td>
+<p>Additional variational parameters for <code>family =
+    "binomial"</code> only.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optimize.eta</code></td>
+<td>
+<p>If TRUE, eta was fit to data (<code>family =
+    "binomial"</code> only).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fitted.values</code></td>
+<td>
+<p>Matrix containing the predicted (or "fitted")
+values of the outcome at each hyperparameter setting. For the
+logistic regression model (<code>family = "binomial"</code>), each matrix
+entry gives the probability that the binary outcome is equal to 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>residuals</code></td>
+<td>
+<p>For linear regression, this is a matrix containing
+the model residuals at each hyperparameter setting. For <code>family
+    = "binomial"</code>, this is a list with two matrices of the same size;
+<code>residuals$deviance</code> contains the deviance residuals based on
+the likelihood ratio chi-squared statistic;
+<code>residuals$response</code> contains the "response" residuals simply
+defined as the difference between the actual binary values (0 or 1)
+and the fitted binomial probabilities (<em>i.e.</em>,
+<code>fitted.values</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pve</code></td>
+<td>
+<p>For each hyperparameter setting, and for each variable,
+mean estimate of the proportion of variance in outcome explained
+conditioned on variable being included in the model (<code>family =
+    "gaussian"</code> only).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model.pve</code></td>
+<td>
+<p>Samples drawn from posterior distribution giving
+estimates of proportion of variance in outcome (y) explained by fitted
+variable selection model. This is for <code>family = "gaussian"</code>
+only. To obtain the posterior mean estimate of the proportion of
+variance explained (PVE), for example, simply type
+<code>mean(fit$model.pve)</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Regression models</h3>
+
+<p>Two types of outcomes (y) are modeled: (1) a continuous outcome,
+also a "quantitative trait" in the genetics literature; or (2) a
+binary outcome with possible values 0 and 1. For the former, set
+<code>family = "gaussian"</code>, in which case, the outcome is
+i.i.d. normal with mean <code class="reqn">u0 + Z*u + X*b</code> and variance sigma, in
+which u and b are vectors of regresion coefficients, and u0 is the
+intercept. In the second case, we use logistic regression to model
+the outcome, in which the probability that y = 1 is equal to
+<code class="reqn">sigmoid(u0 + Z*u + X*b).</code> See <code>help(sigmoid)</code> for a
+description of the sigmoid function. Note that the regression always
+includes an intercept term (u0).
+</p>
+
+
+<h3>Co-ordinate ascent optimization procedure</h3>
+
+<p>For both regression models, the fitting procedure consists of an inner
+loop and an outer loop. The outer loop iterates over each of the
+hyperparameter settings (sa, sigma and logodds). Given a setting of
+the hyperparameters, the inner loop cycles through coordinate ascent
+updates to tighten the lower bound on the marginal likelihood,
+<code class="reqn">Pr(Y | X, sigma, sa, logodds)</code>. The inner loop coordinate
+ascent updates terminate when either (1) the maximum number of inner
+loop iterations is reached, as specified by <code>maxiter</code>, or (2)
+the maximum difference between the estimated posterior inclusion
+probabilities is less than <code>tol</code>.
+</p>
+<p>To provide a more accurate variational approximation of the posterior
+distribution, by default the fitting procedure has two stages. In the
+first stage, the entire fitting procedure is run to completion, and the
+variational parameters (alpha, mu, s, eta) corresponding to the maximum
+lower bound are then used to initialize the coordinate ascent updates
+in a second stage. Although this has the effect of doubling the
+computation time (in the worst case), the final posterior estimates
+tend to be more accurate with this two-stage fitting procedure. 
+</p>
+
+
+<h3>Variational approximation</h3>
+
+<p>Outputs alpha, mu and s specify the approximate posterior distribution
+of the regression coefficients. Each of these outputs is a p x ns
+matrix. For the ith hyperparameter setting, alpha[,i] is the
+variational estimate of the posterior inclusion probability (PIP)
+for each variable; mu[,i] is the variational estimate of the
+posterior mean coefficient given that it is included in the model;
+and s[,i] is the estimated posterior variance of the coefficient
+given that it is included in the model. These are also the
+quantities that are optimized as part of the inner loop coordinate
+ascent updates. An additional free parameter, eta, is needed for
+fast computation with the logistic regression model <code>(family =
+    "binomial")</code>. The fitted value of eta is returned as an n x ns
+matrix.
+</p>
+<p>The variational estimates should be interpreted carefully,
+especially when variables are strongly correlated. For example,
+consider the simple scenario in which 2 candidate variables are
+closely correlated, and at least one of them explains the outcome
+with probability close to 1. Under the correct posterior
+distribution, we would expect that each variable is included with
+probability ~0.5. However, the variational approximation, due to the
+conditional independence assumption, will typically get this wrong,
+and concentrate most of the posterior weight on one variable (the
+actual variable that is chosen will depend on the starting
+conditions of the optimization). Although the individual PIPs are
+incorrect, a statistic summarizing the variable selection for both
+correlated variables (e.g., the total number of variables included
+in the model) should be reasonably accurate.
+</p>
+<p>More generally, if variables can be reasonably grouped together
+based on their correlations, we recommend interpreting the variable
+selection results at a group level. For example, in genome-wide
+association studies (see the vignettes) ,a SNP with a high PIP
+indicates that this SNP is probably associated with the trait, and
+one or more nearby SNPs within a chromosomal region, or “locus,”
+may be associated as well. Therefore, we interpreted the GWAS
+variable selection results at the level of loci, rather than at the
+level of individual SNPs. 
+</p>
+<p>Also note that special care is required for interpreting the results
+of the variational approximation with the logistic regression
+model. In particular, interpretation of the individual estimates of
+the regression coefficients (e.g., the posterior mean estimates
+<code>fit$mu</code>) is not straightforward due to the additional
+approximation introduced on the individual nonlinear factors in the
+likelihood. As a general guideline, only the relative magnitudes of
+the coefficients are meaningful.
+</p>
+
+
+<h3>Averaging over hyperparameter settings</h3>
+
+<p>In many settings, it is good practice to account for uncertainty in
+the hyperparameters when reporting final posterior quantities. For
+example, hyperparameter sa is often estimated with a high degree of
+uncertainty when only a few variables are included in the model.
+Provided that (1) the hyperparameter settings sigma, sa and logodds
+adequately represent the space of possible hyperparameter settings
+with high posterior mass, (2) the hyperparameter settings are drawn
+from the same distribution as the prior, and (3) the
+fully-factorized variational approximation closely approximates the
+true posterior distribution, then final posterior quantities can be
+calculated by using logw as (unnormalized) log-marginal
+probabilities.
+</p>
+<p>Even when conditions (1), (2) and/or (3) are not satisfied, this can
+approach can still often yield reasonable estimates of averaged
+posterior quantities. The examples below demonstrate how final
+posterior quantities are reported by function
+<code>summary.varbvs</code> (see <code>help(summary.varbvs)</code> for
+more details). To account for discrepancies between the prior on
+(sigma,sa,logodds) and the sampling density used to draw candidate
+settings of the hyperparameters, adjust the log-probabilities by
+setting <code>fit$logw &lt;- fit$logw + logp/logq</code>, where logp is the
+log-density of the prior distribution, and logq is the log-density
+of the sampling distribution. (This is importance sampling; see, for
+example, R. M. Neal, Annealed importance sampling, <em>Statistics
+and Computing</em>, 2001.)
+</p>
+
+
+<h3>Prior on proportion of variance explained</h3>
+
+<p>Specifying the prior variance of the regression coefficients (sa) can
+be difficult, which is why we have included the option of fitting this
+hyperparameter to the data (see input argument <code>update.sa</code>
+above). However, in many settings, especially when a small number of
+variables are included in the regression model, it is preferrable to
+average over candidate settings of sa instead of fitting sa to the
+data. To choose a set of candidate settings for sa, we have advocated
+for setting sa indirectly through a prior estimate of the proportion
+of variance in the outcome explained by the variables (abbreviated as
+PVE), since it is often more natural to specify the PVE rather than
+the prior variance (see references below). This is technically only
+suitable or the linear regression model (<code>family = "gaussian"</code>),
+but could potentially be used for the logistic regression model in an
+approximate way.
+</p>
+<p>For example, one could approximate a uniform prior on the PVE by
+drawing the PVE uniformly between 0 and 1, additionally specifying
+candidate settings for the prior log-odds, then computing the prior
+variance (sa) as follows:</p>
+<pre>sx &lt;- sum(var1.cols(X))
+sa &lt;- PVE/(1-PVE)/(sigmoid(log(10)*logodds)*sx)</pre>
+<p>Note that this calculation will yield <code>sa = 0</code> when <code>PVE =
+  0</code>, and <code>sa = Inf</code> when <code>PVE = 1</code>.
+</p>
+<p>Also, bear in mind that if there are additional covariates (Z)
+included in the linear regression model that explain variance in Y,
+then it will usually make more sense to first remove the linear
+effects of these covariates before performing these calculations. The
+PVE would then represent the prior proportion of variance in the
+residuals of Y that are explained by the candidate variables.
+Alternatively, one could include the matrix Z in the calculations
+above, taking care to ensure that the covariates are included in the
+model with probability 1.
+</p>
+
+
+<h3>Memory requirements</h3>
+
+<p>Finally, we point out that the optimization procedures were
+carefully designed so that they can be applied to very large data
+sets; to date, this code has been tested on data sets with &gt;500,000
+variables and &gt;10,000 samples. An important limiting factor is the
+ability to store the data matrix X in memory. To reduce memory
+requirements, in the MATLAB interface we require that X be single
+precision, but this option is not available in R. Additionally, we
+mostly avoid generating intermediate products that are of the same
+size as X. Only one such intermediate product is generated when
+<code>family = "gaussian"</code>, and none for <code>family = "binomial"</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Peter Carbonetto <a href="mailto:peter.carbonetto@gmail.com">peter.carbonetto@gmail.com</a></p>
+
+
+<h3>References</h3>
+
+<p>P. Carbonetto and M. Stephens (2012). Scalable variational inference
+for Bayesian variable selection in regression, and its accuracy in
+genetic association studies. <em>Bayesian Analysis</em> <b>7</b>,
+73–108.
+</p>
+<p>Y. Guan and M. Stephens (2011). Bayesian variable selection regression
+for genome-wide association studies and other large-scale
+problems. <em>Annals of Applied Statistics</em> <b>5</b>, 1780–1815.
+</p>
+<p>X. Zhou, P. Carbonetto and M. Stephens (2013). Polygenic modeling with
+Bayesian sparse linear mixed models. <em>PLoS Genetics</em> <b>9</b>,
+e1003264.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>summary.varbvs</code>, varbvs.properties,
+<code>varbvspve</code>, <code>varbvsnorm</code>,
+<code>varbvsbin</code>, <code>varbvsbinz</code>,
+<code>normalizelogweights</code>, varbvs-internal
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# LINEAR REGRESSION EXAMPLE
+# -------------------------
+# Data are 200 uncorrelated ("unlinked") single nucleotide polymorphisms
+# (SNPs) with simulated genotypes, in which the first 20 of them have an
+# effect on the outcome. Also generate data for 3 covariates.
+maf &lt;- 0.05 + 0.45*runif(200)
+X   &lt;- (runif(400*200) &lt; maf) + (runif(400*200) &lt; maf)
+X   &lt;- matrix(as.double(X),400,200,byrow = TRUE)
+Z   &lt;- randn(400,3)
+
+# Generate the ground-truth regression coefficients for the variables
+# (X) and additional 3 covariates (Z). Adjust the QTL effects so that
+# the variables (SNPs) explain 50 percent of the variance in the
+# outcome.
+u    &lt;- c(-1,2,1)
+beta &lt;- c(rnorm(20),rep(0,180))
+beta &lt;- 1/sd(c(X %*% beta)) * beta
+
+# Generate the quantitative trait measurements.
+y &lt;- c(-2 + Z %*% u + X %*% beta + rnorm(400))
+
+# Fit the variable selection model.
+fit &lt;- varbvs(X,Z,y,logodds = seq(-3,-1,0.1))
+print(summary(fit))
+
+# Compute the posterior mean estimate of hyperparameter sa.
+sa &lt;- with(fit,sum(sa * w))
+
+# Compare estimated outcomes against observed outcomes.
+y.fit &lt;- predict(fit,X,Z)
+print(cor(y,y.fit))
+
+# LOGISTIC REGRESSION EXAMPLE
+# ---------------------------
+# Data are 100 uncorrelated ("unlinked") single nucleotide polymorphisms
+# (SNPs) with simulated genotypes, in which the first 10 of them have an
+# effect on the outcome. Also generate data for 2 covariates.
+maf &lt;- 0.05 + 0.45*runif(100)
+X   &lt;- (runif(750*100) &lt; maf) + (runif(750*100) &lt; maf)
+X   &lt;- matrix(as.double(X),750,100,byrow = TRUE)
+Z   &lt;- randn(750,2)
+
+# Generate the ground-truth regression coefficients for the variables
+# (X) and additional 2 covariates (Z).
+u    &lt;- c(-1,1)
+beta &lt;- c(0.5*rnorm(10),rep(0,90))
+
+# Simulate the binary trait (case-control status) as a coin toss with
+# success rates given by the logistic regression.
+sigmoid &lt;- function (x)
+  1/(1 + exp(-x))
+y &lt;- as.double(runif(750) &lt; sigmoid(-1 + Z %*% u + X %*% beta))
+
+# Fit the variable selection model.
+fit &lt;- varbvs(X,Z,y,"binomial",logodds = seq(-2,-0.5,0.5))
+print(summary(fit))
+</code></pre>
+
+
+</div>

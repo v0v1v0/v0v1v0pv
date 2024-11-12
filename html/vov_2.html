@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>blur_out</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Blur out</h2>
+
+<h3>Description</h3>
+
+<p>Animation to blur out (disappear) a UI element.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">blur_out(ui, duration = NULL, delay = NULL, steps = NULL, iteration = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ui</code></td>
+<td>
+<p>A UI element</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>duration</code></td>
+<td>
+<p>Duration of animation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delay</code></td>
+<td>
+<p>Delay in seconds before animation starts</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>steps</code></td>
+<td>
+<p>Animation steps</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iteration</code></td>
+<td>
+<p>Iteration of animation</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<ul>
+<li>
+<p> Duration expects one of: "fast" = 800 milliseconds, "faster" = 500 milliseconds, "fastest" = 300 milliseconds, "slow" = 2 seconds, "slower" = 3 seconds, "slowest" = 4 seconds,
+</p>
+</li>
+<li>
+<p> Delay expects one of: 0, 1, 2, 3, 4, 5, no delay if left NULL
+</p>
+</li>
+<li>
+<p> Steps expects one of: 10, 20, 30, 40, 50, no steps if left NULL
+</p>
+</li>
+<li>
+<p> Iteration expects one of: 1, 2, 3, 4, 5, infinite, no iteration if left NULL
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">if (interactive()) {
+  library(shiny)
+  library(vov)
+
+  ui &lt;- fluidPage(
+    use_vov(),
+    blur_out(
+      h1("Hello world!")
+    )
+  )
+
+  server &lt;- function(input, output, session) {}
+
+  shinyApp(ui, server)
+}
+</code></pre>
+
+
+</div>

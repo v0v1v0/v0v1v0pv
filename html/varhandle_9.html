@@ -1,0 +1,174 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>var.info</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get a detailed list of variables</h2>
+
+<h3>Description</h3>
+
+
+<p>This function provides a detailed information of variables in the specified environment. If no environment and list of variables provided for the function, it will consider all existing variables in global environment.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    var.info(list="ALL", regex = NULL, envir=.GlobalEnv, human.readable=TRUE,
+             sortby="size", decreasing=TRUE, n=Inf, beautify = FALSE,
+             progressbar = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>list</code></td>
+<td>
+
+<p>A list of variables which you want to get information for. If not specified, it gets all variables (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>regex</code></td>
+<td>
+
+<p>A regular expression to be applied on the list of variables. This is very useful for example when 'list = "ALL"'. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>envir</code></td>
+<td>
+
+<p>The environment in which you want this function to be functional. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>human.readable</code></td>
+<td>
+
+<p>If you want to have the variable size in human readable format (Kb, Mb, etc.). (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sortby</code></td>
+<td>
+
+<p>The name of a column that you wish to sort the output with. If not specified the result will be sorted by "size". Valid options are "name", "class", "size" or "detail". (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>decreasing</code></td>
+<td>
+
+<p>A logical parameter (TRUE/FALSE) indicating that you want the sort to be done decreasingly or  increasingly. If not specified it is TRUE. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+
+<p>Number of desired rows in output If you want to have top 10, n should be equal to 10. If not specified the output will include all variables. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beautify</code></td>
+<td>
+
+<p>A Logical parameter indicating whether the output should beautified. At the moment it just adds a up/down triangle in the column name, showing the sort direction and based which column the table is sorted. Default value is FALSE. See Details for more information. (optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>progressbar</code></td>
+<td>
+
+<p>A Logical parameter indicating whether user wants to see progressbar or not. Default value is FALSE. See Details for more information. (optional)
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<p>This function is a quick way to have some basic information about a list of variables. By modifying and changing the default parameters, you can narrow down the variables you are investigating. The main objective of this function is providing the following information about the variables in an easy and intuitive way:
+class
+size (amount of memory the variable has occupied)
+detail (dimension for data.frame and matrices and length of vectors)
+</p>
+<p>In case the variable is a matrix or data.frame, in detail column the dimension will be provided, if it is a vector, the length will be reported, otherwise you will see NA in detail column for that specific variable.
+</p>
+<p>This function is usually very quick but in case of having many variables in the environment, it might take some time, hence a progressbar is implemented to inform user about the process.
+</p>
+
+
+<h3>Value</h3>
+
+
+
+
+
+
+<p>The output will be a sorted data.frame with 4 columns. The "name" column contains the name of each variable, column "class" contains the class of each variable, columns "size" show the amount of memory the variable is occupying (it can be configured to be in bytes or human readable format. for this use the human.readable parameter.) and "detail" column includes variable-specific information (for matrices and data.frames the dimension and for vectors their list will be reported.)
+</p>
+
+
+<h3>Author(s)</h3>
+
+
+<p>Mehrad Mahmoudian
+</p>
+
+
+<h3>See Also</h3>
+
+
+<p><code>class</code>, <code>object.size</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    ###### generate some variables ######
+    # a data.frame
+    data(iris)
+    
+    # some character vector
+    for(i in 1:5){
+        assign(letters[i], paste("some random text:",
+                                 paste0(letters[runif(5, 1, 26)],
+                                 collapse="")))
+    }
+    
+    # a list
+    f &lt;- lapply(5:10, function(x){paste("some random text:",
+                                  paste0(letters[runif(5, 1, 26)],
+                                  collapse=""))})
+
+
+    ###### demo of this function ######
+    # basic usage
+    var.info()
+    
+    # the sorting
+    var.info(sortby="name", decreasing=FALSE)
+    
+    # select using regular expression
+    var.info(regex="^i")
+    
+    # having the top 5 objects that use most memory in a beautified output
+    var.info(n=5, sortby="size", decreasing=TRUE, beautify=TRUE)
+
+</code></pre>
+
+
+</div>

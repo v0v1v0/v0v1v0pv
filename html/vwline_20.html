@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>outline</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Calculate outline
+</h2>
+
+<h3>Description</h3>
+
+<p>Calculate outline of a variable-width line, possibly without simplication.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">outline(x, simplify=TRUE, ...)
+## S3 method for class 'vwlineGrob'
+outline(x, simplify=TRUE, ...) 
+## S3 method for class 'offsetXsplineGrob'
+outline(x, simplify=TRUE, ...) 
+## S3 method for class 'offsetBezierGrob'
+outline(x, simplify=TRUE, ...) 
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A variable-width line grob.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>simplify</code></td>
+<td>
+
+<p>Whether to simplify the outline (using <code>polyclip::polysimplify</code>
+to collapse self-intersections).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Possible additional arguments for methods.
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with components <code>x</code> and <code>y</code>
+describing the complete outline of the variable-width line
+(possibly unsimplified).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Paul Murrell
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>grid.vwline</code>,
+<code>grid.offsetXspline</code>
+<code>grid.offsetBezier</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">grid.newpage()
+x &lt;- c(.2, .8, .8, .2)
+y &lt;- c(.2, .8, .2, .8)
+w &lt;- c(0, .1, .1, 0)
+vwlg &lt;- vwlineGrob(x, y, w, gp=gpar(col="grey", lwd=10, fill=NA))
+grid.draw(vwlg)
+o &lt;- outline(vwlg, simplify=FALSE)
+grid.polygon(o$x, o$y, default.units="in")
+
+grid.newpage()
+oxsg &lt;- offsetXsplineGrob(x, y, w, gp=gpar(col="grey", lwd=10, fill=NA))
+grid.draw(oxsg)
+o &lt;- outline(oxsg, simplify=FALSE)
+grid.polygon(o$x, o$y, default.units="in")
+</code></pre>
+
+
+</div>

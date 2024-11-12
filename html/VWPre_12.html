@@ -1,0 +1,68 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>create_time_series</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a time series column</h2>
+
+<h3>Description</h3>
+
+<p><code>create_time_series</code> standardizes the starting point for each 
+event, creates a time series for each event including the offset for the 
+amount of time prior to (or after) the zero point. The time series
+is indicated in a new column called Time.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">create_time_series(data, Adjust = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data table object output by <code>relabel_na</code> or 
+<code>align_msg</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Adjust</code></td>
+<td>
+<p>Optionally an integer value or a text string. If an integer 
+(positive or negative), this will indicate an amount of time in 
+milliseconds. The value is subtracted from the time points: positive values
+shift the zero forward; negative values shift the zero backward.
+If a text string, this will be the name of a column in 
+the data set which contains values indicating when the critical stimulus
+was presented relative to the zero point.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data table object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(VWPre)
+# To create the Time column...
+df &lt;- create_time_series(data = dat, Adjust = "SoundOnsetColumn")
+# or  
+df &lt;- create_time_series(data = dat, Adjust = -100)
+# or
+df &lt;- create_time_series(data = dat, Adjust = 100)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

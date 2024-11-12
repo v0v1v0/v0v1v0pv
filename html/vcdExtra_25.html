@@ -1,0 +1,134 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>datasets</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Information on Data Sets in Packages
+</h2>
+
+<h3>Description</h3>
+
+<p>The <code>data</code> function is used both to load data sets from packages, 
+and give a display of the names and titles of data sets in one or more packages,
+however it does not return a result that can be easily used to get additional
+information about the nature of data sets in packages.
+</p>
+<p>The <code>datasets()</code> function is designed to produce a more useful summary
+display of data sets in one or more packages.  It extracts the <code>class</code>
+and dimension information (<code>dim</code> or codelength) of each item,
+and formats these to provide additional descriptors.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">datasets(package, 
+        allClass=FALSE, 
+        incPackage=length(package) &gt; 1,
+        maxTitle=NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>package</code></td>
+<td>
+<p>a character vector giving the package(s) to look in</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allClass</code></td>
+<td>
+<p>a logical variable. Include all classes of the item (<code>TRUE</code>) or just the last class   
+(<code>FALSE</code>)?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>incPackage</code></td>
+<td>
+<p>include the package name in result?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxTitle</code></td>
+<td>
+<p>maximum length of data set Title</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The requested packages must be installed, and are silently loaded in order
+to extract <code>class</code> and size information.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>data.frame</code> whose rows correspond to data sets found in <code>package</code>.
+</p>
+<p>The columns (for a single package) are:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>Item</code></td>
+<td>
+<p>data set name, a character variable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>class</code></td>
+<td>
+<p>class, the object class of the data set, typically one of <code>"data.frame"</code>, <code>"table"</code>, <code>"array"</code> ...</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dim</code></td>
+<td>
+<p>an abbreviation of the dimensions of the data set, in a form like <code>"36x3"</code> for a data.frame or matrix with 36 rows and 3 columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Title</code></td>
+<td>
+<p>data set title</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>In Rmd documents, 'datasets("package") |&gt; knitr::kable()' can be used to create
+a more pleasing display.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Friendly, with R-help from Curt Seeliger 
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>data</code>, <code>kable</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">datasets("vcdExtra")
+# datasets(c("vcd", "vcdExtra"))
+datasets("datasets", maxTitle=50)
+
+# just list dataset names in a package
+datasets("vcdExtra")[,"Item"]
+datasets("vcd")[,"Item"]
+
+</code></pre>
+
+
+</div>

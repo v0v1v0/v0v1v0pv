@@ -1,0 +1,188 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ARMA.studentt.ff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> VGLTSMs Family Functions:
+Generalized autoregressive moving average model
+with Student-t errors</h2>
+
+<h3>Description</h3>
+
+<p>For an ARMA model, estimates a 3–parameter
+Student-<code class="reqn">t</code> distribution characterizing the errors
+plus the ARMA coefficients by MLE usign Fisher 
+scoring. Central Student–t handled currently.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">            ARMA.studentt.ff(order = c(1, 0),
+                             zero = c("scale", "df"),
+                             cov.Reg = FALSE,
+                             llocation = "identitylink",
+                             lscale    = "loglink",
+                             ldf       = "logloglink",
+                             ilocation = NULL,
+                             iscale = NULL,
+                             idf = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>order</code></td>
+<td>
+
+<p>Two–entries vector, non–negative. 
+The order $u$ and $v$ of the ARMA model.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Same as <code>studentt3</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cov.Reg</code></td>
+<td>
+
+<p>Logical. If covariates are entered, Should these be
+included in the ARMA model as a <code>Reg</code>ressand? Default is FALSE,
+then only embedded in the linear predictors.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>llocation, lscale, ldf, ilocation,
+iscale, idf</code></td>
+<td>
+
+<p>Same as <code>studentt3</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The normality assumption for time series analysis is relaxed to handle
+heavy–tailed data, giving place to the ARMA model with shift-scaled
+Student-<code class="reqn">t</code> errors, another subclass of VGLTSMs. 
+</p>
+<p>For a univariate time series, say <code class="reqn">y_t</code>,
+the model described by this VGLTSM family function is
+</p>
+<p style="text-align: center;"><code class="reqn">
+ \theta(B)y_t = \phi(B) \varepsilon_t,
+</code>
+</p>
+
+<p>where <code class="reqn">\varepsilon_t</code> are distributed as 
+a shift-scaled Student–<code class="reqn">t</code>
+with <code class="reqn">\nu</code> degrees of freedom, i.e.,
+<code class="reqn">\varepsilon_t \sim t(\nu_t, \mu_t, \sigma_t)</code>.
+This family functions estimates the location (<code class="reqn">\mu_t</code>),
+scale (<code class="reqn">\sigma_t</code>) and degrees of freedom (<code class="reqn">\nu_t</code>)
+parameters, plus the ARMA coefficients by MLE.
+</p>
+<p>Currently only centered Student–t distributions are handled.
+Hence, the non–centrality parameter is set to zero.
+</p>
+<p>The linear/additive predictors are
+<code class="reqn">\boldsymbol{\eta} = (\mu, \log \sigma, \log \log \nu)^T,</code>
+where <code class="reqn">\log \sigma</code> and <code class="reqn">\nu</code> are intercept–only
+by default.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> 
+(see <code>vglmff-class</code>)
+to be used by VGLM/VGAM modelling functions, e.g.,
+<code>vglm</code> or <code>vgam</code>.
+</p>
+
+
+
+
+
+
+
+<h3>Note</h3>
+
+<p>If <code>order = 0</code>, then <code>AR.studentt.ff</code>
+fits a usual 3–parameter Student–<code class="reqn">t</code>, as with
+<code>studentt3</code>.
+</p>
+<p>If covariates are incorporated in the analysis,
+these are embedded in the location–parameter model.
+Modify this through <code>zero</code>.
+See <code>CommonVGAMffArguments</code> 
+for details on <code>zero</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda 
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ARIMAXff</code>,
+<code>studentt</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">### Estimate the parameters of the errors distribution for an
+## AR(1) model. Sample size = 50
+
+set.seed(20180218)
+nn &lt;- 250
+y  &lt;- numeric(nn)
+ncp   &lt;- 0           # Non--centrality parameter
+nu    &lt;- 3.5         # Degrees of freedom.
+theta &lt;- 0.45        # AR coefficient
+res &lt;- numeric(250)  # Vector of residuals.
+
+y[1] &lt;- rt(1, df = nu, ncp = ncp)
+for (ii in 2:nn) {
+  res[ii] &lt;- rt(1, df = nu, ncp = ncp)
+  y[ii] &lt;- theta * y[ii - 1] + res[ii]
+}
+# Remove warm up values.
+y &lt;- y[-c(1:200)]
+res &lt;- res[-c(1:200)]
+
+### Fitting an ARMA(1, 0) with Student-t errors.
+AR.stut.er.fit &lt;- vglm(y ~ 1, ARMA.studentt.ff(order = c(1, 0)),
+                       data = data.frame(y = y), trace = TRUE)
+
+summary(AR.stut.er.fit)
+Coef(AR.stut.er.fit)
+
+
+plot(ts(y), col = "red", lty = 1, ylim = c(-6, 6), main = "Plot of series Y with Student-t errors")
+lines(ts(fitted.values(AR.stut.er.fit)), col = "blue", lty = 2)
+abline( h = 0, lty = 2)
+
+
+
+
+</code></pre>
+
+
+</div>

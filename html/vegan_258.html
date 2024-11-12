@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ordiresids</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plots of Residuals and Fitted Values for Constrained Ordination</h2>
+
+<h3>Description</h3>
+
+<p>The function provides <code>plot.lm</code> style diagnostic plots
+for the results of constrained ordination from <code>cca</code>,
+<code>rda</code>, <code>dbrda</code> and
+<code>capscale</code>. Normally you do not need these plots,
+because ordination is descriptive and does not make assumptions on
+the distribution of the residuals. However, if you permute residuals
+in significance tests (<code>anova.cca</code>), you may be
+interested in inspecting that the residuals really are exchangeable
+and independent of fitted values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ordiresids(x, kind = c("residuals", "scale", "qqmath"),
+   residuals = "working", type = c("p", "smooth", "g"),
+   formula, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Ordination result from <code>cca</code>, <code>rda</code>,
+<code>dbrda</code>, <code>capscale</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kind</code></td>
+<td>
+<p>The type of plot: <code>"residuals"</code> plot residuals
+against fitted values, <code>"scale"</code> the square root of absolute
+residuals against fitted values, and <code>"qqmath"</code> the residuals
+against expected distribution (defaults <code>qnorm</code>),
+unless defined differently in the <code>formula</code>  argument. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>residuals</code></td>
+<td>
+<p>The kind of residuals and fitted values, with alternatives
+<code>"working"</code>, <code>"response"</code>, <code>"standardized"</code> and
+<code>"studentized"</code> (see Details).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>The type of plot. The argument is passed on to
+<span class="pkg">lattice</span> functions. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>Formula to override the default plot. The formula can
+contain items <code>Fitted</code>, <code>Residuals</code>, <code>Species</code> and
+<code>Sites</code> (provided that names of species and sites are available
+in the ordination result).  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments passed to <span class="pkg">lattice</span> functions. </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The default plots are similar as in <code>plot.lm</code>, but they
+use <code>Lattice</code> functions
+<code>xyplot</code> and <code>qqmath</code>. The
+alternatives have default formulae but these can be replaced by the
+user. The elements available in formula or in the <code>groups</code> argument
+are <code>Fitted</code>, <code>Residuals</code>, <code>Species</code> and <code>Sites</code>.
+</p>
+<p>With <code>residuals = "response"</code> and <code>residuals = "working"</code>
+the fitted values and residuals are found with functions
+<code>fitted.cca</code> and <code>residuals.cca</code>. With
+<code>residuals = "standardized"</code> the residuals are found with
+<code>rstandard.cca</code>, and with <code>residuals = "studentized"</code>
+they are found with <code>rstudent.cca</code>, and in both cases the
+fitted values are standardized with <code>sigma.cca</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The function returns a <code>Lattice</code> object that can
+displayed as plot.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jari Oksanen </p>
+
+
+<h3>See Also</h3>
+
+<p><code>plot.lm</code>, <code>fitted.cca</code>,
+<code>residuals.cca</code>, <code>rstandard.cca</code>,
+<code>rstudent.cca</code>, <code>sigma.cca</code>,
+<code>Lattice</code>, <code>xyplot</code>,
+<code>qqmath</code>.  </p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(varespec)
+data(varechem)
+mod &lt;- cca(varespec ~ Al + P + K, varechem)
+ordiresids(mod)
+ordiresids(mod, formula = Residuals ~ Fitted | Species, residuals="standard",
+   cex = 0.5)
+</code></pre>
+
+
+</div>

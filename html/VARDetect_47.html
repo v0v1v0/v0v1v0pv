@@ -1,0 +1,218 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tbss</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Block segmentation scheme (BSS).</h2>
+
+<h3>Description</h3>
+
+<p>Perform the block segmentation scheme (BSS) algorithm to detect the structural breaks
+in large scale high-dimensional non-stationary VAR models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tbss(
+  data,
+  method = c("sparse", "group sparse", "fLS"),
+  group.case = c("columnwise", "rowwise"),
+  group.index = NULL,
+  lambda.1.cv = NULL,
+  lambda.2.cv = NULL,
+  mu = NULL,
+  q = 1,
+  max.iteration = 50,
+  tol = 10^(-2),
+  block.size = NULL,
+  blocks = NULL,
+  refit = FALSE,
+  use.BIC = TRUE,
+  an.grid = NULL,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>input data matrix, with each column representing the time series component</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>method: sparse, group sparse, and fixed low rank plus sparse. Default is sparse</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group.case</code></td>
+<td>
+<p>group sparse pattern: column, row.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group.index</code></td>
+<td>
+<p>group index for group sparse case</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.1.cv</code></td>
+<td>
+<p>tuning parameter lambda_1 for fused lasso</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.2.cv</code></td>
+<td>
+<p>tuning parameter lambda_2 for fused lasso</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu</code></td>
+<td>
+<p>tuning parameter for low rank component, only available when method is set to "fLS"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>the VAR lag</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.iteration</code></td>
+<td>
+<p>max number of iteration for the Fused lasso</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>tolerance for the fused lasso</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>block.size</code></td>
+<td>
+<p>the block size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>blocks</code></td>
+<td>
+<p>the blocks</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>refit</code></td>
+<td>
+<p>logical; if TRUE, refit the VAR model for parameter estimation. Default is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use.BIC</code></td>
+<td>
+<p>use BIC for k-means part</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>an.grid</code></td>
+<td>
+<p>a vector of an for grid searching</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>a Boolean argument to determine whether provide detailed outputs for each step. Default is FALSE</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>S3 object of class <code>VARDetect.result</code>, which contains the followings
+</p>
+
+<dl>
+<dt>data</dt>
+<dd>
+<p>the original dataset</p>
+</dd>
+<dt>q</dt>
+<dd>
+<p>the time lag user specified, a numeric value</p>
+</dd>
+<dt>cp</dt>
+<dd>
+<p>final estimated change points, a numeric vector</p>
+</dd>
+<dt>sparse_mats</dt>
+<dd>
+<p>estimated sparse components for each segment, a list of numeric matrices</p>
+</dd>
+<dt>lowrank_mats</dt>
+<dd>
+<p>estimated low rank components for each segment, a list of numeric matrices</p>
+</dd>
+<dt>est_phi</dt>
+<dd>
+<p>estimated final model parameters, the summation of the sparse and the low rank components</p>
+</dd>
+<dt>time</dt>
+<dd>
+<p>computation time for each step</p>
+</dd>
+</dl>
+<h3>Examples</h3>
+
+<pre><code class="language-R">#### sparse VAR model
+nob &lt;- (10^3) # number of time points
+p &lt;- 15; # number of time series components
+brk &lt;- c(floor(nob/3),floor(2*nob/3),nob+1); # true break points with nob+1 as the last element
+m0 &lt;- length(brk) -1; # number of break points
+q.t &lt;- 1; # the true AR order
+m &lt;- m0+1 #number of segments
+try&lt;-simu_var('sparse',nob=nob,k=p,lags=q.t,brk = brk,sp_pattern="off-diagonal",seed=1)
+data &lt;- try$series
+data &lt;- as.matrix(data)
+#run the bss method
+fit &lt;- tbss(data, method = "sparse", q = q.t)
+print(fit)
+summary(fit)
+plot(fit, data, display = "cp")
+plot(fit, data, display = "param")
+
+
+###### Example for fixed low rank plus sparse structure VAR model
+nob &lt;- 300
+p &lt;- 15
+brk &lt;- c(floor(nob/3), floor(2*nob/3), nob+1)
+m &lt;- length(brk)
+q.t &lt;- 1
+signals &lt;- c(-0.7, 0.7, -0.7)
+rank &lt;- c(2, 2, 2)
+singular_vals &lt;- c(1, 0.75)
+info_ratio &lt;- rep(0.35, 3)
+try &lt;- simu_var(method = "fLS", nob = nob, k = p, lags = 1, brk = brk,
+                sigma = as.matrix(diag(p)), signals = signals, seed=1,
+                rank = rank, singular_vals = singular_vals, info_ratio = info_ratio,
+                sp_pattern = "off-diagonal", spectral_radius = 0.9)
+data &lt;- try$series
+data &lt;- as.matrix(data)
+fit &lt;- tbss(data, method = "fLS", mu = 150)
+print(fit)
+summary(fit)
+plot(fit, data, display = "cp")
+plot(fit, data, display = "param")
+</code></pre>
+
+
+</div>

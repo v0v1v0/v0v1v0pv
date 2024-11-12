@@ -1,0 +1,242 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simulate.vlm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulate Responses for VGLMs and VGAMs</h2>
+
+<h3>Description</h3>
+
+<p>Simulate one or more responses from the distribution
+corresponding to a fitted model object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vlm'
+simulate(object, nsim = 1, seed = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>an object representing a fitted model.
+Usually an object of class
+<code>vglm-class</code>
+or
+<code>vgam-class</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsim, seed</code></td>
+<td>
+
+<p>Same as <code>simulate</code>.
+</p>
+</td>
+</tr>
+</table>
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional optional arguments.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>This is a methods function for <code>simulate</code>
+and hopefully should behave in a very similar manner.
+Only <span class="pkg">VGAM</span> family functions with a <code>simslot</code> slot
+have been implemented for <code>simulate</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Similar to <code>simulate</code>.
+Note that many <span class="pkg">VGAM</span> family functions can handle multiple responses.
+This can result in a longer data frame with more rows
+(<code>nsim</code> multiplied by <code>n</code> rather than the
+ordinary <code>n</code>).
+In the future an argument may be available so that there
+is always <code>n</code> rows no matter how many responses were
+inputted.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Warning</h3>
+
+<p>With multiple response and/or multivariate responses,
+the order of the elements may differ.
+For some <span class="pkg">VGAM</span> families, the order is
+<code class="reqn">n \times N \times F</code>,
+where <code class="reqn">n</code> is the sample size,
+<code class="reqn">N</code> is <code>nsim</code> and
+<code class="reqn">F</code> is <code>ncol(fitted(vglmObject))</code>.
+For other <span class="pkg">VGAM</span> families, the order is
+<code class="reqn">n \times F \times N</code>.
+An example of each is given below.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Currently the <span class="pkg">VGAM</span> family functions with a
+<code>simslot</code> slot are:
+<code>alaplace1</code>,
+<code>alaplace2</code>,
+<code>betabinomial</code>,
+<code>betabinomialff</code>,
+<code>betaR</code>,
+<code>betaff</code>,
+<code>biamhcop</code>,
+<code>bifrankcop</code>,
+<code>bilogistic</code>,
+<code>binomialff</code>,
+<code>binormal</code>,
+<code>binormalcop</code>,
+<code>biclaytoncop</code>,
+<code>cauchy</code>,
+<code>cauchy1</code>,
+<code>chisq</code>,
+<code>dirichlet</code>,
+<code>dagum</code>,
+<code>erlang</code>,
+<code>exponential</code>,
+<code>bifgmcop</code>,
+<code>fisk</code>,
+<code>gamma1</code>,
+<code>gamma2</code>,
+<code>gammaR</code>,
+<code>gengamma.stacy</code>,
+<code>geometric</code>,
+<code>gompertz</code>,
+<code>gumbelII</code>,
+<code>hzeta</code>,
+<code>inv.lomax</code>,
+<code>inv.paralogistic</code>,
+<code>kumar</code>,
+<code>lgamma1</code>,
+<code>lgamma3</code>,
+<code>lindley</code>,
+<code>lino</code>,
+<code>logff</code>,
+<code>logistic1</code>,
+<code>logistic</code>,
+<code>lognormal</code>,
+<code>lomax</code>,
+<code>makeham</code>,
+<code>negbinomial</code>,
+<code>negbinomial.size</code>,
+<code>paralogistic</code>,
+<code>perks</code>,
+<code>poissonff</code>,
+<code>posnegbinomial</code>,
+<code>posnormal</code>,
+<code>pospoisson</code>,
+<code>polya</code>,
+<code>polyaR</code>,
+<code>posbinomial</code>,
+<code>rayleigh</code>,
+<code>riceff</code>,
+<code>simplex</code>,
+<code>sinmad</code>,
+<code>slash</code>,
+<code>studentt</code>,
+<code>studentt2</code>,
+<code>studentt3</code>,
+<code>triangle</code>,
+<code>uninormal</code>,
+<code>yulesimon</code>,
+<code>zageometric</code>,
+<code>zageometricff</code>,
+<code>zanegbinomial</code>,
+<code>zanegbinomialff</code>,
+<code>zapoisson</code>,
+<code>zapoissonff</code>,
+<code>zigeometric</code>,
+<code>zigeometricff</code>,
+<code>zinegbinomial</code>,
+<code>zipf</code>,
+<code>zipoisson</code>,
+<code>zipoissonff</code>.
+Also, categorical family functions:
+<code>acat</code>,
+<code>cratio</code>,
+<code>sratio</code>,
+<code>cumulative</code>,
+<code>multinomial</code>.
+</p>
+
+
+<p>See also
+<code>RNG</code> about random number generation in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>,
+<code>vglm</code>, <code>vgam</code> for model fitting.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 10; mysize &lt;- 20; set.seed(123)
+bdata &lt;- data.frame(x2 = rnorm(nn))
+bdata &lt;- transform(bdata,
+  y1   = rbinom(nn, size = mysize, p = logitlink(1+x2, inverse = TRUE)),
+  y2   = rbinom(nn, size = mysize, p = logitlink(1+x2, inverse = TRUE)),
+  f1   = factor(as.numeric(rbinom(nn, size = 1,
+                                  p = logitlink(1+x2, inverse = TRUE)))))
+(fit1 &lt;- vglm(cbind(y1, aaa = mysize - y1) ~ x2,  # Matrix response (2-colns)
+              binomialff, data = bdata))
+(fit2 &lt;- vglm(f1 ~ x2, binomialff, model = TRUE, data = bdata)) # Factor response
+
+set.seed(123); simulate(fit1, nsim = 8)
+set.seed(123); c(simulate(fit2, nsim = 3))  # Use c() when model = TRUE
+
+# An n x N x F example
+set.seed(123); n &lt;- 100
+bdata &lt;- data.frame(x2 = runif(n), x3 = runif(n))
+bdata &lt;- transform(bdata, y1 = rnorm(n, 1 + 2 * x2),
+                          y2 = rnorm(n, 3 + 4 * x2))
+fit1 &lt;- vglm(cbind(y1, y2) ~ x2, binormal(eq.sd = TRUE), data = bdata)
+nsim &lt;- 1000  # Number of simulations for each observation
+my.sims &lt;- simulate(fit1, nsim = nsim)
+dim(my.sims)  # A data frame
+aaa &lt;- array(unlist(my.sims), c(n, nsim, ncol(fitted(fit1))))  # n by N by F
+summary(rowMeans(aaa[, , 1]) - fitted(fit1)[, 1])  # Should be all 0s
+summary(rowMeans(aaa[, , 2]) - fitted(fit1)[, 2])  # Should be all 0s
+
+# An n x F x N example
+n &lt;- 100; set.seed(111); nsim &lt;- 1000
+zdata &lt;- data.frame(x2 = runif(n))
+zdata &lt;- transform(zdata, lambda1 =  loglink(-0.5 + 2 * x2, inverse = TRUE),
+                          lambda2 =  loglink( 0.5 + 2 * x2, inverse = TRUE),
+                          pstr01  = logitlink( 0,            inverse = TRUE),
+                          pstr02  = logitlink(-1.0,          inverse = TRUE))
+zdata &lt;- transform(zdata, y1 = rzipois(n, lambda = lambda1, pstr0 = pstr01),
+                          y2 = rzipois(n, lambda = lambda2, pstr0 = pstr02))
+zip.fit  &lt;- vglm(cbind(y1, y2) ~ x2, zipoissonff, data = zdata, crit = "coef")
+my.sims &lt;- simulate(zip.fit, nsim = nsim)
+dim(my.sims)  # A data frame
+aaa &lt;- array(unlist(my.sims), c(n, ncol(fitted(zip.fit)), nsim))  # n by F by N
+summary(rowMeans(aaa[, 1, ]) - fitted(zip.fit)[, 1])  # Should be all 0s
+summary(rowMeans(aaa[, 2, ]) - fitted(zip.fit)[, 2])  # Should be all 0s
+</code></pre>
+
+
+</div>

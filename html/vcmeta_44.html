@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.lm.cor.gen</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Meta-regression analysis for correlations</h2>
+
+<h3>Description</h3>
+
+<p>This function estimates the intercept and slope coefficients in a
+meta-regression model where the dependent variable is a
+Fisher-transformed correlation. The correlations can be of different types
+(e.g., Pearson, partial, Spearman). The estimates are OLS estimates
+with robust standard errors that accommodate residual heteroscedasticity.
+This function uses estimated correlations and their standard errors as
+input. The correlations are Fisher-transformed and hence the parameter
+estimates do not have a simple interpretation. However, the hypothesis
+test results can be used to decide if a population slope is either
+positive or negative.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.lm.cor.gen(alpha, cor, se, X)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor</code></td>
+<td>
+<p>vector of estimated correlations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se</code></td>
+<td>
+<p>number of control variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>matrix of predictor values</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is for the intercept with one additional
+row per predictor.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - OLS estimate
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> z - z-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+cor &lt;- c(.40, .65, .60, .45)
+se &lt;- c(.182, .114, .098, .132)
+x1 &lt;- c(18, 25, 23, 19)
+X &lt;- matrix(x1, 4, 1)
+meta.lm.cor.gen(.05, cor, se, X)
+
+# Should return: 
+#       Estimate         SE          z     p
+# b0 -0.47832153 0.63427931 -0.7541181 0.451
+# b1  0.05047154 0.02879859  1.7525699 0.080
+
+
+</code></pre>
+
+
+</div>

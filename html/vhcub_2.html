@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>CAI.values</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Codon Adaptation  Index  (CAI)</h2>
+
+<h3>Description</h3>
+
+<p>Measure the Codon Adaptation  Index  (CAI)  Sharp  and  Li  (1987), of DNA sequence.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">CAI.values(df.virus, ENc.set.host,
+                       df.host,genetic.code = "1",set.len = 5, threshold = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df.virus</code></td>
+<td>
+<p>a data frame with seq_name and its virus DNA sequence.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ENc.set.host</code></td>
+<td>
+<p>a data frame with ENc values of a host.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df.host</code></td>
+<td>
+<p>a data frame with seq_name and its host DNA sequence.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>genetic.code</code></td>
+<td>
+<p>a single string that uniquely identifies a genetic code to use.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>set.len</code></td>
+<td>
+<p>a number represents a percent that will be used as reference genes from the total host genes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threshold</code></td>
+<td>
+<p>optional numeric, specifying sequence length, in codons, used for filtering.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For more information about CAI <a href="https://academic.oup.com/nar/article-abstract/15/3/1281/1166844?redirectedFrom=fulltext">Sharp  and  Li, 1987</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data.frame containing the computed CAI values for each DNA sequences within df.fasta.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ali Mostafa Anwar <a href="mailto:ali.mo.anwar@std.agr.cu.edu.eg">ali.mo.anwar@std.agr.cu.edu.eg</a> and Mohmed Soudy <a href="mailto:MohmedSoudy2009@gmail.com">MohmedSoudy2009@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+
+# read DNA from fasta file
+fasta &lt;- fasta.read("virus.fasta", "host.fasta")
+fasta.v &lt;- fasta[[1]]
+fasta.h &lt;- fasta[[2]]
+# Calculate CAI
+enc.df.host &lt;- ENc.values(fasta.h) 
+
+
+cai.df &lt;- CAI.values(fasta.v, enc.df.host, fasta.h)
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,63 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>autoplot.mdl_vtl_df</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot output from a vital model</h2>
+
+<h3>Description</h3>
+
+<p>Produces a plot showing a model applied to a vital object. This can be applied
+to one type of model only. So use select() to choose the model column to plot.
+If there are multiple keys, separate models will be identified by colour.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'mdl_vtl_df'
+autoplot(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>A mable object obtained from a vital.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments ignored.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A ggplot2 object.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Rob J Hyndman
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(ggplot2)
+aus_mortality |&gt;
+ dplyr::filter(State == "Victoria") |&gt;
+ model(ave = FMEAN(Mortality)) |&gt;
+ autoplot() + scale_y_log10()
+
+</code></pre>
+
+
+</div>

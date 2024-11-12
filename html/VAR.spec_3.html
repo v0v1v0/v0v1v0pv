@@ -1,0 +1,363 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>calculate.VAR</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Attempts to define a bivariate VAR (Vector autoregression) model.
+</h2>
+
+<h3>Description</h3>
+
+<p>Attempts to find a VAR model which is compatible with the polynomials specified in its attribute <code>inv.roots</code>, makes necessary adjustments, calculates its spectra, coefficients and order, makes the necessary checks and plots the spectra. Finding a VAR model involves finding complex polynomials <code class="reqn">det(z), cross(z), chi.1(z)</code> and <code class="reqn">chi.2(z)</code>, satisfying 
+EQ(*): </p>
+<p style="text-align: center;"><code class="reqn">|det(z)|^2+|cross(z)|^2 = |chi.1(z)|^2 |chi.2(z)|^2</code>
+</p>
+<p> on <code class="reqn">z|=1</code>. If <code>calculate.VAR</code> is successful in finding such polynomials, there exists a bivariate VAR(p) model with marginal spectra </p>
+<p style="text-align: center;"><code class="reqn">f.i (w) = (1/2\pi)* |chi.i(z)|^2 /|det(z)|^2,</code>
+</p>
+<p> and cross-spectrum </p>
+<p style="text-align: center;"><code class="reqn">f.1.2 (w) = (1/2\pi)* z^{(-p)}*cross(z) /|det(z)|^2,</code>
+</p>
+<p> where <code class="reqn">z=exp(-iw)</code>. The squared Coherency is then given by </p>
+<p style="text-align: center;"><code class="reqn">|cross(z)|^2 /(|det(z)|^2+|cross(z)|^2).</code>
+</p>
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">calculate.VAR(a.var, calc.method = "from.det.cross", M.fact = 1.1, 
+              plot.spectra = TRUE,suppr.spec.check.warn=FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>a.var</code></td>
+<td>
+
+<p>An object of class <code>var</code>, previously initialized by <code>Init.var</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>calc.method</code></td>
+<td>
+
+<p>One of 'from.det.cross' or 'from.eta.ksi.zeta'. See details for further explanations.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M.fact</code></td>
+<td>
+
+<p>Numeric. A factor &gt;1, by which the <code class="reqn">min (|ksi.c(z) /[eta.1(z)eta.2(z)zeta(z)]|^2 )</code> is multiplied, in order to ensure that <code class="reqn">|chi.1(z)*chi.2(z)|^2 - |det(z)|^2</code> is positive on <code class="reqn">|z|=1</code>. Only relevant when <code>calc.method</code> = 'from.eta.ksi.zeta'. Affects the range of values of the Coherency spectrum.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.spectra</code></td>
+<td>
+
+<p>Logical. If TRUE, the marginal spectra, Coherency and Phase spectra will be plotted.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>suppr.spec.check.warn</code></td>
+<td>
+
+<p>Logical. If TRUE, warnings on whether spectra obtained directly from <code class="reqn">cross, det, chi.1</code> and <code class="reqn">chi.2</code>  (in <code>spec.1, spec.2, Coher, Phase</code>) differ by more than <code>eps.for.spectra</code> from the spectra (in <code>spec</code>) obtained from the coefficients of the VAR model (see <code>Note</code>, below)  are suppressed.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In order to define a VAR model, one seeks to define <code class="reqn">det(z), cross(z)</code> and <code class="reqn">chi.1(z), chi.2(z)</code>, such that EQ(*) holds. There are two ways implemented for doing so, which are specified by argument <code>calc.method</code>:
+</p>
+
+<ul>
+<li> <p><code>calc.method</code> = 'from.det.cross'. (See Ioannidis (2007), Proposition 2). One must first specify the roots for <code class="reqn">det(z)</code> and <code class="reqn">cross(z)</code>. They fix these two polynomials, which will not be modified during the calculation. One may also specify some roots for <code class="reqn">chi.1(z)</code> and <code class="reqn">chi.2(z)</code>. If these two latter are compatible with EQ(*) they will be kept. If not, they may be modified during the calculation. Further roots may be added by <code>compute.VAR</code> during the calculation to <code class="reqn">chi.2</code> to ensure that EQ(*) holds. All changes are recorded in attribute <code>inv.roots</code>.  If the user wishes some of the roots of <code class="reqn">chi.2</code> to be rather added to <code class="reqn">chi.1</code>, he may do so by editing attribute <code>inv.roots</code> after running the function once, by increasing the multiplicity of the root for <code class="reqn">chi.1</code> and decreasing it by the same amount for <code class="reqn">chi.2</code>, and then, re-running the function. With the option <code>calc.method</code> = 'from.det.cross' one has more direct control over peaks for the marginal spectra (via <code class="reqn">chi.i</code> and <code class="reqn">det</code>) and the Coherency being close to 0 or 1 (via <code class="reqn">det</code> and <code class="reqn">cross</code>), as well as the Phase spectrum, i.e., the lag-/lead- structure between the two series (via <code class="reqn">cross</code>). 
+</p>
+</li>
+<li> <p><code>calc.method</code> = 'from.eta.ksi.zeta'. (See Ioannidis (2007), Proposition 1). One must specify the roots of <code class="reqn">eta.1, eta.2, ksi.1, ksi.2</code> and <code class="reqn">zeta</code>. These fix </p>
+<p style="text-align: center;"><code class="reqn">chi.i(z) = M* eta.i(z) zeta(z) ksi.j(z)/ksi.c(z))</code>
+</p>
+<p> and </p>
+<p style="text-align: center;"><code class="reqn">det(z)=M *zeta(z) ksi.1(z) ksi.2(z)/ksi.c(z),</code>
+</p>
+<p> where <code class="reqn">M</code> equals <code>M.fact</code>*<code class="reqn">min (|ksi.c(z) /[eta.1(z) eta.2(z) zeta(z)]|^2 )</code> and <code class="reqn">ksi.c</code> is the maximal common divisor of <code class="reqn">ksi.1(z)</code> and <code class="reqn">ksi.2(z)</code>. Then, <code class="reqn">cross(z)</code> is automatically determined so as that EQ(*) is satisfied. The result is that marginal spectra are given by </p>
+<p style="text-align: center;"><code class="reqn">f.i (w) = |eta.i(z)|^2 /|ksi.i(z)|^2</code>
+</p>
+<p> and the squared Coherency is given by </p>
+<p style="text-align: center;"><code class="reqn">1-|ksi.c(z)|^2 /|M* eta.1(z) eta.2(z) zeta(z)|^2.</code>
+</p>
+<p> With the option <code>calc.method</code> = 'from.eta.ksi.zeta' one has more direct control over peaks (via <code class="reqn">ksi</code>) and zeroes (via <code class="reqn">eta</code>) of the marginal spectra and, partially, over the Coherency (via <code class="reqn">ksi.c, eta</code> and <code class="reqn">zeta</code>), but not of the Phase spectrum. However, for certain aspects of the Coherency, a more direct control over the relation of <code class="reqn">cross</code> and <code class="reqn">det</code> would be required, which is not available with this option. For example, with this option, it is not possible to set the multiplicity of a root to be higher for <code class="reqn">cross</code> than for <code class="reqn">det</code>.
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>An object of class var, basically a list including elements:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>grid </code></td>
+<td>
+<p>The number of equidistant gridpoints in <code class="reqn">[0,\pi]</code>, used for plotting and numerical approximations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.max.init</code></td>
+<td>
+<p>An initial limitation on the order of the VAR model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inv.roots</code></td>
+<td>
+<p>A <code>data.frame</code> containing the roots of certain polynomials, used to specify the VAR model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>niter</code></td>
+<td>
+<p>An integer specifying the maximal number of iterations for the Innovations algorithm.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps.max.for.UIA</code></td>
+<td>
+<p>Numeric close to 0. Specifies the threshold for the relative increase in precision achieved at a step of the Innovations algorithm, for accepting that the algorithm has converged.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps.for.roots</code></td>
+<td>
+<p>Numeric close to 0. A threshold for considering two roots as identical, if a) the inverses of their radii and b) their angles (in their polar representation) differ by less than this threshold.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps.for.spectra</code></td>
+<td>
+
+<p>Numeric close to 0. A threshold for checking the validity of the calculation of the VAR model. It's spectra are calculated on the basis of the polynomials used to specify the VAR model in <code>inv.roots.def</code> should coincide with the spectra calculated on the basis of the VAR model's coefficients. If they differ by more than <code>a.eps.for.spectra</code> warning messages will be written out to the console.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>validity.msg</code></td>
+<td>
+<p>A message containing more precise information on a) the convergence of the Innovations Algorithm and b) on the maximal difference between the spectra of the VAR model as calculated on the basis of the polynomials used to specify it and the spectra obtained on the basis of the VAR model's coefficients. The message should be printed after each call to <code>calculate.var</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order</code></td>
+<td>
+<p>(Integer) The final order of the VAR model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ar.list</code></td>
+<td>
+<p>A list with entries (calculated solving the Yule-Walker equations): 
+</p>
+
+<ul>
+<li> <p><code>order</code> (Integer) The final order of the VAR model. 
+</p>
+</li>
+<li>	<p><code>ar</code> A three dimensional array (orderx2x2), containing the coefficients of the VAR model. 
+</p>
+</li>
+<li>	<p><code>var.pred</code> A 2x2 matrix containing the covariance matrix of the innovations.</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cov.1, cov.2, cov.cross, cov.cross.neg</code></td>
+<td>
+<p>Three one dimensional arrays of length <code>order</code>+1 containing the auto- and the cross- covariances (for lags and leads respectively) of the two series for lags=0,...,<code>order</code>. They are being calculated as Dirichlet-approximations to the Fourier transforms of the spectra, which have been calculated from <code class="reqn">det, cross, chi.1</code> and <code class="reqn">chi.2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>freq</code></td>
+<td>
+<p>A one dimensional array of length <code>grid</code>. It contains the grid-points at which spectra are being calculated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spec</code></td>
+<td>
+<p>A three dimensional array (<code>grid</code>x2x2). Contains for each grid-point the spectral matrix, as calculated <b>at the basis of the VAR model's coefficients</b>, given in attribute <code>ar.list</code>. That is, <code>spec</code>[j,1,1] is the spectrum of series 1 at grid-point j, <code>spec</code>[j,1,2] is the cross-spectrum between the series 1 and 2 at grid-point j, etc.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spec.1, spec.2</code></td>
+<td>
+<p>Two one dimensional arrays of length <code>grid</code> containing the <b>log</b> of the values of the spectra of series 1 and 2, respectively, <b>as calculated from <code class="reqn">chi, det</code></b>, i.e.  <code class="reqn">\code{spec.1}[j]=log[(1/2\pi)  |chi.i(z)|^2 /|det(z)|^2]</code>, where <code class="reqn">z=exp(-ij\pi/(\code{grid}-1))</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Coher</code></td>
+<td>
+<p>A one dimensional array of length <code>grid</code> containing the values of the log of the squared Coherency spectrum between series 1 and 2, <b>as calculated from <code class="reqn">cross, det</code></b>, i.e.  <code class="reqn">\code{Coher}[j] = log(|cross(z)|^2 /(|det(z)|^2+|cross(z)|^2])</code>, <code class="reqn">z=exp(-ij\pi/(\code{grid}-1))</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Phase</code></td>
+<td>
+<p>A one dimensional array of length <code>grid</code> containing the values of the Phase spectrum between series 1 and 2, <b>as calculated from <code class="reqn">cross</code></b>, i.e., <code class="reqn">\code{Phase} (w) = arg[ z^{(-p)}*cross(z)]</code> , where <code class="reqn">z=exp(-ij\pi/(\code{grid}-1))</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Phase.div.freq, group.delay </code></td>
+<td>
+<p>Two one dimensional arrays of length <code>grid</code> containing the values of <code>Phase</code>(w)/w, which gives the lead/lag in units of time, and the derivative of <code>Phase</code>(w) with respect to w, respectively.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>det, cross, chi.1, chi.2, ksi.1, ksi.2, eta.1, eta.2, zeta</code></td>
+<td>
+<p>Contain detailed information on the respective polynomials (the last five only if <code>calc.method</code> = 'from.eta.ksi.zeta' was used), as modified during the calculation, each one with attributes:
+</p>
+
+<ul>
+<li> <p><code>const</code> the constant of the polynomial;
+</p>
+</li>
+<li> <p><code>inv.roots</code> the modulus and angle for the inverses of the roots of the polynomial (for conjugate pairs only the one with angle in <code class="reqn">[0,\pi]</code>);
+</p>
+</li>
+<li>	<p><code>inv.roots.number</code>, the number of the roots of the polynomial (pairs of complex roots are counted only once);
+</p>
+</li>
+<li>	<p><code>order</code>, the degree of the polynomial;
+</p>
+</li>
+<li>	<p><code>coefs</code>, an array of length <code class="reqn">2( \code{inv.roots.number} +1)</code> containing the coefficients of the polynomial;
+</p>
+</li>
+<li>	<p><code>fourier.coefs</code>, an array of length <code class="reqn">2\code{pmax.init}+1</code> containing the Fourier transform of the <code class="reqn">|polynomial(z)|^2</code> on <code class="reqn">|z|=1</code>;
+</p>
+</li>
+<li>	<p><code>values$spec</code>, an array of length <code>grid</code>, containing the values of the squared modulus of the polynomial, i.e. <code class="reqn">|polynomial(z)|^2</code> on <code class="reqn">|z|=1</code>;
+</p>
+</li>
+<li> <p><code>Inv.values$spec</code>, an array of length <code>grid</code>, containing the <b>log of the inverses</b> of the values of the squared modulus of the polynomial, i.e. <code class="reqn">-log [ |polynomial(z)|^2 ]</code> on <code class="reqn">|z|=1</code>.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p><code>calculate.VAR</code> performs a check on the validity of the output and stores relevant information in attribute <code>validity.msg</code>. There are certain reasons for which the output may  not be valid: First, the calculation involves numerical approximations; the relevant algorithms may have not achieved convergence to the desired precision. Second, there may be features in the spectra, which cannot be well represented by a VAR model, resulting in polynomials <code class="reqn">cross, det, chi.1</code> and <code class="reqn">chi.2</code> not satisfying EQ(*). Thus, it is imperative to check a) the validity of EQ(*). It is also important to check b) that the spectra obtained directly from <code class="reqn">cross, det, chi.1</code> and <code class="reqn">chi.2</code>  (in <code>spec.1, spec.2, Coher, Phase</code>) coincide with the spectra (in <code>spec</code>) obtained from the coefficients of the VAR model (in <code>ar.list</code>). The checks performed by <code>calculate.VAR</code> concern exactly the checks under a) and b): the maximum absolute difference between the relevant quantities (in log scale, where appropriate) is passed in <code>validity.msg</code>. Moreover, warnings are written out to the console if the Innovations algorithm did not converge or if any of the quantities in 'b' exceeds <code>eps.for.spectra</code>, provided that <code>suppr.spec.check.warn</code>=FALSE. The same check is conducted visually if <code>plot.spectra</code>=TRUE: each spectrum is calculated and plotted according to both methods. The two should coincide.
+</p>
+<p>The option <code>method</code>='from.det.cross' seems generally numerically more stable than the option
+</p>
+<p><code>method</code>='from.eta.ksi.zeta'.
+</p>
+<p><b>Suggestions on how to obtain desired spectral characteristics:</b>
+</p>
+<p>Let <code class="reqn">z_0:= r_0^{-1}exp(iw_0)</code>, with <code class="reqn">r_0</code> close to 1. 
+For a polynomial <code class="reqn">p(z)</code> denote by <code class="reqn">[p(z_0)]</code> the multiplicity of <code class="reqn">z_0</code> as root of <code class="reqn">p(z)</code>.
+</p>
+<p>To obtain
+</p>
+
+<ul>
+<li>
+<p> a peak in <code class="reqn">f.1(w_0)</code>
+</p>
+
+<ul>
+<li>
+<p> with <code>method</code>='from.det.cross': choose <code class="reqn">[det(z_0)] &gt; [chi.1(z_0)]</code>.
+</p>
+</li>
+<li>
+<p> with <code>method</code>='from.eta.ksi.zeta': choose <code class="reqn">[ksi.1(z_0)] &gt; [eta.1(z_0)]</code>.
+</p>
+</li>
+</ul>
+</li>
+<li>
+<p> a trough in <code class="reqn">f.1(w_0)</code>
+</p>
+
+<ul><li>
+<p> with <code>method</code>='from.eta.ksi.zeta': choose <code class="reqn">[ksi.1(z_0)] &lt; [eta.1(z_0)]</code>.
+</p>
+</li></ul>
+</li>
+<li>
+<p> a <code class="reqn">Coh(w_0)</code> close to 1
+</p>
+
+<ul>
+<li>
+<p> with <code>method</code>='from.det.cross': choose <code class="reqn">[det(z_0)] &gt; [cross(z_0)]</code>.
+</p>
+</li>
+<li>
+<p> with <code>method</code>='from.eta.ksi.zeta': choose <code class="reqn">min([ksi.1(z_0)],[ksi.2(z_0)]) &gt; [eta.1(z_0)]+[eta.2(z_0)]+[zeta(z_0)]</code>.
+</p>
+</li>
+</ul>
+</li>
+<li>
+<p> a <code class="reqn">Coh(w_0)</code> close to 0
+</p>
+
+<ul>
+<li>
+<p> with <code>method</code>='from.det.cross': choose <code class="reqn">[det(z_0)] &lt; [cross(z_0)]</code>.
+</p>
+</li>
+<li>
+<p> with <code>method</code>='from.eta.ksi.zeta': choose <code class="reqn">min([ksi.1(z_0)],[ksi.2(z_0)]) &lt; [eta.1(z_0)]+[eta.2(z_0)]+[zeta(z_0)]</code>.
+</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Ioannidis, E. E. (2007). Spectra of bivariate VAR(p) models. Journal of Statistical Planning and Inference 137(2), 554-566. 
+</p>
+<p>Ioannidis, E. E. and Chronis, G. A. (2005). Extreme spectra of VAR models and orders of near-cointegration. J. Time Ser. Anal. 26, 399-421.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VAR.spec-package</code>,<code>Init.var</code>, <code>simulate.VAR</code>,
+</p>
+<p><code>plot_VAR.spectra</code>, <code>plot_VAR.Phase.details</code>,
+</p>
+<p><code>calc.VAR.spec.from.coefs</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">my.var &lt;- Init.var(grid=501, order.max.init=10, inv.roots.def=NULL)
+my.var$inv.roots[2,]&lt;- c(0.98,0.017261,2,3,1,1,2, rep(0,8))
+my.var$inv.roots[3,]&lt;- c(0.92,0.897598,2,1,1,1,2, rep(0,8))
+my.var$inv.roots[4,]&lt;- c(0.98,1.795196,1,1,0,1,1, rep(0,8))
+my.var &lt;- calculate.VAR (a.var = my.var, calc.method="from.det.cross", 
+          plot.spectra=TRUE,suppr.spec.check.warn=TRUE)
+print(my.var$validity.msg)
+
+</code></pre>
+
+
+</div>

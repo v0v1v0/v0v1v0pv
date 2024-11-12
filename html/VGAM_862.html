@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>logistic</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Logistic Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the location and scale parameters of the logistic
+distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">logistic1(llocation = "identitylink", scale.arg = 1, imethod = 1)
+logistic(llocation = "identitylink", lscale = "loglink",
+         ilocation = NULL, iscale = NULL, imethod = 1, zero = "scale")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>llocation, lscale</code></td>
+<td>
+
+<p>Parameter link functions applied to the location parameter <code class="reqn">l</code>
+and scale parameter <code class="reqn">s</code>.
+See <code>Links</code> for more choices, and
+<code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale.arg</code></td>
+<td>
+
+<p>Known positive scale parameter (called <code class="reqn">s</code> below).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilocation, iscale</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The two-parameter logistic distribution has a density that can
+be written as
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;l,s) = \frac{\exp[-(y-l)/s]}{
+      s\left( 1 + \exp[-(y-l)/s] \right)^2}</code>
+</p>
+
+<p>where <code class="reqn">s &gt; 0</code> is the scale parameter, and <code class="reqn">l</code> is the location
+parameter. The response <code class="reqn">-\infty&lt;y&lt;\infty</code>.  The mean
+of <code class="reqn">Y</code> (which is the fitted value) is <code class="reqn">l</code> and its variance is
+<code class="reqn">\pi^2 s^2 / 3</code>.
+</p>
+<p>A logistic distribution with <code>scale = 0.65</code>
+(see <code>dlogis</code>)
+resembles
+<code>dt</code>
+with <code>df = 7</code>;
+see <code>logistic1</code> and <code>studentt</code>.
+</p>
+<p><code>logistic1</code> estimates the location parameter only while
+<code>logistic</code> estimates both parameters.
+By default,
+<code class="reqn">\eta_1 = l</code>
+and <code class="reqn">\eta_2 = \log(s)</code>
+for <code>logistic</code>.
+</p>
+<p><code>logistic</code> can handle multiple responses.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code> and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Fisher scoring is used, and the Fisher information matrix is
+diagonal.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Johnson, N. L. and Kotz, S. and Balakrishnan, N. (1994).
+<em>Continuous Univariate Distributions</em>,
+2nd edition, Volume 1, New York: Wiley.  Chapter 15.
+</p>
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+<p>Castillo, E., Hadi, A. S., Balakrishnan, N.
+and Sarabia, J. S. (2005).
+<em>Extreme Value and Related Models with Applications in
+Engineering and Science</em>,
+Hoboken, NJ, USA: Wiley-Interscience, p.130.
+</p>
+<p>deCani, J. S. and Stine, R. A. (1986).
+A Note on Deriving the Information Matrix for a
+Logistic Distribution,
+<em>The American Statistician</em>,
+<b>40</b>, 220–222.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rlogis</code>,
+<code>CommonVGAMffArguments</code>,
+<code>logitlink</code>,
+<code>gensh</code>,
+<code>cumulative</code>,
+<code>bilogistic</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Location unknown, scale known
+ldata &lt;- data.frame(x2 = runif(nn &lt;- 500))
+ldata &lt;- transform(ldata, y1 = rlogis(nn, loc = 1+5*x2, sc = exp(2)))
+fit1 &lt;- vglm(y1 ~ x2, logistic1(scale = exp(2)), ldata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+
+# Both location and scale unknown
+ldata &lt;- transform(ldata, y2 = rlogis(nn, loc = 1 + 5*x2, exp(x2)))
+fit2 &lt;- vglm(cbind(y1, y2) ~ x2, logistic, data = ldata, trace = TRUE)
+coef(fit2, matrix = TRUE)
+vcov(fit2)
+summary(fit2)
+</code></pre>
+
+
+</div>

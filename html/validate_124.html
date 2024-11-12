@@ -1,0 +1,107 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get or set rule metadata</h2>
+
+<h3>Description</h3>
+
+<p>Rule metadata are key-value pairs where the value is a simple (atomic)
+string or number.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta(x, ...)
+
+meta(x, name) &lt;- value
+
+## S4 method for signature 'rule'
+meta(x, ...)
+
+## S4 replacement method for signature 'rule,character'
+meta(x, name) &lt;- value
+
+## S4 method for signature 'expressionset'
+meta(x, simplify = TRUE, ...)
+
+## S4 replacement method for signature 'expressionset,character'
+meta(x, name) &lt;- value
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an R object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Arguments to be passed to other methods</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p><code>[character]</code> metadata key</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>Value to set</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>simplify</code></td>
+<td>
+<p>Gather all metadata into a dataframe?</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p>Other expressionset-methods: 
+<code>as.data.frame()</code>,
+<code>as.data.frame,expressionset-method</code>,
+<code>created()</code>,
+<code>description()</code>,
+<code>label()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>origin()</code>,
+<code>plot,validator-method</code>,
+<code>summary()</code>,
+<code>variables()</code>,
+<code>voptions()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+v &lt;- validator(x &gt; 0, y &gt; 0)
+
+# metadata is recycled over rules
+meta(v,"foo") &lt;- "bar" 
+
+# assign metadata to a selection of rules
+meta(v[1],"fu") &lt;- 2
+
+# retrieve metadata as data.frame
+meta(v)
+
+# retrieve metadata as list
+meta(v,simplify=TRUE)
+
+</code></pre>
+
+
+</div>

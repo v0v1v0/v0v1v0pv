@@ -1,0 +1,263 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>zetaffMlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Link functions for the mean of 1–parameter 
+discrete distributions: The Zeta Distribution.
+</h2>
+
+<h3>Description</h3>
+
+<p>Computes the <code>zetaffMlink</code> transformation, including its inverse
+and the first two derivatives.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">
+  zetaffMlink(theta, bvalue = NULL, 
+              alg.roots = c("Newton-Raphson", "bisection")[1],
+              inverse = FALSE, deriv = 0, short = TRUE, tag = FALSE)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character. This is <code class="reqn">\theta</code> by default, although
+it can be <code class="reqn">\eta</code> sometimes, depending on the other parameters. 
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue</code></td>
+<td>
+
+<p>Details at <code>Links</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alg.roots</code></td>
+<td>
+
+<p>Character. The iterative method to find the inverse of this link
+function. Default is Newton–Raphson. Optionally, the bisection 
+method is also available.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inverse, deriv, short, tag</code></td>
+<td>
+
+<p>Details at <code>Links</code>
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a link function for the zeta distribution,
+<code>zetaff</code>, which emerges by applying 
+the logarithm transformation to its mean. Specifically, 
+assume <code class="reqn">Y</code> follows a zeta distribution with shape parameter 
+<code class="reqn">s</code> (this is <code>theta</code> in the VGLM/VGAM framework). 
+Then, the mean of <code class="reqn">Y</code> is 
+
+</p>
+<p style="text-align: center;"><code class="reqn"> \mu = \frac{\zeta (s)}{\zeta (s + 1)}, </code>
+</p>
+
+
+<p>provided <code class="reqn">s &gt; 1</code>, where <code class="reqn">\zeta</code> is the Riemann's zeta
+function computed by <code>zeta</code>. The notation 
+adopted here conforms with <code>zetaff</code>
+in terms of the density of the zeta distribution.
+</p>
+<p>The <code>zetaffMlink</code> transformation is given by
+
+</p>
+<p style="text-align: center;"><code class="reqn">\eta = \tt{zetaffMlink}(s) = \log \frac{\zeta (s)}{\zeta (s + 1)}.</code>
+</p>
+
+
+<p>It is particularly useful when modelling event–rate data where 
+the expected number of events, <code class="reqn">\mu</code>, can be modelled as
+
+</p>
+<p style="text-align: center;"><code class="reqn">\mu = \lambda t.</code>
+</p>
+
+
+<p>Specifically, <code class="reqn">\lambda</code> is a standardized mean per unit–time, and 
+<code class="reqn">t</code> is the observed timeframe.
+</p>
+<p>The domain set for <code class="reqn">s</code>, i.e. <code class="reqn">\theta</code>, is 
+<code class="reqn">(1, \infty)</code>. Hence, either large values of 
+<code class="reqn">s</code>, or those too close to <code class="reqn">1</code> from the right, or out of 
+range will result in <code>Inf</code>, <code>-Inf</code>, <code>NA</code> or 
+<code>NaN</code>. Use argument <code>bvalue</code> to adequately replace 
+them before computing the link function.
+
+</p>
+<p>WARNING: While in <code>zetaff</code> the parameter 
+<code class="reqn">s</code> lies in <code class="reqn">(1, \infty)</code>, 
+<code>zetaffMlink</code> will be real when <code class="reqn">s &gt; 1</code>. Consequently, 
+for any VGLM fitted via <code>zetaff</code> using this 
+link function, numerical problems will take place if any 
+<code class="reqn">s</code> value lies between 0.0 and 1.0 at any iteration. Use 
+optional link functions like <code>loglink</code>.
+</p>
+<p>When <code>inverse = TRUE</code> and <code>deriv = 0</code>,
+<code class="reqn">s</code> changes into <code class="reqn">\eta</code>, and therefore the domain set 
+(only in this case) turns into <code class="reqn">(0, \infty)</code>.
+See below for further details.
+</p>
+<p>If <code>theta</code> is a character, arguments <code>inverse</code> and
+<code>deriv</code> are disregarded.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the <code>zetaffMlink</code> transformation of 
+<code>theta</code>, if <code>inverse = FALSE</code>. When <code>inverse = TRUE</code>,
+<code>theta</code> becomes <code class="reqn">\eta</code>, and then the inverse of <code>zetaffMlink</code>
+is required. However, it cannot be written in closed–form. Instead,
+the inverse image of <code class="reqn">\eta</code>, say <code class="reqn">\theta_\eta</code>, 
+is returned. That is, a unique vector <code class="reqn">\theta_\eta</code> 
+such that 
+
+</p>
+<p style="text-align: center;"><code class="reqn"> {\tt{zetaffMlink}} (\theta_\eta) = \eta.</code>
+</p>
+
+
+<p>This process is equivalent to find the root, 
+<code class="reqn">\theta_\eta</code>, of the function 
+<code class="reqn"> {\tt{zetaffMlink}} (\theta) - \eta, </code>
+which is internally carried out via the method entered
+at <code>alg.roots</code>. Options available are 
+“<code>Newton-Raphson</code>” and “<code>bisection</code>”.
+</p>
+<p>For <code>deriv = 1</code>, <em>d</em> <code>eta</code> / <em>d</em> <code>theta</code> 
+as a function of <code>theta</code> if <code>inverse = FALSE</code>, else 
+the reciprocal <em>d</em> <code>theta</code> / <em>d</em> <code>eta</code>.
+</p>
+<p>Similarly, when <code>deriv = 2</code> the second order derivatives 
+are returned accordingly.
+</p>
+<p>The first two derivatives of the Riemman's zeta function 
+are computed by <code>zeta</code>.
+</p>
+<p>Besides, the <code>zetaffMlink</code> function as well as its derivatives
+are graphically delimited for specific asymptotes.
+Consequently, the mathematical limit of this link function is 
+returned for special values of <code>theta</code>, e.g. 
+for <code>theta</code> = <code class="reqn">\infty</code>. See example 2 below.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>Where the inverse image of <code class="reqn">\eta</code>, <code class="reqn">\theta_\eta</code>,
+is required, values entered at <code>theta</code> (becoming <code class="reqn">\eta</code>) must
+be non-negative. The reason is that the <code>zetaffMlink</code>
+transformation is decreasing but strictly positive in <code class="reqn">(1, \infty)</code> 
+asymptotically approaching to the horizontal axis. In this way, the 
+<em>shifted–down</em> <code>zetaffMlink</code> function
+
+</p>
+<p style="text-align: center;"><code class="reqn">{\tt{zetaff.func}}(\theta | \eta) = 
+           {\tt{zetaffMlink}}(\theta) - \eta</code>
+</p>
+
+
+<p>uniquely intersects the horizontal axis and hence the inverse image 
+computed by “<code>Newton-Raphson</code>” or “<code>bisection</code>” 
+will be a real
+number.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Overall, this link function is useful to model any parameter
+lying in <code class="reqn">(1, \infty)</code>, specially if the theoretical mean
+can be written as <code class="reqn">\mu = \lambda t</code>, as stated above.
+As a result, some problems may arise if there are covariates.
+Try another link function if any issue, such 
+as <code>logloglink</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and T. W. Yee
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>zetaff</code>,
+<code>newtonRaphson.basic</code>,
+<code>bisection.basic</code>,
+<code>zeta</code>,
+<code>loglink</code>,
+<code>Links</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Example 1  ##
+Shapes &lt;- 1:10 + 0.1 
+zetaffMlink(theta = Shapes, deriv = 1)  ## d eta/d theta, as function of theta
+
+zetafflk.inv &lt;- zetaffMlink(theta = zetaffMlink(theta = Shapes), inverse = TRUE) - Shapes
+ 
+summary(zetafflk.inv)                      ## Should be zero
+
+
+## Example 2. Special values of theta, inverse = FALSE ##
+Shapes &lt;- c(-Inf, -1, 0.5, 1, 1.5, 10, 100, Inf, NaN, NA) 
+print(rbind(Shapes, zetaffMlink  = zetaffMlink(theta = Shapes),
+            inv.zfflink = zetaffMlink(theta = Shapes, inverse = TRUE)), digits = 3)
+
+
+## Example 3. Plot of 'zetaffMlink()' and its first two derivatives ##
+## inverse = FALSE, deriv = 0, 1, 2 ##
+
+Shapes &lt;- seq(1, 20, by = 0.01)[-1]
+y.shapes &lt;- zetaffMlink(theta = Shapes, deriv = 0)
+der.1 &lt;- zetaffMlink(theta = Shapes, deriv = 1)
+der.2 &lt;- zetaffMlink(theta = Shapes, deriv = 2)
+
+plot(y.shapes ~ Shapes, 
+     col = "black", main = "log(mu), mu = E[Y], Y ~ Zeta(s).",
+     ylim = c(-5, 10), xlim = c(-0.1, 5), lty = 1, type = "l", lwd = 3)
+abline(v = 1.0, col = "orange", lty = 2, lwd = 3)
+abline(v = 0, h = 0, col = "gray50", lty = "dashed")
+
+lines(Shapes, der.1, col = "blue", lty = 5)
+lines(Shapes, der.2, col = "chocolate", lty = 4)
+legend(2, 7, legend = c("zetaffMlink", "deriv = 1", "deriv = 2"),
+       col = c("black", "blue", "chocolate"), lty = c(1, 5, 4), lwd = c(3, 1, 1))
+ 
+
+</code></pre>
+
+
+</div>

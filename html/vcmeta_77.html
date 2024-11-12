@@ -1,0 +1,165 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>replicate.prop2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares and combines 2-group proportion differences in original and
+follow-up studies</h2>
+
+<h3>Description</h3>
+
+<p>This function computes confidence intervals from an original study and a
+follow-up study where the effect size is a 2-group proportion difference.
+Confidence intervals for the difference and average effect size are also
+computed. The confidence level for the difference is 1 – 2*alpha, which
+is recommended for equivalence testing.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">replicate.prop2(alpha, f11, f12, n11, n12, f21, f22, n21, n22)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f11</code></td>
+<td>
+<p>frequency count for group 1 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f12</code></td>
+<td>
+<p>frequency count for group 2 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n11</code></td>
+<td>
+<p>sample size for group 1 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n12</code></td>
+<td>
+<p>sample size for group 2 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f21</code></td>
+<td>
+<p>frequency count for group 1 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f22</code></td>
+<td>
+<p>frequency count for group 2 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n21</code></td>
+<td>
+<p>sample size for group 1 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n22</code></td>
+<td>
+<p>sample size for group 2 in follow-up study</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A 4-row matrix. The rows are:
+</p>
+
+<ul>
+<li>
+<p> Row 1 summarizes the original study
+</p>
+</li>
+<li>
+<p> Row 2 summarizes the follow-up study
+</p>
+</li>
+<li>
+<p> Row 3 estimates the difference in proportion differences
+</p>
+</li>
+<li>
+<p> Row 4 estimates the average proportion difference
+</p>
+</li>
+</ul>
+<p>The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - proportion difference estimate (single study, difference, average)
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> z - z-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2021).
+“Design and analysis of replication studies.”
+<em>Organizational Research Methods</em>, <b>24</b>(3), 513–529.
+ISSN 1094-4281, <a href="https://doi.org/10.1177/1094428120911088">doi:10.1177/1094428120911088</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">replicate.prop2(.05, 21, 16, 40, 40, 19, 13, 60, 60)
+
+# Should return:
+#                         Estimate         SE         z         p
+# Original:             0.11904762 0.10805233 1.1017590 0.2705665
+# Follow-up:            0.09677419 0.07965047 1.2149858 0.2243715
+# Original - Follow-up: 0.02359056 0.13542107 0.1742016 0.8617070
+# Average:              0.11015594 0.06771053 1.6268656 0.1037656
+#                                LL        UL
+# Original:             -0.09273105 0.3308263
+# Follow-up:            -0.05933787 0.2528863
+# Original - Follow-up: -0.19915727 0.2463384
+# Average:              -0.02255427 0.2428661
+
+
+</code></pre>
+
+
+</div>

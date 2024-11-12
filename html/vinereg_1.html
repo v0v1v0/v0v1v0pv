@@ -1,0 +1,60 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cll</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Conditional log-likelihood</h2>
+
+<h3>Description</h3>
+
+<p>Calculates the conditional log-likelihood of the response given the covariates.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cll(object, newdata, cores = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>an object of class <code>vinereg</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>matrix of response and covariate values for which to compute
+the conditional distribution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cores</code></td>
+<td>
+<p>integer; the number of cores to use for computations.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# simulate data
+x &lt;- matrix(rnorm(200), 100, 2)
+y &lt;- x %*% c(1, -2)
+dat &lt;- data.frame(y = y, x = x, z = as.factor(rbinom(100, 2, 0.5)))
+
+# fit vine regression model
+fit &lt;- vinereg(y ~ ., dat)
+
+cll(fit, dat)
+fit$stats$cll
+</code></pre>
+
+
+</div>

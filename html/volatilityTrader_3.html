@@ -1,0 +1,130 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gutsPnL</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculates per share Profit and Loss (PnL) at expiration for Guts Option Strategy and draws its Bar Plot displaying PnL in the Plots tab.</h2>
+
+<h3>Description</h3>
+
+<p>This is a volatility strategy consisting of a long position in an ITM (in the money call : ST is greater than call strike price of X1LC ) call option with a strike price X1LC, and a long position in an ITM (in the money put : ST is less than put strike of X2HP) put option with a strike price X2HP. This is a net debit trade. Since both call and put options are ITM, this strategy is more costly to establish than a long straddle position. The trader or investor has neutral outlook. This is a capital gain strategy (Kakushadze &amp; Serur, 2018).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">gutsPnL(
+  ST,
+  X2HP,
+  X1LC,
+  P,
+  C,
+  hl = 0,
+  hu = 2,
+  spot = spot,
+  pl = pl,
+  myData = myData,
+  myTibble = myTibble,
+  PnL = PnL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ST</code></td>
+<td>
+<p>Spot Price at time T.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X2HP</code></td>
+<td>
+<p>Higher Strike Price or eXercise price bought Put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X1LC</code></td>
+<td>
+<p>Lower Strike Price or eXercise price bought Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>P</code></td>
+<td>
+<p>Put Premium or Put Price paid for the bought put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>Call Premium or Call Price paid for the bought Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hl</code></td>
+<td>
+<p>lower bound value for setting lower-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hu</code></td>
+<td>
+<p>upper bound value for setting upper-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spot</code></td>
+<td>
+<p>Spot Price</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pl</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myData</code></td>
+<td>
+<p>Data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myTibble</code></td>
+<td>
+<p>tibble</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PnL</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>According to conceptual details given by Cohen (2015), and a closed form solution provided by Kakushadze and Serur (2018), this method is developed, and the given examples are created, to compute per share Profit and Loss at expiration for Guts Option Strategy and draw its graph in the Plots tab.
+</p>
+
+
+<h3>Value</h3>
+
+<p>graph of the strategy
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">gutsPnL(25,27,24.75,2.5,3)
+gutsPnL(46,48,44,2,4,hl=0.6,hu=1.6)
+gutsPnL(1020,1025,1015,10,18,hl=0.95,hu=1.045)
+</code></pre>
+
+
+</div>

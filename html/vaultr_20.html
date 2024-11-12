@@ -1,0 +1,201 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vault_client_tools</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vault Tools</h2>
+
+<h3>Description</h3>
+
+<p>Vault Tools
+</p>
+<p>Vault Tools
+</p>
+
+
+<h3>Details</h3>
+
+<p>Interact with vault's cryptographic tools.  This provides support
+for high-quality random numbers and cryptographic hashes.  This
+functionality is also available through the transit secret engine.
+</p>
+
+
+<h3>Super class</h3>
+
+<p><code>vaultr::vault_client_object</code> -&gt; <code>vault_client_tools</code>
+</p>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-vault_client_tools-new"><code>vault_client_tools$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_tools-random"><code>vault_client_tools$random()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_tools-hash"><code>vault_client_tools$hash()</code></a>
+</p>
+</li>
+</ul>
+<details open><summary>Inherited methods</summary><ul>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="format"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-format"><code>vaultr::vault_client_object$format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="help"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-help"><code>vaultr::vault_client_object$help()</code></a></span></li>
+</ul></details><hr>
+<a id="method-vault_client_tools-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a <code>vault_client_tools</code> object. Not typically
+called by users.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_tools$new(api_client)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>api_client</code></dt>
+<dd>
+<p>A vault_api_client object</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_tools-random"></a>
+
+
+
+<h4>Method <code>random()</code>
+</h4>
+
+<p>Generates high-quality random bytes of the
+specified length.  This is totally independent of R's random
+number stream and provides random numbers suitable for
+cryptographic purposes.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_tools$random(bytes = 32, format = "hex")</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>bytes</code></dt>
+<dd>
+<p>Number of bytes to generate (as an integer)</p>
+</dd>
+<dt><code>format</code></dt>
+<dd>
+<p>The output format to produce; must be one of
+<code>hex</code> (a single hex string such as <code>d1189e2f83b72ab6</code>),
+<code>base64</code> (a single base64 encoded string such as
+<code style="white-space: pre;">⁠8TDJekY0mYs=⁠</code>) or <code>raw</code> (a raw vector of length <code>bytes</code>).</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_tools-hash"></a>
+
+
+
+<h4>Method <code>hash()</code>
+</h4>
+
+<p>Generates a cryptographic hash of given data using
+the specified algorithm.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_tools$hash(data, algorithm = NULL, format = "hex")</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>data</code></dt>
+<dd>
+<p>A raw vector of data to hash.  To generate a raw
+vector from an R object, one option is to use <code>unserialize(x, NULL)</code> but be aware that version information may be included.
+Alternatively, for a string, one might use <code>charToRaw</code>.</p>
+</dd>
+<dt><code>algorithm</code></dt>
+<dd>
+<p>A string indicating the hash algorithm to use.
+The exact set of supported algorithms may depend by vault
+server version, but as of version 1.0.0 vault supports
+<code>sha2-224</code>, <code>sha2-256</code>, <code>sha2-384</code> and <code>sha2-512</code>.  The
+default is <code>sha2-256</code>.</p>
+</dd>
+<dt><code>format</code></dt>
+<dd>
+<p>The format of the output - must be one of <code>hex</code>
+or <code>base64</code>.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">server &lt;- vaultr::vault_test_server(if_disabled = message)
+if (!is.null(server)) {
+  client &lt;- server$client()
+
+  # Random bytes in hex
+  client$tools$random()
+  # base64
+  client$tools$random(format = "base64")
+  # raw
+  client$tools$random(10, format = "raw")
+
+  # Hash data:
+  data &lt;- charToRaw("hello vault")
+  # will produce 55e702...92efd40c2a4
+  client$tools$hash(data)
+
+  # sha2-512 hash:
+  client$tools$hash(data, "sha2-512")
+
+  # cleanup
+  server$kill()
+}
+</code></pre>
+
+
+</div>

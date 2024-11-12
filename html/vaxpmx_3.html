@@ -1,0 +1,77 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>glmParametricSampling</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Accounting for the uncertainty on the fitted <code>"glm"</code> model and observed data</h2>
+
+<h3>Description</h3>
+
+<p><code>glmParametricSampling</code> is used for vaccine efficacy confidence interval construction. 
+It provides a vector of vaccine efficacy values, with length of <code>nboot</code>. 95% confidence interval, defined by 2.5th and 97.5th percentile of this vector,
+accounts for the uncertainty on the model fit (via parametric resampling of the posterior distribution of the model parameters) and observed data (via bootstrapping).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">glmParametricSampling(Fit, nboot = 2000, Data.vaccinated, Data.control)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Fit</code></td>
+<td>
+<p>an object of class inheriting from <code>"glm"</code> representing the fitted model</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nboot</code></td>
+<td>
+<p>a numeric value for number of bootstrap samples for confidence interval construction</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Data.vaccinated</code></td>
+<td>
+<p>a data frame for the vaccinated group, containing the variables in the fitted model; data must include a column called "vaccine" with binary indicator of vaccination status</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Data.control</code></td>
+<td>
+<p>a data frame for the control group, containing the variables in the fitted model; data must include a column called "vaccine" with binary indicator of vaccination status</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a vector of vaccine efficacy values <code>VE_set</code>, with length of <code>nboot</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Load required packages
+library(dplyr)
+
+# Load an example dataset
+data(data_temp)
+Data.vaccinated &lt;- filter(data_temp, vaccine == 1)
+Data.control &lt;- filter(data_temp, vaccine == 0)
+
+# Fit logistic model relating neutralizing titer to disease status, specific to serotype 2
+logisticFit &lt;- glm(disease_any ~ nAb1, data = data_temp, family = binomial())
+
+# Estimate 95\% confidence interval of vaccine efficacy based on the fitted model
+efficacySet &lt;- glmParametricSampling(logisticFit, nboot = 500, Data.vaccinated, Data.control)
+CI &lt;- lapply(EfficacyCI(efficacySet),"*", 100)
+
+</code></pre>
+
+
+</div>

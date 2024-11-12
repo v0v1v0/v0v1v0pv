@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Vine</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create Vine Objects</h2>
+
+<h3>Description</h3>
+
+<p>Functions to create <code>Vine</code> objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Vine(type, dimension = 2, trees = dimension - 1,
+     copulas = matrix(list(indepCopula()), 
+                      dimension - 1, dimension - 1))
+CVine(dimension = 2, trees = dimension - 1,
+      copulas = matrix(list(indepCopula()), 
+                       dimension - 1, dimension - 1))
+DVine(dimension = 2, trees = dimension - 1,
+      copulas = matrix(list(indepCopula()), 
+                       dimension - 1, dimension - 1))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Type of vine. Supported values: <code>"CVine"</code> and <code>"DVine"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dimension</code></td>
+<td>
+<p>See the documentation of the <code>Vine</code> slot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trees</code></td>
+<td>
+<p>See the documentation of the <code>Vine</code> slot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>copulas</code></td>
+<td>
+<p>See the documentation of the <code>Vine</code> slot.</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><code>Vine</code>,
+<code>CVine</code>,
+<code>DVine</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dimension &lt;- 3
+copulas &lt;- matrix(list(normalCopula(0.5),
+                       claytonCopula(2.75),
+                       tCopula(0.75, df = 2),
+                       NULL),
+                  ncol = dimension - 1,
+                  nrow = dimension - 1,
+                  byrow = TRUE)
+
+Vine("DVine", dimension = dimension, trees = dimension - 1,
+     copulas = copulas)
+DVine(dimension = dimension, trees = dimension - 1,
+      copulas = copulas)
+</code></pre>
+
+
+</div>

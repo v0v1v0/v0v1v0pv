@@ -1,0 +1,315 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>read.DWDdata</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fetch meteo data of DWD weather stations</h2>
+
+<h3>Description</h3>
+
+<p>Fetch observed meteorological data of German weather stations from freely
+accessible part of the Climate Data Center of Germany's National
+Meteorological Service (Deutscher Wetterdienst, DWD).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">read.DWDdata(
+  id,
+  type = "climate",
+  period = "recent",
+  resolution = "daily",
+  file = NULL,
+  destdir = NULL,
+  quiet = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>integer. A valid station id (cf. read.DWDstations).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>string. Stations can be of type ‘<span class="samp">⁠"climate"⁠</span>’ offering a range
+of meteorological parameters or of type ‘<span class="samp">⁠"precipitation"⁠</span>’ solely
+recording rainfall. There are about 400 ‘<span class="samp">⁠climate⁠</span>’ and 2000
+‘<span class="samp">⁠precipitation⁠</span>’ stations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>string specifying a time span. The last 1.5 years are
+called ‘<span class="samp">⁠"recent"⁠</span>’. Data from the individual beginning of measurements
+up to a year ago are labelled ‘<span class="samp">⁠"historical"⁠</span>’.
+‘<span class="samp">⁠"recent"⁠</span>’ data have not yet gone through the full quality control
+procedure. ‘<span class="samp">⁠"historical"⁠</span>’ data have completed the operational quality
+control. But be aware there still might be gaps and inhomogeneities.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>resolution</code></td>
+<td>
+<p>string. Temporal resolution of the data can be
+‘<span class="samp">⁠"daily"⁠</span>’ or ‘<span class="samp">⁠"monthly"⁠</span>’. ‘<span class="samp">⁠"daily"⁠</span>’ being the common
+resolution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>file</code></td>
+<td>
+<p>a string specifying the location of a dataset. ‘<span class="samp">⁠"file"⁠</span>’
+may point to a file on a FTP server or on the local file system.
+If the file lives on a FTP server the string must start with
+<code>'ftp://'</code>. If it is NULL (the default), data will be downloaded
+from DWD's FTP server.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>destdir</code></td>
+<td>
+<p>directory (string) where intermediate data (downloaded *.zip
+file) are stored. If it is NULL (the default) a subdirectory
+‘<span class="samp">⁠downloaded_packages⁠</span>’ of the session temporary directory will be used
+(and the files will be deleted at the end of the session).
+It might be advisable to keep the .zip file since it contains the
+stations documentation and metadata (e.g. station shift, used devices,
+downtimes etc.).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>If TRUE, suppress status messages (if any), and the progress bar.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>An introduction to the data available at the Climate Data Center can be
+found in the German
+<a href="https://opendata.dwd.de/climate_environment/CDC/Liesmich_intro_CDC-FTP.pdf">Liesmich_intro_CDC_ftp</a>
+or the translated
+<a href="https://opendata.dwd.de/climate_environment/CDC/Readme_intro_CDC_ftp.pdf">Readme_intro_CDC_ftp</a>.
+</p>
+<p>The freely accessible part of the Climate Data Center of Germany's National
+Meteorological Service (Deutscher Wetterdienst, DWD) is part of the DWD's
+mandate for basic supply of information (termed "Grundversorgung").
+These services may be used without any restrictions (no fees will be charged
+and in general there are no restrictions for the use the data), provided
+that the source is indicated as laid down in the
+<a href="http://www.gesetze-im-internet.de/geonutzv/BJNR054700013.html">"GeoNutzV"</a>
+ordinance. The source reference shall roughly meet the following rules:
+</p>
+
+<ul>
+<li>
+<p> Where data are used without modification, the source reference shall
+read "Source: Deutscher Wetterdienst" or just consist of the DWD logo.
+</p>
+</li>
+<li>
+<p> If the data are modified, the source reference shall specify as
+precisely as possible the extent of such, e.g. "Based on data from
+Deutscher Wetterdienst, figures rounded".
+</p>
+</li>
+</ul>
+<p>A more detailed description of the rules can be found in the official and
+legally binding German
+<a href="https://opendata.dwd.de/climate_environment/CDC/Nutzungsbedingungen_German.pdf">Nutzungsbedingungen</a>
+or the translated <a href="https://opendata.dwd.de/climate_environment/CDC/Terms_of_use.pdf">Terms
+of use</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data.frame with the observed weather data. Beware of gaps and
+inhomogeneities! ‘<span class="samp">⁠colnames⁠</span>’ contains the original header and
+hence German terms.
+</p>
+<p>Content of 'climate'-data.frame:
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+   <strong>Name</strong> </td>
+<td style="text-align: left;"> <strong>Description</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   STATIONS_ID </td>
+<td style="text-align: left;"> station id</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   MESS_DATUM  </td>
+<td style="text-align: left;"> date</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   QN_3        </td>
+<td style="text-align: left;"> quality level of next columns (-)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   FX          </td>
+<td style="text-align: left;"> daily maximum of wind gust (m/s)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   FM          </td>
+<td style="text-align: left;"> daily mean of wind velocity (m/s)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   QN_4        </td>
+<td style="text-align: left;"> quality level of next columns (-)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   RSK         </td>
+<td style="text-align: left;"> daily precipitation height (mm)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   RSKF        </td>
+<td style="text-align: left;"> precipitation form (-)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   SDK         </td>
+<td style="text-align: left;"> daily sunshine duration (h)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   SHK_TAG     </td>
+<td style="text-align: left;"> daily snow depth (cm)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   NM          </td>
+<td style="text-align: left;"> daily mean of cloud cover (1/8)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   VPM         </td>
+<td style="text-align: left;"> daily mean of vapor pressure (hPa)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   PM          </td>
+<td style="text-align: left;"> daily mean of pressure (hPa)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   TMK         </td>
+<td style="text-align: left;"> daily mean of temperature (°C)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   UPM         </td>
+<td style="text-align: left;"> daily mean of relative humidity (%)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   TXK         </td>
+<td style="text-align: left;"> daily maximum of temperature at 2m height (°C)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   TNK         </td>
+<td style="text-align: left;"> daily minimum of temperature at 2m height (°C)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   TGK         </td>
+<td style="text-align: left;"> daily minimum of air temperature at 5cm above ground (°C)
+  </td>
+</tr>
+</table>
+<p>Content of 'precipitation'-data.frame:
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+   <strong>Name</strong> </td>
+<td style="text-align: left;"> <strong>Description</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   STATIONS_ID </td>
+<td style="text-align: left;"> station id</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   MESS_DATUM  </td>
+<td style="text-align: left;"> date</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   QN_6        </td>
+<td style="text-align: left;"> quality level of next columns (-)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   RS          </td>
+<td style="text-align: left;"> daily precipitation height (mm)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   RSF         </td>
+<td style="text-align: left;"> precipitation form (-)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   SH_TAG      </td>
+<td style="text-align: left;"> daily height of snow pack (cm)</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  </td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Freely accessible DWD data available via the
+<a href="https://www.dwd.de/EN/climate_environment/cdc/cdc_node_en.html">Climate Data Center</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# fetch last 500 days worth of data from station Göttingen
+clim &lt;- read.DWDdata(id=1691)
+
+# save data &amp; metadata (documentation about devices, downtimes etc.)
+clim &lt;- read.DWDdata(id=1691, destdir='.')
+
+# find and download historical data from the Brocken
+stat.hist &lt;- read.DWDstations(period='historical')
+brocken.id &lt;- stat.hist[grep("^Brock", stat.hist$name), ]$id
+clim.brocken &lt;- read.DWDdata(id=brocken.id, period='historical')
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

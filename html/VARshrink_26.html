@@ -1,0 +1,55 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>stability_sh</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Stability function</h2>
+
+<h3>Description</h3>
+
+<p>A variant of vars::stability().
+Warning: this function has not been tested for small sample sizes yet.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">stability_sh(x, type = c("OLS-CUSUM", "Rec-CUSUM", "Rec-MOSUM",
+  "OLS-MOSUM", "RE", "ME", "Score-CUSUM", "Score-MOSUM", "fluctuation"),
+  h = 0.15, dynamic = FALSE, rescale = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class "varshrinkest"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type, h, dynamic, rescale, ...</code></td>
+<td>
+<p>Other arguments to strucchange::efp()</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><code>stability</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Canada, package = "vars")
+y &lt;- diff(Canada)
+estim &lt;- VARshrink(y, p = 2, type = "const", method = "ridge")
+stability_sh(estim)
+</code></pre>
+
+
+</div>

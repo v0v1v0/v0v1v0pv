@@ -1,0 +1,358 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tvcolmm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Tree-based varying coefficient regression based on ordinal and
+nominal two-stage linear mixed models.</h2>
+
+<h3>Description</h3>
+
+<p>The <code>tvcolmm</code> function implements the
+tree-based longitudinal varying coefficient regression algorithm
+proposed in Burgin and Ritschard (2015). The algorithm approximates
+varying fixed coefficients in the cumulative logit mixed model by a
+(multivariate) piecewise constant function using recursive
+partitioning, i.e., it estimates the fixed effect component of the
+model separately for strata of the value space of partitioning
+variables. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tvcolmm(formula, data, family = cumulative(), 
+        weights, subset, offset, na.action = na.omit, 
+        control = tvcolmm_control(), ...)
+
+tvcolmm_control(sctest = TRUE, alpha = 0.05, bonferroni = TRUE,
+                minsize = 50, maxnomsplit = 5, maxordsplit = 9,
+                maxnumsplit = 9, fast = TRUE,
+                trim = 0.1, estfun.args = list(), nimpute = 5,
+                seed = NULL, maxstep = 1e3, verbose = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>a symbolic description of the model to fit, e.g.,
+</p>
+<p><code>y ~ -1 + vc(z1, ..., zL, by = x1 + ... + xP, intercept = TRUE) + re(1|id)</code>
+</p>
+<p>where <code>vc</code> term specifies the varying fixed coefficients. Only
+one such <code>vc</code> term is allowed with
+<code>tvcolmm</code> (in contrast to <code>tvcglm</code>
+where multiple <code>vc</code> terms can be specified). The above example 
+formula removes the global intercepts and adds locally varying
+intercepts, by adding a <code>-1</code> term and specfiying <code>intercept
+    = TRUE</code> in the <code>vc</code> term. If varying intercepts are desired, we
+recommend to always remove the global intercepts. For more details on
+the formula specification, see <code>olmm</code> and
+<code>vcrpart-formula</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>the model family. An object of class
+<code>family.olmm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data frame containing the variables in the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>an optional numeric vector of weights to be used in the 
+fitting process.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subset</code></td>
+<td>
+<p>an optional logical or integer vector specifying a
+subset of <code>'data'</code> to be used in the fitting process.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>offset</code></td>
+<td>
+<p>this can be used to specify an a priori known component 
+to be included in the linear predictor during fitting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.action</code></td>
+<td>
+<p>a function that indicates what should happen if data 
+contain <code>NA</code>s. The default <code>na.action = na.omit</code> is
+listwise deletion, i.e., observations with missings on any variable
+are dropped. See <code>na.action</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>a list with control parameters as returned by
+<code>tvcolmm_control</code>, or by <code>tvcm_control</code>
+for advanced users.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sctest</code></td>
+<td>
+<p>logical scalar. Defines whether coefficient constancy
+tests should be used for the variable and node selection in each
+iteration.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>numeric significance threshold between 0 and 1. A node is
+splitted when the smallest (possibly Bonferroni-corrected) <code class="reqn">p</code>
+value for any coefficient constancy test in the current step falls
+below <code>alpha</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bonferroni</code></td>
+<td>
+<p>logical. Indicates if and how <code class="reqn">p</code>-values of
+coefficient constancy tests must be Bonferroni
+corrected. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minsize</code></td>
+<td>
+<p>numeric scalar. The minimum sum of weights in terminal
+nodes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxnomsplit, maxordsplit, maxnumsplit</code></td>
+<td>
+<p>integer scalars for split
+candidate reduction. See <code>tvcm_control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fast</code></td>
+<td>
+<p>logical scalar. Whether the approximative model should be
+used to search for the next split. See
+<code>tvcm_control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trim</code></td>
+<td>
+<p>numeric between 0 and 1. Specifies the trimming parameter
+in coefficient constancy tests for continuous partitioning
+variables. See also the argument <code>from</code> of function
+<code>supLM</code> in package <span class="pkg">strucchange</span>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estfun.args</code></td>
+<td>
+<p>list of arguments to be passed to
+<code>olmm_gefp</code>. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nimpute</code></td>
+<td>
+<p>a positive integer scalar. The number of times
+coefficient constancy tests should be repeated in each
+iteration. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>an integer specifying which seed should be set at the
+beginning.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxstep</code></td>
+<td>
+<p>integer. The maximum number of iterations i.e. number
+of splits to be processed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>logical. Should information about the fitting process
+be printed to the screen?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments passed to the fitting function
+<code>fit</code> or to <code>tvcm_control</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>tvcolmm</code> function iterates the following steps:
+</p>
+
+<ol>
+<li>
+<p> Fit the current mixed model
+</p>
+<p><code>y ~ Node:x1 + ... + Node:xP + re(1 + w1 + ... |id)</code>
+</p>
+<p>with <code>olmm</code>, where <code>Node</code> is a categorical
+variable with terminal node labels <code>1</code>, ..., <code>M</code>. 
+</p>
+</li>
+<li>
+<p> Test the constancy of the fixed effects <code>Node:x1,
+    ...</code>, separately for each moderator <code>z1</code>, ..., <code>zL</code>
+in each node <code>1</code>, ..., <code>M</code>. This yields <code>L</code> times
+<code>M</code> (possibly Bonferroni corrected) <code class="reqn">p</code>-values for
+rejecting coefficient constancy.
+</p>
+</li>
+<li>
+<p> If the minimum <code class="reqn">p</code>-value is smaller than <code>alpha</code>,
+then select the node and the variable corresponding to the minimum
+<code class="reqn">p</code>-value. Search and incorporate the optimal
+among the candidate splits in the selected node and variable by
+exhaustive likelihood search.
+</p>
+</li>
+<li>
+<p> Else if minimum <code class="reqn">p</code>-value is larger than <code>alpha</code>,
+stop the algorithm and return the current model.
+</p>
+</li>
+</ol>
+<p>The implemented coefficient constancy tests used for node and variable
+selection (step 2) are based on the M-fluctuation tests of Zeileis and
+Hornik (2007), using the observation scores of the fitted mixed
+model. The observation scores can be extracted by
+<code>olmm_estfun</code> for models fitted with
+<code>olmm</code>. To deal with intra-individual correlations
+between such observation scores, the <code>olmm_estfun</code>
+function decorrelates the observation scores. In cases of unbalanced
+data, the pre-decorrelation method requires imputation. <code>nimpute</code>
+gives the number of times the coefficient constancy tests are repeated
+in each iteration. The final <code class="reqn">p</code>-values are then the averages of
+the repetations.
+</p>
+<p>The algorithm combines the splitting technique of Zeileis (2008) with
+the technique of Hajjem et. al (2011) and Sela and Simonoff (2012) to
+incorporate regression trees into mixed models.
+</p>
+<p>For the exhaustive search, the algorithm implements a number of split
+point reduction methods to decrease the computational complexity. See
+the arguments <code>maxnomsplit</code>, <code>maxordsplit</code> and
+<code>maxnumsplit</code>. By default, the algorithm also uses the
+approximative search model approach proposed in Burgin and Ritschard
+(2017). To disable this option to use the original algorithm, set
+<code>fast = FALSE</code> in <code>tvcolmm_control</code>.
+</p>
+<p>Special attention is given to varying intercepts, i.e. the terms that
+account for the direct effects of the moderators. A common
+specification is 
+</p>
+<p><code>y ~ -1 + vc(z1, ..., zL, by = x1 + ... + xP, intercept = TRUE) + re(1 + w1 + ... |id)</code>
+</p>
+<p>Doing so replaces the globale intercept by local intercepts. As
+mentioned, if a varying intercepts are desired, we recommend to always
+remove the global intercept. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>tvcm</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>References</h3>
+
+<p>Zeileis, A., T. Hothorn, and K. Hornik (2008). Model-Based
+Recursive Partitioning. <em>Journal of Computational and Graphical
+Statistics</em>, <b>17</b>(2), 492–514. 
+</p>
+<p>Zeileis A., Hornik K. (2007), Generalized M-Fluctuation Tests for
+Parameter Instability, <em>Statistica Neerlandica</em>, <b>61</b>(4),
+488–508.
+</p>
+<p>Burgin R. and Ritschard G. (2015), Tree-Based Varying Coefficient 
+Regression for Longitudinal Ordinal Responses. <em>Computational
+Statistics &amp; Data Analysis</em>, <b>86</b>, 65–80.
+</p>
+<p>Burgin, R. and G. Ritschard (2017), Coefficient-Wise Tree-Based
+Varying Coefficient Regression with vcrpart. <em>Journal of
+Statistical Software</em>, <b>80</b>(6), 1–33.
+</p>
+<p>Sela R. and J. S. Simonoff (2012). RE-EM trees: A Data Mining
+Approach for Longitudinal and Clustered data, <em>Machine Learning</em>
+<b>86</b>(2), 169–207. 
+</p>
+<p>A. Hajjem, F. Bellavance and D. Larocque (2011), Mixed Effects
+Regression Trees for Clustered Data, <em>Statistics &amp; Probability
+Letters</em> <b>81</b>(4), 451–459.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>tvcm_control</code>, <code>tvcm-methods</code>,
+<code>tvcm-plot</code>, <code>fvcolmm</code>,
+<code>olmm</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## ------------------------------------------------------------------- # 
+## Example: Moderated effect effect of unemployment
+##
+## Here we fit a varying coefficient ordinal linear mixed on the 
+## synthetic ordinal longitudinal data 'unemp'. The interest is whether 
+## the effect of unemployment 'UNEMP' on happiness 'GHQL' is moderated 
+## by 'AGE', 'FISIT', 'GENDER' and 'UEREGION'. 'FISIT' is the only true  
+## moderator. For the the partitioning we coefficient constancy tests,
+## as described in Burgin and Ritschard (2015)
+## ------------------------------------------------------------------- #
+
+data(unemp)
+
+## fit the model
+model.UE &lt;-
+  tvcolmm(GHQL ~ -1 + 
+          vc(AGE, FISIT, GENDER, UEREGION, by = UNEMP, intercept = TRUE) +
+          re(1|PID), data = unemp)
+
+## diagnosis
+plot(model.UE, "coef")
+summary(model.UE)
+splitpath(model.UE, steps = 1, details = TRUE)
+</code></pre>
+
+
+</div>

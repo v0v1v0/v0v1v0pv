@@ -1,0 +1,65 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>[[,VirtualArray,ANY,ANY-method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Indexing to extract the elements of a '<code>VirtualArray</code>'-derived class object.</h2>
+
+<h3>Description</h3>
+
+<p>Double bracket <code>'[['</code> refers to elements'/layers' name in the <code>@stack</code> of the '<code>VirtualArray</code>'-derived object. Use single brackets to extract elements based on their position in the '<code>VirtualArray</code>'.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'VirtualArray,ANY,ANY'
+x[[i, drop = TRUE]]
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>VirtualArray</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>i</code></td>
+<td>
+<p>subscript of the first dimension(rows) or vector-like subsetting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drop</code></td>
+<td>
+<p><code>logical</code> should the <code>VirtualArray</code> be dropped and the element be reduced to the element class?</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>VirtualArray</code>-derived class object, or an object of the class that makes up the VirtualArray
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(exemplar)
+# finds a layer
+exemplar[["sample1"]]
+# returns a stack
+exemplar[[c("sample1", "sample2")]]
+# replaces a layervalues, but not the attributes of the layer
+exemplar2 &lt;- exemplar
+exemplar2[["sample1"]] &lt;- exemplar2[["sample2"]]
+# compare every value in the they are all the same
+exemplar2[["sample1"]]$x == exemplar2[["sample2"]]$x
+</code></pre>
+
+
+</div>

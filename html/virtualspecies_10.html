@@ -1,0 +1,244 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>limitDistribution</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Limit a virtual species distribution to a defined area</h2>
+
+<h3>Description</h3>
+
+<p>This function is designed to limit species distributions to a subsample of
+their total distribution range. It will thus generate a species which is not
+at the equilibrium with its environment (i.e., which did not occupy the full
+range of suitable environmental conditions).
+</p>
+<p>This function basically takes any type of raster and will limit values above
+0 to areas where the species is allowed to disperse.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">limitDistribution(x, geographical.limit = "extent", area = NULL, plot = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a <code>SpatRaster</code> object composed of 0, 1 and NA, or the output 
+list from 
+<code>generateSpFromFun</code>, <code>generateSpFromPCA</code> 
+or <code>generateRandomSp</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>geographical.limit</code></td>
+<td>
+<p><code>"country"</code>, <code>"region"</code>, 
+<code>"continent"</code>, <code>"polygon"</code>, <code>"raster"</code> or <code>"extent"</code>.
+The method used
+to limit the distribution range: see details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>area</code></td>
+<td>
+<p><code>NULL</code>, a character string, a <code>polygon</code>, a 
+<code>raster</code> or an <code>extent</code> object.
+The area in which the distribution range will be limited: see details. 
+If <code>NULL</code>
+and <code>geographical.limit = "extent"</code>, then you will be asked to draw an
+extent on the map.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, the resulting 
+limited
+distribution will be plotted.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><a href="http://borisleroy.com/virtualspecies_tutorial/08-dispersallimitation.html">
+Online tutorial for this function</a>
+</p>
+<p><b>How the function works:</b>
+</p>
+<p>The function will remove occurrences of the species outside the chosen area:
+</p>
+
+<ul>
+<li>
+<p>NA are kept unchanged
+</p>
+</li>
+<li>
+<p>0 are kept unchanged
+</p>
+</li>
+<li>
+<p>values &gt; 0 within the limits of <code>area</code> are kept unchanged
+</p>
+</li>
+<li>
+<p>values &gt; 0 outside the limits of <code>area</code> are set to 0
+</p>
+</li>
+</ul>
+<p><b>How to define the area in which the range is limited:</b>
+</p>
+<p>You can choose to limit the distribution range of the species to:
+</p>
+
+<ol>
+<li>
+<p>a particular country, region or continent (assuming your raster has
+the WGS84 projection): 
+</p>
+<p>Set the argument
+<code>geographical.limit</code> to <code>"country"</code>, <code>"region"</code> or
+<code>"continent"</code>, and provide the name(s) of the associated countries,
+regions or continents to <code>area</code> (see examples). 
+</p>
+<p>List of possible <code>area</code> names:
+</p>
+
+<ul>
+<li>
+<p>Countries: type 
+<code>unique(rnaturalearth::ne_countries(returnclass ='sf')$sovereignt)</code> 
+in the console
+</p>
+</li>
+<li>
+<p>Regions: "Africa", "Antarctica", "Asia", "Oceania", "Europe", 
+"Americas"
+</p>
+</li>
+<li>
+<p>Continents: "Africa", "Antarctica", "Asia", "Europe", 
+"North America", "Oceania", "South America"</p>
+</li>
+</ul>
+</li>
+<li>
+<p>a polygon:
+</p>
+<p>Set <code>geographical.limit</code> to <code>"polygon"</code>, and provide your
+polygon to <code>area</code>.
+
+</p>
+</li>
+<li>
+<p>a raster:
+</p>
+<p>Set <code>geographical.limit</code> to <code>"raster"</code>, and provide your
+raster to <code>area</code>. Your raster values should be 1 (suitable area),
+0 (unsuitable area) or NA (outside your mask).
+
+</p>
+</li>
+<li>
+<p>an extent object:
+</p>
+<p>Set <code>geographical.limit</code> to <code>"extent"</code>, and either provide your
+extent object to <code>area</code>, or leave it <code>NULL</code> to draw an extent on
+the map.
+</p>
+</li>
+</ol>
+<h3>Value</h3>
+
+<p>a <code>list</code> containing 7 elements:
+</p>
+
+<ul>
+<li>
+<p><code>approach</code>: the approach used to generate the species, <em>i.e.</em>, <code>"response"</code>
+</p>
+</li>
+<li>
+<p><code>details</code>: the details and parameters used to generate the species
+</p>
+</li>
+<li>
+<p><code>suitab.raster</code>: the virtual species distribution, as a Raster object containing the
+environmental suitability)
+</p>
+</li>
+<li>
+<p><code>PA.conversion</code>: the parameters used to convert the suitability into presence-absence
+</p>
+</li>
+<li>
+<p><code>pa.raster</code>: the presence-absence map, as a Raster object containing 0 (absence) / 1 (presence) / NA
+</p>
+</li>
+<li>
+<p><code>geographical.limit</code>: the method used to
+limit the distribution and the area in which the distribution is restricted
+</p>
+</li>
+<li>
+<p><code>occupied.area</code>: the area occupied by the virtual species as a
+Raster of presence-absence
+</p>
+</li>
+</ul>
+<p>The structure of the virtualspecies object can be seen using <code>str()</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+</p>
+<p>with help from C. N. Meynard, C. Bellard &amp; F. Courchamp
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Create an example stack with six environmental variables
+a &lt;- matrix(rep(dnorm(1:100, 50, sd = 25)), 
+            nrow = 100, ncol = 100, byrow = TRUE)
+env &lt;- c(rast(a * dnorm(1:100, 50, sd = 25)),
+         rast(a * 1:100),
+         rast(a * logisticFun(1:100, alpha = 10, beta = 70)),
+         rast(t(a)),
+         rast(exp(a)),
+         rast(log(a)))
+names(env) &lt;- paste("Var", 1:6, sep = "")   
+
+# More than 6 variables: by default a PCA approach will be used
+sp &lt;- generateRandomSp(env)
+
+# limiting the distribution to a specific extent
+limit &lt;- ext(1, 50, 1, 50)
+
+limitDistribution(sp, area = limit)
+
+
+# Example of a raster of habitat patches
+habitat.raster &lt;- setValues(sp$pa.raster, 
+                            sample(c(0, 1), size = ncell(sp$pa.raster), 
+                            replace = TRUE))
+
+plot(habitat.raster) # 1 = suitable habitat; 0 = unsuitable habitat
+sp &lt;- limitDistribution(sp, geographical.limit = "raster", area = habitat.raster)
+par(mfrow = c(2, 1))
+plot(sp$pa.raster)
+plot(sp$occupied.area) # Species could not occur in many cells because
+# habitat patches were unsuitable
+</code></pre>
+
+
+</div>

@@ -1,0 +1,299 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vimp_anova</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Nonparametric Intrinsic Variable Importance Estimates: ANOVA</h2>
+
+<h3>Description</h3>
+
+<p>Compute estimates of and confidence intervals for nonparametric ANOVA-based
+intrinsic variable importance. This is a wrapper function for <code>cv_vim</code>,
+with <code>type = "anova"</code>. This type
+has limited functionality compared to other
+types; in particular, null hypothesis tests
+are not possible using <code>type = "anova"</code>.
+If you want to do null hypothesis testing
+on an equivalent population parameter, use
+<code>vimp_rsquared</code> instead.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vimp_anova(
+  Y = NULL,
+  X = NULL,
+  cross_fitted_f1 = NULL,
+  cross_fitted_f2 = NULL,
+  indx = 1,
+  V = 10,
+  run_regression = TRUE,
+  SL.library = c("SL.glmnet", "SL.xgboost", "SL.mean"),
+  alpha = 0.05,
+  delta = 0,
+  na.rm = FALSE,
+  cross_fitting_folds = NULL,
+  stratified = FALSE,
+  C = rep(1, length(Y)),
+  Z = NULL,
+  ipc_weights = rep(1, length(Y)),
+  scale = "logit",
+  ipc_est_type = "aipw",
+  scale_est = TRUE,
+  cross_fitted_se = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>the outcome.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>the covariates. If <code>type = "average_value"</code>, then the exposure
+variable should be part of <code>X</code>, with its name provided in <code>exposure_name</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross_fitted_f1</code></td>
+<td>
+<p>the predicted values on validation data from a
+flexible estimation technique regressing Y on X in the training data. Provided as
+either (a) a vector, where each element is
+the predicted value when that observation is part of the validation fold;
+or (b) a list of length V, where each element in the list is a set of predictions on the
+corresponding validation data fold.
+If sample-splitting is requested, then these must be estimated specially; see Details. However,
+the resulting vector should be the same length as <code>Y</code>; if using a list, then the summed
+length of each element across the list should be the same length as <code>Y</code> (i.e.,
+each observation is included in the predictions).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross_fitted_f2</code></td>
+<td>
+<p>the predicted values on validation data from a
+flexible estimation technique regressing either (a) the fitted values in
+<code>cross_fitted_f1</code>, or (b) Y, on X withholding the columns in <code>indx</code>.
+Provided as either (a) a vector, where each element is
+the predicted value when that observation is part of the validation fold;
+or (b) a list of length V, where each element in the list is a set of predictions on the
+corresponding validation data fold.
+If sample-splitting is requested, then these must be estimated specially; see Details. However,
+the resulting vector should be the same length as <code>Y</code>; if using a list, then the summed
+length of each element across the list should be the same length as <code>Y</code> (i.e.,
+each observation is included in the predictions).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>indx</code></td>
+<td>
+<p>the indices of the covariate(s) to calculate variable
+importance for; defaults to 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>V</code></td>
+<td>
+<p>the number of folds for cross-fitting, defaults to 5. If
+<code>sample_splitting = TRUE</code>, then a special type of <code>V</code>-fold cross-fitting
+is done. See Details for a more detailed explanation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>run_regression</code></td>
+<td>
+<p>if outcome Y and covariates X are passed to
+<code>vimp_accuracy</code>, and <code>run_regression</code> is <code>TRUE</code>,
+then Super Learner will be used; otherwise, variable importance
+will be computed using the inputted fitted values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SL.library</code></td>
+<td>
+<p>a character vector of learners to pass to
+<code>SuperLearner</code>, if <code>f1</code> and <code>f2</code> are Y and X,
+respectively. Defaults to <code>SL.glmnet</code>, <code>SL.xgboost</code>,
+and <code>SL.mean</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>the level to compute the confidence interval at.
+Defaults to 0.05, corresponding to a 95% confidence interval.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>the value of the <code class="reqn">\delta</code>-null (i.e., testing if
+importance &lt; <code class="reqn">\delta</code>); defaults to 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>should we remove NAs in the outcome and fitted values
+in computation? (defaults to <code>FALSE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross_fitting_folds</code></td>
+<td>
+<p>the folds for cross-fitting. Only used if
+<code>run_regression = FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stratified</code></td>
+<td>
+<p>if run_regression = TRUE, then should the generated
+folds be stratified based on the outcome (helps to ensure class balance
+across cross-validation folds)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>the indicator of coarsening (1 denotes observed, 0 denotes
+unobserved).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>either (i) NULL (the default, in which case the argument
+<code>C</code> above must be all ones), or (ii) a character vector
+specifying the variable(s) among Y and X that are thought to play a
+role in the coarsening mechanism. To specify the outcome, use <code>"Y"</code>; to
+specify covariates, use a character number corresponding to the desired
+position in X (e.g., <code>"1"</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_weights</code></td>
+<td>
+<p>weights for the computed influence curve (i.e.,
+inverse probability weights for coarsened-at-random settings).
+Assumed to be already inverted (i.e., ipc_weights = 1 / [estimated
+probability weights]).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>should CIs be computed on original ("identity") or
+another scale? (options are "log" and "logit")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_est_type</code></td>
+<td>
+<p>the type of procedure used for coarsened-at-random
+settings; options are "ipw" (for inverse probability weighting) or
+"aipw" (for augmented inverse probability weighting).
+Only used if <code>C</code> is not all equal to 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale_est</code></td>
+<td>
+<p>should the point estimate be scaled to be greater than or equal to 0?
+Defaults to <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross_fitted_se</code></td>
+<td>
+<p>should we use cross-fitting to estimate the standard
+errors (<code>TRUE</code>, the default) or not (<code>FALSE</code>)?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments to the estimation tool, see "See also".</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>We define the population ANOVA
+parameter for the group of features (or  single feature) <code class="reqn">s</code> by
+</p>
+<p style="text-align: center;"><code class="reqn">\psi_{0,s} := E_0\{f_0(X) - f_{0,s}(X)\}^2/var_0(Y),</code>
+</p>
+
+<p>where <code class="reqn">f_0</code> is the population conditional mean using all features,
+<code class="reqn">f_{0,s}</code> is the population conditional mean using the features with
+index not in <code class="reqn">s</code>, and <code class="reqn">E_0</code> and <code class="reqn">var_0</code> denote expectation and
+variance under the true data-generating distribution, respectively.
+</p>
+<p>Cross-fitted ANOVA estimates are computed by first
+splitting the data into <code class="reqn">K</code> folds; then using each fold in turn as a
+hold-out set, constructing estimators <code class="reqn">f_{n,k}</code> and <code class="reqn">f_{n,k,s}</code> of
+<code class="reqn">f_0</code> and <code class="reqn">f_{0,s}</code>, respectively on the training data and estimator
+<code class="reqn">E_{n,k}</code> of <code class="reqn">E_0</code> using the test data; and finally, computing
+</p>
+<p style="text-align: center;"><code class="reqn">\psi_{n,s} := K^{(-1)}\sum_{k=1}^K E_{n,k}\{f_{n,k}(X) - f_{n,k,s}(X)\}^2/var_n(Y),</code>
+</p>
+
+<p>where <code class="reqn">var_n</code> is the empirical variance.
+See the paper by Williamson, Gilbert, Simon, and Carone for more
+details on the mathematics behind this function.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of classes <code>vim</code> and <code>vim_anova</code>.
+See Details for more information.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>SuperLearner</code> for specific usage of the
+<code>SuperLearner</code> function and package.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># generate the data
+# generate X
+p &lt;- 2
+n &lt;- 100
+x &lt;- data.frame(replicate(p, stats::runif(n, -5, 5)))
+
+# apply the function to the x's
+smooth &lt;- (x[,1]/5)^2*(x[,1]+7)/5 + (x[,2]/3)^2
+
+# generate Y ~ Normal (smooth, 1)
+y &lt;- smooth + stats::rnorm(n, 0, 1)
+
+# set up a library for SuperLearner; note simple library for speed
+library("SuperLearner")
+learners &lt;- c("SL.glm", "SL.mean")
+
+# estimate (with a small number of folds, for illustration only)
+est &lt;- vimp_anova(y, x, indx = 2,
+           alpha = 0.05, run_regression = TRUE,
+           SL.library = learners, V = 2, cvControl = list(V = 2))
+
+</code></pre>
+
+
+</div>

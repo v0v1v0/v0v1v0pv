@@ -1,0 +1,200 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>emis_cold</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimation of cold start emissions hourly for the of the week</h2>
+
+<h3>Description</h3>
+
+<p><code>emis_cold</code> emissions are estimated as the product of the
+vehicles on a road, length of the road, emission factor evaluated at the
+respective speed. The estimation considers the beta parameter, the fraction of
+mileage driven
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">emis_cold(
+  veh,
+  lkm,
+  ef,
+  efcold,
+  beta,
+  speed = 34,
+  agemax = if (!inherits(x = veh, what = "list")) {
+     ncol(veh)
+ } else {
+    
+    ncol(veh[[1]])
+ },
+  profile,
+  simplify = FALSE,
+  hour = nrow(profile),
+  day = ncol(profile),
+  array = TRUE,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>veh</code></td>
+<td>
+<p>"Vehicles" data-frame or list of "Vehicles" data-frame. Each data-frame
+as number of columns matching the age distribution of that type of vehicle.
+The number of rows is equal to the number of streets link</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lkm</code></td>
+<td>
+<p>Length of each link</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ef</code></td>
+<td>
+<p>List of functions of emission factors of vehicular categories</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>efcold</code></td>
+<td>
+<p>List of functions of cold start emission factors of vehicular categories</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>Dataframe with the hourly cold-start distribution to each day
+of the period. Number of rows are hours and columns are days</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>speed</code></td>
+<td>
+<p>Speed data-frame with number of columns as hours</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>agemax</code></td>
+<td>
+<p>Age of oldest vehicles for that category</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>profile</code></td>
+<td>
+<p>Numerical or dataframe with nrows equal to 24 and ncol 7 day
+of the week</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>simplify</code></td>
+<td>
+<p>Logical; to determine if EmissionsArray should les dimensions,
+being streets, vehicle categories and hours or default (streets, vehicle
+categories, hours and days). Default is FALSE to avoid break old code, but
+the recommendation is that new estimations use this parameter as TRUE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hour</code></td>
+<td>
+<p>Number of considered hours in estimation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>day</code></td>
+<td>
+<p>Number of considered days in estimation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>array</code></td>
+<td>
+<p>Deprecated! <code>emis_cold</code> returns only arrays.
+When TRUE and veh is not a list, expects a profile as a dataframe producing
+an array with dimensions (streets x columns x hours x days)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical; To show more information</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>EmissionsArray  g/h
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Do not run
+data(net)
+data(pc_profile)
+data(fe2015)
+data(fkm)
+data(pc_cold)
+pcf &lt;- as.data.frame(cbind(pc_cold,pc_cold,pc_cold,pc_cold,pc_cold,pc_cold,
+pc_cold))
+PC_G &lt;- c(33491,22340,24818,31808,46458,28574,24856,28972,37818,49050,87923,
+          133833,138441,142682,171029,151048,115228,98664,126444,101027,
+          84771,55864,36306,21079,20138,17439, 7854,2215,656,1262,476,512,
+          1181, 4991, 3711, 5653, 7039, 5839, 4257,3824, 3068)
+veh &lt;- data.frame(PC_G = PC_G)
+pc1 &lt;- my_age(x = net$ldv, y = PC_G, name = "PC")
+pcw &lt;- temp_fact(net$ldv+net$hdv, pc_profile)
+speed &lt;- netspeed(pcw, net$ps, net$ffs, net$capacity, net$lkm, alpha = 1)
+pckm &lt;- units::set_units(fkm[[1]](1:24), "km"); pckma &lt;- cumsum(pckm)
+cod1 &lt;- emis_det(po = "CO", cc = 1000, eu = "III", km = pckma[1:11])
+cod2 &lt;- emis_det(po = "CO", cc = 1000, eu = "I", km = pckma[12:24])
+#vehicles newer than pre-euro
+co1 &lt;- fe2015[fe2015$Pollutant=="CO", ] #24 obs!!!
+cod &lt;- c(co1$PC_G[1:24]*c(cod1,cod2),co1$PC_G[25:nrow(co1)])
+lef &lt;- ef_ldv_scaled(co1, cod, v = "PC", cc = "&lt;=1400",
+                     f = "G",p = "CO", eu=co1$Euro_LDV)
+# Mohtly average temperature 18 Celcius degrees
+lefec &lt;- ef_ldv_cold_list(df = co1, ta = 18, cc = "&lt;=1400", f = "G",
+                          eu = co1$Euro_LDV, p = "CO" )
+lefec &lt;- c(lefec,lefec[length(lefec)], lefec[length(lefec)],
+           lefec[length(lefec)], lefec[length(lefec)],
+           lefec[length(lefec)])
+length(lefec) == ncol(pc1)
+#emis change length of 'ef' to match ncol of 'veh'
+class(lefec)
+PC_CO_COLD &lt;- emis_cold(veh = pc1,
+                        lkm = net$lkm,
+                        ef = lef,
+                        efcold = lefec,
+                        beta = pcf,
+                        speed = speed,
+                        profile = pc_profile)
+class(PC_CO_COLD)
+plot(PC_CO_COLD)
+lpc &lt;- list(pc1, pc1)
+PC_CO_COLDv2 &lt;- emis_cold(veh = pc1,
+                          lkm = net$lkm,
+                          ef = lef,
+                          efcold = lefec,
+                          beta = pcf,
+                          speed = speed,
+                          profile = pc_profile,
+                          hour = 2,
+                          day = 1)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

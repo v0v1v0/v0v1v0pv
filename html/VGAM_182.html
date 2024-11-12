@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>chisq</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Chi-squared and Chi Distributions </h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the degrees of freedom for
+a chi-squared distribution. Also fits the chi distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">chisq(link = "loglink", zero = NULL, squared = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for
+information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>squared</code></td>
+<td>
+
+<p>Logical.
+Set <code>FALSE</code> for the chi distribution.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The degrees of freedom is treated as a
+real parameter to be estimated
+and not as an integer.
+Being positive, a log link is used by default.
+Fisher scoring is used.
+</p>
+<p>If a random variable has a chi-squared
+distribution then the 
+square root of the random variable
+has a chi distribution.
+For both distributions,
+the fitted value is the mean.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Multiple responses are permitted.
+There may be convergence problems if the degrees of freedom
+is very large or close to zero.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Chisquare</code>.
+<code>uninormal</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">cdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+cdata &lt;- transform(cdata, y1 = rchisq(nn, df = exp(1 - 1 * x2)),
+                          y2 = rchisq(nn, df = exp(2 - 2 * x2)))
+fit &lt;- vglm(cbind(y1, y2) ~ x2, chisq, data = cdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+</code></pre>
+
+
+</div>

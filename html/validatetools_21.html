@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>substitute_values</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>substitute a value in a rule set</h2>
+
+<h3>Description</h3>
+
+<p>Substitute values into expression, thereby simplifying the rule set.
+Rules that evaluate to TRUE because of the substitution are removed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">substitute_values(.x, .values = list(...), ..., .add_constraints = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>.x</code></td>
+<td>
+<p><code>validator</code> object with rules</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.values</code></td>
+<td>
+<p>(optional) named list with values for variables to substitute</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>alternative way of supplying values for variables (see examples).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.add_constraints</code></td>
+<td>
+<p><code>logical</code>, should values be added as constraints to the resulting validator object?</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(validate)
+rules &lt;- validator( rule1 = z &gt; 1
+                  , rule2 = y &gt; z
+                  )
+# rule1 is dropped, since it always is true
+substitute_values(rules, list(z=2))
+
+# you can also supply the values as separate parameters
+substitute_values(rules, z = 2)
+
+# you can choose to not add substituted values as a constraint
+substitute_values(rules, z = 2, .add_constraints = FALSE)
+
+rules &lt;- validator( rule1 = if (gender == "male") age &gt;= 18 )
+substitute_values(rules, gender="male")
+substitute_values(rules, gender="female")
+</code></pre>
+
+
+</div>

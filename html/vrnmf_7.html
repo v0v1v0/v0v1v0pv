@@ -1,0 +1,215 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>volnmf_estimate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Alternating optimization of volume-regularized NMF</h2>
+
+<h3>Description</h3>
+
+<p><code>volnmf_estimate</code> provides alternating optimization of volume-regularized factorization of a matrix <code>B</code> using the following objective function:
+<code class="reqn">F = ||B*Q - C*R||^2 + w.vol*volume(R)</code>. Matrix <code>C</code> is required to be non-negative and having either column or row vectors on the simplex.
+Matrix <code>R</code> can optionally have non-negativity constraint. Matrix <code>Q</code> can optionally be identity matrix or any unitary.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">volnmf_estimate(
+  B,
+  C,
+  R,
+  Q,
+  domain = "covariance",
+  volf = "logdet",
+  R.majorate = FALSE,
+  wvol = NULL,
+  delta = 1e-08,
+  n.iter = 10000,
+  err.cut = 1e-08,
+  vol.iter = 100,
+  c.iter = 100,
+  extrapolate = TRUE,
+  accelerate = TRUE,
+  acc.C = 4/5,
+  acc.R = 3/4,
+  C.constraint = "col",
+  C.bound = 1,
+  R.constraint = "pos",
+  verbose = TRUE,
+  record = 100,
+  Canchor = NULL,
+  Ctrue = NULL,
+  mutation.run = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>B</code></td>
+<td>
+<p>A numeric matrix. A matrix to factorize (by default NULL). If not given than matrix <code>B</code> is taken to be a square root decomposition of <code class="reqn">P = B*t(B)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>Numeric matrices. Initial matrices for optimiztion.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R</code></td>
+<td>
+<p>Numeric matrices. Initial matrices for optimiztion.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Q</code></td>
+<td>
+<p>Numeric matrices. Initial matrices for optimiztion.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>domain</code></td>
+<td>
+<p>A character. Optimize unitary rotation matrix <code>Q</code> ("covariance") or keep it as identity matrix (as in standard NMF). By default "covariance".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>volf</code></td>
+<td>
+<p>A character. Function that approximate volume. Can have values of "logdet" or "det" (by default "logdet").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R.majorate</code></td>
+<td>
+<p>A boolean. Majorate logdet each iteration of <code>volnmf_logdet()</code> (by default FALSE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wvol</code></td>
+<td>
+<p>A numeric. A weight of volume-regularized term <code>volume(R)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>A numeric. Logdet regularization term <code>log(det(R) + delta)</code> (by default 1e-8).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.iter</code></td>
+<td>
+<p>An integer. Number of iterations (by default <code>1,000</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>err.cut</code></td>
+<td>
+<p>A numeric. Relative error in determinant between iterations to stop algorithm (by default <code>1e-8</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vol.iter</code></td>
+<td>
+<p>An integer. Number of iterations to update volume-regularized matrix <code>R</code> at each alternating step.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>c.iter</code></td>
+<td>
+<p>An integer. Number of iterations to update simplex matrix <code>C</code> at each alternating step.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extrapolate</code></td>
+<td>
+<p>A numeric. Do Nesterov extrapolation inside blocks of R and C optimization (by default TRUE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>accelerate</code></td>
+<td>
+<p>A numeric. Do acceleration each update after R and C blocks estimated via Nesterov-like extrapolation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>acc.C</code></td>
+<td>
+<p>A numeric. Acceleration parameter of matrix C.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>acc.R</code></td>
+<td>
+<p>A numeric. Acceleration parameter of matrix R.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C.constraint</code></td>
+<td>
+<p>A character. Constraint either sum of columns ("col") or sum of rows ("row) to be equal to <code>C.bound</code> (By default "col").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C.bound</code></td>
+<td>
+<p>A numeric. A simplex constraint on matrix C vectors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R.constraint</code></td>
+<td>
+<p>A character. Set up non-negativity ("pos") constraint on elements of <code>R</code> (by default "pos", alternative "no").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>A boolean. Print per-iteration information (by default FALSE)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>record</code></td>
+<td>
+<p>A numeric. Record parameters every 'record' iterations (by default <code>NULL</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Canchor</code></td>
+<td>
+<p>A matrix. A matrix of anchor components (unused currently). (default=NULL)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Ctrue</code></td>
+<td>
+<p>A matrix. Correct matrix C if known. Useful for benchmark.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mutation.run</code></td>
+<td>
+<p>A boolean. Assess goodness of solution using reflection test if mutation.run=TRUE (applicable only to analysis of mutation patterns). (default=FALSE)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>List of objects:
+</p>
+<p><code>C, R, Q</code>, <code>E</code> Factorization matrices.
+</p>
+<p><code>iter, err</code> Number of iterations and relative per-iteration error <code>err</code> in matrix <code>C</code>.
+</p>
+<p><code>info.record</code> a list of objects that record and store state of matrices each <code>record</code> iterations.
+</p>
+
+
+</div>

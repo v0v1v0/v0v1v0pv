@@ -1,0 +1,335 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>generateRandomSp</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate a random virtual species distribution from environmental variables</h2>
+
+<h3>Description</h3>
+
+<p>This function generates randomly a virtual species distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">generateRandomSp(
+  raster.stack,
+  approach = "automatic",
+  rescale = TRUE,
+  convert.to.PA = TRUE,
+  relations = c("gaussian", "linear", "logistic", "quadratic"),
+  rescale.each.response = TRUE,
+  realistic.sp = TRUE,
+  species.type = "multiplicative",
+  niche.breadth = "any",
+  sample.points = FALSE,
+  nb.points = 10000,
+  PA.method = "probability",
+  alpha = -0.1,
+  adjust.alpha = TRUE,
+  beta = "random",
+  species.prevalence = NULL,
+  plot = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>raster.stack</code></td>
+<td>
+<p>a SpatRaster object, in which each layer represent an
+environmental 
+variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>approach</code></td>
+<td>
+<p><code>"automatic"</code>, <code>"random"</code>, <code>"response"</code>
+or <code>"pca"</code>. This parameters defines how species will be generated. 
+<code>"automatic"</code>: If less than 6 variables in <code>raster.stack</code>, a 
+response approach will be used, otherwise a pca approach will be used.
+<code>"random"</code>: the approach will be randomly picked. Otherwise choose
+<code>"response"</code> or <code>"pca"</code>. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rescale</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, the final 
+probability of presence is rescaled between 0 and 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>convert.to.PA</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, the 
+virtual species distribution will also be converted into Presence-Absence.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>relations</code></td>
+<td>
+<p>[response approach] a vector containing the possible types 
+of response function.
+The implemented type of relations are <code>"gaussian"</code>, <code>"linear"</code>,
+<code>"logistic"</code> and <code>"quadratic"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rescale.each.response</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, 
+the individual responses to
+each environmental variable are rescaled between 0 and 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>realistic.sp</code></td>
+<td>
+<p>[response approach] <code>TRUE</code> or <code>FALSE</code>. If 
+<code>TRUE</code>, the function will try to define responses that can form a viable
+species. If <code>FALSE</code>, the responses will be randomly generated
+(may result in environmental conditions that do not co-exist).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species.type</code></td>
+<td>
+<p>[response approach] <code>"additive"</code> or 
+<code>"multiplicative"</code>. Defines 
+how the final probability of presence is calculated: if <code>"additive"</code>,
+responses to each
+variable are summed; if <code>"multiplicative"</code>, responses are multiplied.
+See <code>generateSpFromFun</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>niche.breadth</code></td>
+<td>
+<p>[pca approach] <code>"any"</code>, <code>"narrow"</code> or 
+<code>"wide"</code>. This parameter
+defines how tolerant is the species regarding environmental conditions by 
+adjusting
+the standard deviations of the gaussian functions. See 
+<code>generateSpFromPCA</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample.points</code></td>
+<td>
+<p>[pca approach] <code>TRUE</code> of <code>FALSE</code>. If you have 
+a large
+raster file then use this parameter to sample a number of points equal to
+<code>nb.points</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nb.points</code></td>
+<td>
+<p>[pca approach] a numeric value. Only useful if 
+<code>sample.points = TRUE</code>.
+The number of sampled points from the raster, to perform the PCA. A too small
+value may not be representative of the environmental conditions in your 
+raster.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PA.method</code></td>
+<td>
+<p><code>"threshold"</code> or <code>"probability"</code>. If 
+<code>"threshold"</code>, then occurrence probabilities are simply converted into
+presence-absence according to the threshold <code>beta</code>. If 
+<code>"probability"</code>, then
+probabilities are converted according to a logistic function of threshold 
+<code>beta</code> and slope <code>alpha</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p><code>NULL</code> or a negative numeric value. Only useful if 
+<code>PA.method = "probability"</code>. The value of <code>alpha</code> will
+shape the logistic function transforming occurrences into presence-absences.
+See <code>logisticFun</code> and examples therein for the choice of 
+<code>alpha</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>adjust.alpha</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. Only useful if 
+<code>rescale = FALSE</code>. If  <code>adjust.alpha = TRUE</code>, then the value 
+of <code>alpha</code> will
+be adjusted to an appropriate value  for the range of suitabilities.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p><code>"random"</code>, a numeric value in the range of your 
+probabilities or <code>NULL</code>. This is the threshold of conversion into
+presence-absence (= the inflexion point if <code>PA.method = "probability"</code>).
+If <code>"random"</code>, a numeric value will be randomly generated within 
+the range
+of probabilities of occurrence. See <code>convertToPA</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species.prevalence</code></td>
+<td>
+<p><code>NULL</code> or a numeric value between 0 and 1.
+The species prevalence is the proportion of sites actually occupied by the
+species. See <code>convertToPA</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, the generated 
+virtual species will be plotted.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><a href="http://borisleroy.com/virtualspecies_tutorial/05-randomspecies.html">
+Online tutorial for this function</a>
+</p>
+<p>This function generate random virtual species, either using a PCA 
+approach, or using
+a response approach. In case of a response approach, only four response 
+functions are
+currently used: gaussian, linear, logistic and quadratic functions.
+</p>
+<p>Note that in case of numerous predictor variables, the "response" 
+approach will
+not work well because it will often generate contradicting response functions 
+(e.g., mean annual temperature optimum at degrees C and temperature 
+of the coldest month at
+10 degrees C). In these case, it is advised to use the PCA approach 
+(by default, a PCA approach
+will be used if there are more than 6 predictor variables).
+</p>
+<p>If <code>rescale.each.response = TRUE</code>, then the probability response to each
+variable will be normalised between 0 and 1 according to the following 
+formula:
+P.rescaled = (P - min(P)) / (max(P) - min (P)). Similarly, if 
+<code>rescale = TRUE</code>,
+the final environmental suitability will be rescaled between 0 and 1 
+with the same formula.
+</p>
+<p>By default, the function will perform a probabilistic conversion into 
+presence-
+absence, with a randomly chosen beta threshold. If you want to customise the 
+conversion parameters, you have to define <b>two</b> of the three 
+following parameters:
+</p>
+
+<ul>
+<li>
+<p><code>beta</code>: the 'threshold' of the logistic function (i.e. the 
+inflexion point)
+</p>
+</li>
+<li>
+<p><code>alpha</code>: the slope of the logistic function
+</p>
+</li>
+<li>
+<p><code>species.prevalence</code>: the proportion of sites in which the species
+occur
+</p>
+</li>
+</ul>
+<p>If you provide <code>beta</code> and <code>alpha</code>, the <code>species.prevalence</code>
+is calculated immediately calculated after conversion into presence-absence.
+</p>
+<p>As explained in <code>convertToPA</code>, if you choose choose a precise
+<code>species.prevalence</code>, it may not be possible to reach this particular 
+value because of the availability of environmental conditions. Several
+runs may be necessary to reach the desired <code>species.prevalence</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a <code>list</code> with 3 to 5 elements (depending if the conversion 
+to presence-absence was performed):
+</p>
+
+<ul>
+<li>
+<p><code>approach</code>: the approach used to generate the species, 
+<em>i.e.</em>, <code>"response"</code>
+</p>
+</li>
+<li>
+<p><code>details</code>: the details and parameters used to generate the 
+species
+</p>
+</li>
+<li>
+<p><code>suitab.raster</code>: the virtual species distribution, as a 
+SpatRaster object containing the
+environmental suitability)
+</p>
+</li>
+<li>
+<p><code>PA.conversion</code>: the parameters used to convert the suitability 
+into presence-absence
+</p>
+</li>
+<li>
+<p><code>pa.raster</code>: the presence-absence map, as a SpatRaster object 
+containing 0 (absence) / 1 (presence) / NA
+</p>
+</li>
+</ul>
+<p>The structure of the virtualspecies can object be seen using <code>str()</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+</p>
+<p>with help from C. N. Meynard, C. Bellard &amp; F. Courchamp
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Create an example stack with six environmental variables
+a &lt;- matrix(rep(dnorm(1:100, 50, sd = 25)), 
+            nrow = 100, ncol = 100, byrow = TRUE)
+env &lt;- c(rast(a * dnorm(1:100, 50, sd = 25)),
+         rast(a * 1:100),
+         rast(a * logisticFun(1:100, alpha = 10, beta = 70)),
+         rast(t(a)),
+         rast(exp(a)),
+         rast(log(a)))
+names(env) &lt;- paste("Var", 1:6, sep = "")   
+
+# More than 6 variables: by default a PCA approach will be used
+generateRandomSp(env)
+
+# Manually choosing a response approach: this may fail because it is hard
+# to find a realistic species with six distinct responses to six variables
+
+generateRandomSp(env, approach = "response")
+
+
+# Randomly choosing the approach
+generateRandomSp(env, approach = "random")
+
+
+</code></pre>
+
+
+</div>

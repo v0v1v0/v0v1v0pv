@@ -1,0 +1,312 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot a supported S3 object</h2>
+
+<h3>Description</h3>
+
+<p>S3 method for creating plots directly from objects using <code>ggplot2</code>,
+similar to the base R <code>plot()</code> function.
+</p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Methods <code>visr.survfit()</code> and <code>visr.tidycuminc()</code> have been deprecated
+in favor of <code>ggsurvfit::ggsurvfit()</code> and <code>ggsurvfit::ggcuminc()</code>, respectively.
+</p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#questioning"><img src="../help/figures/lifecycle-questioning.svg" alt="[Questioning]"></a>
+<code>visr.attrition()</code> function to draw a Consort flow diagram chart is currently being questioned.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visr(x, ...)
+
+## Default S3 method:
+visr(x, ...)
+
+## S3 method for class 'survfit'
+visr(
+  x = NULL,
+  x_label = NULL,
+  y_label = NULL,
+  x_units = NULL,
+  x_ticks = NULL,
+  y_ticks = NULL,
+  fun = "surv",
+  legend_position = "right",
+  ...
+)
+
+## S3 method for class 'attrition'
+visr(
+  x,
+  description_column_name = "Criteria",
+  value_column_name = "Remaining N",
+  complement_column_name = "",
+  box_width = 50,
+  font_size = 12,
+  fill = "white",
+  border = "black",
+  ...
+)
+
+## S3 method for class 'tidycuminc'
+visr(
+  x = NULL,
+  x_label = "Time",
+  y_label = "Cumulative Incidence",
+  x_units = NULL,
+  x_ticks = pretty(x$tidy$time, 10),
+  y_ticks = pretty(c(0, 1), 5),
+  legend_position = "right",
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object of class <code>attritiontable</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments passed on to the method</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_label</code></td>
+<td>
+<p><code>character</code> Label for the x-axis. When not specified,
+the function will look for <code>"PARAM"</code> or <code>"PARAMCD"</code> information in the original data set (CDISC standards).
+If no <code>"PARAM"</code>/<code>"PARAMCD"</code> information is available, the default x-axis label is <code>"Time"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_label</code></td>
+<td>
+<p><code>character</code> Label for the y-axis. When not specified,
+the default will do a proposal, depending on the <code>fun</code> argument.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_units</code></td>
+<td>
+<p>Unit to be added to the x_label (x_label (x_unit)).
+Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_ticks</code></td>
+<td>
+<p>Ticks for the x-axis. When not specified, the default will
+do a proposal.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_ticks</code></td>
+<td>
+<p>Ticks for the y-axis. When not specified,
+the default will do a proposal based on the <code>fun</code> argument.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fun</code></td>
+<td>
+<p>Function that represents the scale of the estimate.
+The current options are:
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+<code>surv</code> </td>
+<td style="text-align: left;"> is the survival probability. This is the default </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>log</code> </td>
+<td style="text-align: left;"> is log of the survival probability </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>event</code> </td>
+<td style="text-align: left;"> is the failure probability </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>cloglog</code> </td>
+<td style="text-align: left;"> is log(-log(survival probability)) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>pct</code> </td>
+<td style="text-align: left;"> is survival as a percentage </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>logpct</code> </td>
+<td style="text-align: left;"> is log survival as a percentage </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>cumhaz</code> </td>
+<td style="text-align: left;"> is the cumulative hazard </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend_position</code></td>
+<td>
+<p>Specifies the legend position in the plot.
+Character values allowed are "top" "left" "bottom" "right".
+Numeric coordinates are also allowed.
+Default is "right".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>description_column_name</code></td>
+<td>
+<p><code>character</code> Name of the column containing
+the inclusion descriptions</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value_column_name</code></td>
+<td>
+<p><code>character</code> Name of the column containing the
+remaining sample counts</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>complement_column_name</code></td>
+<td>
+<p><code>character</code> Optional: Name of the column
+containing the exclusion descriptions</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>box_width</code></td>
+<td>
+<p><code>character</code> The box width for each box in the flow
+chart</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>font_size</code></td>
+<td>
+<p><code>character</code> The fontsize in pt</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fill</code></td>
+<td>
+<p>The color (string or hexcode) to use to fill the boxes in the
+flowchart</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>border</code></td>
+<td>
+<p>The color (string or hexcode) to use for the borders of the
+boxes in the flowchart</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Object of class <code>ggplot</code> and <code>ggsurvplot</code> for <code>survfit</code> objects.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ggplot</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# fit KM
+km_fit &lt;- survival::survfit(survival::Surv(AVAL, 1 - CNSR) ~ TRTP, data = adtte)
+
+# plot curves using survival plot function
+plot(km_fit)
+
+# plot same curves using visR::visr plotting function
+visR::visr(km_fit)
+
+# estimate KM using visR wrapper
+survfit_object &lt;- visR::estimate_KM(data = adtte, strata = "TRTP")
+
+# Plot survival probability
+visR::visr(survfit_object, fun = "surv")
+
+# Plot survival percentage
+visR::visr(survfit_object, fun = "pct")
+
+# Plot cumulative hazard
+visR::visr(survfit_object, fun = "cloglog")
+
+
+## Create attrition
+attrition &lt;- visR::get_attrition(adtte,
+  criteria_descriptions = c(
+    "1. Not in Placebo Group",
+    "2. Be 75 years of age or older.",
+    "3. White",
+    "4. Female"
+  ),
+  criteria_conditions = c(
+    "TRTP != 'Placebo'",
+    "AGE &gt;= 75",
+    "RACE=='WHITE'",
+    "SEX=='F'"
+  ),
+  subject_column_name = "USUBJID"
+)
+
+## Draw a CONSORT attrition chart without specifying extra text for the complement
+attrition %&gt;%
+  visr("Criteria", "Remaining N")
+
+## Add detailed complement descriptions to the "exclusion" part of the CONSORT diagram
+# Step 1. Add new column to attrition dataframe
+attrition$Complement &lt;- c(
+  "NA",
+  "Placebo Group",
+  "Younger than 75 years",
+  "Non-White",
+  "Male"
+)
+
+# Step 2. Define the name of the column in the call to the plotting function
+attrition %&gt;%
+  visr("Criteria", "Remaining N", "Complement")
+
+## Styling the CONSORT flowchart
+# Change the fill and outline of the boxes in the flowchart
+attrition %&gt;%
+  visr("Criteria", "Remaining N", "Complement", fill = "lightblue", border = "grey")
+
+## Adjust the font size in the boxes
+attrition %&gt;%
+  visr("Criteria", "Remaining N", font_size = 10)
+
+</code></pre>
+
+
+</div>

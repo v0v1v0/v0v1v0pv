@@ -1,0 +1,81 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>varbin.convert</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>varbin.convert
+
+</h2>
+
+<h3>Description</h3>
+
+<p>Generate new variable based on constructed binnings</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">varbin.convert(df, ivTable, x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>A data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ivTable</code></td>
+<td>
+<p>Output from either varbin, varbin.factor, varbin.monotonic or varbin.kink.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>String. Name of variable in data frame for which binninngs should be applied.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The command varbin.convert appends a new variable named "WoE_[x]" to the data frame. The new variable consist of the Weight of Evidence values from the resulting binning.
+
+
+
+
+
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Set seed and generate data
+set.seed(1337)
+target &lt;- as.numeric(runif(10000, 0, 1)&lt;0.2)
+age &lt;- round(rnorm(10000, 40, 15), 0)
+age[age&lt;20] &lt;- round(rnorm(sum(age&lt;20), 40, 5), 0)
+age[age&gt;95] &lt;- round(rnorm(sum(age&gt;95), 40, 5), 0)
+inc &lt;- round(rnorm(10000, 100000, 10000), 0)
+educ &lt;- sample(c("MSC", "BSC", "SELF", "PHD", "OTHER"), 10000, replace=TRUE)
+df &lt;- data.frame(target=target, age=age, inc=inc, educ=educ)
+
+# Split train/test
+df_train &lt;- df[1:5000, ]
+df_test &lt;- df[5001:nrow(df), ]
+
+# Perform unrestricted binnings
+result &lt;- varbin.factor(df_train, "educ", "target")
+result2 &lt;- varbin(df_train, "age", "target")
+
+# Convert test data
+df_new &lt;- varbin.convert(rbind(df_train, df_test), result,"educ")
+df_new &lt;- varbin.convert(df_new, result2, "age")
+</code></pre>
+
+
+</div>

@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>apply_transformations</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Apply vachette transformations</h2>
+
+<h3>Description</h3>
+
+<p>Apply vachette transformations
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">apply_transformations(vachette_data, ...)
+
+## S3 method for class 'vachette_data'
+apply_transformations(
+  vachette_data,
+  tol.end = 0.001,
+  tol.noise = 1e-08,
+  step.x.factor = 1.5,
+  ngrid.fit = 100,
+  window = 17,
+  log_file = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vachette_data</code></td>
+<td>
+<p>object of class <code>vachette_data</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol.end</code></td>
+<td>
+<p>numeric; Relative tolerance to determine last x open end reference</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol.noise</code></td>
+<td>
+<p>numeric; Relative tolerance for landmark determination typical curves</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>step.x.factor</code></td>
+<td>
+<p>numeric; x-axis extension factor to search for last x, i.e., to determine where close enough to asymptote</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ngrid.fit</code></td>
+<td>
+<p>numeric; number of grid points in last query segment for matching last reference segment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>window</code></td>
+<td>
+<p>integer; size (gridpoints) of Savitzky Golay smoothing window for landmark position determination</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log_file</code></td>
+<td>
+<p>character; File path to direct console output e.g., <code>"log.txt"</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>vachette_data</code> object containing a list of vachette-transformed <code>data.frame</code>s
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">obs &lt;- read.csv(system.file(package = "vachette", "examples", "iv-obs.csv"))
+typ &lt;- read.csv(system.file(package = "vachette", "examples", "iv-typ-minmax.csv"))
+
+vd &lt;- vachette_data(
+  obs.data = obs,
+  typ.data = typ,
+  covariates = c(WT = 70),
+  mappings = c(OBS = "DV", x = "time"),
+  model.name  = "IV"
+ )
+
+ vd &lt;- apply_transformations(vd)
+
+</code></pre>
+
+
+</div>

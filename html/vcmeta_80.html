@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>replicate.spear</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares and combines Spearman correlations in original and follow-up studies</h2>
+
+<h3>Description</h3>
+
+<p>This function can be used to compare and combine Spearman correlations from
+an original study and a follow-up study. The confidence level for the
+difference is 1 – 2*alpha, which is recommended for equivalence testing.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">replicate.spear(alpha, cor1, n1, cor2, n2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor1</code></td>
+<td>
+<p>estimated Spearman correlation in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>sample size in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor2</code></td>
+<td>
+<p>estimated Spearman correlation in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>sample size in follow-up study</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A 4-row matrix. The rows are:
+</p>
+
+<ul>
+<li>
+<p> Row 1 summarizes the original study
+</p>
+</li>
+<li>
+<p> Row 2 summarizes the follow-up study
+</p>
+</li>
+<li>
+<p> Row 3 estimates the difference in correlations
+</p>
+</li>
+<li>
+<p> Row 4 estimates the average correlation
+</p>
+</li>
+</ul>
+<p>The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - Spearman correlation estimate (single study, difference, average)
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> z - z-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2021).
+“Design and analysis of replication studies.”
+<em>Organizational Research Methods</em>, <b>24</b>(3), 513–529.
+ISSN 1094-4281, <a href="https://doi.org/10.1177/1094428120911088">doi:10.1177/1094428120911088</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">replicate.spear(.05, .598, 80, .324, 200)
+
+# Should return:
+#                       Estimate         SE        z            p         LL        UL
+# Original:                0.598 0.07948367 5.315140 1.065752e-07 0.41985966 0.7317733
+# Follow-up:               0.324 0.06541994 4.570582 4.863705e-06 0.19049455 0.4457384
+# Original - Follow-up:    0.274 0.10294378 3.437975 5.860809e-04 0.09481418 0.4342171
+# Average:                 0.461 0.05147189 9.967944 0.000000e+00 0.36695230 0.5457190
+
+
+</code></pre>
+
+
+</div>

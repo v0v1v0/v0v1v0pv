@@ -1,0 +1,125 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>get_risktable</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Obtain risk tables for tables and plots</h2>
+
+<h3>Description</h3>
+
+<p>Create a risk table from an object using an S3 method.
+Currently, no default method is defined.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">get_risktable(x, ...)
+
+## S3 method for class 'survfit'
+get_risktable(
+  x,
+  times = NULL,
+  statlist = "n.risk",
+  label = NULL,
+  group = c("strata", "statlist"),
+  collapse = FALSE,
+  ...
+)
+
+## S3 method for class 'tidycuminc'
+get_risktable(
+  x,
+  times = pretty(x$tidy$time, 10),
+  statlist = "n.risk",
+  label = NULL,
+  group = c("strata", "statlist"),
+  collapse = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class <code>survfit</code> or <code>tidycuminc</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments passed on to the method</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>times</code></td>
+<td>
+<p>Numeric vector indicating the times at which the risk set, censored subjects, events are calculated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>statlist</code></td>
+<td>
+<p>Character vector indicating which summary data to present. Current choices are "n.risk" "n.event"
+"n.censor", "cum.event", "cum.censor".
+Default is "n.risk".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label</code></td>
+<td>
+<p>Character vector with labels for the statlist. Default matches "n.risk" with "At risk", "n.event" with
+"Events", "n.censor" with "Censored", "cum.event" with "Cum. Event", and "cum.censor" with "Cum. Censor".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>String indicating the grouping variable for the risk tables.
+Current options are:
+</p>
+
+<ul>
+<li>
+<p>"strata": groups the risk tables per stratum.
+The <code>label</code> specifies the label within each risk table. The strata levels
+are used for the titles of the risk tables. This is the default
+</p>
+</li>
+<li>
+<p>"statlist": groups the risk tables per statlist.
+The <code>label</code> specifies the title for each risk table. The strata levels
+are used for labeling within each risk table.
+</p>
+</li>
+</ul>
+<p>Default is "strata".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>collapse</code></td>
+<td>
+<p>Boolean, indicates whether to present the data overall.
+Default is FALSE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>return list of attributes the form the risk table i.e.
+number of patients at risk per strata
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>summary.survfit</code>
+</p>
+
+
+</div>

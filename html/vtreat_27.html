@@ -1,0 +1,48 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>makekWayCrossValidationGroupedByColumn</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Build a k-fold cross validation splitter, respecting (never splitting) groupingColumn.</h2>
+
+<h3>Description</h3>
+
+<p>Build a k-fold cross validation splitter, respecting (never splitting) groupingColumn.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">makekWayCrossValidationGroupedByColumn(groupingColumnName)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>groupingColumnName</code></td>
+<td>
+<p>name of column to group by.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>splitting function in the sense of vtreat::buildEvalSets.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+d &lt;- data.frame(y=sin(1:100))
+d$group &lt;- floor(seq_len(nrow(d))/5)
+splitter &lt;- makekWayCrossValidationGroupedByColumn('group')
+split &lt;- splitter(nrow(d),5,d,d$y)
+d$splitLabel &lt;- vtreat::getSplitPlanAppLabels(nrow(d),split)
+rowSums(table(d$group,d$splitLabel)&gt;0)
+
+</code></pre>
+
+
+</div>

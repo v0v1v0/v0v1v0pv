@@ -1,0 +1,245 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>volcano3D</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Three-Dimensional Volcano Plot</h2>
+
+<h3>Description</h3>
+
+<p>Plots the three-way comparisons of variables such as gene expression data in
+3D space using plotly. x, y position represents polar position on 3 axes
+representing the amount each variable or gene tends to each of the 3
+categories. The z axis represents -log10 P value for the one-way test
+comparing each variable across the 3 groups.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">volcano3D(
+  polar,
+  type = 1,
+  label_rows = c(),
+  label_size = 14,
+  arrow_length = 100,
+  colour_code_labels = FALSE,
+  label_colour = "black",
+  grid_colour = "grey80",
+  grid_width = 2,
+  grid_options = NULL,
+  axis_colour = "black",
+  axis_width = 2,
+  marker_size = 3,
+  marker_outline_width = 0,
+  marker_outline_colour = "white",
+  z_axis_title_offset = 1.2,
+  z_axis_title_size = 12,
+  z_axis_angle = 0.5,
+  radial_axis_title_size = 14,
+  radial_axis_title_offset = 1.2,
+  xy_aspectratio = 1,
+  z_aspectratio = 0.8,
+  camera_eye = list(x = 0.9, y = 0.9, z = 0.9),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>polar</code></td>
+<td>
+<p>Object of S4 class 'volc3d' following call to either
+<code>polar_coords</code>, <code>deseq_polar</code> or
+<code>voom_polar</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Either <code>1</code> or <code>2</code> specifying type of polar coordinates: <code>1</code> =
+Z-scaled, <code>2</code> = unscaled (equivalent to log2 fold change for gene
+expression).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label_rows</code></td>
+<td>
+<p>A vector of row names or numbers to label</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label_size</code></td>
+<td>
+<p>font size for labels (default 14).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>arrow_length</code></td>
+<td>
+<p>The length of label arrows (default 100)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colour_code_labels</code></td>
+<td>
+<p>Logical whether label annotations should be colour
+coded. If <code>FALSE</code> <code>label_colour</code> is used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label_colour</code></td>
+<td>
+<p>HTML colour of annotation labels if not colour coded.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grid_colour</code></td>
+<td>
+<p>The colour of the cylindrical grid (default "grey80")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grid_width</code></td>
+<td>
+<p>The width of the grid lines (default 2)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grid_options</code></td>
+<td>
+<p>Optional list of additional arguments to pass to
+<code>polar_grid</code>, eg. <code>z_axis_ticks</code> and <code>r_axis_ticks</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>axis_colour</code></td>
+<td>
+<p>The colour of the grid axes and labels (default "black")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>axis_width</code></td>
+<td>
+<p>The width of axis lines (default 2)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>marker_size</code></td>
+<td>
+<p>Size of the markers (default 3)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>marker_outline_width</code></td>
+<td>
+<p>Width for marker outline (default 0 means no
+outline)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>marker_outline_colour</code></td>
+<td>
+<p>Colour for marker outline (default white)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z_axis_title_offset</code></td>
+<td>
+<p>The position scaling between grid and z axis title
+(default=1.2)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z_axis_title_size</code></td>
+<td>
+<p>The font size for the z axis title (default=12)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z_axis_angle</code></td>
+<td>
+<p>Angle in radians for the position of z axis (default
+0.5)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>radial_axis_title_size</code></td>
+<td>
+<p>The font size for the radial (default=15)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>radial_axis_title_offset</code></td>
+<td>
+<p>The position scaling between grid and radial
+axis title (default=1.2)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xy_aspectratio</code></td>
+<td>
+<p>The aspect ratio for the xy axis compared to z (default
+1). Increasing this makes the grid wider in the plot window.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z_aspectratio</code></td>
+<td>
+<p>The aspect ratio for the z axis compared to x and y
+(default 0.8). Decreasing this makes the plot appear more squat.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>camera_eye</code></td>
+<td>
+<p>The (x,y,z) components of the start 'eye' camera vector.
+This vector determines the view point about the origin of this scene.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Optional arguments passed to <code>plot_ly</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a cylindrical 3D plotly plot featuring variables on a
+tri-axis radial graph with the -log10(multi-group test p-value) on the
+z-axis
+</p>
+
+
+<h3>References</h3>
+
+<p>Lewis, Myles J., et al. (2019).
+<a href="https://pubmed.ncbi.nlm.nih.gov/31461658/">
+Molecular portraits of early rheumatoid arthritis identify clinical and
+treatment response phenotypes.</a>
+<em>Cell reports</em>, <strong>28</strong>:9
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>polar_coords</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(example_data)
+syn_polar &lt;- polar_coords(outcome = syn_example_meta$Pathotype,
+                          data = t(syn_example_rld))
+volcano3D(syn_polar)
+
+</code></pre>
+
+
+</div>

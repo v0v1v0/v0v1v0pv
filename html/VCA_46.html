@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lmerG</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Construct Variance-Covariance Matrix of Random Effects for Models Fitted by Function 'lmer'</h2>
+
+<h3>Description</h3>
+
+<p>This function restricts the variance-covariance matrix of random effects <code class="reqn">G</code> to be either
+diagonal ('cov=FALSE') or to take any non-zero covariances into account (default, 'cov=TRUE').
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lmerG(obj, cov = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(object) inheriting from class 'lmerMod'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cov</code></td>
+<td>
+<p>(logical) TRUE = in case of non-zero covariances a block diagonal matrix will be constructed,
+FALSE = a diagonal matrix with all off-diagonal element being equal to zero will be contructed</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is not intended to be called directly by users and therefore not exported!
+</p>
+
+
+<h3>Value</h3>
+
+<p>(Matrix) representing the variance-covariance structure of random effects <code class="reqn">G</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(lme4)
+data(Orthodont)
+Ortho &lt;- Orthodont
+Ortho$age2 &lt;- Ortho$age - 11
+Ortho$Subject &lt;- factor(as.character(Ortho$Subject))
+fit &lt;-lmer(distance~Sex+Sex:age2+(age2|Subject), Ortho) 
+G1 &lt;- VCA:::lmerG(fit, cov=FALSE)
+G2 &lt;- VCA:::lmerG(fit, cov=TRUE)
+G1[1:10,1:10]
+G2[1:10,1:10]
+
+## End(Not run)
+</code></pre>
+
+
+</div>

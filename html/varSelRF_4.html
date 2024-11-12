@@ -1,0 +1,274 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>randomVarImpsRFplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot random random variable importances</h2>
+
+<h3>Description</h3>
+
+<p>Plot variable importances from random permutations of class labels and
+the variable importances from the original data set.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">randomVarImpsRFplot(randomImportances, forest,
+                    whichImp = "impsUnscaled", nvars = NULL,
+                    show.var.names = FALSE, vars.highlight = NULL,
+                    main = NULL, screeRandom = TRUE,
+                    lwdBlack = 1.5,
+                    lwdRed = 2,
+                    lwdLightblue = 1,
+                    cexPoint = 1,
+                    overlayTrue = FALSE,
+                    xlab = NULL,
+                    ylab = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>randomImportances</code></td>
+<td>
+<p>A list with a structure such as the object
+return by <code>randomVarImpsRF</code></p>
+</td>
+</tr></table>
+<p>.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>forest</code></td>
+<td>
+<p>A random forest fitted to the original data. This forest
+must have been fitted with <code>importances = TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>whichImp</code></td>
+<td>
+<p>The importance measue to use. One (only one) of
+<code>impsUnscaled</code>,
+<code>impsScaled</code>, <code>impsGini</code>, that correspond, respectively, to
+the (unscaled) mean decrease in accuracy, the scaled mean decrease
+in accuracy, and the Gini index.  See below and
+<code>randomForest</code>,
+<code>importance</code> and the references for further explanations of the
+measures of variable importance. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nvars</code></td>
+<td>
+<p>If NULL will show the plot for the complete range of
+variables. If an integer, will plot only the most important nvars.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.var.names</code></td>
+<td>
+<p>If TRUE, show the variable names in the
+plot. Unless you are plotting few variables, it probably won't be of
+any use.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vars.highlight</code></td>
+<td>
+<p>A vector indicating the variables to highlight
+in the plot with a vertical blue segment. You need to pass here a
+vector of variable names, not variable positions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>The title for the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>screeRandom</code></td>
+<td>
+<p>If TRUE, order all the variable importances (i.e.,
+those from both the original and the permuted class labels data
+sets) from
+largest to smallest before plotting. The plot will thus resemble a
+usual "scree plot". </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwdBlack</code></td>
+<td>
+<p>The width of the line to use for the importances from
+the original data set.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwdRed</code></td>
+<td>
+<p> The width of the line to use for the average of the
+importances for the permuted data sets. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwdLightblue</code></td>
+<td>
+<p> The width of the line for the importances for the
+individual permuted data sets.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cexPoint</code></td>
+<td>
+ <p><code>cex</code> argument for the points for the
+importances from the original data set.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overlayTrue</code></td>
+<td>
+<p>If TRUE, the variable importance from the
+original data set will be plotted last, so
+you can see it even if buried in the middle of many gree lines; can
+be of help when the plot does not allow you to see the black line.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>The title for the x-axis (see <code>xlab</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>The title for the y-axis (see <code>ylab</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments to plot.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Only used for its side effects of producing plots. In particular, you
+will see lines of three colors:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>black</code></td>
+<td>
+<p>Connects the variable importances from the original
+simulated data. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>green</code></td>
+<td>
+<p>Connect the variable
+importances from the data sets with permuted class labels; there
+will be as many lines as <code>numrandom</code> where used when
+<code>randomVarImpsRF</code> was called to obtain the random
+importances.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>red</code></td>
+<td>
+<p>Connects the average of the importances from the permuted
+data sets.</p>
+</td>
+</tr>
+</table>
+<p>Additionally, if you used a valid set of values for
+<code>vars.highlight</code>, these will be shown with a vertical blue
+segment.
+</p>
+
+
+<h3>Note</h3>
+
+<p>These plots resemble the scree plots commonly used with principal
+component analysis, and the actual choice of colors was taken from the
+importance spectrum plots of <cite>Friedman \&amp; Meulman</cite>.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ramon Diaz-Uriarte <a href="mailto:rdiaz02@gmail.com">rdiaz02@gmail.com</a></p>
+
+
+<h3>References</h3>
+
+<p>Breiman, L. (2001) Random forests.
+<em>Machine Learning</em>, <b>45</b>, 5–32.
+</p>
+<p>Diaz-Uriarte, R. , Alvarez de Andres,
+S. (2005) Variable selection from random forests: application to gene
+expression
+data. Tech. report. <a href="http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html">http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html</a>
+</p>
+<p>Friedman, J., Meulman, J. (2005) Clustering objects on subsets of attributes (with discussion).
+<em>J. Royal Statistical Society, Series B</em>, <b>66</b>, 815–850. 
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>randomForest</code>,
+<code>varSelRF</code>,
+<code>varSelRFBoot</code>,
+<code>varSelImpSpecRF</code>,
+<code>randomVarImpsRF</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+x &lt;- matrix(rnorm(45 * 30), ncol = 30)
+x[1:20, 1:2] &lt;- x[1:20, 1:2] + 2
+colnames(x) &lt;- paste0("V", seq.int(ncol(x)))
+cl &lt;- factor(c(rep("A", 20), rep("B", 25)))  
+
+rf &lt;- randomForest(x, cl, ntree = 200, importance = TRUE)
+rf.rvi &lt;- randomVarImpsRF(x, cl, 
+                          rf, 
+                          numrandom = 20, 
+                          usingCluster = FALSE) 
+
+randomVarImpsRFplot(rf.rvi, rf)
+op &lt;- par(las = 2)
+randomVarImpsRFplot(rf.rvi, rf, show.var.names = TRUE)
+par(op)
+
+
+## Not run: 
+## identical, but using a cluster
+## make a small cluster, for the sake of illustration
+psockCL &lt;- makeCluster(2, "PSOCK")
+clusterSetRNGStream(psockCL, iseed = 789)
+clusterEvalQ(psockCL, library(varSelRF))
+
+rf.rvi &lt;- randomVarImpsRF(x, cl, 
+                          rf, 
+                          numrandom = 20, 
+                          usingCluster = TRUE,
+                          TheCluster = psockCL) 
+
+randomVarImpsRFplot(rf.rvi, rf)
+stopCluster(psockCL)
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

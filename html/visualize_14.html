@@ -1,0 +1,103 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visualize.hyper</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualize Hypergeometric Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Generates a plot of the Hypergeometric distribution with user specified
+parameters.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visualize.hyper(
+  stat = 1,
+  m = 5,
+  n = 4,
+  k = 2,
+  section = "lower",
+  strict = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>stat</code></td>
+<td>
+<p>a statistic to obtain the probability from. When using the
+"bounded" condition, you must supply the parameter as <code>stat = c(lower_bound, upper_bound)</code>. Otherwise, a simple <code>stat = desired_point</code> will suffice.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p><code>m</code> white balls. <code>m</code> must be greater than 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p><code>n</code> black balls. <code>n</code> must be greater than 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>draw <code>k</code> balls without replacement.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>section</code></td>
+<td>
+<p>Select how you want the statistic(s) evaluated via
+<code style="white-space: pre;">⁠section=⁠</code> either <code>"lower"</code>,<code>"bounded"</code>, <code>"upper"</code>,
+or<code>"tails"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>strict</code></td>
+<td>
+<p>Determines whether the probability will be generated as a
+strict (&lt;, &gt;) or equal to (&lt;=, &gt;=) inequality. <code style="white-space: pre;">⁠strict=⁠</code> requires
+either values = 0 or =FALSE for equal to OR values =1 or =TRUE for strict.
+For bounded condition use: <code>strict=c(0,1)</code> or
+<code>strict=c(FALSE,TRUE)</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>James Balamuta
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>visualize.it()</code> , <code>dhyper()</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Evaluates lower tail.
+visualize.hyper(stat = 1, m=4, n=5, k=3, section = "lower", strict = 0) 
+
+# Evaluates bounded region.
+visualize.hyper(stat = c(2,4), m=14, n=5, k=2, section = "bounded", strict = c(0,1))
+
+# Evaluates upper tail.
+visualize.hyper(stat = 1, m=4, n=5, k=3, section = "upper", strict = 1)
+
+</code></pre>
+
+
+</div>

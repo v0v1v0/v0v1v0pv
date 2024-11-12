@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary.VSURF</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summary of VSURF results</h2>
+
+<h3>Description</h3>
+
+<p>This function displays a summary of VSURF results
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VSURF'
+summary(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object of class <code>VSURF</code>, which is the result of the
+<code>VSURF</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function prints the total computation time of VSURF.  It also gives the
+number of selected variables (and the computation time) at each step of
+VSURF. In addition, it gives the number of cores and the type of cluster
+if the parallel version of VSURF was used.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Robin Genuer, Jean-Michel Poggi and Christine Tuleau-Malot
+</p>
+
+
+<h3>References</h3>
+
+<p>Genuer, R. and Poggi, J.M. and Tuleau-Malot, C. (2010),
+<em>Variable selection using random forests</em>, Pattern Recognition Letters
+31(14), 2225-2236
+</p>
+<p>Genuer, R. and Poggi, J.M. and Tuleau-Malot, C. (2015),
+<em>VSURF: An R Package for Variable Selection Using Random Forests</em>,
+The R Journal 7(2):19-33
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VSURF</code>, <code>plot.VSURF</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Not run: 
+data(iris)
+iris.vsurf &lt;- VSURF(iris[,1:4], iris[,5], ntree = 100, nfor.thres = 20,
+                    nfor.interp = 10, nfor.pred = 10)
+summary(iris.vsurf)
+
+# A more interesting example with toys data (see \code{\link{toys}})
+# (a few minutes to execute)
+data(toys)
+toys.vsurf &lt;- VSURF(toys$x, toys$y)
+summary(toys.vsurf)
+## End(Not run)
+
+</code></pre>
+
+
+</div>

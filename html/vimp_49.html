@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vimp_hypothesis_test</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Perform a hypothesis test against the null hypothesis of <code class="reqn">\delta</code> importance</h2>
+
+<h3>Description</h3>
+
+<p>Perform a hypothesis test against the null hypothesis of zero importance by:
+(i) for a user-specified level <code class="reqn">\alpha</code>, compute a <code class="reqn">(1 - \alpha)\times 100</code>% confidence interval around the predictiveness for both the full and reduced regression functions (these must be estimated on independent splits of the data);
+(ii) if the intervals do not overlap, reject the null hypothesis.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vimp_hypothesis_test(
+  predictiveness_full,
+  predictiveness_reduced,
+  se,
+  delta = 0,
+  alpha = 0.05
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>predictiveness_full</code></td>
+<td>
+<p>the estimated predictiveness of the regression including the covariate(s) of interest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>predictiveness_reduced</code></td>
+<td>
+<p>the estimated predictiveness of the regression excluding the covariate(s) of interest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se</code></td>
+<td>
+<p>the estimated standard error of the variable importance estimator</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>the value of the <code class="reqn">\delta</code>-null (i.e., testing if importance &lt; <code class="reqn">\delta</code>); defaults to 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>the desired type I error rate (defaults to 0.05).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See the paper by Williamson, Gilbert, Simon, and Carone for more
+details on the mathematics behind this function and the definition of the parameter of interest.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a list, with: the hypothesis testing decision (<code>TRUE</code> if the null hypothesis is rejected, <code>FALSE</code> otherwise); the p-value from the hypothesis test; and the test statistic from the hypothesis test.
+</p>
+
+
+</div>

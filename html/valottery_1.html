@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cash.4.life</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>CASH4LIFE</h2>
+
+<h3>Description</h3>
+
+<p>Historical data for the CASH4LIFE game. Game play: Pick five different numbers from 1 through 60;
+then select one Cash Ball number from 1 through 4.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cash.4.life
+</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 34 rows and 7 variables:
+</p>
+
+<dl>
+<dt>date</dt>
+<dd>
+<p>date of draw</p>
+</dd>
+<dt>cashball</dt>
+<dd>
+<p>cash ball result</p>
+</dd>
+<dt>N1</dt>
+<dd>
+<p>1st number in order</p>
+</dd>
+<dt>N2</dt>
+<dd>
+<p>2nd number in order</p>
+</dd>
+<dt>N3</dt>
+<dd>
+<p>3rd number in order</p>
+</dd>
+<dt>N4</dt>
+<dd>
+<p>4th number in order</p>
+</dd>
+<dt>N5</dt>
+<dd>
+<p>5th number in order</p>
+</dd>
+</dl>
+<h3>Source</h3>
+
+<p><a href="https://www.valottery.com">https://www.valottery.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Check numbers drawn are uniformly distributed
+x &lt;- qunif(ppoints(nrow(cash.4.life)*5),1,60)
+y &lt;- sort(unlist(cash.4.life[,3:7]))
+qqplot(x,y)
+</code></pre>
+
+
+</div>

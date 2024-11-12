@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a summary</h2>
+
+<h3>Description</h3>
+
+<p>Create a summary
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">summary(object, ...)
+
+## S4 method for signature 'expressionset'
+summary(object, ...)
+
+## S4 method for signature 'indication'
+summary(object, ...)
+
+## S4 method for signature 'validation'
+summary(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An R object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Currently unused</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>data.frame</code> with the information mentioned below is returned.
+</p>
+
+
+<h3>Validator and indicator objects</h3>
+
+<p>For these objects, the ruleset is split into subsets (blocks) that are disjunct in the
+sense that they do not share any variables. For each block the number of variables, 
+the number of rules and the number of rules that are linear are reported.
+</p>
+
+
+<h3>Indication</h3>
+
+<p>Some basic information per evaluated indicator is reported: the number 
+of items to which the indicator was applied, the output <code>class</code>, 
+some statistics (min, max, mean , number of NA)
+and wether an exception occurred (warnings or errors). The evaluated 
+expression is reported as well.
+</p>
+
+
+<h3>Validation</h3>
+
+<p>Some basic information per evaluated validation rule is reported: the number of
+items to which the rule was applied, the output <code>class</code>, some statistics
+(passes, fails, number of NA) and wether an exception occurred (warnings or
+errors). The evaluated expression is reported as well.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>plot,validator-method</code>
+</p>
+<p>Other expressionset-methods: 
+<code>as.data.frame()</code>,
+<code>as.data.frame,expressionset-method</code>,
+<code>created()</code>,
+<code>description()</code>,
+<code>label()</code>,
+<code>meta()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>origin()</code>,
+<code>plot,validator-method</code>,
+<code>variables()</code>,
+<code>voptions()</code>
+</p>
+<p>Other indication-methods: 
+<code>confront()</code>,
+<code>event()</code>,
+<code>indication-class</code>
+</p>
+<p>Other validation-methods: 
+<code>aggregate,validation-method</code>,
+<code>all,validation-method</code>,
+<code>any,validation-method</code>,
+<code>barplot,validation-method</code>,
+<code>check_that()</code>,
+<code>compare()</code>,
+<code>confront()</code>,
+<code>event()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>plot,validation-method</code>,
+<code>sort,validation-method</code>,
+<code>validation-class</code>,
+<code>values()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(retailers)
+v &lt;- validator(staff &gt; 0, staff.costs/staff &lt; 20, turnover+other.revenue == total.revenue)
+summary(v)
+
+cf &lt;- confront(retailers,v)
+summary(cf)
+
+
+</code></pre>
+
+
+</div>

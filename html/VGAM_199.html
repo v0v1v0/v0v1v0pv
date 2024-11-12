@@ -1,0 +1,111 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Coef</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Computes Model Coefficients and Quantities </h2>
+
+<h3>Description</h3>
+
+<p><code>Coef</code> is a generic function which computes model
+coefficients from objects returned by modelling functions.
+It is an auxiliary function to <code>coef</code> that
+enables extra capabilities for some specific models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Coef(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>An object for which the computation of other types of model
+coefficients or quantities is meaningful.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Other arguments fed into the specific methods function of
+the model.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function can often be useful for <code>vglm</code> objects
+with just an intercept term in the RHS of the formula, e.g.,
+<code>y ~ 1</code>. Then often this function will apply the inverse
+link functions to the parameters.  See the example below.
+</p>
+<p>For reduced-rank VGLMs, this function can return the <b>A</b>,
+<b>C</b> matrices, etc.
+</p>
+<p>For quadratic and additive ordination models, this function
+can return ecological meaningful quantities such as tolerances,
+optimums, maximums.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The value returned depends specifically on the methods function
+invoked.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>This function may not work for <em>all</em> <span class="pkg">VGAM</span> family
+functions. You should check your results on some artificial
+data before applying it to models fitted to real data.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Hastie, T. J. (2003).
+Reduced-rank vector generalized linear models.
+<em>Statistical Modelling</em>,
+<b>3</b>, 15–41.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>coef</code>,
+<code>Coef.vlm</code>,
+<code>Coef.rrvglm</code>,
+<code>Coef.qrrvglm</code>,
+<code>depvar</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 1000
+bdata &lt;- data.frame(y = rbeta(nn, shape1 = 1, shape2 = 3))  # Original scale
+fit &lt;- vglm(y ~ 1, betaR, data = bdata, trace = TRUE)  # Intercept-only model
+coef(fit, matrix = TRUE)  # Both on a log scale
+Coef(fit)  # On the original scale
+</code></pre>
+
+
+</div>

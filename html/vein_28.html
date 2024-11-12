@@ -1,0 +1,141 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ef_eea</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Emissions factors from European European Environment Agency</h2>
+
+<h3>Description</h3>
+
+<p><code>ef_cetesb</code> returns a vector or data.frame of Brazilian emission factors.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ef_eea(
+  category,
+  fuel,
+  segment,
+  euro,
+  tech,
+  pol,
+  mode,
+  slope,
+  load,
+  speed,
+  fcorr = rep(1, 8)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>category</code></td>
+<td>
+<p>String: "PC" (Passenger Cars), "LCV" (Light Commercial Vehicles),
+"TRUCKS" (Heavy Duty Trucks),
+"BUS" (Buses) or "MC" (Motorcycles or L-Category as in EEA 2019).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fuel</code></td>
+<td>
+<p>String;  "G", "G HY", "G PHEV G",
+"G PHEV ELEC",  "D", "D PHEV D",
+"D PHEV ELEC", "LPG BIFUEL LPG", "LPG BIFUEL G",
+"CNG BIFUEL CNG", "CNG BIFUEL G", "D HY D",
+"D HY ELEC", "CNG", "BIO D"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>segment</code></td>
+<td>
+<p>String for type of vehicle (try different, the function will show values).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>euro</code></td>
+<td>
+<p>String; euro standard:
+"PRE", "IMPROVED CONVENTIONAL", "OPEN LOOP",
+"ECE 15/00-01", "ECE 15/02", "ECE 15/03", "ECE 15/04".
+"I", "II", "III", "IV", "V",
+"VI A/B/C", "VI D", "VI D-TEMP", "VI D/E",
+"EEV".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tech</code></td>
+<td>
+<p>String; technology:
+"DPF", "DPF With S/W Update", "DPF+SCR"
+"EGR", "GDI", "GDI+GPF", "LNT+DPF", "PFI", "SCR".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pol</code></td>
+<td>
+<p>String; "CO", "NOx", "NMHC" (VOC), "PM" (PM Exhaust), "EC", "CH4", "NH3", "N2O"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mode</code></td>
+<td>
+<p>String; "Urban Peak", "Urban Off Peak", "Rural", "Highway", NA.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>slope</code></td>
+<td>
+<p>Numeric; 0.00, -0.06, -0.04, -0.02,  0.02,  0.04,  0.06, or NA</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>load</code></td>
+<td>
+<p>Numeric; 0.0,0.5, 1.0 or NA</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>speed</code></td>
+<td>
+<p>Numeric; optional numeric in km/h.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fcorr</code></td>
+<td>
+<p>Numeric; Correction by fuel properties by euro technology.
+See <code>fuel_corr</code>. The order from first to last is
+"PRE", "I", "II", "III", "IV", "V", "VI", "or other VI. Default is 1</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Return a function depending of speed or numeric (g/km)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">{
+# ef_eea(category = "I DONT KNOW")
+ef_eea(category = "PC",
+fuel = "G",
+segment = "Small",
+euro = "I",
+tech = NA,
+pol = "CO",
+mode = NA,
+slope = 0,
+load = 0)(10)
+}
+</code></pre>
+
+
+</div>

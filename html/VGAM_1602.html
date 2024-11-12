@@ -1,0 +1,158 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>seq2binomial</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> The Two-stage Sequential Binomial Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimation of the probabilities of a
+two-stage binomial distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">seq2binomial(lprob1 = "logitlink", lprob2 = "logitlink",
+             iprob1 = NULL,    iprob2 = NULL,
+             parallel = FALSE, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lprob1, lprob2</code></td>
+<td>
+
+<p>Parameter link functions applied to the two probabilities,
+called <code class="reqn">p</code> and <code class="reqn">q</code> below.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iprob1, iprob2</code></td>
+<td>
+
+<p>Optional initial value for the first and second probabilities
+respectively.  A <code>NULL</code> means a value is obtained in the
+<code>initialize</code> slot.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel, zero</code></td>
+<td>
+
+<p>Details at <code>Links</code>.
+If <code>parallel = TRUE</code> then the constraint also applies to
+the intercept.
+See <code>CommonVGAMffArguments</code> for details.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This <span class="pkg">VGAM</span> family function fits the model described by
+Crowder and Sweeting (1989) which is described as follows.
+Each of <code class="reqn">m</code> spores has a probability <code class="reqn">p</code> of
+germinating. Of the <code class="reqn">y_1</code> spores that germinate,
+each has a probability <code class="reqn">q</code> of bending in a particular
+direction. Let <code class="reqn">y_2</code> be the number that bend in the
+specified direction. The probability model for this data is
+<code class="reqn">P(y_1,y_2) =</code>
+</p>
+<p style="text-align: center;"><code class="reqn">
+{m   \choose y_1} p^{y_1} (1-p)^{m-y_1}
+{y_1 \choose y_2} q^{y_2} (1-q)^{y_1-y_2}</code>
+</p>
+
+<p>for <code class="reqn">0 &lt; p &lt; 1</code>, <code class="reqn">0 &lt; q &lt; 1</code>,
+<code class="reqn">y_1=1,\ldots,m</code>
+and
+<code class="reqn">y_2=1,\ldots,y_1</code>.
+Here, <code class="reqn">p</code> is <code>prob1</code>,
+<code class="reqn">q</code> is <code>prob2</code>.
+</p>
+<p>Although the Authors refer to this as the <em>bivariate
+binomial</em> model, I have named it the <em>(two-stage)
+sequential binomial</em> model.  Fisher scoring is used.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see
+<code>vglmff-class</code>).  The object is used by modelling
+functions such as <code>vglm</code> and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be a two-column matrix of sample proportions
+corresponding to <code class="reqn">y_1</code> and <code class="reqn">y_2</code>.
+The <code class="reqn">m</code> values should be inputted with the <code>weights</code>
+argument of <code>vglm</code>
+and <code>vgam</code>.
+The fitted value is a two-column matrix of estimated
+probabilities <code class="reqn">p</code> and <code class="reqn">q</code>.
+A common form of error is when there are no trials
+for <code class="reqn">y_1</code>,
+e.g., if <code>mvector</code> below has some values which are zero.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Crowder, M. and Sweeting, T. (1989).
+Bayesian inference for a bivariate binomial distribution.
+<em>Biometrika</em>,
+<b>76</b>,
+599–603.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>binomialff</code>,
+<code>cfibrosis</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">sdata &lt;- data.frame(mvector = round(rnorm(nn &lt;- 100, m = 10, sd = 2)),
+                    x2 = runif(nn))
+sdata &lt;- transform(sdata, prob1 = logitlink(+2 - x2, inverse = TRUE),
+                          prob2 = logitlink(-2 + x2, inverse = TRUE))
+sdata &lt;- transform(sdata, successes1 = rbinom(nn, size = mvector,    prob = prob1))
+sdata &lt;- transform(sdata, successes2 = rbinom(nn, size = successes1, prob = prob2))
+sdata &lt;- transform(sdata, y1 = successes1 / mvector)
+sdata &lt;- transform(sdata, y2 = successes2 / successes1)
+fit &lt;- vglm(cbind(y1, y2) ~ x2, seq2binomial, weight = mvector,
+            data = sdata, trace = TRUE)
+coef(fit)
+coef(fit, matrix = TRUE)
+head(fitted(fit))
+head(depvar(fit))
+head(weights(fit, type = "prior"))  # Same as with(sdata, mvector)
+# Number of first successes:
+head(depvar(fit)[, 1] * c(weights(fit, type = "prior")))
+# Number of second successes:
+head(depvar(fit)[, 2] * c(weights(fit, type = "prior")) *
+                          depvar(fit)[, 1])
+</code></pre>
+
+
+</div>

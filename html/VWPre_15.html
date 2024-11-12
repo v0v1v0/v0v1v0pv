@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>fasttrack</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fast-track basic preprocessing</h2>
+
+<h3>Description</h3>
+
+<p><code>fasttrack</code> is a meta-function for advanced users who are 
+already familiar with the package functions and do not need to take remedial 
+actions such as recoding interest areas, remapping gaze data, or performing
+message alignment.It takes all necessary arguments for the component functions
+to produce proportion looks and can output either empirical logits or 
+binomial data. The function returns a dataframe containing the result of 
+the series of subroutines.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">fasttrack(
+  data = data,
+  Subject = NULL,
+  Item = NA,
+  EventColumns = c("Subject", "TRIAL_INDEX"),
+  NoIA = NoIA,
+  Adjust = 0,
+  Recording = NULL,
+  WhenLandR = NA,
+  BinSize = NULL,
+  SamplingRate = NULL,
+  ObsPerBin = NULL,
+  ObsOverride = FALSE,
+  Constant = 0.5,
+  CustomBinom = NULL,
+  Output = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data frame object created from an Eyelink Sample Report.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Subject</code></td>
+<td>
+<p>An obligatory string containing the column name corresponding 
+to the subject identifier.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Item</code></td>
+<td>
+<p>An optional string containing the column name corresponding to 
+the item identifier; by default, NA.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>EventColumns</code></td>
+<td>
+<p>A vector specifying the columns which will be used for creating 
+the Event variable; by default, Subject and TRIAL_INDEX.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NoIA</code></td>
+<td>
+<p>A positive integer indicating the number of interest areas defined 
+when creating the study.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Adjust</code></td>
+<td>
+<p>An integer indicating amount of time in milliseconds by which to 
+offset the time series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Recording</code></td>
+<td>
+<p>A string indicating which eyes were used for recording gaze data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>WhenLandR</code></td>
+<td>
+<p>A string indicating which eye ("Right" or "Left) to use 
+if gaze data is available for both eyes (i.e., Recording = "LandR").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BinSize</code></td>
+<td>
+<p>A positive integer indicating the size of the binning window 
+(in milliseconds).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SamplingRate</code></td>
+<td>
+<p>A positive integer indicating the sampling rate (in Hertz) 
+used to record the gaze data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ObsPerBin</code></td>
+<td>
+<p>A positive integer indicating the desired number of 
+observations to be used in the calculations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ObsOverride</code></td>
+<td>
+<p>A logical value controlling restrictions on the value
+provided to ObsPerBin. Default value is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Constant</code></td>
+<td>
+<p>A positive number used for the empirical logit and weights
+calculation; by default, 0.5 as in Barr (2008).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CustomBinom</code></td>
+<td>
+<p>An optional parameter specifying a vector containing two 
+integers corresponding to the interest area IDs to be combined.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Output</code></td>
+<td>
+<p>An obligatory string containing either "ELogit" or "Binomial".</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data table containing formatting and calculations.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(VWPre)
+# Perform meta-function on data
+df &lt;- fasttrack(data = dat, Subject = "RECORDING_SESSION_LABEL", Item = "itemid", 
+       EventColumns = c("Subject", "TRIAL_INDEX"), NoIA = 4, Adjust = 100, 
+			Recording = "LandR", WhenLandR = "Right", BinSize = 20, 
+			SamplingRate = 1000, ObsPerBin = 20, Constant = 0.5, 
+			Output = "ELogit")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

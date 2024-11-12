@@ -1,0 +1,77 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotTDvalues</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Value plotting function for 24-2 or 30-2 visual field measurement:</h2>
+
+<h3>Description</h3>
+
+<p><code>plotTDvalues</code> plots the following 24-2 or 30-2 visual field measurement: sensitivity, TD, and PD:
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotTDvalues(tds, cex.tds = 1, textcolor = function(x) "black",
+  show.lines = T, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>tds</code></td>
+<td>
+<p>a vector contains sensitivity/TD/PD measurement. For 24-2 VF <code>tds</code> should have 52 or 54 elements. For 30-2 VF, <code>tds</code> should have 74 or 76 elements.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex.tds</code></td>
+<td>
+<p>a numeric variable for label size (default: 1).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>textcolor</code></td>
+<td>
+<p>a function defines the label color.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.lines</code></td>
+<td>
+<p>a logical variable indicates whether to show the horizontal and vertical lines.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other variables to be added.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>value plot for sensitivity, TD and PD input.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vfseries)
+tds = t(vfseries[1, grepl('^s[0-9]+', colnames(vfseries))])
+plotTDvalues(tds)
+title(main = "Sensitivity", line = 3)
+tds = t(vfseries[1, grepl('^td[0-9]+', colnames(vfseries))])
+plotTDvalues(tds)
+title(main = "Total Dviation", line = 3)
+tds = t(vfseries[1, grepl('^pd[0-9]+', colnames(vfseries))])
+plotTDvalues(tds)
+title(main = "Pattern Dviation", line = 3)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,145 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineClarkeTest</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Clarke Test Comparing Two R-Vine Copula Models</h2>
+
+<h3>Description</h3>
+
+<p>This function performs a Clarke test between two d-dimensional R-vine copula
+models as specified by their <code>RVineMatrix()</code> objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineClarkeTest(data, RVM1, RVM2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>An N x d data matrix (with uniform margins).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RVM1, RVM2</code></td>
+<td>
+<p><code>RVineMatrix()</code> objects of models 1 and 2.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The test proposed by Clarke (2007) allows to compare non-nested models. For
+this let <code class="reqn">c_1</code> and <code class="reqn">c_2</code> be two competing vine copulas in terms of
+their densities and with estimated parameter sets
+<code class="reqn">\hat{\boldsymbol{\theta}}_1</code> and
+<code class="reqn">\hat{\boldsymbol{\theta}}_2</code>. The null hypothesis of
+statistical indistinguishability of the two models is
+</p>
+<p style="text-align: center;"><code class="reqn">H_0: P(m_i &gt; 0) = 0.5\ \forall i=1,..,N, </code>
+</p>
+<p> where
+<code class="reqn">m_i:=\log\left[\frac{c_1(\boldsymbol{u}_i|\hat{\boldsymbol{\theta}}_1)}{c_2(\boldsymbol{u}_i|\hat{\boldsymbol{\theta}}_2)}\right]</code> for observations
+<code class="reqn">\boldsymbol{u}_i,\ i=1,...,N</code>.
+</p>
+<p>Since under statistical equivalence of the two models the log likelihood
+ratios of the single observations are uniformly distributed around zero and
+in expectation <code class="reqn">50\%</code> of the log likelihood ratios greater than zero,
+the test statistic </p>
+<p style="text-align: center;"><code class="reqn">\texttt{statistic} := B = \sum_{i=1}^N
+\mathbf{1}_{(0,\infty)}(m_i), </code>
+</p>
+<p> where <code class="reqn">\mathbf{1}</code> is the indicator function,
+is distributed Binomial with parameters <code class="reqn">N</code> and <code class="reqn">p=0.5</code>, and
+critical values can easily be obtained. Model 1 is interpreted as
+statistically equivalent to model 2 if <code class="reqn">B</code> is not significantly
+different from the expected value <code class="reqn">Np = \frac{N}{2}</code>.
+</p>
+<p>Like AIC and BIC, the Clarke test statistic may be corrected for the number
+of parameters used in the models. There are two possible corrections; the
+Akaike and the Schwarz corrections, which correspond to the penalty terms in
+the AIC and the BIC, respectively.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>statistic, statistic.Akaike, statistic.Schwarz</code></td>
+<td>
+<p>Test
+statistics without correction, with Akaike correction and with Schwarz
+correction.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value, p.value.Akaike, p.value.Schwarz</code></td>
+<td>
+<p>P-values of
+tests without correction, with Akaike correction and with Schwarz
+correction.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Jeffrey Dissmann, Eike Brechmann
+</p>
+
+
+<h3>References</h3>
+
+<p>Clarke, K. A. (2007). A Simple Distribution-Free Test for
+Nonnested Model Selection. Political Analysis, 15, 347-363.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineVuongTest()</code>, <code>RVineAIC()</code>,
+<code>RVineBIC()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+# vine structure selection time-consuming (~ 20 sec)
+
+# load data set
+data(daxreturns)
+
+
+# select the R-vine structure, families and parameters
+RVM &lt;- RVineStructureSelect(daxreturns[,1:5], c(1:6))
+RVM$Matrix
+RVM$par
+RVM$par2
+
+# select the C-vine structure, families and parameters
+CVM &lt;- RVineStructureSelect(daxreturns[,1:5], c(1:6), type = "CVine")
+CVM$Matrix
+CVM$par
+CVM$par2
+
+# compare the two models based on the data
+clarke &lt;- RVineClarkeTest(daxreturns[,1:5], RVM, CVM)
+clarke$statistic
+clarke$statistic.Schwarz
+clarke$p.value
+clarke$p.value.Schwarz
+
+</code></pre>
+
+
+</div>

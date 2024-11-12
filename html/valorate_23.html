@@ -1,0 +1,145 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>valorate.plot.kaplan</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>PLOT KAPLAN-MEIER CURVES</h2>
+
+<h3>Description</h3>
+
+<p>Plots the Kaplan-Meier Curves from two groups.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">valorate.plot.kaplan(vro, clusters, p=valorate.survdiff(vro, clusters), 
+  main, short.names=TRUE, draw.all=FALSE, mark="|", mark.cex=0.75, 
+  margins=TRUE, col=2:3, col.all="skyblue")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vro</code></td>
+<td>
+<p>the valorate object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clusters</code></td>
+<td>
+<p>a numerical or logical vector representing the two survival groups encoded in 1/TRUE for those 'mutated' (in the group of interest) or 1/FALSE for those who not. Basically this value is the 'x' vector in the VALORATE re-formulation. See references.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>the estimated p-value of the log-rank test. The default is valorate.survdiff(vro, clusters).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>typical plot parameter. The default is an expression depending on the parameters. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>short.names</code></td>
+<td>
+<p>if TRUE (default) use 'LR' instead or 'Log-Rank' and 'HR' instead or 'Hazard-Ratio' in legends.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>draw.all</code></td>
+<td>
+<p>if TRUE, the plot includes also the survival curve of all subjects before stratification.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mark</code></td>
+<td>
+<p>character to mark censoring. The default is "|".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mark.cex</code></td>
+<td>
+<p>the character expansion. The default is 0.75</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>margins</code></td>
+<td>
+<p>if TRUE (default) set the margins properly.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>specifies the colors for survival curves. The default is 2:3 (red for cluster=0, green for cluster=1).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.all</code></td>
+<td>
+<p>specifies the color when draw.all is TRUE. The default is "skyblue".</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Plots the estimated Kaplan-Meier survival curves from data.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Nothing.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Trevino <a href="mailto:vtrevino@itesm.mx">vtrevino@itesm.mx</a></p>
+
+
+<h3>References</h3>
+
+<p>Trevino et al. 2016 <a href="http://bioinformatica.mty.itesm.mx/valorateR">http://bioinformatica.mty.itesm.mx/valorateR</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>new.valorate</code>.
+<code>valorate.survdiff</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Create a random population of 100 subjects 
+## having 20 events
+subjects &lt;- numeric(100)
+subjects[sample(100,20)] &lt;- 1
+vo &lt;- new.valorate(rank=subjects, sampling.size=100000, verbose=TRUE)
+
+groups &lt;- numeric(100)
+groups[sample(100,20)] &lt;- 1  # 20 to likely see some difference
+pvr &lt;- valorate.survdiff(vo, groups) 
+print(pvr)
+
+## Not run: valorate.plot.kaplan(vo, groups, main="Two Curves")
+
+## Not run: valorate.plot.kaplan(vo, groups, draw.all=TRUE, 
+    main="Three Curves (Including All Data)")
+## End(Not run)
+
+</code></pre>
+
+
+</div>

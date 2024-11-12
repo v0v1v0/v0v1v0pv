@@ -1,0 +1,147 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>h-methods</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Methods for the h-functions</h2>
+
+<h3>Description</h3>
+
+<p>The <code class="reqn">h</code> function represents the conditional distribution function of a
+bivariate copula and it should be defined for every copula used in
+a pair-copula construction. It is defined as the partial derivative of the
+distribution function of the copula w.r.t. the second argument
+<code class="reqn">h(x,v) = F(x|v) = \partial C(x,v) / \partial v</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">h(copula, x, v, eps)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>copula</code></td>
+<td>
+<p>A bivariate <code>copula</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Numeric vector with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>Numeric vector with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>To avoid numerical problems for extreme values, the values of
+<code>x</code>, <code>v</code> and return values close to <code>0</code> and <code>1</code> are
+substituted by <code>eps</code> and <code>1 - eps</code>, respectively. The default
+<code>eps</code> value for most of the copulas is <code>.Machine$double.eps^0.5</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Methods</h3>
+
+
+<dl>
+<dt><code>signature(copula = "copula")</code></dt>
+<dd>
+<p>Default definition of the <code class="reqn">h</code> function for a bivariate copula.
+This method is used if no particular definition is given for a copula.
+The partial derivative is calculated numerically using the
+<code>numericDeriv</code> function.</p>
+</dd>
+<dt><code>signature(copula = "indepCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h</code> function of the independence copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h(x, v) = x</code>
+</p>
+</dd>
+<dt><code>signature(copula = "normalCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h</code> function of the normal copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h(x, v; \rho) =
+      \Phi \left( \frac{\Phi^{-1}(x) - \rho\ \Phi^{-1}(v)}
+                       {\sqrt{1-\rho^2}} \right)</code>
+</p>
+</dd>
+<dt><code>signature(copula = "tCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h</code> function of the t copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h(x, v; \rho, \nu) =
+      t_{\nu+1} \left( \frac{t^{-1}_{\nu}(x) - \rho\ t^{-1}_{\nu}(v)}
+                            {\sqrt{\frac{(\nu+(t^{-1}_{\nu}(v))^2)(1-\rho^2)}
+                                        {\nu+1}}} \right)</code>
+</p>
+</dd>
+<dt><code>signature(copula = "claytonCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h</code> function of the Clayton copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h(x, v; \theta) = v^{-\theta-1}(x^{-\theta}+v^{-\theta}-1)^{-1-1/\theta}</code>
+</p>
+</dd>
+<dt><code>signature(copula = "gumbelCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h</code> function of the Gumbel copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h(x, v; \theta) = C(x, v; \theta)\ \frac{1}{v}\ (-\log v)^{\theta-1}
+                            \left((-\log x)^{\theta} + (-\log v)^{\theta} \right)^{1/\theta-1}</code>
+</p>
+</dd>
+<dt><code>signature(copula = "fgmCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h</code> function of the Farlie-Gumbel-Morgenstern copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h(x, v; \theta) =
+      (1 + \theta \ (-1 + 2v) \ (-1 + x)) \ x</code>
+</p>
+</dd>
+<dt><code>signature(copula = "frankCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h</code> function of the Frank copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h(x, v; \theta) =
+      \frac{e^{-\theta v}}
+           {\frac{1 - e^{-\theta}}{1 - e^{-\theta x}} + e^{-\theta v} - 1}</code>
+</p>
+</dd>
+<dt><code>signature(copula = "galambosCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h</code> function of the Galambos copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h(x, v; \theta) =
+      \frac{C(x, v; \theta)}{v}
+      \left( 1 - \left[ 1 + \left(\frac{-\log v}{-\log x}\right)^{\theta} \right]^{-1-1/\theta} \right)</code>
+</p>
+</dd>
+</dl>
+<h3>References</h3>
+
+<p>Aas, K. and Czado, C. and Frigessi, A. and Bakken, H. (2009)
+Pair-copula constructions of multiple dependence.
+<em>Insurance: Mathematics and Economics</em> <b>44</b>, 182–198.
+</p>
+<p>Schirmacher, D. and Schirmacher, E. (2008)
+Multivariate dependence modeling using pair-copulas.
+<em>Enterprise Risk Management Symposium, Chicago</em>.
+</p>
+
+
+</div>

@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>statespace</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Design a State-Space Model</h2>
+
+<h3>Description</h3>
+
+<p>The function <code>statespace</code> builds a state-space model, with known or unknown variances.
+By default, this function builds a state-space model in the static setting, with a constant
+state (zero state noise covariance matrix) and constant observation noise variance.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">statespace(X, y, kalman_params = NULL, viking_params = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>design matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>variable of interest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kalman_params</code></td>
+<td>
+<p>(default <code>NULL</code>) list containing initial values for <code>theta,P</code>
+as well as the variances (<code>Q,sig</code>). If it is not specified, the state-space model is
+constructed in the static setting (<code>theta=0, P=I, Q=0, sig=1</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>viking_params</code></td>
+<td>
+<p>(default <code>NULL</code>) list of parameters for the Viking algorithm.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a statespace object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(1)
+### Simulate data
+n &lt;- 1000
+d &lt;- 5
+Q &lt;- diag(c(0,0,0.25,0.25,0.25))
+sig &lt;- 1
+
+X &lt;- cbind(matrix(rnorm((d-1)*n,sd=1),n,d-1),1)
+theta &lt;- matrix(rnorm(d), d, 1)
+theta_arr &lt;- matrix(0, n, d)
+for (t in 1:n) {
+  theta_arr[t,] &lt;- theta
+  theta &lt;- theta + matrix(mvtnorm::rmvnorm(1,matrix(0,d,1),Q),d,1)
+}
+y &lt;- rowSums(X * theta_arr) + rnorm(n, sd=sig)
+
+####################
+### Kalman Filter
+# Default Static Setting
+ssm &lt;- viking::statespace(X, y)
+plot(ssm)
+
+# Known variances
+ssm &lt;- viking::statespace(X, y, kalman_params = list(Q=Q, sig=sig))
+plot(ssm)
+
+</code></pre>
+
+
+</div>

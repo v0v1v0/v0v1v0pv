@@ -1,0 +1,116 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate Simple Ratio (SR).</h2>
+
+<h3>Description</h3>
+
+<p>Simple Ratio is the ratio of the spectra (mostly reflectance) between two bands
+in the format of </p>
+<p style="text-align: center;"><code class="reqn">SR = \lambda_i/\lambda_j</code>
+</p>
+
+<p>It is a normalization of SR by doing NSR = (1-SR)/(1+SR), with the same two spectral bands.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sr(s, b1, b2)
+
+nsr(s, b1, b2)
+
+lm.sr(s, b1, b2, y)
+
+lm.nsr(s, b1, b2, y)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>s</code></td>
+<td>
+<p>Spectral data in the format of visa's Spectra object, spectra.data.frame or spectra.matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b1</code></td>
+<td>
+<p>A integer number which defines the wavelength of the 1st spectral band.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b2</code></td>
+<td>
+<p>A integer number which defines the wavelength of the 2nd spectral band.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>A numeric variable to correlate with SR</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Simple ratio and NDVI looking indices are the two groups of mostly used spectral indices in remote sensing.
+</p>
+<p>As it exactly reads in its name, it is a normalization of the SR and ranges in (0,1).
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>sr</code></td>
+<td>
+<p>Returns a simple ratio index.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsr</code></td>
+<td>
+<p>Returns a NSR index.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>Returns a ggplot object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>Returns a ggplot object.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(visa)
+s &lt;- NSpec.DF$spectra
+sr1 &lt;- sr(s, 480, 550)
+
+s &lt;- NSpec.DF$spectra
+nsr1 &lt;- nsr(s, 480, 550)
+
+s &lt;- NSpec.DF
+y &lt;- NSpec.DF$N
+lm.sr(s,600,500,y)
+
+s &lt;- NSpec.DF
+y &lt;- NSpec.DF$N
+lm.nsr(s,600,500,y)
+
+</code></pre>
+
+
+</div>

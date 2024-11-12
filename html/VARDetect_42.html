@@ -1,0 +1,315 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simu_tbss</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulation function for TBSS algorithm</h2>
+
+<h3>Description</h3>
+
+<p>Function for deploying simulation using TBSS algorithm
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">simu_tbss(
+  nreps,
+  simu_method = c("sparse", "group sparse", "fLS"),
+  nob,
+  k,
+  lags = 1,
+  lags_vector = NULL,
+  brk,
+  sigma,
+  skip = 50,
+  group_mats = NULL,
+  group_type = c("columnwise", "rowwise"),
+  group_index = NULL,
+  sparse_mats = NULL,
+  sp_density = NULL,
+  signals = NULL,
+  rank = NULL,
+  info_ratio = NULL,
+  sp_pattern = c("off-diagonal", "diagoanl", "random"),
+  singular_vals = NULL,
+  spectral_radius = 0.9,
+  est_method = c("sparse", "group sparse", "fLS"),
+  q = 1,
+  tol = 0.01,
+  lambda.1.cv = NULL,
+  lambda.2.cv = NULL,
+  mu = NULL,
+  group.index = NULL,
+  group.case = c("columnwise", "rowwise"),
+  max.iteration = 100,
+  refit = FALSE,
+  block.size = NULL,
+  blocks = NULL,
+  use.BIC = TRUE,
+  an.grid = NULL,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>nreps</code></td>
+<td>
+<p>A numeric integer number, indicates the number of simulation replications</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>simu_method</code></td>
+<td>
+<p>the structure of time series: "sparse","group sparse", and "fLS"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nob</code></td>
+<td>
+<p>sample size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>dimension of transition matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lags</code></td>
+<td>
+<p>lags of VAR time series. Default is 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lags_vector</code></td>
+<td>
+<p>a vector of lags of VAR time series for each segment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>brk</code></td>
+<td>
+<p>a vector of break points with (nob+1) as the last element</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma</code></td>
+<td>
+<p>the variance matrix for error term</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>skip</code></td>
+<td>
+<p>an argument to control the leading data points to obtain a stationary time series</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group_mats</code></td>
+<td>
+<p>transition matrix for group sparse case</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group_type</code></td>
+<td>
+<p>type for group lasso: "columnwise", "rowwise". Default is "columnwise".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group_index</code></td>
+<td>
+<p>group index for group lasso.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sparse_mats</code></td>
+<td>
+<p>transition matrix for sparse case</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sp_density</code></td>
+<td>
+<p>if we choose random pattern, we should provide the sparsity density for each segment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>signals</code></td>
+<td>
+<p>manually setting signal for each segment (including sign)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rank</code></td>
+<td>
+<p>if we choose method is low rank plus sparse, we need to provide the ranks for each segment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>info_ratio</code></td>
+<td>
+<p>the information ratio leverages the signal strength from low rank and sparse components</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sp_pattern</code></td>
+<td>
+<p>a choice of the pattern of sparse component: diagonal, 1-off diagonal, random, custom</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>singular_vals</code></td>
+<td>
+<p>singular values for the low rank components</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spectral_radius</code></td>
+<td>
+<p>to ensure the time series is piecewise stationary.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>est_method</code></td>
+<td>
+<p>method: sparse, group sparse, and fixed low rank plus sparse. Default is sparse</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>the AR order</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>tolerance for the fused lasso</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.1.cv</code></td>
+<td>
+<p>tuning parameter lambda_1 for fused lasso</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.2.cv</code></td>
+<td>
+<p>tuning parameter lambda_2 for fused lasso</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu</code></td>
+<td>
+<p>tuning parameter for low rank component, only available when method is set to "fLS"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group.index</code></td>
+<td>
+<p>group index for group sparse case</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group.case</code></td>
+<td>
+<p>group sparse pattern: column, row.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.iteration</code></td>
+<td>
+<p>max number of iteration for the fused lasso</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>refit</code></td>
+<td>
+<p>logical; if TRUE, refit the VAR model for parameter estimation. Default is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>block.size</code></td>
+<td>
+<p>the block size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>blocks</code></td>
+<td>
+<p>the blocks</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use.BIC</code></td>
+<td>
+<p>use BIC for k-means part</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>an.grid</code></td>
+<td>
+<p>a vector of an for grid searching</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>a Boolean argument; if TRUE, function provides detailed information. Default is FALSE</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A S3 object of class, named <code>VARDetect.simu.result</code>
+</p>
+
+<dl>
+<dt>est_cps</dt>
+<dd>
+<p>A list of estimated change points, including all replications</p>
+</dd>
+<dt>est_sparse_mats</dt>
+<dd>
+<p>A list of estimated sparse components for all replications</p>
+</dd>
+<dt>est_lowrank_mats</dt>
+<dd>
+<p>A list of estimated low rank components for all replications</p>
+</dd>
+<dt>est_phi_mats</dt>
+<dd>
+<p>A list of estimated model parameters, transition matrices for VAR model</p>
+</dd>
+<dt>running_times</dt>
+<dd>
+<p>A numeric vector, containing all running times</p>
+</dd>
+</dl>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+nob &lt;- 4000; p &lt;- 15
+brk &lt;- c(floor(nob / 3), floor(2 * nob / 3), nob + 1)
+m &lt;- length(brk); q.t &lt;- 1
+sp_density &lt;- rep(0.05, m * q.t)
+signals &lt;- c(-0.6, 0.6, -0.6)
+try_simu &lt;- simu_tbss(nreps = 3, simu_method = "sparse", nob = nob,
+                      k = p, lags = q.t, brk = brk, sigma = diag(p),
+                      signals = signals, sp_density = sp_density,
+                      sp_pattern = "random", est_method = "sparse", q = q.t,
+                      refit = TRUE)
+
+</code></pre>
+
+
+</div>

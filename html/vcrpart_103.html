@@ -1,0 +1,324 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tvcglm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Coefficient-wise tree-based varying coefficient regression based
+on generalized linear models</h2>
+
+<h3>Description</h3>
+
+<p>The <code>tvcglm</code> function implements the
+tree-based varying coefficient regression algorithm for generalized
+linear models introduced by Burgin and Ritschard (2017). The
+algorithm approximates varying coefficients by piecewise constant
+functions using recursive partitioning, i.e., it estimates the
+selected coefficients individually by strata of the value space of
+partitioning variables. The special feature of the provided algorithm
+is that it allows building for each varying coefficient an individual
+partition, which enhances the possibilities for model specification
+and to select partitioning variables individually by coefficient.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tvcglm(formula, data, family, 
+       weights, subset, offset, na.action = na.omit, 
+       control = tvcglm_control(), ...)
+
+tvcglm_control(minsize = 30, mindev = 2.0,
+               maxnomsplit = 5, maxordsplit = 9, maxnumsplit = 9,
+               cv = TRUE, folds = folds_control("kfold", 5),
+               prune = cv, fast = TRUE, center = fast,
+	       maxstep = 1e3, verbose = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>a symbolic description of the model to fit, e.g.,
+</p>
+<p><code>y ~ vc(z1, z2, z3) + vc(z1, z2, by = x1) + vc(z2, z3, by = x2)</code>
+</p>
+<p>where the <code>vc</code> terms specify the varying fixed
+coefficients. The unnamed arguments within <code>vc</code> terms are
+interpreted as partitioning variables (i.e., moderators). The
+<code>by</code> argument specifies the associated predictor variable. If
+no such predictor variable is specified (e.g., see the first term in
+the above example formula), the <code>vc</code> term is interpreted as a
+varying intercept, i.e., an nonparametric estimate of the direct
+effect of the partitioning variables. For details, see
+<code>vcrpart-formula</code>. Note that the global intercept may
+be removed by a <code>-1</code> term, according to the desired
+interpretation of the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>the model family. An object of class
+<code>family</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data frame containing the variables in the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>an optional numeric vector of weights to be used in the 
+fitting process.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subset</code></td>
+<td>
+<p>an optional logical or integer vector specifying a
+subset of <code>'data'</code> to be used in the fitting process.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>offset</code></td>
+<td>
+<p>this can be used to specify an a priori known component 
+to be included in the linear predictor during fitting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.action</code></td>
+<td>
+<p>a function that indicates what should happen if data 
+contain <code>NA</code>s. The default <code>na.action = na.omit</code> is
+listwise deletion, i.e., observations with missings on any variable
+are dropped. See <code>na.action</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>a list with control parameters as returned by
+<code>tvcglm_control</code>, or by <code>tvcm_control</code>
+for advanced users.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minsize</code></td>
+<td>
+<p>numeric (vector). The minimum sum of weights in
+terminal nodes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mindev</code></td>
+<td>
+<p>numeric scalar. The minimum permitted training error 
+reduction a split must exhibit to be considered of a new split.
+The main role of this parameter is to save computing time by early
+stopping. May be set lower for very few partitioning variables
+resp. higher for many partitioning variables. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxnomsplit, maxordsplit, maxnumsplit</code></td>
+<td>
+<p>integer scalars for split
+candidate reduction. See <code>tvcm_control</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cv</code></td>
+<td>
+<p>logical scalar. Whether or not the <code>cp</code> parameter
+should be cross-validated. If <code>TRUE</code> <code>cvloss</code> is
+called.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>folds</code></td>
+<td>
+<p>a list of parameters to create folds as produced by 
+<code>folds_control</code>. Is used for cross-validation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prune</code></td>
+<td>
+<p>logical scalar. Whether or not the initial tree should be
+pruned by the estimated <code>cp</code> parameter from
+cross-validation. Cannot be <code>TRUE</code> if <code>cv = FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fast</code></td>
+<td>
+<p>logical scalar. Whether the approximative model should be
+used to search for the next split. The approximative search model
+uses only the observations of the node to split and incorporates the
+fitted values of the current model as offsets. Therewith the
+estimation is reduces to the coefficients of the added split. If
+<code>FALSE</code>, the accurate search model is used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>center</code></td>
+<td>
+<p>logical integer. Whether the predictor variables of
+update models during the grid search should be centered. Note that
+<code>TRUE</code> will not modify the predictors of the fitted model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxstep</code></td>
+<td>
+<p>integer. The maximum number of iterations i.e. number
+of splits to be processed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>logical. Should information about the fitting process
+be printed to the screen?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments passed to the fitting function
+<code>fit</code> or to <code>tvcm_control</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>tvcglm</code> processes two stages. The first stage, called 
+partitioning stage, builds overly fine partitions for each <code>vc</code>
+term; the second stage, called pruning stage, selects the best-sized
+partitions by collapsing inner nodes. For details on the pruning
+stage, see <code>tvcm-assessment</code>. The partitioning stage
+iterates the following steps: 
+</p>
+
+<ol>
+<li>
+<p> Fit the current generalized linear model
+</p>
+<p><code>y ~ NodeA:x1 + ... + NodeK:xK</code>
+</p>
+<p>with <code>glm</code>, where <code>Nodek</code> is a categorical
+variable with terminal node labels for the <code class="reqn">k</code>-th varying
+coefficient. 
+</p>
+</li>
+<li>
+<p> Search the globally best split among the candidate splits by
+an exhaustive -2 likelihood training error search that cycles
+through all possible splits.
+</p>
+</li>
+<li>
+<p> If the -2 likelihood training error reduction of the best
+split is smaller than <code>mindev</code> or there is no candidate split
+satisfying the minimum node size <code>minsize</code>, stop the
+algorithm. 
+</p>
+</li>
+<li>
+<p> Else incorporate the best split and repeat the procedure.
+</p>
+</li>
+</ol>
+<p>The partitioning stage selects, in each iteration, the split that
+maximizes the -2 likelihood training error reduction, compared to the
+current model. The default stopping parameters are <code>minsize = 30</code>
+(a minimum node size of 30) and <code>mindev = 2</code> (the training error
+reduction of the best split must be larger than two to continue).
+</p>
+<p>The algorithm implements a number of split point reduction methods to
+decrease the computational complexity. See the arguments
+<code>maxnomsplit</code>, <code>maxordsplit</code> and <code>maxnumsplit</code>.
+</p>
+<p>The algorithm can be seen as an extension of CART (Breiman et. al.,
+1984) and PartReg (Wang and Hastie, 2014), with the new feature that
+partitioning can be processed coefficient-wise.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>tvcm</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>References</h3>
+
+<p>Breiman, L., J. H. Friedman, R. A. Olshen and C.J. Stone (1984).  
+<em>Classification and Regression Trees</em>. New York, USA: Wadsworth. 
+</p>
+<p>Wang, J. C., Hastie, T. (2014), Boosted Varying-Coefficient
+Regression Models for Product Demand Prediction, <em>Journal of
+Computational and Graphical Statistics</em>, <b>23</b>(2), 361-382. 
+</p>
+<p>Burgin, R. and G. Ritschard (2017), Coefficient-Wise Tree-Based
+Varying Coefficient Regression with vcrpart. <em>Journal of
+Statistical Software</em>, <b>80</b>(6), 1–33.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>tvcm_control</code>, <code>tvcm-methods</code>,
+<code>tvcm-plot</code>, <code>tvcm-plot</code>,
+<code>tvcm-assessment</code>, <code>fvcglm</code>,
+<code>glm</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## ------------------------------------------------------------------- #  
+## Example: Moderated effect of education on poverty
+##
+## The algorithm is used to find out whether the effect of high
+## education 'EduHigh' on poverty 'Poor' is moderated by the civil
+## status 'CivStat'. We specify two 'vc' terms in the logistic
+## regression model for 'Poor': a first that accounts for the direct
+## effect of 'CivStat' and a second that accounts for the moderation of
+## 'CivStat' on the relation between 'EduHigh' and 'Poor'. We use here
+## the 2-stage procedure with a partitioning- and a pruning stage as
+## described in Burgin and Ritschard (2017). 
+## ------------------------------------------------------------------- #
+
+data(poverty)
+poverty$EduHigh &lt;- 1 * (poverty$Edu == "high")
+
+## fit the model
+model.Pov &lt;-
+  tvcglm(Poor ~ -1 +  vc(CivStat) + vc(CivStat, by = EduHigh) + NChild, 
+         family = binomial(), data = poverty, subset = 1:200,
+         control = tvcm_control(verbose = TRUE, papply = lapply,
+           folds = folds_control(K = 1, type = "subsampling", seed = 7)))
+
+## diagnosis
+plot(model.Pov, "cv")
+plot(model.Pov, "coef")
+summary(model.Pov)
+splitpath(model.Pov, steps = 1:3)
+prunepath(model.Pov, steps = 1)
+</code></pre>
+
+
+</div>

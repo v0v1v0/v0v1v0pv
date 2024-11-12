@@ -1,0 +1,70 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vip2vivid</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>vip2vivid</h2>
+
+<h3>Description</h3>
+
+<p>Takes measured importance and interactions
+from the vip package and turns them into a matrix
+which can be used for plotting. Accepts any of the variable importance
+methods supplied by vip.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vip2vivid(importance, interaction, reorder = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>importance</code></td>
+<td>
+<p>Measured importance from the vip package using <code>vi</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>interaction</code></td>
+<td>
+<p>Measured interaction from the vip package using <code>vint</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>reorder</code></td>
+<td>
+<p>If TRUE (default) uses DendSer to reorder the matrix of interactions and variable importances.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A matrix of interaction values, with importance on the diagonal.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(ranger)
+library(vip)
+aq &lt;- na.omit(airquality) # get data
+nameAq &lt;- names(aq[-1]) # get feature names
+
+rF &lt;- ranger(Ozone ~ ., data = aq, importance = "permutation") # create ranger random forest fit
+vImp &lt;- vi(rF) # vip importance
+vInt &lt;- vint(rF, feature_names = nameAq) # vip interaction
+
+vip2vivid(vImp, vInt)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

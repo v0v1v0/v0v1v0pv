@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>joint_ms_format</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Formats the Parameter Vector</h2>
+
+<h3>Description</h3>
+
+<p>Formats a parameter vector by putting the model parameters into a <code>list</code>
+with elements for each type of parameter.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">joint_ms_format(object, par = object$start_val)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a joint_ms object from <code>joint_ms_ptr</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>parameter vector to be formatted.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with the following elements:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>markers</code></td>
+<td>
+<p>list with an element for each marker. The lists contains an
+element called <code>fixef</code> for non-time-varying fixed effects and an
+element called <code>fixef_vary</code> time-varying fixed effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>survival</code></td>
+<td>
+<p>list with an element for each survival outcome. The lists
+contains an element called <code>fixef</code> for non-time-varying fixed effects,
+an element called <code>fixef_vary</code> time-varying fixed effects, and an
+element called <code>associations</code> for the association parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vcov</code></td>
+<td>
+<p>contains three covariance matrices called <code>vcov_marker</code>,
+<code>vcov_vary</code> and <code>vcov_surv</code> for the covariance matrix of the
+markers error term, the time-varying random effects, and the frailties,
+respectively.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># load in the data
+library(survival)
+data(pbc, package = "survival")
+
+# re-scale by year
+pbcseq &lt;- transform(pbcseq, day_use = day / 365.25)
+pbc &lt;- transform(pbc, time_use = time / 365.25)
+
+# create the marker terms
+m1 &lt;- marker_term(
+  log(bili) ~ 1, id = id, data = pbcseq,
+  time_fixef = bs_term(day_use, df = 5L),
+  time_rng = poly_term(day_use, degree = 1L, raw = TRUE, intercept = TRUE))
+m2 &lt;- marker_term(
+  albumin ~ 1, id = id, data = pbcseq,
+  time_fixef = bs_term(day_use, df = 5L),
+  time_rng = poly_term(day_use, degree = 1L, raw = TRUE, intercept = TRUE))
+
+# base knots on observed event times
+bs_term_knots &lt;-
+  with(pbc, quantile(time_use[status == 2], probs = seq(0, 1, by = .2)))
+
+boundary &lt;- c(bs_term_knots[ c(1, length(bs_term_knots))])
+interior &lt;- c(bs_term_knots[-c(1, length(bs_term_knots))])
+
+# create the survival term
+s_term &lt;- surv_term(
+  Surv(time_use, status == 2) ~ 1, id = id, data = pbc,
+  time_fixef = bs_term(time_use, Boundary.knots = boundary, knots = interior))
+
+# create the C++ object to do the fitting
+model_ptr &lt;- joint_ms_ptr(
+  markers = list(m1, m2), survival_terms = s_term,
+  max_threads = 2L, ders = list(0L, c(0L, -1L)))
+
+# find the starting values
+start_vals &lt;- joint_ms_start_val(model_ptr)
+
+# format the starting values
+joint_ms_format(model_ptr,start_vals)
+</code></pre>
+
+
+</div>

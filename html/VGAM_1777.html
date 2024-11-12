@@ -1,0 +1,143 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Tol</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Tolerances </h2>
+
+<h3>Description</h3>
+
+<p>Generic function for the <em>tolerances</em> of a model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Tol(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p> An object for which the computation or
+extraction of a tolerance or tolerances is meaningful.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Other arguments fed into the specific
+methods function of the model. Sometimes they are fed
+into the methods function for <code>Coef</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Different models can define an optimum in different ways.
+Many models have no such notion or definition.
+</p>
+<p>Tolerances occur in quadratic ordination, i.e., CQO and UQO.
+They have ecological meaning because a high tolerance
+for a species means the species can survive over a large
+environmental range (stenoecous species), whereas a
+small tolerance means the species' niche is small
+(eurycous species).
+Mathematically, the tolerance is like the variance of
+a normal distribution.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The value returned depends specifically on the methods
+function invoked.
+For a <code>cqo</code> binomial or Poisson fit, this
+function returns a
+<code class="reqn">R \times R \times S</code> array, where <code class="reqn">R</code> is the rank
+and <code class="reqn">S</code> is the number of species.
+Each tolerance matrix ought to be positive-definite, and
+for a rank-1 fit, taking the square root of each tolerance
+matrix results in each species' tolerance (like a standard
+deviation).
+</p>
+
+
+<h3>Warning </h3>
+
+<p>There is a direct inverse relationship between the scaling of
+the latent variables (site scores) and the tolerances.
+One normalization is for the latent variables to have unit
+variance.
+Another normalization is for all the tolerances to be unit.
+These two normalization cannot simultaneously hold in general.
+For rank-<em>R&gt;1</em> models it becomes more complicated because
+the latent variables are also uncorrelated. An important
+argument when fitting quadratic ordination models is whether
+<code>eq.tolerances</code> is <code>TRUE</code> or <code>FALSE</code>.
+See Yee (2004) for details.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Tolerances are undefined for ‘linear’ and additive
+ordination models.
+They are well-defined for quadratic ordination models.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2004).
+A new technique for maximum-likelihood
+canonical Gaussian ordination.
+<em>Ecological Monographs</em>,
+<b>74</b>, 685–701.
+</p>
+<p>Yee, T. W. (2006).
+Constrained additive ordination.
+<em>Ecology</em>, <b>87</b>, 203–213.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Tol.qrrvglm</code>.
+<code>Max</code>,
+<code>Opt</code>,
+<code>cqo</code>,
+<code>rcim</code> for UQO.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+set.seed(111)  # This leads to the global solution
+hspider[,1:6] &lt;- scale(hspider[, 1:6])  # Standardized environmental vars
+p1 &lt;- cqo(cbind(Alopacce, Alopcune, Alopfabr, Arctlute, Arctperi,
+                Auloalbi, Pardlugu, Pardmont, Pardnigr, Pardpull,
+                Trocterr, Zoraspin) ~
+          WaterCon + BareSand + FallTwig + CoveMoss + CoveHerb + ReflLux,
+          poissonff, data = hspider, Crow1positive = FALSE)
+
+Tol(p1)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

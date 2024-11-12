@@ -1,0 +1,118 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>heatcomp</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Components Heat Plot</h2>
+
+<h3>Description</h3>
+
+<p>The function creates a heat plot based on the two-by-two component combinations, obtained from the
+network meta-analysis (NMA) model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">heatcomp(
+  model,
+  sep = "+",
+  median = TRUE,
+  random = TRUE,
+  z_value = FALSE,
+  freq = TRUE,
+  legend_name = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>An object of class <code>netmeta</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sep</code></td>
+<td>
+<p>A single character that defines the separator between interventions components.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>median</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> the median is used instead of the mean as a summary measure.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>random</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> the random-effects NMA model is used instead of the fixed-effect NMA model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z_value</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> z-values are used instead of interventions effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>freq</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> the frequency of component combinations are printed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend_name</code></td>
+<td>
+<p>A single character that specifies the title of the legend.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Diagonal elements refer to components, while off-diagonal to components' combinations. Each element summarizes by default
+the NMA relative effects (<code>z_value = FALSE</code>) of the interventions that includes the corresponding
+component combination. Combinations that were not observed in the NMA model, are denoted by the letter "X".
+Frequency of component combinations observed in the NMA is printed by default (<code>freq = TRUE</code>). As a summary measure,
+the median is used by default (<code>median = TRUE</code>). The magnitude of each relative effect is reflected by the color's intensity.
+Estimates close to zero are denoted by white color, and indicates a small magnitude of the corresponding component combination, while
+deep green and red colors indicate a large magnitude of the corresponding component combination.
+Outcomes nature (beneficial or harmful) is defined in the <code>netmeta</code> model.
+</p>
+<p>The function can be also adjusted to include z-scores by setting the argument <code>z_value = TRUE</code>.
+Z-scores quantify the strength of statistical evidence. Thus, dark green (or red) indicates strong statistical evidence that
+the corresponding component (or combination of components) performs better (or worse) than the reference intervention.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>ggplot</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>In the case where the NMA relative effects are used, the uncertainty of the NMA estimates are reflected by the size of the grey boxes.
+The bigger the box, the more precise the estimate.
+</p>
+<p>By setting <code>median = FALSE</code>, the mean is used instead of the median as a summary measure.
+</p>
+<p>The function can be applied only in network meta-analysis models that contain multi-component interventions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(nmaMACE)
+heatcomp(model = nmaMACE)
+
+</code></pre>
+
+
+</div>

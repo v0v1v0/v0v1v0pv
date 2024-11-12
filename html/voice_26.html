@@ -1,0 +1,243 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tag</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Tag a data frame with media information</h2>
+
+<h3>Description</h3>
+
+<p>Tag a data frame with media information
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tag(
+  x,
+  groupBy = "wav_path",
+  wavPath = unique(x$wav_path),
+  wavPathName = "wav_path",
+  tags = c("feat_summary"),
+  sortByGroupBy = TRUE,
+  filesRange = NULL,
+  features = "f0",
+  sex = "u",
+  windowShift = 5,
+  numFormants = 8,
+  numcep = 12,
+  dcttype = c("t2", "t1", "t3", "t4"),
+  fbtype = c("mel", "htkmel", "fcmel", "bark"),
+  resolution = 40,
+  usecmp = FALSE,
+  mc.cores = 1,
+  full.names = TRUE,
+  recursive = FALSE,
+  check.mono = FALSE,
+  stereo2mono = FALSE,
+  overwrite = FALSE,
+  freq = 44100,
+  round.to = 4,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An Extended data frame to be tagged with media information. See references.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groupBy</code></td>
+<td>
+<p>A variable to group the summary measures. The argument must be a character vector. (Default: <code>groupBy = 'wav_path'</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wavPath</code></td>
+<td>
+<p>A vector containing the path(s) to WAV files. May be both as <code>dirname</code> or <code>basename</code> formats.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wavPathName</code></td>
+<td>
+<p>A string containing the WAV path name. (Default: <code>wavPathName = 'wav_path'</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tags</code></td>
+<td>
+<p>Tags to be added to <code>x</code>. See Details. (Default: <code>'feat_summary'</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sortByGroupBy</code></td>
+<td>
+<p>Logical. Should the function sort the Extended data frame <code>x</code> by <code>gropuBy</code>? (Default: <code>sortByGroupBy = TRUE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filesRange</code></td>
+<td>
+<p>The desired range of directory files. Should only be used when all the WAV files are in the same folder. (Default: <code>NULL</code>, i.e., all files).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>features</code></td>
+<td>
+<p>Vector of features to be extracted. (Default: <code>'f0'</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sex</code></td>
+<td>
+<p><code>= &lt;code&gt;</code> set sex specific parameters where &lt;code&gt; = <code>'f'</code>[emale], <code>'m'</code>[ale] or <code>'u'</code>[nknown] (default: <code>'u'</code>). Used as 'gender' by <code>wrassp::ksvF0</code>, <code>wrassp::forest</code> and <code>wrassp::mhsF0</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>windowShift</code></td>
+<td>
+<p><code>= &lt;dur&gt;</code> set analysis window shift to &lt;dur&gt;ation in ms (default: 5.0). Used by <code>wrassp::ksvF0</code>, <code>wrassp::forest</code>, <code>wrassp::mhsF0</code>, <code>wrassp::zcrana</code>, <code>wrassp::rfcana</code>, <code>wrassp::acfana</code>, <code>wrassp::cepstrum</code>, <code>wrassp::dftSpectrum</code>, <code>wrassp::cssSpectrum</code> and <code>wrassp::lpsSpectrum</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numFormants</code></td>
+<td>
+<p><code>= &lt;num&gt;</code> &lt;num&gt;ber of formants (Default: <code>8</code>). Used by <code>wrassp::forest</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numcep</code></td>
+<td>
+<p>Number of Mel-frequency cepstral coefficients (cepstra) to return (Default: <code>12</code>). Used by <code>tuneR::melfcc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dcttype</code></td>
+<td>
+<p>Type of DCT used. <code>'t1'</code> or <code>'t2'</code>, <code>'t3'</code> for HTK <code>'t4'</code> for feacalc (Default: <code>'t2'</code>). Used by <code>tuneR::melfcc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fbtype</code></td>
+<td>
+<p>Auditory frequency scale to use: <code>'mel'</code>, <code>'bark'</code>, <code>'htkmel'</code>, <code>'fcmel'</code> (Default: <code>'mel'</code>). Used by <code>tuneR::melfcc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>resolution</code></td>
+<td>
+<p><code>= &lt;freq&gt;</code> set FFT length to the smallest value which results in a frequency resolution of &lt;freq&gt; Hz or better (Default: <code>40.0</code>). Used by <code>wrassp::cssSpectrum</code>, <code>wrassp::dftSpectrum</code> and <code>wrassp::lpsSpectrum</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>usecmp</code></td>
+<td>
+<p>Logical. Apply equal-loudness weighting and cube-root compression (PLP instead of LPC) (Default: <code>FALSE</code>). Used by <code>tuneR::melfcc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mc.cores</code></td>
+<td>
+<p>Number of cores to be used in parallel processing. (Default: <code>1</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>full.names</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, the directory path is prepended to the file names to give a relative file path. If <code>FALSE</code>, the file names (rather than paths) are returned. (Default: <code>TRUE</code>) Used by <code>base::list.files</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>recursive</code></td>
+<td>
+<p>Logical. Should the listing recursively into directories? (Default: <code>FALSE</code>) Used by <code>base::list.files</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.mono</code></td>
+<td>
+<p>Logical. Check if the WAV file is mono. (Default: <code>TRUE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stereo2mono</code></td>
+<td>
+<p>(Experimental) Logical. Should files be converted from stereo to mono? (Default: <code>TRUE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overwrite</code></td>
+<td>
+<p>(Experimental) Logical. Should converted files be overwritten? If not, the file gets the suffix <code>_mono</code>. (Default: <code>FALSE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>freq</code></td>
+<td>
+<p>Frequency in Hz to write the converted files when <code>stereo2mono=TRUE</code>. (Default: <code>44100</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>round.to</code></td>
+<td>
+<p>Number of decimal places to round to. (Default: <code>NULL</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical. Should the running status be showed? (Default: <code>FALSE</code>)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>filesRange</code> should only be used when all the WAV files are in the same folder.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A tibble data frame containing summarized numeric columns using (1) mean, (2) standard deviation, (3) variation coefficient, (4) median, (5) interquartile range and (6) median absolute deviation.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(voice)
+
+# get path to audio file
+path2wav &lt;- list.files(system.file('extdata', package = 'wrassp'),
+pattern = glob2rx('*.wav'), full.names = TRUE)
+
+# creating Extended synthetic data
+E &lt;- dplyr::tibble(subject_id = c(1,1,1,2,2,2,3,3,3),
+wav_path = path2wav)
+E
+
+# minimal usage
+tag(E)
+
+# canonical data
+tag(E, groupBy = 'subject_id')
+
+# limiting filesRange
+tag(E, filesRange = 3:6)
+
+# more features
+Et &lt;- tag(E, features = c('f0', 'fmt', 'rf', 'rcf', 'rpf', 'rfc', 'mfcc'),
+groupBy = 'subject_id')
+Et
+str(Et)
+</code></pre>
+
+
+</div>

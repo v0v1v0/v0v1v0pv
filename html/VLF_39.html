@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>separate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Separate Specimen by Species Names</h2>
+
+<h3>Description</h3>
+
+<p>Separates specimen into lists by species names.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">separate(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A matrix of sequences, usually reduced sequences containing only VLFs, where the second position of the matrix contains the species name for the specimen.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>If the argument x needs to be a reduced matrix, it can be calculated using the function VLF.reduced.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list containing a matrix of sequences for each species.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: data(birds)
+species.names &lt;- birds[,2]
+specimen.Number &lt;- nrow(birds)
+rownames(birds) &lt;- species.names
+Nuc.count &lt;- count.function(birds, specimen.Number, 648)
+frequency.matrix &lt;- ffrequency.matrix.function(Nuc.count, 648)
+birdSpec.freq &lt;- specimen.frequencies(frequency.matrix, birds, specimen.Number, species.names, 648)
+Bird_specimen_VLFcount &lt;- VLF.count.spec(birdSpec.freq, 0.001, 648)
+Bird_position_VLFcount &lt;- VLF.count.pos(birdSpec.freq, 0.001, 648)
+bird_VLFconvert &lt;- VLF.convert.matrix(birds, birdSpec.freq, 0.001, 648)
+bird_VLFnuc &lt;- VLF.nucleotides(bird_VLFconvert, birds, 648)
+bird_VLFreduced &lt;- VLF.reduced(bird_VLFnuc, Bird_specimen_VLFcount, 648)
+bird_species &lt;- separate(bird_VLFreduced)
+## End(Not run)
+</code></pre>
+
+
+</div>

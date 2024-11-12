@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>eigen.test</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Difference test for successive relative eigenvalues</h2>
+
+<h3>Description</h3>
+
+<p>Tests the difference between two successive relative eigenvalues
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">eigen.test(n, relValues)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>the sample size(s), given as a number or a vector of length 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>relValues</code></td>
+<td>
+<p>a vector of relative eigenvalues</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The P-values for the test of difference between successive eigenvalues
+</p>
+
+
+<h3>References</h3>
+
+<p>Mardia KV, Kent JT, Bibby JM (1979)
+<em>Multivariate analysis</em>. Academic Press, London.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>relative.eigen</code> for the computation of relative eigenvalues,
+</p>
+<p><code>pchisq</code> for Chi-squared distribution
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Data matrix of 2D landmark coordinates
+data("Tropheus.IK.coord")
+coords &lt;- which(names(Tropheus.IK.coord) == "X1"):which(names(Tropheus.IK.coord) == "Y19")
+proc.coord &lt;- as.matrix(Tropheus.IK.coord[coords])
+
+# Data reduction
+phen.pca &lt;- prcomp(proc.coord, rank. = 5, tol = sqrt(.Machine$double.eps))
+pc.scores &lt;- phen.pca$x
+
+# Covariance matrix of each population
+S.phen.pop &lt;- cov.group(pc.scores, groups = Tropheus.IK.coord$POP.ID)
+
+# Relative PCA = relative eigenanalysis between 2 covariance matrices
+# (population IKA1 relative to IKS5)
+relEigen.a1s5 &lt;- relative.eigen(S.phen.pop[, , "IKA1"], S.phen.pop[, , "IKS5"])
+
+# Test of the difference between 2 successives eigenvalues
+# of the covariance matrix of IKA1 relative to IKS5
+n_ika1 &lt;- length(which(Tropheus.IK.coord$POP.ID == "IKA1"))  # sample size for IKA1
+n_iks5 &lt;- length(which(Tropheus.IK.coord$POP.ID == "IKS5"))  # sample size for IKS5
+eigen.test(n = c(n_ika1, n_iks5), relValues = relEigen.a1s5$relValues)
+
+</code></pre>
+
+
+</div>

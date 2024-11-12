@@ -1,0 +1,194 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cops</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Centre of the Parameter Space </h2>
+
+<h3>Description</h3>
+
+<p>Returns a vector similar to coefs() comprising
+the centre of the parameter space (COPS) values,
+given a fitted VGLM regression.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cops(object, ...)
+copsvglm(object, beta.range = c(-5, 6),
+         tol = .Machine$double.eps^0.25,
+         dointercepts = TRUE, trace. = FALSE,
+         slowtrain = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>A <code>vglm</code> object.
+However, this function will not work for all
+such objects.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta.range</code></td>
+<td>
+
+<p>Numeric.
+Interval for the numerical search.
+After a little scaling, it is effectively
+fed into <code>interval</code> in
+<code>optimize</code>.
+Convergence failure may occur if this
+argument is too wide so it is a good
+idea to vary this argument.
+In fact, it is strongly recommended that
+several values be fed into this argument
+to help ensure the proper solution is obtained.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+
+<p>Numeric.
+Fed into <code>tol</code> in
+<code>optimize</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dointercepts</code></td>
+<td>
+
+<p>Logical.
+Compute the COPS for the intercepts?
+This should be set to <code>FALSE</code>
+for models such as
+<code>propodds</code> and
+<code>cumulative</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trace.</code></td>
+<td>
+
+<p>Logical.
+Print a running log?
+This may or may not work properly.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>slowtrain</code></td>
+<td>
+
+<p>Logical.
+If <code>TRUE</code> then all columns of a
+matrix is computed.
+If <code>FALSE</code> then only one column of a
+matrix is computed, and this is the only
+column needed.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>currently unused but may be used in the
+future for further arguments passed into
+the other methods functions.
+
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For many models, some COPS values will be
+<code>Inf</code> or <code>-Inf</code>
+so that manual checking is needed,
+for example, <code>poissonff</code>.
+Each value returned may be effectively
+that of <code>beta.range</code>
+or <code>NA</code>.
+The answers returned by this function only
+make sense if the COPSs are in the
+interior of the parameter space.
+This function was written specifically for
+logistic regression but has much wider
+applicability.
+Currently the result returned depends critically
+on <code>beta.range</code> so that the answer should
+be checked after several values are fed into
+that argument.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A named vector, similar to <code>coefvlm</code>.
+If <code>trace.</code> then a list is returned,
+having a componennt comprising a
+matrix of function evaluations used by
+<code>optimize</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is experimental and
+can be made to run more efficiently
+in the future.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee.  </p>
+
+
+<h3>References</h3>
+
+
+
+
+
+
+
+
+<p>Yee, T. W. (2024).
+Musings and new results on the parameter space.
+<em>Under review</em>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>hdeff</code>.
+<code>coefvlm</code>,
+<code>coef</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: data("xs.nz", package = "VGAMdata")
+data1 &lt;- na.omit(xs.nz[, c("age", "cancer", "sex")])
+fit1 &lt;- vglm(cancer ~ age + sex, binomialff, data1)
+cops(fit1)  # 'beta.range' is okay here
+
+## End(Not run)</code></pre>
+
+
+</div>

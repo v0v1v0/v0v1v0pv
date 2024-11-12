@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>barplot,validation-method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot number of violations</h2>
+
+<h3>Description</h3>
+
+<p>Plot number of violations
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'validation'
+barplot(
+  height,
+  ...,
+  order_by = c("fails", "passes", "nNA"),
+  stack_by = c("fails", "passes", "nNA"),
+  topn = Inf,
+  add_legend = TRUE,
+  add_exprs = TRUE,
+  colors = c(fails = "#FB9A99", passes = "#B2DF8A", nNA = "#FDBF6F")
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p>an R object defining height of bars (here, a <code>validation</code> object)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>parameters to be passed to <code>barplot</code> but not 
+<code>height</code>, <code>horiz</code>, <code>border</code>,<code>las</code>, and <code>las</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order_by</code></td>
+<td>
+<p>(single <code>character</code>) order bars decreasingly from top to bottom by the 
+number of fails, passes or <code>NA</code>'s.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stack_by</code></td>
+<td>
+<p>(3-vector of <code>characters</code>) Stacking order for bar chart (left to right)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>topn</code></td>
+<td>
+<p>If specified, plot only the top n most violated calls</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add_legend</code></td>
+<td>
+<p>Display legend?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add_exprs</code></td>
+<td>
+<p>Display rules?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colors</code></td>
+<td>
+<p>Bar colors for validations yielding NA or a violation</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list, containing the bar locations as in <code>barplot</code>
+</p>
+
+
+<h3>Credits</h3>
+
+<p>The default colors were generated with the <code>RColorBrewer</code> package of Erich Neuwirth.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other validation-methods: 
+<code>aggregate,validation-method</code>,
+<code>all,validation-method</code>,
+<code>any,validation-method</code>,
+<code>check_that()</code>,
+<code>compare()</code>,
+<code>confront()</code>,
+<code>event()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>plot,validation-method</code>,
+<code>sort,validation-method</code>,
+<code>summary()</code>,
+<code>validation-class</code>,
+<code>values()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(retailers)
+cf &lt;- check_that(retailers
+    , staff.costs &lt; total.costs
+    , turnover + other.rev == total.rev
+    , other.rev &gt; 0
+    , total.rev &gt; 0)
+barplot(cf)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,148 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>density_plot_theorical</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>density_plot_theorical</h2>
+
+<h3>Description</h3>
+
+<p>This function creates a smoothed kernel density plot of utilities for different EQ5D versions and specified value sets.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">density_plot_theorical(
+  value_sets_3L = NULL,
+  value_sets_5L = NULL,
+  value_sets_XW = NULL,
+  value_sets_XWR = NULL,
+  value_sets_others = NULL,
+  graph_title = "",
+  x_axis_title = "Index Value",
+  x_min_value = NULL,
+  x_max_value = NULL,
+  y_axis_title = "Density",
+  y_min_value = NULL,
+  y_max_value = NULL,
+  legend_name = "",
+  color_palette = NULL,
+  line_types = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>value_sets_3L</code></td>
+<td>
+<p>A character vector specifying the country value sets for the EQ5D-3L version.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value_sets_5L</code></td>
+<td>
+<p>A character vector specifying the country value sets for the EQ5D-5L version.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value_sets_XW</code></td>
+<td>
+<p>A character vector specifying the country value sets for the EQ5D-XW version.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value_sets_XWR</code></td>
+<td>
+<p>A character vector specifying the country value sets for the EQ5D-XWR version.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value_sets_others</code></td>
+<td>
+<p>A list of lists specifying the inputs for other instruments. Each list within the main list should be named and contain a data frame ('df'), a column specifying the health states ('stateColumn'), and a column specifying the utility values ('utilityColumn').</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>graph_title</code></td>
+<td>
+<p>A character string specifying the title of the graph. Default is an empty string.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_axis_title</code></td>
+<td>
+<p>A character string specifying the title of the x-axis. Default is "Index Value".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_min_value</code></td>
+<td>
+<p>A numeric specifying the minimum value for the x-axis. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_max_value</code></td>
+<td>
+<p>A numeric specifying the maximum value for the x-axis. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_axis_title</code></td>
+<td>
+<p>A character string specifying the title of the y-axis. Default is "Density".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_min_value</code></td>
+<td>
+<p>A numeric specifying the minimum value for the y-axis. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_max_value</code></td>
+<td>
+<p>A numeric specifying the maximum value for the y-axis. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend_name</code></td>
+<td>
+<p>A character string specifying the name of the legend. Default is "".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color_palette</code></td>
+<td>
+<p>A character vector specifying the colors for the density lines. Default is a predefined color palette.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>line_types</code></td>
+<td>
+<p>A character vector specifying the line types for the density lines. Default is solid.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A ggplot object visualizing the density of utilities for the specified EQ5D versions and other instruments value sets.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">density_plot_theorical(value_sets_3L = "NL", value_sets_5L = "NL")
+instrument &lt;- data.frame(HS=c(123, 456, 789), val = c(-0.3, 0.1, 0.75))
+value_set_other &lt;- list(test_instrument = list(df = instrument, 
+                        stateColumn = "HS", 
+                        utilityColumn = "val"))
+density_plot_theorical(value_sets_3L = "HU", value_sets_others = value_set_other)
+</code></pre>
+
+
+</div>

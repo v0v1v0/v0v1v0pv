@@ -1,0 +1,57 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>check_cov_lower</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check Lower Bound of Covariance Parameters</h2>
+
+<h3>Description</h3>
+
+<p>Ensures that the covariance parameters define a positive definite covariance
+matrix. It takes the vector
+<code class="reqn">(\rho_1, \sigma^2_1, ..., \rho_q, \sigma^2_q, \tau^2)</code> and checks if
+all <code class="reqn">\rho_k&gt;0</code>, all <code class="reqn">\sigma_k^2&gt;=0</code>, and <code class="reqn">\tau^2&gt;0</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">check_cov_lower(cv, q)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>cv</code></td>
+<td>
+<p>(<code>numeric(2*q+1)</code>) <br> Covariance vector of SVC model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>(<code>numeric(1)</code>) <br> Integer indicating the number of SVCs.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>logical(1)</code> with <code>TRUE</code> if all conditions above are
+fulfilled.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># first one is true, all other are false
+check_cov_lower(c(0.1, 0, 0.2,  1, 0.2), q = 2)
+check_cov_lower(c(0  , 0, 0.2,  1, 0.2), q = 2)
+check_cov_lower(c(0.1, 0, 0.2,  1, 0  ), q = 2)
+check_cov_lower(c(0.1, 0, 0.2, -1, 0  ), q = 2)
+</code></pre>
+
+
+</div>

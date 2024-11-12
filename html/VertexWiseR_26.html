@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>TFCE_threshold</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Thresholding TFCE output</h2>
+
+<h3>Description</h3>
+
+<p>Threshold TFCE maps from the TFCE_vertex_analysis() output and identifies significant clusters at the desired threshold.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">TFCE_threshold(TFCEoutput, p = 0.05, atlas = 1, k = 20, VWR_check = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>TFCEoutput</code></td>
+<td>
+<p>An object containing the output from TFCE_vertex_analysis()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>A numeric object specifying the p-value to threshold the results (Default is 0.05)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>atlas</code></td>
+<td>
+<p>A numeric integer object corresponding to the atlas of interest.  1=Desikan, 2=Destrieux-148, 3=Glasser-360, 4=Schaefer-100, 5=Schaefer-200, 6=Schaefer-400. Set to <code>1</code> by default. This argument is ignored for hippocampal surfaces.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>Cluster-forming threshold (Default is 20)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VWR_check</code></td>
+<td>
+<p>A boolean object specifying whether to check and validate system requirements. Default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list object containing the cluster level results, thresholded t-stat map, and positive, negative and bidirectional cluster maps.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">model1_TFCE=readRDS(system.file('demo_data/model1_TFCE.rds', 
+package = 'VertexWiseR'))
+
+TFCEanalysis_output=TFCE_threshold(model1_TFCE, p=0.05, atlas=1,
+VWR_check=FALSE)
+TFCEanalysis_output$cluster_level_results
+</code></pre>
+
+
+</div>

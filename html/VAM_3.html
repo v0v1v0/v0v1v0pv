@@ -1,0 +1,107 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vam</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variance-adjusted Mahalanobis (VAM) algorithm</h2>
+
+<h3>Description</h3>
+
+<p>Implementation of the Variance-adjusted Mahalanobis (VAM) method, which computes distance statistics and one-sided p-values 
+for all cells in the specified single cell gene expression matrix. This matrix should reflect the subset of the full 
+expression profile that corresponds to a single gene set. The p-values will be computed using either a 
+chi-square distribution, a non-central chi-square distribution or gamma distribution as controlled by the
+<code>center</code> and <code>gamma</code> arguments for the one-sided alternative hypothesis that the expression values in the 
+cell are further from the mean (<code>center=T</code>) or origin (<code>center=F</code>) than expected under the null 
+of uncorrelated technical noise, i.e., gene expression variance is purely technical and all genes are uncorrelated.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    vam(gene.expr, tech.var.prop, gene.weights, center=FALSE, gamma=TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>gene.expr</code></td>
+<td>
+<p>An n x p matrix of gene expression values for n cells and p genes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tech.var.prop</code></td>
+<td>
+<p>Vector of technical variance proportions for each of the p genes. 
+If specified, the Mahalanobis distance will be computed using a diagonal covariance matrix generated using these proportions. 
+If not specified, the Mahalanobis distances will be computed using a diagonal covariance matrix generated from the 
+sample variances.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gene.weights</code></td>
+<td>
+<p>Optional vector of gene weights. If specified, weights must be &gt; 0. 
+The weights are used to adjust the gene variance values included in the computation of the modified Mahalanobis distances.
+Specifically, the gene variance is divided by the gene weight. This adjustment means that large 
+weights will increase the influence of a given gene in the computation of the modified Mahalanobis distance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>center</code></td>
+<td>
+<p>If true, will mean center the values in the computation of the Mahalanobis statistic.
+If false, will compute the Mahalanobis distance from the origin. Default is F.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>If true, will fit a gamma distribution to the non-zero squared Mahalanobis distances computed from 
+a row-permuted version of <code>gene.expr</code>. The estimated gamma distribution will be used to compute
+a one-sided p-value for each cell. If false, will compute the p-value using the standard 
+chi-square approximation for the squared Mahalanobis distance (or non-central if <code>center=F</code>). Default is T.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>data.frame</code> with the following elements (row names will match row names from gene.expr):
+</p>
+
+<ul>
+<li>
+<p> "cdf.value": 1 minus the one-sided p-values computed from the squared adjusted Mahalanobis distances. 
+</p>
+</li>
+<li>
+<p> "distance.sq": The squared adjusted Mahalanobis distances for the n cells. 
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><code>vamForCollection</code>,<code>vamForSeurat</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    # Simulate Poisson expression data for 10 genes and 10 cells
+    gene.expr=matrix(rpois(100, lambda=2), nrow=10)
+    # Simulate technical variance proportions
+    tech.var.prop=runif(10)
+    # Execute VAM to compute scores for the 10 genes on each cell
+    vam(gene.expr=gene.expr, tech.var.prop=tech.var.prop)
+    # Create weights that prioritize the first 5 genes
+    gene.weights = c(rep(2,5), rep(1,5))
+    # Execute VAM using the weights
+    vam(gene.expr=gene.expr, tech.var.prop=tech.var.prop, 
+    	gene.weights=gene.weights)    
+</code></pre>
+
+
+</div>

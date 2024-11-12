@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>constrainAges</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Constrain a dataset to only occurrences within a certain age-range</h2>
+
+<h3>Description</h3>
+
+<p>Assign fossil occurrences to different intervals within a geologic timescale, then remove occurrences that are not temporally constrained to a single interval within that timescale.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">constrainAges(Data, Timescale)
+
+multiplyAges(Data, Timescale)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>A data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Timescale</code></td>
+<td>
+<p>A data frame</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Cull a paleobiology database data frame to only occurrences temporally constrained to be within a certain level of the geologic timescale (e.g., period, epoch). The geologic timescale should come from the Macrostrat database, but custom time-scales can be used if structured in the same way. See <code>downloadTime</code> for how to download a timescale.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andrew A. Zaffos
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Download a test dataset of Cenozoic bivalves.
+# DataPBDB&lt;-downloadPBDB(Taxa="Bivalvia",StartInterval="Cenozoic",StopInterval="Cenozoic")
+
+# Download the international epochs timescale from macrostrat.org
+# Epochs&lt;-downloadTime("international epochs")
+
+# Find only occurrences that are temporally constrained to a single international epoch
+# ConstrainedPBDB&lt;-constrainAges(DataPBDB,Timescale=Epochs)
+
+# Create mutliple instances of a single occurrence for each epoch it occurs in
+# MultipliedPBDB&lt;-multiplyAges(DataPBDB,Timescale=Epochs)
+
+</code></pre>
+
+
+</div>

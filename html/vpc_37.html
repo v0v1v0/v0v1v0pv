@@ -1,0 +1,266 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vpc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>VPC function</h2>
+
+<h3>Description</h3>
+
+<p>Creates a VPC plot from observed and simulation data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vpc(sim, ...)
+
+## Default S3 method:
+vpc(sim, ...)
+
+vpc_vpc(
+  sim = NULL,
+  obs = NULL,
+  psn_folder = NULL,
+  bins = "jenks",
+  n_bins = "auto",
+  bin_mid = "mean",
+  obs_cols = NULL,
+  sim_cols = NULL,
+  software = "auto",
+  show = NULL,
+  stratify = NULL,
+  pred_corr = FALSE,
+  pred_corr_lower_bnd = 0,
+  pi = c(0.05, 0.95),
+  ci = c(0.05, 0.95),
+  uloq = NULL,
+  lloq = NULL,
+  log_y = FALSE,
+  log_y_min = 0.001,
+  xlab = NULL,
+  ylab = NULL,
+  title = NULL,
+  smooth = TRUE,
+  vpc_theme = NULL,
+  facet = "wrap",
+  scales = "fixed",
+  labeller = NULL,
+  vpcdb = FALSE,
+  verbose = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>sim</code></td>
+<td>
+<p>this is usually a data.frame with observed data, containing the independent and dependent variable, a column indicating the individual, and possibly covariates. E.g. load in from NONMEM using read_table_nm.  However it can also be an object like a nlmixr or xpose object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments sent to other methods (like xpose or nlmixr);  Note these arguments are not used in the default vpc and are ignored by the default method.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>a data.frame with observed data, containing the independent and dependent variable, a column indicating the individual, and possibly covariates. E.g. load in from NONMEM using read_table_nm</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>psn_folder</code></td>
+<td>
+<p>instead of specifying "sim" and "obs", specify a PsN-generated VPC-folder</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bins</code></td>
+<td>
+<p>either "density", "time", or "data", "none", or one of the approaches available in classInterval() such as "jenks" (default) or "pretty", or a numeric vector specifying the bin separators.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_bins</code></td>
+<td>
+<p>when using the "auto" binning method, what number of bins to aim for</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bin_mid</code></td>
+<td>
+<p>either "mean" for the mean of all timepoints (default) or "middle" to use the average of the bin boundaries.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs_cols</code></td>
+<td>
+<p>observation dataset column names (list elements: "dv", "idv", "id", "pred")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sim_cols</code></td>
+<td>
+<p>simulation dataset column names (list elements: "dv", "idv", "id", "pred", "sim")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>software</code></td>
+<td>
+<p>name of software platform using (e.g. nonmem, phoenix)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show</code></td>
+<td>
+<p>what to show in VPC (obs_dv, obs_ci, pi, pi_as_area, pi_ci, obs_median, sim_median, sim_median_ci)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stratify</code></td>
+<td>
+<p>character vector of stratification variables. Only 1 or 2 stratification variables can be supplied.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred_corr</code></td>
+<td>
+<p>perform prediction-correction?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred_corr_lower_bnd</code></td>
+<td>
+<p>lower bound for the prediction-correction</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pi</code></td>
+<td>
+<p>simulated prediction interval to plot. Default is c(0.05, 0.95),</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ci</code></td>
+<td>
+<p>confidence interval to plot. Default is (0.05, 0.95)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>uloq</code></td>
+<td>
+<p>Number or NULL indicating upper limit of quantification. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lloq</code></td>
+<td>
+<p>Number or NULL indicating lower limit of quantification. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log_y</code></td>
+<td>
+<p>Boolean indicting whether y-axis should be shown as logarithmic. Default is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log_y_min</code></td>
+<td>
+<p>minimal value when using log_y argument. Default is 1e-3.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>label for x axis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>label for y axis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smooth</code></td>
+<td>
+<p>"smooth" the VPC (connect bin midpoints) or show bins as rectangular boxes. Default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vpc_theme</code></td>
+<td>
+<p>theme to be used in VPC. Expects list of class vpc_theme created with function vpc_theme()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>facet</code></td>
+<td>
+<p>either "wrap", "columns", or "rows"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scales</code></td>
+<td>
+<p>either "fixed" (default), "free_y", "free_x" or "free"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labeller</code></td>
+<td>
+<p>ggplot2 labeller function to be passed to underlying ggplot object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vpcdb</code></td>
+<td>
+<p>Boolean whether to return the underlying vpcdb rather than the plot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>show debugging information (TRUE or FALSE)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list containing calculated VPC information (when vpcdb=TRUE), or a ggplot2 object (default)
+</p>
+
+
+<h3>See Also</h3>
+
+<p>sim_data, vpc_cens, vpc_tte, vpc_cat
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## See vpc.ronkeizer.com for more documentation and examples
+library(vpc)
+
+# Basic commands:
+vpc(sim = simple_data$sim, obs = simple_data$obs)
+vpc(sim = simple_data$sim, obs = simple_data$obs, lloq = 20)
+
+</code></pre>
+
+
+</div>

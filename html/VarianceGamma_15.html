@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vgCheckPars</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check Parameters of the Variance Gamma Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Given a putative set of parameters for the variance gamma
+distribution, the functions checks if the parameters are in the
+correct range, and if the set has the correct length of 4.  </p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  vgCheckPars(param, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>param</code></td>
+<td>
+<p>Numeric. Putative parameter values for a Variance Gamma
+distribution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments for calls to <code>all.equal</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+  
+<p>The vector <code>param</code> takes the form <code>c(c, sigma, theta, nu)</code>.
+If either <code>sigma</code> or <code>nu</code> is negative, then an error message
+is returned.
+</p>
+<p>If the vector <code>param</code> has a length not equal to 4, then an error
+message is returned.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>case</code></td>
+<td>
+<p>Whichever of <code>'error'</code> or <code>'normal'</code> is
+identified by the function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>errMessage</code></td>
+<td>
+<p>An appropriate error message if an error was found,
+the empty string <code>""</code> otherwise.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>David Scott <a href="mailto:d.scott@auckland.ac.nz">d.scott@auckland.ac.nz</a>,
+Christine Yang Dong <a href="mailto:c.dong@auckland.ac.nz">c.dong@auckland.ac.nz</a></p>
+
+
+<h3>See Also</h3>
+
+<p><code>dvg</code>, <code>vgMom</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> vgCheckPars(c(0,1,0,1))      # normal
+ vgCheckPars(c(0,0,0,1))      # error
+ vgCheckPars(c(0,1,0,-2))     # error
+ vgCheckPars(c(0,1,0))        # error
+</code></pre>
+
+
+</div>

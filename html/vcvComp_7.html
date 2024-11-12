@@ -1,0 +1,77 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>minv</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Matrix pseudoinverse</h2>
+
+<h3>Description</h3>
+
+<p>Computes the inverse or the pseudoinverse of a matrix
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">minv(M, method = 0, pa = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>M</code></td>
+<td>
+<p>a numeric matrix (square matrix)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>an integer for the method of inversion.
+If method = 0, only the nonzero eigenvalues are kept;
+if method = 1, only the eigenvalues above a threshold are kept;
+if method = 2, only the several first eigenvalues are kept;
+if method = 3, a Tikhonov regularization (= ridge regression) is performed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pa</code></td>
+<td>
+<p>an integer for the parameter of inversion.
+If method = 1, pa is the threshold below which the eigenvalues are not kept;
+if method = 2, pa is an positive integer number corresponding to number of eigenvalues that are kept;
+if method = 3, pa is the scaling factor for the identity matrix</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A numeric matrix corresponding to the pseudoinverse of M
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Data matrix of 2D landmark coordinates
+data("Tropheus.IK.coord")
+coords &lt;- which(names(Tropheus.IK.coord) == "X1"):which(names(Tropheus.IK.coord) == "Y19")
+proc.coord &lt;- as.matrix(Tropheus.IK.coord[coords])
+
+# Covariance matrix of each population
+S.phen.pop &lt;- cov.group(proc.coord, groups = Tropheus.IK.coord$POP.ID)
+
+# Pseudo-inversion of a square matrix (covariance matrix of the population IKS5)
+S2 &lt;- S.phen.pop[, , "IKS5"]
+invS2 &lt;- minv(S2, method = 0, pa = 0)  # Pseudoinverse keeping non-zero eigenvalues
+invS2 &lt;- minv(S2, method = 1, pa = 10^-8)  # Pseudoinverse keeping eigenvalues above 10^-8
+invS2 &lt;- minv(S2, method = 2, pa = 5)  # Pseudoinverse keeping the first five eigenvalues
+invS2 &lt;- minv(S2, method = 3, pa = 0.5)  # Ridge regression with Tikhonov factor of 0.5
+
+</code></pre>
+
+
+</div>

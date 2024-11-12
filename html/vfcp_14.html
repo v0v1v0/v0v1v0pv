@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vfjoe</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Joe Copula Variable Given Second One and Copula Probability
+</h2>
+
+<h3>Description</h3>
+
+<p><code>v</code> for Joe copula <code>C(u, v)</code> given probability
+<code>C(u, v)</code> and <code>u</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vfjoe(C, u, tht)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+
+<p>Probability value of the Joe copula. It can be a vector.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>u</code></td>
+<td>
+
+<p>The first variable value of the <code>C(u, v)</code>.
+<code>u</code> can be a vector if <code>C</code> is a single.
+<code>u</code> is a matrix with <code>nrow = length(C)</code> if <code>C</code> is a vector.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tht</code></td>
+<td>
+
+<p>Copula parameter
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The value of the <code>u</code> must be grater than <code>C</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The value of the second variable depending on the first variable
+and copula probability value.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Josef Brejcha
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">C &lt;- 0.3
+tht &lt;- 6
+u &lt;- c(0.35, 0.4, 0.45)
+v &lt;- vfjoe(C, u, tht)
+kop = joeCopula(tht)
+pCopula(cbind(u, v), kop)
+#
+Cf &lt;- c(0.3, 0.4)
+mx &lt;- matrix(c(seq(0.35, 0.45, 0.05), seq(0.5, 0.6, 0.05)),
+             nrow = 2, ncol = 3, byrow = TRUE)
+rownames(mx) &lt;- Cf
+vfjoe(C = Cf, u = mx , tht=6)
+#           [,1]      [,2]      [,3]
+# [1,] 0.4021216 0.3513741 0.3274672
+# [2,] 0.4379531 0.4184746 0.4087143
+</code></pre>
+
+
+</div>

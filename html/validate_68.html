@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>exists_any</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Test for (unique) existence</h2>
+
+<h3>Description</h3>
+
+<p>Group records according to (zero or more) classifying variables.  Test for
+each group whether at least one (<code>exists</code>) or precisely one
+(<code>exists_one</code>) record satisfies a condition.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">exists_any(rule, by = NULL, na.rm = FALSE)
+
+exists_one(rule, by = NULL, na.rm = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>rule</code></td>
+<td>
+<p><code>[expression]</code> A validation rule</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>A bare (unquoted) variable name or a list of bare variable
+names, that will be used to group the data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p><code>[logical]</code> Toggle to ignore results that yield <code>NA</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>logical</code> vector, with the same number of entries as there
+are rows in the entire data under scrutiny. If a test fails, all records in
+the group are labeled with <code>FALSE</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other cross-record-helpers: 
+<code>contains_exactly()</code>,
+<code>do_by()</code>,
+<code>hb()</code>,
+<code>hierarchy()</code>,
+<code>is_complete()</code>,
+<code>is_linear_sequence()</code>,
+<code>is_unique()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Test whether each household has exactly one 'head of household'
+
+dd &lt;- data.frame(
+   hhid   = c(1,  1,  2,  1,  2,  2,  3 )
+ , person = c(1,  2,  3,  4,  5,  6,  7 )
+ , hhrole = c("h","h","m","m","h","m","m")
+)
+v &lt;- validator(exists_one(hhrole=="h", hhid))
+values(confront(dd, v))
+
+# same, but now with missing value in the data
+dd &lt;- data.frame(
+    hhid   = c(1,  1,  2,  1,  2,  2,  3 )
+  , person = c(1,  2,  3,  4,  5,  6,  7 )
+  , hhrole = c("h",NA,"m","m","h","m","h")
+)
+values(confront(dd, v))
+
+# same, but now we ignore the missing values
+v &lt;- validator(exists_one(hhrole=="h", hhid, na.rm=TRUE))
+values(confront(dd, v))
+
+</code></pre>
+
+
+</div>

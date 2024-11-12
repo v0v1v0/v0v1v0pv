@@ -1,0 +1,139 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lmerSummary</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Derive VCA-Summary Table from an Object Fitted via Function <code>lmer</code>
+</h2>
+
+<h3>Description</h3>
+
+<p>This function builds a variance components analysis (VCA) table
+from an object representing a model fitted by function <code>lmer</code>
+of the <code>lme4</code> R-package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lmerSummary(
+  obj,
+  VarVC = TRUE,
+  terms = NULL,
+  Mean = NULL,
+  cov = FALSE,
+  X = NULL,
+  tab.only = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(lmerMod) object as returned by function <code>lmer</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VarVC</code></td>
+<td>
+<p>(logical) TRUE = the variance-covariance matrix of variance components will be approximated
+following the Giesbrecht &amp; Burns approach, FALSE = it will not be approximated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>terms</code></td>
+<td>
+<p>(character) vector, optionally defining the order of variance terms to be used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Mean</code></td>
+<td>
+<p>(numeric) mean value used for CV-calculation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cov</code></td>
+<td>
+<p>(logical) TRUE = in case of non-zero covariances a block diagonal matrix will be constructed,
+FALSE = a diagonal matrix with all off-diagonal elements being equal to zero will be contructed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>(matrix) design matrix of fixed effects as constructed to meet VCA-package requirements</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tab.only</code></td>
+<td>
+<p>(logical) TRUE = will return only the VCA-results table as 'data.frame', argument 'VarVC' will 
+be automatically set to 'FALSE' (see details)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>It applies the approximation of the variance-covariance
+matrix of variance components according to Giesbrecht &amp; Burns (1985) and uses this
+information to approximate the degrees of freedom according to Satterthwaite
+(see SAS PROC MIXED documentation option 'CL').
+</p>
+<p>This function can be used to create a VCA-results table from almost any fitted 'lmerMod'-object, i.e. one can
+apply it to a model fitted via function <code>lmer</code> of the <code>lme4</code>-package. The only 
+additional argument that needs to be used is 'tab.only' (see examples).
+</p>
+
+
+<h3>Value</h3>
+
+<p>(list) still a premature 'VCA'-object but close to a "complete" 'VCA'-object
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Searle, S.R, Casella, G., McCulloch, C.E. (1992), Variance Components, Wiley New York
+</p>
+<p>Giesbrecht, F.G. and Burns, J.C. (1985), Two-Stage Analysis Based on a Mixed Model: Large-Sample
+Asymptotic Theory and Small-Sample Simulation Results, Biometrics 41, p. 477-486
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>remlVCA</code>, <code>remlMM</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# fit a model with a VCA-function first
+data(VCAdata1)
+fit0 &lt;- remlVCA(y~(device+lot)/day/run, subset(VCAdata1, sample==5))
+fit0
+
+# fit the same model with function 'lmer' of the 'lme4'-package
+library(lme4)
+fit1 &lt;- lmer(y~(1|device)+(1|lot)+(1|device:lot:day)+(1|device:lot:day:run),
+subset(VCAdata1, sample==5))
+lmerSummary(fit1, tab.only=TRUE)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

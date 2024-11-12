@@ -1,0 +1,160 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_deploy_sagemaker</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Deploy a vetiver model API to Amazon SageMaker</h2>
+
+<h3>Description</h3>
+
+<p>Use <code>vetiver_deploy_sagemaker()</code> to deploy a <code>vetiver_model()</code>
+that has been versioned and stored via <code>vetiver_pin_write()</code> as a Plumber API
+on Amazon SageMaker.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetiver_deploy_sagemaker(
+  board,
+  name,
+  instance_type,
+  ...,
+  predict_args = list(),
+  docker_args = list(),
+  build_args = list(),
+  endpoint_args = list(),
+  repo_name = glue("vetiver-sagemaker-{name}")
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>board</code></td>
+<td>
+<p>An AWS S3 board created with <code>pins::board_s3()</code>. This board
+must be in the correct region for your SageMaker instance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>Pin name.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>instance_type</code></td>
+<td>
+<p>Type of EC2 instance to use; see
+<a href="https://aws.amazon.com/sagemaker/pricing/">Amazon SageMaker pricing</a>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not currently used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>predict_args</code></td>
+<td>
+<p>A list of optional arguments passed to <code>vetiver_api()</code>
+such as the prediction <code>type</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>docker_args</code></td>
+<td>
+<p>A list of optional arguments passed to
+<code>vetiver_write_docker()</code> such as the <code>lockfile</code> name or whether to use
+<code>rspm</code>. Do not pass <code>additional_pkgs</code> here, as this function uses
+<code>additional_pkgs = required_pkgs(board)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>build_args</code></td>
+<td>
+<p>A list of optional arguments passed to
+<code>vetiver_sm_build()</code> such as the model <code>version</code> or the <code>compute_type</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>endpoint_args</code></td>
+<td>
+<p>A list of optional arguments passed to
+<code>vetiver_sm_endpoint()</code> such as <code>accelerator_type</code> or <code>data_capture_config</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>repo_name</code></td>
+<td>
+<p>The name for the AWS ECR repository to store the model.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function stores your model deployment image in the same bucket used
+by <code>board</code>.
+</p>
+<p>The function <code>vetiver_deploy_sagemaker()</code> uses:
+</p>
+
+<ul>
+<li> <p><code>vetiver_sm_build()</code> to build and push a Docker image to ECR,
+</p>
+</li>
+<li> <p><code>vetiver_sm_model()</code> to create a SageMaker model, and
+</p>
+</li>
+<li> <p><code>vetiver_sm_endpoint()</code> to deploy a SageMaker model endpoint.
+</p>
+</li>
+</ul>
+<p>These modular functions are available for more advanced use cases.
+</p>
+<p>If you are working locally, you will likely need to explicitly set up
+your execution role to work correctly. Check out
+<a href="https://dyfanjones.r-universe.dev/smdocker">"Execution role requirements"</a>
+in the smdocker documentation, and especially note that the bucket containing
+your vetiver model needs to be added as a resource in your IAM role policy.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The deployed <code>vetiver_endpoint_sagemaker()</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vetiver_sm_build()</code>, <code>vetiver_sm_model()</code>, <code>vetiver_sm_endpoint()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">if (FALSE) {
+library(pins)
+b &lt;- board_s3(bucket = "my-existing-bucket")
+cars_lm &lt;- lm(mpg ~ ., data = mtcars)
+v &lt;- vetiver_model(cars_lm, "cars_linear")
+vetiver_pin_write(b, v)
+
+endpoint &lt;- vetiver_deploy_sagemaker(
+    board = b,
+    name = "cars_linear",
+    instance_type = "ml.t2.medium",
+    predict_args = list(type = "class", debug = TRUE)
+)
+}
+
+</code></pre>
+
+
+</div>

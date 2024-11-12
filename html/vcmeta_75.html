@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>replicate.prop.ps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares and combines paired-samples proportion differences in original and
+follow-up studies</h2>
+
+<h3>Description</h3>
+
+<p>This function computes confidence intervals from an original study and a
+follow-up study where the effect size is a paired-samples proportion
+difference. Confidence intervals for the difference and average of effect
+sizes are also computed. The confidence level for the difference is
+1 – 2*alpha, which is recommended for equivalence testing.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">replicate.prop.ps(alpha, f1, f2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f1</code></td>
+<td>
+<p>vector of frequency counts for 2x2 table in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f2</code></td>
+<td>
+<p>vector of frequency counts for 2x2 table in follow-up study</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A 4-row matrix. The rows are:
+</p>
+
+<ul>
+<li>
+<p> Row 1 summarizes the original study
+</p>
+</li>
+<li>
+<p> Row 2 summarizes the follow-up study
+</p>
+</li>
+<li>
+<p> Row 3 estimates the difference in proportion differences
+</p>
+</li>
+<li>
+<p> Row 4 estimates the average proportion difference
+</p>
+</li>
+</ul>
+<p>The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - proportion difference estimate (single study, difference, average)
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> z - z-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2021).
+“Design and analysis of replication studies.”
+<em>Organizational Research Methods</em>, <b>24</b>(3), 513–529.
+ISSN 1094-4281, <a href="https://doi.org/10.1177/1094428120911088">doi:10.1177/1094428120911088</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">f1 &lt;- c(42, 2, 15, 61)
+f2 &lt;- c(69, 5, 31, 145)
+replicate.prop.ps(.05, f1, f2)
+
+# Should return:
+#                           Estimate         SE           z            p
+# Original:              0.106557377 0.03440159  3.09745539 1.951898e-03
+# Follow-up:             0.103174603 0.02358274  4.37500562 1.214294e-05
+# Original - Follow-up:  0.003852359 0.04097037  0.09402793 9.250870e-01
+# Average:               0.105511837 0.02048519  5.15064083 2.595979e-07
+#                                LL         UL
+# Original:              0.03913151 0.17398325
+# Follow-up:             0.05695329 0.14939592
+# Original - Follow-up: -0.06353791 0.07124263
+# Average:               0.06536161 0.14566206
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,362 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.VFP</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot VFP-Ojbects.</h2>
+
+<h3>Description</h3>
+
+<p>Function takes an object of class 'VFP' and plots a fitted variance-function
+either on the original variance-scale ('type="vc"') or on the CV-scale ("cv").
+The corresponding 100x(1-alpha)% confidencen interval around the variance-function
+can be plotted either as lines ('ci.type="lines') or as per default as CI-band.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VFP'
+plot(
+  x,
+  model.no = NULL,
+  type = c("vc", "sd", "cv"),
+  add = FALSE,
+  alpha = 0.05,
+  ci.col = "gray90",
+  ci.type = c("band", "lines", "none"),
+  dispersion = NULL,
+  browse = FALSE,
+  BG = "white",
+  Title = list(),
+  Xlabel = list(),
+  Ylabel = list(),
+  Line = list(),
+  Points = list(),
+  Grid = list(),
+  Crit = list(),
+  ylim = NULL,
+  xlim = NULL,
+  Prediction = NULL,
+  Pred.CI = NULL,
+  Model = TRUE,
+  CI.method = c("chisq", "t", "normal"),
+  use.log = FALSE,
+  Npred = 200,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>(VFP) object as returned by function 'fit.vfp'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model.no</code></td>
+<td>
+<p>(integer) specifying which model to plot, must be one of the fitted models</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>(character) either "vc" to generate a plot on the original
+variance-scale or "cv" to plot it on the coefficient of variation
+scale, i.e. CV = 100*sqrt(VC)/Mean or "log" to plot after a variance 
+stabilizing transformation. The latter will not work if 'Prediction' is specified!.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add</code></td>
+<td>
+<p>(logical) TRUE = the current (im)precision profile is added to an existing plot,
+FALSE = a new plot will be generated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>(numeric) value specifying the 100x(1-alpha)% confidencen interval
+to be plotted around the function</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ci.col</code></td>
+<td>
+<p>(character) string specifying a color used for the CI-region</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ci.type</code></td>
+<td>
+<p>(character) either "band" to plto the CI as polygon, or "lines" to
+plot the CI-bounds as two separate line using color 'ci.col'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dispersion</code></td>
+<td>
+<p>(numeric) NULL = the dispersion parameter will be estimated,
+numeric value = the dispersion parameter will be used as specified</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>browse</code></td>
+<td>
+<p>(logical) TRUE = if multiple models were fitted, all will be displayed one after
+the other in increasing order of their respective AIC, mouse-klick on the plot
+triggers switch to the next model</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BG</code></td>
+<td>
+<p>(character) string specifying a background color</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Title</code></td>
+<td>
+<p>(list) passed to function <code>mtext</code> controlling content and style of
+the main title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Xlabel</code></td>
+<td>
+<p>(list) passed to function <code>mtext</code> controlling the labeling
+of the X-axis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Ylabel</code></td>
+<td>
+<p>(list) passed to function <code>mtext</code> controlling the labeling
+of the Y-axis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Line</code></td>
+<td>
+<p>(list) passed to function <code>lines</code> controlling the visual appearance
+of the line representing the fitted variance-function</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Points</code></td>
+<td>
+<p>(list) passed to function <code>points</code> controlling how 
+data used to fit a variance function shall be plotted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Grid</code></td>
+<td>
+<p>(list) passed to function <code>addGrid</code> controlling the appearance
+of a grid, set to NULL to omit</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Crit</code></td>
+<td>
+<p>(list) passed to function <code>legend</code> per default used to present
+the optimality criterion for choosing the best fitting model, per default this
+is AIC and additionally residual sum of squares (RSS) is shown for the plotted
+model in the upper-right corner</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylim</code></td>
+<td>
+<p>(numeric) vector of length two specifying plot-limits in Y-direction, if NULL
+these will be automatically determined</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim</code></td>
+<td>
+<p>(numeric) vector of length two specifying plot-limits in X-direction, if NULL
+these will be automatically determined</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Prediction</code></td>
+<td>
+<p>(list) with elements 'y' specifying values on VC-, SD- or CV-scale depending on
+'type' for which predictions on the X-axis are requested or 'x' specifying mean-values
+on the X-axis for which predictions on the Y-axis are requested; furthermore,
+all graphical parameters accepted by function <code>lines</code> indicating predictions;
+NULL to omit (default);
+additionally to arguments accepted by function 'lines', one can specify parameters
+'x.line' and 'y.line' used to indicated values at the respective axis in margin-lines see
+<code>mtext</code> for details; 'cex' and 'font' for specifying how these values are plotted.
+The same color as lines is used    per default but can be changed setting 'text.col'.
+Can also be (numeric) vector (not a list) which results in using default graphical settings. 
+See also parameter Pred.CI.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Pred.CI</code></td>
+<td>
+<p>(list) with all parameters accepted by function <code>rect</code>; if not NULL,
+the 100x(1-alpha)% CI of predicted values will be added as a semi-transparent rectangle
+per default (see examples).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Model</code></td>
+<td>
+<p>(logical) TRUE = plots the fitted model as subtitle below the main title, FALSE = omits this</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CI.method</code></td>
+<td>
+<p>(character) one of "t", "normal", "chisq" specifying which CI-method to use for
+deriving confidence intervals</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use.log</code></td>
+<td>
+<p>(logical) TRUE = X- and Y-axis will be log-transformed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Npred</code></td>
+<td>
+<p>(integer) specifying the number of data points used to plot the fitted model, the larger the 
+smoother (maybe slower if too large)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters passed forward</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>(matrix) of predictions at user-specified X- or Y-coordinates is invisibly return in case Prediction is not NULL
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzemeister <a href="mailto:andre.schuetzeneister@roche.com">andre.schuetzeneister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>fit.vfp</code>, <code>predict.VFP</code>, <code>predictMean</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(VCA)
+data(VCAdata1)
+lst &lt;- anovaVCA(y~(device+lot)/day/run, VCAdata1, by="sample")
+mat &lt;- getMat.VCA(lst)		# automatically selects "total"
+mat
+
+res &lt;- fit.vfp(model.no=1:10, Data=mat)
+plot(res)
+plot(res, type="cv")
+plot(res, type="cv", ci.type="lines", ci.col="red",
+		Grid=list(col="wheat"), Points=list(pch=2, lwd=2, col="black"))
+
+# same for repeatability
+mat.err &lt;- getMat.VCA(lst, "error")
+res.err &lt;- fit.vfp(1:10, Data=mat.err)
+plot(res.err)
+
+# add predictions to plot, e.g. functional sensitivity
+plot(res.err, type="cv", xlim=c(0, 4), Prediction=10)
+
+# variability at X-values are of interest
+plot(res.err, type="cv", xlim=c(0, 4), Prediction=list(x=0.5))
+
+# one can specify X- and Y-values in the "Prediction" list-argument
+plot(res.err, type="cv", xlim=c(0, 4), 
+		Prediction=list(x=c(0.25, 0.5), y=15))
+
+#######################################################################
+# another example using CA19_9 data from CLSI EP05-A3
+
+data(CA19_9)
+
+# fit reproducibility model to data
+fits.CA19_9 &lt;- anovaVCA(result~site/day, CA19_9, by="sample")
+
+# fit within-laboratory-model treating site as fixed effect
+fits.ip.CA19_9 &lt;- anovaMM(result~site/(day), CA19_9, by="sample")
+
+# the variability "between-site" is not part of "total"
+fits.ip.CA19_9[[1]]
+fits.CA19_9[[1]]
+
+# extract repeatability
+rep.CA19_9 &lt;- getMat.VCA(fits.CA19_9, "error")
+
+# extract reproducibility
+repro.CA19_9 &lt;- getMat.VCA(fits.CA19_9, "total")
+
+# extract intermediate-precision (within-lab)
+ip.CA19_9 &lt;- getMat.VCA(fits.ip.CA19_9, "total")
+
+# fit model (a+bX)^C (model 8) to all three matrices
+
+mod8.repro 	&lt;- fit.vfp(repro.CA19_9, 8)
+mod8.ip		&lt;- fit.vfp(ip.CA19_9, 8)
+mod8.rep		&lt;- fit.vfp(rep.CA19_9, 8)
+
+# plot reproducibility precision profile first
+# leave enough space in right margin for a legend
+plot(mod8.repro, mar=c(5.1, 7, 4.1, 15), 
+		type="cv", ci.type="none", Model=FALSE,
+		Line=list(col="blue", lwd=3), 
+		Points=list(pch=15, col="blue", cex=1.5),  
+		xlim=c(10, 450), ylim=c(0,10),
+		Xlabel=list(text="CA19-9, kU/L (LogScale) - 3 Patient Pools, 3 QC Materials",
+				cex=1.5), Title=NULL,
+		Ylabel=list(text="% CV", cex=1.5),
+		Grid=NULL, Crit=NULL, log="x")
+
+# add intermediate precision profile
+plot	(mod8.ip, type="cv", add=TRUE, ci.type="none",
+		Points=list(pch=16, col="deepskyblue", cex=1.5),
+		Line=list(col="deepskyblue", lwd=3), log="x")
+
+# add repeatability precision profile
+plot(mod8.rep, type="cv", add=TRUE, ci.type="none",
+		Points=list(pch=17, col="darkorchid3", cex=1.5),
+		Line=list(col="darkorchid3", lwd=3), log="x")
+
+# add legend to right margin
+legend.rm( x="center", pch=15:17, col=c("blue", "deepskyblue", "darkorchid3"),
+		cex=1.5, legend=c("Reproducibility", "Within-Lab Precision", "Repeatability"),
+		box.lty=0)
+
+# repeatability precision profile with some beautifications
+plot(mod8.rep, BG="darkgray", 
+		Points=list(pch=17, cex=1.5, col="blue"), Line=list(col="blue"),
+		Grid=list(x=seq(0, 400, 50), y=seq(0, 100, 10), col="white"),
+		Xlabel=list(cex=1.5, text="CA19-9 [U/mL]", col="blue"),
+		Ylabel=list(cex=1.5, text="Repeatability on Variance-Scale", col="blue"),
+		Crit=list(text.col="white", text.font=2, cex=1.25))
+
+</code></pre>
+
+
+</div>

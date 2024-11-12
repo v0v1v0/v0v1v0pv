@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compute_metric</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute an internal evaluation metric for clustered data</h2>
+
+<h3>Description</h3>
+
+<p>Metric will be computed from 2 to max_k clusters. Note that the row number in results will be different from k.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compute_metric(dmat, clusters, metric_name, max_k = 14)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dmat</code></td>
+<td>
+<p>distance matrix output of <code>compute_dmat()</code> or <code>stats::dist()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clusters</code></td>
+<td>
+<p>output of <code>compute_clusters()</code> or <code>fastcluster::hclust()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metric_name</code></td>
+<td>
+<p>"silhouette" or "dunn"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_k</code></td>
+<td>
+<p>maximum number of clusters to cut using <code>dendextend::cutree()</code>. Default is 14.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a data frame with columns <code>k</code> and <code>score</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data_to_cluster &lt;- iris[c("Petal.Length", "Sepal.Length")]
+dmat &lt;- compute_dmat(data_to_cluster, "euclidean", TRUE)
+clusters &lt;- compute_clusters(dmat, "complete")
+compute_metric(dmat, clusters, "dunn")
+</code></pre>
+
+
+</div>

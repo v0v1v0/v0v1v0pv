@@ -1,0 +1,132 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_collection</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a <code>ggplot</code> object associated with a time series belonging to a
+collection.</h2>
+
+<h3>Description</h3>
+
+<p>Apart from the time series, future values and forecasts for the
+future values form part of the <code>ggplot</code> object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_collection(collection, number, methods = NULL, level = NULL, sdp = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>collection</code></td>
+<td>
+<p>a list with the collection of time series. Each component
+of the list must have been built with the <code>ts_info()</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>number</code></td>
+<td>
+<p>an integer. The number of the time series. It should be a value
+between 1 and <code>length(collection)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>methods</code></td>
+<td>
+<p>NULL (default) or a character vector indicating the names of
+the forecasting methods to be displayed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>NULL (default) or a number in the interval (0, 100) indicating
+the level of the prediction interval to be shown. This parameter in
+considered only when just one forecasting method is plotted and the
+forecasting method has a prediction interval with the specified level.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sdp</code></td>
+<td>
+<p>logical. Should data points be shown in the plot? (default value
+<code>TRUE</code>)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>collection</code> parameter must be a list. Each component of the list stores
+a time series and, optionally, its future values, forecasts for the future
+values and prediction intervals for the forecasts. Each component should have
+been created using the <code>ts_info()</code> function.
+</p>
+<p>In the example section you can see an example of a collection of time series.
+If the <code>collection</code> parameter is not specified correctly, a proper message is
+shown.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The <code>ggplot</code> object representing the time series and its forecast.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ts_info()</code> function to see how to build the components of the
+<code>collection</code> parameter.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># create a collection of two time series and plot both time series
+c &lt;- list(ts_info(USAccDeaths), ts_info(ldeaths))
+plot_collection(c, number = 1)
+plot_collection(c, number = 2, sdp = FALSE)
+
+# create a collection of one time series with future values and forecasts
+if (require(forecast)) {
+  c &lt;- vector(2, mode = "list")
+  timeS &lt;- window(USAccDeaths, end = c(1977, 12))
+  f &lt;- window(USAccDeaths, start = c(1978, 1))
+  ets_fit   &lt;- ets(timeS)
+  ets_pred  &lt;- forecast(ets_fit, h = length(f), level = 90)
+  mean_pred &lt;- meanf(timeS, h = length(f), level = 90)
+  c[[1]] &lt;- ts_info(timeS, future = f,
+            prediction_info("ES", ets_pred$mean,
+                            pi_info(90, ets_pred$lower, ets_pred$upper)),
+            prediction_info("Mean", mean_pred$mean,
+                            pi_info(90, mean_pred$lower, mean_pred$upper))
+  )
+  timeS &lt;- ts(rnorm(30, sd = 3))
+  f &lt;- rnorm(5, sd = 3)
+  rw &lt;- rwf(timeS, h = length(f), level = 80)
+  mean &lt;- meanf(timeS, h = length(f), level = 90)
+  c[[2]] &lt;- ts_info(timeS, future = f,
+            prediction_info("Random Walk", rw$mean,
+                            pi_info(80, rw$lower, rw$upper)),
+            prediction_info("Mean", mean$mean,
+                            pi_info(90, mean$lower, mean$upper))
+  )
+  plot_collection(c, number = 1)
+}
+if (require("forecast"))
+  plot_collection(c, number = 2)
+if (require("forecast"))
+  plot_collection(c, number = 2, methods = "Mean") # just plot a forecasting method
+if (require("forecast"))
+  plot_collection(c, number = 2, methods = "Random Walk", level = 80)
+</code></pre>
+
+
+</div>

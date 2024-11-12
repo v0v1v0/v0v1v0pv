@@ -1,0 +1,174 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>geometricffMlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Link functions for the mean of 1–parameter 
+discrete distributions: The Geometric Distribution.
+</h2>
+
+<h3>Description</h3>
+
+<p>Computes the <code>geometricffMlink</code> transformation, including its inverse
+and the first two derivatives.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    geometricffMlink(theta, bvalue = NULL, inverse = FALSE, 
+                     deriv = 0, short = TRUE, tag = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue, inverse, deriv, short, tag</code></td>
+<td>
+
+<p>Details at <code>Links</code>
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a natural link function to model the mean of the (discret)
+geometric distribution, <code>geometric</code>,
+defined as the logarithmm of its mean, i.e.,
+</p>
+<p style="text-align: center;"><code class="reqn"> \eta = -\log \frac{p}{1 - p} = -{\tt{logit}}(p).</code>
+</p>
+
+<p>Here, <code class="reqn">p</code> is the probability of succes, as in 
+<code>geometric</code>. 
+</p>
+<p>While this link function can be used to model any parameter lying in 
+<code class="reqn">(0, 1)</code>, it is particularly useful for event-rate geometric data 
+where the mean can be written in terms of some rate of events, 
+say <code class="reqn">\lambda = \lambda(\mathbf{x})</code>, as
+
+</p>
+<p style="text-align: center;"><code class="reqn">\mu = \lambda(\mathbf{x}) t,</code>
+</p>
+
+
+<p>and the time <code class="reqn">t</code> (as <code class="reqn">\log t</code>) can be easily 
+incorporated in the analysis as an offset.
+</p>
+<p>Under this link function the domain set for <code class="reqn">p</code> 
+is <code class="reqn">(0, 1)</code>. Hence, values of <code class="reqn">\rho</code> too
+close to the extremes, or out of range will result 
+in <code>Inf</code>, <code>-Inf</code>, <code>NA</code> or <code>NaN</code>. 
+Use argument <code>bvalue</code> to adequately replace them before 
+computing the link function.
+</p>
+<p>If <code>theta</code> is a character, arguments <code>inverse</code> and 
+<code>deriv</code> are disregarded.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the <code>geometricffMlink</code> transformation of
+<code>theta</code> when <code>inverse = FALSE</code>. When 
+<code>inverse = TRUE</code> then <code>theta</code> becomes <code class="reqn">\eta</code>, and
+<code>exp(-theta) / (exp(-theta) - 1)</code> is returned.
+</p>
+<p>For <code>deriv = 1</code>, <em>d</em> <code>eta</code> / <em>d</em> <code>theta</code>,
+if <code>inverse = FALSE</code>, else 
+the reciprocal <em>d</em> <code>theta</code> / <em>d</em> <code>eta</code>
+as a function of <code>theta</code>.
+</p>
+<p>For <code>deriv = 2</code> the second order derivatives 
+are correspondingly returned.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>Numerical instability may occur if covariates are used leading to 
+values of <code class="reqn">p</code> out of range. Try to overcome this by using
+argument <code>bvalue</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function may return <code>Inf</code> of <code>-Inf</code> for values of 
+<code class="reqn">p</code> too close to <code class="reqn">0</code> and <code class="reqn">1</code> respectively.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and T. W. Yee
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>geometric</code>,
+<code>Links</code>, 
+<code>logitlink</code>,
+<code>logffMlink</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+### Example 1  ###
+my.probs &lt;- ppoints(100)
+geol.inv &lt;-
+    geometricffMlink(theta = geometricffMlink(theta = my.probs), # the inverse
+                                inverse = TRUE) - my.probs
+summary(geol.inv)     ## zero
+
+###  Example 2. Special values of 'prob'  ###
+my.probs &lt;- c(-Inf, -2, -1, 0, 0.25, 0.75, 1.0, 5, Inf, NaN, NA) 
+rbind(probs = my.probs, 
+      geoffMlink = geometricffMlink(theta = my.probs),
+      inv.geoffl = geometricffMlink(theta = my.probs, inverse = TRUE))
+
+
+###  Example 3 Some probability link functions  ###
+
+
+my.probs &lt;- ppoints(100)
+
+par(lwd = 2)
+plot(my.probs, logitlink(my.probs), xlim = c(-0.1, 1.1), ylim = c(-5, 8),
+     type = "l", col = "limegreen", 
+     ylab = "transformation", las = 1, main = "Some probability link functions")
+lines(my.probs, geometricffMlink(my.probs), col = "gray50")
+lines(my.probs, logffMlink(my.probs), col = "blue")
+lines(my.probs, probitlink(my.probs), col = "purple")
+lines(my.probs, clogloglink(my.probs), col = "chocolate")
+lines(my.probs, cauchitlink(my.probs), col = "tan")
+abline(v = c(0.5, 1), lty = "dashed")
+abline(v = 0, h = 0, lty = "dashed")
+legend(0.1, 8, 
+      c("geometricffMlink", "logffMlink","logitlink", "probitlink",
+      "clogloglink", "cauchitlink"), 
+      col = c("gray50", "blue", "limegreen", "purple", "chocolate", "tan"),
+      lwd = 1, cex = 0.5)
+par(lwd = 1) 
+ 
+</code></pre>
+
+
+</div>

@@ -1,0 +1,384 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ARXff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> VGLTSMs family functions: Order–p Autoregressive Model 
+with covariates</h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the order–p autoregressive model
+(AR(p)) with covariates.
+Estimates the drift, standard deviation (or variance) of the 
+random noise (not necessarily constant),
+and coefficients of the conditional–mean model.
+
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">      ARXff(order    = 1,
+            zero     = c(if (nodrift) NULL else "ARdrift", "ARcoeff"),
+            xLag     = 0,
+            type.EIM = c("exact", "approximate")[1],
+            var.arg  = TRUE, 
+            nodrift  = FALSE,
+            noChecks = FALSE,
+            ldrift   = "identitylink", 
+            lsd      = "loglink",
+            lvar     = "loglink",
+            lARcoeff = "identitylink",
+            idrift   = NULL,
+            isd      = NULL,
+            ivar     = NULL,
+            iARcoeff = NULL)     
+           
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>order</code></td>
+<td>
+
+<p>The order (i.e., 'p') of the AR model, which is recycled if needed.
+See below for further details.
+By default, an autoregressive model of order-<code class="reqn">1</code> is fitted.
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Integer or character–strings vector. 
+Name(s) or position(s) of the parameters/linear predictors
+to be modeled as intercept-only. Details at 
+<code>zero</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xLag</code></td>
+<td>
+
+<p>Same as <code>ARIMAXff</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.EIM, var.arg, nodrift, noChecks</code></td>
+<td>
+
+<p>Same as <code>ARIMAXff</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ldrift, lsd, lvar, lARcoeff</code></td>
+<td>
+
+<p>Link functions applied to the <em>drift</em>,
+the standar deviation (or variance) of the noise, and the
+AR coefficients.
+Same as <code>ARIMAXff</code>.
+</p>
+<p>Further details on 
+<code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>idrift, isd, ivar, iARcoeff</code></td>
+<td>
+
+<p>Same as <code>ARIMAXff</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This family function describes an autoregressive model of order-<code class="reqn">p</code>
+with covariates (ARX(p)). It is a special case of the subclass VGLM–ARIMA
+(Miranda and Yee, 2018):
+</p>
+<p style="text-align: center;"><code class="reqn"> Y_t | \Phi_{t - 1} = \mu_t + \theta_{1} Y_{t - 1} + \ldots + 
+\theta_p Y_{t - p} + \varepsilon_t,</code>
+</p>
+
+<p>where  <code class="reqn">\boldsymbol{x}_t</code>
+a (possibly time–varying) covariate vector and
+<code class="reqn">\mu_t = \mu^{\star} + \boldsymbol{\beta}^T \boldsymbol{x}_t</code> is a (time–dependent) scaled–mean, known as <em>drift</em>.
+</p>
+<p>At this stage, conditional Gaussian white noise, 
+<code class="reqn">\varepsilon_t| \Phi_{t - 1}</code> 
+is handled, in the form
+</p>
+<p style="text-align: center;"><code class="reqn">\varepsilon_t | \Phi_{t - 1} \sim 
+  N(0, \sigma^2_{\varepsilon_t | \Phi_{t - 1}}).</code>
+</p>
+
+<p>The distributional assumptions on the observations are then
+</p>
+<p style="text-align: center;"><code class="reqn">Y_t | \Phi_{t - 1} \sim 
+   N(\mu_{t | \Phi_{t - 1}}, 
+   \sigma^2_{\varepsilon_t | \Phi_{t - 1}}), </code>
+</p>
+
+<p>involving the conditional mean 
+equation for the ARX(p) model:
+</p>
+<p style="text-align: center;"><code class="reqn">\mu_{t | \Phi_{t - 1}} = \mu_t + 
+ \boldsymbol{\beta}^T * \boldsymbol{x}_t
+   \theta_{1} Y_{t - 1} + \ldots + 
+      \theta_p Y_{t - p}.</code>
+</p>
+
+<p><code class="reqn">\Phi_{t}</code> denotes the information
+of the joint process
+<code class="reqn">\left(Y_{t}, \boldsymbol{x}_{t + 1}^T \right)</code>,
+at time <code class="reqn">t</code>.
+</p>
+
+
+
+<p>The loglikelihood is computed by <code>dARp</code>,
+at each Fisher scoring iteration.
+</p>
+<p>The linear predictor is
+</p>
+<p style="text-align: center;"><code class="reqn">\boldsymbol{\eta} = \left( 
+\mu_t, \log \sigma^{2}_{\varepsilon_{t | \Phi_{t - 1}}},
+\theta_1, \ldots, \theta_p
+\right)^T.</code>
+</p>
+ 
+<p>Note, the covariates may also intervene in the conditional
+variance model
+<code class="reqn">\log \sigma^{2}_{\varepsilon_{t | \Phi_{t - 1}}}.</code> Hence, this family function
+does not restrict the noise to be <em>strictly</em> white noise
+(in the sense of <em>constant variance</em>). 
+</p>
+<p>The unconditional mean, 
+<code class="reqn"> E(Y_{t}) = \mu</code>, satisfies
+</p>
+<p style="text-align: center;"><code class="reqn">\mu \rightarrow \frac{\mu^{\star}}{1 - (\theta_1 +
+\ldots + \theta_p)} </code>
+</p>
+
+<p>when the process is stationary, and no covariates are involved.
+</p>
+<p>This family function currently handles
+<em>multiple responses</em> so that a matrix can be used as the response.
+Also, for further details on VGLM/VGAM–link functions refer to 
+<code>Links</code>.
+</p>
+<p>Further choices for the random noise, besides Gaussian, will be
+implemented over time.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> 
+(see <code>vglmff-class</code>). The
+object is used by VGLM/VGAM modelling functions, such as
+<code>vglm</code> or <code>vgam</code>.
+</p>
+
+
+
+
+
+
+
+<h3>Note</h3>
+
+<p><code>zero</code> can be either an <em>integer</em> vector
+or a vector of <b>character strings</b>
+specifying either the position(s) or name(s) (partially or not) of the 
+parameter(s) modeled as intercept-only. Numeric values can be set as usual 
+(See <code>CommonVGAMffArguments</code>).
+Character strings can be entered as per
+parameter names in this family function, given by:
+</p>
+<p><code>c("drift", "noiseVar" or "noiseSD", "ARcoeff")</code>.
+</p>
+<p>Users can modify the <code>zero</code> argument according to their needs.
+</p>
+<p>By default, <code class="reqn">\mu_t</code> and the coefficients
+<code class="reqn">\theta_1, \ldots, \theta_p</code>
+are intercept–only. That is, 
+<code class="reqn">\log \sigma^{2}_{\varepsilon_{t | \Phi_{t - 1}}}</code> is modelled in terms of any explanatories
+entered in the <code>formula</code>.
+</p>
+<p>Users, however, can modify this
+according to their needs via
+<code>zero</code>. For example, set the covariates in the
+<code>drift</code> model, <code class="reqn">\mu_t</code>.
+In addition, specific constraints 
+for parameters are handled through the function 
+<code>cm.ARMA</code>.
+</p>
+<p>If <code>var.arg = TRUE</code>, this family function estimates
+<code class="reqn">\sigma_{\varepsilon_t | \Phi_{t - 1}}^2</code>.
+Else, the
+<code class="reqn">\sigma_{\varepsilon_t | \Phi_{t - 1}}</code>
+estimate is returned.
+
+</p>
+<p>For this family function the <code>order</code> is recycled. That is,
+<code>order</code> will be replicated up to the number of responses
+given in the <code>vglm</code> call is matched.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>Values of the estimates may not correspond
+to stationary ARs, leading to low accuracy in the MLE estimates,
+e.g., values very close to 1.0.
+<em>Stationarity</em> is then examined, via
+<code>checkTS.VGAMextra</code>,
+if
+<code>noChecks = FALSE</code> (default) 
+and <b>no</b> constraint matrices are set
+(See <code>constraints</code> for further
+details on this).
+If the estimated model very close to be non-stationary, then
+a <code>warning</code> will be outlined. 
+Set <code>noChecks = TRUE</code> to completely ignore this.
+</p>
+<p>NOTE: Full details on these 'checks' are shown within the 
+<code>summary()</code> output.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda and T. W. Yee
+</p>
+
+
+<h3>References</h3>
+
+<p>Madsen, H. (2008)
+Time Series Analysis. 
+Florida, USA: <em>Chapman &amp; Hall</em>(Sections 5.3 and 5.5).
+</p>
+<p>Porat, B., and Friedlander, B. (1986)
+Computation of the Exact Information Matrix of Gaussian
+Time Series with Stationary Random Components.
+<em>IEEE Transactions on Acoustics, Speech and Signal
+Processing</em>. <b>ASSp-34(1)</b>, 118–130.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ARIMAXff</code>,
+<code>ARMAXff</code>,
+<code>MAXff</code>,
+<code>checkTS.VGAMextra</code>,
+<code>CommonVGAMffArguments</code>,
+<code>Links</code>,
+<code>vglm</code>,
+
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(1)
+nn     &lt;- 150
+tsdata &lt;- data.frame(x2 =  runif(nn))             # A single covariate.
+theta1 &lt;- 0.45; theta2 &lt;- 0.31; theta3 &lt;- 0.10     # Coefficients
+drift  &lt;- c(1.3, -1.1)                             # Two responses.
+sdAR   &lt;- c(sqrt(4.5), sqrt(6.0))                  # Two responses.
+
+# Generate AR sequences of order 2 and 3, under Gaussian noise.
+# Note, the drift for 'TS2' depends on x2 !
+tsdata  &lt;-  data.frame(tsdata, TS1 = arima.sim(nn, 
+              model = list(ar = c(theta1, theta1^2)),  rand.gen = rnorm, 
+              mean = drift[1], sd = sdAR[1]),
+                                TS2 = arima.sim(nn,  
+              model = list(ar = c(theta1, theta2, theta3)), rand.gen = rnorm, 
+              mean = drift[2] + tsdata$x2 , sd = sdAR[2]))
+
+# EXAMPLE 1. A simple AR(2), maximizing the exact log-likelihood
+# Note that parameter constraints are involved for TS1, but not 
+# considered in this fit. "rhobitlink" is used as link for AR coeffs.
+
+fit.Ex1 &lt;- vglm(TS1 ~ 1, ARXff(order = 2, type.EIM = "exact",
+                      #iARcoeff = c(0.3, 0.3, 0.3), # OPTIONAL INITIAL VALUES
+                      # idrift = 1, ivar = 1.5, isd = sqrt(1.5),
+                      lARcoeff = "rhobitlink"), 
+              data = tsdata,  trace = TRUE, crit = "loglikelihood")
+Coef(fit.Ex1)
+summary(fit.Ex1)
+vcov(fit.Ex1, untransform = TRUE)       # Conformable with this fit.
+AIC(fit.Ex1)
+#------------------------------------------------------------------------#
+# Fitting same model using arima(). 
+#------------------------------------------------------------------------#
+(fitArima &lt;- arima(tsdata$TS1, order = c(2, 0, 0)))
+# Compare with 'fit.AR'. True are theta1 = 0.45; theta1^2 = 0.2025
+Coef(fit.Ex1)[c(3, 4, 2)]    # Coefficients estimated in 'fit.AR'
+
+
+# EXAMPLE 2. An AR(3) over TS2, with one covariate affecting the drift only.
+# This analysis makes sense as the TS2's drift is a function ox 'x2', 
+# i.e., 'x2' affects the 'drift' parameter only. The noise variance 
+# (var.arg = TRUE) is estimated, as intercept-only. See the 'zero' argument.
+
+
+#------------------------------------------------------------------------#
+# This model CANNOT be fitted using arima()
+#------------------------------------------------------------------------#
+fit.Ex2 &lt;- vglm(TS2 ~ x2,  ARXff(order = 3, zero = c("noiseVar", "ARcoeff"), 
+                             var.arg = TRUE), 
+                  ## constraints = cm.ARMA(Model = ~ 1, lags.cm = 3, Resp = 1),
+              data = tsdata,  trace = TRUE, crit = "log")
+
+# True are theta1 &lt;- 0.45; theta2 &lt;- 0.31; theta3 &lt;- 0.10
+coef(fit.Ex2, matrix = TRUE)
+summary(fit.Ex2)    
+vcov(fit.Ex2)
+BIC(fit.Ex2)
+constraints(fit.Ex2)
+
+
+# EXAMPLE 3. Fitting an ARX(3) on two responses TS1, TS2; intercept-only model with
+#  constraints over the drifts. Here, 
+# a) No checks on invertibility performed given the use of cm.ARMA().
+# b) Only the drifts are modeled in terms of 'x2'. Then,  'zero' is
+# set correspondingly.
+#------------------------------------------------------------------------#
+# arima() does not handle this model.
+#------------------------------------------------------------------------#
+fit.Ex3 &lt;- vglm(cbind(TS1, TS2) ~ x2, ARXff(order = c(3, 3), 
+                            zero = c("noiseVar", "ARcoeff"), var.arg = TRUE), 
+             constraints = cm.ARMA(Model = ~ 1 + x2, lags.cm = c(3, 3), Resp = 2),
+             trace = TRUE, data = tsdata, crit = "log")
+
+coef(fit.Ex3, matrix = TRUE)
+summary(fit.Ex3)
+vcov(fit.Ex3)
+constraints(fit.Ex3)
+
+
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,119 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>as.data.frame,cellComparison-method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Translate cellComparison objects to data frame</h2>
+
+<h3>Description</h3>
+
+<p>Versions of a data set can be cellwise compared using
+<code>cells</code>. The result is a <code>cellComparison</code> object, 
+which can usefully be translated into a data frame.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'cellComparison'
+as.data.frame(x, row.names = NULL, optional = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object to coerce</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>row.names</code></td>
+<td>
+<p>ignored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optional</code></td>
+<td>
+<p>ignored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments passed to other methods</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame with the following columns.
+</p>
+
+<ul>
+<li>
+<p><code>status</code>: Row names of the <code>cellComparison</code> object.
+</p>
+</li>
+<li>
+<p><code>version</code>: Column names of the <code>cellComparison</code> object.
+</p>
+</li>
+<li>
+<p><code>count</code>: Contents of the <code>cellComparison</code> object.
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p>Other comparing: 
+<code>as.data.frame,validatorComparison-method</code>,
+<code>barplot,cellComparison-method</code>,
+<code>barplot,validatorComparison-method</code>,
+<code>cells()</code>,
+<code>compare()</code>,
+<code>match_cells()</code>,
+<code>plot,cellComparison-method</code>,
+<code>plot,validatorComparison-method</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(retailers)
+
+# start with raw data
+step0 &lt;- retailers
+
+# impute turnovers
+step1 &lt;- step0
+step1$turnover[is.na(step1$turnover)] &lt;- mean(step1$turnover,na.rm=TRUE)
+
+# flip sign of negative revenues
+step2 &lt;- step1
+step2$other.rev &lt;- abs(step2$other.rev)
+  
+
+# create an overview of differences, comparing to the previous step
+cells(raw = step0, imputed = step1, flipped = step2, compare="sequential")
+
+# create an overview of differences compared to raw data
+out &lt;- cells(raw = step0, imputed = step1, flipped = step2)
+out
+
+# Graphical overview of the changes
+plot(out)
+barplot(out)
+
+# transform data to data.frame (easy for use with ggplot)
+as.data.frame(out)
+
+
+</code></pre>
+
+
+</div>

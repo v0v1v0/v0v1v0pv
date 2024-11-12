@@ -1,0 +1,134 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>expectation_maximization</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Expectation-Maximization</h2>
+
+<h3>Description</h3>
+
+<p><code>expectation_maximization</code> is a method to choose hyper-parameters of the
+linear Gaussian State-Space Model with time-invariant variances relying on the
+Expectation-Maximization algorithm.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">expectation_maximization(
+  X,
+  y,
+  n_iter,
+  Q_init,
+  sig_init = 1,
+  verbose = 1000,
+  lambda = 10^-9,
+  mode_diag = FALSE,
+  p1 = 0
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>explanatory variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>time series</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_iter</code></td>
+<td>
+<p>number of iterations of the EM algorithm</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Q_init</code></td>
+<td>
+<p>initial covariance matrix on the state noise</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sig_init</code></td>
+<td>
+<p>(optional, default <code>1</code>) initial value of the standard deviation
+of the observation noise</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>(optional, default <code>1000</code>) frequency for prints</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda</code></td>
+<td>
+<p>(optional, default <code>10^-9</code>) regularization parameter to avoid singularity</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mode_diag</code></td>
+<td>
+<p>(optional, default <code>FALSE</code>) if <code>TRUE</code> then we restrict the
+search to diagonal matrices for <code>Q</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p1</code></td>
+<td>
+<p>(optional, default <code>0</code>) deterministic value of <code>P1 = p1 I</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>E-step is realized through recursive Kalman formulae (filtering then smoothing).<br>
+M-step is the maximization of the expected complete likelihood with respect to the
+hyper-parameters.<br>
+We only have the guarantee of convergence to a LOCAL optimum.
+We fix P1 = p1 I (by default p1 = 0). We optimize theta1, sig, Q.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a list containing values for <code>P,theta,sig,Q</code>, and two vectors
+<code>DIFF, LOGLIK</code> assessing the convergence of the algorithm.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(1)
+### Simulate data
+n &lt;- 100
+d &lt;- 5
+Q &lt;- diag(c(0,0,0.25,0.25,0.25))
+sig &lt;- 1
+
+X &lt;- cbind(matrix(rnorm((d-1)*n,sd=1),n,d-1),1)
+theta &lt;- matrix(rnorm(d), d, 1)
+theta_arr &lt;- matrix(0, n, d)
+for (t in 1:n) {
+  theta_arr[t,] &lt;- theta
+  theta &lt;- theta + matrix(mvtnorm::rmvnorm(1,matrix(0,d,1),Q),d,1)
+}
+y &lt;- rowSums(X * theta_arr) + rnorm(n, sd=sig)
+
+l &lt;- viking::expectation_maximization(X, y, 50, diag(d), verbose=10)
+print(l$Q)
+print(l$sig)
+</code></pre>
+
+
+</div>

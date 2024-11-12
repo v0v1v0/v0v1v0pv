@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>estimate_cuminc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Competing Events Cumulative Incidence</h2>
+
+<h3>Description</h3>
+
+<p>Function creates a cumulative incidence object using the
+<code>tidycmprsk::cuminc()</code> function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">estimate_cuminc(
+  data = NULL,
+  strata = NULL,
+  CNSR = "CNSR",
+  AVAL = "AVAL",
+  conf.int = 0.95,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data frame. The dataset is expected to have
+one record per subject per analysis parameter. Rows with missing observations included in the analysis are removed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>AVAL, CNSR, strata</code></td>
+<td>
+<p>These arguments are used to construct a formula to be passed to <code>tidycmprsk::cuminc(formula=)</code>.
+</p>
+
+<ul>
+<li> <p><code>AVAL</code> Analysis value for Time-to-Event analysis. Default is <code>"AVAL"</code>, as per CDISC ADaM guiding principles.
+</p>
+</li>
+<li> <p><code>CNSR</code> Column name indicating the outcome and censoring statuses.
+Column must be a factor and the first level indicates censoring, the
+next level is the outcome of interest, and the remaining levels are the
+competing events. Default is <code>"CNSR"</code>
+</p>
+</li>
+<li> <p><code>strata</code> Character vector, representing the strata for Time-to-Event analysis. When NULL, an overall analysis is performed.
+Default is <code>NULL</code>.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>conf.int</code></td>
+<td>
+<p>Confidence internal level. Default is 0.95. Parameter is passed to <code>tidycmprsk::cuminc(conf.level=)</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional argument passed to <code>tidycmprsk::cuminc()</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A cumulative incidence object as explained at https://mskcc-epi-bio.github.io/tidycmprsk/reference/cuminc.html
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">cuminc &lt;-
+  visR::estimate_cuminc(
+    data = tidycmprsk::trial,
+    strata = "trt",
+    CNSR = "death_cr",
+    AVAL = "ttdeath"
+  )
+cuminc
+
+cuminc %&gt;%
+  visR::visr() %&gt;%
+  visR::add_CI() %&gt;%
+  visR::add_risktable(statlist = c("n.risk", "cum.event"))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>calculate_feature</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>calculate_feature</h2>
+
+<h3>Description</h3>
+
+<p>The calculate_feature function is designed to extract specific
+feature-related information within a viewshed. It allows you to compute
+the proportion of the feature that is present in the viewshed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">calculate_feature(viewshed, feature, type, exclude_value)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>viewshed</code></td>
+<td>
+<p>Viewshed object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>feature</code></td>
+<td>
+<p>Raster. Land cover or land use</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Numeric. The input type of land cover raster.
+type=1: percentage raster (that represents the percentage of
+area in each cell).
+type=2: binary raster (that only uses two values to represent whether
+the feature exists in each cell).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>exclude_value</code></td>
+<td>
+<p>Numeric. the value of those cells need to be excluded
+in the analysis. If type = 2, exclude_value is reqired.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Numeric. The canopy area in the viewshed.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Load a viewpoint
+test_viewpoint &lt;- sf::read_sf(system.file("test_viewpoint.shp", package = "viewscape"))
+# load dsm raster
+dsm &lt;- terra::rast(system.file("test_dsm.tif", package ="viewscape"))
+#Compute viewshed
+viewshed &lt;- compute_viewshed(dsm = dsm,
+                             viewpoints = test_viewpoint,
+                             offset_viewpoint = 6)
+# load canopy raster
+test_canopy &lt;- terra::rast(system.file("test_canopy.tif",
+                                       package ="viewscape"))
+# calculate the percentage of canopy coverage
+test_canopy_proportion &lt;- viewscape::calculate_feature(viewshed = viewshed,
+                                                       feature = test_canopy,
+                                                       type = 2,
+                                                       exclude_value = 0)
+</code></pre>
+
+
+</div>

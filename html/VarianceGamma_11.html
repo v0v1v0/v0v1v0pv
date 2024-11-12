@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary.vgFit</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summarizing Variance Gamma Distribution Fit</h2>
+
+<h3>Description</h3>
+
+<p><code>summary</code> Method for class <code>"vgFit"</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vgFit'
+summary(object, ...)
+
+## S3 method for class 'summary.vgFit'
+print(x, digits = max(3, getOption("digits") - 3), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object of class <code>"vgFit"</code>, resulting from a call to
+<code>vgFit</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class <code>"summary.vgFit"</code>, resulting from a call to
+<code>summary.vgFit</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>The number of significant digits to use when printing.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments passed to or from other methods.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+ 
+<p><code>summary.vgFit</code> calculates standard errors for the estimates of
+<code class="reqn">c</code>, <code class="reqn">\sigma</code>, <code class="reqn">\theta</code>, and
+<code class="reqn">\nu</code> of the variance gamma distribution parameter vector
+<code>param</code> if the Hessian from the call to <code>optim</code> or
+<code>nlm</code> is available. Because the parameters in the call to
+the optimiser are <code class="reqn">c</code>, <code class="reqn">\log(\sigma)</code>,
+<code class="reqn">\theta</code> and <code class="reqn">\log(\nu)</code>, the delta method is
+used to obtain the standard errors for <code class="reqn">\sigma</code> and
+<code class="reqn">\nu</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If the Hessian is available, <code>summary.vgFit</code> computes
+standard errors for the estimates of <code class="reqn">c</code>, <code class="reqn">\sigma</code>,
+<code class="reqn">\theta</code>, and <code class="reqn">\nu</code>, and adds them to <code>object</code>
+as <code>object$sds</code>. Otherwise, no calculations are performed and the
+composition of <code>object</code> is unaltered.
+</p>
+<p><code>summary.vgFit</code> invisibly returns <code>x</code> with class changed to
+<code>summary.vgFit</code>.
+</p>
+<p>See <code>vgFit</code> for the composition of an object of class
+<code>vgFit</code>.
+</p>
+<p><code>print.summary.vgFit</code> prints a summary in the same format as
+<code>print.vgFit</code> when the Hessian is not available from
+the fit. When the Hessian is available, the standard errors for the
+parameter estimates are printed in parentheses beneath the parameter
+estimates, in the manner of <code>fitdistr</code> in the package
+<code>MASS</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vgFit</code>, <code>summary</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">### Continuing the  vgFit(.) example:
+param &lt;- c(0,0.5,0,0.5)
+dataVector &lt;- rvg(500, param = param)
+fit &lt;- vgFit(dataVector)
+print(fit)
+summary(fit)          
+</code></pre>
+
+
+</div>

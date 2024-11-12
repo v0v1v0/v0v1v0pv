@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>query.gt</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Query the gt slot</h2>
+
+<h3>Description</h3>
+
+<p>Query the 'gt' slot of objects of class vcfR
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">is.polymorphic(x, na.omit = FALSE)
+
+is.biallelic(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class vcfR</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.omit</code></td>
+<td>
+<p>logical to omit missing data</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function <strong>is_polymorphic</strong> returns a vector of logicals indicating whether a variant is polymorphic.
+Only variable sites are reported in vcf files.
+However, once someone manipulates a vcfR object, a site may become invariant.
+For example, if a sample is removed it may result in a site becoming invariant.
+This function queries the sites in a vcfR object and returns a vector of logicals (TRUE/FALSE) to indicate if they are actually variable.
+</p>
+<p>The function <strong>is_bialleleic</strong> returns a vector of logicals indicating whether a variant is biallelic.
+Some analyses or downstream analyses only work with biallelic loci.
+This function can help manage this.
+</p>
+<p>Note that <strong>is_bialleleic</strong> queries the ALT column in the fix slot to count alleles.
+If you remove samples from the gt slot you may invalidate the information in the fix slot.
+For example, if you remove the samples with the alternate allele you will make the position invariant and this function will provide inaccurate information.
+So use caution if you've made many modifications to your data.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>extract.gt</code>
+</p>
+
+
+</div>

@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simulateMVSIS</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulate a dataset for demonstrating the performance of screenIID with the MV-SIS option with categorical outcome variable</h2>
+
+<h3>Description</h3>
+
+<p>Simulates a dataset that can be used to test screenIID for ultrahigh-dimensional discriminant analysis with the MV-SIS option.
+The simulation is based on the balanced scenarios in Example 3.1 of Cui, Li &amp; Zhong (2015).
+The simulated dataset has p numerical X-predictors and a categorical Y-response.
+Special thanks are due to Wei Zhong for providing some of the code upon which this function is based.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">simulateMVSIS(R = 2, n = 40, p = 2000, mu = 3, heavyTailedCovariates = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>R</code></td>
+<td>
+<p>a positive integer, number of outcome categories for multinomial (categorical) outcome Y.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>Number of subjects in the dataset to be simulated.  It will also equal to the number of rows
+in the  dataset to be simulated, because it is assumed that each row represents a different independent and
+identically distributed subject.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>Number of predictor variables (covariates) in the simulated dataset.  These covariates
+will be the features screened by DC-SIS.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu</code></td>
+<td>
+<p>Signal strength;  the larger mu is, the easier the active covariates will be to discover.
+#  Specifically, mu is added to the rth predictor for r=1,...,R, so that the probability
+that Y equals r will be higher if the rth predictor is higher.  It is assumed that p&gt;&gt;r
+so that most predictors will be inactive.  In real data there is no reason why, say, the
+first two columns in the matrix should be the important ones, but this is convenient in a
+simulation and the choice of permutation of the columns involves no loss of generality.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>heavyTailedCovariates</code></td>
+<td>
+<p>If TRUE, the covariates will be generated as independent t variates,
+plus covariate-specific constants.  If FALSE, they will be generated as independent standard normal variates.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with following components:
+X Matrix of predictors to be screened. It will have n rows and p columns.
+Y Vector of responses.  It will have length n.
+</p>
+
+
+<h3>References</h3>
+
+<p>Cui, H., Li, R., &amp; Zhong, W. (2015). Model-free feature screening
+for ultrahigh dimensional discriminant analysis. Journal of the American
+Statistical Association, 110: 630-641. &lt;DOI:10.1080/01621459.2014.920256&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(12345678)
+results &lt;- simulateMVSIS()
+</code></pre>
+
+
+</div>

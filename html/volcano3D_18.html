@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>significance_subset</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract a subset population</h2>
+
+<h3>Description</h3>
+
+<p>Subsets data according to the significance groups.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">significance_subset(polar, significance = NULL, output = "pvals")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>polar</code></td>
+<td>
+<p>A polar object including expression data from groups of
+interest. Created by <code>polar_coords</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>significance</code></td>
+<td>
+<p>Which significance factors to subset to. If <code>NULL</code>
+all levels except 'ns' (non-significant) are selected.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output</code></td>
+<td>
+<p>What object to return. Options are "pvals", "padj", "data",
+"df" for subset dataframes, or "polar" to subset the entire 'volc3d' class
+object.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns an object (type defined by <code>output</code>) with rows susbet to
+those which satisfy the significance condition.
+</p>
+
+
+<h3>References</h3>
+
+<p>Lewis, Myles J., et al. (2019).
+<a href="https://pubmed.ncbi.nlm.nih.gov/31461658/">
+Molecular portraits of early rheumatoid arthritis identify clinical and
+treatment response phenotypes.</a>
+<em>Cell reports</em>, <strong>28</strong>:9
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(example_data)
+syn_polar &lt;- polar_coords(outcome = syn_example_meta$Pathotype,
+                          data = t(syn_example_rld))
+
+subset &lt;- significance_subset(syn_polar, "L+", "df")
+</code></pre>
+
+
+</div>

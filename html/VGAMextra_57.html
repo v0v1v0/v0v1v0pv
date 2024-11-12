@@ -1,0 +1,326 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gen.betaIImr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Generalized Beta Distribution of the Second Kind family function </h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the 4-parameter 
+generalized beta II distribution using Fisher scoring.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R"> gen.betaIImr(lscale    = "loglink", 
+              lshape1.a = "loglink", 
+              lshape2.p = "loglink", 
+              lshape3.q = "loglink", 
+              iscale    = NULL, 
+              ishape1.a = NULL,
+              ishape2.p = NULL, 
+              ishape3.q = NULL, 
+              imethod   = 1,
+              lss       = TRUE, 
+              gscale    = exp(-5:5), 
+              gshape1.a = exp(-5:5),
+              gshape2.p = exp(-5:5), 
+              gshape3.q = exp(-5:5), 
+              probs.y   = c(0.25, 0.50, 0.75),
+              zero      = "shape" )            
+ </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lscale, lshape1.a, lshape2.p, lshape3.q</code></td>
+<td>
+
+<p>Parameter link functions applied to the 
+shape parameter <code>a</code>,
+scale parameter <code>scale</code>,
+shape parameter <code>p</code>, and
+shape parameter <code>q</code>.
+All four parameters are positive.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iscale, ishape1.a, ishape2.p, ishape3.q</code></td>
+<td>
+
+<p>Optional initial values for <code>b</code>, <code>a</code>, <code>p</code> and <code>q</code>.
+Default is <code>NULL</code> for all of them, meaning initial values are 
+computed internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>Initializing method to internally compute the initial values.
+Currently, only <code>method = 1</code> is handled.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gscale, gshape1.a, gshape2.p, gshape3.q</code></td>
+<td>
+
+<p>Grid search initial values.
+See <code>CommonVGAMffArguments</code> for further information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Numeric or Character vector. Position(s) or name(s) of the 
+parameters/linear predictors to be modeled as intercept-only.
+Details at 
+<code>CommonVGAMffArguments</code>.
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lss, probs.y</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for important information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This distribution is most useful for unifying a substantial
+number of size distributions. For example, the Singh-Maddala,
+Dagum, Fisk (log-logistic), Lomax (Pareto type II),
+inverse Lomax, beta distribution of the second kind
+distributions are all special cases.
+Full details can be found in Kleiber and Kotz (2003), and
+Brazauskas (2002). The argument names given here are used 
+by other families that are special cases of this family.
+Fisher scoring is used here and for the special cases too.
+</p>
+<p>The 4-parameter generalized beta II distribution has density
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = a y^{ap-1} / [b^{ap} B(p,q) \{1 + (y/b)^a\}^{p+q}]</code>
+</p>
+
+<p>for <code class="reqn">a &gt; 0</code>, <code class="reqn">b &gt; 0</code>, <code class="reqn">p &gt; 0</code>, <code class="reqn">q &gt; 0</code>, 
+<code class="reqn">y \geq 0</code>.
+Here <code class="reqn">B</code> is the beta function, and 
+<code class="reqn">b</code> is the scale parameter <code>scale</code>,
+while the others are shape parameters.
+The mean is 
+</p>
+<p style="text-align: center;"><code class="reqn">E(Y) = b \, \Gamma(p + 1/a) \, \Gamma(q - 1/a) / 
+                                (\Gamma(p) \, \Gamma(q))</code>
+</p>
+
+<p>provided <code class="reqn">-ap &lt; 1 &lt; aq</code>; these are returned as the fitted values.
+
+
+
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+<p><code>zero</code> can be a <b>numeric</b> or a <b>character</b> vector 
+specifying the position(s) or the name(s) (partially or not) of the linear 
+predictors modeled as intercept–only. Numeric values can be 
+entered as usual. If names are used, note that the linear predictors in 
+this family function are
+</p>
+<p><code>c("scale", "shape1.a", "shape2.p", "shape3.q")</code>.
+</p>
+<p>For simplicity, using names rather than numeric vectors is 
+recommended.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Paramaters <code>"shape1.a", "shape2.p", "shape3.q"</code> are modeled 
+as intercept only, by default.
+</p>
+<p>If the self-starting initial values fail, try experimenting
+with the initial value arguments, <code>iscale</code>, <code>ishape1.a</code>,
+<code>ishape2.p</code> and <code>ishape3.q</code> whose default is <code>NULL</code>.
+Also, the constraint <code class="reqn">-ap &lt; 1 &lt; aq</code> may be violated as the 
+iterations progress so it is worth monitoring convergence, e.g., 
+set <code>trace = TRUE</code>.
+</p>
+<p>Successful convergence depends on choosing good initial values. This 
+process might be difficult for this distribution, since 4 parameters are 
+involved. Presently, only <code>method = 1</code> is internally handled to set 
+initial values. It involves <em>grid search</em>, an internal implementation 
+of the well-known grid search algorithm for exhaustive searching through 
+a manually specified subset of the hyperparameter space.
+
+
+
+
+
+
+
+
+</p>
+<p>Default value of <code>lss</code> is <code>TRUE</code> standing for the 
+following order: location (b), shape1.a (a), shape2.p (p), 
+shape3.q (q). In order to match the arguments of existing R functions, 
+the option <code>lss = FALSE</code> might be set leading to switch the 
+position of location (b) and shape1.a (a), only.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee and V. Miranda.</p>
+
+
+<h3>References</h3>
+
+<p>Brazauskas, V. (2002)
+Fisher information matrix for the Feller-Pareto distribution.
+<em>Statistics &amp; Probability Letters</em>, 
+<b>59</b>, 159–167.
+</p>
+<p>Kleiber, C. and Kotz, S. (2003) 
+<em>Statistical Size Distributions in Economics and Actuarial Sciences</em>.
+Wiley Series in Probability and Statistics. 
+Hoboken, New Jersey, USA.
+</p>
+<p>McDonald, J. B. and Xu, Y. J. (1995)
+A generalization of the beta distribution with applications.
+<em>Journal of Econometrics</em>. 
+<b>66</b>, p.133–152.
+</p>
+<p>McDonald, J. B. (1984)
+Some generalized functions for the size distribution of income.
+<em>Econometrica</em>, 
+<b>52</b>, 647–663.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>betaff</code>,
+<code>betaII</code>,
+<code>dagum</code>,
+<code>sinmad</code>,
+<code>fisk</code>,
+<code>lomax</code>,
+<code>inv.lomax</code>,
+<code>paralogistic</code>,
+<code>inv.paralogistic</code>,
+
+<code>genbetaIIDist</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+#----------------------------------------------------------------------- #
+# An example.- In this data set parameters 'shape1.a' and 'shape3.q' are 
+# generated in terms of x2.
+
+set.seed(1003)
+nn &lt;- 200
+gdata1  &lt;- data.frame(x2 = runif(nn))
+gdata   &lt;- transform(gdata1,
+           y1 = rgen.betaII(nn, scale = exp(1.1), shape1.a = exp(1.2 + x2), 
+                            shape2.p = exp(0.7) , shape3.q = exp(2.1 - x2)),
+           y2 = rgen.betaII(nn, scale = exp(2.0), shape1.a = exp(1.8 + x2),
+                            shape2.p = exp(2.3) , shape3.q = exp(1.9 - x2)), 
+           y3 = rgen.betaII(nn, scale = exp(1.5), shape1.a = exp(1.8),
+                            shape2.p = exp(2.3) , shape3.q = exp(1.3)))
+                            
+#------------------------------------------------------------------------#
+# A single intercept-only model. No covariates.
+# Note the use of (optional) initial values.
+fit  &lt;- vglm(y2 ~ 1,   #y3 ~ 1
+             gen.betaIImr(lss = TRUE,
+                          # OPTIONAL INITIAL VALUES
+                           #iscale    = exp(1.5), 
+                           #ishape1.a = exp(1.8),
+                           #ishape2.p = exp(2.3),
+                           #ishape3.q = exp(1.3),
+                          
+                          imethod = 1),  
+             data = gdata, trace = TRUE, crit = "loglik")
+             
+Coef(fit)
+coef(fit, matrix = TRUE)
+summary(fit)
+
+#------------------------------------------------------------------------#
+# An intercept-only model. Two responses.
+fit1 &lt;- vglm(cbind(y2, y2) ~ 1,   # cbind(y1, y2)
+             gen.betaIImr(lss = TRUE),  
+             data = gdata, trace = TRUE, crit = "loglik")
+             
+Coef(fit1)
+coef(fit1, matrix = TRUE)
+summary(fit1)
+vcov(fit1, untransform = TRUE)
+
+#------------------------------------------------------------------------#
+# An example incorporating one covariate. Constraints are set accordingly.
+# x2 affects shape1.a and shape3.q.
+# Note that the first option uses 'constraints', whilst in the second
+# choice we use the argument 'zero' to 'set' the same constraints.
+
+### Option 1.
+c1 &lt;- rbind(0, 1, 0, 0)
+c2 &lt;- rbind(0, 0, 0, 1)
+mycons &lt;- matrix( c(c1, c2), nc = 2, byrow = FALSE)
+
+fit2 &lt;- vglm(y1 ~ x2, gen.betaIImr(lss = TRUE, zero = NULL),
+             data = gdata, trace = TRUE, crit = "loglik",
+             constraints = list(x2 = mycons ))
+
+coef(fit2, matrix = TRUE)
+summary(fit2)
+vcov(fit2)
+constraints(fit2)
+
+
+### Option 2.
+fit3 &lt;- vglm(y1 ~ x2, 
+             gen.betaIImr(lss = TRUE, 
+                          zero = c("scale", "shape2.p")),
+             data = gdata, trace = TRUE, crit = "loglik")
+
+coef(fit3, matrix = TRUE)
+summary(fit3)
+vcov(fit3)
+constraints(fit3)
+
+  
+</code></pre>
+
+
+</div>

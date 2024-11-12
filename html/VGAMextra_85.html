@@ -1,0 +1,153 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>MVNcov</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Multivariate Normal Distribution Family Function</h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the Multivariate Normal
+distribution. The covariances (not correlation coefficients)
+are included in the parameter vector.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">      MVNcov(zero = c("var", "cov"),
+             lmean = "identitylink",
+             lvar  = "loglink",
+             lcov  = "identitylink")
+ 
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Integer or character–string vector.
+Which linear predictors are intercept–only.
+Details at <code>zero</code> or
+<code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lmean, lvar, lcov</code></td>
+<td>
+
+<p>VGLM–link functions applied to the means, variances and covariances.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For the <code class="reqn">K</code>–dimensional normal distribution, 
+this fits a linear model to the <code class="reqn">K</code> means 
+<code class="reqn">\mu_j</code> <code class="reqn">j = 1, \ldots, K</code>, which are the 
+first entries in the linear predictor. The variances
+<code class="reqn">\sigma^2_j</code> <code class="reqn">j = 1, \ldots, K</code> 
+and then the covariances
+<code class="reqn">cov_{ij}</code> <code class="reqn">i = 1, \ldots, K,
+  j = i + 1, \ldots, K</code>, are next aligned.
+The fitted means are returned as the fitted values.
+</p>
+<p>The log–likelihood is computed via
+<code>dmultinorm</code>,
+an implementation of the multivariate Normal density.
+</p>
+<p>The score and 
+expected information matrices are internally computed
+at each Fisher scoring step, using its vectorized form.
+</p>
+<p>The response should be an <code class="reqn">K</code>–column matrix.
+The covariances may be any real number so that
+the <code>identitylink</code>
+is a reasonable choice.
+For further details on VGLM/VGAM–link functions, see
+<code>Links</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> 
+(see <code>vglmff-class</code>) to be
+used by VGLM/VGAM modelling functions, e.g.,
+<code>vglm</code> or <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Unlike other implementations, e.g., 
+<code>binormal</code> from 
+<span class="pkg">VGAM</span> in terms of <code class="reqn">\rho</code> and standard deviations,
+<code>MVNcov</code> estimates
+the variances and covariances, modeled as intercept–only.
+See argument <code>zero</code>, whose default is <code>c("var", "cov")</code>,
+to change this.
+</p>
+
+<p>Thus far, there is no guarantee that the estimated var–cov matrix will be 
+positive–definite. Proper procedures to validate this will
+be incorporated shortly, such as the <code>@validparams</code> slot.
+</p>
+<p>Although the function has been tested on <code class="reqn">K \leq 5</code>
+data sets, it is recommended that <code class="reqn">K \leq 3</code>,
+unless the data are <em>nice</em> and <code class="reqn">n</code> is sufficiently large.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>dmultinorm</code>,
+<code>binormal</code>,
+<code>CommonVGAMffArguments</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># K = 3.
+set.seed(180227)
+nn  &lt;- 85
+mvndata &lt;- data.frame(x2 = runif(nn), x3 = runif(nn))
+mvndata &lt;- transform(mvndata, 
+                     y = rbinorm(nn, mean1 = 2 - 2 * x2 + 1 * x3,
+                          mean2 = 2 - 1.5 * x3,
+                          var1 = exp(1.0), var2 = exp(-0.75),
+                          cov12 = 0.5 * exp(1.0) * exp(-0.75)))
+mvndata &lt;- transform(mvndata, y3 = rnorm(nn, mean = 2 + x2, sd = exp(1.5)))
+colnames(mvndata) &lt;- c("x2", "x3", "y1", "y2", "y3")
+
+mvnfit &lt;- vglm(cbind(y1, y2, y3) ~ x2 + x3, MVNcov, data = mvndata, trace = TRUE)
+(mvncoef  &lt;- coef(mvnfit, mat = TRUE))
+
+## Check variances and covariances: var1, var2 and var3.
+exp(mvncoef[c(10, 13, 16)])  # True are var1 = exp(1.0) = 2.718, 
+                             # var2 = exp(-0.75) = 0.472
+                             # and var3 = exp(1.5)^2 = 20.08554
+vcov(mvnfit)
+constraints(mvnfit)
+summary(mvnfit)
+
+
+</code></pre>
+
+
+</div>

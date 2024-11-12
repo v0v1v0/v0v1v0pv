@@ -1,0 +1,192 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vscc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variable Selection for Clustering and Classification</h2>
+
+<h3>Description</h3>
+
+<p>Performs variable selection under a clustering or classification framework. Automated implementation using model-based clustering is based on <code>teigen</code> version 2.0 and <code>mclust</code> version 4.0; issues *may* arise when using different versions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vscc(x, G=1:9, automate = "mclust", initial = NULL, initunc=NULL, train = NULL,
+    forcereduction = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>Data frame or matrix to perform variable selection on
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>G</code></td>
+<td>
+
+<p>Vector for the number of groups to consider during initialization and/or post-selection analysis. Default is 1-9. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>automate</code></td>
+<td>
+
+<p>Character string (<code>"teigen"</code>, <code>"mclust"</code> (default), or NULL only) indicating which mixture model family to implement as initialization and/or post-selection analysis. If NULL, the function assumes manual operation of the algorithm (meaning an initial clustering vector must be given, and no post-selection analysis is performed).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>initial</code></td>
+<td>
+
+<p>Optional vector giving the initial clustering. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>initunc</code></td>
+<td>
+
+<p>Optional scalar indicating the total uncertainty of the initial clustering solution. Only used when <code>initial</code> is non-null. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>train</code></td>
+<td>
+
+<p>Optional vector of training data (for classification framework).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>forcereduction</code></td>
+<td>
+
+<p>Logical indicating if the full data set should be considered (FALSE) when selecting the ‘best’ variable subset via total model uncertainty. Not used if <code>automate=NULL</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>selected</code></td>
+<td>
+
+<p>A list containing the subsets of variables selected for each relation. Each set is numbered according to the number in the exponential of the relationship. For instance, <code>vscc_object$selected[[3]]</code> corresponds to the variable subset selected by the cubic relationship.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+
+<p>The family used as initialization and/or post selection. (Same as user input <code>automate</code>, and can be <code>NULL</code>).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wss</code></td>
+<td>
+
+<p>The within-group variance associated with each variable from the full data set.
+</p>
+</td>
+</tr>
+</table>
+<p>The remaining values are provided as long as <code>automate</code> is not <code>NULL</code>:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>topselected</code></td>
+<td>
+
+<p>The best variable subset according to the total model uncertainty.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>initialrun</code></td>
+<td>
+
+<p>Results from the initialization; an object of class <code>teigen</code> or <code>mclust</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bestmodel</code></td>
+<td>
+
+<p>Results from the best model on the selected variable subset; an object of class <code>teigen</code> or <code>mclust</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>chosenrelation</code></td>
+<td>
+
+<p>Numeric indication of the relationship chosen according to total model uncertainty. The number corresponds to exponent in the relationship: for instance, a value of '4' suggests the quartic relationship. If the value <code>"Full dataset"</code> is given, then the unreduced data provides the best model uncertainty; can be avoided by specifying <code>forcereduction=TRUE</code> in the function call.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>uncertainty</code></td>
+<td>
+
+<p>Total model uncertainty associated with the best relationship.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allmodelfit</code></td>
+<td>
+
+<p>List containing the results (<code>teigen</code> or <code>mclust</code> objects) from the post-selection analysis on each variable subset. Number corresponds to the exponent in the relationship. For instance, <code>vscc_object$allmodelfit[[1]]</code> gives the results from the analysis on the variables selected by the linear relationship.
+</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Jeffrey L. Andrews, Paul D. McNicholas
+</p>
+
+
+<h3>References</h3>
+
+<p>See <code>citation("vscc")</code> for the variable selection references. See also <code>citation("teigen")</code> and <code>citation("mclust")</code> if using those families of models via the <code>automate</code> call.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>teigen</code>, <code>Mclust</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">require("mclust")
+data(banknote)
+head(banknote)
+bankrun &lt;- vscc(banknote[,-1])
+head(bankrun$topselected) #Show preview of selected variables
+table(banknote[,1], bankrun$initialrun$classification) #Clustering results on full data set
+table(banknote[,1], bankrun$bestmodel$classification) #Clustering results on reduced data set
+</code></pre>
+
+
+</div>

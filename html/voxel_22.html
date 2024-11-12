@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotGAMM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>GAMM plotting using ggplot2</h2>
+
+<h3>Description</h3>
+
+<p>GAMM plotting using ggplot2
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotGAMM(gammFit, smooth.cov, groupCovs = NULL, orderedAsFactor = F,
+  rawOrFitted = F, plotCI = T, grouping = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>gammFit</code></td>
+<td>
+<p>fitted gam model as produced by gamm4::gamm()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smooth.cov</code></td>
+<td>
+<p>(character) name of smooth term to be plotted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groupCovs</code></td>
+<td>
+<p>(character)  name of group variable to plot by, if NULL (default) then there are no groups in plot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>orderedAsFactor</code></td>
+<td>
+<p>Disabled</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rawOrFitted</code></td>
+<td>
+<p>If FALSE (default) then only smooth terms are plotted; if rawOrFitted = "raw" then raw values are plotted against smooth; if rawOrFitted = "fitted" then fitted values are plotted against smooth</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plotCI</code></td>
+<td>
+<p>if TRUE (default) upper and lower confidence intervals are added at 2 standard errors above and below the mean</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grouping</code></td>
+<td>
+<p>(character) Name of variable that you want to use as the group argument in ggplot2::aes(), useful for better visualization of longitudinal data, (default is NULL)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a ggplot object that can be visualized using the print() function
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Plotting: <code>plotGAM</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+set.seed(1)
+data &lt;- data.frame(x = (seq(.25,25, .25) +rnorm(100)), group = rep(1:2, 5), z=rnorm(100),
+              index.rnorm = rep(rnorm(50, sd = 50), 2), index.var = rep(1:50, 2))
+data$y &lt;- (data$x)*data$group*10 + rnorm(100, sd = 700) + data$index.rnorm + data$z
+data$group &lt;- ordered(data$group)
+
+
+gamm &lt;- gamm4::gamm4(y ~ + s(x) + s(x, by=group) + z + group, data=data, random = ~ (1|index.var))
+
+
+plot &lt;- plotGAMM(gammFit &lt;- gamm, smooth.cov &lt;- "x", groupCovs = "group",
+                    plotCI &lt;- T, rawOrFitted = "raw", grouping = "index.var")
+
+plot2 &lt;- plotGAMM(gammFit &lt;- gamm, smooth.cov &lt;- "x", groupCovs = "group",
+                  plotCI &lt;- T, rawOrFitted = "fitted", grouping = "index.var")
+</code></pre>
+
+
+</div>

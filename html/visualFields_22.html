@@ -1,0 +1,230 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>glr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Global and pointwise linear regression analyses</h2>
+
+<h3>Description</h3>
+
+<p>Functions that compute global and pointwise linear regression analyses:
+</p>
+
+<ul>
+<li>
+<p><code>glr</code> performs global linear regression analysis
+</p>
+</li>
+<li>
+<p><code>plr</code> performs pointwise linear regression (PLR) analysis
+</p>
+</li>
+<li>
+<p><code>poplr</code> performs PoPLR analysis as in O'Leary et al (see reference)
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">glr(g, testSlope = 0)
+
+plr(vf, testSlope = 0)
+
+poplr(vf, testSlope = 0, nperm = factorial(7), trunc = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>a data.frame with date on the first column and the value of the
+global index on the second column</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>testSlope</code></td>
+<td>
+<p>slope, or slopes, to test as null hypothesis. Default is 0.
+if a single value, then the same null hypothesis is used for all locations.
+If a vector of values, then (for <code>plr</code> and <code>poplr</code>) each
+location of the visual field will have a different null hypothesis. The length of
+testSlope must be 1 or equal to the number of locations to be used in the PLR or
+PoPLR analysis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vf</code></td>
+<td>
+<p>visual fields sensitivity data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nperm</code></td>
+<td>
+<p>number of permutations. If the number of visits is 7 or less, then
+<code>nperm = factorial(nrow(vf))</code>. For series greater than 8 visits, default is
+factorial(7). For series up to 7 visits, it is the factorial of the number of visits
+(with less than 7 visits, the number of possible permutations is small and results
+can be unreliable. For instance, for 5 visits, the number of possible permutations is
+only 120.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trunc</code></td>
+<td>
+<p>truncation value for the Truncated Product Method (see reference)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<ul><li>
+<p><code>poplr</code> there is a small difference between this implementation of
+PoPLR and that proposed by O'Leary et al. The combined S statistic in the
+paper used a natural logarithm. Here we not only use a logarithm of base 10
+but we also divide by the number of locations. This way the S statistic has
+a more direct interpretation as the average number of leading zeros in the
+p-values for pointwise (simple) linear regression. That is, if S = 2, then
+the p-values have on average 2 leading zeros, if S = 3, then 3 leading zeros,
+and so on
+</p>
+</li></ul>
+<h3>Value</h3>
+
+
+<ul>
+<li>
+<p><code>glr</code> and <code>plr</code> return a list with the following
+</p>
+
+<ul>
+<li>
+<p><code>id</code> patient ID
+</p>
+</li>
+<li>
+<p><code>eye</code> patient eye
+</p>
+</li>
+<li>
+<p><code>testSlope</code> slope for <code>glr</code> or list of slopes for <code>plr</code>
+to test as null hypotheses
+</p>
+</li>
+<li>
+<p><code>nvisits</code> number of visits
+</p>
+</li>
+<li>
+<p><code>years</code> years from baseline. Used for the pointwise linear
+regression analysis
+</p>
+</li>
+<li>
+<p><code>data</code> data analyzed. For <code>glr</code>, it is the values of the
+global indes analyzed. For <code>plr</code>, each column is a location of the
+visual field used for the analysis. Each row is a visit (as many as years)
+</p>
+</li>
+<li>
+<p><code>pred</code> predicted values. Each column is a location of the visual
+field used for the analysis. Each row is a visit (as many as years)
+</p>
+</li>
+<li>
+<p><code>sl</code> slopes estimated at each location for pointwise (simple)
+linear regression
+</p>
+</li>
+<li>
+<p><code>int</code> intercept estimated at each location for pointwise (simple)
+linear regression
+</p>
+</li>
+<li>
+<p><code>tval</code> t-values obtained for the left-tailed-t-tests for the slopes
+obtained in the pointwise (simple) linear regression at each location
+</p>
+</li>
+<li>
+<p><code>pval</code> p-values obtained for the left-tailed t-tests for the slopes
+obtained
+</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>poplr</code> returns a list with the following additional fields
+</p>
+
+<ul>
+<li>
+<p><code>csl</code> the modified Fisher's S-statistic for the left-tailed permutation test
+</p>
+</li>
+<li>
+<p><code>cslp</code> the p-value for the left-tailed permutation test
+</p>
+</li>
+<li>
+<p><code>csr</code> the modifed Fisher's S-statistic for the right-tailed permutation test
+</p>
+</li>
+<li>
+<p><code>csrp</code> the p-value for the right-tailed permutation test
+</p>
+</li>
+<li>
+<p><code>pstats</code> a list with the poinwise slopes ('<code>sl</code>'), intercepts
+('<code>int</code>'), standard errors ('<code>se</code>'), and p-values ('<code>pval</code>') obtained
+for the series at each location analyzed and for all <code>nperm</code> permutations
+(in '<code>permutations</code>')
+</p>
+</li>
+<li>
+<p><code>cstats</code> a list with all combined stats:
+</p>
+
+<ul>
+<li>
+<p><code>csl, csr</code> the combined Fisher S-statistics for the left- and right-tailed
+permutation tests respectively
+</p>
+</li>
+<li>
+<p><code>cslp, csrp</code> the corresponding p-values for the permutation tests
+</p>
+</li>
+<li>
+<p><code>cslall, csrall</code> the combined Fisher S-statistics for all permutations
+</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>N. O'Leary, B. C. Chauhan, and P. H. Artes. <em>Visual field progression in
+glaucoma: estimating the overall significance of deterioration with permutation
+analyses of pointwise linear regression (PoPLR)</em>. Investigative Ophthalmology
+and Visual Science, 53, 2012
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vf &lt;- vffilter(vfpwgRetest24d2, id == 1) # select one patient
+res &lt;- glr(getgl(vf)[,c("date", "tmd")]) # linear regression with mean deviation (MD)
+res &lt;- plr(gettd(vf))   # pointwise linear regression (PLR) with TD values
+res &lt;- poplr(gettd(vf)) # Permutation of PLR with TD values
+</code></pre>
+
+
+</div>

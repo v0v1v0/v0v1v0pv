@@ -1,0 +1,136 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>import_data_from_polymapR</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Import data from polymapR</h2>
+
+<h3>Description</h3>
+
+<p>Function to import datasets from polymapR. Function from MAPpoly.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">import_data_from_polymapR(
+  input.data,
+  ploidy,
+  parent1 = "P1",
+  parent2 = "P2",
+  input.type = c("discrete", "probabilistic"),
+  prob.thres = 0.95,
+  pardose = NULL,
+  offspring = NULL,
+  filter.non.conforming = TRUE,
+  verbose = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>input.data</code></td>
+<td>
+<p>a <code>polymapR</code> dataset</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ploidy</code></td>
+<td>
+<p>the ploidy level</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parent1</code></td>
+<td>
+<p>a character string containing the name (or pattern of genotype IDs) of parent 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parent2</code></td>
+<td>
+<p>a character string containing the name (or pattern of genotype IDs) of parent 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>input.type</code></td>
+<td>
+<p>Indicates whether the input is discrete ("disc") or probabilistic ("prob")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prob.thres</code></td>
+<td>
+<p>threshold probability to assign a dosage to offspring. If the probability 
+is smaller than <code>thresh.parent.geno</code>, the data point is converted to 'NA'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pardose</code></td>
+<td>
+<p>matrix of dimensions (n.mrk x 3) containing the name of the markers in the first column, and the 
+dosage of parents 1 and 2 in columns 2 and 3. (see polymapR vignette)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>offspring</code></td>
+<td>
+<p>a character string containing the name (or pattern of genotype IDs) of the offspring 
+individuals. If <code>NULL</code> (default) it considers all individuals as offsprings, except 
+<code>parent1</code> and <code>parent2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filter.non.conforming</code></td>
+<td>
+<p>if <code>TRUE</code> exclude samples with non 
+expected genotypes under no double reduction. Since markers were already filtered in polymapR, the default is 
+<code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>if <code>TRUE</code> (default), the current progress is shown; if
+<code>FALSE</code>, no output is produced</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See examples at <a href="https://rpubs.com/mmollin/tetra_mappoly_vignette">https://rpubs.com/mmollin/tetra_mappoly_vignette</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>object of class <code>mappoly.data</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Marcelo Mollinari <a href="mailto:mmollin@ncsu.edu">mmollin@ncsu.edu</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Bourke PM et al: (2019) PolymapR — linkage analysis and genetic map 
+construction from F1 populations of outcrossing polyploids. 
+_Bioinformatics_ 34:3496–3502.
+doi: <a href="https://doi.org/10.1093/bioinformatics/bty1002">10.1093/bioinformatics/bty1002</a>
+</p>
+<p>Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
+analysis and haplotype phasing in experimental autopolyploid
+populations with high ploidy level using hidden Markov
+models, _G3: Genes, Genomes, Genetics_. 
+doi: <a href="https://doi.org/10.1534/g3.119.400378">10.1534/g3.119.400378</a>
+</p>
+
+
+</div>

@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>viviNetwork</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>viviNetwork</h2>
+
+<h3>Description</h3>
+
+<p>Create a Network plot displaying variable importance
+and variable interaction.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">viviNetwork(
+  mat,
+  intThreshold = NULL,
+  intLims = NULL,
+  impLims = NULL,
+  intPal = rev(colorspace::sequential_hcl(palette = "Purples 3", n = 100)),
+  impPal = rev(colorspace::sequential_hcl(palette = "Greens 3", n = 100)),
+  removeNode = FALSE,
+  layout = igraph::layout_in_circle,
+  cluster = NULL,
+  nudge_x = 0.05,
+  nudge_y = 0.03,
+  edgeWidths = 1:4
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mat</code></td>
+<td>
+<p>A matrix, such as that returned by vivi, of values to be plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>intThreshold</code></td>
+<td>
+<p>Remove edges with weight below this value if provided.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>intLims</code></td>
+<td>
+<p>Specifies the fit range for the color map for interaction strength.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>impLims</code></td>
+<td>
+<p>Specifies the fit range for the color map for importance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>intPal</code></td>
+<td>
+<p>A vector of colours to show interactions, for use with scale_fill_gradientn.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>impPal</code></td>
+<td>
+<p>A vector of colours to show importance, for use with scale_fill_gradientn.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>removeNode</code></td>
+<td>
+<p>If TRUE, then removes nodes with no connecting edges when thresholding interaction values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>layout</code></td>
+<td>
+<p>igraph layout function or a numeric matrix with two columns, one row per node. Defaults to igraph::layout_as_circle</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cluster</code></td>
+<td>
+<p>Either a vector of cluster memberships for nodes or an igraph clustering function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nudge_x</code></td>
+<td>
+<p>Nudge (centered) labels by this amount, outward horizontally.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nudge_y</code></td>
+<td>
+<p>Nudge (centered) labels by this amount, outward vertically.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>edgeWidths</code></td>
+<td>
+<p>A vector specifying the scaling of the edges for the displayed graph. Values must be positive.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A plot displaying interaction strength between variables on the edges and variable importance on the nodes.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(ranger)
+aq &lt;- na.omit(airquality)
+rF &lt;- ranger(Ozone ~ ., data = aq, importance = "permutation")
+myMat &lt;- vivi(fit = rF, data = aq, response = "Ozone")
+viviNetwork(myMat)
+
+</code></pre>
+
+
+</div>

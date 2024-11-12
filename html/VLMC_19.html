@@ -1,0 +1,126 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>logLik</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Log Likelihood of and between VLMC objects</h2>
+
+<h3>Description</h3>
+
+<p>Compute the log-likelihood or “entropy” of a fitted
+<code>vlmc</code> object.  This is a method for the
+generic <code>logLik</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">entropy(object)
+## S3 method for class 'vlmc'
+logLik(object, ...)
+entropy2(ivlmc1, ivlmc2, alpha.len = ivlmc1[1])
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>typically the result of <code>vlmc(..)</code>.</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>ivlmc1,ivlmc2</code></td>
+<td>
+<p>two <code>vlmc</code> (sub) trees, see <code>vlmc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha.len</code></td>
+<td>
+<p>positive integer specifying the alphabet length.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>(potentially more arguments; required by generic)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>logLik.vlmc()</code> method computes the log likelihood for a fitted
+<code>vlmc</code> object.  <code>entropy</code> is an alias for
+<code>logLik</code> for reasons of back compatibility.
+</p>
+<p><code>entropy2</code> is less clear ... ... [[[ FIXME ]]] ... ...
+</p>
+
+
+<h3>Value</h3>
+
+<p>a negative number, in some contexts typically further divided by
+<code>log(x$alpha.len)</code>.
+</p>
+<p>Note that the <code>logLik</code> method is used by the default method of
+the <code>AIC</code> generic function (from R version 1.4.x), and
+hence provides <code>AIC(object)</code> for vlmc objects.  Also, since vlmc
+version 1.3-13, <code>BIC()</code> works as well.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler</p>
+
+
+<h3>See Also</h3>
+
+<p><code>deviance.vlmc</code>,
+<code>vlmc</code>, <code>draw.vlmc</code>.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dd &lt;- cumsum(rpois(999, 1.5)) %% 10
+(vd &lt;- vlmc(dd))
+entropy(vd)# the bare number
+logLik(vd)
+logLik(vdL &lt;- vlmc(dd, cutoff = 3))
+entropy2(vd $vlmc.vec,
+         vdL$vlmc.vec)
+
+## AIC model selection:
+f1 &lt;- c(1,0,0,0)  # as in example(vlmc)
+f2 &lt;- rep(1:0,2)
+(dt1 &lt;- c(f1,f1,f2,f1,f2,f2,f1))
+AIC(print(vlmc(dt1)))
+AIC(print(vlmc(dt1, cutoff = 2.6)))
+AIC(print(vlmc(dt1, cutoff = 0.4)))# these two differ ``not really''
+AIC(print(vlmc(dt1, cutoff = 0.1)))
+
+## Show how to compute it from the fitted conditional probabilities :
+logLikR &lt;- function(x) {
+    dn &lt;- dimnames(pr &lt;- predict(x))
+    sum(log(pr[cbind(2:nrow(pr), match(dn[[1]][-1], dn[[2]]))]))
+}
+
+all.equal(  logLikR(vd),
+          c(logLik (vd)), tol=1e-10) # TRUE, they do the same
+
+## Compare different ones:  [cheap example]:
+example(draw)
+for(n in ls())
+  if(is.vlmc(get(n))) {
+       vv &lt;- get(n)
+       cat(n,":",formatC(logLik(vv) / log(vv$alpha.len),
+                         format= "f", wid=10),"\n")
+  }
+</code></pre>
+
+
+</div>

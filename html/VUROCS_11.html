@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VUSvar</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variance of the volume under the ROC surface</h2>
+
+<h3>Description</h3>
+
+<p>Computes the volume under the ROC surface (VUS) and its variance for a vector of realisations <code>y</code> (i.e. realised categories) and a vector of predictions <code>fx</code> (i.e. values of the a ranking function f) for the purpose of assessing the discrimiatory power in a multi-class classification problem.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">VUSvar(y, fx, ncores = 1, clusterType = "SOCK")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>a vector of realized categories.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fx</code></td>
+<td>
+<p>a vector of predicted values of the ranking function f.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncores</code></td>
+<td>
+<p>number of cores to be used for parallelized computations. The default value is 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clusterType</code></td>
+<td>
+<p>type of cluster to be initialized in case more than one core is used for calculations. The default values is "SOCK". For details regarding the different types to be used, see <code>makeCluster</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The implemented algorithm is based on Waegeman, De Baets and Boullart (2008). A list of length two is returned, containing the following components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>var</code></td>
+<td>
+<p>variance of the volume under the ROC surface</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>val</code></td>
+<td>
+<p>volume under the ROC surface</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Waegeman W., De Baets B., Boullart L., 2008. On the scalability of ordered multi-class ROC analysis. Computational Statistics &amp; Data Analysis 52, 3371-3388.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">VUSvar(rep(1:5,each=3),c(1,2,3,rep(2:5,each=3)))
+</code></pre>
+
+
+</div>

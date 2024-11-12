@@ -1,0 +1,66 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>filter_point_density</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Retains one point of the original point cloud within a voxel of given size.</h2>
+
+<h3>Description</h3>
+
+<p>Retains one point of the original point cloud within a voxel of given size.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">filter_point_density(data, res, message)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data.frame or data.table containing the x, y, z, ... coordinates of a point cloud.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>res</code></td>
+<td>
+<p>numeric. The voxel resolution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>message</code></td>
+<td>
+<p>logical. If FALSE, messages are disabled. Default = TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a data.frame or data.table with reduced point sensity.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#- import tls data
+tls=data.table::fread(system.file("extdata", "Tree_t0.asc", package="VoxR"))
+
+#- keep one point in 2cm voxels
+filtered=VoxR::filter_point_density(tls,0.02)
+rgl::open3d()
+rgl::plot3d(filtered,add=TRUE)
+
+#- keep one point in 10cm voxels
+filtered=VoxR::filter_point_density(tls,0.1)
+rgl::open3d()
+rgl::plot3d(filtered,add=TRUE)
+</code></pre>
+
+
+</div>

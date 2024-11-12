@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>MODE.freq</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Modal Frequencies</h2>
+
+<h3>Description</h3>
+
+<p>Returns the frequencies of the nucleotides in each position of nucleotide sequence that occurs most often.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">MODE.freq(freq, seqlength)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>freq</code></td>
+<td>
+
+<p>Frequency matrix for nucleotides.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seqlength</code></td>
+<td>
+
+<p>Length of the nucleotide sequence.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The argument freq can be calculated using the function ffrequency.matrix.function.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector of frequencies for the first modal sequence.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: data(birds)
+species.names &lt;- birds[,2]
+specimen.Number &lt;- nrow(birds)
+rownames(birds) &lt;- species.names
+Nuc.count &lt;- count.function(birds, specimen.Number, 648)
+frequency.matrix &lt;- ffrequency.matrix.function(Nuc.count, 648)
+birdSpec.freq &lt;- specimen.frequencies(frequency.matrix, birds, specimen.Number, species.names, 648)
+nucleotide.modalSequence &lt;- MODE(frequency.matrix, 648)
+Bird_first.modal.frequencies &lt;- MODE.freq(frequency.matrix, 648)
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,52 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>moves_speed</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Return speed bins according to US/EPA MOVES model</h2>
+
+<h3>Description</h3>
+
+<p><code>speed_moves</code> return an object of average speed bins as defined by
+US EPA MOVES. The input must be speed as miles/h (mph)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">moves_speed(x, net)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object with class, "sf",  "data.frame", "matrix" or "numeric" with speeds
+in miles/h (mph)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>optional  spatial dataframe of class "sf".
+it is transformed to "sf".</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">{
+data(net)
+net$mph &lt;- units::set_units(net$ps, "miles/h")
+net$speed_bins &lt;- moves_speed(net$mph)
+head(net)
+moves_speed(net["ps"])
+}
+</code></pre>
+
+
+</div>

@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lsmMat</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Contrast Matrix for LS Means</h2>
+
+<h3>Description</h3>
+
+<p>Function determines appropriate contrast matrix for computing the LS Means of
+each factor level of one or multiple fixed effects variables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lsmMat(obj, var = NULL, quiet = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(VCA) object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var</code></td>
+<td>
+<p>(character) string specifyig the fixed effects variable for which
+the LS Means generating matrices should be computed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = will suppress any warning, which will be issued otherwise</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This functions implements the 5 rules given in the documentation of SAS PROC GLM for computing the LS Means.#'
+The LS Means correspond to marginal means adjusted for bias introduced by unbalancedness.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(matrix) where each row corresponds to a LS Means generating contrast
+for each factor level of one or multiple fixed effects variable(s)
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schutzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+fit1 &lt;- anovaMM(y~day/run, dataEP05A2_1)
+
+VCA:::lsmMat(fit1, "day")	# function not exported
+VCA:::lsmMat(fit1, "run")
+VCA:::lsmMat(fit1)			# is equal to listing all fixed terms
+
+# a more complex and unbalanced model
+data(VCAdata1)
+datS1 &lt;- VCAdata1[VCAdata1$sample == 1, ]
+set.seed(42)
+datS1ub &lt;- datS1[-sample(1:nrow(datS1))[1:25],]
+fit2 &lt;- anovaMM(y~(lot+device)/day/(run), datS1ub)
+VCA:::lsmMat(fit2, c("lot", "device"))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

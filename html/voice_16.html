@@ -1,0 +1,132 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>interp_df</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Inperpolate data frames</h2>
+
+<h3>Description</h3>
+
+<p>Interpolate data frames using multicore, compressing to <code>compact.to</code> fraction. May remove zeros.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">interp_df(
+  x,
+  compact.to,
+  id = colnames(x)[1],
+  colnum = NULL,
+  drop.x = TRUE,
+  drop.zeros = FALSE,
+  to.data.frame = TRUE,
+  round.off = NULL,
+  weight = NULL,
+  mc.cores = 1
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>compact.to</code></td>
+<td>
+<p>Proportion of remaining points after interpolation. If equals to 1 and keep.zeros = TRUE, the original vector is presented.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>The identification column. Default: <code>colname</code> of the first column of <code>x</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colnum</code></td>
+<td>
+<p>A <code>char</code> vector indicating the numeric colnames. If <code>NULL</code>, uses the columns of the <code>numeric</code> class.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drop.x</code></td>
+<td>
+<p>Logical. Drop columns containing .x? Default: <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drop.zeros</code></td>
+<td>
+<p>Logical. Drop repeated zeros or keep 1 zero per null set? Default: <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>to.data.frame</code></td>
+<td>
+<p>Logical. Should return a data frame? If <code>FALSE</code> returns a list. Default: <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>round.off</code></td>
+<td>
+<p>Number of decimal places of the interpolated <code>y</code>. Default: <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weight</code></td>
+<td>
+<p>Vector of weights with same length of <code>y</code>. Default: <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mc.cores</code></td>
+<td>
+<p>The number of cores to mclapply. Default: <code>1</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame of interpolated values with nrow near to <code>compact.to*length(x)</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>interp</code>, <code>interp_mc</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(voice)
+
+# get path to audio file
+path2wav &lt;- list.files(system.file('extdata', package = 'wrassp'),
+pattern = glob2rx('*.wav'), full.names = TRUE)
+
+# getting Media data frame via lean call
+M &lt;- extract_features(dirname(path2wav), features = c('f0','fmt'),
+mc.cores = 1, verbose = FALSE)
+
+
+(cM.df &lt;- interp_df(M[,-(1:2)], 0.1, mc.cores = 1))
+(cM.df2 &lt;- interp_df(M[,-(1:2)], 0.1, drop.x = FALSE, mc.cores = 1))
+
+dim(M)
+dim(cM.df)
+dim(cM.df2)
+(cM.list &lt;- interp_df(M[,-(1:2)], 0.1, to.data.frame = FALSE, mc.cores = 1))
+
+</code></pre>
+
+
+</div>

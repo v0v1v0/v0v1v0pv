@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Gompertz</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Gompertz Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, cumulative distribution function,
+quantile function
+and
+random generation for
+the Gompertz distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dgompertz(x, scale = 1, shape, log = FALSE)
+pgompertz(q, scale = 1, shape, lower.tail = TRUE, log.p = FALSE)
+qgompertz(p, scale = 1, shape, lower.tail = TRUE, log.p = FALSE)
+rgompertz(n, scale = 1, shape)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+<p>vector of quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>vector of probabilities.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Same as in <code>runif</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical.
+If <code>log = TRUE</code> then the logarithm of the density is
+returned.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail, log.p</code></td>
+<td>
+
+<p>Same meaning as in <code>pnorm</code>
+or <code>qnorm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale, shape</code></td>
+<td>
+<p>positive scale and shape parameters. </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See <code>gompertz</code> for details.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dgompertz</code> gives the density,
+<code>pgompertz</code> gives the cumulative distribution function,
+<code>qgompertz</code> gives the quantile function, and
+<code>rgompertz</code> generates random deviates.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee and Kai Huang </p>
+
+
+<h3>See Also</h3>
+
+<p><code>gompertz</code>,
+<code>dgumbel</code>,
+<code>dmakeham</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">probs &lt;- seq(0.01, 0.99, by = 0.01)
+Shape &lt;- exp(1); Scale &lt;- exp(1)
+max(abs(pgompertz(qgompertz(p = probs, Scale, shape = Shape),
+                  Scale, shape = Shape) - probs))  # Should be 0
+
+## Not run:  x &lt;- seq(-0.1, 1.0, by = 0.001)
+plot(x, dgompertz(x, Scale,shape = Shape), type = "l", las = 1,
+     main = "Blue is density, orange is the CDF", col = "blue",
+     sub = "Purple lines are the 10,20,...,90 percentiles",
+     ylab = "")
+abline(h = 0, col = "blue", lty = 2)
+lines(x, pgompertz(x, Scale, shape = Shape), col = "orange")
+probs &lt;- seq(0.1, 0.9, by = 0.1)
+Q &lt;- qgompertz(probs, Scale, shape = Shape)
+lines(Q, dgompertz(Q, Scale, shape = Shape), col = "purple",
+      lty = 3, type = "h")
+pgompertz(Q, Scale, shape = Shape) - probs  # Should be all zero
+abline(h = probs, col = "purple", lty = 3) 
+## End(Not run)
+</code></pre>
+
+
+</div>

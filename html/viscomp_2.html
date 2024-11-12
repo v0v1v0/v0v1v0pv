@@ -1,0 +1,107 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compGraph</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Components Network Graph</h2>
+
+<h3>Description</h3>
+
+<p>The Components Network Graph is meant to visualize the frequency of components’ combinations found in the network.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compGraph(
+  model,
+  sep = "+",
+  mostF = 5,
+  excl = NULL,
+  title = "Most frequent combinations of components",
+  print_legend = TRUE,
+  size_legend = 0.825
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>An object of class <code>netmeta</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sep</code></td>
+<td>
+<p>A single character that defines the separator between interventions components.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mostF</code></td>
+<td>
+<p>Number of most frequent combinations of the network.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>excl</code></td>
+<td>
+<p>A character vector that specifies the combinations to be excluded from the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>A single character that specifies the overall title of the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>print_legend</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> the legend is printed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size_legend</code></td>
+<td>
+<p>size of the legend.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function resembles a network plot where nodes represent the individual components found in the network
+and edges represent the combination of components found in at least one treatment arm of the trials included in the
+network meta-analysis model. Each edge’s color represents one of the unique interventions (components’ combination)
+found in the network of interventions. Edges’ thickness indicates the frequency by which each intervention
+(combination of components) was observed in the network (number of arms in which the combination was assigned).
+The number of the most frequent combinations can be modified from the argument <code>mostF</code>. The function by
+default plots the five most frequent components' combinations found in the network.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns (invisibly) a <code>qgraph</code> object.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The function can be applied only in network meta-analysis models that contain multi-component interventions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(nmaMACE)
+compGraph(model = nmaMACE)
+
+</code></pre>
+
+
+</div>

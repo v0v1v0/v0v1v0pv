@@ -1,0 +1,70 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>align_plots</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Align multiple ggplot graphs, taking into account the legend</h2>
+
+<h3>Description</h3>
+
+<p>This function aligns multiple <code>ggplot</code> graphs by making them the same width by taking into account the legend width.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">align_plots(pltlist)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>pltlist</code></td>
+<td>
+<p>A list of plots</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>List of <code>ggplot</code> with equal width.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://stackoverflow.com/questions/26159495">https://stackoverflow.com/questions/26159495</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+## create 2 graphs
+p1 &lt;- ggplot2::ggplot(adtte, ggplot2::aes(x = as.numeric(AGE), fill = "Age")) +
+  ggplot2::geom_histogram(bins = 15)
+
+p2 &lt;- ggplot2::ggplot(adtte, ggplot2::aes(x = as.numeric(AGE))) +
+  ggplot2::geom_histogram(bins = 15)
+
+## default alignment does not take into account legend size
+cowplot::plot_grid(
+  plotlist = list(p1, p2),
+  align = "none",
+  nrow = 2
+)
+
+## align_plots() takes into account legend width
+cowplot::plot_grid(
+  plotlist = visR::align_plots(pltlist = list(p1, p2)),
+  align = "none",
+  nrow = 2
+)
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>valorate.risk</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>ESTIMATES RISK</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the risk (hazard ratio), and confidence interval of a 'mutated' group.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">valorate.risk(vro, clusters)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vro</code></td>
+<td>
+<p>the valorate object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clusters</code></td>
+<td>
+<p>a numerical or logical vector representing the two survival groups encoded in 1/TRUE for those 'mutated' (in the group of interest) or 1/FALSE for those who not. Basically this value is the 'x' vector in the VALORATE re-formulation. See references.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A coxph model depending on clusters is run to establish the risk/hazard ratio.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A number representing the relative risk. The confidence interval, p-value, and the coxph model are included as attributes.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Trevino <a href="mailto:vtrevino@itesm.mx">vtrevino@itesm.mx</a></p>
+
+
+<h3>References</h3>
+
+<p>Trevino et al. 2016 <a href="http://bioinformatica.mty.itesm.mx/valorateR">http://bioinformatica.mty.itesm.mx/valorateR</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>new.valorate</code>.
+<code>valorate.survdiff</code>.
+<code>coxph</code> (survival package).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Create a random population of 100 subjects 
+## having 20 events
+subjects &lt;- numeric(100)
+subjects[sample(100,20)] &lt;- 1
+vo &lt;- new.valorate(rank=subjects, sampling.size=100000, verbose=TRUE)
+
+groups &lt;- numeric(100)
+groups[sample(100,20)] &lt;- 1  # 20 to likely see some difference
+pvr &lt;- valorate.survdiff(vo, groups) 
+print(pvr)
+
+valorate.risk(vo, groups)
+
+</code></pre>
+
+
+</div>

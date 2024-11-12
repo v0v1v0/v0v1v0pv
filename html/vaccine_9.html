@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>params_ce_cox</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Set parameters controlling Cox model estimation of controlled effect curves</h2>
+
+<h3>Description</h3>
+
+<p>This should be used in conjunction with <code>est_ce</code> to
+set parameters controlling Cox model estimation of controlled effect
+curves; see examples.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">params_ce_cox(spline_df = NA, spline_knots = NA, edge_ind = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>spline_df</code></td>
+<td>
+<p>An integer; if the marker is modeled flexibly within the Cox
+model linear predictor as a natural cubic spline, this option controls
+the degrees of freedom in the spline; knots are chosen to be equally
+spaced across the range of the marker.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spline_knots</code></td>
+<td>
+<p>A numeric vector; as an alternative to specifying
+<code>spline_df</code>, the exact locations of the knots in the spline
+(including boundary knots) can be specified with this option.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>edge_ind</code></td>
+<td>
+<p>Boolean. If TRUE, an indicator variable corresponding to the
+lower limit of the marker will be included in the Cox model linear
+predictor.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of options.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(hvtn505)
+dat &lt;- load_data(time="HIVwk28preunblfu", event="HIVwk28preunbl", vacc="trt",
+                 marker="IgG_V2", covariates=c("age","BMI","bhvrisk"),
+                 weights="wt", ph2="casecontrol", data=hvtn505)
+
+ests_cox &lt;- est_ce(
+  dat = dat,
+  type = "Cox",
+  t_0 = 578,
+  params_cox = params_ce_cox(spline_df=4)
+)
+
+</code></pre>
+
+
+</div>

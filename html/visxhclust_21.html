@@ -1,0 +1,58 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_annotation_dist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot distribution of annotation data across clusters</h2>
+
+<h3>Description</h3>
+
+<p>Plot distribution of annotation data across clusters
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_annotation_dist(annotations_df, cluster_labels, selected_clusters = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>annotations_df</code></td>
+<td>
+<p>data frame with variables not used in clustering</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cluster_labels</code></td>
+<td>
+<p>output from <code>cut_clusters()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selected_clusters</code></td>
+<td>
+<p>optional vector of cluster labels to include in plots</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a <code>patchwork</code> object
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dmat &lt;- compute_dmat(iris, "euclidean", TRUE, c("Petal.Length", "Sepal.Length"))
+clusters &lt;- compute_clusters(dmat, "complete")
+cluster_labels &lt;- cut_clusters(clusters, 2)
+plot_annotation_dist(iris["Species"], cluster_labels)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,117 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>discretization</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Discretization of a Possibly Continuous Data Frame of Random Variables</h2>
+
+<h3>Description</h3>
+
+<p>This function discretizes data frame of possibly continuous random variables through rules for discretization. The discretization algorithms are unsupervised and univariate. See details for the complete list (the desired number of bins could also be provided).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">discretization(data.df = NULL, discretization.method = "cencov", frequency = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data.df</code></td>
+<td>
+<p>a data frame containing the data to discretize, binary variables must be declared as factors, other as numeric vector. The data frame must be named.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>discretization.method</code></td>
+<td>
+<p>a character vector giving the discretization method to use; see details. If a number is provided, the variable will be discretized by equal binning.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>frequency</code></td>
+<td>
+<p>logical variable to select the output. If set to TRUE a list with the table of count for each bin and the discretized data frame is returned. If set to FALSE only the discretized data frame is returned.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>discretization()</code> supports multiple rules for discretization. Below is the list of supported rules. IQR() stands for interquartile range.
+</p>
+<p><code>fd</code> stands for the Freedman–Diaconis rule. The number of bins is given by </p>
+<p style="text-align: center;"><code class="reqn">\frac{range(x) * n^{1/3}}{2 * IQR(x)}</code>
+</p>
+<p> The Freedman–Diaconis rule is known to be less sensitive than the Scott's rule to outlier.
+</p>
+<p><code>doane</code> stands for doane's rule. The number of bins is given by
+</p>
+<p style="text-align: center;"><code class="reqn">1 + \log_{2}{n} + \log_{2}{1+\frac{|g|}{\sigma_{g}}}</code>
+</p>
+
+<p>is a modification of Sturges' formula which attempts to improve its performance with non-normal data.
+</p>
+<p><code>cencov</code> stands for Cencov's rule. The number of bins is given by:
+</p>
+<p style="text-align: center;"><code class="reqn">n^{1/3}</code>
+</p>
+
+<p><code>rice</code> stands for Rice' rule. The number of bins is given by:
+</p>
+<p style="text-align: center;"><code class="reqn">2 n^{1/3}</code>
+</p>
+
+<p><code>terrell-scott</code> stands for Terrell-Scott's rule. The number of bins is given by: </p>
+<p style="text-align: center;"><code class="reqn">(2 n)^{1/3}</code>
+</p>
+
+<p>This is known that Cencov, Rice and Terrell-Scott rules over estimates k compared to other rules due to his simplicity.
+</p>
+<p><code>sturges</code> stands for Sturges's rule. The number of bins is given by: </p>
+<p style="text-align: center;"><code class="reqn">1 + \log_2(n)</code>
+</p>
+
+<p><code>scott</code> stands for Scott's rule. The number of bins is given by:
+</p>
+<p style="text-align: center;"><code class="reqn">range(x) / \sigma(x) n^{-1/3}</code>
+</p>
+
+<p><code>kmeans</code> apply the classical k-means clustering to one-dimensional continuous data.
+</p>
+
+
+<h3>Value</h3>
+
+<p>the discretized dataframe or a list containing the table of counts for each bin the discretized dataframe</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Gilles Kratzer</p>
+
+
+<h3>References</h3>
+
+<p>Garcia, S., et al.  (2013) A survey of discretization techniques: Taxonomy and empirical analysis in supervised learning. <em>IEEE Transactions on Knowledge and Data Engineering</em>, 25.4, 734-750.
+</p>
+<p>Cebeci, Z. and Yıldız, F. (2017) Unsupervised Discretization of Continuous Variables in a Chicken Egg Quality Traits Dataset. <em>Turkish Journal of Agriculture-Food Science and Technology</em>, 5.4, 315-320.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rv &lt;- rnorm(n = 100, mean = 0, sd = 2)
+
+entropy.data(freqs.table = discretization(data.df = rv,
+discretization.method = "fd",
+frequency=TRUE)[[1]])
+
+</code></pre>
+
+
+</div>

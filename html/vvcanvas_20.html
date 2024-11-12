@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>get_calendar_events</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get Calendar Events from Canvas LMS API</h2>
+
+<h3>Description</h3>
+
+<p>Retrieve the paginated list of calendar events or assignments for the current user.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">get_calendar_events(
+  canvas,
+  type = "event",
+  start_date = NULL,
+  end_date = NULL,
+  undated = FALSE,
+  all_events = FALSE,
+  context_codes = NULL,
+  excludes = NULL,
+  includes = NULL,
+  important_dates = FALSE,
+  blackout_date = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>canvas</code></td>
+<td>
+<p>A list containing the 'api_key' and 'base_url' for authentication.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>The type of events to retrieve. Default is "event". Allowed values: event, assignment.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start_date</code></td>
+<td>
+<p>Only return events since the start_date (inclusive). Defaults to today.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>end_date</code></td>
+<td>
+<p>Only return events before the end_date (inclusive). Defaults to start_date.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>undated</code></td>
+<td>
+<p>Defaults to false (dated events only). If true, only return undated events and ignore start_date and end_date.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all_events</code></td>
+<td>
+<p>Defaults to false (uses start_date, end_date, and undated criteria). If true, all events are returned, ignoring start_date, end_date, and undated criteria.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>context_codes</code></td>
+<td>
+<p>List of context codes of courses, groups, users, or accounts whose events you want to see. If not specified, defaults to the current user (i.e personal calendar, no course/group events).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>excludes</code></td>
+<td>
+<p>Array of attributes to exclude. Possible values are “description”, “child_events” and “assignment”.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>includes</code></td>
+<td>
+<p>Array of optional attributes to include. Possible values are “web_conference” and if calendar_series flag is on, “series_natural_language”.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>important_dates</code></td>
+<td>
+<p>Defaults to false. If true, only events with important dates set to true will be returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>blackout_date</code></td>
+<td>
+<p>Defaults to false. If true, only events with blackout date set to true will be returned.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame of calendar events retrieved from the Canvas LMS API.
+</p>
+
+
+</div>

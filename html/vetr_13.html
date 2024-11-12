@@ -1,0 +1,120 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>all_bw</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Verify Values in Vector are Between Two Others</h2>
+
+<h3>Description</h3>
+
+<p>Similar to <code>isTRUE(all(x &gt;= lo &amp; x &lt;= hi))</code> with default settings,
+except that it is substantially faster and returns a string describing the
+first encountered violation rather than FALSE on failure.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">all_bw(x, lo = -Inf, hi = Inf, na.rm = FALSE, bounds = "[]")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>vector logical (treated as integer), integer, numeric, or character.
+Factors are treated as their underlying integer vectors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lo</code></td>
+<td>
+<p>scalar vector of type coercible to the type of <code>x</code>, cannot be NA,
+use <code>-Inf</code> to indicate unbounded (default).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hi</code></td>
+<td>
+<p>scalar vector of type coercible to the type of <code>x</code>, cannot be NA,
+use <code>Inf</code> to indicate unbounded (default), must be greater than or equal to
+<code>lo</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>TRUE, or FALSE (default), whether NAs are considered to be
+in bounds.  Unlike with <code>all()</code>, for <code>all_bw</code> <code>na.rm=FALSE</code> returns an
+error string if there are NAs instead of NA.  Arguably NA, but not NaN,
+should be considered to be in <code style="white-space: pre;">⁠[-Inf,Inf]⁠</code>, but since <code>NA &lt; Inf</code> is NA we
+treat them as always being out of bounds.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bounds</code></td>
+<td>
+<p><code>character(1L)</code> for values between <code>lo</code> and <code>hi</code>:
+</p>
+
+<ul>
+<li> <p>“[]” include <code>lo</code> and <code>hi</code>
+</p>
+</li>
+<li> <p>“()” exclude <code>lo</code> and <code>hi</code>
+</p>
+</li>
+<li> <p>“(]” exclude <code>lo</code>, include <code>hi</code>
+</p>
+</li>
+<li> <p>“[)” include <code>lo</code>, exclude <code>hi</code>
+</p>
+</li>
+</ul>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>You can modify the comparison to be strictly greater/less than via the
+<code>bounds</code> parameter, and the treatment of NAs with <code>na.rm</code>.  Note that NAs are
+considered to be out of bounds by default.  While technically incorrect
+since we cannot know whether an NA value is in or out of bounds, this
+assumption is both conservative and convenient.  Zero length <code>x</code> will always
+succeed.
+</p>
+<p>If <code>x</code> and <code>lo</code>/<code>hi</code> are different types, <code>lo</code>/<code>hi</code> will be coerced to the
+type of <code>x</code>.  When <code>lo</code>/<code>hi</code> are numeric and <code>x</code> is integer, if <code>lo</code>/<code>hi</code>
+values are outside of the integer range then that side will be treated as if
+you had used <code>-Inf</code>/<code>Inf</code>.  <code>-Inf</code> and <code>Inf</code> mean <code>lo</code> and <code>hi</code> will be
+unbounded for all data types.
+</p>
+
+
+<h3>Value</h3>
+
+<p>TRUE if all values in <code>x</code> conform to the specified bounds, a string
+describing the first position that fails otherwise
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">all_bw(runif(100), 0, 1)
+all_bw(runif(100) * 2, 0, 1)
+all_bw(NA, 0, 1)              # This is does not return NA
+all_bw(NA, 0, 1, na.rm=TRUE)
+
+vec &lt;- c(runif(100, 0, 1e12), Inf, 0)
+all_bw(vec, 0)      # All +ve numbers
+all_bw(vec, hi=0)   # All -ve numbers
+all_bw(vec, 0, bounds="(]") # All strictly +ve nums
+all_bw(vec, 0, bounds="[)") # All finite +ve nums
+</code></pre>
+
+
+</div>

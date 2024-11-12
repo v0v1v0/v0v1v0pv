@@ -1,0 +1,418 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visielse</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function <code>visielse</code>
+</h2>
+
+<h3>Description</h3>
+
+<p><code>visielse</code> plots the graphic from time data and build an object class
+<code>ViSigrid</code> with, at least, the time data of each punctual action defined
+in the <code>ViSibook</code> for all subjects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visielse(X, book = NULL, is.ViSibook = FALSE, doplot = TRUE,
+  Xsup = NULL, method = "global", group = NULL, grwithin = NULL,
+  informer = "median", tests = TRUE, threshold.test = 0.01,
+  quantity = "N", pixel = 20, t_0 = 0, sorted.line = TRUE,
+  decrgr2 = FALSE, max_tps = NULL, colvect = NULL, ncolvect = NULL,
+  times = FALSE, timeformat = c("hh:mm:ss"), idsubject = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>A <code>data.frame</code> or <code>matrix</code>. <code>X</code> stores punctual action timestamps.
+The actions are defined in <code>book</code>, and X columns names should correspond to the slot "vars" of <code>book</code>.
+X must also have a column to identify individuals (id column).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>book</code></td>
+<td>
+<p>A <code>data.frame</code> or a <code>ViSibook</code> or NULL.  <code>book</code> stores the process structure. </p>
+
+<ul>
+<li>
+<p> If it is a <code>data.frame</code> it should contains at least the columns <strong>vars, label, typeA, showorder, deb, fin </strong>.
+Optionally, other characteristics can be filled : <strong>GZDebn,  GZFin, Repetition, BZBeforeDeb, BZBeforeFin, BZAfterDeb, BZAfterFin, BZLong , BZLtype </strong>.
+</p>
+</li>
+<li>
+<p> If it is a <code>ViSibook</code> it should correspond to the columns names of X.
+</p>
+</li>
+<li>
+<p> If it is <code>NULL</code> the process is the ordered list of punctual actions given by the columns names of X.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>is.ViSibook</code></td>
+<td>
+<p>A logical </p>
+ <ul>
+<li> <p><code>FALSE</code> if book is a <code>data.frame</code> or <code>NULL</code>. </p>
+</li>
+<li> <p><code>TRUE</code> is book is a ViSibook.</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>doplot</code></td>
+<td>
+<p>A logical If <code>FALSE</code>, the graphic is not plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Xsup</code></td>
+<td>
+<p>A <code>data.frame</code> or <code>matrix</code> storing supplementary time data,  <strong>all individuals in</strong>  <code>Xsup</code>  <strong>must be in </strong> <code>X</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>In { <code>"global"</code> ,  <code>"cut"</code> ,  <code>"join"</code> , <code>"within"</code> }.
+<code>method</code> specifies the plotting method, see <code>details</code>. If <code>group</code> is <code>NULL</code>,
+<code>method</code> is set to <code>"global"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>A <code>factor</code> with two <code>levels</code>.
+<code>group</code> indicates the group attributed to the individuals,
+it has same the length as the number of rows of <code>X</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grwithin</code></td>
+<td>
+<p>A level of <code>group</code>.
+If <code>method</code> is set to <code>within</code>, <code>grwithin</code> specifies the group to consider.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>informer</code></td>
+<td>
+<p>In { "<code>NULL</code>" , "<code>median</code>" , "<code>mean</code>" }.
+If <code>informer</code> is set
+to "median" the median and quartiles are computed,
+if it is set to "mean" the  mean and standard deviation are. If <code>informer</code> is <code>NULL</code> no indicators are computed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tests</code></td>
+<td>
+<p>A boolean.
+When <code>informer</code> is not NULL and <code>group</code> is defined, if <code>tests</code> is <code>TRUE</code>, tests are computed to compare groups.
+If the parameter <code>informer</code> is set to "<code>mean</code>",
+the function <code>wilcox.test()</code> is used, if <code>informer</code> is set to "<code>median</code>" the function <code>mood.test()</code> is used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threshold.test</code></td>
+<td>
+<p>A numeric between 0 and  1.
+<code>threshold.test</code> is the value of the p-value under which the H0 hypothesis
+of the test is rejected when <code>tests</code> is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quantity</code></td>
+<td>
+<p>In { "<code>N</code>" , "<code>dens</code>" }. <code>quantity</code> allows choosing the quantity represented for punctual action
+When <code>quantity</code> is set to "N" the number of individuals is considered. Otherwise when it
+is set to "dens" proportion of individuals is considered instead. If <code>group</code> is defined and
+<code>method</code> set to "cut" or "within", this proportion is calculated regarding each represented group.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pixel</code></td>
+<td>
+<p>An integer.
+It is the number of unit of time under which individuals are aggregated in the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t_0</code></td>
+<td>
+<p>either 0, either a value of the slot "<code>vars</code>" in <code>book</code>,
+<code>t_0</code> indicates the starting time to plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sorted.line</code></td>
+<td>
+<p>A boolean.
+When <code>sorted.line</code> is <code>TRUE</code>, it allows long actions to be sorted by starting time.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>decrgr2</code></td>
+<td>
+<p>A boolean. When sorted.line is TRUE and decrgr2 is TRUE, long actions of the second group are plotted in decreasing order by starting times.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_tps</code></td>
+<td>
+<p>A numeric, <code>&gt;0</code>. <code>max_tps</code> is the maximum time used to build the grid in the plot.
+<code>max_tps</code> is useful when <code>Xsup</code> is given. If <code>max_tps</code> is <code>NULL</code> it is automatically computed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colvect</code></td>
+<td>
+<p>A <code>matrix</code> containing colors.
+Colors are automatically computed if <code>colvect</code> is <code>NULL</code>.
+If <code>group</code> is not <code>NULL</code> colvect should have two rows otherwise one.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncolvect</code></td>
+<td>
+<p>A <code>numeric</code>.
+<code>ncolvect</code> indicates the number of columns of <code>colvect</code>. Its default setting is <code>dim(X)[1]</code>.
+<code>ncolvect</code> is considered only if <code>colvect</code> is <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>times</code></td>
+<td>
+<p>A boolean. If <code>times</code> is <code>TRUE</code>, it indicates that <code>X</code> contains data in a time format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>timeformat</code></td>
+<td>
+<p>time format.  If <code>times</code> is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>idsubject</code></td>
+<td>
+<p>An integer between 1 and <code>dim(X)[2]</code>.  <code>idsubject</code> indicates the
+number of the column of X that contains individuals id numbers.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<ul>
+<li> <p><code>method</code>    </p>
+
+<ul>
+<li> <p><code>global</code> :  The plot of the ViSigrid object will not consider the parameter <code>group</code> and plot indistinctly all individuals. 
+</p>
+</li>
+<li> <p><code>cut</code> : In the plot of the ViSigrid object, each group will be plotted separately, one under the other with different colors. 
+</p>
+</li>
+<li>  <p><code>join</code> : In the plot of the ViSigrid object, groups are spatially mixed but they are represented by different colors. 
+</p>
+</li>
+<li>
+<p><code>within</code> : In the plot of the ViSigrid object, all individuals are plotted together then the group specified in <code>grwithin</code>
+is plotted another time underneath. 
+</p>
+</li>
+</ul>
+</li>
+<li> <p><code>informer</code>
+</p>
+<p>The parameter <code>informer</code> allows users to choose the statistics to be plotted. <code>informer</code> can take three values:
+</p>
+
+<ul>
+<li> <p><code>median</code>: Median and quartiles are calculated for each action, using the function
+quantile from the package stats. This is the default value.
+</p>
+</li>
+<li>
+<p><code>mean</code>: Mean and standard deviation are calculated for each action, using the
+functions mean and var from the package stats.
+</p>
+</li>
+<li>
+<p><code>NULL</code>: no indicators are computed.
+</p>
+</li>
+</ul>
+<p>When a group is defined, statistics are calculated per group if the method cut or
+within is chosen.
+</p>
+<p>When plotting the <code>ViSigrid</code> object, statistics for punctual actions are represented by
+white circles linked by a line. For long action, only a black line is plotted starting at 
+the median (or mean) value of the punctual action staring times. The line length represents
+the median (or mean) of the long action duration.
+Informers are computed directly on the given matrix for punctual action.
+And for long actions, it is based on the difference between the punctual action defining its beginning and the one defining its ending.
+
+</p>
+</li>
+<li> <p><code>tests</code> and <code>threshold.test</code>
+</p>
+<p>As for the parameter informer, tests are computed on the given
+matrix or data.frame X for a punctual action. And for a long action, it is calculated on its difference between its beginning and its ending punctual actions.
+In  <code>plot-ViSigrid-method</code>, results of the tests are represented by a star only when the
+resulted p-value is bellow or equal to value defined by the parameter threshold.test.
+
+</p>
+</li>
+<li> <p><code>pixel</code>
+</p>
+<p>The parameter pixel represents the number of unit of time under which individuals
+are aggregated for punctual action in the plot. When the parameter pixel is too
+small the information represented will be too much aggregated to allow interpretation.
+</p>
+<p>For punctual actions data are aggregated in a matrix <code class="reqn">M</code> . The number of row of <code class="reqn">M</code> is the
+number of action and its number of columns is  <code class="reqn">[ ( max(X)-t_{0} )/pixel]</code>.
+</p>
+<p><code class="reqn">M_{i,j}</code> contains the number of observations of the <code class="reqn">i</code>-th punctual action (by the order
+of the ViSibook object) between <code class="reqn">t_0 + (j-1)pixel</code> included and
+<code class="reqn">t_0 + j*pixel</code> excluded.
+
+</p>
+</li>
+<li> <p><code>t_0</code>
+</p>
+<p>The origin of the graphic can be set using the parameter t_0. There is two ways to define it:
+</p>
+
+<ul>
+<li>
+<p>A number:  set to 0__. It can be change at convenience, but for long actions black zones will not
+be drawn, and for punctual actions black and green zones will not be translated.
+</p>
+</li>
+<li>
+<p>The name of a punctual action: To set the origin of the graphic to the moment
+when the action was done for each individual. Black and green zones will not be translated as well.
+</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>x can also has the columns : GZDebn,  GZFin, Repetition, BZBeforeDeb, BZBeforeFin, BZAfterDeb, BZAfterFin, BZLong , BZLtype
+</p>
+
+
+<h3>Value</h3>
+
+<p>a ViSigrid object.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Classes <code>ViSigrid</code> and <code>ViSibook</code>.
+The method plot for ViSigrid object <code>plot-ViSigrid-method</code> for examples.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">coffee &lt;- c(  58, 11,  5, 53, 53, 59, 24, 59, 46, 20)
+fill_coffee &lt;- c(162,  57,103,154,165,132,  74, 107, 104,  93)
+fill_water &lt;- c(  66,  92,54, 78, 74, 114, 91, 129, 71, 56)
+push_B &lt;- c( 74, 99, 62, 84, 83, 120, 95, 129, 80, 63 )
+drink &lt;- c( 472, 176, 475, 283, 265, 207, 234, 184, 490, 520)
+X &lt;- data.frame(id = seq(1,10), coffee, fill_coffee,fill_water,push_B,drink)
+library(ViSiElse)
+visi1 &lt;- visielse(X)
+
+#### Changing the pixel of time
+
+visi1 &lt;- visielse(X, pixel = 10)
+# Plot the mean and standart deviation
+
+visi1 &lt;- visielse(X,informer = "mean")
+
+#### Do not plot indicators
+visi1 &lt;- visielse(X,informer = NULL)
+
+
+# Extraction of the visibook from the data
+
+visi1 &lt;- visielse(X,informer = NULL, doplot = FALSE)
+book &lt;- visi1@book
+plot(book)
+
+#### Changing labels
+
+book[,2]&lt;- c("Taking the coffee",
+             "Fill the machine with coffee",
+             "Fill the tank with water",
+             "Push the Button",
+             "Drink the coffee")
+plot(book)
+visi1 &lt;- visielse(X, book=book, is.ViSibook = TRUE,informer = NULL)
+
+
+#### Change the order of Actions in the process
+
+book[,4]&lt;- c(5,1,2,4,3)
+plot(book)
+visi1 &lt;- visielse(X, book=book, is.ViSibook = TRUE)
+
+
+
+#### Adding a long Actions
+
+visi1 &lt;- visielse( X )
+book &lt;- ConvertFromViSibook( visi1@book ) # Convert book into data.frame
+add_delay &lt;- c( "delay_coffee_push","Preparation","l","6","coffee","push_B")
+book[6,] &lt;- add_delay
+book
+
+
+### ViSiElse representation of long actions
+
+visi2 &lt;- visielse( X=X , book=book,informer=NULL)
+
+## Green &amp; Black zones
+
+book$GZDeb &lt;- c(NA,60,NA,NA,NA,NA)
+book$GZFin &lt;- c(NA,120,NA,NA,NA,NA)
+book$BZBeforeDeb &lt;- c(NA,0,NA,NA,NA,NA)
+book$BZBeforeFin &lt;- c(NA,30,NA,NA,NA,NA)
+book$BZAfterDeb &lt;- c(NA,180,NA,NA,NA,NA)
+book$BZAfterFin &lt;- c(NA,Inf,NA,NA,NA,NA)
+book$BZLong &lt;- c(rep(NA,5),150)
+book$BZLtype &lt;- c(rep(NA,5),"time")
+visi1 &lt;- visielse( X, book=book , informer = NULL)
+
+book$BZLtype &lt;- c(rep(NA,5),"span")
+visi1 &lt;- visielse( X, book=book ,informer = NULL)
+
+
+## Group
+
+### Method : Cut
+group &lt;- c( "group2","group1","group2","group1","group1",
+             "group2","group1","group1","group1","group2")
+visi1 &lt;- visielse( X,group=group, book=book ,informer = NULL, method = "cut")
+
+visi1 &lt;- visielse( X,group=group, book=book ,informer = NULL, method = "join")
+
+visi1 &lt;- visielse( X,group=group, book=book ,informer = NULL, method = "within",grwithin = "group1")
+</code></pre>
+
+
+</div>

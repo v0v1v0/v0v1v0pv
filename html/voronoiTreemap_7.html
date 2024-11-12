@@ -1,0 +1,162 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vt_d3</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Voronoi Treemap in an htmlwidget</h2>
+
+<h3>Description</h3>
+
+<p>Function to generate an htmlwidget with a voronoi treemap
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vt_d3(data, elementId = NULL, width = NULL, height = NULL,
+  seed = NULL, title = NULL, legend = FALSE, legend_title = NULL,
+  footer = NULL, label = TRUE, color_circle = "#aaaaaa",
+  color_border = "#ffffff", color_label = "#000000",
+  size_border = "1px", size_border_hover = "3px",
+  size_circle = "2px")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a correct json data object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>elementId</code></td>
+<td>
+<p>optional a custom elementId to be returned</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p>width of the widget</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p>height of the widget</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>if defined, the plot is fixed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>NULL or a string for the title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+<p>TRUE/FALSE if a legend should be printed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend_title</code></td>
+<td>
+<p>NULL or a string for the title of the legend</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>footer</code></td>
+<td>
+<p>NULL or a string for the footer text</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label</code></td>
+<td>
+<p>TRUE/FALSE if the labels should be printed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color_circle</code></td>
+<td>
+<p>color for the outer circle</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color_border</code></td>
+<td>
+<p>color for the inner lines</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color_label</code></td>
+<td>
+<p>color for the label in the plot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size_border</code></td>
+<td>
+<p>thickness of the borders in css style, e.g. '1px'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size_border_hover</code></td>
+<td>
+<p>thickness of the borders when hovering in css style, e.g. '3px'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size_circle</code></td>
+<td>
+<p>thickness of the circle in css style, e.g. '2px'</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>The JavaScript library d3-voronoi treemap can be found here <a href="https://github.com/Kcnarf/d3-voronoi-treemap">https://github.com/Kcnarf/d3-voronoi-treemap</a>
+and the example is based on the
+remake of HowMuch.net's article 'The Global Economy by GDP' by _Kcnarf <a href="https://bl.ocks.org/Kcnarf/fa95aa7b076f537c00aed614c29bb568">https://bl.ocks.org/Kcnarf/fa95aa7b076f537c00aed614c29bb568</a>.
+</p>
+
+
+<h3>References</h3>
+
+<p>Arlind Nocaj and Ulrik Brandes. (2012). Computing Voronoi Treempas: Faster, Simpler and Resolution-independent.
+Computer Graphics Forum. Vol.31. 855-864.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vt_d3(vt_export_json(vt_testdata()))
+data(ExampleGDP)
+gdp_json &lt;- vt_export_json(vt_input_from_df(ExampleGDP))
+vt_d3(gdp_json)
+data(canada)
+canada$codes &lt;- canada$h3
+canada &lt;- canada[canada$h1=="Canada",]
+canadaH &lt;- vt_input_from_df(canada,scaleToPerc = FALSE)
+vt_d3(vt_export_json(canadaH))
+#without label
+vt_d3(vt_export_json(canadaH), label=FALSE)
+#Example with coloring from scales package
+library(scales)
+canada$color &lt;- seq_gradient_pal()(exp(canada$weight)/500)
+canadaH &lt;- vt_input_from_df(canada,scaleToPerc = FALSE)
+vt_d3(vt_export_json(canadaH))
+</code></pre>
+
+
+</div>

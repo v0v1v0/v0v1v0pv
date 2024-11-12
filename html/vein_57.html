@@ -1,0 +1,159 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>emis_evap</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimation of evaporative emissions</h2>
+
+<h3>Description</h3>
+
+<p><code>emis_evap</code> estimates evaporative emissions from
+EMEP/EEA emisison guidelines
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">emis_evap(
+  veh,
+  x,
+  ed,
+  hotfi,
+  hotc,
+  warmc,
+  carb = 0,
+  p,
+  params,
+  pro_month,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>veh</code></td>
+<td>
+<p>Numeric or data.frame of Vehicles with untis 'veh'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Numeric which can be either, daily mileage by age of use
+with units 'lkm', number of trips or number of proc. When it
+has units 'lkm', all the emission factors must be in 'g/km'.
+When ed is in g/day, x it is the number of days (without units).
+When hotfi, hotc or warmc are in g/trip, x it is the number of trips (without units).
+When hotfi, hotc or warmc are in g/proced, x it is the number of proced (without units).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ed</code></td>
+<td>
+<p>average daily evaporative emissions. If x has units 'lkm', the units
+of ed must be 'g/km', other case, this are simply g/day (without units).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hotfi</code></td>
+<td>
+<p>average hot running losses or soak evaporative factor
+for vehicles with fuel injection and returnless fuel systems.
+If x has units 'lkm', the units of ed must be 'g/km',
+other case, this is simply g/trip or g/proced</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hotc</code></td>
+<td>
+<p>average running losses or soak evaporative factor for vehicles with
+carburetor or fuel return system
+for vehicles with fuel injection and returnless fuel systems.
+If x has units 'lkm', the units of ed must be 'g/km',</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>warmc</code></td>
+<td>
+<p>average cold and warm running losses or soak evaporative factor
+for vehicles with carburetor or fuel return system
+for vehicles with fuel injection and returnless fuel systems.
+If x has units 'lkm', the units of ed must be 'g/km',</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>carb</code></td>
+<td>
+<p>fraction of gasoline vehicles with carburetor or fuel return system.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>Fraction of trips finished with hot engine</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>params</code></td>
+<td>
+<p>Character; Add columns with information to returning data.frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pro_month</code></td>
+<td>
+<p>Numeric; monthly profile to distribute annual mileage in each month.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical; To show more information</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>numeric vector of emission estimation in grams
+</p>
+
+
+<h3>Note</h3>
+
+<p>When veh is a "Vehicles" data.frame, emission factors are evaluated till the
+number of columns of veh. For instance, if the length of the emission factor is 20
+but the number of columns of veh is 10, the 10 first emission factors are used.
+</p>
+
+
+<h3>References</h3>
+
+<p>Mellios G and Ntziachristos 2016. Gasoline evaporation. In:
+EEA, EMEP. EEA air pollutant emission inventory guidebook-2009. European
+Environment Agency, Copenhagen, 2009
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ef_evap</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+(a &lt;- Vehicles(1:10))
+(lkm &lt;- units::as_units(1:10, "km"))
+(ef &lt;- EmissionFactors(1:10))
+(ev &lt;- emis_evap(veh = a, x = lkm, hotfi = ef))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

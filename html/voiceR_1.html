@@ -1,0 +1,194 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>autoExtract</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Automatically analyze audio files</h2>
+
+<h3>Description</h3>
+
+<p>Automatically analyzes audio files and outputs a data.frame with their main extracted audio features.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">autoExtract(
+  path = ".",
+  audioList = list(),
+  filter = NA,
+  fileType = "wav",
+  fileNamePattern = "ID_Condition_Dimension",
+  sep = "_",
+  parallel = FALSE,
+  recursive = FALSE,
+  preprocess = FALSE,
+  extended = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>path</code></td>
+<td>
+<p>An optional character string indicating the path to the folder containing the audio files. Default corresponds to the current working directory. (You should only define it if the audios you wish to analyze are not already read in R. Otherwise define the audioList parameter).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>audioList</code></td>
+<td>
+<p>An optional list of Wave objects to analyze.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filter</code></td>
+<td>
+<p>An optional character vector indicating IDs, Conditions, Dimensions, or other patterns used to filter for specific audio files. Default corresponds to NA.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fileType</code></td>
+<td>
+<p>A character string indicating the audio file format (wav or mp3). Default corresponds to wav.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fileNamePattern</code></td>
+<td>
+<p>A character string indicating the naming format of the audio files, such as "ID-Condition-Dimension", "Condition_ID_Dimension" or just "ID". Default corresponds to "ID".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sep</code></td>
+<td>
+<p>A non alpha-numeric character that acts as separator between the different naming components. Default corresponds to an underscore. This field can be ignored if the audio file name only contains an ID component.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+<p>Logical value indicating whether to use parallelism to extract the different audio characteristics to enhance computational performance. Default corresponds to FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>recursive</code></td>
+<td>
+<p>Logical value indicating whether subdirectories in the specified directory should be included when searching for voice files. Default corresponds to FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>preprocess</code></td>
+<td>
+<p>Logical value indicating whether to preprocess (normalize amplitude and remove background noise) the audio files before extraction and analysis. Default corresponds to FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extended</code></td>
+<td>
+<p>Logical value indicating whether all features extracted by the soundgen package should be inputted. Default corresponds to FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other options used to control preprocessing behavior.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The voiceR package requires the audio file names to follow a specific pattern, in which the different components are separated by a non alphanumeric character (e.g., “_”). File name components refer to:
+</p>
+
+<dl>
+<dt>ID</dt>
+<dd>
+<p>Unique identifier of the speaker or recording.</p>
+</dd>
+<dt>Condition</dt>
+<dd>
+<p>Experimental condition or other grouping variable.</p>
+</dd>
+<dt>Dimension</dt>
+<dd>
+<p>Additional survey or experiment information (e.g., additional conditions).</p>
+</dd>
+</dl>
+<p>Order and presence of the different components is not important, as long as at least one of the aforementioned components is present.
+Furthermore, non-relevant components can be skipped by specifying “Null” in its position such as: ID_Null_Condition. Valid name patterns are, for example, 876h Interior (ID Condition), Exterior-3543h (Condition-ID), 983b-Exterior-q1 (ID-Condition-Dimension) or 455k (ID). All voice files within one session need to follow the same file naming pattern.
+Note: the non-alpha numeric separator should also be specified as sep.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data.frame is created with the following audio features:
+</p>
+
+<dl>
+<dt>duration</dt>
+<dd>
+<p>Total duration in seconds.</p>
+</dd>
+<dt>voice_breaks_percent</dt>
+<dd>
+<p>Proportion of unvoiced frames.</p>
+</dd>
+<dt>RMS_env</dt>
+<dd>
+<p>Root mean square of the amplitude envelope.</p>
+</dd>
+<dt>mean_loudness</dt>
+<dd>
+<p>Average subjective loudness in sone.</p>
+</dd>
+<dt>mean_F0</dt>
+<dd>
+<p>Average fundamental frequency in Hertz.</p>
+</dd>
+<dt>sd_F0</dt>
+<dd>
+<p>Standard deviation of the fundamental frequency in Hertz.</p>
+</dd>
+<dt>mean_entropy</dt>
+<dd>
+<p>Average Wiener entropy. A value of 0 indicates a pure tone, while a value of 1 indicates white noise.</p>
+</dd>
+<dt>mean_HNR</dt>
+<dd>
+<p>Average Harmonics-to-Noise Ratio.</p>
+</dd>
+<dt>ID</dt>
+<dd>
+<p>ID component of the audio file.</p>
+</dd>
+<dt>Condition</dt>
+<dd>
+<p>If fileNamePattern and audio names include a Condition, an additional column with the Condition component of the audio file is included.</p>
+</dd>
+<dt>Dimension</dt>
+<dd>
+<p>If fileNamePattern and audio names include a Dimension, an additional column with the Dimension component of the audio file is included.</p>
+</dd>
+</dl>
+<h3>See Also</h3>
+
+<p>[soundgen::analyze()], [seewave::duration()], [seewave::rms()], [seewave::env()]
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+audioData &lt;- autoExtract(audioList = testAudioList, filter = c("5b438f516066ad470d3be72c52005251"))
+
+
+</code></pre>
+
+
+</div>

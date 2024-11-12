@@ -1,0 +1,187 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>invweibullDist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Inverse Weibull Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random numbers 
+generator for the Inverse Weibull Distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    dinvweibull(x, scale = 1, shape, log = FALSE)
+    pinvweibull(q, scale = 1, shape, lower.tail = TRUE, log.p = FALSE)
+    qinvweibull(p, scale = 1, shape, lower.tail = TRUE, log.p = FALSE)
+    rinvweibull(n, scale = 1, shape)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, p, n</code></td>
+<td>
+
+<p>Same as <code>Weibull</code>. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale, shape</code></td>
+<td>
+ 
+<p>Scale and shape parameters, same as <code>Weibull</code>.
+Both must be positive. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log, log.p, lower.tail</code></td>
+<td>
+
+<p>Same as <code>Weibull</code>. 
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Inverse Weibull density with parameters scale = <em>b</em> and 
+shape = <code class="reqn">s</code>, is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = s b^s y^{-s-1} \exp{[-(y/b)^{-s}}],</code>
+</p>
+
+<p>for <code class="reqn">y &gt; 0</code>, <code class="reqn">b &gt; 0</code>, and <code class="reqn">s &gt; 0</code>. 
+</p>
+<p>The Weibull distribution and the Inverse Weibull distributions are related
+as follows:
+</p>
+<p>Let <code class="reqn">X</code> be a Weibull random variable with paramaters scale =<code class="reqn">b</code>
+and shape =<code class="reqn">s</code>. Then, the random variable <code class="reqn">Y = 1/X</code> has 
+the Inverse Weibull density with parameters scale = <code class="reqn">1/b</code> and 
+shape = <code class="reqn">s</code>. Thus, algorithms of <em>[dpqr]-Inverse Weibull</em> 
+underlie on <code>Weibull</code>.
+</p>
+<p>Let <code class="reqn">Y</code> be a r.v. distributed as Inverse Weibull (<code class="reqn">b, s</code>).
+The <code class="reqn">k^{th}</code> moment exists for 
+<code class="reqn">-\infty &lt; k &lt; s</code> and is given by
+</p>
+<p style="text-align: center;"><code class="reqn">E[Y^k] = b^{k} \ \Gamma(1 - k/s).</code>
+</p>
+
+<p>The mean (if <code class="reqn">s &gt; 1</code>) and variance (if <code class="reqn">s &gt; 2</code>) are
+</p>
+<p style="text-align: center;"><code class="reqn">E[Y] = b \ \Gamma(1 - 1/s); \ \ \ Var[Y] = b^{2} \ 
+  [\Gamma(1 - 2/s) - (\Gamma(1 - 1/s))^2].</code>
+</p>
+
+
+
+
+
+<p>Here, <code class="reqn">\Gamma(\cdot)</code> is the gamma function as in 
+<code>gamma</code>. 
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dinvweibull()</code> returns the density, <code>pinvweibull()</code> computes the 
+distribution function, <code>qinvweibull()</code> gives the quantiles, and 
+<code>rinvweibull()</code> generates random numbers from the Inverse Weibull 
+distribution.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>The order of the arguments of <em>[dpqr]-Inverse Weibull</em> does not match 
+those in <code>Weibull</code>.
+</p>
+
+
+<h3>Note</h3>
+
+
+
+
+<p>Small values of <em>scale</em> or <em>shape</em> will provide Inverse Weibull 
+values too close to zero. Then, function <code>rinvweibull()</code> with such 
+characteristics will return either values too close to zero or values
+represented as zero in computer arithmetic.
+</p>
+<p>The Inverse Weibull distribution, which is that of <code class="reqn">X</code> where 
+<code class="reqn">1/X</code> has the Weibull density, is known as the log-Gompertz
+distribution. Thus, in order to emphazise the continuity concept of the 
+Inverse Weibull density, if <code class="reqn">x = 0</code>, then <code>dinvweibull</code> 
+returns zero, which is the limit of such a density when <code class="reqn">'x'</code> 
+tends to zero.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and T. W. Yee.</p>
+
+
+<h3>References</h3>
+
+<p>Kleiber, C. and Kotz, S. (2003) 
+<em>Statistical Size Distributions in Economics and Actuarial Sciences</em>.
+Wiley Series in Probability and Statistics. Hoboken, New Jersey, USA.
+</p>
+<p>Abramowitz, M. and Stegun, I. A. (1972) 
+<em>Handbook of Mathematical Functions with Formulas, Graphs, and 
+Mathematical Tables</em>.
+ch.6, p.255. Dover, New York, USA.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Weibull</code>,
+<code>gamma</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  #(1) ______________
+  n        &lt;- 20
+  scale    &lt;- exp(2)
+  shape    &lt;- exp(1)
+  data.1   &lt;- runif(n, 0, 1)
+  data.q   &lt;- qinvweibull(-data.1, scale = scale, shape = shape, log.p = TRUE)  
+  data.p   &lt;- -log(pinvweibull(data.q, scale = scale, shape = shape)) 
+  arg.max  &lt;- max(abs(data.p - data.1))     # Should be zero
+  
+
+  #(2)_________________
+   scale  &lt;- exp(1.0)
+    shape &lt;- exp(1.2)
+    xx    &lt;- seq(0, 10.0, len = 201)
+    yy    &lt;- dinvweibull(xx, scale = scale, shape = shape)
+    qtl   &lt;- seq(0.1, 0.9, by =0.1)
+    d.qtl &lt;- qinvweibull(qtl, scale = scale, shape = shape)
+    plot(xx, yy, type = "l", col = "red", 
+         main = "Red is density, blue is cumulative distribution function",
+         sub  = "Brown dashed lines represent the 10th, ... 90th percentiles",
+         las = 1, xlab = "x", ylab = "", ylim = c(0,1))
+    abline(h = 0, col= "navy", lty = 2)
+    lines(xx, pinvweibull(xx, scale = scale, shape = shape), col= "blue")
+    lines(d.qtl, dinvweibull(d.qtl, scale = scale, shape = shape), 
+          type ="h", col = "brown", lty = 3)
+        
+</code></pre>
+
+
+</div>

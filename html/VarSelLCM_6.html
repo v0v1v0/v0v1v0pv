@@ -1,0 +1,54 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BIC</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>BIC criterion.</h2>
+
+<h3>Description</h3>
+
+<p>This function gives the BIC criterion of an instance of <code>VSLCMresults</code>. 
+BIC is computed according to the formula </p>
+<p style="text-align: center;"><code class="reqn">BIC=log-likelihood - 0.5*\nu*log(n)</code>
+</p>
+ 
+<p>where  <code class="reqn">\nu</code> denotes the number of parameters in the fitted model and <code class="reqn">n</code> represents the sample size.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'VSLCMresults'
+BIC(object)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>instance of <code>VSLCMresults</code>.</p>
+</td>
+</tr></table>
+<h3>References</h3>
+
+<p>Schwarz, G. (1978). Estimating the dimension of a model. Annals of Statistics, 6(2), 461-464.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Data loading:
+data(heart)
+
+# Cluster analysis without variable selection (number of clusters between 1 and 3)
+res&lt;- VarSelCluster(heart[,-13], 2, vbleSelec = FALSE)
+
+# Get the BIC value
+BIC(res)
+</code></pre>
+
+
+</div>

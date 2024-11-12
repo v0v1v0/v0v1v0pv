@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>interpolateRaster</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Interpolate patchily sampled rasters</h2>
+
+<h3>Description</h3>
+
+<p>Uses thin plate spline regression from
+<code>fields</code> package to interpolate missing two-dimensional
+raster values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">interpolateRaster(inputRaster, fast = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>inputRaster</code></td>
+<td>
+<p>An object of class <code>SpatRaster</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fast</code></td>
+<td>
+<p>A logical operator. Setting to <code>TRUE</code> triggers use
+of <code>fastTps</code> instead of <code>Tps</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>For any additional arguments passed to <code>Tps</code> or <code>fastTps</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Missing data values from original raster
+are replaced with interpolated values. User has the
+option of choosing <code>fastTps</code> to speed calculation,
+but be advised that this is only an approximation
+of a true thin plate spline.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class raster
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Tps</code>, <code>fastTps</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(terra)
+library(fields)
+# Create sample raster
+r &lt;- rast(ncol=50, nrow=50)
+values(r) &lt;- 1:2500
+
+# Introduce a "hole"
+values(r)[c(117:127, 167:177, 500:550)] &lt;- NA
+plot(r)
+
+# Patch hole with interpolateRaster
+interpolatedRaster &lt;- interpolateRaster(r)
+plot(interpolatedRaster)
+fastInterp &lt;- interpolateRaster(r, fast = TRUE, aRange = 3.0)
+plot(fastInterp)
+
+
+</code></pre>
+
+
+</div>

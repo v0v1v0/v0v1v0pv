@@ -1,0 +1,162 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vblpcmstart</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate sensible starting configuration for the variational parameter set. 
+</h2>
+
+<h3>Description</h3>
+
+<p>Uses fast methods to generate sensible and coherent values for the parameters of the
+variational method. There are returned as a list and that list may be passed directly to
+vblpcmfit(). User specification of the configuration is recommended as tweaks to this list only. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vblpcmstart(g.network,G=1,d=2,LSTEPS=5e3,model="plain", CLUST=0, B=NULL,
+           lcc=TRUE, edgecovs=NULL,sendcovs=NULL,receivecovs=NULL,
+           socialcovs=NULL,START="FR", seed=NaN)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>g.network</code></td>
+<td>
+<p>a network object
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>G</code></td>
+<td>
+<p>Desired number of groups
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+<p>Desired dimensionality of the latent space
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LSTEPS</code></td>
+<td>
+<p>Number of steps in the log-likelihood forces algorithm
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>model specified as "plain", "rreceiver", "rsender" or "rsocial". See vblpcmcovs for details. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CLUST</code></td>
+<td>
+<p>degree of push to clustering at the start
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>B</code></td>
+<td>
+<p>default intercept value
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lcc</code></td>
+<td>
+<p>logical indicator. TRUE =&gt; analyze largest connected component 
+of g.network only FALSE =&gt; analyze the whole network. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>edgecovs</code></td>
+<td>
+<p>optional edge covariates.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sendcovs</code></td>
+<td>
+<p>optional sender node covariates.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>receivecovs</code></td>
+<td>
+<p>optional receiver node covariates.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>socialcovs</code></td>
+<td>
+<p>optional sociality node covariates.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>START</code></td>
+<td>
+<p>what to start the initial positions with. 
+"FR" for Fruchterman-Reingold. 
+"geodesic" for geodesic distances.
+"laplace" for using the Graph Laplacian.
+"random" for random. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>Optional seed for the random number generator in R. Equivalent to using set.seed(seed). 
+The default NaN value does not call set.seed(). 
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A v.params list containing the latent positions, clustering membership probabilities, etc. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Salter-Townshend
+</p>
+
+
+<h3>See Also</h3>
+
+<p>vblpcmfit, vblpcmcovs
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(sampson)
+### plot the mean posterior positions with initial estimations for variational parameters
+plot(vblpcmstart(samplike,G=3),main="Sampson's Monks: VB Initial Values")
+### plot the mean posterior positions with final estimations for variational parameters
+plot(vblpcmfit(vblpcmstart(samplike,G=3)),main="Sampson's Monks: VB Solution")
+</code></pre>
+
+
+</div>

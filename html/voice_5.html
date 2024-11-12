@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>expand_model</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Expand model</h2>
+
+<h3>Description</h3>
+
+<p>Expand model given <code>y</code> and <code>x</code> variables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">expand_model(y, x, k)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>The Y variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>The X variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>Number of additive components.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>char</code> vector containing the expanded models.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(voice)
+
+expand_model('y', LETTERS[1:4], 1)
+expand_model('y', LETTERS[1:4], 2)
+expand_model('y', LETTERS[1:4], 3)
+expand_model('y', LETTERS[1:4], 4)
+
+# multiple models using apply functions
+nx &lt;- 10 # number of X variables to be used
+models &lt;- lapply(1:nx, expand_model, y = 'y', x = LETTERS[1:nx])
+names(models) &lt;- 1:nx
+models
+sum(sapply(models, length)) # total of models
+</code></pre>
+
+
+</div>

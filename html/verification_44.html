@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>quantile2disc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Convert Continuous Forecast Values to Discrete Forecast Values.</h2>
+
+<h3>Description</h3>
+
+<p>Converts continuous forecast values into discrete forecast values. This is necessary in calculating the quantile score decomposition. Discrete forecasts are defined by the mean value of forecasts within a bin specified by the bin vector (bin boundaries).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">quantile2disc(x, bins)</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A vector of forecast values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bins</code></td>
+<td>
+<p>Vector with bin boundaries</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>new</code></td>
+<td>
+<p>New vector x (continuous forecast values replaced with disretized forecast values)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mids</code></td>
+<td>
+<p>Vector of discrete forecast values</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>This function is used within <code>quantileScore</code>.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Sabrina Bentzien</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- rnorm(100)
+bins &lt;- quantile(x,seq(0,1,length.out=11))
+
+newx &lt;- quantile2disc(x,bins)
+
+</code></pre>
+
+
+</div>

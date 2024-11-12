@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getTurnTakingProbMatrix</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>getTurnTakingProbMatrix: create a vocaldia from a
+data.frame.</h2>
+
+<h3>Description</h3>
+
+<p>Convert a data frame into a vocalisation diagram using counts rather than sampling.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getTurnTakingProbMatrix(df, individual = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>a data frame consisting, minimally, of a column for
+vocalisation/pause start times, a column for end times, and a
+column identifying the speaker, speaker role or 'Floor' (for
+silences).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>individual</code></td>
+<td>
+<p>whether to include individual speakers or group
+them into a single Vocalisation node</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other parameters to be passed to
+<code>getTurnTakingMatrix</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Unlike <code>getSampledVocalMatrix</code>, this function is based
+on transition counts rather than sampled intervals. As a result,
+where in this version self transitions will always be set to 0
+(since a vocalisation by a speaker is never followed by another
+vocalisation by the same speaker) in the sampled version self
+transitons will usually dominate the distribution, since the
+speaker who is speaking now is very likely to be the one who were
+speaking one second ago.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a vocaldia object, consisting of a vocalisation matrix
+(vocmatrix) where cell <code class="reqn">(m,n)</code> contains the probabilities <code class="reqn">P(n|m)</code>
+transitions to node <code class="reqn">n</code> from node <code class="reqn">m</code>, and a table of prior
+probabilities (stationary distribution) per node.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>(Luz, 2013) and  <code>getTurnTakingMatrix</code>.
+</p>
+<p>S. Luz. Automatic identification of experts and performance
+prediction in the multimodal math data corpus through analysis
+of speech interaction. In <em>Proceedings of the 15th ACM on
+International Conference on Multimodal Interaction, ICMI'13</em>,
+pages 575–582, New York, NY, USA, 2013. ACM.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- subset(atddia, id=='Abbott_Maddock_01')
+getTurnTakingProbMatrix(x)
+getTurnTakingProbMatrix(x, individual=TRUE)
+</code></pre>
+
+
+</div>

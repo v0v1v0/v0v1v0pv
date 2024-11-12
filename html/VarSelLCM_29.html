@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VarSelImputation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Imputation of missing values</h2>
+
+<h3>Description</h3>
+
+<p>This function permits imputation of missing values in a dataset by using mixture model.
+Two methods can be used for imputation:
+</p>
+
+<ul>
+<li>
+<p>posterior mean (method="postmean")
+</p>
+</li>
+<li>
+<p>sampling from the full conditionnal distribution (method="sampling")
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">VarSelImputation(obj, newdata, method = "postmean")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>an instance of VSLCMresults  which defines the model used for imputation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>data.frame Dataset containing the missing values to impute.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>character definiting the method of imputation: "postmean" or "sampling"</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Data loading
+data("heart")
+
+# Clustering en 2 classes
+results &lt;- VarSelCluster(heart[,-13], 2)
+
+# Data where missing values will be imputed
+newdata &lt;- heart[1:2,-13]
+newdata[1,1] &lt;- NA
+newdata[2,2] &lt;- NA
+
+# Imputation
+VarSelImputation(results, newdata)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>html_dependency_vue</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Dependencies for Vue</h2>
+
+<h3>Description</h3>
+
+<p>Dependencies for Vue
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">html_dependency_vue(offline = TRUE, minified = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>offline</code></td>
+<td>
+<p><code>logical</code> to use local file dependencies.  If <code>FALSE</code>,
+then the dependencies use cdn as its <code>src</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minified</code></td>
+<td>
+<p><code>logical</code> to use minified (production) version.  Use
+<code>minified = FALSE</code> for debugging or working with Vue devtools.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>htmlDependency</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other dependencies: 
+<code>html_dependency_vue3()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">if(interactive()){
+
+library(vueR)
+library(htmltools)
+
+attachDependencies(
+  tagList(
+    tags$div(id="app","{{message}}"),
+    tags$script(
+    "
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue!'
+      }
+    });
+    "
+    )
+  ),
+  html_dependency_vue()
+)
+}
+</code></pre>
+
+
+</div>

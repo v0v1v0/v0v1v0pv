@@ -1,0 +1,289 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>roc.plot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Relative operating characteristic curve.</h2>
+
+<h3>Description</h3>
+
+<p>This function creates Receiver Operating
+Characteristic (ROC) plots for one or more models.  A ROC curve
+plots the false alarm rate against the hit rate for a
+probablistic forecast for a range of thresholds. The area under
+the curve is viewed as a measure of a forecast's accuracy.  A
+measure of 1 would indicate a perfect model.  A measure of 0.5
+would indicate a random forecast. </p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    ## Default S3 method:
+roc.plot(x, pred, thresholds = NULL, binormal =
+FALSE,   legend = FALSE, leg.text = NULL,  plot = "emp", CI = FALSE,
+n.boot = 1000, alpha = 0.05, tck = 0.01, plot.thres = seq(0.1,
+0.9, 0.1), show.thres = TRUE, main = "ROC Curve", xlab = "False Alarm Rate",
+ylab = "Hit Rate", extra = FALSE,  ...)
+## S3 method for class 'prob.bin'
+roc.plot(x, ...) </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A binary observation (coded {0, 1 } ) or a verification
+object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred</code></td>
+<td>
+<p>A probability prediction on the interval [0,1].  If
+multiple models are compared, this may be a matrix where each
+column represents a different prediction.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thresholds</code></td>
+<td>
+<p>Thresholds may be provided. These thresholds
+will be used to calculate the hit rate ($h$) and false alarm
+rate ($f$).  If thresholds is NULL, all unique thresholds are
+used as a threshold. Alternatively, if the number of bins is
+specified,  thresholds will be calculated using the
+specified numbers of quantiles. </p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>binormal</code></td>
+<td>
+<p> If TRUE, in addition to the empirical ROC curve, the
+binormal ROC curve will be calculated.  To get a plot draw, plot must
+be either “binorm” or “both”.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+<p>Binomial.  Defaults to FALSE indicating whether a legend
+should be displayed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>leg.text</code></td>
+<td>
+<p>Character vector for legend.  If NULL, models are
+labeled  “Model A", “Model B",...</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p>Either “emp” (default), “binorm” or “both” to
+determine which plot is shown.  If set to NULL, a plot is not
+created</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CI</code></td>
+<td>
+<p>Confidence Intervals.  Calculated by bootstrapping
+the observations and prediction, then calculating PODy and
+PODn values.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.boot</code></td>
+<td>
+<p>Number of bootstrap samples.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p> Confidence interval.  By default = 0.05</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tck</code></td>
+<td>
+<p>Tick width on confidence interval whiskers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.thres</code></td>
+<td>
+<p>By default, displays the threshold levels on
+the ROC diagrams.  To surpress these values, set it equal to
+NULL.  If confidence intervals (CI) is set to TRUE, levels
+specified here will determine where confidence interval boxes
+are placed. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.thres</code></td>
+<td>
+<p> Show thresholds for points indicated by
+plot.thres.  Defaults to TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>Title for plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab, ylab</code></td>
+<td>
+<p>Plot axes labels.  Defaults to “Hit Rate”
+and “False Alarm Rate”, for the y and x axes respectively.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extra</code></td>
+<td>
+<p> Extra text describing binormal and empirical lines. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional plotting options.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>If assigned to an object, the following values are reported.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>plot.data</code></td>
+<td>
+<p>The data used to generate the ROC plots.  This
+is a array. Column headers are thresholds, empirical hit and
+false alarm rates, and binormal hit and false alarm rates.  Each
+model is depicted on an array indexed by the third dimension.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>roc.vol</code></td>
+<td>
+<p>The areas under the ROC curves.  By default,this
+is printed on the plots.  Areas and p-values are
+calculated with and without adjustments for ties along with
+the p-value for the area.  These
+values are calculated using <code>roc.area</code>.  The
+fifth column contains the area under the binormal curve, if
+binormal is selected.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>A.boot</code></td>
+<td>
+<p>If confidence intervals are calculated, the area under the ROC curve are returned. </p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>  Other packages in R provide functions to create ROC diagrams and different diagnostics.  The <b>ROCR</b> package provides excellent functions to generate ROC diagrams with lines coded by threshold.  Large datasets are handled by a sampling routine and the user may plot a number of threshold dependent, contingency table scores.  Arguably, this is a superior package with respect to ROC plotting.
+</p>
+<p>There is not a minimum size required to create confidence
+limits or show thresholds.  When there are few data points, it
+is possilbe to make some pretty unattractive graphs. 
+</p>
+<p>The roc.plot method can be used to summarize a "verify, prob.bin" class object created with the verify command.  It is appropriate to use the roc plot for forecast which are not probabilities, but rather forecasts made on a continuous scale.  The roc plot function can be used to summarize such forecasts but it is not possible to use the verify function to summarize such forecasts.  An example is shown below.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich</p>
+
+
+<h3>References</h3>
+
+<p>Mason, I. (1982) “A model for assessment of weather forecasts,”
+<em>Aust. Met. Mag</em> <b>30</b> (1982) 291-303.  
+</p>
+<p>Mason, S.J. and N.E. Graham. (2002) “Areas beneath the
+relative operating characteristics (ROC) and relative operating
+levels (ROL) curves: Statistical significance and interpretation, ”
+<em>Q. J. R. Meteorol. Soc.</em> <b>128</b> pp. 2145-2166.  
+</p>
+<p>Swets, John A. (1996) <em>Signal Detection Theory and ROC Analysis
+in Psychology and Diagnostics</em>, Lawrence Erlbaum Associates, Inc.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>pop </code>  and <code>lines.roc </code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Data from Mason and Graham article.
+
+a&lt;- c(0,0,0,1,1,1,0,1,1,0,0,0,0,1,1)
+b&lt;- c(.8, .8, 0, 1,1,.6, .4, .8, 0, 0, .2, 0, 0, 1,1)
+c&lt;- c(.928,.576, .008, .944, .832, .816, .136, .584, .032, .016, .28, .024, 0, .984, .952)
+
+A&lt;- data.frame(a,b,c)
+names(A)&lt;- c("event", "p1", "p2")
+
+## for model with ties
+roc.plot(A$event, A$p1)
+
+## for model without ties
+roc.plot(A$event, A$p2)
+
+### show binormal curve fit.
+
+roc.plot(A$event, A$p2, binormal = TRUE)
+## Not run: 
+# icing forecast
+
+data(prob.frcs.dat)
+A &lt;- verify(prob.frcs.dat$obs, prob.frcs.dat$frcst/100)
+roc.plot(A, main = "AWG Forecast")
+
+
+# plotting a ``prob.bin'' class object.
+obs&lt;- round(runif(100))
+pred&lt;- runif(100)
+
+A&lt;- verify(obs, pred, frcst.type = "prob", obs.type = "binary")
+
+roc.plot(A, main = "Test 1", binormal = TRUE, plot = "both")
+
+## show confidence intervals.  MAY BE SLOW
+roc.plot(A, threshold = seq(0.1,0.9, 0.1), main = "Test 1", CI = TRUE,
+alpha = 0.1)
+
+###   example from forecast verification website. 
+data(pop)
+d &lt;- pop.convert() ## internal function used to make binary observations for the pop figure.
+### note the use of bins = FALSE !!
+ mod24 &lt;- verify(d$obs_norain, d$p24_norain, bins = FALSE)
+
+ mod48 &lt;- verify(d$obs_norain, d$p48_norain, bins = FALSE)
+
+roc.plot(mod24, plot.thres = NULL)
+lines.roc(mod48, col = 2, lwd = 2)
+leg.txt &lt;- c("24 hour forecast", "48 hour forecast")
+legend( 0.6, 0.4, leg.txt, col = c(1,2), lwd = 2)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

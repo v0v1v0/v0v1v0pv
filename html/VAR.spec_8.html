@@ -1,0 +1,44 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VAR.inv.roots.from.det.cross</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+An example <code>data.frame</code> defining a VAR (Vector autoregression) model.
+</h2>
+
+<h3>Description</h3>
+
+<p>An example <code>data.frame</code> to be used for argument <code>inv.roots.def</code> of function <code>Init.var</code>, when subsequently argument <code>method</code> of function <code>calculate.VAR</code> is set to "from.det.cross".
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">VAR.inv.roots.from.det.cross
+</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A <code>data.frame</code> containing 3 roots (rows) and their multiplicities for the polynomials <code class="reqn">det(z), cross(z)</code>, <code class="reqn">chi.1(z)</code> and <code class="reqn">chi.2(z)</code>, as well as their constants in the first row.</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Init.var</code>, <code>calculate.VAR</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+my.var &lt;- Init.var(grid=501, order.max.init=10, inv.roots.def=VAR.inv.roots.from.det.cross)
+my.var &lt;- calculate.VAR(a.var=my.var,calc.method="from.det.cross",
+                        suppr.spec.check.warn=TRUE)
+print(my.var$validity.msg)
+</code></pre>
+
+
+</div>

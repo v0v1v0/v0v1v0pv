@@ -1,0 +1,190 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>runValse</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>runValse</h2>
+
+<h3>Description</h3>
+
+<p>Main function
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">runValse(
+  X,
+  Y,
+  procedure = "LassoMLE",
+  selecMod = "DDSE",
+  gamma = 1,
+  mini = 10,
+  maxi = 50,
+  eps = 1e-04,
+  kmin = 2,
+  kmax = 3,
+  rank.min = 1,
+  rank.max = 5,
+  ncores_outer = 1,
+  ncores_inner = 1,
+  thresh = 1e-08,
+  grid_lambda = numeric(0),
+  size_coll_mod = 50,
+  fast = TRUE,
+  verbose = FALSE,
+  plot = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>matrix of covariates (of size n*p)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>matrix of responses (of size n*m)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>procedure</code></td>
+<td>
+<p>among 'LassoMLE' or 'LassoRank'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selecMod</code></td>
+<td>
+<p>method to select a model among 'DDSE', 'DJump', 'BIC' or 'AIC'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>integer for the power in the penaly, by default = 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mini</code></td>
+<td>
+<p>integer, minimum number of iterations in the EM algorithm, by default = 10</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxi</code></td>
+<td>
+<p>integer, maximum number of iterations in the EM algorithm, by default = 100</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>real, threshold to say the EM algorithm converges, by default = 1e-4</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kmin</code></td>
+<td>
+<p>integer, minimum number of clusters, by default = 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kmax</code></td>
+<td>
+<p>integer, maximum number of clusters, by default = 10</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rank.min</code></td>
+<td>
+<p>integer, minimum rank in the low rank procedure, by default = 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rank.max</code></td>
+<td>
+<p>integer, maximum rank in the low rank procedure, by default = 5</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncores_outer</code></td>
+<td>
+<p>Number of cores for the outer loop on k</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncores_inner</code></td>
+<td>
+<p>Number of cores for the inner loop on lambda</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thresh</code></td>
+<td>
+<p>real, threshold to say a variable is relevant, by default = 1e-8</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grid_lambda, </code></td>
+<td>
+<p>a vector with regularization parameters if known, by default numeric(0)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size_coll_mod</code></td>
+<td>
+<p>(Maximum) size of a collection of models, by default 50</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fast</code></td>
+<td>
+<p>TRUE to use compiled C code, FALSE for R code only</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>TRUE to show some execution traces</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p>TRUE to plot the selected models after run</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The selected model (except if the collection of models
+has less than 11 models, the function returns the collection as it can not select one using Capushe)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">n = 50; m = 10; p = 5
+beta = array(0, dim=c(p,m,2))
+beta[,,1] = 1
+beta[,,2] = 2
+data = generateXY(n, c(0.4,0.6), rep(0,p), beta, diag(0.5, p), diag(0.5, m))
+X = data$X
+Y = data$Y
+res = runValse(X, Y, kmax = 5, plot=FALSE)
+X &lt;- matrix(runif(100), nrow=50)
+Y &lt;- matrix(runif(100), nrow=50)
+res = runValse(X, Y, plot=FALSE)
+
+</code></pre>
+
+
+</div>

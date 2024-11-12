@@ -1,0 +1,174 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>posnormal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Positive Normal Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Fits a positive (univariate) normal distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">posnormal(lmean = "identitylink", lsd = "loglink",
+          eq.mean = FALSE, eq.sd = FALSE,
+          gmean = exp((-5:5)/2), gsd = exp((-1:5)/2),
+          imean = NULL, isd = NULL, probs.y = 0.10, imethod = 1,
+          nsimEIM = NULL, zero = "sd")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>lmean, lsd</code></td>
+<td>
+
+<p>Link functions for the mean and standard
+deviation parameters of the usual univariate normal distribution.
+They are <code class="reqn">\mu</code> and <code class="reqn">\sigma</code> respectively.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>gmean, gsd, imethod</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+<code>gmean</code> and <code>gsd</code>
+currently operate on a multiplicative scale, on the sample mean
+and the sample standard deviation, respectively.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imean, isd</code></td>
+<td>
+
+<p>Optional initial values for <code class="reqn">\mu</code> and <code class="reqn">\sigma</code>.
+A <code>NULL</code> means a value is computed internally.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eq.mean, eq.sd</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+The fact that these arguments are supported results in
+default constraint matrices being a <em>permutation</em> of the
+identity matrix (effectively <em>trivial</em> constraints).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero, nsimEIM, probs.y</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The positive normal distribution is the ordinary normal
+distribution but with the probability of zero or less being zero.
+The rest of the probability density function is scaled up.
+Hence
+the probability density function can be written
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \frac{1}{\sqrt{2\pi} \sigma} \exp\left( -\frac12
+             (y-\mu)^2 / \sigma^2  \right) /
+             \left[ 1-\Phi(-\mu/ \sigma) \right]</code>
+</p>
+
+<p>where <code class="reqn">\Phi()</code> is the cumulative distribution function
+of a standard normal (<code>pnorm</code>).
+Equivalently, this is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \frac{1}{\sigma} \frac{\phi((y-\mu) / \sigma)}{
+             1-\Phi(-\mu/ \sigma)}</code>
+</p>
+
+<p>where <code class="reqn">\phi()</code> is the probability
+density function of a standard normal distribution
+(<code>dnorm</code>).
+</p>
+<p>The mean of <code class="reqn">Y</code> is
+</p>
+<p style="text-align: center;"><code class="reqn">E(Y) = \mu + \sigma \frac{\phi(-\mu/ \sigma)}{
+             1-\Phi(-\mu/ \sigma)}. </code>
+</p>
+
+<p>This family function handles multiple responses.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>It is recommended that <code>trace = TRUE</code> be used to monitor
+convergence; sometimes the estimated mean is <code>-Inf</code> and the
+estimated mean standard deviation is <code>Inf</code>, especially
+when the sample size is small.
+Under- or over-flow may occur if the data is ill-conditioned.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response variable for this family function is the same as
+<code>uninormal</code> except positive values are required.
+Reasonably good initial values are needed.
+</p>
+<p>The distribution of the reciprocal of a positive normal random
+variable is known as an alpha distribution.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>uninormal</code>,
+<code>tobit</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pdata &lt;- data.frame(Mean = 1.0, SD = exp(1.0))
+pdata &lt;- transform(pdata, y = rposnorm(n &lt;- 1000, m = Mean, sd = SD))
+
+## Not run: with(pdata, hist(y, prob = TRUE, border = "blue",
+  main = paste("posnorm(m =", Mean[1], ", sd =", round(SD[1], 2),")")))
+## End(Not run)
+fit &lt;- vglm(y ~ 1, posnormal, data = pdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+(Cfit &lt;- Coef(fit))
+mygrid &lt;- with(pdata, seq(min(y), max(y), len = 200))
+## Not run: lines(mygrid, dposnorm(mygrid, Cfit[1], Cfit[2]), col = "red")
+</code></pre>
+
+
+</div>

@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineMatrixCheck</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>R-Vine Matrix Check</h2>
+
+<h3>Description</h3>
+
+<p>The given matrix is tested to be a valid R-vine matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineMatrixCheck(M)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>M</code></td>
+<td>
+<p>A <code class="reqn">dxd</code> vine matrix.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>code</code></td>
+<td>
+ <p><code>1</code> for OK; <br><code>-4</code> matrix is neither lower nor upper triangular;<br><code>-3</code> diagonal can not be put in order d:1;<br><code>-2</code> for not permutation of j:d in column d-j; <br><code>-1</code> if cannot find proper binary array from array in natural order.  </p>
+</td>
+</tr></table>
+<h3>Note</h3>
+
+<p>The matrix M do not have to be given in natural order or the diagonal
+in order d:1. The test checks if it can be done in order to be a valid
+R-vine matrix. <br> If a function in this package needs the natural order the
+<code>RVineMatrix</code> object is automatically "normalized". <br> The function
+<code>RVineMatrix()</code> automatically checks if the given R-vine matrix is
+valid.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Harry Joe
+</p>
+
+
+<h3>References</h3>
+
+<p>Joe H, Cooke RM and Kurowicka D (2011). Regular vines:
+generation algorithm and number of equivalence classes. In Dependence
+Modeling: Vine Copula Handbook, pp 219–231. World Scientific, Singapore.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineMatrix()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+A1 &lt;- matrix(c(6, 0, 0, 0, 0, 0,
+               5, 5, 0, 0, 0, 0,
+               3, 4, 4, 0, 0, 0,
+               4, 3, 3, 3, 0, 0,
+               1, 1, 2, 2, 2, 0,
+               2, 2, 1, 1, 1, 1), 6, 6, byrow = TRUE)
+b1 &lt;- RVineMatrixCheck(A1)
+print(b1)
+# improper vine matrix, code=-1
+A2 &lt;- matrix(c(6, 0, 0, 0, 0, 0,
+               5, 5, 0, 0, 0, 0,
+               4, 4, 4, 0, 0, 0,
+               1, 3, 3, 3, 0, 0,
+               3, 1, 2, 2, 2, 0,
+               2, 2, 1, 1, 1,1 ), 6, 6, byrow = TRUE)
+b2 &lt;- RVineMatrixCheck(A2)
+print(b2)
+# improper vine matrix, code=-2
+A3 &lt;- matrix(c(6, 0, 0, 0, 0, 0,
+               3, 5, 0, 0, 0, 0,
+               3, 4, 4, 0, 0, 0,
+               4, 3, 3, 3, 0, 0,
+               1, 1, 2, 2, 2, 0,
+               2, 2, 1, 1, 1, 1), 6, 6, byrow = TRUE)
+b3 &lt;- RVineMatrixCheck(A3)
+print(b3)
+
+</code></pre>
+
+
+</div>

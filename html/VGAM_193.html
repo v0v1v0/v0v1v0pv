@@ -1,0 +1,165 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>CM.equid</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Constraint Matrices for Symmetry, Order,
+Parallelism, etc.
+
+</h2>
+
+<h3>Description</h3>
+
+<p>Given <em>M</em> linear/additive predictors,
+construct the constraint matrices to allow
+symmetry, (linear and normal) ordering, etc.
+in terms such as the intercept.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">CM.equid(M, Trev = FALSE, Tref = 1)
+ CM.free(M, Trev = FALSE, Tref = 1)
+ CM.ones(M, Trev = FALSE, Tref = 1)
+CM.symm0(M, Trev = FALSE, Tref = 1)
+CM.symm1(M, Trev = FALSE, Tref = 1)
+CM.qnorm(M, Trev = FALSE, Tref = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>M</code></td>
+<td>
+<p> Number of linear/additive predictors,
+usually <code class="reqn">&gt;1</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Tref</code></td>
+<td>
+<p> Reference level for the threshold,
+this should be a single value from <code>1:M</code>.
+This argument is ignored by some of the above
+functions.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Trev</code></td>
+<td>
+<p> Logical.
+Apply reverse direction
+for the thresholds direction?
+This argument is ignored by some of the above
+functions.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A constraint matrix is <code class="reqn">M \times R</code> where
+<code class="reqn">R</code> is its rank and usually the elements are
+0, 1 or <code class="reqn">-1</code>.
+There is a constraint matrix for each column
+of the LM matrix used to fit the
+<code>vglm</code>.
+They are used to apportion the regression
+coefficients to the linear predictors, e.g.,
+parallelism, exchangeability, etc.
+The functions described here are intended
+to construct
+constraint matrices easily for
+symmetry constraints and
+linear ordering etc.
+They are potentially useful for categorical data
+analysis (e.g., <code>cumulative</code>,
+<code>multinomial</code>), especially for the
+intercept term.
+When applied to <code>cumulative</code>,
+they are sometimes called
+<em>structured thresholds</em>,
+e.g., <span class="pkg">ordinal</span>.
+</p>
+<p>One example is the stereotype model proposed
+by Anderson (1984)
+(see <code>multinomial</code> and
+<code>rrvglm</code>) where the elements of
+the <b>A</b> matrix are ordered.
+This is not fully possible in <span class="pkg">VGAM</span> but
+some special cases can be fitted, e.g.,
+use <code>CM.equid</code> to create
+a linear ordering.
+And <code>CM.symm1</code> might result in
+fully ordered estimates too, etc.
+</p>
+<p><code>CM.free</code> creates
+<em>free</em> or unconstrained estimates.
+It is almost always the case for VGLMs,
+and is simply <code>diag(M)</code>.
+</p>
+<p><code>CM.ones</code> creates
+<em>equal</em> estimates,
+which is also known as the <em>parallelism</em>
+assumption in models such as
+<code>cumulative</code>.
+It gets its name because the constraint matrix
+is simply <code>matrix(1, M, 1)</code>.
+</p>
+<p><code>CM.equid</code> creates
+<em>equid</em>istant estimates. This is a
+linear scaling, and the direction and
+origin are controlled by <code>Treverse</code>
+and <code>Tref</code> respectively.
+</p>
+<p><code>CM.qnorm</code> and
+<code>CM.qlogis</code> are based on
+<code>qnorm</code> and
+<code>qlogis</code>.
+For example, <code>CM.qnorm(M)</code> is essentially
+<code>cbind(qnorm(seq(M) / (M + 1)))</code>.
+This might be useful with a model with
+<code>probitlink</code> applied to multiple
+intercepts.
+</p>
+<p>Further details can be found at
+<code>cumulative</code> and
+<code>CommonVGAMffArguments</code>,
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>A constraint matrix.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>CommonVGAMffArguments</code>,
+<code>cumulative</code>,
+<code>acat</code>,
+<code>cratio</code>,
+<code>sratio</code>,
+<code>multinomial</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">CM.equid(4)
+CM.equid(4, Trev = TRUE, Tref = 3)
+CM.symm1(5)
+CM.symm0(5)
+CM.qnorm(5)
+</code></pre>
+
+
+</div>

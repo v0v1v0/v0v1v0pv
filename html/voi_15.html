@@ -1,0 +1,283 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>chemo_cea</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Chemotherapy cost-effectiveness model</h2>
+
+<h3>Description</h3>
+
+<p>An artificial health economic decision model with a typical Markov model structure, used for illustrating Value of Information methods.
+Functions are provided to generate model parameters and evaluate the model, and samples from probabilistic analysis of the model are
+provided as built-in datasets.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">chemo_cea
+
+chemo_nb
+
+chemo_pars
+
+chemo_cea_501
+
+chemo_constants
+
+chemo_evsi_or
+
+chemo_pars_fn(n)
+
+chemo_model_nb(
+  p_side_effects_t1,
+  p_side_effects_t2,
+  p_hospitalised_total,
+  p_died,
+  lambda_home,
+  lambda_hosp,
+  c_home_care,
+  c_hospital,
+  c_death,
+  u_recovery,
+  u_home_care,
+  u_hospital,
+  rate_longterm
+)
+
+chemo_model_cea(
+  p_side_effects_t1,
+  p_side_effects_t2,
+  p_hospitalised_total,
+  p_died,
+  lambda_home,
+  lambda_hosp,
+  c_home_care,
+  c_hospital,
+  c_death,
+  u_recovery,
+  u_home_care,
+  u_hospital,
+  rate_longterm
+)
+
+chemo_model_lor_nb(
+  p_side_effects_t1,
+  logor_side_effects,
+  p_hospitalised_total,
+  p_died,
+  lambda_home,
+  lambda_hosp,
+  c_home_care,
+  c_hospital,
+  c_death,
+  u_recovery,
+  u_home_care,
+  u_hospital,
+  rate_longterm
+)
+
+chemo_model_lor_cea(
+  p_side_effects_t1,
+  logor_side_effects,
+  p_hospitalised_total,
+  p_died,
+  lambda_home,
+  lambda_hosp,
+  c_home_care,
+  c_hospital,
+  c_death,
+  u_recovery,
+  u_home_care,
+  u_hospital,
+  rate_longterm
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>Number of samples to generate from the uncertainty distribution of the parameters in <code>chemo_pars_fn</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p_side_effects_t1</code></td>
+<td>
+<p>Probability of side effects under treatment 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p_side_effects_t2</code></td>
+<td>
+<p>Probability of side effects under treatment 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p_hospitalised_total</code></td>
+<td>
+<p>Probability of hospitalisation in the year after receiving treatment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p_died</code></td>
+<td>
+<p>Probability of death in the year after receiving treatment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda_home</code></td>
+<td>
+<p>Recovery probability for someone treated at home</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda_hosp</code></td>
+<td>
+<p>Recovery probability for someone treated in hospital who does not die</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>c_home_care</code></td>
+<td>
+<p>Cost of a yearly period under treatment at home</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>c_hospital</code></td>
+<td>
+<p>Cost of hospital treatment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>c_death</code></td>
+<td>
+<p>Cost of death</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>u_recovery</code></td>
+<td>
+<p>Utility of a period in the recovery state</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>u_home_care</code></td>
+<td>
+<p>Utility of home care state</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>u_hospital</code></td>
+<td>
+<p>Utility of hospital state</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rate_longterm</code></td>
+<td>
+<p>Long term mortality rate</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logor_side_effects</code></td>
+<td>
+<p>Log odds ratio of side effects for treatment 2 compared to 1</p>
+</td>
+</tr>
+</table>
+<h3>Format</h3>
+
+<p>An object of class <code>list</code> of length 33.
+</p>
+<p>An object of class <code>evsi</code> (inherits from <code>data.frame</code>) with 15030 rows and 3 columns.
+</p>
+<p>Samples of 10000 from probabilistic analysis of this model are made available in the package, in the
+following data objects:
+</p>
+<p><code>chemo_pars</code>: Sample from the distributions of the parameters, as a data frame with names as documented above.
+</p>
+<p><code>chemo_cea</code>: List with components <code>e</code> (sampled effects), <code>c</code> (sampled costs), and <code>k</code> (a set of five
+equally-spaced willingess-to-pay values from 10000 to 50000 pounds).   The effects and costs are data frames
+with two columns, one for each decision option.
+</p>
+<p><code>chemo_nb</code>: Data frame with two columns, giving the net monetary benefit for each decision option,
+at a willingness-to-pay of 20000 pounds.
+</p>
+<p><code>chemo_cea_501</code>: List with components <code>e</code> (sampled effects), <code>c</code> (sampled costs), and <code>k</code> (a set of 501
+willlingess-to-pay values from 10000 to 50000)  This is provided to facilitate illustrations of plots of
+VoI measures against willingness-to-pay.
+</p>
+<p>The following additional data objects are supplied:
+</p>
+<p><code>chemo_constants</code> includes various constants required by the code.
+</p>
+<p><code>chemo_evsi_or</code> is the result of an EVSI analysis to estimate the expected value of a two-arm trial, with a binary outcome, to estimate the log odds ratio of side effects.  This object is a data frame with three columns, giving the sample size per arm (<code>n</code>), willingness-to-pay (<code>k</code>) and the corresponding EVSI (<code>evsi</code>).
+</p>
+
+
+<h3>Details</h3>
+
+<p>For more details, refer to Heath et al. (forthcoming book...)
+</p>
+
+
+<h3>Value</h3>
+
+<p>Two alternative functions are provided to evaluate the decision model for given parameters.
+</p>
+<p><code>chemo_model_nb</code> returns a vector with elements giving the net monetary benefit for standard of care
+and novel treatment, respectively, at a willingness-to-pay of 20,000 pounds per QALY.
+</p>
+<p><code>chemo_model_cea</code> returns a matrix with:
+</p>
+
+<ul>
+<li>
+<p> two rows, the first for expected costs and the second for expected effects (QALYs) over the fifty year time horizon, and
+</p>
+</li>
+<li>
+<p> two columns, the first for the "standard of care" decision option, and the second for the novel
+treatment.
+</p>
+</li>
+</ul>
+<p><code>chemo_model_lor_nb</code> and <code>chemo_model_lor_cea</code> are the same model, but parameterised in terms of
+the probability of side effects for the standard of care <code>p_side_effects_t1</code> and the log odds ratio
+of side effects between treatment groups <code>logor_side_effects</code>, rather than in terms of
+<code>p_side_effects_t1</code> and <code>p_side_effects_t2</code>
+</p>
+<p><code>chemo_pars_fn</code> generates a sample from the uncertainty distribution of the parameters in the chemotherapy model . This returns a data frame with parameters matching the arguments of
+<code>chemo_model_nb</code>, and the following additional derived parameters:
+</p>
+
+<ul>
+<li> <p><code>p_side_effects_t2</code>:
+</p>
+</li>
+<li> <p><code>p_hospitalised_total</code>: probability of hospitalisation over the 50 year time horizon
+</p>
+</li>
+<li> <p><code>p_died</code>: probability of death over the time horizon, given hospitalisation
+</p>
+</li>
+<li> <p><code>lambda_home</code>: conditional probability that a patient recovers given they are not hospitalised
+</p>
+</li>
+<li> <p><code>lambda_hosp</code>: conditional probability that a patient in hospital recovers given they do not die
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Value of Information for Healthcare Decision Making
+(CRC Press, eds. Heath, Kunst and Jackson: forthcoming)
+</p>
+
+
+</div>

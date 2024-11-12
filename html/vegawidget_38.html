@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vw_examine</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Examine vegaspec</h2>
+
+<h3>Description</h3>
+
+<p>This is a thin wrapper to <code>listviewer::jsonedit()</code>,
+use to interactively examine a Vega or Vega-Lite specification.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vw_examine(
+  spec,
+  mode = "view",
+  modes = c("view", "code", "form", "text", "tree"),
+  ...,
+  width = NULL,
+  height = NULL,
+  elementId = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>spec</code></td>
+<td>
+<p>An object to be coerced to <code>vegaspec</code>, a Vega/Vega-Lite specification</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mode</code></td>
+<td>
+<p><code>string</code> for the initial view from modes.
+<code>'view'</code> is the default.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modes</code></td>
+<td>
+<p>string <code>c('view','code', 'form', 'text', 'tree')</code>
+will be the default, since these are all the modes
+currently supported by <strong><code>jsoneditor</code></strong>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p><code>list</code> of other options for <code>jsoneditor</code>.  This is a temporary way
+of trying other options in <code>jsoneditor</code>.  In the future, this will be eliminated
+in favor of specific, more self-documenting and helpful arguments.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p>integer in pixels defining the width of the <code>div</code> container.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p>integer in pixels defining the height of the <code>div</code> container.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>elementId</code></td>
+<td>
+<p>character to specify valid <code>CSS</code> id of the
+htmlwidget for special situations in which you want a non-random
+identifier.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>S3 object of class <code>jsonedit</code> and <code>htmlwidget</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  vw_examine(spec_mtcars)
+
+  spec_mtcars_autosize &lt;-
+    spec_mtcars %&gt;%
+    vw_autosize(width = 300, height = 300)
+
+  vw_examine(spec_mtcars_autosize)
+</code></pre>
+
+
+</div>

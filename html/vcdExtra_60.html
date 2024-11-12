@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>glmlist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Create a Model List Object
+</h2>
+
+<h3>Description</h3>
+
+<p><code>glmlist</code> creates a <code>glmlist</code> object containing a list of fitted <code>glm</code> objects with their names.
+<code>loglmlist</code> does the same for <code>loglm</code> objects.
+</p>
+<p>The intention is to provide object classes to facilitate model comparison,
+extraction, summary and plotting of model components, etc., perhaps using
+<code>lapply</code> or similar.
+</p>
+<p>There exists a <code>anova.glm</code> method for <code>glmlist</code> objects.  Here,
+a <code>coef</code> method is also defined, collecting the coefficients from all models in
+a single object of type determined by <code>result</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">glmlist(...)
+loglmlist(...)
+
+## S3 method for class 'glmlist'
+coef(object, result=c("list", "matrix", "data.frame"), ...)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>One or more model objects, as appropriate to the function, optionally assigned names as in <code>list</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a <code>glmlist</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>result</code></td>
+<td>
+<p>type of the result to be returned</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The arguments to <code>glmlist</code>  or <code>loglmlist</code> are of the form <code>value</code> or <code>name=value</code>.
+</p>
+<p>Any objects which do not inherit the appropriate class <code>glm</code> or <code>loglm</code> are excluded, with a warning.
+</p>
+<p>In the <code>coef</code> method, coefficients from the different models are matched by name in the list of
+unique names across all models.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>glmlist</code> <code>loglmlist</code>, just like a <code>list</code>,
+except that each model is given a <code>name</code> attribute.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Friendly;
+<code>coef</code> method by John Fox
+</p>
+
+
+<h3>See Also</h3>
+
+<p>The function <code>llist</code> in package <code>Hmisc</code> is similar, but perplexingly
+more general.
+</p>
+<p>The function <code>anova.glm</code> also handles <code>glmlist objects</code>
+</p>
+<p><code>LRstats</code> gives LR statistics and tests for a <code>glmlist</code> object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Mental)
+indep &lt;- glm(Freq ~ mental+ses,
+                family = poisson, data = Mental)
+Cscore &lt;- as.numeric(Mental$ses)
+Rscore &lt;- as.numeric(Mental$mental)
+
+coleff &lt;- glm(Freq ~ mental + ses + Rscore:ses,
+                family = poisson, data = Mental)
+roweff &lt;- glm(Freq ~ mental + ses + mental:Cscore,
+                family = poisson, data = Mental)
+linlin &lt;- glm(Freq ~ mental + ses + Rscore:Cscore,
+                family = poisson, data = Mental)
+                
+# use object names
+mods &lt;- glmlist(indep, coleff, roweff, linlin)
+names(mods)
+
+# assign new names
+mods &lt;- glmlist(Indep=indep, Col=coleff, Row=roweff, LinxLin=linlin)
+names(mods)
+
+LRstats(mods)
+
+coef(mods, result='data.frame')
+
+#extract model components
+unlist(lapply(mods, deviance))
+
+res &lt;- lapply(mods, residuals)
+boxplot(as.data.frame(res), main="Residuals from various models")
+</code></pre>
+
+
+</div>

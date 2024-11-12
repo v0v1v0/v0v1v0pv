@@ -1,0 +1,106 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.local_importance</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot Local Variable Importance measure</h2>
+
+<h3>Description</h3>
+
+<p>Function plot.local_importance plots local importance measure based on Ceteris Paribus profiles.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'local_importance'
+plot(
+  x,
+  ...,
+  variables = NULL,
+  color = NULL,
+  type = NULL,
+  title = "Local variable importance"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>object returned from <code>local_variable_importance()</code> function</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other object returned from <code>local_variable_importance()</code> function that shall be plotted together</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>variables</code></td>
+<td>
+<p>if not <code>NULL</code> then only <code>variables</code> will be presented</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color</code></td>
+<td>
+<p>a character. How to aggregated measure? Either  "_label_method_" or "_label_model_".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>a character. How variables shall be plotted? Either "bars" (default) or "lines".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>the plot's title, by default <code>'Local variable importance'</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a ggplot2 object
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library("DALEX")
+data(apartments)
+
+library("randomForest")
+apartments_rf_model &lt;- randomForest(m2.price ~ construction.year + surface +
+                                    floor + no.rooms, data = apartments)
+
+explainer_rf &lt;- explain(apartments_rf_model, data = apartmentsTest[,2:5],
+                        y = apartmentsTest$m2.price)
+
+new_apartment &lt;- data.frame(construction.year = 1998, surface = 88, floor = 2L, no.rooms = 3)
+
+profiles &lt;- predict_profile(explainer_rf, new_apartment)
+
+library("vivo")
+measure1 &lt;- local_variable_importance(profiles, apartments[,2:5],
+                          absolute_deviation = TRUE, point = TRUE, density = FALSE)
+
+plot(measure1)
+
+measure2 &lt;- local_variable_importance(profiles, apartments[,2:5],
+                          absolute_deviation = TRUE, point = TRUE, density = TRUE)
+plot(measure1, measure2, color = "_label_method_", type = "lines")
+
+
+</code></pre>
+
+
+</div>

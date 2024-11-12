@@ -1,0 +1,105 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bin_x</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Group continuous data values (x-axis)</h2>
+
+<h3>Description</h3>
+
+<p>The "bin" property is for grouping quantitative, continuous data values of a
+particular field into smaller number of “bins” (e.g., for a histogram).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bin_x(vl, min = NULL, max = NULL, base = NULL, step = NULL,
+  steps = NULL, minstep = NULL, div = NULL, maxbins = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vl</code></td>
+<td>
+<p>Vega-Lite object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min</code></td>
+<td>
+<p>the minimum bin value to consider.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max</code></td>
+<td>
+<p>the maximum bin value to consider.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>base</code></td>
+<td>
+<p>the number base to use for automatic bin determination.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>step</code></td>
+<td>
+<p>an exact step size to use between bins.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>steps</code></td>
+<td>
+<p>an array of allowable step sizes to choose from.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minstep</code></td>
+<td>
+<p>minimum allowable step size (particularly useful for integer values).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>div</code></td>
+<td>
+<p>Scale factors indicating allowable subdivisions. The default value is
+[5, 2], which indicates that for base 10 numbers (the default base),
+the method may consider dividing bin sizes by 5 and/or 2. For example,
+for an initial step size of 10, the method can check if bin sizes of 2
+(= 10/5), 5 (= 10/2), or 1 (= 10/(5*2)) might also satisfy the given
+constraints.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxbins</code></td>
+<td>
+<p>the maximum number of allowable bins.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p><a href="http://vega.github.io/vega-lite/docs/bin.html">Vega-Lite Binning</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vegalite() %&gt;%
+  add_data("https://vega.github.io/vega-editor/app/data/movies.json") %&gt;%
+  encode_x("IMDB_Rating", "quantitative") %&gt;%
+  encode_y("Rotten_Tomatoes_Rating", "quantitative") %&gt;%
+  encode_size("*", "quantitative", aggregate="count") %&gt;%
+  bin_x(maxbins=10) %&gt;%
+  bin_y(maxbins=10) %&gt;%
+  mark_point()
+</code></pre>
+
+
+</div>

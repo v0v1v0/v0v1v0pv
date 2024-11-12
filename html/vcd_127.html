@@ -1,0 +1,145 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Pairs plot panel functions for off-diagonal cells</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Off-diagonal Panel Functions for Table Pairs Plot</h2>
+
+<h3>Description</h3>
+
+<p>Off-diagonal panel functions for <code>pairs.table</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pairs_strucplot(panel = mosaic, 
+  type = c("pairwise", "total", "conditional", "joint"),
+  legend = FALSE, margins = c(0, 0, 0, 0), labeling = NULL, ...)
+pairs_assoc(...)
+pairs_mosaic(...)
+pairs_sieve(...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>panel</code></td>
+<td>
+<p>function to be used for the plots in each
+cell, such as <code>pairs_assoc</code>, <code>pairs_mosaic</code>,
+and <code>pairs_sieve</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>character string specifying the type of independence model
+visualized in the cells.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+<p>logical specifying whether a legend should be displayed
+in the cells or not.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>margins</code></td>
+<td>
+<p>margins inside each cell (see <code>strucplot</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labeling</code></td>
+<td>
+<p>labeling function or labeling-generating function (see
+<code>strucplot</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p><code>pairs_mosaic</code>, <code>pairs_assoc</code>, and
+<code>pairs_sieve</code>: parameters
+passed to <code>pairs_strucplot</code>. <code>pairs_strucplot</code>:
+other parameters passed to panel function.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>These functions really just wrap <code>assoc</code>, <code>sieve</code>, and
+<code>mosaic</code> by basically inhibiting labeling and
+legend-drawing and setting the margins to 0.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A function with arguments:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>contingency table.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>i, j</code></td>
+<td>
+<p>cell coordinates.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>David Meyer <a href="mailto:David.Meyer@R-project.org">David.Meyer@R-project.org</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Cohen, A. (1980),
+On the graphical display of the significant components in a two-way
+contingency table.
+<em>Communications in Statistics—Theory and Methods</em>, <b>A9</b>,
+1025–1041.
+</p>
+<p>Friendly, M. (1992),
+Graphical methods for categorical data.
+<em>SAS User Group International Conference Proceedings</em>, <b>17</b>,
+190–200.
+<a href="http://datavis.ca/papers/sugi/sugi17.pdf">http://datavis.ca/papers/sugi/sugi17.pdf</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>pairs.table</code>,
+<code>pairs_text</code>,
+<code>pairs_barplot</code>,
+<code>assoc</code>,
+<code>mosaic</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data("UCBAdmissions")
+data("PreSex")
+
+pairs(PreSex)
+pairs(UCBAdmissions)
+pairs(UCBAdmissions, upper_panel_args = list(shade = FALSE))
+pairs(UCBAdmissions, lower_panel = pairs_mosaic(type = "conditional"))
+pairs(UCBAdmissions, upper_panel = pairs_assoc)
+</code></pre>
+
+
+</div>

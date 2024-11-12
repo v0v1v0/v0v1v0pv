@@ -1,0 +1,649 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vault_client_auth_approle</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vault AppRole Authentication Configuration</h2>
+
+<h3>Description</h3>
+
+<p>Vault AppRole Authentication Configuration
+</p>
+<p>Vault AppRole Authentication Configuration
+</p>
+
+
+<h3>Details</h3>
+
+<p>Interact with vault's AppRole authentication backend.  For more
+details about this, see the vault documentation at
+https://developer.hashicorp.com/vault/docs/auth/approle
+</p>
+
+
+<h3>Super class</h3>
+
+<p><code>vaultr::vault_client_object</code> -&gt; <code>vault_client_auth_approle</code>
+</p>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-vault_client_auth_approle-new"><code>vault_client_auth_approle$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-custom_mount"><code>vault_client_auth_approle$custom_mount()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-role_list"><code>vault_client_auth_approle$role_list()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-role_write"><code>vault_client_auth_approle$role_write()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-role_read"><code>vault_client_auth_approle$role_read()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-role_delete"><code>vault_client_auth_approle$role_delete()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-role_id_read"><code>vault_client_auth_approle$role_id_read()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-role_id_write"><code>vault_client_auth_approle$role_id_write()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-secret_id_generate"><code>vault_client_auth_approle$secret_id_generate()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-secret_id_list"><code>vault_client_auth_approle$secret_id_list()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-secret_id_read"><code>vault_client_auth_approle$secret_id_read()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-secret_id_delete"><code>vault_client_auth_approle$secret_id_delete()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth_approle-login"><code>vault_client_auth_approle$login()</code></a>
+</p>
+</li>
+</ul>
+<details open><summary>Inherited methods</summary><ul>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="format"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-format"><code>vaultr::vault_client_object$format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="help"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-help"><code>vaultr::vault_client_object$help()</code></a></span></li>
+</ul></details><hr>
+<a id="method-vault_client_auth_approle-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a <code>vault_client_approle</code> object. Not typically
+called by users.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$new(api_client, mount)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>api_client</code></dt>
+<dd>
+<p>A vault_api_client object</p>
+</dd>
+<dt><code>mount</code></dt>
+<dd>
+<p>Mount point for the backend</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-custom_mount"></a>
+
+
+
+<h4>Method <code>custom_mount()</code>
+</h4>
+
+<p>Set up a <code>vault_client_auth_approle</code> object at a
+custom mount. For example, suppose you mounted the <code>approle</code>
+authentication backend at <code style="white-space: pre;">⁠/approle-dev⁠</code> you might use <code>ar &lt;- vault$auth$approle2$custom_mount("/approle-dev")</code> - this pattern
+is repeated for other secret and authentication backends.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$custom_mount(mount)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>mount</code></dt>
+<dd>
+<p>String, indicating the path that the engine is mounted at.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-role_list"></a>
+
+
+
+<h4>Method <code>role_list()</code>
+</h4>
+
+<p>This endpoint returns a list the existing AppRoles in the method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$role_list()</pre></div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-role_write"></a>
+
+
+
+<h4>Method <code>role_write()</code>
+</h4>
+
+<p>Creates a new AppRole or updates an existing AppRole. This
+endpoint supports both create and update capabilities. There can
+be one or more constraints enabled on the role. It is required to
+have at least one of them enabled while creating or updating a
+role.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$role_write(
+  role_name,
+  bind_secret_id = NULL,
+  secret_id_bound_cidrs = NULL,
+  token_bound_cidrs = NULL,
+  policies = NULL,
+  secret_id_num_uses = NULL,
+  secret_id_ttl = NULL,
+  token_num_uses = NULL,
+  token_ttl = NULL,
+  token_max_ttl = NULL,
+  period = NULL,
+  enable_local_secret_ids = NULL,
+  token_type = NULL
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>role_name</code></dt>
+<dd>
+<p>Name of the AppRole</p>
+</dd>
+<dt><code>bind_secret_id</code></dt>
+<dd>
+<p>Require secret_id to be presented when
+logging in using this AppRole (boolean, default is <code>TRUE</code>).</p>
+</dd>
+<dt><code>secret_id_bound_cidrs</code></dt>
+<dd>
+<p>Character vector of CIDR blocks;
+if set, specifies blocks of IP addresses which can perform
+the login operation.</p>
+</dd>
+<dt><code>token_bound_cidrs</code></dt>
+<dd>
+<p>Character vector of if set, specifies
+blocks of IP addresses which can use the auth tokens
+generated by this role.</p>
+</dd>
+<dt><code>policies</code></dt>
+<dd>
+<p>Character vector of policies set on tokens
+issued via this AppRole.</p>
+</dd>
+<dt><code>secret_id_num_uses</code></dt>
+<dd>
+<p>Number of times any particular
+SecretID can be used to fetch a token from this AppRole,
+after which the SecretID will expire. A value of zero will
+allow unlimited uses.</p>
+</dd>
+<dt><code>secret_id_ttl</code></dt>
+<dd>
+<p>Duration, after which any SecretID expires.</p>
+</dd>
+<dt><code>token_num_uses</code></dt>
+<dd>
+<p>Number of times issued tokens can be
+used. A value of 0 means unlimited uses</p>
+</dd>
+<dt><code>token_ttl</code></dt>
+<dd>
+<p>Duration to set as the TTL for issued tokens
+and at renewal time.</p>
+</dd>
+<dt><code>token_max_ttl</code></dt>
+<dd>
+<p>Duration, after which the issued token can
+no longer be renewed.</p>
+</dd>
+<dt><code>period</code></dt>
+<dd>
+<p>A duration; when set, the token generated using
+this AppRole is a periodic token; so long as it is renewed it
+never expires, but the TTL set on the token at each renewal
+is fixed to the value specified here. If this value is
+modified, the token will pick up the new value at its next
+renewal.</p>
+</dd>
+<dt><code>enable_local_secret_ids</code></dt>
+<dd>
+<p>Boolean, if <code>TRUE</code>, then the
+secret IDs generated using this role will be cluster
+local. This can only be set during role creation and once
+set, it can't be reset later.</p>
+</dd>
+<dt><code>token_type</code></dt>
+<dd>
+<p>The type of token that should be generated
+via this role. Can be <code>service</code>, <code>batch</code>, or <code>default</code> to use
+the mount's default (which unless changed will be service
+tokens).</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-role_read"></a>
+
+
+
+<h4>Method <code>role_read()</code>
+</h4>
+
+<p>Reads the properties of an existing AppRole.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$role_read(role_name)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>role_name</code></dt>
+<dd>
+<p>Name of the AppRole</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-role_delete"></a>
+
+
+
+<h4>Method <code>role_delete()</code>
+</h4>
+
+<p>Deletes an existing AppRole from the method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$role_delete(role_name)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>role_name</code></dt>
+<dd>
+<p>Name of the AppRole to delete</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-role_id_read"></a>
+
+
+
+<h4>Method <code>role_id_read()</code>
+</h4>
+
+<p>Reads the RoleID of an existing AppRole.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$role_id_read(role_name)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>role_name</code></dt>
+<dd>
+<p>Name of the AppRole</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-role_id_write"></a>
+
+
+
+<h4>Method <code>role_id_write()</code>
+</h4>
+
+<p>Updates the RoleID of an existing AppRole to a
+custom value.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$role_id_write(role_name, role_id)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>role_name</code></dt>
+<dd>
+<p>Name of the AppRole (string)</p>
+</dd>
+<dt><code>role_id</code></dt>
+<dd>
+<p>Value to be set as RoleID (string)</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-secret_id_generate"></a>
+
+
+
+<h4>Method <code>secret_id_generate()</code>
+</h4>
+
+<p>Generates and issues a new SecretID on an existing
+AppRole. Similar to tokens, the response will also contain a
+<code>secret_id_accessor</code> value which can be used to read the
+properties of the SecretID without divulging the SecretID
+itself, and also to delete the SecretID from the AppRole.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$secret_id_generate(
+  role_name,
+  metadata = NULL,
+  cidr_list = NULL,
+  token_bound_cidrs = NULL
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>role_name</code></dt>
+<dd>
+<p>Name of the AppRole.</p>
+</dd>
+<dt><code>metadata</code></dt>
+<dd>
+<p>Metadata to be tied to the SecretID. This
+should be a named list of key-value pairs. This metadata will
+be set on tokens issued with this SecretID, and is logged in
+audit logs in plaintext.</p>
+</dd>
+<dt><code>cidr_list</code></dt>
+<dd>
+<p>Character vector CIDR blocks enforcing secret
+IDs to be used from specific set of IP addresses. If
+<code>bound_cidr_list</code> is set on the role, then the list of CIDR
+blocks listed here should be a subset of the CIDR blocks
+listed on the role.</p>
+</dd>
+<dt><code>token_bound_cidrs</code></dt>
+<dd>
+<p>Character vector of CIDR blocks; if
+set, specifies blocks of IP addresses which can use the auth
+tokens generated by this SecretID. Overrides any role-set
+value but must be a subset.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-secret_id_list"></a>
+
+
+
+<h4>Method <code>secret_id_list()</code>
+</h4>
+
+<p>Lists the accessors of all the SecretIDs issued
+against the AppRole. This includes the accessors for "custom"
+SecretIDs as well.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$secret_id_list(role_name)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>role_name</code></dt>
+<dd>
+<p>Name of the AppRole</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-secret_id_read"></a>
+
+
+
+<h4>Method <code>secret_id_read()</code>
+</h4>
+
+<p>Reads out the properties of a SecretID.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$secret_id_read(
+  role_name,
+  secret_id,
+  accessor = FALSE
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>role_name</code></dt>
+<dd>
+<p>Name of the AppRole</p>
+</dd>
+<dt><code>secret_id</code></dt>
+<dd>
+<p>Secret ID attached to the role</p>
+</dd>
+<dt><code>accessor</code></dt>
+<dd>
+<p>Logical, if <code>TRUE</code>, treat <code>secret_id</code> as an
+accessor rather than a secret id.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-secret_id_delete"></a>
+
+
+
+<h4>Method <code>secret_id_delete()</code>
+</h4>
+
+<p>Delete an AppRole secret ID
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$secret_id_delete(
+  role_name,
+  secret_id,
+  accessor = FALSE
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>role_name</code></dt>
+<dd>
+<p>Name of the AppRole</p>
+</dd>
+<dt><code>secret_id</code></dt>
+<dd>
+<p>Secret ID attached to the role</p>
+</dd>
+<dt><code>accessor</code></dt>
+<dd>
+<p>Logical, if <code>TRUE</code>, treat <code>secret_id</code> as an
+accessor rather than a secret id.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth_approle-login"></a>
+
+
+
+<h4>Method <code>login()</code>
+</h4>
+
+<p>Log into the vault using AppRole authentication.
+Normally you would not call this directly but instead use
+<code style="white-space: pre;">⁠$login⁠</code> with <code>method = "approle"</code> and proving the <code>role_id</code>
+and <code>secret_id</code> arguments.  This function returns a vault
+token but does not set it as the client token.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth_approle$login(role_id, secret_id)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>role_id</code></dt>
+<dd>
+<p>RoleID of the AppRole</p>
+</dd>
+<dt><code>secret_id</code></dt>
+<dd>
+<p>SecretID belonging to AppRole</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+vaultr::vault_client(addr = "https://localhost:8200")$auth$approle
+</code></pre>
+
+
+</div>

@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>my_age</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Returns amount of vehicles at each age</h2>
+
+<h3>Description</h3>
+
+<p><code>my_age</code> returns amount of vehicles at each age using a
+numeric vector.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">my_age(
+  x,
+  y,
+  agemax,
+  name = "vehicle",
+  k = 1,
+  pro_street,
+  net,
+  verbose = FALSE,
+  namerows
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Numeric; vehicles by street (or spatial feature).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Numeric or data.frame; when pro_street is not available, y must be
+'numeric', else, a 'data.frame'. The names of the columns of this data.frame
+must be the same as the elements of pro_street and each column must have a
+profile of age of use of vehicle. When 'y' is 'numeric' the vehicles
+has the same age distribution to all streets. When 'y' is a data.frame,
+the distribution by age of use varies the streets.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>agemax</code></td>
+<td>
+<p>Integer; age of oldest vehicles for that category</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>Character; of vehicle assigned to columns of dataframe.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>Integer; multiplication factor. If its length is &gt; 1, it must match the length of x</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pro_street</code></td>
+<td>
+<p>Character; each category of profile for each street.
+The length of this character vector must be equal to the length of 'x'. The
+names of the data.frame 'y' must have the same content of 'pro_street'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>SpatialLinesDataFrame or Spatial Feature of "LINESTRING"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical; message with average age and total number of vehicles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>namerows</code></td>
+<td>
+<p>Any vector to be change row.names. For instance, the name of
+regions or streets.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>dataframe of age distribution of vehicles.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The functions age* produce distribution of the circulating fleet by age of use.
+The order of using these functions is:
+</p>
+<p>1. If you know the distribution of the vehicles by age of use , use:  <code>my_age</code>
+2. If you know the sales of vehicles, or (the regis)*better) the registry of new vehicles,
+use <code>age</code> to apply a survival function.
+3. If you know the theoretical shape of the circulating fleet and you can use
+<code>age_ldv</code>, <code>age_hdv</code> or <code>age_moto</code>. For instance,
+you dont know the sales or registry of vehicles, but somehow you know
+the shape of this curve.
+4. You can use/merge/transform/adapt any of these functions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(net)
+dpc &lt;- c(seq(1,20,3), 20:10)
+PC_E25_1400 &lt;- my_age(x = net$ldv, y = dpc, name = "PC_E25_1400")
+class(PC_E25_1400)
+plot(PC_E25_1400)
+PC_E25_1400sf &lt;- my_age(x = net$ldv, y = dpc, name = "PC_E25_1400", net = net)
+class(PC_E25_1400sf)
+plot(PC_E25_1400sf)
+PC_E25_1400nsf &lt;- sf::st_set_geometry(PC_E25_1400sf, NULL)
+class(PC_E25_1400nsf)
+yy &lt;- data.frame(a = 1:5, b = 5:1)    # perfiles por categoria de calle
+pro_street &lt;- c("a", "b", "a")         # categorias de cada calle
+x &lt;- c(100,5000, 3)                               # vehiculos
+my_age(x = x, y =  yy, pro_street = pro_street)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,106 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>filled_voxel_cloud</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Produces a filled voxel cloud.</h2>
+
+<h3>Description</h3>
+
+<p>This function produces a filled voxel cloud of a tree, i.e. a voxels cloud within which
+empty objects (e.g. trunk and large branches) are filled. The algorithm was inspired from
+the one described by Vonderach et al. (2012) with some modifications. First, the point cloud is
+is voxelized with a given (<code>res</code>) voxel resolution. The voxel cloud is then sliced into one voxel
+tick layers. Within a single layer different objects are then clustered based on their
+distance to each other (see the distance_clustering function for more details). Each
+cluster is then filled by addind voxels along the range of Y for each X value of the cluster and reversly along
+the range of X for each Y of the cluster. All unique voxels are then returned.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">filled_voxel_cloud(data, res, d_clust, estimate_volume, message)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data.frame or data.table containing the x, y, z, ... coordinates of a point cloud.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>res</code></td>
+<td>
+<p>numeric. Resolution of a voxel.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>d_clust</code></td>
+<td>
+<p>numeric. The distance to use for clustering, see the distance_clustering for more details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estimate_volume</code></td>
+<td>
+<p>logical. If TRUE the tree volume is computed as done in Vonderach et al. (2012).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>message</code></td>
+<td>
+<p>logical. If FALSE, messages are disabled. Default = TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>If <code>estimate_volume = FLASE</code> a data.frame or data.table containing the voxels coordinates is returned. If
+<code>estimate_volume = TRUE</code> a list containing the voxels coordinates and the estimated tree volume
+is returned.
+</p>
+
+
+<h3>References</h3>
+
+<p>Vonderach, C., Voegtle, T., &amp; Adler, P. (2012). Voxel-based approach for estimating urban tree volume from
+terrestrial laser scanning data. International Archives of Photogrammetry, Remote Sensing and Spatial Information Sciences,
+39, 451-456.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#- import tls data
+tls=data.table::fread(system.file("extdata", "Tree_t1.asc", package="VoxR"))
+
+#- keep the tree trunk
+tls=tls[z&lt;=0]
+
+#- run filled voxel voxelisation
+filled = VoxR::filled_voxel_cloud(tls,0.02)
+
+#- run usual voxelisation
+voxels = VoxR::vox(tls,0.02)
+
+#- compare filled voxel cloud to empty voxel cloud
+VoxR::plot_voxels(filled,res = 0.02)
+VoxR::plot_voxels(voxels,res = 0.02)
+
+#- compare the volume estimate from Vonderach et al. 2012 to estimate based on voxel volume
+#- run filled voxel voxelisation with volume estimation
+filled = VoxR::filled_voxel_cloud(tls,0.01,estimate_volume = TRUE)
+
+#- compare volumes
+filled$estimated_volume # Vonderach
+nrow(filled$filled_voxels)*0.01^3 # voxel based
+</code></pre>
+
+
+</div>

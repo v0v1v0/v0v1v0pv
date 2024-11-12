@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Zipf</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Zipf Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random
+generation for the Zipf distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dzipf(x, N, shape, log = FALSE)
+pzipf(q, N, shape, log.p = FALSE)
+qzipf(p, N, shape)
+rzipf(n, N, shape)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, p, n</code></td>
+<td>
+<p>Same as <code>Poisson</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>N, shape</code></td>
+<td>
+
+<p>the number of elements, and the exponent characterizing the
+distribution.
+See <code>zipf</code> for more details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log, log.p</code></td>
+<td>
+
+<p>Same meaning as in <code>Normal</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a finite version of the zeta distribution.
+See <code>zetaff</code> for more details.
+In general, these functions runs slower and slower as <code>N</code>
+increases.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dzipf</code> gives the density,
+<code>pzipf</code> gives the cumulative distribution function,
+<code>qzipf</code> gives the quantile function, and
+<code>rzipf</code> generates random deviates.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>zipf</code>,
+<code>Zipfmb</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">N &lt;- 10; shape &lt;- 0.5; y &lt;- 1:N
+proby &lt;- dzipf(y, N = N, shape = shape)
+## Not run:  plot(proby ~ y, type = "h", col = "blue",
+   ylim = c(0, 0.2), ylab = "Probability", lwd = 2, las = 1,
+   main = paste0("Zipf(N = ", N, ", shape = ", shape, ")")) 
+## End(Not run)
+sum(proby)  # Should be 1
+max(abs(cumsum(proby) - pzipf(y, N = N, shape = shape)))  # 0?
+</code></pre>
+
+
+</div>

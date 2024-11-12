@@ -1,0 +1,105 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>prep_df</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Prepare a dataframe</h2>
+
+<h3>Description</h3>
+
+<p>Prepares a dataframe based on provided filters and naming options
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">prep_df(
+  lFilters,
+  lValues_for_naming,
+  df,
+  color_var,
+  facet = "left",
+  facet_var = rlang::sym("VIS_Groep"),
+  facet_name_var = rlang::sym("VIS_Groep_naam")
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lFilters</code></td>
+<td>
+<p>List of filters to be applied on the dataframe.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lValues_for_naming</code></td>
+<td>
+<p>List of values used for naming.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>Dataframe to be processed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color_var</code></td>
+<td>
+<p>Variable used for coloring.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>facet</code></td>
+<td>
+<p>Facet grid side ("left" by default).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>facet_var</code></td>
+<td>
+<p>Variable used for facet grid ("VIS_Groep" by default).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>facet_name_var</code></td>
+<td>
+<p>Variable used for facet grid naming ("VIS_Groep_naam" by default).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function collapses values from the naming list into a single string,
+removes null elements from the filter list, transforms filter list into elements
+suitable for filtering, applies filters, adds new columns, and casts var used as color to factor.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A prepared dataframe with applied filters and new columns.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">df &lt;- dplyr::tibble(
+  VIS_Groep = sample(c("Group1", "Group2", "Group3"), 100, replace = TRUE),
+  VIS_Groep_naam = sample(c("Name1", "Name2", "Name3"), 100, replace = TRUE),
+  var1 = sample(c("A", "B", "C"), 100, replace = TRUE),
+  var2 = rnorm(100),
+  color_var = sample(c("Red", "Blue", "Green"), 100, replace = TRUE)
+)
+lFilters &lt;- list("A;var1")
+lValues_for_naming = list("Name1;VIS_Groep_naam", "Name2;VIS_Groep_naam")
+color_var = "color_var"
+dfPrepared &lt;- prep_df(lFilters, lValues_for_naming, df, color_var, facet = "right")
+</code></pre>
+
+
+</div>

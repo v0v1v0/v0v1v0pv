@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>use_vegawidget</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add vegawidget functions to your package</h2>
+
+<h3>Description</h3>
+
+<p>These functions are offered to help you import and re-export vegawidget
+functions in your package. For more detail, please see
+<a href="https://vegawidget.github.io/vegawidget/articles/articles/import.html">this article</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">use_vegawidget(s3_class_name = NULL)
+
+use_vegawidget_interactive()
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>s3_class_name</code></td>
+<td>
+<p><code>character</code>, name of an S3 class for object to
+be coerced to a <code>vegaspec</code>; default (NULL) implies no additional class</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p><strong><code>use_vegawidget()</code></strong>:
+</p>
+<p>Adds vegawidget functions:
+</p>
+
+<ul>
+<li> <p><code>as_vegaspec()</code>, <code>vw_as_json()</code>
+</p>
+</li>
+<li> <p><code>format()</code>, <code>print()</code>, <code>knit_print()</code>
+</p>
+</li>
+<li> <p><code>vegawidget()</code>, <code>vega_embed()</code>, <code>vw_set_base_url()</code>
+</p>
+</li>
+<li> <p><code>vw_to_svg()</code> and other image functions
+</p>
+</li>
+<li> <p><code>vegawidgetOutput()</code>, <code>renderVegawidget()</code>
+</p>
+</li>
+</ul>
+<p>In practical terms:
+</p>
+
+<ul>
+<li>
+<p> adds <strong>vegawidget</strong> to <code>Imports</code> in your package's DESCRIPTION file.
+</p>
+</li>
+<li>
+<p> adds <strong>V8</strong>, <strong>withr</strong>, <strong>fs</strong>, <strong>rsvg</strong>, and <strong>png</strong> to <code>Suggests</code>
+in your package's DESCRIPTION file.
+</p>
+</li>
+<li>
+<p> creates <code>R/utils-vegawidget.R</code>
+</p>
+</li>
+<li>
+<p> you can delete references to functions you do not want
+to re-export.
+</p>
+</li>
+</ul>
+<p>If you have your own S3 class for a spec, specify the <code>s3_class_name</code>
+argument. You will have to edit <code style="white-space: pre;">⁠R/utils-vegawidget-&lt;s3_class_name&gt;.R⁠</code>:
+</p>
+
+<ul><li>
+<p> add the code within your class's method for
+to coerce your object to a <code>vegaspec</code>.
+</p>
+</li></ul>
+<p>To permit knit-printing of your custom class, you will have to add some code
+to your package's <code>.onLoad()</code> function.
+</p>
+<p><strong><code>use_vegawidget_interactive()</code></strong>:
+</p>
+<p>If you want to add the JavaScript and Shiny functions,
+use this after running <code>use_vegawidget()</code>. It adds:
+</p>
+
+<ul>
+<li> <p><code>vw_add_data_listener()</code> and other listener-functions.
+</p>
+</li>
+<li> <p><code>vw_handler_data()</code> and other handler functions.
+</p>
+</li>
+<li> <p><code>vw_shiny_get_data()</code> and other Shiny getters.
+</p>
+</li>
+<li> <p><code>vw_shiny_set_data()</code> and other Shiny setters.
+</p>
+</li>
+</ul>
+<p>In practical terms:
+</p>
+
+<ul>
+<li>
+<p> adds <strong>shiny</strong>, <strong>dplyr</strong>, to <code>Suggests</code>.
+</p>
+</li>
+<li>
+<p> creates <code>R/utils-vegawidget-interactive.R</code>.
+</p>
+</li>
+<li>
+<p> at your discretion, delete references to functions you do not want
+to re-export.
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>invisible <code>NULL</code>, called for side effects
+</p>
+
+
+</div>

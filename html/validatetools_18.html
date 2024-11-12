@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simplify_conditional</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simplify conditional statements</h2>
+
+<h3>Description</h3>
+
+<p>Conditional rules may be constrained by the others rules in a validation rule set.
+This procedure tries to simplify conditional statements.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">simplify_conditional(x, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>validator</code> object with the validation rules.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>not used.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>validator</code> simplified rule set.
+</p>
+
+
+<h3>References</h3>
+
+<p>TODO non-constraining, non-relaxing
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(validate)
+
+# non-relaxing clause
+rules &lt;- validator( r1 = if (x &gt; 1) y &gt; 3
+                  , r2 = y &lt; 2
+                  )
+# y &gt; 3 is always FALSE so r1 can be simplified
+simplify_conditional(rules)
+
+# non-constraining clause
+rules &lt;- validator( r1 = if (x &gt; 0) y &gt; 0
+                  , r2 = if (x &lt; 1) y &gt; 1
+                  )
+simplify_conditional(rules)
+
+rules &lt;- validator( r1 = if (A == "a1") x &gt; 0
+                  , r2 = if (A == "a2") x &gt; 1
+                  , r3 = A == "a1"
+                  )
+simplify_conditional(rules)
+</code></pre>
+
+
+</div>

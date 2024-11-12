@@ -1,0 +1,98 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>is.parallel</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Parallelism Constraint Matrices</h2>
+
+<h3>Description</h3>
+
+<p>Returns a logical vector from a test of whether an object such
+as a matrix or VGLM object
+corresponds to a parallelism assumption.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">is.parallel.matrix(object, ...)
+is.parallel.vglm(object, type = c("term", "lm"), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>an object such as a constraint matrix or
+a <code>vglm</code> object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+
+<p>passed into <code>constraints</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>additional optional arguments.
+Currently unused.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>These functions may be useful for categorical models
+such as
+<code>propodds</code>,
+<code>cumulative</code>,
+<code>acat</code>,
+<code>cratio</code>,
+<code>sratio</code>,
+<code>multinomial</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector of logicals, testing whether each constraint matrix
+is a one-column matrix of ones.
+Note that parallelism can still be thought of as holding if
+the constraint matrix has a non-zero but constant values, however,
+this is currently not implemented.
+No checking is done that the constraint matrices have the same
+number of rows.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>constraints</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  require("VGAMdata")
+fit &lt;- vglm(educ ~ sm.bs(age) * sex + ethnicity,
+            cumulative(parallel = TRUE), head(xs.nz, 200))
+is.parallel(fit)
+is.parallel(fit, type = "lm")  # For each column of the LM matrix
+
+## End(Not run)
+</code></pre>
+
+
+</div>

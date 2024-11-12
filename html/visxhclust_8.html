@@ -1,0 +1,65 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compute_gapstat</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute Gap statistic for clustered data</h2>
+
+<h3>Description</h3>
+
+<p>Compute Gap statistic for clustered data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compute_gapstat(df, clusters, gap_B = 50, max_k = 14)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>the data used to compute clusters</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clusters</code></td>
+<td>
+<p>output of <code>compute_clusters()</code> or <code>fastcluster::hclust()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gap_B</code></td>
+<td>
+<p>number of bootstrap samples for <code>cluster::clusGap()</code> function. Default is 50.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_k</code></td>
+<td>
+<p>maximum number of clusters to compute the statistic. Default is 14.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a data frame with the Tab component of <code>cluster::clusGap()</code> results
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data_to_cluster &lt;- iris[c("Petal.Length", "Sepal.Length")]
+dmat &lt;- compute_dmat(data_to_cluster, "euclidean", TRUE)
+clusters &lt;- compute_clusters(dmat, "complete")
+gap_results &lt;- compute_gapstat(scale(data_to_cluster), clusters)
+head(gap_results)
+</code></pre>
+
+
+</div>

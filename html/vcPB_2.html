@@ -1,0 +1,239 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vc.pb</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Varying-Coefficient Disparity Decomposition Analysis for a Longitudinal Data</h2>
+
+<h3>Description</h3>
+
+<p>The <code>vc.pb</code> offers Peters-Belson(PB) type of nonparametric varying-coefficient regression method which measures the disparity between a majority group
+and a minority group for the longitudinal data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vc.pb(
+  formula,
+  group,
+  data,
+  id,
+  modifier = NULL,
+  local_time = NULL,
+  bandwidth_M = NULL,
+  bandwidth_m = NULL,
+  bandwidth_xM = NULL,
+  bandwidth_xm = NULL,
+  bandwidth_Z_M = NULL,
+  bandwidth_Z_m = NULL,
+  bandwidth_Z_xM = NULL,
+  bandwidth_Z_xm = NULL,
+  detail = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>a formula for the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>a vector within the <code>data</code> which is used for separating majority and minority groups.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data frame and data has to be included with the form of <code>data.frame</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>a vector within the <code>data</code> which is used for identifying the observations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modifier</code></td>
+<td>
+<p>(optional) a vector from the <code>data</code> which is an optional argument to add the varying term into the model. The default is <code>NULL</code>. If the class of the vector is given as
+<code>integer</code> then, the continuous version of <code>vc.PB</code> is performed and if the class is <code>factor</code> or <code>character</code>, then the discrete version is proceeded. Three different sets of
+inputs are needed for different versions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>local_time</code></td>
+<td>
+<p>(optional) a vector used for the local points of time variable in the kernel regression.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bandwidth_M</code></td>
+<td>
+<p>(optional) a bandwidth for the time variable used for estimating the time-varying coefficient of the majority group.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bandwidth_m</code></td>
+<td>
+<p>(optional) a bandwidth for the time variable used for estimating the time-varying coefficient of the minority group.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bandwidth_xM</code></td>
+<td>
+<p>(optional) a vector of <code>p</code> number of bandwidths for estimating the local expectations of the design matrix for the majority group.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bandwidth_xm</code></td>
+<td>
+<p>(optional) a vector of <code>p</code> number of bandwidths for estimating the local expectations of the design matrix for the minority group.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bandwidth_Z_M</code></td>
+<td>
+<p>(optional) a bandwidth for the varying variable used for estimating the time-varying coefficient of the majority group. Used only when the class of <code>modifier</code> is <code>integer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bandwidth_Z_m</code></td>
+<td>
+<p>(optional) a bandwidth for the varying variable used for estimating the time-varying coefficient of the minority group. Used only when the class of <code>modifier</code> is <code>integer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bandwidth_Z_xM</code></td>
+<td>
+<p>(optional) a vector of <code>p</code> number of bandwidths for estimating the local expectations of the design matrix related to varying variable for the majority group. Used only when the class of <code>modifier</code> is <code>integer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bandwidth_Z_xm</code></td>
+<td>
+<p>(optional) a vector of <code>p</code> number of bandwidths for estimating the local expectations of the design matrix related to varying variable for the minority group. Used only when the class of <code>modifier</code> is <code>integer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>detail</code></td>
+<td>
+<p>a bool argument whether the detailed results are provided or not.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>used for controlling the others.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>vc.pb</code> returns an object of class <code>"vc.pb"</code>, which is a list containing
+following components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>a matched call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overall_disparity</code></td>
+<td>
+<p>overall disparity between major and minor groups.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>explained_disparity</code></td>
+<td>
+<p>explained disparity between major and minor groups, this component is given only when <code>varying</code> is null.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>explained_disparity_by_X</code></td>
+<td>
+<p>explained disparity from the variables without <code>modifier</code> variable given that the modifier variable is from the majority group, this component is given only when <code>varying</code> is not null.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>explained_disparity_by_Z</code></td>
+<td>
+<p>explained disparity from <code>modifier</code> variable, this component is given only when <code>varying</code> is not null.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>unexplained_disparity</code></td>
+<td>
+<p>unexplained disparity between major and minor groups.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>times</code></td>
+<td>
+<p>local time points used for kernel regression.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>major</code></td>
+<td>
+<p>a majority group label.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minor</code></td>
+<td>
+<p>a minority group label.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modfier, varying.type</code></td>
+<td>
+<p>the modifier variable and the type of the modifier variable, these components are given only when <code>varying</code> is not null.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bandwidths</code></td>
+<td>
+<p>various corresponding bandwidths. Please see the details or the attached reference for more information.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Sang Kyu Lee
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(1)
+n &lt;- 100
+x1 &lt;- rnorm(n)
+x2 &lt;- rnorm(n)
+time &lt;- rep(1:5, 20) + runif(n)
+y &lt;- rnorm(n)
+sub_id &lt;- rep(1:25, 1, each = 4)
+group &lt;- rep(as.character(1:2), 25, each = 2)
+z &lt;- as.character(rbinom(n, 1, prob = 0.5))
+
+data &lt;- data.frame(y = y, x1 = x1, x2 = x2, z = z, group = group, time = time, sub_id = sub_id)
+
+fit &lt;- vc.pb(y ~ (x1|time) + x2, data = data, id = sub_id, group = group)
+fit
+</code></pre>
+
+
+</div>

@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hausdorff_check</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function for Hausdorff distance computation</h2>
+
+<h3>Description</h3>
+
+<p>The function includes two Hausdorff distance.
+The first one is hausdorff_true_est (<code class="reqn">d(A_n, \tilde{A}_n^f)</code>): for each estimated change point, we find the closest true CP and compute the distance, then take the maximum of distances.
+The second one is hausdorff_est_true(<code class="reqn">d(\tilde{A}_n^f, A_n)</code>): for each true change point, find the closest estimated change point and compute the distance, then take the maximum of distances.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hausdorff_check(pts.final, brk)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>pts.final</code></td>
+<td>
+<p>a list of estimated change points</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>brk</code></td>
+<td>
+<p>the true change points</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Hausdorff distance summary results, including mean, standard deviation and median.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## an example of 10 replicates result
+set.seed(1)
+nob &lt;- 1000
+brk &lt;- c(333, 666, nob+1)
+cp.list &lt;- vector('list', 10)
+for(i in 1:10){
+    cp.list[[i]] &lt;-  brk[1:2] + sample(c(-50:50),1)
+}
+# some replicate fails to detect all the change point
+cp.list[[2]] &lt;- cp.list[[2]][1]
+cp.list[4] &lt;- list(NULL)      # setting 4'th element to NULL.
+# some replicate overestimate the number of change point
+cp.list[[3]] &lt;- c(cp.list[[3]], 800)
+cp.list
+res &lt;- hausdorff_check(cp.list, brk)
+res
+
+</code></pre>
+
+
+</div>

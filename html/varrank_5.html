@@ -1,0 +1,208 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.varrank</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualization of varrank output</h2>
+
+<h3>Description</h3>
+
+<p><code>plot</code> method for <code>varrank</code> objects with multiple options.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'varrank'
+plot(x,
+                       ## block separation
+                       colsep = TRUE,
+                       rowsep = TRUE,
+                       sepcol ="white",
+                       sepwidth=c(0.005,0.005),
+
+                       ## cell labeling
+                       cellnote = TRUE,
+                       notecex = 1.5,
+                       notecol = "black",
+                       digitcell = 3,
+
+                       ## Row/Column Labelling
+                       margins = c(6, 6, 4, 2),
+                       labelscex = 1.2,
+
+                       ## color key + density info
+                       colkey = NULL,
+                       densadj = 0.25,
+                       textlines = 2,
+
+                       ## plot labels
+                       main = NULL,
+                       maincex = 1,
+                       ...)</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class <code>varrank</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colsep</code></td>
+<td>
+<p>(optional) a logical parameter to indicate if columns should be separated from others by narrow space of color. The default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rowsep</code></td>
+<td>
+<p>(optional) a logical parameter to indicate if rows should be separated from others by narrow space of color. The default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sepcol</code></td>
+<td>
+<p>(optional) the color to use to separate rows or columns. The default is <code>white</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sepwidth</code></td>
+<td>
+<p>(optional) Vector of length 2 giving the width
+(colsep) or height (rowsep) the separator box drawn by colsep and
+rowsep as a function of the width (colsep) or height (rowsep) of a
+cell. The defaults is <code>c(0.005, 0.005)</code>.</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>cellnote</code></td>
+<td>
+<p>(optional) a logical parameter to indicate if the scores should be displayed in cells.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>notecex</code></td>
+<td>
+<p>(optional) numeric scaling factor for <code>scores</code>. The default is 1.5.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>notecol</code></td>
+<td>
+<p>(optional) character string specifying the color for
+<code>cellnote</code> text.  Defaults to "black".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digitcell</code></td>
+<td>
+<p>(optional) integer that indicate how many digits of the <code>scores</code> should be displayed. The default is 3.</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>labelscex</code></td>
+<td>
+<p>the magnification factor to be used for x and y labels relative to the current setting of cex. The default is 1.2.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>margins</code></td>
+<td>
+<p>numerical vector of the form c(bottom, left, top, right) which gives the number of lines of margin to be specified on the four sides of the plot. The default is c(6, 6, 4, 2).</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>colkey</code></td>
+<td>
+<p>specification for the color scheme to be used. The default is a rainbow color scheme.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>densadj</code></td>
+<td>
+<p>numeric scaling value for tuning the kernel width when
+a density plot is drawn on the color key.  (See the <code>adjust</code>
+parameter for the <code>density</code> function for details.)  Defaults is
+0.25.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>textlines</code></td>
+<td>
+<p>number of lines to display <code>relevance/redundance</code> in the key. Default is 2.</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>an overall title for the plot. Default is none.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maincex</code></td>
+<td>
+<p>main magnification to be used for the plot. Default is 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments passed to image.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This <code>plot</code> method for <code>varrank</code> objects provides an
+extensible framework for the visualization <code>varrank</code> output analysis. The
+user is allowed to specify block separations, display of scores and the color scheme to be used. The other parameters give a full control on the output. The final rendering depends on the <code>algorithm</code> used. For a 'forward' search the key density is on the upper right corner and for a 'backward'
+search the key density is in the bottom left corner.
+The default color scheme is continuous heat color from blue to red. A
+popular alternative for creating color palettes is <span class="pkg">RColorBrewer</span>,
+<a href="https://cran.r-project.org/package=RColorBrewer">https://cran.r-project.org/package=RColorBrewer</a>.
+</p>
+<p>This <code>plot</code> method is very similar to the <code>heatmap.2</code> function from <span class="pkg">gplots</span>, <a href="https://cran.r-project.org/package=gplots">https://cran.r-project.org/package=gplots</a>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Gilles Kratzer</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">if (requireNamespace("mlbench", quietly = TRUE)) {
+library(mlbench)
+data(PimaIndiansDiabetes)
+
+##forward search for all variables
+out &lt;- varrank(data.df = PimaIndiansDiabetes,
+  method = "estevez",
+  variable.important = "diabetes",
+  discretization.method = "sturges",
+  algorithm = "forward",scheme="mid")
+
+##default output
+plot(x = out)
+
+##typical plot for high dimensional datasets
+plot(x = out, colsep = FALSE, rowsep = FALSE, cellnote = FALSE)
+}
+</code></pre>
+
+
+</div>

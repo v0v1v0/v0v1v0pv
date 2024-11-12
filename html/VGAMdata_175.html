@@ -1,0 +1,202 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>wffc.points</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Point System for the 2008 World Fly Fishing Championships </h2>
+
+<h3>Description</h3>
+
+<p>Point system for the 2008 World Fly Fishing Championships:
+current and some proposals.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">wffc.P1(length, c1 = 100, min.eligible = 0.18, ppm = 2000)
+wffc.P2(length, c1 = 100, min.eligible = 0.18, ppm = 2000,
+        c.quad = 12700)
+wffc.P3(length, c1 = 100, min.eligible = 0.18, ppm = 2000)
+wffc.P1star(length, c1 = 100, min.eligible = 0.18, ppm = 2000)
+wffc.P2star(length, c1 = 100, min.eligible = 0.18, ppm = 2000,
+            c.quad = 12700)
+wffc.P3star(length, c1 = 100, min.eligible = 0.18, ppm = 2000)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>length</code></td>
+<td>
+<p> Length of the fish, in meters. Numeric vector. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>c1</code></td>
+<td>
+<p> Points added to each eligible fish. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min.eligible</code></td>
+<td>
+<p> The 2008 WFFC regulations stipulated
+that the
+smallest eligible fish was 0.180 m, which is 180 mm. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ppm</code></td>
+<td>
+<p> Points per meter of length of the fish. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>c.quad</code></td>
+<td>
+
+<p>Constants for the quadratic terms.
+
+
+The defaults
+mean that a fish twice the minimum legal size will award
+about 50 percent
+more points compared to <code>wffc.P1()</code>
+and <code>wffc.P1star()</code>.
+See below for examples.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The official website contains a document with
+the official rules and
+regulations of the competition.
+The function <code>wffc.P1()</code> implements the
+current WFFC point system,
+and is ‘discrete’ in that fish lengths are
+rounded up to the nearest
+centimeter (provided it is greater or equal
+to <code>min.eligible</code> m).
+<code>wffc.P1star()</code> is a continuous version
+of it in that it is
+piecewise linear with two pieces and it is discontinuous at
+<code>min.eligible</code>.
+</p>
+<p>The function <code>wffc.P2()</code> is a new proposal which
+rewards catching bigger fish.
+It is based on a quadratic polynomial.
+<code>wffc.P2star()</code> is a continuous version of it.
+</p>
+<p>The function <code>wffc.P3()</code> is another new proposal which
+rewards catching bigger fish.
+Named a <em>cumulative linear proposal</em>,
+its slope is <code>ppm</code> between <code>min.eligible</code> and
+<code>2 * min.eligible</code>,
+its slope is <code>2 * ppm</code>
+between <code>2 * min.eligible</code> and
+<code>3 * min.eligible</code>,
+its slope is <code>3 * ppm</code>
+between <code>3 * min.eligible</code> and
+<code>4 * min.eligible</code>, etc.
+One adds the usual <code>c1</code> to each eligible fish.
+<code>wffc.P3star()</code> is a continuous
+version of <code>wffc.P3()</code>.
+</p>
+<p>The function <code>wffc.P4()</code> is another new proposal which
+rewards catching bigger fish.
+Named a <em>cumulative linear proposal</em>,
+its slope is <code>ppm</code> between <code>min.eligible</code> and
+<code>2 * min.eligible</code>,
+its slope is <code>2 * ppm</code>
+between <code>2 * min.eligible</code> and
+<code>1.5 * min.eligible</code>,
+its slope is <code>3 * ppm</code>
+between <code>1.5 * min.eligible</code> and
+<code>2 * min.eligible</code>, etc.
+One adds the usual <code>c1</code> to each eligible fish.
+<code>wffc.P4star()</code> is a continuous
+version of <code>wffc.P4()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector with the number of points.
+</p>
+
+
+<h3>Note</h3>
+
+<p><code>wffc.P2</code> and <code>wffc.P2star</code> may
+change in the future,
+as well as possibly
+<code>wffc.P3</code> and <code>wffc.P3star</code>
+and
+<code>wffc.P4</code> and <code>wffc.P4star</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee. </p>
+
+
+<h3>References</h3>
+
+
+
+
+
+<p>Yee, T. W. (2014).
+Scoring rules, and the role of chance:
+analysis of the 2008 World Fly Fishing Championships.
+<em>Journal of Quantitative Analysis in Sports</em>.
+<b>10</b>, 397–409.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>wffc</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  fishlength &lt;- seq(0.0, 0.72, by = 0.001)
+plot(fishlength, wffc.P2star(fishlength), type = "l", col = "blue",
+  las = 1, lty = "dashed", lwd = 2, las = 1, cex.main = 0.8,
+  xlab = "Fish length (m)", ylab = "Competition points",
+  main = "Current (red) &amp; proposed (blue&amp;green) WFFC point system")
+lines(fishlength, wffc.P1star(fishlength), col = "red", lwd = 2)
+lines(fishlength, wffc.P3star(fishlength), col = "darkgreen",
+      lwd = 2, lty = "dashed")
+lines(fishlength, wffc.P4star(fishlength), col = "orange",
+      lwd = 2, lty = "dashed")
+abline(v = (1:4) * 0.18, lty = "dotted")
+abline(h = (1:13) * wffc.P1star(0.18), lty = "dotted") 
+## End(Not run)
+
+# Successive slopes:
+(wffc.P1star((2:8)*0.18) - wffc.P1star((1:7)*0.18)) / (0.18 * 2000)
+(wffc.P3star((2:8)*0.18) - wffc.P3star((1:7)*0.18)) / (0.18 * 2000)
+(wffc.P4star((2:8)*0.18) - wffc.P4star((1:7)*0.18)) / (0.18 * 2000)
+
+# More successive slopes:
+MM2 &lt;- 0.18 / 2
+ind1 &lt;- 2:12
+(wffc.P4star((ind1)*MM2) - wffc.P4star((ind1-1)*MM2)) / (MM2 * 2000)
+
+# About 50 percent more points:
+wffc.P2    (2 * 0.18) / wffc.P1    (2 * 0.18)
+wffc.P2star(2 * 0.18) / wffc.P1star(2 * 0.18)
+</code></pre>
+
+
+</div>

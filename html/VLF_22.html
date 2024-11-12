@@ -1,0 +1,141 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>concordanceFun</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+VLF Concordance Check Function
+</h2>
+
+<h3>Description</h3>
+
+<p>Compares ntVLFs to aaVLFs to see if they are concordant (i.e., if the ntVLF causes the aaVLF).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">concordanceFun(nuc, aa, nuclength = 648, aalength = 216, aminoAcid_Modal)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>nuc</code></td>
+<td>
+
+<p>A matrix of ntVLFs, that contains only those specimen with VLFs, and a sequence with only VLF nucleotides and NAs in all other positions of the nucleotide sequences.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aa</code></td>
+<td>
+
+<p>A matrix of aaVLFs, that contains only those specimen with VLFs, and a sequence with only VLF amino acids and NAs in all other positions of the amino acid sequence.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nuclength</code></td>
+<td>
+
+<p>The length of the nucleotide sequence.  By default is 648.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aalength</code></td>
+<td>
+
+<p>The length of the amino acid sequence.  By default is 216.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aminoAcid_Modal</code></td>
+<td>
+
+<p>The modal amino acid sequence (i.e., the amino acid sequence that occurs most often in the given sequences)
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The argument nuc can be taken from the VLFmatrix output from the vlfFun function.  The argument aa can be taken from the VLFmatrix output from the aminoAcidFun function.  The argument aminoAcid_Modal can be taken from the modal output from the aminoAcidFun function.</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>matched</code></td>
+<td>
+<p>A list of the concordant ntVLFs and aaVLFs.  Contains the specimen identifier, the species name, the concordant amino acid, the amino acid position, and the concordant amino acid position.  There may be mulitple entries for the same aaVLF if that VLF is concordant to more than one ntVLF.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>codons</code></td>
+<td>
+<p>A vector containing calculations for how many of the concordant amino acids were caused by changes in each of the nucleotide codon positions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>concordantType</code></td>
+<td>
+<p>Contains information on how many of the concordant aaVLFs had a change in amino acid residue type and how many remained in the same amino acid residue category.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aminoAcidType</code></td>
+<td>
+<p>Contains information on how many of the aaVLFs had a change in amino acid residue type and how many remained in the same amino acid residue category.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>concordNuc</code></td>
+<td>
+<p>Gives the number of ntVLFs that showed concordance to aaVLFs.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>concordAA</code></td>
+<td>
+<p>Gives the number of aaVLFs that showed concordance to ntVLFs.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sequences</code></td>
+<td>
+<p>Gives the number of sequences that had both ntVLFs and aaVLFs.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: #VLF analysis
+data(birds)
+bird_vlfAnalysis &lt;- vlfFun(birds)
+
+#Amino Acid analysis
+data(birds_aminoAcids)
+bird_aaAnalysis &lt;- aminoAcidFun(birds_aminoAcids)
+
+#Concordance analysis
+bird_Concordance &lt;- concordanceFun(bird_vlfAnalysis$VLFmatrix, bird_aaAnalysis$VLFmatrix, 648, 216,
+    bird_aaAnalysis$modal)
+## End(Not run)
+</code></pre>
+
+
+</div>

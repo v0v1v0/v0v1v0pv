@@ -1,0 +1,155 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary.varSelRFBoot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summary of a varSelRFBoot object</h2>
+
+<h3>Description</h3>
+
+<p>Returns error rate and stability measures of a varSelRFBoot object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'varSelRFBoot'
+summary(object, return.model.freqs = FALSE,
+                     return.class.probs = TRUE,
+                     return.var.freqs.b.models = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object of class varSelRFBoot, as returned from
+<code>varSelRFBoot</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>return.model.freqs</code></td>
+<td>
+<p>If TRUE return a table with the frequencies
+of the final "models" (sets of selected variables) over all
+bootstrap replications.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>return.class.probs</code></td>
+<td>
+<p>If TRUE return average class probabilities
+for each sample based on the out-of-bag probabilites (see
+<code>varSelRFBoot</code>, the <code>prob.predictions</code> component).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>return.var.freqs.b.models</code></td>
+<td>
+<p>If TRUE return the frequencies of all
+variables selected from the bootstrap replicates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>If <code>return.class.probs = TRUE</code> a matrix with the average class
+probabilities  for each sample based on the out-of-bag probabilites. 
+</p>
+<p>Regardless of that setting, print out several summaries:
+
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>Summaries related to the "simplified" random forest on the original
+data</code></td>
+<td>
+<p>Such as the number and identity of the variables selected.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Summaries related to the error rate estimate</code></td>
+<td>
+<p>Such as the .632+
+estimate, and some of its components</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Summaries related to the stability (uniqueness) of the results
+obtained</code></td>
+<td>
+<p>Such as the frequency of the selected variables in the
+bootstrap runs, the frequency of the selected variables in the
+boostrap runs that are also among the variables selected from the
+complete run, the overlap of the bootstrap forests with the forest
+from the original data set (see <code>varSelRF</code> for the
+definition of overlap), and (optionally) the frequency of the
+"models", where a
+model is the set of variables selected in any particular run.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Ramon Diaz-Uriarte  <a href="mailto:rdiaz02@gmail.com">rdiaz02@gmail.com</a></p>
+
+
+<h3>References</h3>
+
+<p>Breiman, L. (2001) Random forests.
+<em>Machine Learning</em>, <b>45</b>, 5–32.
+</p>
+<p>Diaz-Uriarte, R. and Alvarez de Andres,
+S. (2005) Variable selection from random forests: application to gene
+expression
+data. Tech. report. <a href="http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html">http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html</a>
+</p>
+<p>Efron, B. &amp; Tibshirani, R. J. (1997) Improvements on cross-validation: the .632+ bootstrap method.
+<em>J. American Statistical Association</em>, <b>92</b>, 548–560.  
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>randomForest</code>,
+<code>varSelRF</code>,
+<code>varSelRFBoot</code>,
+<code>plot.varSelRFBoot</code>,
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+## This is a small example, but can take some time.
+
+x &lt;- matrix(rnorm(25 * 30), ncol = 30)
+x[1:10, 1:2] &lt;- x[1:10, 1:2] + 2
+cl &lt;- factor(c(rep("A", 10), rep("B", 15)))  
+
+rf.vs1 &lt;- varSelRF(x, cl, ntree = 200, ntreeIterat = 100,
+                   vars.drop.frac = 0.2)
+rf.vsb &lt;- varSelRFBoot(x, cl,
+                       bootnumber = 10,
+                       usingCluster = FALSE,
+                       srf = rf.vs1)
+rf.vsb
+summary(rf.vsb)
+plot(rf.vsb)
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

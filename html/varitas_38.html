@@ -1,0 +1,61 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mean.field.value</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>mean.field.value</h2>
+
+<h3>Description</h3>
+
+<p>Get mean value of a variant annotation field
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'field.value'
+mean(variants, field = c("TUMOUR.DP", "NORMAL.DP",
+  "NORMAL.AF", "TUMOUR.AF", "QUAL"), caller = c("consensus", "vardict",
+  "pgm", "mutect", "isis", "varscan", "lofreq"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>variants</code></td>
+<td>
+<p>Data frame with variants</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>field</code></td>
+<td>
+<p>String giving field of interest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>caller</code></td>
+<td>
+<p>String giving caller to calculate values from</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>As part of the variant merging process, annotated variant data frames are merged into 
+one, with the value from each caller prefixed by CALLER. For example, the VarDict normal allele 
+freqeuncy will have header VARDICT.NORMAL.AF. This function takes the average of all callers' value 
+for a given field, removing NA's. If only a single caller is present in the data frame, that value is returned.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Vector of mean values.
+</p>
+
+
+</div>

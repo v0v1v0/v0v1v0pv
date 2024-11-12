@@ -1,0 +1,150 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.visitation_forecast</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>visitation_forecast Plot Methods</h2>
+
+<h3>Description</h3>
+
+<p>Methods for plotting objects of the class "visitation_forecast".
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'visitation_forecast'
+plot(
+  x,
+  difference = FALSE,
+  log_outputs = FALSE,
+  actual_visitation = NULL,
+  xlab = "Time",
+  ylab = "Fitted Value",
+  pred_color = "#228B22",
+  actual_color = "#FF0000",
+  size = 1.5,
+  main = "Forecasts for Visitation Model",
+  plot_points = FALSE,
+  date_breaks = "1 month",
+  date_labels = "%y %b",
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of the "visitation_forecast" class.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>difference</code></td>
+<td>
+<p>A boolean to plot the differenced series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log_outputs</code></td>
+<td>
+<p>A boolean to plot the logged outputs of the forecast.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>actual_visitation</code></td>
+<td>
+<p>A timeseries object representing the actual visitation that will be plotted along site the visitation_forecast object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>A string that will be used for the xlabel of the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>A string that will be used for the ylabel of the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred_color</code></td>
+<td>
+<p>a String that will be used for the predicted series color of the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>actual_color</code></td>
+<td>
+<p>a String that will be used for the actual series color of the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size</code></td>
+<td>
+<p>A number that represents the thickness of the lines being plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>A string that will be used for the title of the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot_points</code></td>
+<td>
+<p>a boolean to specify if the plot should be points or continous line.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>date_breaks</code></td>
+<td>
+<p>A string to represent the distance between dates that the x-axis should be in. ex "1 month", "1 year".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>date_labels</code></td>
+<td>
+<p>A string to represent the format of the x-axis time labels. ex</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>extra arguments to pass in</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>No return value, called for plotting objects of the class "visitation_forecast".
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#' #Example:
+
+data("park_visitation")
+data("flickr_userdays")
+
+n_ahead &lt;- 12
+park &lt;- "YELL"
+pud_ts &lt;- ts(park_visitation[park_visitation$park == park,]$pud, start = 2005, freq = 12)
+pud_ts &lt;- log(pud_ts)
+trend_proxy &lt;- log(flickr_userdays)
+
+mf &lt;- visitation_model(pud_ts,trend_proxy)
+vf &lt;- predict(mf,12, only_new = TRUE)
+plot(vf)
+</code></pre>
+
+
+</div>

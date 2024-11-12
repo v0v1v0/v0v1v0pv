@@ -1,0 +1,114 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Collect.reddit</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Collect comments data from reddit threads</h2>
+
+<h3>Description</h3>
+
+<p>Collects comments made by users on one or more specified subreddit conversation threads and structures
+the data into a dataframe with the class names <code>"datasource"</code> and <code>"reddit"</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'reddit'
+Collect(
+  credential,
+  threadUrls,
+  waitTime = c(3, 5),
+  ua = getOption("HTTPUserAgent"),
+  writeToFile = FALSE,
+  verbose = FALSE,
+  ...
+)
+
+collect_reddit_threads(
+  threadUrls,
+  waitTime = c(3, 5),
+  ua = getOption("HTTPUserAgent"),
+  writeToFile = FALSE,
+  verbose = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>credential</code></td>
+<td>
+<p>A <code>credential</code> object generated from <code>Authenticate</code> with class name <code>"reddit"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threadUrls</code></td>
+<td>
+<p>Character vector. Reddit thread urls to collect data from.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>waitTime</code></td>
+<td>
+<p>Numeric vector. Time range in seconds to select random wait from in-between url collection requests.
+Minimum is 3 seconds. Default is <code>c(3, 5)</code> for a wait time chosen from between 3 and 5 seconds.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ua</code></td>
+<td>
+<p>Character string. Override User-Agent string to use in Reddit thread requests. Default is
+<code>option("HTTPUserAgent")</code> value as set by vosonSML.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>writeToFile</code></td>
+<td>
+<p>Logical. Write collected data to file. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical. Output additional information about the data collection. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional parameters passed to function. Not used in this method.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>tibble</code> object with class names <code>"datasource"</code> and <code>"reddit"</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The reddit web endpoint used for collection has maximum limit of 500 comments per thread url.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# subreddit url to collect threads from
+threadUrls &lt;- c("https://www.reddit.com/r/xxxxxx/comments/xxxxxx/x_xxxx_xxxxxxxxx/")
+
+redditData &lt;- redditAuth |&gt;
+  Collect(threadUrls = threadUrls, writeToFile = TRUE)
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

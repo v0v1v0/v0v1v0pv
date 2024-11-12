@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>columnParse</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Column Parsing</h2>
+
+<h3>Description</h3>
+
+<p>Parses column names from input occurrence
+<code>data.frame</code> for more seamless function
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">columnParse(occs, wDepth = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>occs</code></td>
+<td>
+<p>A <code>data.frame</code> with at least two columns
+named "longitude" and "latitude" or that
+can be coerced into this format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wDepth</code></td>
+<td>
+<p>Logical; flags whether a depth column should
+also be sought.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is an internal function to return the putative
+indices for latitude and longitude or x and y coordinates
+of occurrences to allow for code that is more robust to
+very common user error
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>list</code> of length 2 with indices of the x and y
+columns, respectively, followed by a message with a plain
+text report of which columns were interpreted as x and y.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(terra)
+
+# Create sample raster
+r &lt;- rast(ncol=10, nrow=10)
+values(r) &lt;- 1:100
+
+# Create test occurrences
+set.seed(0)
+longitude &lt;- sample(ext(r)[1]:ext(r)[2],
+                    size = 10, replace = FALSE)
+set.seed(0)
+latitude &lt;- sample(ext(r)[3]:ext(r)[4],
+                   size = 10, replace = FALSE)
+set.seed(0)
+depth &lt;- sample(0:35, size = 10, replace = TRUE)
+occurrences &lt;- as.data.frame(cbind(longitude,latitude,depth))
+
+# Here's the function
+result &lt;- columnParse(occs = occurrences[,1:2],
+                      wDepth = FALSE)
+result &lt;- columnParse(occs = occurrences,
+                      wDepth = TRUE)
+
+</code></pre>
+
+
+</div>

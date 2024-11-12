@@ -1,0 +1,59 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>FNAIVE</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Functional naive model</h2>
+
+<h3>Description</h3>
+
+<p><code>FNAIVE()</code> returns an random walk functional model applied to the formula's response variable as a function of age.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">FNAIVE(formula, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>Model specification.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A model specification.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Rob J Hyndman
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fnaive &lt;- aus_mortality |&gt;
+  dplyr::filter(State == "Victoria", Sex == "female") |&gt;
+  model(fit = FNAIVE(Mortality))
+report(fnaive)
+autoplot(fnaive) + ggplot2::scale_y_log10()
+</code></pre>
+
+
+</div>

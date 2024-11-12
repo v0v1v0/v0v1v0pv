@@ -1,0 +1,204 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pairs.copuladata</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Pairs Plot of Copula Data</h2>
+
+<h3>Description</h3>
+
+<p>This function provides pair plots for copula data. Using default setting it
+plots bivariate contour plots on the lower panel, scatter plots and
+correlations on the upper panel and histograms on the diagonal panel.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'copuladata'
+pairs(
+  x,
+  labels = names(x),
+  ...,
+  lower.panel = lp.copuladata,
+  upper.panel = up.copuladata,
+  diag.panel = dp.copuladata,
+  label.pos = 0.85,
+  cex.labels = 1,
+  gap = 0,
+  method = "kendall",
+  ccols = terrain.colors(11),
+  margins = "norm"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>copuladata</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p>variable names/labels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other graphical parameters (see <code>graphics::par()</code>) or
+options passed to <code>BiCopKDE()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.panel</code></td>
+<td>
+<p>panel function to be used on the lower diagonal panels
+(if not supplied, a default function is used)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>upper.panel</code></td>
+<td>
+<p>panel function to be used on the upper diagonal panels
+(if not supplied, a default function is used)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>diag.panel</code></td>
+<td>
+<p>panel function to be used on the diagonal panels (if not
+supplied, a default function is used)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label.pos</code></td>
+<td>
+<p>y position of labels in the diagonal panel; default:
+<code>label.pos = 0.85</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex.labels</code></td>
+<td>
+<p>magnification to be used for the labels of the diagonal
+panel; default: <code>cex.labels = 1</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gap</code></td>
+<td>
+<p>distance between subplots, in margin lines; default: <code>gap = 0</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>a character string indicating which correlation coefficients
+are computed. One of <code>"pearson"</code>, <code>"kendall"</code> (default), or
+<code>"spearman"</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ccols</code></td>
+<td>
+<p>color to be used for the contour plots; default: <code>ccols = terrain.colors(30)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>margins</code></td>
+<td>
+<p>character; margins for the contour plots. Options are:<br><code>"unif"</code> for the original copula density,
+<code>"norm"</code> for the transformed density with standard normal margins,
+<code>"exp"</code> with standard exponential margins, and  <code>"flexp"</code> with
+flipped exponential margins.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>If the default panel functions are used <br></p>
+ <ul>
+<li> <p><code>col</code>
+changes only the color of the points in the scatter plot
+(<code>upper.panel</code>) <br></p>
+</li>
+<li> <p><code>cex</code> changes only the magnification of
+the points in the scatter plot (<code>upper.panel</code>) </p>
+</li>
+</ul>
+<h3>Author(s)</h3>
+
+<p>Tobias Erhardt
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>graphics::pairs()</code>, <code>as.copuladata()</code>,
+<code>BiCopKDE()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data(daxreturns)
+
+data &lt;- as.copuladata(daxreturns)
+sel &lt;- c(4,5,14,15)
+
+## pairs plot with default settings
+pairs(data[sel])
+
+## pairs plot with custom settings
+nlevels &lt;- 20
+pairs(data[sel], cex = 2, pch = 1, col = "black",
+      diag.panel = NULL, label.pos = 0.5,
+      cex.labels = 2.5, gap = 1,
+      method = "pearson", ccols = heat.colors(nlevels),
+      margins = "flexp")
+
+## pairs plot with own panel functions
+up &lt;- function(x, y) {
+  # upper panel: empirical contour plot
+  op &lt;- par(usr = c(-3, 3, -3, 3), new = TRUE)
+  BiCopKDE(x, y,
+           levels = c(0.01, 0.05, 0.1, 0.15, 0.2),
+           margins = "exp",
+           axes = FALSE)
+  on.exit(par(op))
+}
+
+lp &lt;- function(x, y) {
+  # lower panel: scatter plot (copula data) and correlation
+  op &lt;- par(usr = c(0, 1, 0, 1), new = TRUE)
+  points(x, y, pch = 1, col = "black")
+  r &lt;- cor(x, y, method = "spearman") # Spearman's rho
+  txt &lt;- format(x = r, digits = 3, nsmall = 3)[1]
+  text(x = 0.5, y = 0.5, labels = txt, cex = 1 + abs(r) * 2, col = "blue")
+  on.exit(par(op))
+}
+
+dp &lt;- function(x) {
+  # diagonal panel: histograms (copula data)
+  op &lt;- par(usr = c(0, 1, 0, 1.5), new = TRUE)
+  hist(x, freq = FALSE, add = TRUE, col = "brown", border = "black", main = "")
+  abline(h = 1, col = "black", lty = 2)
+  on.exit(par(op))
+}
+
+nlevels &lt;- 20
+pairs(data[sel],
+      lower.panel = lp, upper.panel = up, diag.panel = dp, gap = 0.5)
+
+</code></pre>
+
+
+</div>

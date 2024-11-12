@@ -1,0 +1,257 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>posbernoulli.b</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Positive Bernoulli Family Function with Behavioural Effects </h2>
+
+<h3>Description</h3>
+
+<p>Fits a GLM-/GAM-like model to multiple Bernoulli responses where
+each row in the capture history matrix response has at least
+one success (capture).
+Capture history behavioural effects are accommodated.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">posbernoulli.b(link = "logitlink", drop.b = FALSE ~ 1,
+   type.fitted = c("likelihood.cond", "mean.uncond"), I2 = FALSE,
+   ipcapture = NULL, iprecapture = NULL,
+   p.small = 1e-4, no.warning = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link, drop.b, ipcapture, iprecapture</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information about
+these arguments.
+By default the parallelism assumption does not apply to the
+intercept.
+With an intercept-only model
+setting <code>drop.b = TRUE ~ 1</code> results in the
+<code class="reqn">M_0</code>/<code class="reqn">M_h</code> model.
+</p>
+
+
+
+
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>I2</code></td>
+<td>
+
+<p>Logical.
+This argument is used for terms that are not parallel.
+If <code>TRUE</code> then the constraint matrix <code>diag(2)</code>
+(the general default constraint matrix in <span class="pkg">VGAM</span>) is used,
+else <code>cbind(0:1, 1)</code>.
+The latter means the first element/column
+corresponds to the behavioural effect.
+Consequently it and its standard error etc. can be accessed
+directly without subtracting two quantities.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.fitted</code></td>
+<td>
+
+<p>Details at <code>posbernoulli.tb</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.small, no.warning</code></td>
+<td>
+
+<p>See <code>posbernoulli.t</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This model
+(commonly known as <code class="reqn">M_b</code>/<code class="reqn">M_{bh}</code> in the
+capture–recapture literature)
+operates on a capture history matrix response of 0s and 1s
+(<code class="reqn">n \times \tau</code>).
+See <code>posbernoulli.t</code> for details,
+e.g., common assumptions with other models.
+Once an animal is captured for the first time,
+it is marked/tagged so that its future
+capture history can be recorded. The effect of the recapture
+probability is modelled through a second linear/additive
+predictor.  It is well-known that some species of animals are
+affected by capture,
+e.g., trap-shy or trap-happy. This <span class="pkg">VGAM</span> family function
+<em>does</em> allow the capture history to be modelled via such
+behavioural effects.
+So does <code>posbernoulli.tb</code> but
+<code>posbernoulli.t</code> cannot.
+</p>
+
+
+<p>The number of linear/additive predictors is <code class="reqn">M = 2</code>,
+and the default links are
+<code class="reqn">(logit \,p_c, logit \,p_r)^T</code>
+where <code class="reqn">p_c</code> is the probability of capture and
+<code class="reqn">p_r</code> is the probability of recapture.
+The fitted value returned is of the same dimension as
+the response matrix, and depends on the capture history:
+prior to being first captured, it is <code>pcapture</code>.
+Afterwards, it is <code>precapture</code>.
+</p>
+<p>By default, the constraint matrices for the intercept term
+and the other covariates are set up so that <code class="reqn">p_r</code>
+differs from <code class="reqn">p_c</code> by a simple binary effect,
+on a logit scale.
+However, this difference (the behavioural effect) is more
+directly estimated by having <code>I2 = FALSE</code>.
+Then it allows an estimate of the trap-happy/trap-shy effect;
+these are positive/negative values respectively.
+If <code>I2 = FALSE</code> then
+the (nonstandard) constraint matrix used is
+<code>cbind(0:1, 1)</code>,
+meaning the first element can be interpreted as the behavioural
+effect.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The dependent variable is <em>not</em> scaled to row proportions.
+This is the same as <code>posbernoulli.t</code>
+and <code>posbernoulli.tb</code>
+but different from <code>posbinomial</code>
+and <code>binomialff</code>.
+</p>
+
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee. </p>
+
+
+<h3>References</h3>
+
+<p>See <code>posbernoulli.t</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>posbernoulli.t</code> and
+<code>posbernoulli.tb</code> (including estimating <code class="reqn">N</code>),
+<code>deermice</code>,
+<code>dposbern</code>,
+<code>rposbern</code>,
+<code>posbinomial</code>,
+<code>aux.posbernoulli.t</code>,
+<code>prinia</code>.
+</p>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# deermice data ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+
+# Fit a M_b model
+M.b &lt;- vglm(cbind(y1, y2, y3, y4, y5, y6) ~ 1,
+            posbernoulli.b, data = deermice, trace = TRUE)
+coef(M.b)["(Intercept):1"]  # Behavioural effect on logit scale
+coef(M.b, matrix = TRUE)
+constraints(M.b, matrix = TRUE)
+summary(M.b, presid = FALSE)
+
+# Fit a M_bh model
+M.bh &lt;- vglm(cbind(y1, y2, y3, y4, y5, y6) ~ sex + weight,
+             posbernoulli.b, data = deermice, trace = TRUE)
+coef(M.bh, matrix = TRUE)
+coef(M.bh)["(Intercept):1"]  # Behavioural effect on logit scale
+# (2,1) elt is for the behavioural effect:
+constraints(M.bh)[["(Intercept)"]]
+summary(M.bh, presid = FALSE)  # Significant trap-happy effect
+# Approx. 95 percent confidence for the behavioural effect:
+SE.M.bh &lt;- coef(summary(M.bh))["(Intercept):1", "Std. Error"]
+coef(M.bh)["(Intercept):1"] + c(-1, 1) * 1.96 * SE.M.bh
+
+# Fit a M_h model
+M.h &lt;- vglm(cbind(y1, y2, y3, y4, y5, y6) ~ sex + weight,
+            posbernoulli.b(drop.b = TRUE ~ sex + weight),
+            data = deermice, trace = TRUE)
+coef(M.h, matrix = TRUE)
+constraints(M.h, matrix = TRUE)
+summary(M.h, presid = FALSE)
+
+# Fit a M_0 model
+M.0 &lt;- vglm(cbind(    y1 + y2 + y3 + y4 + y5 + y6,
+                  6 - y1 - y2 - y3 - y4 - y5 - y6) ~ 1,
+            posbinomial, data = deermice, trace = TRUE)
+coef(M.0, matrix = TRUE)
+summary(M.0, presid = FALSE)
+
+
+# Simulated data set ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+set.seed(123); nTimePts &lt;- 5; N &lt;- 1000  # N is the popn size
+pdata &lt;- rposbern(N, nTimePts=nTimePts, pvars=2, is.popn=TRUE)
+nrow(pdata)  # &lt; N (because some animals were never captured)
+# The truth: xcoeffs are c(-2, 1, 2) and cap.effect = +1
+
+M.bh.2 &lt;- vglm(cbind(y1, y2, y3, y4, y5) ~ x2,
+               posbernoulli.b, data = pdata, trace = TRUE)
+coef(M.bh.2)
+coef(M.bh.2, matrix = TRUE)
+constraints(M.bh.2, matrix = TRUE)
+summary(M.bh.2, presid = FALSE)
+head(depvar(M.bh.2))    # Capture history response matrix
+head(M.bh.2@extra$cap.hist1)  # Info on its capture history
+head(M.bh.2@extra$cap1)  # When it was first captured
+head(fitted(M.bh.2))     # Depends on capture history
+(trap.effect &lt;- coef(M.bh.2)["(Intercept):1"])  # Should be +1
+head(model.matrix(M.bh.2, type = "vlm"), 21)
+head(pdata)
+summary(pdata)
+dim(depvar(M.bh.2))
+vcov(M.bh.2)
+
+M.bh.2@extra$N.hat  # Population size estimate; should be about N
+M.bh.2@extra$SE.N.hat  # SE of the estimate of the population size
+# An approximate 95 percent confidence interval:
+round(M.bh.2@extra$N.hat + c(-1, 1)*1.96* M.bh.2@extra$SE.N.hat, 1)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

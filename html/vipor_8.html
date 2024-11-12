@@ -1,0 +1,149 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>offsetX</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Offset data using quasirandom noise to avoid overplotting</h2>
+
+<h3>Description</h3>
+
+<p>Arranges data points using quasirandom noise (van der Corput sequence), pseudorandom noise or alternatively positioning extreme values within a band to the left and right to form beeswarm/one-dimensional scatter/strip chart style plots. That is a plot resembling a cross between a violin plot (showing the density distribution) and a scatter plot (showing the individual points). This function returns a vector of the offsets to be used in plotting.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">offsetX(y, x = rep(1, length(y)), width = 0.4, varwidth = FALSE, ...)
+
+offsetSingleGroup(
+  y,
+  maxLength = NULL,
+  method = c("quasirandom", "pseudorandom", "smiley", "maxout", "frowney", "minout",
+    "tukey", "tukeyDense"),
+  nbins = NULL,
+  adjust = 1
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>vector of data points</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a grouping factor for y (optional)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p>the maximum spacing away from center for each group of points. Since points are spaced to left and right, the maximum width of the cluster will be approximately width*2 (0 = no offset, default = 0.4)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varwidth</code></td>
+<td>
+<p>adjust the width of each group based on the number of points in the group</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments to offsetSingleGroup</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxLength</code></td>
+<td>
+<p>multiply the offset by sqrt(length(y)/maxLength) if not NULL. The sqrt is to match boxplot (allows comparison of order of magnitude different ns, scale with standard error)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>method used to distribute the points:
+</p>
+
+<dl>
+<dt>quasirandom:</dt>
+<dd>
+<p>points are distributed within a kernel density estimate of the distribution with offset determined by quasirandom Van der Corput noise</p>
+</dd>
+<dt>pseudorandom:</dt>
+<dd>
+<p>points are distributed within a kernel density estimate of the distribution with offset determined by pseudorandom noise a la jitter</p>
+</dd>
+<dt>maxout:</dt>
+<dd>
+<p>points are distributed within a kernel density with points in a band distributed with highest value points on the  outside and lowest in the middle</p>
+</dd>
+<dt>minout:</dt>
+<dd>
+<p>points are distributed within a kernel density with points in a band distributed with highest value points in the middle and lowest on the outside</p>
+</dd>
+<dt>tukey:</dt>
+<dd>
+<p>points are distributed as described in Tukey and Tukey "Strips displaying empirical distributions: I. textured dot strips"</p>
+</dd>
+<dt>tukeyDense:</dt>
+<dd>
+<p>points are distributed as described in Tukey and Tukey but are constrained with the kernel density estimate</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nbins</code></td>
+<td>
+<p>the number of points used to calculate density (defaults to 1000 for quasirandom and pseudorandom and 100 for others)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>adjust</code></td>
+<td>
+<p>adjust the bandwidth used to calculate the kernel density (smaller values mean tighter fit, larger values looser fit, default is 1)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a vector with of x-offsets of the same length as y
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Generate fake data
+dat &lt;- list(rnorm(50), rnorm(500), c(rnorm(100), rnorm(100,5)), rcauchy(100))
+names(dat) &lt;- c("Normal", "Dense Normal", "Bimodal", "Extremes")
+
+## Plot each distribution with a variety of parameters
+par(mfrow=c(4,1), mar=c(2,4, 0.5, 0.5))
+sapply(names(dat),function(label) {
+  y&lt;-dat[[label]]
+  
+  offsets &lt;- list(
+    'Default'=offsetX(y),
+    'Smoother'=offsetX(y, adjust=2),
+    'Tighter'=offsetX(y, adjust=0.1),
+    'Thinner'=offsetX(y, width=0.1)
+  )
+  ids &lt;- rep(1:length(offsets), sapply(offsets,length))
+  
+  plot(unlist(offsets) + ids, rep(y, length(offsets)), 
+       ylab=label, xlab='', xaxt='n', pch=21, las=1)
+  axis(1, 1:4, c("Default", "Adjust=2", "Adjust=0.1", "Width=10%"))
+})
+
+</code></pre>
+
+
+</div>

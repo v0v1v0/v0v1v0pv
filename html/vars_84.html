@@ -1,0 +1,323 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summary method for objects of class varest, svarest and svecest</h2>
+
+<h3>Description</h3>
+
+<p>'summary' methods for class '"varest"', '"svarest"' and '"svecest"'.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'varest'
+summary(object, equations = NULL, ...)
+## S3 method for class 'varsum'
+print(x, digits = max(3, getOption("digits") - 3),
+signif.stars = getOption("show.signif.stars"), ...)
+## S3 method for class 'svarest'
+summary(object,  ...)
+## S3 method for class 'svarsum'
+print(x, digits = max(3, getOption("digits") - 3), ...)
+## S3 method for class 'svecest'
+summary(object,  ...)
+## S3 method for class 'svecsum'
+print(x, digits = max(3, getOption("digits") - 3), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Object of class ‘<code>varest</code>’, usually, a
+result of a call to <code>VAR</code>, or object of class ‘<code>svarest</code>’, usually, a
+result of a call to <code>SVAR</code>, or object of class ‘<code>svecest</code>’, usually, a
+result of a call to <code>SVEC</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>equations</code></td>
+<td>
+<p>Character vector of endogenous variable names for
+which summary results should be returned. The default is <code>NULL</code>
+and results are returned for all equations in the VAR.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object with class attribute ‘varsum’, ‘svarsum’.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>the number of significant digits to use when printing.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>signif.stars</code></td>
+<td>
+<p>logical. If 'TRUE', ‘significance stars’
+are printed for each coefficient.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns either a list with class attribute <code>varsum</code> which contains the
+following elements:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>names</code></td>
+<td>
+<p>Character vector with the names of the endogenous
+correlation matrix of VAR residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logLik</code></td>
+<td>
+<p>Numeric, value of log Likelihood.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>Integer, sample size.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>roots</code></td>
+<td>
+<p>Vector, roots of the characteristic polynomial.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Character vector, deterministic regressors included in VAR:</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>Call, the initial call to <code>VAR</code>.</p>
+</td>
+</tr>
+</table>
+<p>Or a list with class attribute <code>svarsum</code> which contains the
+following elements:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Character, the type of SVAR-model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>A</code></td>
+<td>
+<p>Matrix, estimated coefficients for A matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>B</code></td>
+<td>
+<p>Matrix, estimated coefficients for B matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Ase</code></td>
+<td>
+<p>Matrix, standard errors for A matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Bse</code></td>
+<td>
+<p>Matrix, standard errors for B matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LRIM</code></td>
+<td>
+<p>Matrix, long-run impact coefficients for <code>BQ</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Sigma.U</code></td>
+<td>
+<p>Matrix, variance/covariance of reduced form residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logLik</code></td>
+<td>
+<p>Numeric, value of log-Likelihood.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LR</code></td>
+<td>
+<p>htest, LR result of over-identification test.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>Integer, number of observations used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>opt</code></td>
+<td>
+<p>List, result of <code>optim()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iter</code></td>
+<td>
+<p>Integer, the count of iterations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>Call, the call to <code>SVAR()</code>.</p>
+</td>
+</tr>
+</table>
+<p>Or a list with class attribute <code>svecsum</code> which contains the
+following elements:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Character, the type of SVEC-model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SR</code></td>
+<td>
+<p>Matrix, contemporaneous impact matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LR</code></td>
+<td>
+<p>Matrix, long-run impact matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SRse</code></td>
+<td>
+<p>Matrix, standard errors for SR matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LRse</code></td>
+<td>
+<p>Matrix, standard errors for LR matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Sigma.U</code></td>
+<td>
+<p>Matrix, variance/covariance of reduced form residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logLik</code></td>
+<td>
+<p>Numeric, value of log-Likelihood.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LRover</code></td>
+<td>
+<p>htest, LR result of over-identification test.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>Integer, number of observations used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r</code></td>
+<td>
+<p>Integer, co-integration rank of VECM.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iter</code></td>
+<td>
+<p>Integer, the count of iterations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>Call, the call to <code>SVEC()</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Bernhard Pfaff</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VAR</code>, <code>SVAR</code>, <code>SVEC</code>  
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Canada)
+## summary-method for varest
+var.2c &lt;- VAR(Canada, p = 2 , type = "const")
+summary(var.2c)
+## summary-method for svarest
+amat &lt;- diag(4)
+diag(amat) &lt;- NA
+amat[2, 1] &lt;- NA
+amat[4, 1] &lt;- NA
+## Estimation method scoring
+svar.a &lt;- SVAR(x = var.2c, estmethod = "scoring", Amat = amat, Bmat = NULL,
+max.iter = 100, maxls = 1000, conv.crit = 1.0e-8)
+summary(svar.a)
+## summary-method for svecest
+vecm &lt;- ca.jo(Canada[, c("prod", "e", "U", "rw")], type = "trace",
+              ecdet = "trend", K = 3, spec = "transitory")
+SR &lt;- matrix(NA, nrow = 4, ncol = 4)
+SR[4, 2] &lt;- 0
+LR &lt;- matrix(NA, nrow = 4, ncol = 4)
+LR[1, 2:4] &lt;- 0
+LR[2:4, 4] &lt;- 0
+svec.b &lt;- SVEC(vecm, LR = LR, SR = SR, r = 1, lrtest = FALSE, boot =
+FALSE)
+summary(svec.b) 
+</code></pre>
+
+
+</div>

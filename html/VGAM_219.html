@@ -1,0 +1,200 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Coef.qrrvglm-class</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Class “Coef.qrrvglm” </h2>
+
+<h3>Description</h3>
+
+<p>The most pertinent matrices and other quantities pertaining to a
+QRR-VGLM (CQO model).
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>Coef(object,
+...)</code> where <code>object</code> is an object of class <code>"qrrvglm"</code>
+(created by <code>cqo</code>).
+</p>
+<p>In this document, <code class="reqn">R</code> is the <em>rank</em>, <code class="reqn">M</code> is the number of
+linear predictors and <code class="reqn">n</code> is the number of observations.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt>
+<code>A</code>:</dt>
+<dd>
+<p>Of class <code>"matrix"</code>, <b>A</b>, which are the
+linear ‘coefficients’ of the matrix of latent variables.
+It is <code class="reqn">M</code> by <code class="reqn">R</code>. </p>
+</dd>
+<dt>
+<code>B1</code>:</dt>
+<dd>
+<p>Of class <code>"matrix"</code>, <b>B1</b>.
+These correspond to terms of the argument <code>noRRR</code>. </p>
+</dd>
+<dt>
+<code>C</code>:</dt>
+<dd>
+<p>Of class <code>"matrix"</code>, <b>C</b>, the
+canonical coefficients. It has <code class="reqn">R</code> columns. </p>
+</dd>
+<dt>
+<code>Constrained</code>:</dt>
+<dd>
+<p>Logical. Whether the model is
+a constrained ordination model. </p>
+</dd>
+<dt>
+<code>D</code>:</dt>
+<dd>
+<p>Of class <code>"array"</code>,
+<code>D[,,j]</code> is an order-<code>Rank</code> matrix, for
+<code>j</code> = 1,...,<code class="reqn">M</code>.
+Ideally, these are negative-definite in order to make the response
+curves/surfaces bell-shaped.
+</p>
+</dd>
+<dt>
+<code>Rank</code>:</dt>
+<dd>
+<p>The rank (dimension, number of latent variables)
+of the RR-VGLM. Called <code class="reqn">R</code>. </p>
+</dd>
+<dt>
+<code>latvar</code>:</dt>
+<dd>
+<p><code class="reqn">n</code> by <code class="reqn">R</code> matrix
+of latent variable values. </p>
+</dd>
+<dt>
+<code>latvar.order</code>:</dt>
+<dd>
+<p>Of class <code>"matrix"</code>, the permutation
+returned when the function
+<code>order</code> is applied to each column of <code>latvar</code>.
+This enables each column of <code>latvar</code> to be easily sorted.
+</p>
+</dd>
+<dt>
+<code>Maximum</code>:</dt>
+<dd>
+<p>Of class <code>"numeric"</code>, the
+<code class="reqn">M</code> maximum fitted values. That is, the fitted values
+at the optimums for <code>noRRR = ~ 1</code> models.
+If <code>noRRR</code> is not <code>~ 1</code> then these will be <code>NA</code>s. </p>
+</dd>
+<dt>
+<code>NOS</code>:</dt>
+<dd>
+<p>Number of species.</p>
+</dd>
+<dt>
+<code>Optimum</code>:</dt>
+<dd>
+<p>Of class <code>"matrix"</code>, the values
+of the latent variables where the optimums are.
+If the curves are not bell-shaped, then the value will
+be <code>NA</code> or <code>NaN</code>.</p>
+</dd>
+<dt>
+<code>Optimum.order</code>:</dt>
+<dd>
+<p>Of class <code>"matrix"</code>, the permutation
+returned when the function
+<code>order</code> is applied to each column of <code>Optimum</code>.
+This enables each row of <code>Optimum</code> to be easily sorted.
+</p>
+</dd>
+</dl>
+<dl>
+<dt>
+<code>bellshaped</code>:</dt>
+<dd>
+<p>Vector of logicals: is each
+response curve/surface bell-shaped? </p>
+</dd>
+<dt>
+<code>dispersion</code>:</dt>
+<dd>
+<p>Dispersion parameter(s). </p>
+</dd>
+<dt>
+<code>Dzero</code>:</dt>
+<dd>
+<p>Vector of logicals, is each of the
+response curves linear in the latent variable(s)?
+It will be if and only if
+<code>D[,,j]</code> equals <b>O</b>, for
+<code>j</code> = 1,...,<code class="reqn">M</code> . </p>
+</dd>
+<dt>
+<code>Tolerance</code>:</dt>
+<dd>
+<p>Object of class <code>"array"</code>,
+<code>Tolerance[,,j]</code> is an order-<code>Rank</code> matrix, for
+<code>j</code> = 1,...,<code class="reqn">M</code>, being the matrix of
+tolerances (squared if on the diagonal).
+These are denoted by <b>T</b> in Yee (2004).
+Ideally, these are positive-definite in order to make the response
+curves/surfaces bell-shaped.
+The tolerance matrices satisfy
+<code class="reqn">T_s = -\frac12 D_s^{-1}</code>.
+</p>
+</dd>
+</dl>
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2004).
+A new technique for maximum-likelihood
+canonical Gaussian ordination.
+<em>Ecological Monographs</em>,
+<b>74</b>, 685–701.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Coef.qrrvglm</code>,
+<code>cqo</code>,
+<code>print.Coef.qrrvglm</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x2 &lt;- rnorm(n &lt;- 100)
+x3 &lt;- rnorm(n)
+x4 &lt;- rnorm(n)
+latvar1 &lt;- 0 + x3 - 2*x4
+lambda1 &lt;- exp(3 - 0.5 * ( latvar1-0)^2)
+lambda2 &lt;- exp(2 - 0.5 * ( latvar1-1)^2)
+lambda3 &lt;- exp(2 - 0.5 * ((latvar1+4)/2)^2)
+y1 &lt;- rpois(n, lambda1)
+y2 &lt;- rpois(n, lambda2)
+y3 &lt;- rpois(n, lambda3)
+yy &lt;- cbind(y1, y2, y3)
+# vvv p1 &lt;- cqo(yy ~ x2 + x3 + x4, fam = poissonff, trace = FALSE)
+## Not run: 
+lvplot(p1, y = TRUE, lcol = 1:3, pch = 1:3, pcol = 1:3)
+
+## End(Not run)
+# vvv print(Coef(p1), digits = 3)
+</code></pre>
+
+
+</div>

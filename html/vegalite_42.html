@@ -1,0 +1,111 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mark_line</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Line mark</h2>
+
+<h3>Description</h3>
+
+<p>A line mark represents the data points stored in a field with a line
+connecting all of these points. Unlike other marks except area that represents
+one data element per mark, one line mark represent multiple data element as
+a single line.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mark_line(vl, orient = NULL, interpolate = NULL, tension = NULL,
+  opacity = NULL, color = NULL, fill = NULL, stroke = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vl</code></td>
+<td>
+<p>Vega-Lite object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>orient</code></td>
+<td>
+<p>the orientation of a non-stacked bar, area, and line charts.
+The value is either "horizontal", or "vertical" (default). For bar and
+tick, this determines whether the size of the bar and tick should be
+applied to x or y dimension. For area, this property determines the
+orient property of the Vega output. For line, this property determines
+the path order of the points in the line if path channel is not specified.
+For stacked charts, this is always determined by the orientation of the stack;
+therefore explicitly specified value will be ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>interpolate</code></td>
+<td>
+<p>The line interpolation method to use. One of <code>linear</code>
+<code>step-before</code>, <code>step-after</code>, <code>basis</code>, <code>basis-open</code>,
+<code>basis-closed</code>, <code>bundle</code>, <code>cardinal</code>, <code>cardinal-open</code>,
+<code>cardinal-closed</code>, <code>monotone</code>. For more information about each
+interpolation method, please see D3’s line interpolation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tension</code></td>
+<td>
+<p>Depending on the interpolation type, sets the tension parameter.
+(See D3’s line interpolation.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>opacity</code></td>
+<td>
+<p><code>0.0</code>-<code>1.0</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color</code></td>
+<td>
+<p>color of the mark – either fill or stroke color based on the filled mark config.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fill</code></td>
+<td>
+<p>fill color. This config will be overridden by color channel’s
+specified or mapped values if filled is true.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stroke</code></td>
+<td>
+<p>stroke color. This config will be overridden by color channel’s
+specified or mapped values if filled is false.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p><a href="http://vega.github.io/vega-lite/docs/mark.html">Vega-Lite Mark spec</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vegalite() %&gt;%
+  cell_size(300, 300) %&gt;%
+  add_data("https://vega.github.io/vega-editor/app/data/driving.json") %&gt;%
+  encode_x("miles", "quantitative") %&gt;%
+  encode_y("gas", "quantitative") %&gt;%
+  encode_path("year", "temporal") %&gt;%
+  scale_x_linear(zero=FALSE) %&gt;%
+  scale_y_linear(zero=FALSE) %&gt;%
+  mark_line()
+</code></pre>
+
+
+</div>

@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Vcov</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fast Covariance Matrix and Standard Error Computation</h2>
+
+<h3>Description</h3>
+
+<p>Skip wasted object summary steps computed by base R when computing covariance matrices and standard errors of common model objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  Vcov(object, ...)
+
+  ## S3 method for class 'lm'
+Vcov(object, ...)
+
+  ## S3 method for class 'glm'
+Vcov(object, dispersion = NULL, ...)
+  
+  se(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p> A fitted model object. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Additional arguments for method functions. For the <code>glm</code> method this can be used to pass a <code>dispersion</code> parameter. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dispersion</code></td>
+<td>
+<p> The dispersion parameter for the family used. Either a single numerical value or <code>NULL</code> (the default), in which case it is inferred from <code>obj</code>. For details, see <code>summary.glm</code>. </p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+ 
+<p><code>summary.glm</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  # data taken from ?lm
+  ctl = c(4.17,5.58,5.18,6.11,4.50,4.61,5.17,4.53,5.33,5.14)
+  trt = c(4.81,4.17,4.41,3.59,5.87,3.83,6.03,4.89,4.32,4.69)
+  group = gl(2, 10, 20, labels = c("Ctl","Trt"))
+  weight = c(ctl, trt)
+  reg_lm = lm(weight ~ group)
+  Vcov(reg_lm)
+  se(reg_lm)
+
+  # data taken from ?glm
+  counts = c(18,17,15,20,10,20,25,13,12)
+  outcome = gl(3,1,9)
+  treatment = gl(3,3)
+  reg_glm = glm(counts ~ outcome + treatment, family = poisson)
+  Vcov(reg_glm)
+  se(reg_glm)
+</code></pre>
+
+
+</div>

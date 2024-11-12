@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>branches</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract all branches of the Vistla tree</h2>
+
+<h3>Description</h3>
+
+<p>Gives access to a list of all branches in the tree.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">branches(x, suboptimal = FALSE)
+
+## S3 method for class 'vistla'
+as.data.frame(x, row.names = NULL, optional = FALSE, suboptimal = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>vistla object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>suboptimal</code></td>
+<td>
+<p>if TRUE, sub-optimal branches are included.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>row.names</code></td>
+<td>
+<p>passed to <code>as.data.frame</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optional</code></td>
+<td>
+<p>passed to <code>as.data.frame</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>ignored.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame collecting all branches traced by vistla.
+Each row corresponds to a single branch, i.e., edge between feature pairs.
+This way it is a triplet of original features, names of which are stored in <code>a</code>,
+<code>b</code> and <code>c</code> columns.
+For instance, path <code class="reqn">I \rightarrow J \rightarrow K \rightarrow L \rightarrow M</code> 
+would be stored in three rows, for <code class="reqn">(a,b,c)</code>=<code class="reqn">(I,J,K)</code>, <code class="reqn">(J,K,L)</code>
+and <code class="reqn">(K,L,M)</code>.
+The width of a path (minimal <code class="reqn">\iota</code> value) between root and feature pair <code class="reqn">(b,c)</code> is
+stored in the <code>score</code> column.
+<code>depth</code> stores the path depth, starting from 1 for pairs directly connected to the root,
+and increasing by one for each additional feature.
+Final column, <code>leaf</code>, is a logical path indicating whether the edge is a final segment
+of the widest path between root and <code class="reqn">c</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Pruned trees (obtained with <code>prune</code> and using <code>targets</code> argument
+in the <code>vistla</code> call) have no suboptimal branches.
+</p>
+
+
+</div>

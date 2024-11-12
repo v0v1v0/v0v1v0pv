@@ -1,0 +1,200 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>fitLMM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fit Linear Mixed Model by ANOVA or REML</h2>
+
+<h3>Description</h3>
+
+<p>Function serves as interface to functions <code>anovaMM</code> and <code>remlMM</code>
+for fitting a linear mixed model (LMM) either by ANOVA or REML. All arguments applicable
+to either one of these functions can be specified (see <code>anovaMM</code> or <code>remlMM</code> for details).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">fitLMM(
+  form,
+  Data,
+  method = c("anova", "reml"),
+  scale = TRUE,
+  VarVC = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>form</code></td>
+<td>
+<p>(formula) specifiying the linear mixed model, random effects need to be identified by enclosing
+them in round brackets, i.e. ~a/(b) will model factor 'a' as fixed and 'b' as random</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>(data.frame)  containing all variables referenced in 'form', note that variables can only be of type
+"numeric", "factor" or "character". The latter will be automatically converted to "factor"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>(character) either "anova" to use ANOVA Type-I estimation of variance components or "reml" to use 
+restricted maximum likelihood (REML) estimation of variance component</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>(logical) TRUE = scale values of the response aiming to avoid numerical problems
+when numbers are either very small or very large, FALSE = use original scale</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VarVC</code></td>
+<td>
+<p>(logical) TRUE = variance-covariance matrix of variance components will be computed, FALSE = it will not
+be computed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments to be passed to function <code>anovaMM</code> or function <code>remlMM</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Besides offering a convenient interface to both functions for fitting a LMM, this function also provides all elements
+required for standard task of fitted models, e.g. prediction, testing general linear hypotheses via R-package <code>multcomp</code>,
+etc. (see examples).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>fitVCA</code>, <code>anovaMM</code>, <code>remlMM</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_2)
+
+# assuming 'day' as fixed, 'run' as random
+# Note: default method is "anova"
+fitLMM(y~day/(run), dataEP05A2_2)
+
+# explicitly request "reml"
+fitLMM(y~day/(run), dataEP05A2_2, method="reml")
+
+# assuming both as random leads to same results as
+# calling anovaVCA (ANOVA is the default)
+fitLMM(y~(day)/(run), dataEP05A2_2)
+anovaVCA(y~day/run, dataEP05A2_2)
+
+# now using REML-estimation
+fitLMM(y~(day)/(run), dataEP05A2_2, "reml")
+remlVCA(y~day/run, dataEP05A2_2)
+
+# use different approaches to estimating the covariance of 
+# variance components (covariance parameters)
+# create unbalanced data
+dat.ub &lt;- dataEP05A2_2[-c(11,12,23,32,40,41,42),]
+m1.ub &lt;- fitLMM(y~day/(run), dat.ub, VarVC.method="scm")
+# VarVC.method="gb" is an approximation not relying on quadratic forms
+m2.ub &lt;- fitLMM(y~day/(run), dat.ub, VarVC.method="gb")		
+# REML-estimated variance components usually differ from ANOVA-estimates
+# and so do the variance-covariance matrices
+m3.ub &lt;- fitLMM(y~day/(run), dat.ub, "reml", VarVC=TRUE)		
+V1.ub &lt;- round(vcovVC(m1.ub), 12)
+V2.ub &lt;- round(vcovVC(m2.ub), 12)
+V3.ub &lt;- round(vcovVC(m3.ub), 12)
+
+# fit a larger random model
+data(VCAdata1)
+fitMM1 &lt;- fitLMM(y~((lot)+(device))/(day)/(run), VCAdata1[VCAdata1$sample==1,])
+fitMM1
+# now use function tailored for random models
+fitRM1 &lt;- anovaVCA(y~(lot+device)/day/run, VCAdata1[VCAdata1$sample==1,])
+fitRM1
+
+# there are only 3 lots, take 'lot' as fixed 
+fitMM2 &lt;- fitLMM(y~(lot+(device))/(day)/(run), VCAdata1[VCAdata1$sample==2,])
+# use REML on this (balanced) data
+fitMM2.2 &lt;- fitLMM(y~(lot+(device))/(day)/(run), VCAdata1[VCAdata1$sample==2,], "reml")
+
+# the following model definition is equivalent to the one above,
+# since a single random term in an interaction makes the interaction
+# random (see the 3rd reference for details on this topic)
+fitMM3 &lt;- fitLMM(y~(lot+(device))/day/run, VCAdata1[VCAdata1$sample==2,])
+
+# fit same model for each sample using by-processing
+lst &lt;- fitLMM(y~(lot+(device))/day/run, VCAdata1, by="sample")
+lst
+
+# fit mixed model originally from 'nlme' package
+
+library(nlme)
+data(Orthodont)
+fit.lme &lt;- lme(distance~Sex*I(age-11), random=~I(age-11)|Subject, Orthodont) 
+
+# re-organize data
+Ortho &lt;- Orthodont
+Ortho$age2 &lt;- Ortho$age - 11
+Ortho$Subject &lt;- factor(as.character(Ortho$Subject))
+fit.anovaMM1 &lt;- fitLMM(distance~Sex*age2+(Subject)*age2, Ortho)
+
+# use simplified formula avoiding unnecessary terms
+fit.anovaMM2 &lt;- fitLMM(distance~Sex+Sex:age2+(Subject)+(Subject):age2, Ortho)
+
+# and exclude intercept
+fit.anovaMM3 &lt;- fitLMM(distance~Sex+Sex:age2+(Subject)+(Subject):age2-1, Ortho)
+
+# compare results
+fit.lme
+fit.anovaMM1
+fit.anovaMM2
+fit.anovaMM3
+
+# are there a sex-specific differences?
+cmat &lt;- getL(fit.anovaMM3, c("SexMale-SexFemale", "SexMale:age2-SexFemale:age2")) 
+cmat
+
+test.fixef(fit.anovaMM3, L=cmat)
+
+# fit LMM with fixed lot and device effects and test for lot-differences
+data(VCAdata1)
+fitS5 &lt;- fitLMM(y~(lot+device)/(day)/(run), subset(VCAdata1, sample==5), "reml")
+fitS5
+
+# apply Tukey-HSD test to screen for lot differences
+library(multcomp)
+res.tuk &lt;- glht(fitS5, linfct=mcp(lot="Tukey"))
+summary(res.tuk)
+
+# compact letter display
+res.tuk.cld &lt;- cld(res.tuk, col=paste0("gray", c(90,60,75)))
+plot(res.tuk.cld)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

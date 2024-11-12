@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Collect.search.twitter</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Collect tweet data from twitter search</h2>
+
+<h3>Description</h3>
+
+<p>This function collects tweet data based on search terms and structures the data into a dataframe with
+the class names <code>"datasource"</code> and <code>"twitter"</code>.
+</p>
+<p>The twitter Standard search API sets a rate limit of 180 requests every 15 minutes. A maximum of 100 tweets can be
+collected per search request meaning the maximum number of tweets per operation is 18000 / 15 minutes. More tweets
+can be collected by using <code>retryOnRateLimit = TRUE</code> parameter which will cause the collection to pause if the
+rate limit is reached and resume when the rate limit resets (in approximately 15 minutes). Alternatively the
+twitter API parameter <code>since_id</code> can be used in a later session to resume a twitter search collection from the
+last tweet previously collected as tweet status id's are sequential. The Standard API only returns tweets for the
+last 7 days.
+</p>
+<p>All of the search query operators available through the twitter API can be used in the <code>searchTerm</code> field. For
+example, to search for tweets containing the term <code>"love"</code> or <code>"hate"</code> the <code>"OR"</code> operator can be
+used in the term field: <code>searchTerm = "love OR hate"</code>. For more information refer to the twitter API
+documentation for query operators:
+<a href="https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/guides/standard-operators">https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/guides/standard-operators</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'search.twitter'
+Collect(
+  credential,
+  endpoint,
+  searchTerm = "",
+  searchType = "recent",
+  numTweets = 100,
+  includeRetweets = TRUE,
+  retryOnRateLimit = TRUE,
+  writeToFile = FALSE,
+  verbose = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>credential</code></td>
+<td>
+<p>A <code>credential</code> object generated from <code>Authenticate</code> with class name <code>"twitter"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>endpoint</code></td>
+<td>
+<p>API endpoint.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>searchTerm</code></td>
+<td>
+<p>Character string. Specifies a twitter search term. For example, <code>"Australian politics"</code> or the
+hashtag <code>"#auspol"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>searchType</code></td>
+<td>
+<p>Character string. Returns filtered tweets as per search type <code>recent</code>, <code>mixed</code> or
+<code>popular</code>. Default type is <code>recent</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numTweets</code></td>
+<td>
+<p>Numeric. Specifies how many tweets to be collected. Defaults is <code>100</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>includeRetweets</code></td>
+<td>
+<p>Logical. Specifies if the search should filter out retweets. Defaults is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>retryOnRateLimit</code></td>
+<td>
+<p>Logical. When the API rate-limit is reached should the collection wait and resume when it resets. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>writeToFile</code></td>
+<td>
+<p>Logical. Write collected data to file. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical. Output additional information. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Arguments passed on to <code>rtweet::search_tweets</code>
+</p>
+
+<dl>
+<dt><code>geocode</code></dt>
+<dd>
+<p>Geographical limiter of the template
+"latitude,longitude,radius" e.g., <code>geocode = "37.78,-122.40,1mi"</code>.</p>
+</dd>
+<dt><code>since_id</code></dt>
+<dd>
+<p>Supply a vector of ids or a data frame of previous results to
+find tweets <strong>newer</strong> than <code>since_id</code>.</p>
+</dd>
+<dt><code>max_id</code></dt>
+<dd>
+<p>Supply a vector of ids or a data frame of previous results to
+find tweets <strong>older</strong> than <code>max_id</code>.</p>
+</dd>
+<dt><code>parse</code></dt>
+<dd>
+<p>If <code>TRUE</code>, the default, returns a tidy data frame. Use <code>FALSE</code>
+to return the "raw" list corresponding to the JSON returned from the
+Twitter API.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A tibble object with class names <code>"datasource"</code> and <code>"twitter"</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Additional parameters passed to this function in the ellipsis <code>...</code> will also be passed to the Twitter
+search API request. Most parameters have been covered but a complete list can be found here:
+<a href="https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/api-reference/get-search-tweets">https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/api-reference/get-search-tweets</a> A useful
+additional parameter is <code>language</code> allowing the user can restrict tweets returned to a particular language
+using an ISO 639-1 code. For example, to restrict a search to tweets in English the value <code>language = "en"</code>
+can be passed to this function.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# search and collect 100 recent tweets for the hashtag #auspol
+myTwitterData &lt;- twitterAuth |&gt;
+  Collect(searchTerm = "#auspol", searchType = "recent", numTweets = 100, verbose = TRUE,
+          includeRetweets = FALSE, retryOnRateLimit = TRUE, writeToFile = TRUE)
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

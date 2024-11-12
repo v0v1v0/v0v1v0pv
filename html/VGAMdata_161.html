@@ -1,0 +1,238 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>smqP</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Smoking Data in the NHANES 2017–2020 Cycle </h2>
+
+<h3>Description</h3>
+
+<p>Selected variables mainly focussed on the smoking
+questionnaire of the 
+National Health and Nutrition Examination Survey
+collected during 1.5 cycles just prior to Covid-19.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(smqP)
+</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A data frame with the following variables.
+</p>
+
+<dl>
+<dt>SEQN</dt>
+<dd>
+<p>Identifier for individuals that can be used
+to merge in other data sets from the same cycle.
+</p>
+</dd>
+<dt>TC30</dt>
+<dd>    
+<p>Numeric.
+Tobacco consumption:
+average number of cigarettes/day during past 30 days.
+Aka <code>SMD650</code> with some preprocessing.
+</p>
+</dd>
+</dl>
+<dl>
+<dt>SCA</dt>
+<dd>
+<p>Smoking cessation age (SCA).
+Is missing for those who have not quit.
+Computing this involved variables
+<code>SMQ050Q</code>, <code>SMQ050U</code> and <code>age</code>.
+The variable <code>SMQ050Q</code> is for
+<code>How long since (you) quit smoking cigarettes?</code>
+and
+<code>SMQ050U</code> are the units
+(e.g., years, months, days).
+The variable <code>SMQ050Q</code> is right-censored
+at 50 years (66666 means 50 or more years)
+and for such people SCA was set to <code>NA</code>.
+</p>
+</dd>
+<dt>TCquit</dt>
+<dd>
+
+<p>Tobacco consumption:
+number of cigarettes smoked per day when quit.
+Aka <code>SMD057</code> with some preprocessing.
+</p>
+</dd>
+<dt>SIA</dt>
+<dd>   
+<p>Smoking initiation age (SIA):
+age when individuals started smoking cigarettes regularly.
+Aka <code>SMD030</code> with some preprocessing.
+</p>
+</dd>
+<dt>age, gender</dt>
+<dd>
+<p>Age (<code>RIDAGEYR</code>) when surveyed;
+the value 80 is right-censored,
+i.e., subjects 80 years or older were recorded as 80.
+Gender is <code>RIAGENDR</code> .
+</p>
+</dd>
+<dt>race, race2</dt>
+<dd>
+<p>Race (<code>RIDRETH1</code>) and a
+binary simplification of race
+(<code>"Non-Hispanic White"</code> versus
+<code>"Others"</code>).
+</p>
+</dd>
+<dt>educ, marital</dt>
+<dd>
+<p>Education (<code>DMDEDUC2</code>) and
+marital status (<code>DMDMARTZ</code>).
+Both variables were not collected for those
+aged 12–19, hence those are <code>NA</code>s.
+</p>
+</dd>
+<dt>poverty_ratio</dt>
+<dd>
+<p>Ratio of family income to poverty (<code>INDFMPIR</code>).
+</p>
+</dd>
+<dt>meals_fastfood_pizza, diet, readytoeat_foods</dt>
+<dd>
+<p>For example,
+for the first one, this is
+the number of meals from a fast food or pizza place
+(<code>DBD900</code>) during the last 7 days, where
+the value 5555 means more than 21 meals per week,
+the value 7777 means the person refused to answer, and
+the value 9999 means the person didn't know.
+The other variables may be described later in more detail.
+</p>
+</dd>
+<dt>frozen_meals</dt>
+<dd>
+<p>To be described later.
+</p>
+</dd>
+<dt>people_fam_smoking, people_home_smoking</dt>
+<dd>
+<p>Numeric.
+For <code>people_fam_smoking</code>, this is
+Number of people who live here smoke tobacco?
+(<code>SMD460</code>). For this,
+0 is: No one in household is a smoker;
+1 is: 1 household member is a smoker;
+2 is: 2 or more household members are smokers.
+</p>
+<p>For <code>people_home_smoking</code>, this is
+the number of people who smoke inside this home?
+(<code>SMD470</code>). For this,
+0 is: No one smokes inside the house;
+1 is: 1 household member smokes inside the house;
+2 is: 2 or more household members smoke inside the house.
+</p>
+</dd>
+<dt>use_cigarettes, use_pipes, use_cigars</dt>
+<dd>
+<p>Use during the last 5 days of smoking variants.
+The codes are <code>SMQ690A</code>, <code>SMQ690B</code>, <code>SMQ690C</code>.
+</p>
+</dd>
+<dt>use_hookah, use_ecigarettes</dt>
+<dd>
+<p>The codes are <code>SMQ690G</code>, <code>SMQ690H</code>.
+</p>
+</dd>
+<dt>use_snuff, use_otherSmokeless</dt>
+<dd>
+<p>The codes are <code>SMQ690E</code>, <code>SMQ690K</code>.
+</p>
+</dd>
+<dt>passiveSmoke_job, passiveSmoke_rest</dt>
+<dd>
+<p>Binary 0 (no) or 1 (yes)
+measuring exposure to passive smoke at
+certain places in the past 7 days,
+e.g.,
+While you were working at a job or business outside
+of the home,
+did someone else smoke cigarettes or other tobacco
+products indoors?
+The codes are <code>SMQ858</code>, <code>SMQ862</code>.
+</p>
+
+</dd>
+<dt>passiveSmoke_bar, passiveSmoke_car</dt>
+<dd>
+<p>See above.
+The codes are <code>SMQ868</code>, <code>SMQ872</code>.
+</p>
+
+</dd>
+<dt>passiveSmoke_home, passiveSmoke_other</dt>
+<dd>
+<p>See above.
+The codes are <code>SMQ876</code>, <code>SMQ880</code>.
+</p>
+</dd>
+<dt>passiveSmoke_ecigarettes</dt>
+<dd>
+<p>See above.
+The code is <code>SMQ940</code>.
+</p>
+</dd>
+</dl>
+<h3>Details</h3>
+
+<p>The National Health and Nutrition Examination Survey
+(NHANES)
+is a well-known longitudinal study located in USA
+(a country just north of Mexico).
+This data frame shares a selection of variables mainly
+to do with the smoking questionnaire
+(codeword: <code>SMQ</code>);
+some demographic and anthropometric variables
+might also be included and/or added later.
+The significance of <code>P</code> is that the
+2019–2020 cycle was not completed due to Covid-19,
+hence this data concerns 2017–2020 and is a merging of
+the 2017–2018 cycle (data codenamed <code>J</code>) with
+further data collected just prior to the pandemic.
+</p>
+<p>The original data has been preprocessed and/or simplified.
+For example, <code>"Don't know"</code> and <code>"Refused"</code>
+usually have been converted to a <code>NA</code>.
+</p>
+<p>This data frame is subject to change,
+especially with the addition of new variables.
+</p>
+
+
+<h3>Source</h3>
+
+<p>The URL
+<a href="https://wwwn.cdc.gov/Nchs/Nhanes/">https://wwwn.cdc.gov/Nchs/Nhanes/</a>
+provides an entry point from which many
+data sets may be downloaded.
+Comprehensive documentation is available there too.
+</p>
+
+<p>The data was downloaded in late 2022
+by Luca Frigau, University of Cagliari,
+and some subsequent edits were made by Thomas Yee.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">summary(smqP)
+</code></pre>
+
+
+</div>

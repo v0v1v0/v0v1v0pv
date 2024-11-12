@@ -1,0 +1,82 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>datavisit</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract subset of data using different methods</h2>
+
+<h3>Description</h3>
+
+<p>Extract the subset of data by column names using tensor, array, double list, integer vector, or vector binary tree.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">datavisit(data, inq)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data.frame with structured column names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inq</code></td>
+<td>
+<p>An argument to determine the subset to be extracted by column names. A tensor, array, double list, integer vector and
+vector binary tree is available format of <code>inq</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Return a list which contains the item index, column name, column coordinate and the data in corresponding column for each
+element contained in the assignment of <code>inq</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vbtinq</code>, <code>advbtinq</code>, <code>trvseleinq</code>,
+<code>trvsidxinq</code>, <code>trvssubinq</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#View the data to be visited:
+summary(datatest)
+colnames(datatest)
+
+#Structurize colnames of data into vector binary tree:
+dl &lt;- chrvec2dl(colnames(datatest))
+vbt &lt;- dl2vbt(dl)
+vbt
+
+#Setting subset in different forms, for example the pattern
+#"Strain-(900~1100)-(0.01, 1)-0.6" is desired:
+subunregdl &lt;- list(c(1), c(1:5), c(2,4), c(1)) # undefined double list
+subregdl &lt;- advbtinq(vbt, subunregdl) # regularized double list
+subvbt &lt;- dl2vbt(subregdl) # sub vector binary tree
+subts &lt;- vbt2ts(subvbt) # tensor
+subarr &lt;- vbt2arr(subvbt) # array
+subchrvec &lt;- as.vector(subarr) # character vector
+
+#Visit the data through different methods:
+datavisit(datatest, subunregdl) # by handmade double list
+datavisit(datatest, subregdl) # by defined double list
+datavisit(datatest, subvbt) # by vector binary tree
+datavisit(datatest, subts) # by tensor
+datavisit(datatest, subarr) # by array
+datavisit(datatest, subchrvec) # by character vector
+</code></pre>
+
+
+</div>

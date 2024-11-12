@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bootcovjmcm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimate the covariance of estimated parameters using a bootstrap based method</h2>
+
+<h3>Description</h3>
+
+<p><code>bootcovjmcm</code> gives the estimation of the covariance of estimated parameters returned by <code>jmcm</code> by using a bootstrap based method.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bootcovjmcm(object, mydata, numboot)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a fitted joint mean-covariance model of class "jmcmMod", returned by the function <code>jmcm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mydata</code></td>
+<td>
+<p>the data frame used in fitting the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numboot</code></td>
+<td>
+<p>the number of the bootstrap replications</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>an estimated covariance matrix of the estimated parameters.
+</p>
+
+
+<h3>References</h3>
+
+<p>[1] Liu, R.Y. (1988) "Bootstrap Procedure under Some Non-i.i.d. Models." Annals of Statistics, 16, 1696-1708.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">cattleA &lt;- cattle[cattle$group=='A', ]
+fit.mcd &lt;- jmcm(weight|id|I(ceiling(day/14+1))~1|1,
+               data = cattleA,
+               cov.method = "mcd",
+               triple = c(1,1,1))
+bootcovjmcm(fit.mcd, cattleA, 5)
+## Larger number of replications is needed to achieve accuracy,
+## however it may take hours.
+bootcovjmcm(fit.mcd, cattleA, 500)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,116 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineSim</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulation from an R-Vine Copula Model</h2>
+
+<h3>Description</h3>
+
+<p>This function simulates from a given R-vine copula model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineSim(N, RVM, U = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>N</code></td>
+<td>
+<p>Number of d-dimensional observations to simulate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p>An <code>RVineMatrix()</code> object containing the information of
+the R-vine copula model. Optionally, a length-<code>N</code> list of
+<code>RVineMatrix()</code>  objects sharing the same structure, but possibly
+different family/parameter can be supplied.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>U</code></td>
+<td>
+<p>If not <code>NULL()</code>, an (N,d)-matrix of <code class="reqn">U[0,1]</code> random
+variates to be transformed to the copula sample.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An <code>N</code> x d matrix of data simulated from the given R-vine
+copula model.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jeffrey Dissmann
+</p>
+
+
+<h3>References</h3>
+
+<p>Dissmann, J. F., E. C. Brechmann, C. Czado, and D. Kurowicka
+(2013). Selecting and estimating regular vine copulae and application to
+financial returns. Computational Statistics &amp; Data Analysis, 59 (1), 52-69.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineMatrix()</code>, <code>BiCopSim()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# define 5-dimensional R-vine tree structure matrix
+Matrix &lt;- c(5, 2, 3, 1, 4,
+            0, 2, 3, 4, 1,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 1)
+Matrix &lt;- matrix(Matrix, 5, 5)
+
+# define R-vine pair-copula family matrix
+family &lt;- c(0, 1, 3, 4, 4,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 3,
+            0, 0, 0, 0, 0)
+family &lt;- matrix(family, 5, 5)
+
+# define R-vine pair-copula parameter matrix
+par &lt;- c(0, 0.2, 0.9, 1.5, 3.9,
+         0, 0, 1.1, 1.6, 0.9,
+         0, 0, 0, 1.9, 0.5,
+         0, 0, 0, 0, 4.8,
+         0, 0, 0, 0, 0)
+par &lt;- matrix(par, 5, 5)
+
+# define second R-vine pair-copula parameter matrix
+par2 &lt;- matrix(0, 5, 5)
+
+# define RVineMatrix object
+RVM &lt;- RVineMatrix(Matrix = Matrix, family = family,
+                   par = par, par2 = par2,
+                   names = c("V1", "V2", "V3", "V4", "V5"))
+
+# simulate a sample of size 300 from the R-vine copula model
+set.seed(123)
+simdata &lt;- RVineSim(300, RVM)
+
+</code></pre>
+
+
+</div>

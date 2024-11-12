@@ -1,0 +1,173 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>triangle</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Triangle Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimating the parameter of the triangle distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">triangle(lower = 0, upper = 1,
+         link = extlogitlink(min = 0, max = 1), itheta = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lower, upper</code></td>
+<td>
+<p>lower and upper limits of the distribution.
+Must be finite.
+Called <code class="reqn">A</code> and <code class="reqn">B</code> respectively below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Parameter link function applied to the
+parameter <code class="reqn">\theta</code>,
+which lies in <code class="reqn">(A,B)</code>.
+See <code>Links</code> for more choices.
+The default constrains the estimate to lie in the interval.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>itheta</code></td>
+<td>
+
+<p>Optional initial value for the parameter.
+The default is to compute the value internally.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The triangle distribution
+has a probability density function that
+consists of two lines
+joined at <code class="reqn">\theta</code>, which is the
+location of the mode.
+The lines intersect the
+<code class="reqn">y = 0</code> axis at <code class="reqn">A</code> and <code class="reqn">B</code>.
+Here, Fisher scoring is used.
+</p>
+<p>On fitting, the <code>extra</code> slot has components
+called <code>lower</code>
+and <code>upper</code> which contains the values of
+the above arguments
+(recycled to the right length).
+The fitted values are the mean of the distribution, which is
+<code class="reqn">(A + B + \theta)/3</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>The MLE regularity conditions do not hold for this
+distribution
+(e.g., the first derivative evaluated at the mode
+does not exist because it is not continuous)
+so that misleading inferences may result, e.g.,
+in the <code>summary</code> and <code>vcov</code> of the object.
+Additionally, convergence to the MLE often appears to fail.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must contain values in <code class="reqn">(A, B)</code>.
+For most data sets (especially small ones) it is very
+common for half-stepping to occur.
+</p>
+
+<p>Arguments <code>lower</code> and <code>upper</code>
+and <code>link</code> must match.
+For example, setting
+<code>lower = 0.2</code> and <code>upper = 4</code> and
+<code>link = extlogitlink(min = 0.2, max = 4.1)</code>
+will result in an error.
+Ideally <code>link = extlogitlink(min = lower, max = upper)</code>
+ought to work but it does not (yet)!
+Minimal error checking is done for this deficiency.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Kotz, S. and van Dorp, J. R. (2004).
+Beyond Beta: Other Continuous Families of Distributions
+with Bounded Support and Applications.
+Chapter 1.
+World Scientific: Singapore.
+</p>
+<p>Nguyen, H. D. and McLachlan, G. J. (2016).
+Maximum likelihood estimation of triangular
+and polygon distributions.
+<em>Computational Statistics and Data Analysis</em>,
+<b>102</b>, 23–36.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Triangle</code>,
+<code>Topple</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Example 1
+tdata &lt;- data.frame(y = rtriangle(n &lt;- 3000, theta = 3/4))
+fit &lt;- vglm(y ~ 1, triangle(link = "identitylink"), tdata,
+             trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+head(fit@extra$lower)
+head(fitted(fit))
+with(tdata, mean(y))
+
+# Example 2; Kotz and van Dorp (2004), p.14
+rdata &lt;- data.frame(y = c(0.1,0.25,0.3,0.4,0.45, 0.6, 0.75, 0.8))
+fit &lt;- vglm(y ~ 1, triangle(link = "identitylink"), rdata,
+            trace = TRUE, crit = "coef", maxit = 1000)
+Coef(fit)  # The MLE is the 3rd order statistic, which is 0.3.
+fit &lt;- vglm(y ~ 1, triangle(link = "identitylink"), rdata,
+            trace = TRUE, crit = "coef", maxit = 1001)
+Coef(fit)  # The MLE is the 3rd order statistic, which is 0.3.
+
+## End(Not run)</code></pre>
+
+
+</div>

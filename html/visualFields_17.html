@@ -1,0 +1,379 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vfdesc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visual field dataset</h2>
+
+<h3>Description</h3>
+
+<p>The main object of the visualFields package is a table with 
+a specific format and fields that are mandatory for their management and
+processing (mainly statistical analysis). Each record (row) in the table
+contains data for a single visual field test. The mandatory fields specify
+subject (by its ID code), eye, and test date and time. There are required
+fields statistical and reliability analyses (e.g., age for the determination
+of total-deviation and pattern-deviation values, and for global indices and
+fpr, fnr, fl for the proportion of false positives, false negative, and
+fixation losses). The rest of mandatory fields are sensitivity or deviation
+data for each visual field test location. (The number of fields for
+tested locations varies with the location map, 54 for the 24-2, 76 for the
+30-2, 68 for the 10-2, etc.). Check section <code>Structure of visual fields data</code>
+below for details about the required  structure of the table contatining the
+visual fields datasets.
+</p>
+<p>The following functions carry out analysis on visual fields data:
+</p>
+
+<ul>
+<li>
+<p><code>vfdesc</code> descriptive summary of a visual field dataset
+</p>
+</li>
+<li>
+<p><code>vfsort</code> sort visual field data
+</p>
+</li>
+<li>
+<p><code>vfisvalid</code> check if a table with visual field data is properly
+formatted and valid for analysis
+</p>
+</li>
+<li>
+<p><code>vfread</code> read a csv file with visual field data
+</p>
+</li>
+<li>
+<p><code>vfwrite</code> write a csv file with visual field data
+</p>
+</li>
+<li>
+<p><code>vfjoin</code> joins two visual field datasets
+</p>
+</li>
+<li>
+<p><code>vffilter</code> filters elements from a visual field dataset with
+matching conditions. This function is just a wrapper for <code>dplyr</code>'s
+function <code>filter</code>
+</p>
+</li>
+<li>
+<p><code>vfselect</code> select visual field data by index or the first or last
+<code>n</code> visits per subject and eye
+</p>
+</li>
+<li>
+<p><code>gettd</code> computes total-deviation (TD) values and probability values
+</p>
+</li>
+<li>
+<p><code>gettdp</code> computes total-deviation (TD) probability values
+</p>
+</li>
+<li>
+<p><code>getpd</code> computes pattern-deviation (PD) values
+</p>
+</li>
+<li>
+<p><code>getpdp</code> computes pattern-deviation (PD) probability values
+</p>
+</li>
+<li>
+<p><code>getgh</code> computes the general height (GH) from the TD tables
+</p>
+</li>
+<li>
+<p><code>getgl</code> computes visual fields global indices
+</p>
+</li>
+<li>
+<p><code>getglp</code> computes computes visual fields global indices probability values
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">vfdesc(vf)
+
+vfsort(vf, decreasing = FALSE)
+
+vfisvalid(vf)
+
+vfread(file, dateformat = "%Y-%m-%d", eyecodes = c("OD", "OS", "OU"), ...)
+
+vfwrite(
+  vf,
+  file,
+  dateformat = "%Y-%m-%d",
+  eyecodes = c("OD", "OS", "OU"),
+  ...
+)
+
+vfjoin(vf1, vf2)
+
+vffilter(vf, ...)
+
+vfselect(vf, sel = "last", n = 1)
+
+gettd(vf)
+
+gettdp(td)
+
+getpd(td)
+
+getpdp(pd)
+
+getgh(td)
+
+getgl(vf)
+
+getglp(g)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vf</code></td>
+<td>
+<p>visual field data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>decreasing</code></td>
+<td>
+<p>sort decreasing or increasing?
+Default is increasing, that is <code>decreasing = FALSE</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>file</code></td>
+<td>
+<p>the name of the csv file where to write the data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dateformat</code></td>
+<td>
+<p>format to be used for date. Its default value
+is <code>%Y-%m-%d</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eyecodes</code></td>
+<td>
+<p>codification for right and left eye, respectively.
+By default in visualField uses '<code>OD</code>' and '<code>OS</code>' for
+right and left eye respectively, but it is common to receive csv
+files with the codes '<code>R</code>' and '<code>L</code>'. The code '<code>OU</code>'
+for both eyes is also allowed
+<code>eyecodes</code> should be equal to '<code>c("OD", "OS")</code>' or '<code>c("R", "L")</code>'.
+By default it is '<code>eyecodes = c("OD", "OS", "OU")</code>'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be passed to or from methods</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vf1, vf2</code></td>
+<td>
+<p>the two visual field data objects to join or merge</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sel</code></td>
+<td>
+<p>it can be two things, an array of indices to select from visual field data
+or a string with the values '<code>first</code>' or '<code>last</code>' indicating that only the
+first  few n visits per subject '<code>id</code>' and '<code>eye</code>' are to be  selected.
+Default is '<code>last</code>'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of visits to select. Default value is 1, but it is ignored if
+<code>sel</code> is an index array</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>td</code></td>
+<td>
+<p>total-deviation (TD) values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pd</code></td>
+<td>
+<p>pattern-deviation (PD) values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>global indices</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<ul><li>
+<p><code>vfselect</code> when selecting the last or first few visual fields per
+subject and eye, if that subject and eye has fewer than <code>n</code> visits,
+then all visits are returned
+</p>
+</li></ul>
+<h3>Value</h3>
+
+<p><code>vfdesc</code> returns descriptive statistics of a visual field dataset
+</p>
+<p><code>vfsort</code> returns a sorted visual field dataset
+</p>
+<p><code>vfisvalid</code> returns <code>TRUE</code> or <code>FALSE</code>
+</p>
+<p><code>vfread</code> returns a visual field dataset
+</p>
+<p><code>vfwrite</code> No return value
+</p>
+<p><code>vfjoin</code> returns a visual field dataset
+</p>
+<p><code>vffilter</code> returns a visual field dataset
+</p>
+<p><code>vfselect</code> returns a visual field dataset
+</p>
+<p><code>gettd</code> returns a visual field dataset with total deviation values
+</p>
+<p><code>gettdp</code> returns a visual field dataset with total deviation probability values
+</p>
+<p><code>getpd</code> returns a visual field dataset with pattern deviation values
+</p>
+<p><code>getpdp</code> returns a visual field dataset with pattern deviation probability values
+</p>
+<p><code>getgh</code> returns the general height of visual fields tests
+</p>
+<p><code>getgl</code> returns visual fields global indices
+</p>
+<p><code>getglp</code> returns probability values of visual fields global indices
+</p>
+
+
+<h3>Structure of visual fields data</h3>
+
+<p>Visual fields data is the central object used in visualFields. It is a table of
+visual field data collected with the same perimeter, background and stimulus
+paradigm (e.g., static automated perimetry or frequency-doubling  perimetry),
+stimulus size (e.g., Goldmann size III), grid of visual field test locations
+(e.g., 24-2), and psychophysical testing strategy (e.g., SITA standard).
+Normative values can be obtained from appropriate datasets with data for healthy
+eyes and these normative values can then be used to generate statistical analyses
+and visualizations of data for patients with retinal or visual anomalies.
+</p>
+<p>Each record correspond to a specific test for an eye of a subject taken on a
+specific date at a specific time. Visual field data must have the following
+columns
+</p>
+
+<ul>
+<li>
+<p><code>id</code> an id uniquely identifying a subject. This field is mandatory
+</p>
+</li>
+<li>
+<p><code>eye</code> should be "OD" for right eye or "OS" for left eye. This field is
+mandatory
+</p>
+</li>
+<li>
+<p><code>date</code> test date. This field is mandatory
+</p>
+</li>
+<li>
+<p><code>time</code> test time. This field is mandatory
+</p>
+</li>
+<li>
+<p><code>age</code> age of the patient on the test date. This field is required to
+obtain total-deviation, pattern-deviation values, and other age-dependent
+local and global indices
+</p>
+</li>
+<li>
+<p><code>type</code> type of subject, Could be a healthy subject (ctr for control)
+or a patient with glaucoma (pwg) or a patient with idiopatic intraocular
+hypertension (iih) or other. This field is no required for management or
+statistical analysis.
+</p>
+</li>
+<li>
+<p><code>fpr</code> false positive rate. This field is no required for management or
+statistical analysis.
+</p>
+</li>
+<li>
+<p><code>fnr</code> false negative rate. This field is no required for management or
+statistical analysis.
+</p>
+</li>
+<li>
+<p><code>fl</code> fixation losses. This field is no required for management or
+statistical analysis.
+</p>
+</li>
+<li>
+<p><code>l1..ln</code> sensitivity, total-deviation, or pattern-deviation values for
+each location. For analysis with visualFields there should be as many columns
+as coordinates in the location map set in the visualFields environment. These
+fields are mandatory.
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># get dataset description from visual field table
+vfdesc(vfctrSunyiu24d2)
+# sort dataset
+vfsort(vfctrSunyiu24d2[c(5, 4, 10, 50, 30),])
+# check if a visualField is valid
+vf &lt;- vfctrSunyiu24d2
+vfisvalid(vf) # valid visual field data
+vf$id[5] &lt;- NA
+vfisvalid(vf) # invalid visual field data
+# write and read visual field data
+vf &lt;- vfctrSunyiu24d2
+tf &lt;- tempfile("vf")
+vfwrite(vf, file = tf) # save current locmap in a temp file
+head(vfread(tf)) # read the temp file
+# join visual fields datasets
+vfjoin(vfctrSunyiu24d2, vfpwgRetest24d2)
+# visual field subselection
+vffilter(vf, id == 1) # fields corresponding to a single subject
+vffilter(vf, id == 1 &amp; eye == "OD") # fields for a single subject's right eye
+unique(vffilter(vf, eye == "OS")$eye) # only left eyes
+vffilter(vfjoin(vfctrSunyiu24d2, vfpwgRetest24d2), type == "ctr") # get only controls
+vffilter(vfjoin(vfctrSunyiu24d2, vfpwgRetest24d2), type == "pwg") # get only patients
+# select visual fields by index
+vfselect(vfctrSunyiu24d2, sel = c(1:4, 150))
+# select last few visual fields per subject and eye
+vfselect(vfpwgRetest24d2, sel = "last")
+# select first few visual fields per subject and eye
+vfselect(vfpwgRetest24d2, sel = "first")
+vfselect(vfpwgRetest24d2, sel = "first", n = 5) # get the last 5 visits
+# compute visual field statistics
+vf  &lt;- vfpwgSunyiu24d2
+td  &lt;- gettd(vf)  # get TD values
+tdp &lt;- gettdp(td) # get TD probability values
+pd  &lt;- getpd(td)  # get PD values
+pdp &lt;- getpdp(pd) # get PD probability values
+gh  &lt;- getgh(td)  # get the general height
+g   &lt;- getgl(vf)  # get global indices
+gp  &lt;- getglp(g)  # get global indices probability values
+</code></pre>
+
+
+</div>

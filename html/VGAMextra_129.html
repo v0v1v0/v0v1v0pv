@@ -1,0 +1,169 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>toppleQlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Link functions for the quantiles of several 1–parameter continuous
+distributions
+</h2>
+
+<h3>Description</h3>
+
+<p>Computes the <code>toppleQlink</code> transformation, its inverse and the
+first two derivatives.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  toppleQlink(theta, p = stop("Argument 'p' must be specified."),
+              bvalue = NULL, inverse = FALSE,
+              deriv = 0, short = TRUE, tag = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character. It is <code class="reqn">\theta</code> by default although
+it could be <code class="reqn">\eta</code> depending upon other arguments. 
+See <code>Links</code> for further details about this.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+
+<p>Numeric. A single value between 0 and 1.
+It is the <code class="reqn">p</code>–quantile to be modeled by this link function. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue, inverse, deriv, short, tag</code></td>
+<td>
+
+<p>See <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This link function comforms with requirements of <span class="pkg">VGAM</span> in order
+to be compatible within the VGLM/VGAM framework. That is, monotonic,
+onto, among other features.
+In this line, the <code>toppleQlink</code> transformation arises as the
+proper link to model any quantile of the Topp–Leone distribution
+<code>topple</code>. It is defined as
+
+</p>
+<p style="text-align: center;"><code class="reqn">\frac{1 - \sqrt{1 - p^{1/s}}}{m.max}.</code>
+</p>
+
+
+<p>Here, <code class="reqn">s</code> is a shape parameter lying in <code class="reqn">(0, 1)</code> 
+as in <code>topple</code>,
+whereas <code class="reqn">m.max</code> stands for the maximum in <code class="reqn">(0, 1)</code> of
+</p>
+<p style="text-align: center;"><code class="reqn">1 - \sqrt{1 - p^{1/s}}</code>
+</p>
+
+<p>as a function of <code class="reqn">s</code>. Note, <code class="reqn">p</code> is prespecified (fixed) between 
+<code class="reqn">0</code> and <code class="reqn">1</code>. 
+</p>
+<p>Numerical values of <code class="reqn">s</code> or <code class="reqn">p</code> out of range will 
+result in <code>Inf</code>, <code>-Inf</code>, <code>NA</code> or <code>NaN</code>
+correspondingly.
+</p>
+<p>Arguments <code>inverse</code> and <code>deriv</code> will be ignored
+if <code>theta</code> is character.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the <code>toppleQlink</code> transformation of
+<code>theta</code>, when <code>inverse = FALSE</code>. If <code>inverse = TRUE</code>, then
+the inverse transformation 
+<code> log(p)/log(1 - (1 - theta * </code><code class="reqn">m.max</code><code>)^2)</code> 
+is returned.
+</p>
+<p>For <code>deriv = 1</code>, this function returns 
+<code class="reqn">d</code> <code>eta</code> / <code class="reqn">d</code> <code>theta</code>, 
+if <code>inverse = FALSE</code>. If <code>inverse = TRUE</code>, then the reciprocal 
+<code class="reqn">d</code> <code>theta</code> / <code class="reqn">d</code> <code>eta</code> as a function of <code>theta</code>.
+</p>
+<p>If <code>deriv = 2</code>, then the second order derivatives as a function of
+<code>theta</code>. 
+</p>
+
+
+<h3>Warning</h3>
+
+<p>The expression <code class="reqn">p^{1/s}</code> tends rapidly to zero specially
+for values of <code class="reqn">s</code> less than <code class="reqn">0.005</code>. Therefore, in such cases
+numerical values represented as zero may be returned when computing
+this link function, regardless the value of argument <code>inverse</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Numerical instability may occur for values <code>theta</code> too close
+to 0.0 or 1.0. Use argument <code>bvalue</code> to replace them before
+computing the link.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>topple</code>, 
+<code>Links</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  ## E1. toppleQLink() and its inverse. ##
+  my.s &lt;- ppoints(50); p &lt;- 0.75
+  max(my.s - toppleQlink(toppleQlink(my.s, p = p), p = p, inverse  =TRUE))   ## Zero
+  toppleQlink(theta = c(-0.15, -0.10, 0.25, 0.35) , p = p, inverse  = FALSE) ## NaNs
+  toppleQlink(theta = c(-0.15, -0.10, 0.25, 0.35) , p = p, inverse  = TRUE)  ## NaNs
+   
+   
+  ## E2. toppleQLink() for different avlues of 'p'. ##
+  
+  plot(toppleQlink(theta = my.s, p = 0.05) ~ my.s,
+       type = "l", col = "blue", lty = "dotted", lwd = 3,
+       xlim = c(-0.1, 1.65), ylim = c(-0.1, 1.1), las = 1,
+       main = c("The toppleQlink() transformation"),
+       ylab = "eta = toppleQlink", xlab = "theta")
+  abline(h = 0, v = 0, lwd = 2)
+  abline(h = 1, v = 1, lty = "dotted", col = "green")
+  lines(toppleQlink(theta = my.s, p = 0.25) ~ my.s, lwd = 2, lty = "dashed", col = "gray")
+  lines(toppleQlink(theta = my.s, p = 0.50) ~ my.s, lwd = 2, lty = "dashed", col = "brown")
+  lines(toppleQlink(theta = my.s, p = 0.75) ~ my.s, lwd = 2, lty = "dashed", col = "orange")
+  lines(toppleQlink(theta = my.s, p = 0.95) ~ my.s, lwd = 2, lty = "dashed", col = "gray50")
+  legend(1.1, 1.0, c("p = 0.05", "p = 0.25", "p = 0.50", "p = 0.75", "p = 0.95"),
+         lwd = rep(2, 5), lty = rep("dashed", 5), 
+         col = c("blue", "gray", "brown", "orange", "gray50"))
+  
+</code></pre>
+
+
+</div>

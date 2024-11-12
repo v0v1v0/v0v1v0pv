@@ -1,0 +1,152 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>oalog</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> One-Altered Logarithmic Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Fits a one-altered logarithmic distribution based on
+a conditional model involving a Bernoulli distribution and a
+1-truncated logarithmic distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">oalog(lpobs1 = "logitlink", lshape = "logitlink",
+      type.fitted = c("mean", "shape", "pobs1", "onempobs1"),
+      ipobs1 = NULL, gshape = ppoints(8), zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lpobs1</code></td>
+<td>
+
+<p>Link function for the parameter <code class="reqn">p_1</code> or
+<code class="reqn">\phi</code>,
+called <code>pobs1</code> or <code>phi</code> here.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lshape</code></td>
+<td>
+
+<p>See <code>logff</code> for details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gshape, type.fitted</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>
+and <code>fittedvlm</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<table><tr style="vertical-align: top;">
+<td><code>ipobs1, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>
+for information.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The response <code class="reqn">Y</code> is one with probability <code class="reqn">p_1</code>,
+or <code class="reqn">Y</code> has a 1-truncated logarithmic distribution with
+probability <code class="reqn">1-p_1</code>. 
+Thus <code class="reqn">0 &lt; p_1 &lt; 1</code>,
+which is modelled as a function of the covariates.  The one-altered
+logarithmic distribution differs from the one-inflated
+logarithmic distribution in that the former has ones coming from one
+source, whereas the latter has ones coming from the logarithmic
+distribution too. The one-inflated logarithmic distribution
+is implemented in the <span class="pkg">VGAM</span> package.  Some people
+call the one-altered logarithmic a <em>hurdle</em> model.
+</p>
+<p>The input can be a matrix (multiple responses).
+By default, the two linear/additive predictors
+of <code>oalog</code>
+are <code class="reqn">(logit(\phi), logit(s))^T</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+<p>The <code>fitted.values</code> slot of the fitted object,
+which should be extracted by the generic function <code>fitted</code>,
+returns the mean <code class="reqn">\mu</code> (default) which is given by
+</p>
+<p style="text-align: center;"><code class="reqn">\mu = \phi + (1-\phi) A</code>
+</p>
+
+<p>where <code class="reqn">A</code> is the mean of the one-truncated
+logarithmic distribution.
+If <code>type.fitted = "pobs1"</code> then <code class="reqn">p_1</code> is
+returned.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This family function effectively combines
+<code>binomialff</code> and
+<code>otlog</code> into
+one family function.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>Gaitdlog</code>,
+<code>Oalog</code>,
+<code>logff</code>,
+<code>oilog</code>,
+<code>CommonVGAMffArguments</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: odata &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+odata &lt;- transform(odata, pobs1  = logitlink(-1 + 2*x2, inv = TRUE),
+                          shape  = logitlink(-2 + 3*x2, inv = TRUE))
+odata &lt;- transform(odata, y1 = roalog(nn, shape, pobs1 = pobs1),
+                          y2 = roalog(nn, shape, pobs1 = pobs1))
+with(odata, table(y1))
+
+ofit &lt;- vglm(cbind(y1, y2) ~ x2, oalog, data = odata, trace = TRUE)
+coef(ofit, matrix = TRUE)
+head(fitted(ofit))
+head(predict(ofit))
+summary(ofit)
+
+## End(Not run)</code></pre>
+
+
+</div>

@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vSep</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Select Peptides of a Particular Length/Charge Combination
+</h2>
+
+<h3>Description</h3>
+
+<p>Select Peptides that have a specified length/charge combination, a subfunction
+for <code>lcScan</code>, and all methods of <code>LCMotif</code> and <code>LcComp</code></p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vSep(File, Length = NULL, Charge = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>File</code></td>
+<td>
+
+<p>An R object, usually a <code>data.frame</code> generally created by the function <code>FLoad()</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Length</code></td>
+<td>
+
+<p>An <code>integer</code> value, specifies the desired length to subset.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Charge</code></td>
+<td>
+
+<p>An <code>integer</code> value, specified the desired charge to subset.
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a <code>data.frame</code> with peptides of the selected Length/Charge
+combination.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Cody Moore
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">protExChargeSep &lt;- data.frame(Peptides = c("PWRGPWARVGSG","GYNRVGQGSG","PWRGPWARVGSG"),
+Length = c(12,10,12), Charge = c(2,1,2))
+
+## Length/Charge Combination ##
+
+hitSelEx &lt;- vSep(protExChargeSep,10,1)
+
+## Charge only ##
+
+hitSelEx &lt;- vSep(protExChargeSep,Charge = 1)
+
+## Length Only ##
+
+hitSelEx &lt;- vSep(protExChargeSep,Length = 12)
+</code></pre>
+
+
+</div>

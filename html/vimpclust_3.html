@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>groupsoft</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Group soft-thresholding operator</h2>
+
+<h3>Description</h3>
+
+<p>This function implements the group soft-thresholding operator for a vector which elements are priorly split into groups. For the complete mathematical 
+formulation, the reader may refer to the references below.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">groupsoft(b, lambda, index = 1:length(b), sizegroup = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>b</code></td>
+<td>
+<p>a numerical vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda</code></td>
+<td>
+<p>a positive scalar containing the regularization parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>index</code></td>
+<td>
+<p>a vector of integers of size <code>length(b)</code> containing the group membership for
+each element of <code>b</code>. By default, <code>index=1:length(b)</code> i.e. each element of <code>b</code> constitutes its own group.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sizegroup</code></td>
+<td>
+<p>a boolean. if TRUE, the size of 
+the groups is taken into account in the thresholding operation.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns the sparse vector after the group soft-thresholding operation.
+</p>
+
+
+<h3>References</h3>
+
+<p>M. Chavent, J. Lacaille, A. Mourer and M. Olteanu (2020). 
+Sparse k-means for mixed data via group-sparse clustering, to appear in ESANN proceedings.
+</p>
+<p>M. Yuan and Y. Lin (2006). Model selection and estimation in regression with grouped variables. J. R. Statist. Soc. B, Vol. 68(1), p. 49-67.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>groupsparsewkm</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">b &lt;- c(0.1, 0.2, 0.8, 0.1, 0.1, 0.3)
+index &lt;- c(1,1,2,2,3,3)
+lambda &lt;- 0.1
+groupsoft(b=b, lambda=lambda, index=index, sizegroup=TRUE)
+lambda &lt;- 0.3
+groupsoft(b=b, lambda=lambda, index=index, sizegroup=TRUE)
+lambda &lt;- 0.8
+groupsoft(b=b, lambda=lambda, index=index, sizegroup=TRUE)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>draw</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Draw the Variable Length Markov Chain estimated model
+</h2>
+
+<h3>Description</h3>
+
+<p>Draws the rooted tree corresponding to the estimated contexts in a <code>VLMCX</code> object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">draw(fit, title = "VLMCX Context Tree", print.coef = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fit</code></td>
+<td>
+
+<p>a VLMCX object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+
+<p>the title in the graph.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>print.coef</code></td>
+<td>
+
+<p>It TRUE the algorithm prints in the console the list of all contexts and their corresponding alpha and beta coefficients for the multinomial regression. If FALSE, the algorithm prints in the console a text version of the rooted context tree.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The graph contains circles corresponding to the estimated nodes of the contexts estimated by the algorithm but does not include the structure and covariate parameter vectors.
+</p>
+
+
+<h3>Value</h3>
+
+<p> No return value, called for plotting only.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Adriano Zanin Zambom &lt;adriano.zambom@csun.edu&gt; 
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+n = 1000
+d = 2
+set.seed(1)
+X = cbind(rnorm(n), rnorm(n))
+
+y = rbinom(n,1,.2)
+fit = maximum.context(y, X)
+
+draw(fit)
+
+fit = VLMCX(y, X, alpha.level = 0.0001, max.depth = 3, n.min = 15, trace = TRUE)
+draw(fit)
+
+draw(fit, print.coef = FALSE)
+
+
+
+</code></pre>
+
+
+</div>

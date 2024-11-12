@@ -1,0 +1,139 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Zoabeta</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Zero/One-Inflated Beta Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, and random
+generation for the zero/one-inflated beta distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dzoabeta(x, shape1, shape2, pobs0 = 0, pobs1 = 0, log = FALSE,
+         tol = .Machine$double.eps)
+pzoabeta(q, shape1, shape2, pobs0 = 0, pobs1 = 0,
+         lower.tail = TRUE, log.p = FALSE, tol = .Machine$double.eps)
+qzoabeta(p, shape1, shape2, pobs0 = 0, pobs1 = 0,
+         lower.tail = TRUE, log.p = FALSE, tol = .Machine$double.eps)
+rzoabeta(n, shape1, shape2, pobs0 = 0, pobs1 = 0,
+         tol = .Machine$double.eps)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, p, n</code></td>
+<td>
+<p>Same as <code>Beta</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pobs0, pobs1</code></td>
+<td>
+
+<p>vector of probabilities that 0 and 1 are observed
+(<code class="reqn">\omega_0</code>
+and
+<code class="reqn">\omega_1</code>).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape1, shape2</code></td>
+<td>
+
+<p>Same as <code>Beta</code>.
+They are called <code>a</code> and <code>b</code> in
+<code>beta</code> respectively.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail, log, log.p</code></td>
+<td>
+
+<p>Same as <code>Beta</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+
+<p>Numeric, tolerance for testing equality with 0 and 1.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This distribution is a mixture of a discrete distribution
+with a continuous distribution.
+The cumulative distribution function of <code class="reqn">Y</code> is
+</p>
+<p style="text-align: center;"><code class="reqn">F(y) =(1 - \omega_0 -\omega_1) B(y) +
+            \omega_0 \times I[0 \leq y] +
+      \omega_1 \times I[1 \leq y]</code>
+</p>
+
+<p>where <code class="reqn">B(y)</code> is the cumulative distribution function
+of the beta distribution with the same shape parameters
+(<code>pbeta</code>),
+<code class="reqn">\omega_0</code> is the inflated probability at 0 and
+<code class="reqn">\omega_1</code> is the inflated probability at 1.
+The default values of <code class="reqn">\omega_j</code> mean that these
+functions behave like the ordinary <code>Beta</code>
+when only the essential arguments are inputted.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dzoabeta</code> gives the density,
+<code>pzoabeta</code> gives the distribution function,
+<code>qzoabeta</code> gives the quantile, and
+<code>rzoabeta</code> generates random deviates.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Xiangjie Xue and T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>zoabetaR</code>,
+<code>beta</code>,
+<code>betaR</code>,
+<code>Betabinom</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+N &lt;- 1000; y &lt;- rzoabeta(N, 2, 3, 0.2, 0.2)
+hist(y, probability = TRUE, border = "blue", las = 1,
+     main = "Blue = 0- and 1-altered; orange = ordinary beta")
+sum(y == 0) / N  # Proportion of 0s
+sum(y == 1) / N  # Proportion of 1s
+Ngrid &lt;- 1000
+lines(seq(0, 1, length = Ngrid),
+      dbeta(seq(0, 1, length = Ngrid), 2, 3), col = "orange")
+lines(seq(0, 1, length = Ngrid), col = "blue",
+      dzoabeta(seq(0, 1, length = Ngrid), 2 , 3, 0.2, 0.2))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,226 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>designTreatmentsC</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Build all treatments for a data frame to predict a categorical outcome.</h2>
+
+<h3>Description</h3>
+
+<p>Function to design variable treatments for binary prediction of a
+categorical outcome.  Data frame is assumed to have only atomic columns
+except for dates (which are converted to numeric). Note: re-encoding high cardinality
+categorical variables can introduce undesirable nested model bias, for such data consider
+using <code>mkCrossFrameCExperiment</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">designTreatmentsC(
+  dframe,
+  varlist,
+  outcomename,
+  outcometarget = TRUE,
+  ...,
+  weights = c(),
+  minFraction = 0.02,
+  smFactor = 0,
+  rareCount = 0,
+  rareSig = NULL,
+  collarProb = 0,
+  codeRestriction = NULL,
+  customCoders = NULL,
+  splitFunction = NULL,
+  ncross = 3,
+  forceSplit = FALSE,
+  catScaling = TRUE,
+  verbose = TRUE,
+  parallelCluster = NULL,
+  use_parallel = TRUE,
+  missingness_imputation = NULL,
+  imputation_map = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dframe</code></td>
+<td>
+<p>Data frame to learn treatments from (training data), must have at least 1 row.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varlist</code></td>
+<td>
+<p>Names of columns to treat (effective variables).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outcomename</code></td>
+<td>
+<p>Name of column holding outcome variable. dframe[[outcomename]] must be only finite non-missing values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outcometarget</code></td>
+<td>
+<p>Value/level of outcome to be considered "success",  and there must be a cut such that dframe[[outcomename]]==outcometarget at least twice and dframe[[outcomename]]!=outcometarget at least twice.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>no additional arguments, declared to forced named binding of later arguments</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>optional training weights for each row</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minFraction</code></td>
+<td>
+<p>optional minimum frequency a categorical level must have to be converted to an indicator column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smFactor</code></td>
+<td>
+<p>optional smoothing factor for impact coding models.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rareCount</code></td>
+<td>
+<p>optional integer, allow levels with this count or below to be pooled into a shared rare-level.  Defaults to 0 or off.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rareSig</code></td>
+<td>
+<p>optional numeric, suppress levels from pooling at this significance value greater.  Defaults to NULL or off.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>collarProb</code></td>
+<td>
+<p>what fraction of the data (pseudo-probability) to collar data at if doCollar is set during <code>prepare.treatmentplan</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>codeRestriction</code></td>
+<td>
+<p>what types of variables to produce (character array of level codes, NULL means no restriction).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>customCoders</code></td>
+<td>
+<p>map from code names to custom categorical variable encoding functions (please see <a href="https://github.com/WinVector/vtreat/blob/main/extras/CustomLevelCoders.md">https://github.com/WinVector/vtreat/blob/main/extras/CustomLevelCoders.md</a>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>splitFunction</code></td>
+<td>
+<p>(optional) see vtreat::buildEvalSets .</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncross</code></td>
+<td>
+<p>optional scalar &gt;=2 number of cross validation splits use in rescoring complex variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>forceSplit</code></td>
+<td>
+<p>logical, if TRUE force cross-validated significance calculations on all variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>catScaling</code></td>
+<td>
+<p>optional, if TRUE use glm() linkspace, if FALSE use lm() for scaling.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>if TRUE print progress.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallelCluster</code></td>
+<td>
+<p>(optional) a cluster object created by package parallel or package snow.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use_parallel</code></td>
+<td>
+<p>logical, if TRUE use parallel methods (when parallel cluster is set).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>missingness_imputation</code></td>
+<td>
+<p>function of signature f(values: numeric, weights: numeric), simple missing value imputer.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imputation_map</code></td>
+<td>
+<p>map from column names to functions of signature f(values: numeric, weights: numeric), simple missing value imputers.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The main fields are mostly vectors with names (all with the same names in the same order):
+</p>
+<p>- vars : (character array without names) names of variables (in same order as names on the other diagnostic vectors)
+- varMoves : logical TRUE if the variable varied during hold out scoring, only variables that move will be in the treated frame
+- #' - sig : an estimate significance of effect
+</p>
+<p>See the vtreat vignette for a bit more detail and a worked example.
+</p>
+<p>Columns that do not vary are not passed through.
+</p>
+<p>Note: re-encoding high cardinality on training data can introduce nested model bias, consider using <code>mkCrossFrameCExperiment</code> instead.
+</p>
+
+
+<h3>Value</h3>
+
+<p>treatment plan (for use with prepare)
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>prepare.treatmentplan</code>, <code>designTreatmentsN</code>, <code>designTreatmentsZ</code>, <code>mkCrossFrameCExperiment</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+dTrainC &lt;- data.frame(x=c('a','a','a','b','b','b'),
+   z=c(1,2,3,4,5,6),
+   y=c(FALSE,FALSE,TRUE,FALSE,TRUE,TRUE))
+dTestC &lt;- data.frame(x=c('a','b','c',NA),
+   z=c(10,20,30,NA))
+treatmentsC &lt;- designTreatmentsC(dTrainC,colnames(dTrainC),'y',TRUE)
+dTestCTreated &lt;- prepare(treatmentsC,dTestC,pruneSig=0.99)
+
+</code></pre>
+
+
+</div>

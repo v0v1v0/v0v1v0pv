@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getSampledVocalMatrix</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>getSampledVocalCountMatrix: generate vocalisation diagrams</h2>
+
+<h3>Description</h3>
+
+<p>Generate a probabilistic vocalisation diagram through 'sampling'.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getSampledVocalMatrix(df, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>a data frame consisting, minimally, of a column for
+vocalisation/pause start times, a column for end times, and a
+column identifying the speaker, speaker role or 'Floor' (for
+silences).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>general parameter to be passed to
+<code>getSampledVocalCountMatrix</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A vocalisation diagram (vocaldia) is a representation of a
+dialogue as a Markov process whose cell &lt;m,n&gt; contains the
+transition probability from node n to node m).
+</p>
+
+
+<h3>Value</h3>
+
+<p>a vocaldia object, consisting of a vocalisation matrix
+(vocmatrix) where cell &lt;m,n&gt; contains the transition
+probability from node n to node m, and a table of prior
+probabilities (stationary distribution) per node.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Saturnino Luz  <a href="mailto:luzs@acm.org">luzs@acm.org</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>S. Luz. Automatic identification of experts and performance
+prediction in the multimodal math data corpus through analysis
+of speech interaction. In <em>Proceedings of the 15th ACM on
+International Conference on Multimodal Interaction, ICMI'13</em>,
+pages 575–582, New York, NY, USA, 2013. ACM.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>getSampledVocalCountMatrix</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vocdia) 
+getSampledVocalMatrix(subset(atddia,
+         id=='Abbott_Maddock_01'),nodecolumn='speaker', individual=TRUE)
+</code></pre>
+
+
+</div>

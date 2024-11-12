@@ -1,0 +1,56 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>entropy.data</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Computes an Empirical Estimation of the Entropy from a Table of Counts</h2>
+
+<h3>Description</h3>
+
+<p>This function empirically estimates the Shannon entropy from a table of counts using the observed frequencies.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">entropy.data(freqs.table)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>freqs.table</code></td>
+<td>
+<p>a table of counts.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The general concept of entropy is defined for probability distributions. The 'entropy.data' function estimates empirical entropy from data. The probability is estimated from data using frequency tables. Then the estimates are plug-in in the definition of the entropy to return the so-called empirical entropy. A common known problem of empirical entropy is that the estimations are biased due to the sampling noise. This is also known that the bias will decrease as the sample size increases.</p>
+
+
+<h3>Value</h3>
+
+<p>Shannon's entropy estimate on natural logarithm scale.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Gilles Kratzer</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library("varrank")
+
+rv &lt;- rnorm(n = 100, mean = 0, sd = 2)
+
+entropy.data(freqs.table = discretization(data.df = rv,
+discretization.method = "fd",
+frequency = TRUE)[[1]])
+</code></pre>
+
+
+</div>

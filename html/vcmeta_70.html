@@ -1,0 +1,211 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>replicate.mean.ps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares and combines paired-samples mean differences in original and
+follow-up studies</h2>
+
+<h3>Description</h3>
+
+<p>This function computes confidence intervals from an original study and a
+follow-up study where the effect size is a paired-samples mean difference.
+Confidence intervals for the difference and average effect size are also
+computed. Equality of variances within or across studies is not assumed.
+A Satterthwaite adjustment to the degrees of freedom is used to
+improve the accuracy of the confidence intervals for the difference and
+average. The confidence level for the difference is 1 – 2*alpha, which is
+recommended for equivalence testing.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">replicate.mean.ps(
+  alpha,
+  m11,
+  m12,
+  sd11,
+  sd12,
+  cor1,
+  n1,
+  m21,
+  m22,
+  sd21,
+  sd22,
+  cor2,
+  n2
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m11</code></td>
+<td>
+<p>estimated mean for measurement 1 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m12</code></td>
+<td>
+<p>estimated mean for measurement 2 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd11</code></td>
+<td>
+<p>estimated SD for measurement 1 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd12</code></td>
+<td>
+<p>estimated SD for measurement 2 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor1</code></td>
+<td>
+<p>estimated correlation of paired measurements in orginal study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>sample size in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m21</code></td>
+<td>
+<p>estimated mean for measurement 1 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m22</code></td>
+<td>
+<p>estimated mean for measurement 2 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd21</code></td>
+<td>
+<p>estimated SD for measurement 1 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd22</code></td>
+<td>
+<p>estimated SD for measurement 2 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor2</code></td>
+<td>
+<p>estimated correlation of paired measurements in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>sample size in follow-up study</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A 4-row matrix. The rows are:
+</p>
+
+<ul>
+<li>
+<p> Row 1 summarizes the original study
+</p>
+</li>
+<li>
+<p> Row 2 summarizes the follow-up study
+</p>
+</li>
+<li>
+<p> Row 3 estimates the difference in mean differences
+</p>
+</li>
+<li>
+<p> Row 4 estimates the average mean difference
+</p>
+</li>
+</ul>
+<p>The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - mean difference estimate (single study, difference, average)
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> df - degrees of freedom
+</p>
+</li>
+<li>
+<p> t - t-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2021).
+“Design and analysis of replication studies.”
+<em>Organizational Research Methods</em>, <b>24</b>(3), 513–529.
+ISSN 1094-4281, <a href="https://doi.org/10.1177/1094428120911088">doi:10.1177/1094428120911088</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">replicate.mean.ps(.05, 86.22, 70.93, 14.89, 12.32, .765, 20, 
+                       84.81, 77.24, 15.68, 16.95, .702, 75)
+
+#  Should return:
+#                     Estimate       SE        t            p  
+# Original:              15.29 2.154344 7.097288 9.457592e-07 
+# Follow-up:              7.57 1.460664 5.182575 1.831197e-06 
+# Original - Follow-up:   7.72 2.602832 2.966000 5.166213e-03 
+# Average:               11.43 1.301416 8.782740 1.010232e-10 
+#                              LL       UL       df
+# Original:             10.780906 19.79909 19.00000
+# Follow-up:             4.659564 10.48044 74.00000
+# Original - Follow-up:  3.332885 12.10712 38.40002
+# Average:               8.796322 14.06368 38.40002
+
+
+</code></pre>
+
+
+</div>

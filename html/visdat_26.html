@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vis_dat</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualises a data.frame to tell you what it contains.</h2>
+
+<h3>Description</h3>
+
+<p><code>vis_dat</code> gives you an at-a-glance ggplot object of what is inside a
+dataframe. Cells are coloured according to what class they are and whether
+the values are missing. As <code>vis_dat</code> returns a ggplot object, it is very
+easy to customize and change labels, and customize the plot
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vis_dat(
+  x,
+  sort_type = TRUE,
+  palette = "default",
+  warn_large_data = TRUE,
+  large_data_size = 9e+05,
+  facet
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a data.frame object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sort_type</code></td>
+<td>
+<p>logical TRUE/FALSE. When TRUE (default), it sorts by the
+type in the column to make it easier to see what is in the data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>palette</code></td>
+<td>
+<p>character "default", "qual" or "cb_safe". "default" (the
+default) provides the stock ggplot scale for separating the colours.
+"qual" uses an experimental qualitative colour scheme for providing
+distinct colours for each Type. "cb_safe" is a set of colours that are
+appropriate for those with colourblindness. "qual" and "cb_safe" are drawn
+from http://colorbrewer2.org/.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>warn_large_data</code></td>
+<td>
+<p>logical - warn if there is large data? Default is TRUE
+see note for more details</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>large_data_size</code></td>
+<td>
+<p>integer default is 900000 (given by
+'nrow(data.frame) * ncol(data.frame)“). This can be changed. See
+note for more details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>facet</code></td>
+<td>
+<p>bare variable name for a variable you would like to facet
+by. By default there is no facetting. Only one variable can be facetted.
+You can get the data structure using <code>data_vis_dat</code> and the facetted
+structure by using <code>group_by</code> and then <code>data_vis_dat</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>ggplot2</code> object displaying the type of values in the data frame and
+the position of any missing values.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Some datasets might be too large to plot, sometimes creating a blank
+plot - if this happens, I would recommend downsampling the data, either
+looking at the first 1,000 rows or by taking a random sample. This means
+that you won't get the same "look" at the data, but it is better than
+a blank plot! See example code for suggestions on doing this.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vis_miss()</code> <code>vis_guess()</code> <code>vis_expect()</code> <code>vis_cor()</code>
+<code>vis_compare()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+vis_dat(airquality)
+
+# experimental colourblind safe palette
+vis_dat(airquality, palette = "cb_safe")
+vis_dat(airquality, palette = "qual")
+
+# if you have a large dataset, you might want to try downsampling:
+## Not run: 
+library(nycflights13)
+library(dplyr)
+flights %&gt;%
+  sample_n(1000) %&gt;%
+  vis_dat()
+
+flights %&gt;%
+  slice(1:1000) %&gt;%
+  vis_dat()
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,118 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vmperception.l</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Laplace-Transformed Perception Probabilities of Visual Meteor Magnitudes</h2>
+
+<h3>Description</h3>
+
+<p>Provides the Laplace-transformed perception probability of visual meteor magnitudes
+and its first derivative.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vmperception.l(s, deriv.degree = 0L)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>s</code></td>
+<td>
+<p>numerical; Real (non-complex) parameter for the Laplace transformation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>deriv.degree</code></td>
+<td>
+<p>integer; degree of derivative of the transformation.
+Currently, valid values of <code>deriv.degree</code> are <code>0</code>, <code>1</code> and <code>2</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Laplace-transformed perception probabilities <code>F(s)</code>, given as
+</p>
+<p style="text-align: center;"><code class="reqn">
+F(s) = \mathcal{L} \left\{p\right\}(s)
+= \int_{-0.5}^{\infty} \, f(m) \, \mathrm e^{-s \, m} \,\mathrm{d}m \,,
+</code>
+</p>
+
+<p>are approximately
+</p>
+<p style="text-align: center;"><code class="reqn">
+    P(s) = \begin{cases}
+        s^{-1} \, \exp\left(-4.11 \, s + 1.32 \, s^2 - 0.15 \, s^3\right)\ &amp; \text{ if } s &gt;= 0.0,\\
+        \text{undefined} \  &amp; \text{ otherwise.}
+    \end{cases}
+</code>
+</p>
+
+<p>Here, <code>m</code> is the difference between the limiting magnitude and the meteor magnitude,
+and <code>f(m)</code> denotes the perception probabilities as a function of <code>m</code>.
+The <code class="reqn">\mathcal{L}</code> recalls here the one-sided Laplace transform.
+</p>
+<p>The Laplace transform is notably effective for determining the mean and variance
+of observed meteor magnitudes, which are measured relative to the limiting magnitude.
+This is just one example of its application.
+This approach is valid only when the actual magnitude distribution adheres
+to <code class="reqn">p(m) \sim r^{-m}</code>, where <code class="reqn">s = \log(r)</code>.
+In this scenario, the mean of the observable meteor magnitudes is given by
+<code class="reqn">-\mathcal{L}'/\mathcal{L}</code>, and their variance is calculated as
+<code class="reqn">\mathcal{L}''/\mathcal{L} - (\mathcal{L}'/\mathcal{L})^2</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>returns the Laplace-transformed perception probabilities.
+If <code>deriv.degree</code> is specified, it will return the <code>deriv.degree</code>-th order derivative
+of these Laplace-transformed values.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>vmperception
+vmgeom
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">r &lt;- 2.0
+s &lt;- log(r)
+F0 &lt;- vmperception.l(s)
+F1 &lt;- vmperception.l(s, deriv.degree=1L)
+# magnitude mean
+-F1/F0
+F2 &lt;- vmperception.l(s, deriv.degree=2L)
+# magnitude variance
+F2/F0 - (F1/F0)^2
+# plot the Laplace-transformed perception probabilities
+old_par &lt;- par(mfrow = c(1,1))
+plot(
+    vmperception.l,
+    0.2, 1.1,
+    main = paste(
+        'Laplace-transformed perception',
+        'probability of visual meteor magnitudes'
+    ),
+    col = "blue",
+    log = 'y',
+    xlab = 's',
+    ylab = 'L'
+)
+par(old_par)
+</code></pre>
+
+
+</div>

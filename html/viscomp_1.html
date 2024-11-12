@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compdesc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Components descriptive analysis</h2>
+
+<h3>Description</h3>
+
+<p>The function performs a descriptive analysis regarding the frequency of the components in the network meta-analysis model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compdesc(model, sep = "+", heatmap = TRUE, percentage = TRUE, digits = 2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>An object of class <code>netmeta</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sep</code></td>
+<td>
+<p>A single character that defines the separator between interventions components.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>heatmap</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> a heat matrix of the component's frequency is plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentage</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> combinations' percentages are printed as a number instead of fraction value in the <code>heatmap</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>A single integer value that specifies the percentages' decimal places in the <code>heatmap</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing three items
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>crosstable</code></td>
+<td>
+<p>A cross-table containing the frequency of the components. Each cell represents the number of arms where the corresponding component combination was observed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>frequency</code></td>
+<td>
+<p>A <code>data.frame</code> that contains the component's frequency. Columns
+</p>
+ <ul>
+<li> <p><code>Component</code> denotes the name of each component
+</p>
+</li>
+<li>
+<p><code>Frequency</code> denotes the number of arms where the component was observed
+</p>
+</li>
+<li>
+<p><code>A</code> denotes the number of studies in which the corresponding component was included in all arms
+</p>
+</li>
+<li>
+<p><code>A_percent</code> denotes the percentage of studies in which the corresponding component was included in all arms
+</p>
+</li>
+<li>
+<p><code>B</code> denotes the number of studies in which the corresponding component was included in at least one arm
+</p>
+</li>
+<li>
+<p><code>B_percent</code> denotes the percentage of studies in which the corresponding component was included in at least one arm
+</p>
+</li>
+<li>
+<p><code>C</code> denotes the number of studies in which the corresponding component was not included in any arm
+</p>
+</li>
+<li>
+<p><code>C_percent</code> denotes the percentage of studies in which the corresponding component was not included in any arm
+</p>
+</li>
+<li>
+<p><code>A.B</code> denotes the ratio of columns <code>A</code> and <code>B</code>.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>heatmat</code></td>
+<td>
+<p>An object of class <code>ggplot</code> that visualizes item <code>crosstable</code>. Diagonal elements refer to the components and in parentheses the proportion of study
+arms including that component is provided, while off-diagonal elements to the frequency of component’s combinations and in parentheses the proportion of study arms with both components
+out of those study arms that have the component in the row is provided. Also, the intensity of the color is proportional to the relative frequency of the component combination.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>The function can be applied only in network meta-analysis models that contain multi-component interventions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(nmaMACE)
+compdesc(model = nmaMACE)
+
+</code></pre>
+
+
+</div>

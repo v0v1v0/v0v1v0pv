@@ -1,0 +1,114 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vmperception</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Perception Probabilities of Visual Meteor Magnitudes</h2>
+
+<h3>Description</h3>
+
+<p>Provides the perception probability of visual meteor magnitudes and its first derivative.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vmperception(m, deriv.degree = 0L)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>numerical; difference between the limiting magnitude and the meteor magnitude.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>deriv.degree</code></td>
+<td>
+<p>integer; degree of derivative of the perception probability.
+Currently, valid values of <code>deriv.degree</code> are <code>0</code>, <code>1</code> and <code>2</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The perception probabilities of <em>Koschack R., Rendtel J., 1990b</em>
+are estimated with the formula
+</p>
+<p style="text-align: center;"><code class="reqn">
+    p(m) = \begin{cases}
+        1.0 - \exp\left(-z(m + 0.5)\right)\  &amp; \text{ if } m &gt; -0.5,\\
+        0.0 \  &amp; \text{ otherwise,}
+    \end{cases}
+</code>
+</p>
+
+<p>where
+</p>
+<p style="text-align: center;"><code class="reqn">
+z(x) = 0.003 \, x + 0.0056 \, x^2 + 0.0014 \, x^4
+</code>
+</p>
+
+<p>and <code>m</code> is the difference between the limiting magnitude and the meteor magnitude.
+</p>
+
+
+<h3>Value</h3>
+
+<p>This function returns the visual perception probabilities.
+If <code>deriv.degree</code> is specified, it will return the <code>deriv.degree</code>-th order derivative
+of the perception probability.
+</p>
+
+
+<h3>References</h3>
+
+<p>Koschack R., Rendtel J., 1990b <em>Determination of spatial number density and mass index from visual meteor observations (II).</em> WGN 18, 119–140.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Perception probability of visually estimated meteor of magnitude 3.0
+# with a limiting magnitude of 5.6.
+vmperception(5.6 - 3.0)
+
+# plot
+old_par &lt;- par(mfrow = c(1,1))
+plot(
+    vmperception,
+    -0.5, 8,
+    main = paste(
+        'perception probability of',
+        'visual meteor magnitudes'
+    ),
+    col = "blue",
+    xlab = 'm',
+    ylab = 'p'
+)
+plot(
+    function(m) {
+        vmperception(m, deriv.degree=1L)/vmperception(m)
+    },
+    -0.3, 8,
+    main = paste(
+        'q-values of',
+        'visual meteor magnitudes'
+    ),
+    col = "blue",
+    log = 'y',
+    xlab = 'm',
+    ylab = 'q'
+)
+
+par(old_par)
+</code></pre>
+
+
+</div>

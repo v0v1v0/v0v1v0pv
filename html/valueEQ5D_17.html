@@ -1,0 +1,114 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>map_5Lto3L</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function to map EQ-5D-5L scores to EQ-5D-3L index values as per the 
+specific country and group by gender and age</h2>
+
+<h3>Description</h3>
+
+<p>Function to map EQ-5D-5L scores to EQ-5D-3L index values
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">map_5Lto3L(
+  eq5dresponse_data,
+  mobility,
+  self_care,
+  usual_activities,
+  pain_discomfort,
+  anxiety,
+  country = "UK",
+  method = "CW",
+  groupby = NULL,
+  agelimit = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>eq5dresponse_data</code></td>
+<td>
+<p>the data containing eq5d5L responses</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mobility</code></td>
+<td>
+<p>column name for EQ-5D-5L mobility</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>self_care</code></td>
+<td>
+<p>column name for response for EQ-5D-5L self care</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>usual_activities</code></td>
+<td>
+<p>column name for response for EQ-5D-5L usual
+activities</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pain_discomfort</code></td>
+<td>
+<p>column name for response for EQ-5D-5L pain/discomfort</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>anxiety</code></td>
+<td>
+<p>column name for response for EQ-5D-5L anxiety/depression</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>country</code></td>
+<td>
+<p>country of interest, by default is UK, if groupby has to 
+specify the country should be specified</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>CW cross walk</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groupby</code></td>
+<td>
+<p>male or female -grouping by gender, default NULL</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>agelimit</code></td>
+<td>
+<p>vector of ages to show upper and lower limits</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>index value  if success, negative values for failure
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">map_5Lto3L(data.frame(
+  mo = c(1), sc = c(4), ua = c(4), pd = c(3),
+  ad = c(3)
+), "mo", "sc", "ua", "pd", "ad")
+</code></pre>
+
+
+</div>

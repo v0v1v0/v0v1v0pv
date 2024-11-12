@@ -1,0 +1,156 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mlcc.reps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Multiple Latent Components Clustering - Subspace clustering assuming that the
+number of clusters is known</h2>
+
+<h3>Description</h3>
+
+<p>For a fixed number of cluster function returns the best partition and basis 
+for each subspace.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mlcc.reps(X, numb.clusters = 2, numb.runs = 30, stop.criterion = 1,
+  max.iter = 30, initial.segmentations = NULL, max.dim = 4,
+  scale = TRUE, numb.cores = NULL, estimate.dimensions = TRUE,
+  flat.prior = FALSE, show.warnings = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>A data frame or a matrix with only continuous variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numb.clusters</code></td>
+<td>
+<p>An integer, number of cluster.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numb.runs</code></td>
+<td>
+<p>An integer, number of runs of <code>mlcc.kmeans 
+algorithm</code> with random initialization.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stop.criterion</code></td>
+<td>
+<p>An integer, if an iteration of 
+<code>mlcc.kmeans</code> algorithm makes less changes in partitions than 
+<code>stop.criterion</code>, <code>mlcc.kmeans</code> stops.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.iter</code></td>
+<td>
+<p>max.iter An integer, maximum number of iterations of the loop
+in <code>mlcc.kmeans</code> algorithm.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>initial.segmentations</code></td>
+<td>
+<p>A list of vectors, segmentations that user wants
+to be used as an initial segmentation in <code>mlcc.kmeans</code> 
+algorithm.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.dim</code></td>
+<td>
+<p>An integer, maximal dimension of subspaces.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>A boolean, if TRUE (value set by default) then variables in 
+dataset are scaled to zero mean and unit variance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numb.cores</code></td>
+<td>
+<p>An integer, number of cores to be used, by default all 
+cores are used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estimate.dimensions</code></td>
+<td>
+<p>A boolean, if TRUE (value set by default) 
+subspaces dimensions are estimated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>flat.prior</code></td>
+<td>
+<p>A boolean, if TRUE then, instead of a prior that takes into
+account number of models for a given number of clusters, flat prior is 
+used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.warnings</code></td>
+<td>
+<p>A boolean, if set to TRUE all warnings are displayed, 
+default value is FALSE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In more detail, an algorithm <code>mlcc.kmeans</code> is run a 
+<em>numb.runs</em> of times with random or custom initializations. The best 
+partition is selected according to the BIC.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list consisting of </p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>segmentation</code></td>
+<td>
+<p>a vector containing the 
+partition of the variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BIC</code></td>
+<td>
+<p>a numeric, value of the mBIC</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>basis</code></td>
+<td>
+<p>a list of matrices, the factors for each of the subspaces</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+sim.data &lt;- data.simulation(n = 50, SNR = 1, K = 5, numb.vars = 50, max.dim = 3)
+mlcc.res &lt;- mlcc.reps(sim.data$X, numb.clusters = 5, numb.runs = 20, max.dim = 4, numb.cores = 1)
+show.clusters(sim.data$X, mlcc.res$segmentation)
+
+</code></pre>
+
+
+</div>

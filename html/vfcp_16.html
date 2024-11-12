@@ -1,0 +1,206 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vfploto</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Plotting the cumulative distribution function or survival function
+</h2>
+
+<h3>Description</h3>
+
+<p>Plotting the cumulative distribution function or survival function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vfploto(cx, pro, fam, marg, xo, tht, cdf=TRUE, plt=TRUE, rtn=FALSE,
+  ped = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>cx</code></td>
+<td>
+
+<p>A vector of copula probabilities.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pro</code></td>
+<td>
+
+<p>Numeric vector. Its <code>pro[1]</code> is upper value of the <code>u</code>.
+Next <code>pro[-1]</code> are then all greater than or equal to 1.
+The second case of <code>pro</code> is all <code>pro</code> less than 1.
+The first case is an extra calculation of the <code>u</code> values.
+In the latter case, <code>u</code> values can be pre-selected.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fam</code></td>
+<td>
+
+<p>character; A name of copula. One of c("clayton", "frank", "gumbel",
+"amh", "joe", "fgm"). "amh", "joe", "fgm" names are for
+Ali-Mikhail-Haq, Joe, Farlie-Gumbel-Morgenstern copulas.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>marg</code></td>
+<td>
+
+<p>A vector size 2. Combination of these marginals: <br>
+c("weibull", "gamma", "lnorm", "norm", "betapr", "beta").
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xo</code></td>
+<td>
+
+<p>A vector of marginal distribution parameters. It is size 4
+with these components: <br></p>
+
+<table>
+<tr>
+<td style="text-align: right;">
+  <code>xo[1], xo[3]</code> </td>
+<td style="text-align: left;"> scale, meanlog, mean, shape1 </td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  <code>xo[2], xo[4]</code> </td>
+<td style="text-align: left;"> shape, sdlog, sd, shape2 </td>
+</tr>
+<tr>
+<td style="text-align: right;">
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tht</code></td>
+<td>
+
+<p>copula parameter
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cdf</code></td>
+<td>
+
+<p>logical; Computation for CDF when TRUE. If FALSE
+is the same for Survival.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plt</code></td>
+<td>
+
+<p>Plot only when TRUE.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rtn</code></td>
+<td>
+
+<p>Print output value only when TRUE.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ped</code></td>
+<td>
+
+<p>Compute and add to plot an expected values o f marginal
+distributions when <code class="reqn">ped = TRUE</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Must not be <code>plt</code> and <code>rtn</code> at the same time equal to FALSE.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>rtn</code> is TRUE, then a list of these components: <br></p>
+
+<table>
+<tr>
+<td style="text-align: right;">
+  <code>Type</code> </td>
+<td style="text-align: left;"> character; <code>"CDF"</code> or <code>"Survival"</code> </td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  <code>P</code> </td>
+<td style="text-align: left;"> numeric; CDF or Survival value </td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  <code>x</code> </td>
+<td style="text-align: left;"> numeric vector of the first marginal values for <code>P</code> </td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  <code>y</code> </td>
+<td style="text-align: left;"> numeric vector of the second marginal values for <code>P</code> </td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  <code>u</code> </td>
+<td style="text-align: left;"> numeric vector of the first copula marginal values </td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  <code>v</code> </td>
+<td style="text-align: left;"> numeric vector of the second copula marginal values </td>
+</tr>
+<tr>
+<td style="text-align: right;">
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Josef Brejcha
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">require(copula)
+tht = 0.475
+cx = c(0.0025, 0.05, seq(0.1, 0.9, 0.1), 0.95, 0.975)
+# nC = length(cx)
+proh = c(0.9999999, 8, 4, 4, 4)
+prod = c(0.999, 8, 4, 4, 4)
+fam = "clayton"
+marg = c("weibull", "lnorm")
+xo = c(100, 1.5, 3, 0.425)
+suro = vfploto(cx, proh, fam, marg, xo, tht, cdf=FALSE, plt=TRUE, rtn=FALSE)
+cdfo = vfploto(cx, prod, fam, marg, xo, tht, cdf=TRUE, plt=TRUE, rtn=FALSE)
+##
+cx = 0.4
+vfploto(cx, proh, fam, marg, xo, tht, cdf=TRUE, plt=FALSE, rtn=TRUE,
+        ped = TRUE)
+</code></pre>
+
+
+</div>

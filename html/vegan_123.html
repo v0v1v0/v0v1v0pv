@@ -1,0 +1,173 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>eigenvals</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Extract Eigenvalues from an Ordination Object
+</h2>
+
+<h3>Description</h3>
+
+<p>Function extracts eigenvalues from an object that has them. Many
+multivariate methods return such objects. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">eigenvals(x, ...)
+## S3 method for class 'cca'
+eigenvals(x, model = c("all", "unconstrained", "constrained"),
+          constrained = NULL, ...)
+## S3 method for class 'decorana'
+eigenvals(x, kind = c("additive", "axiswise", "decorana"),
+           ...)
+## S3 method for class 'eigenvals'
+summary(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>An object from which to extract eigenvalues.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>An <code>eigenvals</code> result object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+
+<p>Which eigenvalues to return for objects that inherit from class
+<code>"cca"</code> only.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constrained</code></td>
+<td>
+
+<p>Return only constrained eigenvalues. Deprecated as of vegan
+2.5-0. Use <code>model</code> instead.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kind</code></td>
+<td>
+
+<p>Kind of eigenvalues returned for <code>decorana</code>. Only
+<code>"additive"</code> eigenvalues can be used for reporting importances
+of components in <code>summary</code>. <code>"axiswise"</code> gives the
+non-additive eigenvalues, and <code>"decorana"</code> the decorana values
+(see <code>decorana</code> for details).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Other arguments to the functions (usually ignored)
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a generic function that has methods for <code>cca</code>,
+<code>wcmdscale</code>, <code>pcnm</code>, <code>prcomp</code>,
+<code>princomp</code>, <code>dudi</code> (of <span class="pkg">ade4</span>), and 
+<code>pca</code> and <code>pco</code> (of 
+<span class="pkg">labdsv</span>) result objects. The default method also
+extracts eigenvalues if the result looks like being from
+<code>eigen</code> or <code>svd</code>.  Functions
+<code>prcomp</code> and <code>princomp</code> contain square roots
+of eigenvalues that all called standard deviations, but
+<code>eigenvals</code> function returns their squares.  Function
+<code>svd</code> contains singular values, but function
+<code>eigenvals</code> returns their squares. For constrained ordination
+methods <code>cca</code>, <code>rda</code> and
+<code>capscale</code> the function returns the both constrained and
+unconstrained eigenvalues concatenated in one vector, but the partial
+component will be ignored. However, with argument 
+<code>constrained = TRUE</code> only constrained eigenvalues are returned. 
+</p>
+<p>The <code>summary</code> of <code>eigenvals</code> result returns eigenvalues,
+proportion explained and cumulative proportion explained. The result
+object can have some negative eigenvalues (<code>wcmdscale</code>,
+<code>dbrda</code>, <code>pcnm</code>) which correspond to
+imaginary axes of Euclidean mapping of non-Euclidean distances
+(Gower 1985). In these case real axes (corresponding to positive
+eigenvalues) will "explain" proportion &gt;1 of total variation, and
+negative eigenvalues bring the cumulative proportion to
+1. <code>capscale</code> will only find the positive eigenvalues
+and only these are used in finding proportions. For
+<code>decorana</code> the importances and cumulative proportions
+are only reported for <code>kind = "additive"</code>, because other
+alternatives do not add up to total inertia of the input data.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"eigenvals"</code>, which is a vector of
+eigenvalues.
+</p>
+<p>The <code>summary</code> method returns an object of class
+<code>"summary.eigenvals"</code>, which is a matrix.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jari Oksanen.
+</p>
+
+
+<h3>References</h3>
+
+<p>Gower, J. C. (1985). Properties of Euclidean and non-Euclidean
+distance matrices. <em>Linear Algebra and its Applications</em> 67,
+81–97.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>eigen</code>, <code>svd</code>, <code>prcomp</code>,
+<code>princomp</code>, <code>cca</code>, <code>rda</code>,
+<code>capscale</code>, <code>wcmdscale</code>,
+<code>cca.object</code>. 
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(varespec)
+data(varechem)
+mod &lt;- cca(varespec ~ Al + P + K, varechem)
+ev &lt;- eigenvals(mod)
+ev
+summary(ev)
+
+## choose which eignevalues to return
+eigenvals(mod, model = "unconstrained")
+</code></pre>
+
+
+</div>

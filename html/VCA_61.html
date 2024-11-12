@@ -1,0 +1,143 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predict.VCA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Predictions from a Model Fitted by <code>fitLMM</code>
+</h2>
+
+<h3>Description</h3>
+
+<p>Model returns fitted values in case <code>newdata</code> is NULL or evaluates
+the fitted model employing user-specified data <code>newdata</code>. The default is that
+fitted values incorporate fixed effects and random effects, leaving out the (conditional)
+residuals only. If the interest lies in constraining predictions to the fixed effects only
+set <code>re=NA</code> or incorporate just part of the random variability specifying distinct random
+effects (see <code>re</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VCA'
+predict(object, newdata = NULL, re = NULL, allow.new.levels = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>(VCA) object fitted via function <code>fitLMM</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>(data.frame) with all variables required for the specified prediction,
+i.e. the default settings require all variables of the original model, 
+in case of <code>re=NA</code>, only variables corresponding to fixed effects are
+required.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>re</code></td>
+<td>
+<p>(character) if NULL (default) all random effects will be included, 
+to restrict predictions to the fixed effects use <code>re=NA</code>, for
+a subset of random effects included in predictions use any valid
+random effects specification, i.e. <code>object$random</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allow.new.levels</code></td>
+<td>
+<p>(logical) if new levels (no part of the original fitted model) in newdata
+are allowed. If FALSE (default), such new values in newdata will trigger
+an error; if TRUE, then the prediction will use the unconditional (population-level)
+values for data with previously unobserved levels (or NAs).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments passdo or from other methods</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>(numeric) vector of prediction results
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzeneister@roche.com">andre.schuetzeneister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# fit LMM with fixed lot and device effects and test for lot-differences
+data(VCAdata1)
+datS5 &lt;- subset(VCAdata1, sample==5)
+fitS5 &lt;- fitLMM(y~(lot+device)/(day)/(run), datS5, "anova")
+fitS5
+
+# fitted values including fixed and random effects
+pred0 &lt;- predict(fitS5)
+pred0
+# sanity check:
+all(round(pred0 + resid(fitS5) - datS5$y, 12) == 0)
+# restrict to fixed effects
+predict(fitS5, re=NA)
+# restrict to fixed effects and dayly random effects
+# see required names
+fitS5$random
+predict(fitS5, re="lot:device:day")
+
+# check against original 'lmer'-predictions
+# use version from VCA-package (ordinary data.frame)
+data(Orthodont, package="VCA")
+Ortho &lt;- Orthodont
+Ortho$age2 &lt;- Ortho$age-11
+# use exactly the same data, same ordering
+Ortho &lt;- orderData(Ortho, distance ~ Sex * age2 + (Subject) * age2)
+fit.fitLMM &lt;- fitLMM(distance ~ Sex * age2 + (Subject) * age2, Ortho, "reml")
+library(lme4)
+fit.lmer &lt;- lmer(distance ~ Sex + age2 + Sex:age2 + (age2 | Subject), Ortho)
+# check fitted value first (fixed + random effects)
+predict(fit.lmer)
+predict(fit.fitLMM)
+# restrict to fixed part only
+predict(fit.lmer, re.form=NA)  
+predict(fit.fitLMM, re=NA)
+# user-specified 'newdata'
+newdata &lt;- Ortho[45:54,]
+newdata$age2 &lt;- newdata$age2 + 5
+# include fixed and random effects
+predict(fit.lmer, newdata)
+predict(fit.fitLMM, newdata)
+# generate new data
+newdata &lt;- Ortho[45:54,]          
+newdata$age2 &lt;- newdata$age2 + 5
+# predict on newdata using fixed and random effects
+predict(fit.lmer, newdata) 
+predict(fit.fitLMM, newdata)       
+# restrict prediction to random Subject effects
+predict(fit.lmer, newdata, re.form=~(1|Subject))        
+predict(fit.fitLMM, newdata, re="Subject")
+# restrict prediction to random per-Subject slope
+predict(fit.lmer, newdata, re.form=~(age2-1|Subject)) 
+predict(fit.fitLMM, newdata, re="age2:Subject")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,73 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>varImpRanger</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>varImpRanger</h2>
+
+<h3>Description</h3>
+
+<p>Computes the variable importance for ranger models and for arbitrary measures from the 'measures' package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">varImpRanger(object, data, target, nperm = 1, measure = "multiclass.Brier")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object as returned by cforest. <code>ranger</code> with option <code>keep.inbag = TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Original data that was used for training the random forest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>target</code></td>
+<td>
+<p>Target variable as used in the trained model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nperm</code></td>
+<td>
+<p>The number of permutations performed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>measure</code></td>
+<td>
+<p>The name of the measure of the 'measures' package that should be used for the variable importance calculation.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Vector with computed permutation importance for each variable.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(ranger)
+iris.rg = ranger(Species ~ ., data = iris, keep.inbag = TRUE, probability = TRUE)
+vimp.ranger = varImpRanger(object = iris.rg, data = iris, target = "Species")
+vimp.ranger
+
+## End(Not run)
+</code></pre>
+
+
+</div>

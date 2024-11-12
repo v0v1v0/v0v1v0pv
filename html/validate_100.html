@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>is_unique</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Test for uniquenes of records</h2>
+
+<h3>Description</h3>
+
+<p>Test for uniqueness of columns or combinations of columns.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">is_unique(...)
+
+all_unique(...)
+
+n_unique(...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>When used in a validation rule: a bare (unquoted) list of variable names.
+When used directly, a comma-separated list of vectors of equal length.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>For <code>is_unique</code> A logical vector that is <code>FALSE</code> for each record
+that has a duplicate.
+</p>
+<p>For <code>all_unique</code> a single <code>TRUE</code> or <code>FALSE</code>.
+</p>
+<p>For <code>number_unique</code> a single number representing the number
+of unique values or value combinations in the arguments.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other cross-record-helpers: 
+<code>contains_exactly()</code>,
+<code>do_by()</code>,
+<code>exists_any()</code>,
+<code>hb()</code>,
+<code>hierarchy()</code>,
+<code>is_complete()</code>,
+<code>is_linear_sequence()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+d &lt;- data.frame(X = c('a','b','c','b'), Y = c('banana','apple','banana','apple'), Z=1:4)
+v &lt;- validator(is_unique(X, Y))
+values(confront(d, v))
+
+# example with groupwise test
+df &lt;- data.frame(x=c(rep("a",3), rep("b",3)),y=c(1,1,2,1:3))
+v &lt;- validator(is_unique(y, by=x))
+values(confront(d,v))
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,401 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tvcm-assessment</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Model selection utility functions for <code>tvcm</code> objects.</h2>
+
+<h3>Description</h3>
+
+<p>Pruning, cross-validation to find the optimal pruning parameter and computing 
+validation set errors for <code>tvcm</code> objects. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">
+## S3 method for class 'tvcm'
+prune(tree, cp = NULL, alpha = NULL, maxstep = NULL,
+      terminal = NULL, original = FALSE, ...)
+
+## S3 method for class 'tvcm'
+prunepath(tree, steps = 1L, ...)
+
+## S3 method for class 'tvcm'
+cvloss(object, folds = folds_control(), ...)
+
+folds_control(type = c("kfold", "subsampling", "bootstrap"),
+      K = ifelse(type == "kfold", 5, 100),
+      prob = 0.5, weights = c("case", "freq"),
+      seed = NULL)
+
+## S3 method for class 'cvloss.tvcm'
+plot(x, legend = TRUE, details = TRUE, ...)
+
+## S3 method for class 'tvcm'
+oobloss(object, newdata = NULL, weights = NULL,
+        fun = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object, tree</code></td>
+<td>
+<p>an object of class <code>tvcm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cp</code></td>
+<td>
+<p>numeric scalar. The complexity parameter to be cross-validated 
+resp. the penalty with which the model should be pruned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>numeric significance level. Represents the stopping
+parameter for <code>tvcm</code> objects grown with
+<code>sctest = TRUE</code>, see <code>tvcm_control</code>. A node is
+splitted when the <code class="reqn">p</code> value for any coefficient stability test
+in that node falls below <code>alpha</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxstep</code></td>
+<td>
+<p>integer. The maximum number of steps of the algorithm.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>terminal</code></td>
+<td>
+<p>a list of integer vectors with the ids of the nodes
+the inner nodes to be set to terminal nodes. The length of the list must 
+be equal the number of partitions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>original</code></td>
+<td>
+<p>logical scalar. Whether pruning should be based on the
+trees from partitioning rather than on the current trees.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>steps</code></td>
+<td>
+<p>integer vector. The iteration steps from which
+information should be extracted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>folds</code></td>
+<td>
+<p>a list with control arguments as produced by
+<code>folds_control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>character string. The type of sampling scheme to be used
+to divide the data of the input model in a learning and a validation
+set.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>K</code></td>
+<td>
+<p>integer scalar. The number of folds.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>for <code>folds_control</code>, a character that
+defines whether the weights of <code>object</code> are case weights or
+frequencies of cases; for <code>oobloss</code>, a numeric vector
+of weights corresponding to the rows of <code>newdata</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prob</code></td>
+<td>
+<p>numeric between 0 and 1. The probability for the
+<code>"subsampling"</code> cross-validation scheme.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>an numeric scalar that defines the seed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class <code>cvloss.tvcm</code> as produced by
+<code>cvloss</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+<p>logical scalar. Whether a legend should be added.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>details</code></td>
+<td>
+<p>logical scalar. Whether the foldwise validation errors 
+should be shown.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>a data.frame of out-of-bag data (including the response
+variable). See also <code>predict.tvcm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fun</code></td>
+<td>
+<p>the loss function for the validation sets. By default, the
+(possibly weighted) mean of the deviance residuals as defined by the
+<code>family</code> of the fitted <code>object</code> is applied.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments to be passed.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>tvcglm</code> and <code>tvcm</code> processe
+tree-size selection by default. The functions could be interesting for
+advanced users. 
+</p>
+<p>The <code>prune</code> function is used to collapse inner nodes of
+the tree structures by the tuning parameter <code>cp</code>. The aim of
+pruning by <code>cp</code> is to collapse inner nodes to minimize the
+cost-complexity criterion 
+</p>
+<p style="text-align: center;"><code class="reqn">error(cp) = error(tree) + cp * complexity(tree)</code>
+</p>
+
+<p>where the training error <code class="reqn">error(tree)</code> is defined by
+<code>lossfun</code> and <code class="reqn">complexity(tree)</code> is defined as the total
+number of coefficients times <code>dfpar</code> plus the total number of
+splits times <code>dfsplit</code>. The function <code>lossfun</code> and the
+parameters <code>dfpar</code> and <code>dfsplit</code> are defined  by the
+<code>control</code> argument of <code>tvcm</code>, see also
+<code>tvcm_control</code>. By default, <code class="reqn">error(tree)</code> is minus
+two times the total likelihood of the model and <code class="reqn">complexity(tree)</code>
+the number of splits. The minimization of <code class="reqn">error(cp)</code> is
+implemented by the following iterative backward-stepwise algorithm 
+</p>
+
+<ol>
+<li>
+<p> fit all <code>subtree</code> models that collapse one inner node of the 
+current <code>tree</code> model.
+</p>
+</li>
+<li>
+<p> compute the per-complexity increase in the training error
+</p>
+<p style="text-align: center;"><code class="reqn">dev = (error(subtree) - error(tree)) / 
+        (complexity(tree) - complexity(subtree))</code>
+</p>
+
+<p>for all fitted <code>subtree</code> models
+</p>
+</li>
+<li>
+<p> if any <code>dev</code> &lt; <code>cp</code> then set as the <code>tree</code> model
+the <code>subtree</code> that minimizes <code>dev</code> and repeated 1 to 3, 
+otherwise stop.
+</p>
+</li>
+</ol>
+<p>The penalty <code>cp</code> is generally unknown and is estimated adaptively
+from the data. The <code>cvloss</code> function implements the
+cross-validation method to do this. <code>cvloss</code> repeats
+for each fold the following steps
+</p>
+
+<ol>
+<li>
+<p> fit a new model with <code>tvcm</code> based on the training
+data of the fold. 
+</p>
+</li>
+<li>
+<p> prune the new model for increasing <code>cp</code>. Compute for each 
+<code>cp</code> the average validation error.
+</p>
+</li>
+</ol>
+<p>Doing so yields for each fold a sequence of values for <code>cp</code> and
+a sequence of average validation errors. These sequences are then
+combined to a finer grid and the average validation error is averaged 
+correspondingly. From these two sequences we choose the <code>cp</code>
+value that minimizes the validation error. Notice that the average
+validation error is computed as the total prediction error of the
+validation set divided  by the sum of validation set weights. See also
+the argument <code>ooblossfun</code> in <code>tvcm_control</code> and
+the function <code>oobloss</code>.
+</p>
+<p>The <code>prunepath</code> function can be used to backtrack the
+pruning algorithm. By default, it shows the results from collapsing
+inner nodes in the first iteration. The interesting iteration(s) can
+be selected by the <code>steps</code> argument. The output shows several
+information on the performances when collapsing inner nodes. The node
+labels shown in the output refer to the initial tree.
+</p>
+<p>The function <code>folds_control</code> is used to specify the 
+cross-validation scheme, where a random 5-fold cross-validation scheme 
+is used by default. Alternatives are <code>type = "subsampling"</code> 
+(random draws without replacement) and <code>type = "bootstrap"</code> (random 
+draws with replacement). For 2-stage models (with random-effects) 
+fitted by <code>olmm</code>, the subsets are based on subject-wise 
+i.e. first stage sampling. For models where weights represent frequencies
+of observation units (e.g., data from contingency tables), the option
+<code>weights = "freq"</code> should be considered. <code>cvloss</code> 
+returns an object for which a <code>print</code> and a <code>plot</code> generic is
+provided.  
+</p>
+<p><code>oobloss</code> can be used to estimate the total prediction
+error for validation data (the <code>newdata</code> argument). By default,
+the loss is defined as the sum of deviance residuals, see the return
+value <code>dev.resids</code> of <code>family</code>
+resp. <code>family.olmm</code>. Otherwise, the loss function can
+be defined manually by the argument <code>fun</code>, see the examples
+below. In general the sum of deviance residual is equal the sum of the
+-2 log-likelihood errors. A special case is the gaussian family, where  
+the deviance residuals are computed as <code class="reqn">\sum_{i=1}^N w_i (y_i-\mu)^2</code>, 
+that is, the deviance residuals ignore the term <code class="reqn">log 2\pi\sigma^2</code>. 
+Therefore, the sum of deviance residuals for the gaussian model (and 
+possibly others) is not exactly the sum of -2 log-likelihood prediction 
+errors (but shifted by a constant). Another special case are models with
+random effects. For models based on <code>olmm</code>, the deviance 
+residuals are retrieved from marginal predictions (where random effects are
+integrated out). 
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>prune</code> returns a <code>tvcm</code> object, 
+<code>folds_control</code> returns a list of parameters for building a 
+cross-validation scheme. <code>cvloss</code> returns an <code>cvloss.tvcm</code> 
+object with at least the following components: 
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>grid</code></td>
+<td>
+<p>a list with values for <code>cp</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>oobloss</code></td>
+<td>
+<p>a matrix recording the validated loss for each value in 
+<code>grid</code> for each fold.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cp.hat</code></td>
+<td>
+<p>numeric scalar. The tuning parameter which
+minimizes the cross-validated error.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>folds</code></td>
+<td>
+<p>the used folds to extract the learning and the validation
+sets.</p>
+</td>
+</tr>
+</table>
+<p><code>oobloss</code> returns a scalar representing the total prediction 
+error for <code>newdata</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>References</h3>
+
+<p>Breiman, L., J. H. Friedman, R. A. Olshen and C.J. Stone (1984).  
+<em>Classification and Regression Trees</em>. New York, USA: Wadsworth. 
+</p>
+<p>Hastie, T., R. Tibshirani and J. Friedman (2001). <em>The Elements
+of Statistical Learning</em> (2 ed.). New York, USA: Springer-Verlag.
+</p>
+<p>Burgin, R. and G. Ritschard (2017), Coefficient-Wise Tree-Based
+Varying Coefficient Regression with vcrpart. <em>Journal of
+Statistical Software</em>, <b>80</b>(6), 1–33.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>tvcm</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## --------------------------------------------------------- #
+## Dummy Example:
+##
+## Model selection for the 'vcrpart_2' data. The example is
+## merely a syntax template.
+## --------------------------------------------------------- #
+
+## load the data
+data(vcrpart_2)
+
+## fit the model
+control &lt;- tvcm_control(maxstep = 2L, minsize = 5L, cv = FALSE)
+model &lt;- tvcglm(y ~ vc(z1, z2, by = x1) + vc(z1, by = x2),
+                data = vcrpart_2, family = gaussian(),
+                control = control, subset = 1:75)
+
+## cross-validate 'dfsplit'
+cv &lt;- cvloss(model, folds = folds_control(type = "kfold", K = 2, seed = 1))
+cv
+plot(cv)
+
+## prune model with estimated 'cp'
+model.p &lt;- prune(model, cp = cv$cp.hat)
+
+## backtrack pruning
+prunepath(model.p, steps = 1:3)
+
+## out-of-bag error
+oobloss(model, newdata = vcrpart_2[76:100,])
+
+## use an alternative loss function
+rfun &lt;- function(y, mu, wt) sum(abs(y - mu))
+oobloss(model, newdata = vcrpart_2[76:100,], fun = rfun)
+</code></pre>
+
+
+</div>

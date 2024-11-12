@@ -1,0 +1,168 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>trunclognormal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Truncated Log-normal Distribution Family Function
+</h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimate of the two–parameter lognormal
+distribution with lower/upper truncation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R"> trunclognormal(lmeanlog = "identitylink", lsdlog = "loglink",
+                min.support = 1e-6, max.support = Inf, zero = "sdlog") 
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmeanlog, lsdlog, zero</code></td>
+<td>
+
+<p>Same as <code>lognormal</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min.support, max.support</code></td>
+<td>
+
+<p>Positive lower and upper truncation limits (recycled).
+<code>min.support</code> enables LHS truncation;
+
+<code>max.support</code> enables RHS truncation (default is 
+none).
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>MLE of the two–parameter (univariate) lognormal distribution subject 
+to lower/upper truncation. All response values are greater
+than <code>min.support</code> and lower than <code>max.support</code>.
+</p>
+<p>Default values of <code>min.support</code>, <code>max.suppport</code> should 
+effectively reproduce <code>lognormal</code>.
+</p>
+<p>The truncated–lognormal density for a response <code class="reqn">Y</code> is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y; \mu, \sigma) =    f_N(y; \mu, \sigma) /
+  [\Phi(\texttt{max.support}, \mu, \sigma) -
+  \Phi(\texttt{min.support},\mu, \sigma) ], </code>
+</p>
+
+<p>where <code class="reqn">f_N</code> is the ordinary lognormal density (see
+<code>lognormal</code>) and 
+<code class="reqn">\Phi</code> is the standard normal CDF.
+</p>
+<p>The mean of Y, given by
+</p>
+<p style="text-align: center;"><code class="reqn">
+\exp{(\mu + \sigma^2/2)} \cdot
+[\Phi(((\log(\texttt{max.support}) - \mu)/\sigma) - \sigma) -
+ \Phi(((\log(\texttt{min.support}) - \mu)/\sigma) - \sigma)  ]  /  
+\Delta \Phi(\mu,\sigma),</code>
+</p>
+ 
+<p>with <code class="reqn">\Delta \Phi(\mu, \sigma) = 
+ \Phi( (\log(\texttt{max.support}) - \mu)/\sigma )  -
+ \Phi( (\log(\texttt{min.support}) - \mu)/\sigma ),</code>
+are returned as the fitted values.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda, Siqi (Vicky) Liu and Thomas W. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>Nadarajah, S. and Kotz, S. (2003).
+<code>R</code> Programs for Computing Truncated Distributions.
+<em>Journal of Statistical Software, Code
+Snippets</em>,
+<b>16</b>(2), 1–8. 
+</p>
+<p>Cohen, A.C. (1991)
+<em>Truncated and Censored Samples:
+Theory and Applications</em>,
+New York, USA. Marcel Dekker.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>lognormal</code>,
+<code>uninormal</code>,
+<code>CommonVGAMffArguments</code>,
+<code>Lognormal</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">##########
+set.seed(10470923)
+nn &lt;- 3000
+
+## Parameters
+mysdlog   &lt;- exp(-1.5)   # sdlog
+LL   &lt;- 3.5              # Lower bound
+UL   &lt;- 8.0              # Upper bound
+
+## Truncated data
+ldata2 &lt;- data.frame(x2 = runif(nn))
+ldata2 &lt;- transform(ldata2, y1 = rtrunclnorm(nn, 1 + 1.5 * x2, mysdlog, 
+                                             min.support = LL, max.support = UL))
+# head(ldata2)
+# hist(ldata2$y1, breaks = 22, col = "blue", xlim = c(0, 10))
+
+##############################################################
+# Fitting a truncated lognormal distribution - sd is intercept only
+fit1 &lt;- vglm(y1 ~ x2, trunclognormal(zero = "sdlog", min.support = LL, max.support = UL),
+             data = ldata2, trace = TRUE)
+coef(fit1, matrix = TRUE)
+vcov(fit1)
+             
+##############################################################
+# Fitting a truncated lognormal distribution - zero = NULL
+fit2 &lt;- vglm(y1 ~ x2, trunclognormal(zero = NULL, min.support = LL, max.support = UL),
+             data = ldata2, trace = TRUE)
+coef(fit2, matrix = TRUE)
+vcov(fit2)
+
+##############################################################
+# Mimicking lognormal()
+fit3 &lt;- vglm(y1 ~ x2, trunclognormal(zero = "sdlog"),
+             data = ldata2, trace = TRUE)
+coef(fit3, mat = TRUE)
+
+# Same as
+fit3bis &lt;- vglm(y1 ~ x2, lognormal(zero = "sdlog"),
+                 data = ldata2, trace = TRUE)
+coef(fit3bis, mat = TRUE)
+</code></pre>
+
+
+</div>

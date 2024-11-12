@@ -1,0 +1,143 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vpr_autoid_read</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Read VPR aid files</h2>
+
+<h3>Description</h3>
+
+<p>Read aid text files containing ROI string information or measurement data and output as a dataframe
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vpr_autoid_read(
+  file_list_aid,
+  file_list_aidmeas,
+  export,
+  station_of_interest,
+  opticalSetting,
+  warn = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>file_list_aid</code></td>
+<td>
+<p>a list object of aid text files, containing roi strings. Output from matlab Visual Plankton software.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>file_list_aidmeas</code></td>
+<td>
+<p>a list object of aidmea text files, containing ROI measurements. Output from matlab Visual Plankton software.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>export</code></td>
+<td>
+<p>a character string specifying which type of data to output, either 'aid' (roi strings) or 'aidmeas' (measurement data)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>station_of_interest</code></td>
+<td>
+<p>Station information to be added to ROI data output, use NA if irrelevant</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>opticalSetting</code></td>
+<td>
+<p>Optional argument specifying VPR optical setting. If provided will be used to convert size data into mm from pixels, if missing size data will be output in pixels</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>warn</code></td>
+<td>
+<p>Logical, FALSE silences size data unit warnings</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Only outputs either ROI string information OR measurement data
+</p>
+
+
+<h3>Note</h3>
+
+<p>Full paths to each file should be specified
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>E. Chisholm &amp; K. Sorochan
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+station_of_interest &lt;- 'test'
+dayhour &lt;- c('d222.h03', 'd222.h04')
+
+#' #VPR OPTICAL SETTING (S0, S1, S2 OR S3)
+opticalSetting &lt;- "S2"
+imageVolume &lt;- 83663 #mm^3
+
+auto_id_folder &lt;- system.file('extdata/COR2019002/autoid/', package = 'vprr', mustWork = TRUE)
+auto_id_path &lt;- list.files(paste0(auto_id_folder, "/"), full.names = TRUE)
+
+#'   # Path to aid for each taxa
+aid_path &lt;- paste0(auto_id_path, '/aid/')
+# Path to mea for each taxa
+aidmea_path &lt;- paste0(auto_id_path, '/aidmea/')
+
+# AUTO ID FILES
+aid_file_list &lt;- list()
+aidmea_file_list &lt;- list()
+for (i in 1:length(dayhour)) {
+  aid_file_list[[i]] &lt;-
+    list.files(aid_path, pattern = dayhour[[i]], full.names = TRUE)
+  # SIZE DATA FILES
+  aidmea_file_list[[i]] &lt;-
+    list.files(aidmea_path, pattern = dayhour[[i]], full.names = TRUE)
+}
+
+aid_file_list_all &lt;- unlist(aid_file_list)
+aidmea_file_list_all &lt;- unlist(aidmea_file_list)
+
+ # ROIs
+roi_dat_combine &lt;-
+  vpr_autoid_read(
+    file_list_aid = aid_file_list_all,
+    file_list_aidmeas = aidmea_file_list_all,
+    export = 'aid',
+    station_of_interest = station_of_interest,
+    opticalSetting = opticalSetting,
+    warn = FALSE
+  )
+
+# MEASUREMENTS
+roimeas_dat_combine &lt;-
+  vpr_autoid_read(
+    file_list_aid = aid_file_list_all,
+    file_list_aidmeas = aidmea_file_list_all,
+    export = 'aidmeas',
+    station_of_interest = station_of_interest,
+    opticalSetting = opticalSetting,
+    warn = FALSE
+ )
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,78 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bnrf1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>BNRF1 Gene DNA sequences: Epstein-Barr and Herpes</h2>
+
+<h3>Description</h3>
+
+<p>Two gene DNA data “discrete time series”,
+</p>
+
+<dl>
+<dt><code>bnrf1EB</code></dt>
+<dd>
+<p>the BNRF1 gene from the Epstein-Barr virus,</p>
+</dd>
+<dt><code>bnrf1HV</code></dt>
+<dd>
+<p>the BNRF1 gene from the herpes virus.</p>
+</dd>
+</dl>
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(bnrf1)</code></pre>
+
+
+<h3>Format</h3>
+
+<p>The EB sequence is of <code>length</code> 3954, whereas the HV has
+3741 nucleotides.
+Both are <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> <code>factor</code>s with the four levels
+<code>c("a","c","g","t")</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler (original packaging for <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>).</p>
+
+
+<h3>Source</h3>
+
+<p>See the references; data used to be at
+<code style="white-space: pre;">⁠https://anson.ucdavis.edu/~shumway/tsa.html⁠</code>, and are now available
+in CRAN package <a href="https://CRAN.R-project.org/package=astsa"><span class="pkg">astsa</span></a>, e.g., <code>bnrf1ebv</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>Shumway, R. and Stoffer, D. (2000)
+<em>Time Series Analysis and its Applications</em>.
+Springer Texts in Statistics.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(bnrf1)
+bnrf1EB[1:500]
+table(bnrf1EB)
+table(bnrf1HV)
+n &lt;- length(bnrf1HV)
+table(t = bnrf1HV[-1], "t-1" = bnrf1HV[-n])
+
+plot(as.integer(bnrf1EB[1:500]), type = "b")
+
+
+## Simplistic gene matching:
+percent.eq &lt;- sapply(0:200,
+           function(i) 100 * sum(bnrf1EB[(1+i):(n+i)] ==  bnrf1HV))/n
+plot.ts(percent.eq)
+</code></pre>
+
+
+</div>

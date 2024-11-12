@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bound_intervals</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Select intervals bounded by a genome.</h2>
+
+<h3>Description</h3>
+
+<p>Used to remove out-of-bounds intervals, or trim interval coordinates using a
+<code>genome</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bound_intervals(x, genome, trim = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>genome</code></td>
+<td>
+<p>genome_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trim</code></td>
+<td>
+<p>adjust coordinates for out-of-bounds intervals</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>ivl_df
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other utilities: 
+<code>bed12_to_exons()</code>,
+<code>bed_makewindows()</code>,
+<code>flip_strands()</code>,
+<code>interval_spacing()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", -100,   500,
+  "chr1", 100,    1e9,
+  "chr1", 500,    1000
+)
+
+genome &lt;- read_genome(valr_example("hg19.chrom.sizes.gz"))
+
+# out-of-bounds are removed by default ...
+bound_intervals(x, genome)
+
+# ... or can be trimmed within the bounds of a genome
+bound_intervals(x, genome, trim = TRUE)
+
+</code></pre>
+
+
+</div>

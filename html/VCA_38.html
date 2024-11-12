@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getMat</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract a Specific Matrix from a 'VCA' Object</h2>
+
+<h3>Description</h3>
+
+<p>For convenience only, extracting a specific matrix from the 
+"Matrices" element of a 'VCA' object if this matrix exists.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getMat(obj, mat)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>... (VCA) object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mat</code></td>
+<td>
+<p>... (character) string specifying the matrix to be extracted</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>When 'mat="Z"' the design matrix of random effects will be returned.
+If one is interested in the design matrix of random effects for a specific
+variance component use a name like "Z" + NAME, where NAME has to be equal to
+the name of the VC in the 'VCA' object (see examples). The same applies to 
+the A-matrices in the quadratic forms, use "A" + NAME for extracting a specific 
+A-matrix.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(matrix) as requested by the user
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+fit &lt;- anovaVCA(y~day/run, dataEP05A2_1)
+getMat(fit, "Z")
+getMat(fit, "Zday")
+getMat(fit, "Zday:run")
+getMat(fit, "Zerror")
+fit2 &lt;- anovaMM(y~day/(run), dataEP05A2_1)
+getMat(fit2, "V")			 	# Var(y)
+getMat(fit2, "G")				# Var(re)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

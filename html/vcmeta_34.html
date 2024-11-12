@@ -1,0 +1,147 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.lc.meanratio2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for a log-linear contrast of mean ratios from
+2-group studies</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and confidence interval for a
+log-linear contrast of 2-group mean ratios from two or more studies. A
+Satterthwaite adjustment to the degrees of freedom is used to improve
+the accuracy of the confidence interval. Equality of variances within or across
+studies is not assumed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.lc.meanratio2(alpha, m1, m2, sd1, sd2, n1, n2, v)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m1</code></td>
+<td>
+<p>vector of estimated means for group 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m2</code></td>
+<td>
+<p>vector of estimated means for group 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd1</code></td>
+<td>
+<p>vector of estimated SDs for group 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd2</code></td>
+<td>
+<p>vector of estimated SDs for group 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>vector of group 1 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>vector of group 2 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>vector of contrast coefficients</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns 1-row matrix with the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated log-linear contrast
+</p>
+</li>
+<li>
+<p> SE - standard error of log-linear contrast
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+<li>
+<p> exp(Estimate) - exponentiated log-linear contrast
+</p>
+</li>
+<li>
+<p> exp(LL) - lower limit of the exponentiated confidence interval
+</p>
+</li>
+<li>
+<p> exp(UL) - upper limit of the exponentiated confidence interval
+</p>
+</li>
+<li>
+<p> df - degrees of freedom
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG, Price RM (2020).
+“Confidence intervals for ratios of means and medians.”
+<em>Journal of Educational and Behavioral Statistics</em>, <b>45</b>(6), 750–770.
+ISSN 1076-9986, <a href="https://doi.org/10.3102/1076998620934125">doi:10.3102/1076998620934125</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">m1 &lt;- c(45.1, 39.2, 36.3, 34.5)
+m2 &lt;- c(30.0, 35.1, 35.3, 36.2)
+sd1 &lt;- c(10.7, 10.5, 9.4, 11.5)
+sd2 &lt;- c(12.3, 12.0, 10.4, 9.6)
+n1 &lt;- c(40, 20, 50, 25)
+n2 &lt;- c(40, 20, 48, 26)
+v &lt;- c(.5, .5, -.5, -.5)
+meta.lc.meanratio2(.05, m1, m2, sd1, sd2, n1, n2, v)
+
+# Should return:
+#           Estimate         SE        LL        UL  exp(Estimate)
+# Contrast 0.2691627 0.07959269 0.1119191 0.4264064      1.308868
+#           exp(LL)  exp(UL)       df
+# Contrast 1.118422 1.531743 152.8665
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,119 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot Analysis Results</h2>
+
+<h3>Description</h3>
+
+<p>Plot the Estimated Vaccine Efficacy
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VEwaningVariant'
+plot(x, y, ..., times = NULL, xlim = NULL, nTimes = 20L, ylim = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class VEwaningVariant. The object returned by a call to
+veWaningVariant()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Ignored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Ignored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>times</code></td>
+<td>
+<p>A numeric vector object or NULL. The times since full
+efficacy at which the vaccine efficacy is to be estimated. If NULL, the
+times will be generated internally as a vector of length nTimes spanning
+the range [0, maxTime], where maxTime is the maximum time since vaccination  
+present in the original analysis. Values provided outside of [0, maxTime] 
+are ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim</code></td>
+<td>
+<p>A numeric vector object of length 2 or NULL. The extrema
+of the times values at which estimates are to be calculated. A vector of 
+length nTimes spanning the range [xlim[1], xlim[2]] is generated. Note 
+that the specified limits must lie in the range [0, maxTime]. If input 
+times is a vector object, this input is ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nTimes</code></td>
+<td>
+<p>An integer object. The number of time values at which
+estimates are obatined. The default is 20. If input times is a vector
+object, this input is ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylim</code></td>
+<td>
+<p>A numeric vector object or NULL. The y-axis limits for the plots.
+If NULL, the y-axis limits are taken from the estimated values.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>When the variant under analysis is present only in the unblinded phase, 
+vaccine efficacy cannot be estimated. In this case, plot() shows the  
+relative infection rate at times t since full efficacy reached, defined  
+as infection rate at time t = time since full efficacy reached  
+divided by the infection rate at the time full efficacy is reached (t=0).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A gg object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data(variantData)
+
+set.seed(1234)
+
+ind &lt;- sample(1:nrow(x = variantData), 2000, FALSE)
+
+# NOTE: This sample size is chosen for example only -- larger data sets
+# should be used.
+
+res &lt;- veWaningVariant(data = variantData[ind,], 
+                       L = 52,  
+                       lag = 6,
+                       gFunc = 'piece', 
+                       v = c(15,30))
+
+plot(x = res)
+</code></pre>
+
+
+</div>

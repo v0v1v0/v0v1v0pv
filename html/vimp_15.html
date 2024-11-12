@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>extract_sampled_split_predictions</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract sampled-split predictions from a CV.SuperLearner object</h2>
+
+<h3>Description</h3>
+
+<p>Use the cross-validated Super Learner and a set of specified sample-splitting
+folds to extract cross-fitted predictions on separate splits of the data. This
+is primarily for use in cases where you have already fit a CV.SuperLearner
+and want to use the fitted values to compute variable importance without having
+to re-fit. The number of folds used in the CV.SuperLearner must be even.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">extract_sampled_split_predictions(
+  cvsl_obj = NULL,
+  sample_splitting = TRUE,
+  sample_splitting_folds = NULL,
+  full = TRUE,
+  preds = NULL,
+  cross_fitting_folds = NULL,
+  vector = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>cvsl_obj</code></td>
+<td>
+<p>An object of class <code>"CV.SuperLearner"</code>; must be entered unless <code>preds</code> is specified.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_splitting</code></td>
+<td>
+<p>logical; should we use sample-splitting or not?
+Defaults to <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_splitting_folds</code></td>
+<td>
+<p>A vector of folds to use for sample splitting</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>full</code></td>
+<td>
+<p>logical; is this the fit to all covariates (<code>TRUE</code>) or not
+(<code>FALSE</code>)?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>preds</code></td>
+<td>
+<p>a vector of predictions; must be entered unless <code>cvsl_obj</code> is specified.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross_fitting_folds</code></td>
+<td>
+<p>a vector of folds that were used in cross-fitting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vector</code></td>
+<td>
+<p>logical; should we return a vector (where each element is
+the prediction when the corresponding row is in the validation fold) or a
+list?</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The predictions on validation data in each split-sample fold.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>CV.SuperLearner</code> for usage of the
+<code>CV.SuperLearner</code> function.
+</p>
+
+
+</div>

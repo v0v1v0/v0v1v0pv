@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visNetwork-collapse</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Network visualization collapse / uncollapsed method</h2>
+
+<h3>Description</h3>
+
+<p>Network visualization collapse / uncollapsed method
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visCollapse(
+  graph,
+  nodes,
+  fit = FALSE,
+  resetHighlight = TRUE,
+  clusterOptions = NULL,
+  labelSuffix = "(cluster)"
+)
+
+visUncollapse(
+  graph,
+  nodes = NULL,
+  fit = FALSE,
+  resetHighlight = TRUE,
+  keepCoord = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>graph</code></td>
+<td>
+<p>: a <code>visNetworkProxy</code>  object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodes</code></td>
+<td>
+<p>: a vector of nodes id. NULL for <code>visUncollapse</code> for open all collapsed nodes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fit</code></td>
+<td>
+<p>: Optional. Boolean. Default to FALSE. Call fit method after collapse/uncollapse event ?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>resetHighlight</code></td>
+<td>
+<p>: Optional. Boolean. Default to TRUE to reset highlighted nodes after collapse/uncollapse event.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clusterOptions</code></td>
+<td>
+<p>: Optional. List. Default to NULL. A list of all options you want to pass to cluster collapsed node</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labelSuffix</code></td>
+<td>
+<p>: Optional. Character. Use node label + suffix or just suffix. Default to '(cluster)'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keepCoord</code></td>
+<td>
+<p>: Optional. Boolean. Default to TRUE to keep nodes coordinates on collapse</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>See online documentation <a href="https://datastorm-open.github.io/visNetwork/">https://datastorm-open.github.io/visNetwork/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>visNodes for nodes options, visEdges for edges options, visGroups for groups options, 
+visLegend for adding legend, visOptions for custom option, visLayout &amp; visHierarchicalLayout for layout, 
+visPhysics for control physics, visInteraction for interaction, visNetworkProxy &amp; visFocus &amp; visFit for animation within shiny,
+visDocumentation, visEvents, visConfigure ...
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+
+# have a look to : 
+
+shiny::runApp(system.file("shiny", package = "visNetwork"))
+
+# You can also disable / enabled the double-click event opening cluster
+visNetworkProxy("network_id") %&gt;% visEvents(type = "off", doubleClick = "networkOpenCluster")
+visNetworkProxy("network_id") %&gt;% visEvents(type = "on", doubleClick = "networkOpenCluster")
+
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,201 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>confintvglm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Confidence Intervals for Parameters of VGLMs </h2>
+
+<h3>Description</h3>
+
+<p>Computes confidence intervals (CIs)
+for one or more parameters in a fitted model.
+Currently the object must be a
+<code>"vglm"</code> object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">confintvglm(object, parm, level = 0.95, method = c("wald", "profile"),
+            trace = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p> A fitted model object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parm, level, ...</code></td>
+<td>
+<p>Same as <code>confint</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>Character.
+The default is the first method.
+Abbreviations are allowed.
+Currently <code>"profile"</code> is basically working;
+and it is likely to be more accurate especially for
+small samples, as it is based on a profile log likelihood,
+however it is computationally intensive.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trace</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> then one can monitor the
+computation as it progresses (because it is expensive).
+The default is the orginal model's <code>trace</code> value
+(see <code>vglm.control</code>).
+Setting <code>FALSE</code> suppresses all intermediate output.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The default for
+this methods function is based on <code>confint.default</code>
+and assumes
+asymptotic normality. In particular,
+the <code>coef</code> and
+<code>vcov</code> methods functions are used for
+<code>vglm-class</code> objects.
+</p>
+<p>When <code>method = "profile"</code> the function 
+<code>profilevglm</code>
+is called to do the profiling. The code is very heavily
+based on <code>profile.glm</code>
+which was originally written by
+D. M. Bates and W. N. Venables (For S in 1996)
+and subsequently corrected by B. D. Ripley.
+Sometimes the profiling method can give problems, for
+example, <code>cumulative</code> requires the <code class="reqn">M</code>
+linear predictors not to intersect in the data cloud.
+Such numerical problems are less common when
+<code>method = "wald"</code>, however, it is well-known
+that inference based on profile likelihoods is generally
+more accurate than Wald, especially when the sample size
+is small.
+The deviance (<code>deviance(object)</code>) is used if possible,
+else the difference
+<code>2 * (logLik(object) - ell)</code> is computed,
+where <code>ell</code> are the values of the loglikelihood on a grid.
+</p>
+<p>For
+Wald CIs and
+<code>rrvglm-class</code>
+objects, currently an error message is produced because
+I haven't gotten around to write the methods function;
+it's not too hard, but am too busy!
+An interim measure is to
+coerce the object into a <code>"vglm"</code> object,
+but then the confidence intervals will tend to be too narrow because
+the estimated constraint matrices are treated as known.
+</p>
+<p>For
+Wald CIs and
+<code>vgam-class</code>
+objects, currently an error message is produced because
+the theory is undeveloped.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Same as <code>confint</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The order of the values of argument <code>method</code> may change
+in the future without notice.
+The functions
+<code>plot.profile.glm</code>
+and
+<code>pairs.profile.glm</code>
+from <span class="pkg">MASS</span>
+appear to work with output from this function.
+</p>
+
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p>Thomas Yee adapted <code>confint.lm</code>
+to handle <code>"vglm"</code> objects, for Wald-type
+confidence intervals.
+Also, <code>profile.glm</code>
+was originally written by
+D. M. Bates and W. N. Venables (For S in 1996)
+and subsequently corrected by B. D. Ripley.
+This function effectively calls <code>confint.profile.glm()</code>
+in <span class="pkg">MASS</span>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vcovvlm</code>,
+<code>summaryvglm</code>,
+<code>confint</code>,
+<code>profile.glm</code>,
+<code>lrt.stat.vlm</code>,
+<code>wald.stat</code>,
+<code>plot.profile.glm</code>,
+<code>pairs.profile.glm</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Example 1: this is based on a glm example
+counts &lt;- c(18,17,15,20,10,20,25,13,12)
+outcome &lt;- gl(3, 1, 9); treatment &lt;- gl(3, 3)
+ glm.D93 &lt;-  glm(counts ~ outcome + treatment, family = poisson())
+vglm.D93 &lt;- vglm(counts ~ outcome + treatment, family = poissonff)
+confint(glm.D93) # needs MASS to be present on the system
+confint.default(glm.D93)  # based on asymptotic normality
+confint(vglm.D93)
+confint(vglm.D93) - confint(glm.D93)    # Should be all 0s
+confint(vglm.D93) - confint.default(glm.D93)  # based on asympt. normality
+
+# Example 2: simulated negative binomial data with multiple responses
+ndata &lt;- data.frame(x2 = runif(nn &lt;- 100))
+ndata &lt;- transform(ndata, y1 = rnbinom(nn, mu = exp(3+x2), size = exp(1)),
+                          y2 = rnbinom(nn, mu = exp(2-x2), size = exp(0)))
+fit1 &lt;- vglm(cbind(y1, y2) ~ x2, negbinomial, data = ndata, trace = TRUE)
+coef(fit1)
+coef(fit1, matrix = TRUE)
+confint(fit1)
+confint(fit1, "x2:1")  #  This might be improved to "x2" some day...
+## Not run: 
+confint(fit1, method = "profile")  # Computationally expensive
+confint(fit1, "x2:1", method = "profile", trace = FALSE)
+
+## End(Not run)
+
+fit2 &lt;- rrvglm(y1 ~ x2, negbinomial(zero = NULL), data = ndata)
+confint(as(fit2, "vglm"))  # Too narrow (SEs are biased downwards)
+</code></pre>
+
+
+</div>

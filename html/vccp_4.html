@@ -1,0 +1,262 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vccp.fun</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Multiple change point detection in the vine copula structure of multivariate time series</h2>
+
+<h3>Description</h3>
+
+<p>This function detects multiple change points in the vine
+copula structure of a multivariate time series using
+vine copulas, various state-of-the-art segmentation methods to identify
+multiple change points, and a likelihood ratio test or the stationary bootstrap
+for inference.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vccp.fun(
+  X,
+  method = "NBS",
+  delta = 30,
+  G = 0.1,
+  M = NA,
+  test = "V",
+  CDR = "D",
+  trunc_tree = NA,
+  family_set = 1,
+  pre_white = 0,
+  ar_num = 1,
+  p = 0.3,
+  N = 100,
+  sig_alpha = 0.05
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>A numerical matrix representing the multivariate
+time series, with the columns representing its components.
+If multiple subjects are included (panel data), vertically
+stack the subject data and identify timestamps of each subject in the first column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>A character string, which defines the
+segmentation method. If <code>method</code> = "NBS", which is the
+default method, then the adapted binary segmentation is used.
+Similarly, if <code>method</code> = "OBS", "MOSUM" or "WBS", then binary
+segmentation, MOSUM and wild binary segmentation are used, respectively.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>A positive integer number with default value equal to 30.
+It is used to define the minimum distance acceptable between
+change points. In general, <code>delta</code> &gt;= 5*ncol(X))
+is recommended to ensure sufficient data when estimating the
+vine copula model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>G</code></td>
+<td>
+<p>A positive real number between 0 and 1 with default value equal to 0.1.
+It is used to define the moving sum bandwidth relative to <code>T</code> in MOSUM when
+<code>method</code> = "MOSUM" is chosen. Alternatively, a positive integer
+less than half of the time series length can be set to define the absolute bandwidth.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M</code></td>
+<td>
+<p>A positive integer with default value equal to floor(9*log(T)) (T is the length of the time series).
+It represents the number of sub-samples in WBS when
+<code>method</code> = "WBS" is chosen.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>test</code></td>
+<td>
+<p>A character string, which defines the inference
+method used. If <code>test</code> = "V", which is the default method,
+the Vuong test is performed. If <code>test</code> = "B", the
+stationary bootstrap is performed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CDR</code></td>
+<td>
+<p>A character string, which defines the vine structure.
+If <code>CDR</code> = "D", which is the default method,
+a D-vine is used. Similarly, if <code>CDR</code> = "C" or <code>CDR</code>
+= "R", a C-vine or an R-vine is used, respectively.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trunc_tree</code></td>
+<td>
+<p>A positive integer, which defines the level
+of truncation for the vine copula. If <code>trunc_tree</code> = "NA",
+which is the default value, the Vine contains <code>dim(X)[2]-2</code>
+levels of trees.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family_set</code></td>
+<td>
+<p>A positive integer, which defines the bivariate copula
+family. If <code>familyset</code> = 1, which is the default value, only the
+Gauss copula is selected and VCCP detects change points in
+the linear correlation graph. Coding of pair-copula
+families is the same as in <code>BiCop</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pre_white</code></td>
+<td>
+<p>A positive integer, which defines whether
+the data is pre-whitened. If <code>pre-white</code> = 0, which is the
+default value, no pre-whitening is performed. If
+<code>pre_white</code> = 1, an autoregressive time series model
+(method: yule-walker) is used to preprocess the raw data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ar_num</code></td>
+<td>
+<p>A positive integer, which defines the maximum
+order of model to fit to preprocess the data (see <code>pre_white</code>).
+If <code>ar_num</code> = 1, which is the default value, then an AR(1)
+model is fit to the data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>A positive real number between 0 and 1 which is
+defined as the block size in the stationary bootstrap
+method (<code>rgeom(T,p)</code>) if <code>test</code> = "B" is chosen.
+If <code>p</code> = 0.3, which is the default value, each resampled block
+has 1/0.3 time points on average.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>N</code></td>
+<td>
+<p>A positive integer, which defines the number
+of the stationary bootstrap resamples used. The default value is <code>N</code> = 100.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sig_alpha</code></td>
+<td>
+<p>A positive real number between 0 and 1, which
+defines the significance level of the inference test.
+The default values is 0.05.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The time series <code>X_t</code> is of dimensionality p and we are
+looking for changes in the vine copula structure between
+the different time series components <code>X_{t}^{(1)}, X_{t}^{(2)},
+ ..., X_{t}^{(p)}</code>. VCCP uses vine copulas, various state-of-the-art
+segmentation methods to identify multiple change points,
+and a likelihood ratio test or the stationary bootstrap for inference.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with the following components:
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+<code>loc_of_cpts</code> </td>
+<td style="text-align: left;"> The locations of the detected change points. </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>no_of_cpts</code> </td>
+<td style="text-align: left;"> The number of detected change points. </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>test_df</code> </td>
+<td style="text-align: left;"> A dataframe containing the test result.  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>compute_time</code> </td>
+<td style="text-align: left;"> Time (in minutes) to run <code>vccp.fun</code>. </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>T</code> </td>
+<td style="text-align: left;"> The length of the time series data. </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>sig_alpha</code> </td>
+<td style="text-align: left;"> The significance level for the inference test. </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Xin Xiong, Ivor Cribben (<a href="mailto:cribben@ualberta.ca">cribben@ualberta.ca</a>)
+</p>
+
+
+<h3>References</h3>
+
+<p>"Beyond linear dynamic functional connectivity: a vine copula change point model", Xiong and Cribben (2021), bioRxiv 2021.04.25.441254.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>getTestPlot</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Simulate MVN data with 2 change points
+data &lt;- cbind(1:180, mvn.sim.2.cps(180, 8, seed = 101))
+T &lt;- 180
+## Change point detection using VCCP (it may take several minutes to complete...)
+result.NV &lt;- vccp.fun(data, method = "NBS", delta = 30, test = "V")
+## Plot the results
+getTestPlot(result.NV)
+#title("VCCP: NBS + Vuong")
+
+## Change point detection using NBS and stationary bootstrap for inference
+result.NB &lt;- vccp.fun(data, method = "NBS", delta = 30, test = "B")
+## Plot the results
+getTestPlot(result.NB)
+title("VCCP: NBS + Stationary Bootstrap")
+
+</code></pre>
+
+
+</div>

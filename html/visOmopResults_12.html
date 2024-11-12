@@ -1,0 +1,85 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>formatEstimateName</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Formats estimate_name and estimate_value column</h2>
+
+<h3>Description</h3>
+
+<p>Formats estimate_name and estimate_value columns by changing the name of the
+estimate name and/or joining different estimates together in a single row.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">formatEstimateName(
+  result,
+  estimateName = NULL,
+  keepNotFormatted = TRUE,
+  useFormatOrder = TRUE,
+  estimateNameFormat = lifecycle::deprecated()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>result</code></td>
+<td>
+<p>A <code style="white-space: pre;">⁠&lt;summarised_result&gt;⁠</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estimateName</code></td>
+<td>
+<p>Named list of estimate name's to join, sorted by
+computation order. Indicate estimate_name's between &lt;...&gt;.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keepNotFormatted</code></td>
+<td>
+<p>Whether to keep rows not formatted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>useFormatOrder</code></td>
+<td>
+<p>Whether to use the order in which estimate names
+appear in the estimateName (TRUE), or use the order in the
+input dataframe (FALSE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estimateNameFormat</code></td>
+<td>
+<p>deprecated.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code style="white-space: pre;">⁠&lt;summarised_result&gt;⁠</code> object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">result &lt;- mockSummarisedResult()
+result |&gt;
+  formatEstimateName(
+    estimateName = c(
+      "N (%)" = "&lt;count&gt; (&lt;percentage&gt;%)", "N" = "&lt;count&gt;"
+    ),
+    keepNotFormatted = FALSE
+  )
+
+</code></pre>
+
+
+</div>

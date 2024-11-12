@@ -1,0 +1,70 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ns_term</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Term for a Basis Matrix for Natural Cubic Splines</h2>
+
+<h3>Description</h3>
+
+<p>Term for a Basis Matrix for Natural Cubic Splines
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ns_term(
+  x = numeric(),
+  df = NULL,
+  knots = NULL,
+  intercept = FALSE,
+  Boundary.knots = range(if (use_log) log(x) else x),
+  use_log = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, df, knots, intercept, Boundary.knots</code></td>
+<td>
+<p>same as <code>ns</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use_log</code></td>
+<td>
+<p><code>TRUE</code> if the polynomials should be in the log of the
+argument.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list like <code>ns</code> with an additional element called <code>eval</code>
+to evaluate the basis. See <code>VAJointSurv-terms</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>poly_term</code>, <code>bs_term</code>, <code>weighted_term</code>, and
+<code>stacked_term</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vals &lt;- c(0.41, 0.29, 0.44, 0.1, 0.18, 0.65, 0.29, 0.85, 0.36, 0.47)
+spline_basis &lt;- ns_term(vals,df = 3)
+# evaluate spline basis at 0.5
+spline_basis$eval(0.5)
+# evaluate first derivative of spline basis at 0.5
+spline_basis$eval(0.5, der = 1)
+</code></pre>
+
+
+</div>

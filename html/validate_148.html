@@ -1,0 +1,149 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>voptions</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Set or get options globally or per object.</h2>
+
+<h3>Description</h3>
+
+<p>There are three ways to specify options for this package.
+</p>
+
+<ul>
+<li>
+<p>Globally. Setting <code>voptions(option1=value1,option2=value2,...)</code>
+sets global options.
+</p>
+</li>
+<li>
+<p>Per object. Setting <code>voptions(x=&lt;object&gt;, option1=value1,...)</code>,
+causes all relevant functions that use that object (e.g. 
+<code>confront</code>) to use those local settings.
+</p>
+</li>
+<li>
+<p>At execution time. Relevant functions (e.g. <code>confront</code>) take
+optional arguments allowing one
+to define options to be used during the current function call
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">voptions(x = NULL, ...)
+
+## S4 method for signature 'ANY'
+voptions(x = NULL, ...)
+
+validate_options(...)
+
+reset(x = NULL)
+
+## S4 method for signature 'ANY'
+reset(x = NULL)
+
+## S4 method for signature 'expressionset'
+voptions(x = NULL, ...)
+
+## S4 method for signature 'expressionset'
+reset(x = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>(optional) an object inheriting from <code>expressionset</code> such as <code>validator</code> or <code>indicator</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Name of an option (character) to retrieve options or <code>option = value</code> pairs to set options.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>When requesting option settings: a <code>list</code>. When setting options,
+the whole options list is returned silently.
+</p>
+
+
+<h3>Options for the validate package</h3>
+
+<p>Currently the following options are supported.
+</p>
+
+<ul>
+<li>
+<p><code>na.value</code> (<code>NA</code>,<code>TRUE</code>,<code>FALSE</code>; <code>NA</code>) Value
+to return when a validating statement results in <code>NA</code>.
+</p>
+</li>
+<li>
+<p><code>raise</code> (<code>"none"</code>,<code>"error"</code>,<code>"all"</code>;
+<code>"none"</code>) Control if the <code>confront</code> methods catch or raise
+exceptions.
+The 'all' setting is useful when debugging validation scripts.
+</p>
+</li>
+<li>
+<p><code>lin.eq.eps</code> ('numeric'; 1e-8) The precision used when evaluating
+linear equalities. To be used to control for machine rounding.
+</p>
+</li>
+<li>
+<p><code>"reset"</code> Reset to factory settings.
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p>Other expressionset-methods: 
+<code>as.data.frame()</code>,
+<code>as.data.frame,expressionset-method</code>,
+<code>created()</code>,
+<code>description()</code>,
+<code>label()</code>,
+<code>meta()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>origin()</code>,
+<code>plot,validator-method</code>,
+<code>summary()</code>,
+<code>variables()</code>
+</p>
+<p>Other expressionset-methods: 
+<code>as.data.frame()</code>,
+<code>as.data.frame,expressionset-method</code>,
+<code>created()</code>,
+<code>description()</code>,
+<code>label()</code>,
+<code>meta()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>origin()</code>,
+<code>plot,validator-method</code>,
+<code>summary()</code>,
+<code>variables()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# set an option, local to a validator object:
+v &lt;- validator(x + y &gt; z)
+voptions(v,raise='all')
+# check that local option was set:
+voptions(v,'raise')
+# check that global options have not changed:
+voptions('raise')
+</code></pre>
+
+
+</div>

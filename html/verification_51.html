@@ -1,0 +1,126 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>roc.area</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Area under curve (AUC) calculation for Response Operating Characteristic curve.</h2>
+
+<h3>Description</h3>
+
+<p>This function calculates the area underneath a ROC
+curve following the process outlined in Mason and Graham (2002).  The
+p-value produced is related to the Mann-Whitney U statistics.
+The p-value is calculated using the wilcox.test function which
+automatically handles ties and makes approximations for large values.
+</p>
+<p>The p-value addresses the null hypothesis $H_o:$ The area under the ROC
+curve is 0.5 i.e. the forecast has no skill. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    roc.area(obs, pred)
+       </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>A binary observation (coded {0, 1 } ).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred</code></td>
+<td>
+<p>A probability prediction on the interval [0,1].</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>A</code></td>
+<td>
+<p>Area under ROC curve, adjusted for ties in
+forecasts, if present</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.total</code></td>
+<td>
+<p>Total number of records</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.events</code></td>
+<td>
+<p>Number of events</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.noevents</code></td>
+<td>
+<p>Number of non-events</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value</code></td>
+<td>
+<p>Unadjusted p-value</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>This function is used internally in the <code>roc.plot</code> command
+to calculate areas.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich</p>
+
+
+<h3>References</h3>
+
+<p>Mason, S. J. and Graham, N. E. (2002) Areas beneath the
+relative operating characteristics (ROC) and relative operating
+levels (ROL) curves: Statistical significance and interpretation,
+<em>Q. J. R. Meteorol. Soc.</em> <b>128</b>, 2145–2166.</p>
+
+
+<h3>See Also</h3>
+
+<p><code>roc.plot</code>, <code>verify</code>,
+<code>wilcox.test </code> </p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Data used from Mason and Graham (2002).
+a&lt;- c(1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990,
+ 1991, 1992, 1993, 1994, 1995)
+b&lt;- c(0,0,0,1,1,1,0,1,1,0,0,0,0,1,1)
+c&lt;- c(.8, .8, 0, 1,1,.6, .4, .8, 0, 0, .2, 0, 0, 1,1)
+d&lt;- c(.928,.576, .008, .944, .832, .816, .136, .584, .032, .016, .28, .024, 0, .984, .952)
+
+A&lt;- data.frame(a,b,c, d)
+names(A)&lt;- c("year", "event", "p1", "p2")
+
+## for model with ties
+roc.area(A$event, A$p1)
+
+## for model without ties
+roc.area(A$event, A$p2)
+
+
+</code></pre>
+
+
+</div>

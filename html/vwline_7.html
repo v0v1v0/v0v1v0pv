@@ -1,0 +1,176 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>edgePoints</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Calculate edge points
+</h2>
+
+<h3>Description</h3>
+
+<p>Calculate points on the edge or boundary of a variable-width line.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">edgePoints(x, d, ...)
+## S3 method for class 'vwcurveGrob'
+edgePoints(x, d, which = c("left", "right"), direction = "forward", debug = FALSE, ...) 
+## S3 method for class 'vwlineGrob'
+edgePoints(x, d, x0, y0, which = 1, direction = "forward", debug = FALSE, ...) 
+## S3 method for class 'vwXsplineGrob'
+edgePoints(x, d, which = c("left", "right"), direction = "forward", debug = FALSE, ...)
+## S3 method for class 'brushXsplineGrob'
+edgePoints(x, d, x0, y0, which = 1, direction = "forward", debug = FALSE, ...) 
+## S3 method for class 'offsetXsplineGrob'
+edgePoints(x, d, x0, y0, which = 1, direction = "forward", debug = FALSE, ...) 
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A variable-width line grob.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+
+<p>A numeric vector or unit specifying locations along the boundary of
+the variable-width line.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>which</code></td>
+<td>
+
+<p>For some methods, this is either <code>"left"</code> or <code>"right"</code> (or both)
+indicating which edge to find locations on.  For other methods, this
+is a numeric, selecting which boundary to find locations on.  See Details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>direction</code></td>
+<td>
+
+<p>Either <code>"forwards"</code> or <code>"backwards"</code> to indicate the
+direction of traversal for the edge.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x0, y0</code></td>
+<td>
+
+<p>A location used to determine the start point for traversing an edge.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>debug</code></td>
+<td>
+
+<p>A logical indicating whether to draw graphical debugging
+information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Additional arguments for methods.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If the distance is numeric, it is assumed to be a proportion of the
+length of an edge.
+</p>
+<p>What constitutes an edge varies between different methods:
+some methods produce distinct left and right edges (ignoring line
+endings), in which case locations can be found on either edge;
+other methods generally produce a single boundary (including line
+endings), but self-intersecting lines can produce additional
+boundaries.
+</p>
+<p>For some methods, it is possible for a boundary to form loops,
+so an edge location is not guaranteed to be on the external boundary
+of the variable-width line.
+</p>
+<p>For lines with distinct left and right edges, the forwards direction
+is the direction of the main curve.  For lines with a single boundary,
+the forwards direction is anticlockwise.
+</p>
+<p>For lines with a single boundary, the start point on the boundary is
+defined as the nearest point on the boundary to the location specified
+by <code>x0</code> and <code>y0</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For methods with a single boundary,
+a list with components <code>x</code> and <code>y</code>, giving locations on the
+edge of the variable-width line, and <code>tangent</code>, giving the
+tangent to the edge at each location.
+</p>
+<p>For methods with distinct left and right edges, a list with components
+<code>left</code> and <code>right</code>, each a list as above.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Paul Murrell
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>grid.vwcurve</code>,
+<code>grid.vwline</code>,
+<code>grid.vwXspline</code>,
+<code>grid.brushXspline</code>,
+<code>grid.offsetXspline</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">grid.newpage()
+x &lt;- seq(.2, .8, length.out=100)
+y &lt;- .05*sin(seq(0, 2*pi, length.out=100))
+w &lt;- unit(seq(2, 10, length.out=100), "mm")
+vwcg &lt;- vwcurveGrob(x, y + 2/3, w, lineend="round",
+                    gp=gpar(col="black"))
+grid.draw(vwcg)
+epts &lt;- edgePoints(vwcg, 0:9/9)
+grid.circle(epts$left$x, epts$left$y, r=unit(1, "mm"), 
+            gp=gpar(fill=hcl(0, 80, seq(10, 100, 10))))
+x &lt;- c(.2, .4, .6, .8)
+y &lt;- c(-.05, .05, -.05, .05)
+w &lt;- unit(c(2, 4, 6, 8), "mm")
+vwbg &lt;- brushXsplineGrob(circleBrush(), x, y + 1/3, w,
+                         gp=gpar(col="black"))
+grid.draw(vwbg)
+epts &lt;- edgePoints(vwbg, unit(0:9, "cm"), x0=0, y0=1/3)
+grid.circle(epts$x, epts$y, r=unit(1, "mm"), 
+            gp=gpar(fill=hcl(0, 80, seq(10, 100, 10))))
+</code></pre>
+
+
+</div>

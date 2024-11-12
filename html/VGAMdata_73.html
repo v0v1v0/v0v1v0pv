@@ -1,0 +1,202 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>oiposbinomial</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> One-Inflated Positive Binomial Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Fits a one-inflated positive binomial distribution by maximum
+likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">oiposbinomial(lpstr1 = "logitlink", lprob = "logitlink",
+    type.fitted = c("mean", "prob", "pobs1", "pstr1", "onempstr1"),
+    iprob = NULL, gpstr1 = ppoints(9), gprob  = ppoints(9),
+    multiple.responses = FALSE, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>lpstr1, lprob</code></td>
+<td>
+
+<p>Link functions for the parameter <code class="reqn">\phi</code>
+and the positive binomial probability <code class="reqn">\mu</code> parameter.
+See <code>Links</code> for more choices.
+See <code>CommonVGAMffArguments</code> also.
+For the one-<em>deflated</em> model see below.
+</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>type.fitted</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> and
+<code>fittedvlm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iprob, gpstr1, gprob</code></td>
+<td>
+
+<p>For initial values;
+see <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>multiple.responses</code></td>
+<td>
+
+<p>Logical.
+See <code>binomialff</code>
+and <code>posbinomial</code>.
+</p>
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>These functions are based on
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y=y) =  \phi + (1-\phi) N \mu (1-\mu)^N / (1-(1-\mu)^N),</code>
+</p>
+
+<p>for <code class="reqn">y=1/N</code>, and
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y=y) = (1-\phi) {N \choose Ny} \mu^{Ny}
+        (1-\mu)^{N(1-y)} / (1-(1-\mu)^N).</code>
+</p>
+
+<p>for <code class="reqn">y=2/N,\ldots,1</code>. That is, the response is a sample
+proportion out of <code class="reqn">N</code> trials, and the argument <code>size</code> in
+<code>roiposbinom</code> is <code class="reqn">N</code> here.
+Ideally <code class="reqn">N &gt; 2</code> is needed.
+The parameter <code class="reqn">\phi</code> is the probability of a structural one,
+and it satisfies <code class="reqn">0 &lt; \phi &lt; 1</code> (usually).
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">E(Y)=\phi + (1-\phi) \mu / (1-(1-\mu)^N)</code>
+and these are returned as the default fitted values.
+By default, the two linear/additive predictors
+for <code>oiposbinomial()</code>
+are <code class="reqn">(logit(\phi), logit(\mu))^T</code>.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response variable should have one of the formats described by
+<code>binomialff</code>, e.g., a factor or two column matrix
+or a vector of sample proportions with the <code>weights</code>
+argument specifying the values of <code class="reqn">N</code>.
+</p>
+<p>To work well, one ideally needs large values of <code class="reqn">N</code> and
+<code class="reqn">\mu</code> much greater than 0, i.e., the larger <code class="reqn">N</code> and
+<code class="reqn">\mu</code> are, the better.  If <code class="reqn">N = 1</code> then the model
+is unidentifiable since the number of parameters is excessive.
+</p>
+
+<p>Estimated probabilities of a structural one and an
+observed one are returned, as in <code>zipoisson</code>.
+</p>
+<p>The one-<em>deflated</em> positive binomial distribution might
+be fitted by setting <code>lpstr1 = "identitylink"</code>, albeit,
+not entirely reliably. See <code>zipoisson</code>
+for information that can be applied here.
+
+
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>roiposbinom</code>,
+<code>posbinomial</code>,
+<code>binomialff</code>,
+<code>rbinom</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">size &lt;- 10  # Number of trials; N in the notation above
+nn &lt;- 200
+odata &lt;- data.frame(pstr1  = logitlink( 0, inv = TRUE),  # 0.50
+              mubin1 = logitlink(-1, inv = TRUE),  # Binomial mean
+              svec   = rep(size, length = nn),
+              x2     = runif(nn))
+odata &lt;- transform(odata,
+                   mubin2 = logitlink(-1 + x2, inv = TRUE))
+odata &lt;- transform(odata,
+              y1 = roiposbinom(nn, svec, pr = mubin1, pstr1 = pstr1),
+              y2 = roiposbinom(nn, svec, pr = mubin2, pstr1 = pstr1))
+with(odata, table(y1))
+fit1 &lt;- vglm(y1 / svec ~  1, oiposbinomial, data = odata,
+             weights = svec, trace = TRUE, crit = "coef")
+fit2 &lt;- vglm(y2 / svec ~ x2, oiposbinomial, data = odata,
+             weights = svec, trace = TRUE)
+
+coef(fit1, matrix = TRUE)
+Coef(fit1)  # Useful for intercept-only models
+head(fitted(fit1, type = "pobs1"))  # Estimate of P(Y = 1)
+head(fitted(fit1))
+with(odata, mean(y1))  # Compare this with fitted(fit1)
+summary(fit1)
+</code></pre>
+
+
+</div>

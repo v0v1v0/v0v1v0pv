@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>round_polytope</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Apply rounding to a convex polytope (H-polytope, V-polytope or a zonotope)</h2>
+
+<h3>Description</h3>
+
+<p>Given a convex H or V polytope or a zonotope as input this function brings the polytope in rounded position based on minimum volume enclosing ellipsoid of a pointset.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">round_polytope(P, settings = list())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>P</code></td>
+<td>
+<p>A convex polytope. It is an object from class (a) Hpolytope or (b) Vpolytope or (c) Zonotope.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>settings</code></td>
+<td>
+<p>Optional. A list to parameterize the method by the random walk.
+</p>
+
+<dl>
+<dt>
+<code>random_walk</code> </dt>
+<dd>
+<p>  The random walk to sample uniformly distributed points: (a) <code>'CDHR'</code> for Coordinate Directions Hit-and-Run, (b) <code>'RDHR'</code> for Random Directions Hit-and-Run or (c) <code>'BiW'</code> for Billiard walk. The default random walk is <code>'CDHR'</code> for H-polytopes and <code>'BiW'</code> for the rest of the representations.</p>
+</dd>
+<dt>
+<code>walk_length</code> </dt>
+<dd>
+<p> The walk length of the random walk. The default value is <code class="reqn">10 + 10d</code> for <code>'CDHR'</code> or <code>'RDHR'</code> and 2 for <code>'BiW'</code>.</p>
+</dd>
+<dt>
+<code>seed</code> </dt>
+<dd>
+<p> Optional. A fixed seed for the number generator.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with 4 elements: (a) a polytope of the same class as the input polytope class and (b) the element "T" which is the matrix of the inverse linear transformation that is applied on the input polytope, (c)  the element "shift" which is the opposite vector of that which has shifted the input polytope, (d) the element "round_value" which is the determinant of the square matrix of the linear transformation that is applied on the input polytope.
+</p>
+
+
+<h3>References</h3>
+
+<p><cite>I.Z.Emiris and V. Fisikopoulos,
+“Practical polytope volume approximation,” <em>ACM Trans. Math. Soft.,</em> 2018.</cite>,
+</p>
+<p><cite>Michael J. Todd and E. Alper Yildirim,
+“On Khachiyan’s Algorithm for the Computation of Minimum Volume Enclosing Ellipsoids,” <em>Discrete Applied Mathematics,</em> 2007.</cite>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># rotate a H-polytope (2d unit simplex)
+A = matrix(c(-1,0,0,-1,1,1), ncol=2, nrow=3, byrow=TRUE)
+b = c(0,0,1)
+P = Hpolytope(A = A, b = b)
+listHpoly = round_polytope(P)
+
+# rotate a V-polytope (3d unit cube) using Random Directions HnR with step equal to 50
+P = gen_cube(3, 'V')
+ListVpoly = round_polytope(P)
+
+# round a 2-dimensional zonotope defined by 6 generators using ball walk
+Z = gen_rand_zonotope(2,6)
+ListZono = round_polytope(Z)
+</code></pre>
+
+
+</div>

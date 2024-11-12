@@ -1,0 +1,175 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.visreg2d</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualization of regression functions for two variables</h2>
+
+<h3>Description</h3>
+
+<p>Plot method for visualizing how two variables interact to
+affect the response in regression models.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'visreg2d'
+plot(x, plot.type=c("image","persp","rgl", "gg"),
+xlab, ylab, zlab, color, print.cond=FALSE, whitespace=0.2, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A <code>visreg2d</code> object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.type</code></td>
+<td>
+
+<p>The style of plot to be produced.  The following three options are
+supported:
+</p>
+
+<ul>
+<li> <p><code>'image'</code>, a filled contour plot.
+</p>
+</li>
+<li> <p><code>'gg'</code>, a filled contour plot using <code>ggplot2</code>.
+</p>
+</li>
+<li> <p><code>'persp'</code>, a 3 dimensional perspective plot.
+</p>
+</li>
+<li> <p><code>'rgl'</code>, a version of the perspective plot that can be
+rotated. Note: requires the rgl package to use.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+
+<p>Axis label for x variable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+
+<p>Axis label for y variable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zlab</code></td>
+<td>
+
+<p>Axis label for outcome</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color</code></td>
+<td>
+
+<p>For <code>plot.type='persp'</code> or <code>plot.type='rgl'</code>, the
+color of the surface.  For <code>plot.type='image'</code> or
+<code>plot.type='gg'</code>, a vector of colors used to establish a
+color palette.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>print.cond</code></td>
+<td>
+
+<p>If <code>print.cond==TRUE</code>, the explanatory variable values
+conditioned on in a conditional plot are printed to the console
+(default: <code>FALSE</code>). If <code>print.cond==TRUE</code> and
+<code>type=="contrast"</code>, the conditions will still be printed, but
+they have no bearing on the plot unless interactions are present.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>whitespace</code></td>
+<td>
+
+<p>When <code>xvar</code> or <code>yvar</code> is a factor, whitespace determines
+the amount of space in between the factors.  Default is 0.2, meaning
+that 20 percent of the axis is whitespace.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Graphical parameters can be passed to the function to customize the
+plots.
+</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Patrick Breheny and Woodrow Burchett
+</p>
+
+
+<h3>References</h3>
+
+
+<ul>
+<li> <p><a href="http://pbreheny.github.io/visreg">http://pbreheny.github.io/visreg</a>
+</p>
+</li>
+<li>
+<p> Breheny, P. and Burchett, W. (2017), Visualizing regression
+models using visreg.
+<a href="https://journal.r-project.org/archive/2017/RJ-2017-046/index.html">https://journal.r-project.org/archive/2017/RJ-2017-046/index.html</a>
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><a href="http://pbreheny.github.io/visreg/surface.html">http://pbreheny.github.io/visreg/surface.html</a>
+<code>visreg</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fit &lt;- lm(Ozone ~ Solar.R + Wind + Temp + I(Wind^2) + I(Temp^2) +
+I(Wind*Temp)+I(Wind*Temp^2) + I(Temp*Wind^2) + I(Temp^2*Wind^2),
+data=airquality)
+
+visreg2d(fit, x="Wind", y="Temp", plot.type="image")
+visreg2d(fit, x="Wind", y="Temp", plot.type="image",
+         color=c("purple", "green", "red"))
+visreg2d(fit, x="Wind", y="Temp", plot.type="persp")
+
+## Requires the rgl package
+## Not run: 
+visreg2d(fit,x="Wind",y="Temp",plot.type="rgl")
+
+## End(Not run)
+
+## Requires the ggplot2 package
+## Not run: 
+visreg2d(fit, x="Wind", y="Temp", plot.type="gg")
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

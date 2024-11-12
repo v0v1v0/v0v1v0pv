@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simulateMVSISNY</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulate a dataset for demonstrating the performance of screenIID with the MV-SIS method with numeric outcome Y</h2>
+
+<h3>Description</h3>
+
+<p>Simulates a dataset that can be used to demonstrate variable screening
+for ultrahigh-dimensional regression with categorical predictors and numerical outcome
+variable using the MV-SIS-NY option in screenIID.
+The simulated dataset has p numerical predictors X and a categorical response Y.
+The X covariates are generated as binary with success probability 0.5 each.  The
+response Y is generated as
+Y = 5*X1 + 5*X2  + 5*X12 + 5*X22 + e
+if heteroskedastic=FALSE, where e is a standard normal error term and 1 is a zero-one
+indicator function for the truth of the statement contained.
+Special thanks are due to Wei Zhong for providing some of the code upon which this function is based.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">simulateMVSISNY(n = 500, p = 1000)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>Number of subjects in the dataset to be simulated.  It will also equal to the number of rows
+in the  dataset to be simulated, because it is assumed that each row represents a different independent and
+identically distributed subject.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>Number of predictor variables (covariates) in the simulated dataset.  These covariates
+will be the features screened by DC-SIS.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with following components:
+X Matrix of predictors to be screened. It will have n rows and p columns.
+Y Vector of responses.  It will have length n.
+</p>
+
+
+<h3>References</h3>
+
+<p>Cui, H., Li, R., &amp; Zhong, W. (2015). Model-free feature screening
+for ultrahigh dimensional discriminant analysis. Journal of the American
+Statistical Association, 110: 630-641. &lt;DOI:10.1080/01621459.2014.920256&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(12345678)
+results &lt;- simulateMVSISNY()
+</code></pre>
+
+
+</div>

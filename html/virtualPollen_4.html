@@ -1,0 +1,123 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compareSimulations</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares different simulations produced by <code>simulatePopulation</code>.</h2>
+
+<h3>Description</h3>
+
+<p>Plots together the results of different virtual taxa produced by a single run of <code>simulatePopulation</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compareSimulations(
+  simulation.output = NULL,
+  species = "all",
+  filename = NULL,
+  columns = "Pollen",
+  time.zoom = NULL,
+  width = 12,
+  text.size = 20,
+  title.size = 25,
+  plot.title = ""
+  )
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>simulation.output</code></td>
+<td>
+<p>list, output of <code>simulatePopulation</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species</code></td>
+<td>
+<p>a number or vector or numbers representing rows in the parameters dataframe, or a string or vector of strings referencing to the "label" column of the parameters dataframe.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filename</code></td>
+<td>
+<p>character string, name of output pdf file. If NULL or empty, no pdf is produced.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>columns</code></td>
+<td>
+<p>character string or vector of character strings with these possible values: "Pollen", "Population.mature", "Population.immature", "Population.viable.seeds", "Suitability", "Biomass.total", "Biomass.mature", "Biomass.immature", "Mortality.mature", "Mortality.immature", "Driver.A", "Driver.B".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time.zoom</code></td>
+<td>
+<p>vector of two numbers, indicating the beginnign and end of the time interval to be plotted (i.e. "c(5000, 10000)")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p>plot width in inches.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.size</code></td>
+<td>
+<p>text size of the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title.size</code></td>
+<td>
+<p>plot title size.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.title</code></td>
+<td>
+<p>character string to use as plot title.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The user can decide what virtual taxa to plot through the <code>species</code> argument, and what information to show throught the <code>columns</code> argument. Output is plotted on screen by default, and printed to pdf if the <code>filename</code> argument is filled.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Blas M. Benito  &lt;blasbenito@gmail.com&gt;
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>simulatePopulation</code>, <code>plotSimulation</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+#getting example data
+data(simulation)
+
+#compare taxa 1, 2, and 3.
+compareSimulations(simulation.output = simulation,
+ species = c(1, 2, 3),
+ columns = c("Pollen", "Suitability"),
+ time.zoom = c(1000, 2000)
+)
+
+</code></pre>
+
+
+</div>

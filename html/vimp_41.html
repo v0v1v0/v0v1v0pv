@@ -1,0 +1,377 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sp_vim</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Shapley Population Variable Importance Measure (SPVIM) Estimates and Inference</h2>
+
+<h3>Description</h3>
+
+<p>Compute estimates and confidence intervals for the SPVIMs, using cross-fitting.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sp_vim(
+  Y = NULL,
+  X = NULL,
+  V = 5,
+  type = "r_squared",
+  SL.library = c("SL.glmnet", "SL.xgboost", "SL.mean"),
+  univariate_SL.library = NULL,
+  gamma = 1,
+  alpha = 0.05,
+  delta = 0,
+  na.rm = FALSE,
+  stratified = FALSE,
+  verbose = FALSE,
+  sample_splitting = TRUE,
+  final_point_estimate = "split",
+  C = rep(1, length(Y)),
+  Z = NULL,
+  ipc_scale = "identity",
+  ipc_weights = rep(1, length(Y)),
+  ipc_est_type = "aipw",
+  scale = "identity",
+  scale_est = TRUE,
+  cross_fitted_se = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>the outcome.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>the covariates. If <code>type = "average_value"</code>, then the exposure
+variable should be part of <code>X</code>, with its name provided in <code>exposure_name</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>V</code></td>
+<td>
+<p>the number of folds for cross-fitting, defaults to 5. If
+<code>sample_splitting = TRUE</code>, then a special type of <code>V</code>-fold cross-fitting
+is done. See Details for a more detailed explanation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>the type of importance to compute; defaults to
+<code>r_squared</code>, but other supported options are <code>auc</code>,
+<code>accuracy</code>, <code>deviance</code>, and <code>anova</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SL.library</code></td>
+<td>
+<p>a character vector of learners to pass to
+<code>SuperLearner</code>, if <code>f1</code> and <code>f2</code> are Y and X,
+respectively. Defaults to <code>SL.glmnet</code>, <code>SL.xgboost</code>,
+and <code>SL.mean</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>univariate_SL.library</code></td>
+<td>
+<p>(optional) a character vector of learners to
+pass to <code>SuperLearner</code> for estimating univariate regression functions.
+Defaults to <code>SL.polymars</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>the fraction of the sample size to use when sampling subsets
+(e.g., <code>gamma = 1</code> samples the same number of subsets as the sample
+size)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>the level to compute the confidence interval at.
+Defaults to 0.05, corresponding to a 95% confidence interval.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>the value of the <code class="reqn">\delta</code>-null (i.e., testing if
+importance &lt; <code class="reqn">\delta</code>); defaults to 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>should we remove NAs in the outcome and fitted values
+in computation? (defaults to <code>FALSE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stratified</code></td>
+<td>
+<p>if run_regression = TRUE, then should the generated
+folds be stratified based on the outcome (helps to ensure class balance
+across cross-validation folds)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>should <code>sp_vim</code> and <code>SuperLearner</code> print out
+progress? (defaults to <code>FALSE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_splitting</code></td>
+<td>
+<p>should we use sample-splitting to estimate the full and
+reduced predictiveness? Defaults to <code>TRUE</code>, since inferences made using
+<code>sample_splitting = FALSE</code> will be invalid for variables with truly zero
+importance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>final_point_estimate</code></td>
+<td>
+<p>if sample splitting is used, should the final point estimates
+be based on only the sample-split folds used for inference (<code>"split"</code>, the default),
+or should they instead be based on the full dataset (<code>"full"</code>) or the average
+across the point estimates from each sample split (<code>"average"</code>)? All three
+options result in valid point estimates – sample-splitting is only required for valid inference.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>the indicator of coarsening (1 denotes observed, 0 denotes
+unobserved).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>either (i) NULL (the default, in which case the argument
+<code>C</code> above must be all ones), or (ii) a character vector
+specifying the variable(s) among Y and X that are thought to play a
+role in the coarsening mechanism. To specify the outcome, use <code>"Y"</code>; to
+specify covariates, use a character number corresponding to the desired
+position in X (e.g., <code>"1"</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_scale</code></td>
+<td>
+<p>what scale should the inverse probability weight correction be applied on (if any)?
+Defaults to "identity". (other options are "log" and "logit")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_weights</code></td>
+<td>
+<p>weights for the computed influence curve (i.e.,
+inverse probability weights for coarsened-at-random settings).
+Assumed to be already inverted (i.e., ipc_weights = 1 / [estimated
+probability weights]).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_est_type</code></td>
+<td>
+<p>the type of procedure used for coarsened-at-random
+settings; options are "ipw" (for inverse probability weighting) or
+"aipw" (for augmented inverse probability weighting).
+Only used if <code>C</code> is not all equal to 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>should CIs be computed on original ("identity") or
+another scale? (options are "log" and "logit")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale_est</code></td>
+<td>
+<p>should the point estimate be scaled to be greater than or equal to 0?
+Defaults to <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross_fitted_se</code></td>
+<td>
+<p>should we use cross-fitting to estimate the standard
+errors (<code>TRUE</code>, the default) or not (<code>FALSE</code>)?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments to the estimation tool, see "See also".</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>We define the SPVIM as the weighted average of the population
+difference in predictiveness over all subsets of features not containing
+feature <code class="reqn">j</code>.
+</p>
+<p>This is equivalent to finding the solution to a population weighted least
+squares problem. This key fact allows us to estimate the SPVIM using weighted
+least squares, where we first sample subsets from the power set of all
+possible features using the Shapley sampling distribution; then
+use cross-fitting to obtain estimators of the predictiveness of each
+sampled subset; and finally, solve the least squares problem given in
+Williamson and Feng (2020).
+</p>
+<p>See the paper by Williamson and Feng (2020) for more
+details on the mathematics behind this function, and the validity
+of the confidence intervals.
+</p>
+<p>In the interest of transparency, we return most of the calculations
+within the <code>vim</code> object. This results in a list containing:
+</p>
+
+<dl>
+<dt>SL.library</dt>
+<dd>
+<p>the library of learners passed to <code>SuperLearner</code></p>
+</dd>
+<dt>v</dt>
+<dd>
+<p>the estimated predictiveness measure for each sampled subset</p>
+</dd>
+<dt>fit_lst</dt>
+<dd>
+<p>the fitted values on the entire dataset from the chosen method for each sampled subset</p>
+</dd>
+<dt>preds_lst</dt>
+<dd>
+<p>the cross-fitted predicted values from the chosen method for each sampled subset</p>
+</dd>
+<dt>est</dt>
+<dd>
+<p>the estimated SPVIM value for each feature</p>
+</dd>
+<dt>ics</dt>
+<dd>
+<p>the influence functions for each sampled subset</p>
+</dd>
+<dt>var_v_contribs</dt>
+<dd>
+<p>the contibutions to the variance from estimating predictiveness</p>
+</dd>
+<dt>var_s_contribs</dt>
+<dd>
+<p>the contributions to the variance from sampling subsets</p>
+</dd>
+<dt>ic_lst</dt>
+<dd>
+<p>a list of the SPVIM influence function contributions</p>
+</dd>
+<dt>se</dt>
+<dd>
+<p>the standard errors for the estimated variable importance</p>
+</dd>
+<dt>ci</dt>
+<dd>
+<p>the <code class="reqn">(1-\alpha) \times 100</code>% confidence intervals based on the variable importance estimates</p>
+</dd>
+<dt>p_value</dt>
+<dd>
+<p>p-values for the null hypothesis test of zero importance for each variable</p>
+</dd>
+<dt>test_statistic</dt>
+<dd>
+<p>the test statistic for each null hypothesis test of zero importance</p>
+</dd>
+<dt>test</dt>
+<dd>
+<p>a hypothesis testing decision for each null hypothesis test (for each variable having zero importance)</p>
+</dd>
+<dt>gamma</dt>
+<dd>
+<p>the fraction of the sample size used when sampling subsets</p>
+</dd>
+<dt>alpha</dt>
+<dd>
+<p>the level, for confidence interval calculation</p>
+</dd>
+<dt>delta</dt>
+<dd>
+<p>the <code>delta</code> value used for hypothesis testing</p>
+</dd>
+<dt>y</dt>
+<dd>
+<p>the outcome</p>
+</dd>
+<dt>ipc_weights</dt>
+<dd>
+<p>the weights</p>
+</dd>
+<dt>scale</dt>
+<dd>
+<p>the scale on which CIs were computed</p>
+</dd>
+<dt>mat</dt>
+<dd>
+<p>- a tibble with the estimates, SEs, CIs, hypothesis testing decisions, and p-values</p>
+</dd>
+</dl>
+<h3>Value</h3>
+
+<p>An object of class <code>vim</code>. See Details for more information.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>SuperLearner</code> for specific usage of the
+<code>SuperLearner</code> function and package.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">n &lt;- 100
+p &lt;- 2
+# generate the data
+x &lt;- data.frame(replicate(p, stats::runif(n, -5, 5)))
+
+# apply the function to the x's
+smooth &lt;- (x[,1]/5)^2*(x[,1]+7)/5 + (x[,2]/3)^2
+
+# generate Y ~ Normal (smooth, 1)
+y &lt;- as.matrix(smooth + stats::rnorm(n, 0, 1))
+
+# set up a library for SuperLearner; note simple library for speed
+library("SuperLearner")
+learners &lt;- c("SL.glm")
+
+# -----------------------------------------
+# using Super Learner (with a small number of CV folds,
+# for illustration only)
+# -----------------------------------------
+set.seed(4747)
+est &lt;- sp_vim(Y = y, X = x, V = 2, type = "r_squared",
+SL.library = learners, alpha = 0.05)
+
+</code></pre>
+
+
+</div>

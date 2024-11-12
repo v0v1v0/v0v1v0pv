@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hb</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Hiridoglu-Berthelot function</h2>
+
+<h3>Description</h3>
+
+<p>A function to measure ‘outlierness’ for skew distributed data with long
+right tails. The method works by measuring deviation from a reference
+value, by default the median. Deviation from above is measured as the
+ratio between observed and refence values. Deviation from below is
+measured as the inverse: the ratio between reference value and 
+observed values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hb(x, ref = stats::median, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>[numeric]</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ref</code></td>
+<td>
+<p><code>[function]</code> or <code>[numeric]</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments passed to <code>ref</code> after <code>x</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code class="reqn">\max\{x/ref(x), ref(x)/x\}-1</code> if <code>ref</code> is a function,
+otherwise <code class="reqn">\max\{x/ref, ref/x\}-1</code>
+</p>
+
+
+<h3>References</h3>
+
+<p>Hidiroglou, M. A., &amp; Berthelot, J. M. (1986). Statistical editing and
+imputation for periodic business surveys. Survey methodology, 12(1), 73-83.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other cross-record-helpers: 
+<code>contains_exactly()</code>,
+<code>do_by()</code>,
+<code>exists_any()</code>,
+<code>hierarchy()</code>,
+<code>is_complete()</code>,
+<code>is_linear_sequence()</code>,
+<code>is_unique()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- seq(1,20,by=0.1)
+plot(x,hb(x), 'l')
+
+</code></pre>
+
+
+</div>

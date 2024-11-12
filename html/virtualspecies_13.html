@@ -1,0 +1,178 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotResponse</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualise the response of the virtual species to environmental variables</h2>
+
+<h3>Description</h3>
+
+<p>This function plots the relationships between the virtual species and the environmental variables.
+It requires either the output from <code>generateSpFromFun</code>, <code>generateSpFromPCA</code>, 
+<code>generateRandomSp</code>,
+or a manually defined set of environmental variables and response functions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotResponse(
+  x,
+  parameters = NULL,
+  approach = NULL,
+  rescale = NULL,
+  axes.to.plot = NULL,
+  no.plot.reset = FALSE,
+  rescale.each.response = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>the output from <code>generateSpFromFun</code>, <code>generateSpFromPCA</code>, 
+<code>generateRandomSp</code>, or
+a raster layer/stack of environmental variables (see details for the latter).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parameters</code></td>
+<td>
+<p>in case of manually defined response functions, a list 
+containing the associated parameters. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>approach</code></td>
+<td>
+<p>in case of manually defined response functions, the chosen
+approach: either <code>"response"</code> for a per-variable response approach, or
+<code>"pca"</code> for a PCA approach.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rescale</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, individual response
+plots are rescaled between 0 and 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>axes.to.plot</code></td>
+<td>
+<p>a vector of 2 values listing the two axes of the PCA to plot.
+Only useful for a PCA species.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>no.plot.reset</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>FALSE</code>, the plot window
+will be reset to its initial state after the response has been plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rescale.each.response</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, 
+the individual responses to
+each environmental variable are rescaled between 0 and 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further arguments to be passed to <code>plot</code>. See 
+<code>plot</code> and <code>par</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If you provide the output from <code>generateSpFromFun</code>, <code>generateSpFromPCA</code> or
+<code>generateRandomSp</code>
+then the function will automatically make the appropriate plots.
+</p>
+<p>Otherwise, you can provide a raster layer/stack of environmental variables to
+<code>x</code> and a list of functions to <code>parameters</code> to perform the plot.
+In that case, you have to specify the <code>approach</code>: <code>"reponse"</code> or
+<code>"PCA"</code>:
+</p>
+
+<ul>
+<li>
+<p>if <code>approach = "response"</code>: Provide to <code>parameters</code> a 
+<code>list</code> exactly as defined in <code>generateSpFromFun</code>:<br><code>list(
+           var1 = list(fun = 'fun1', args = list(arg1 = ..., arg2 = ..., etc.)),
+           var2 = list(fun = 'fun2', args = list(arg1 = ..., arg2 = ..., etc.)))</code><br></p>
+
+</li>
+<li>
+<p>if <code>approach = "PCA"</code>: Provide to <code>parameters</code> a
+<code>list</code> containing the following elements:
+</p>
+
+<ul>
+<li>
+<p><code>pca</code>: a <code>dudi.pca</code> object computed  with 
+<code>dudi.pca</code>
+</p>
+</li>
+<li>
+<p><code>means</code>: a vector containing two numeric values. Will be used to define
+the means of the gaussian response functions to the axes of the PCA.
+</p>
+</li>
+<li>
+<p><code>sds</code> a vector containing two numeric values. Will be used to define
+the standard deviations of the gaussian response functions to the axes of 
+the PCA.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Author(s)</h3>
+
+<p>Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+</p>
+<p>with help from C. N. Meynard, C. Bellard &amp; F. Courchamp
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Create an example stack with four environmental variables
+a &lt;- matrix(rep(dnorm(1:100, 50, sd = 25)), 
+            nrow = 100, ncol = 100, byrow = TRUE)
+env &lt;- c(rast(a * dnorm(1:100, 50, sd = 25)),
+         rast(a * 1:100),
+         rast(a * logisticFun(1:100, alpha = 10, beta = 70)),
+         rast(t(a)))
+names(env) &lt;- c("var1", "var2", "var3", "var4")
+
+# Per-variable response approach:
+parameters &lt;- formatFunctions(var1 = c(fun = 'dnorm', mean = 0.00012,
+                                       sd = 0.0001),
+                              var2 = c(fun = 'linearFun', a = 1, b = 0),
+                              var3 = c(fun = 'quadraticFun', a = -20, b = 0.2, 
+                                       c = 0),
+                              var4 = c(fun = 'logisticFun', alpha = -0.001, 
+                                       beta = 0.002))
+sp1 &lt;- generateSpFromFun(env, parameters, plot = TRUE)
+plotResponse(sp1)
+
+# PCA approach:
+sp2 &lt;- generateSpFromPCA(env, plot = FALSE)
+par(mfrow = c(1, 1))
+plotResponse(sp2)
+
+</code></pre>
+
+
+</div>

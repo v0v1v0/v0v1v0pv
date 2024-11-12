@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>AB.Ab.aB.ab</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> The AB-Ab-aB-ab Blood Group System </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the parameter of the
+AB-Ab-aB-ab blood group system.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">AB.Ab.aB.ab(link = "logitlink", init.p = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to <code>p</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>init.p</code></td>
+<td>
+<p> Optional initial value for <code>p</code>. </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This one parameter model involves a probability called <code>p</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The input can be a 4-column matrix of counts, where the columns
+are AB, Ab, aB and ab
+(in order).
+Alternatively, the input can be a 4-column matrix of
+proportions (so each row adds to 1) and the <code>weights</code>
+argument is used to specify the total number of counts for each row.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Lange, K. (2002).
+<em>Mathematical and Statistical Methods for Genetic Analysis</em>,
+2nd ed. New York: Springer-Verlag.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>AA.Aa.aa</code>,
+<code>ABO</code>,
+<code>A1A2A3</code>,
+<code>MNSs</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ymat &lt;- cbind(AB=1997, Ab=906, aB=904, ab=32)  # Data from Fisher (1925)
+fit &lt;- vglm(ymat ~ 1, AB.Ab.aB.ab(link = "identitylink"), trace = TRUE)
+fit &lt;- vglm(ymat ~ 1, AB.Ab.aB.ab, trace = TRUE)
+rbind(ymat, sum(ymat)*fitted(fit))
+Coef(fit)  # Estimated p
+p &lt;- sqrt(4*(fitted(fit)[, 4]))
+p*p
+summary(fit)
+</code></pre>
+
+
+</div>

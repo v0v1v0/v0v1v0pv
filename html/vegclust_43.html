@@ -1,0 +1,123 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vegdiststruct</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Structural and compositional dissimilarity
+</h2>
+
+<h3>Description</h3>
+
+<p>Function to calculate the dissimilarity between ecological communities taking into account both their composition and the size of organisms.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vegdiststruct(x, y=NULL, paired=FALSE, type="cumulative", method="bray", 
+              transform=NULL, classWeights=NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A stratified vegetation data set (see function <code>stratifyvegdata</code>), a set of cummulative abundance profiles (see function <code>CAP</code>) or a set of cummulative abundance surfaces (see function <code>CAS</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>A second stratified vegetation data set (see function <code>stratifyvegdata</code>), a second set of cummulative abundance profiles (see function <code>CAP</code>) or a second set of cummulative abundance surfaces (see function <code>CAS</code>) against which object <code>x</code> should be compared.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>paired</code></td>
+<td>
+<p>Only relevant when <code>y != NULL</code>. If <code>paired = TRUE</code> pairwise comparisons are calculated between elements in <code>x</code> and <code>y</code> (and <code>x</code> and <code>y</code> need to be of the same length). If <code>paired = FALSE</code> then all objects in <code>x</code> are compared to all objects in <code>y</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Whether dissimilarities between pairs of sites should be calculated from differences in cummulative abundance (<code>"cumulative"</code>), in total abundance (<code>"total"</code>) or in volumes of cumulative abundance profiles (<code>"volume"</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>The dissimilarity coefficient to calculate (see details).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>transform</code></td>
+<td>
+<p>A function or the name of a function to be applied to each cumulative abundance value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>classWeights</code></td>
+<td>
+<p>A numerical vector or a matrix containing the weight of each size class or combination of size classes (see functions <code>CAP2matrix</code> and <code>CAS2matrix</code>). If <code>NULL</code>, then the function assumes classes of equal weight.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The six different coefficients available are described in De Caceres et al. (2013): (1) <code>method="bray"</code> for percentage difference (alias Bray-Curtis dissimilarity); (2) <code>method="ruzicka"</code> for Ruzicka index (a generalization of Jaccard); (3) <code>method="kulczynski"</code> for the Kulczynski dissimilarity index; (4) <code>method="ochiai"</code> for the complement of a quantitative generalization of Ochiai index of similarity; (5) <code>method="canberra"</code> for the Canberra index (Adkins form); (6) <code>method="relman"</code> for the relativized Manhattan coefficient (Whittaker's index of association). Currently, the function also supports (7) <code>method="manhattan"</code> for the city block metric.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns an object of class '<code>dist</code>'.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, CREAF.
+</p>
+
+
+<h3>References</h3>
+
+<p>De Cáceres, M., Legendre, P. &amp; He, F. (2013) Dissimilarity measurements and the size structure of ecological communities. Methods in Ecology and Evolution 4: 1167-1177.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>stratifyvegdata</code>, <code>vegdist</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Load stratified data
+data(medreg)
+
+## Check that 'medreg' has correct class
+class(medreg)
+
+## Create cumulative abundance profile (CAP) for each plot
+medreg.CAP = CAP(medreg)
+
+## Create dissimilarity (percentage difference) matrix using profiles
+medreg.D = vegdiststruct(medreg, method="bray")
+
+## Create dissimilarity (percentage difference) matrix using abundances
+medreg.D2 = vegdiststruct(medreg, method="bray", type="total")
+
+## Calculate correlation
+cor(as.vector(medreg.D), as.vector(medreg.D2))
+
+</code></pre>
+
+
+</div>

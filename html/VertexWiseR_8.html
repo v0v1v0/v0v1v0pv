@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>FSLRvextract</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>FSLRvextract</h2>
+
+<h3>Description</h3>
+
+<p>Extracts vertex-wise surface-based measures for each subject from HCP and fMRIprep preprocessed directory, and stores it as a single .RDS file.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">FSLRvextract(
+  sdirpath = "./",
+  wb_path,
+  filename,
+  dscaler,
+  subj_ID = TRUE,
+  silent = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>sdirpath</code></td>
+<td>
+<p>A string object containing the path to the HCP or fMRIprep preprocessed directory. Default is the current working directory ("./").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wb_path</code></td>
+<td>
+<p>The filepath to the workbench folder that you have previously downloaded and unzipped</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filename</code></td>
+<td>
+<p>A string object containing the desired name of the output RDS file. Default is 'fslr32k_measure.rds' in the R temporary directory (tempdir()).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dscaler</code></td>
+<td>
+<p>A string object containing the filename suffix of the dscaler file. These dscaler files are named differently depending on the preprocessing pipeline used. Examples of filename suffixes are shown below
+</p>
+
+<ul>
+<li> <p><code>.thickness_MSMAll.32k_fs_LR.dscalar.nii</code> (HCP MSMAll pipeline)
+</p>
+</li>
+<li> <p><code>.sulc_MSMAll.32k_fs_LR.dscalar.nii</code> (HCP MSMAll pipeline)
+</p>
+</li>
+<li> <p><code>.thickness.32k_fs_LR.dscalar.nii</code> (HCP legacy pipeline)
+</p>
+</li>
+<li> <p><code>.sulc.32k_fs_LR.dscalar.nii</code> (HCP legacy pipeline)
+</p>
+</li>
+<li> <p><code style="white-space: pre;">⁠_space-fsLR_den-91k_thickness.dscalar.nii⁠</code> (fMRIprep; using the <code style="white-space: pre;">⁠--cifti-output 91k⁠</code> flag)
+</p>
+</li>
+<li> <p><code style="white-space: pre;">⁠_space-fsLR_den-91k_curv.dscalar.nii⁠</code> (fMRIprep; using the <code style="white-space: pre;">⁠--cifti-output 91k⁠</code> flag)
+</p>
+</li>
+<li> <p><code style="white-space: pre;">⁠_space-fsLR_den-91k_sulc.dscalar.nii⁠</code> (fMRIprep; using the <code style="white-space: pre;">⁠--cifti-output 91k⁠</code> flag)</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subj_ID</code></td>
+<td>
+<p>A logical object to determine whether to return a list object containing both subject ID and data matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>silent</code></td>
+<td>
+<p>A logical object to determine whether messages will be silenced. Set to 'FALSE' by default</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function searches for the HCP preprocessed directory by listing out files with certain suffixes, extract the data from these files, and organize the left and right hemisphere vertex data for each subject as rows in a N x 64984 data matrix within a .rds object.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A .RDSfile with a list containing 1. the list of subject IDs (first element) and 2. a surface data matrix object (second element), or only a data matrix object. The matrix has N subjects x M vertices dimensions and can be readily used by VertexWiseR statistical analysis functions. Each row corresponds to a subject (in the order they are listed in the folder) and contains the left to right hemispheres' vertex-wise values.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dat_fslr32k=FSLRvextract(sdirpath="./", 
+wb_path="/path/to/workbench",
+filename="dat_fslr32k.rds",
+dscaler=".thickness_MSMAll.32k_fs_LR.dscalar.nii", 
+subj_ID = TRUE, silent=FALSE)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>check_msg_time</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check the time value(s) at a specific message</h2>
+
+<h3>Description</h3>
+
+<p><code>check_msg_time</code> examines the time point of a specific Sample Message
+for each event. Depending on the format of the data, it will use one of three
+columns: TIMESTAMP, Align, or Time.  If times at which the message occurs 
+are equal, it will return a single value.  Optionally, the result can be 
+output to a dataframe containing all event-level information.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">check_msg_time(data, Msg = NULL, ReturnData = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data table object output by <code>relabel_na</code>,
+<code>align_msg</code>, or <code>create_time_series</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Msg</code></td>
+<td>
+<p>A character string containing the exact message to be found in 
+the column SAMPLE_MESSAGE or a regular expression for locating the 
+appropriate message.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ReturnData</code></td>
+<td>
+<p>A logical indicating whether to return a data table 
+containing Message Time information for each event.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The value(s) of Time (in milliseconds) at which the Sample Message
+is found.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(VWPre)
+# Check the Sample Message time...
+check_msg_time(data = dat)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

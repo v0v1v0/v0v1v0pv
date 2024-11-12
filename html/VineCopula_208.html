@@ -1,0 +1,156 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>contour.RVineMatrix</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plotting <code>RVineMatrix</code> objects.</h2>
+
+<h3>Description</h3>
+
+<p>There are two plotting generics for <code>RVineMatrix</code> objects.
+<code>plot.RVineMatrix</code> plots one or all trees of a given R-vine copula
+model. Edges can be labeled with information about the corresponding
+pair-copula. <code>contour.RVineMatrix</code> produces a matrix of contour plots
+(using <code>plot.BiCop()</code>).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'RVineMatrix'
+contour(x, tree = "ALL", xylim = NULL, cex.nums = 1, data = NULL, ...)
+
+## S3 method for class 'RVineMatrix'
+plot(
+  x,
+  tree = "ALL",
+  type = 0,
+  edge.labels = NULL,
+  legend.pos = "bottomleft",
+  interactive = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>RVineMatrix</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tree</code></td>
+<td>
+<p><code>"ALL"</code> or integer vector; specifies which trees are
+plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xylim</code></td>
+<td>
+<p>numeric vector of length 2; sets <code>xlim</code> and <code>ylim</code>
+for the contours</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex.nums</code></td>
+<td>
+<p>numeric; expansion factor for font of the numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data matrix for creating kernel density contours of each pair.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Arguments passed to
+<code>network::plot.network()</code> or
+<code>plot.BiCop()</code> respectively.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>integer; specifies how to make use of variable names: <br><code>0</code> = variable names are ignored, <br><code>1</code> = variable names are
+used to annotate vertices, <br><code>2</code> = uses numbers in plot and adds a
+legend for variable names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>edge.labels</code></td>
+<td>
+<p>character; either a vector of edge labels or one of the
+following: <br><code>"family"</code> = pair-copula family abbreviation (see
+<code>BiCopName()</code>), <br><code>"par"</code> =
+pair-copula parameters, <br><code>"tau"</code> = pair-copula Kendall's tau (by
+conversion of parameters) <br><code>"family-par"</code> = pair-copula family and
+parameters <br><code>"family-tau"</code> = pair-copula family and Kendall's tau.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend.pos</code></td>
+<td>
+<p>the <code>x</code> argument for
+<code>graphics::legend()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>interactive</code></td>
+<td>
+<p>logical; if TRUE, the user is asked to adjust the
+positioning of vertices with his mouse.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If you want the contour boxes to be perfect squares, the plot height should
+be <code>1.25/length(tree)*(d - min(tree))</code> times the plot width.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Thomas Nagler, Nicole Barthel
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineMatrix()</code>,
+<code>network::plot.network()</code>,
+<code>plot.BiCop()</code>,
+<code>BiCopName()</code>,
+<code>graphics::legend()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## build vine model
+strucmat &lt;- matrix(c(3,   1, 2, 0, 2, 1, 0, 0, 1), 3, 3)
+fammat   &lt;- matrix(c(0,   1, 6, 0, 0, 3, 0, 0, 0), 3, 3)
+parmat   &lt;- matrix(c(0, 0.3, 3, 0, 0, 1, 0, 0, 0), 3, 3)
+par2mat  &lt;- matrix(c(0,   0, 0, 0, 0, 0, 0, 0, 0), 3, 3)
+RVM  &lt;- RVineMatrix(strucmat, fammat, parmat, par2mat)
+
+# plot trees
+## Not run: plot(RVM)
+
+# show contour plots
+contour(RVM)
+
+</code></pre>
+
+
+</div>

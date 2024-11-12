@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>discrimination.plot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Discrimination  plot</h2>
+
+<h3>Description</h3>
+
+<p>This function creates a plot of discrimination plots
+(overlay histograms).   In the context of verification, this is often
+used to compare the distribution of event and no-event
+forecasts.  This may be useful in comparing any set of
+observations. By default, boxplots of groups appear as upper
+marginal plots.  These may be surpressed. </p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">discrimination.plot(group.id, value, breaks = 11, main =
+"Discrimination Plot", xlim = NULL, ylim = NULL,  legend =
+FALSE, leg.txt = paste("Model", sort(unique(group.id)) ),   marginal = TRUE, cols =
+seq(2, length(unique(group.id)) + 1), xlab = "Forecast",  ... )</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>group.id</code></td>
+<td>
+<p>A vector identifying groups.  A histogram is
+created for each unique value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>A vector of values corresponding to the group.id
+vector used to create the histograms</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>breaks</code></td>
+<td>
+<p>Number of breaks in the x-axis of the histogram.
+The range of values is taken to be the range of prediction values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>Title for plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim</code></td>
+<td>
+<p>Range of histogram - x axis - main plot coordinates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylim</code></td>
+<td>
+<p>Range of histogram - y axis - main plot coordinates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+<p>Should there be a legend? Default = FALSE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>leg.txt</code></td>
+<td>
+<p>Legend text.  If FALSE or if a marginal plot is
+created, no legend is added.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>A vector showing the colors to be used in the
+histograms and in the marginal boxplots</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>marginal</code></td>
+<td>
+<p>Should a boxplots be placed in the top margin?
+Defaults to TRUE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p> Label of the x-axis on the main plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional plotting options.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> #  A sample forecast.  
+
+data(disc.dat)
+discrimination.plot(disc.dat$group.id, disc.dat$frcst, main = "Default  Plot")
+
+discrimination.plot(disc.dat$group.id, disc.dat$frcst, main = "New Labels", cex = 1.2,
+leg.txt = c("Low", "Med", "High" ) )
+
+discrimination.plot(disc.dat$group.id, disc.dat$frcst, main = "Without Marginal Plots ",
+marginal = FALSE)
+
+
+ </code></pre>
+
+
+</div>

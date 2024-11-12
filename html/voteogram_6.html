@@ -1,0 +1,61 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>senate_carto</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Produce a Senate cartogram</h2>
+
+<h3>Description</h3>
+
+<p>Produce a Senate cartogram
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">senate_carto(vote_tally)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>vote_tally</code></td>
+<td>
+<p>either a <code>pprc</code> object (the result of a call to <code>roll_call()</code>) or
+a <code>data.frame</code> of vote tallies for the senate. It expects 3 columns. <code>state_abbrev</code> : the
+2-letter U.S. state abbreviation; <code>district</code> : either <code>1</code> or <code>2</code> to distinguish between
+each senator; <code>party</code> : <code>R</code>, <code>D</code> or <code>ID</code>; <code>position</code> : <code>yes</code>, <code>no</code>, <code>present</code>, <code>none</code> for
+how the senator voted.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>a <code>ggplot2</code> object that you can further customize with scales, labels, etc.
+</p>
+
+
+<h3>Note</h3>
+
+<p>No "themeing" is applied to the returned ggplot2 object. You can use  <code>theme_voteogram()</code>
+if you need a base theme.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# what you'd normally do
+sen &lt;- roll_call("senate", 115, 1, 110)
+
+## End(Not run)
+
+# Using a saved object
+sen &lt;- readRDS(system.file("extdata", "sen.rds", package = "voteogram"))
+
+senate_carto(sen)
+</code></pre>
+
+
+</div>

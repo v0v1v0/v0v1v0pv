@@ -1,0 +1,187 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VARselect</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Information criteria and FPE for different VAR(p)</h2>
+
+<h3>Description</h3>
+
+<p>The function returns infomation criteria and final prediction error
+for sequential increasing the lag order up to a VAR(p)-proccess.
+which are based on the same sample size. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">VARselect(y, lag.max = 10, type = c("const", "trend", "both", "none"),
+season = NULL, exogen = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Data item containing the endogenous variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag.max</code></td>
+<td>
+<p>Integer for the highest lag order (default is
+<code>lag.max = 10</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Type of deterministic regressors to include.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>season</code></td>
+<td>
+<p>Inlusion of centered seasonal dummy variables (integer
+value of frequency).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>exogen</code></td>
+<td>
+<p>Inlusion of exogenous variables.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Estimates a VAR by OLS per equation. The model is of the following
+form:
+</p>
+<p style="text-align: center;"><code class="reqn">
+    \bold{y}_t = A_1 \bold{y}_{t-1} + \ldots + A_p \bold{y}_{t-p} + CD_t
+    + \bold{u}_t
+  </code>
+</p>
+
+<p>where <code class="reqn">\bold{y}_t</code> is a <code class="reqn">K \times 1</code> vector of endogenous
+variables and <code class="reqn">u_t</code> assigns a spherical disturbance term of the
+same dimension. The coefficient matrices <code class="reqn">A_1, \ldots, A_p</code> are of
+dimension <code class="reqn">K \times K</code>. In addition, either a constant and/or a
+trend can be included as deterministic regressors as well as centered
+seasonal dummy variables and/or exogenous variables (term <code class="reqn">CD_T</code>, by
+setting the <code>type</code> argument to the corresponding value and/or
+setting <code>season</code> to the desired frequency (integer) and/or providing a
+matrix object for <code>exogen</code>, respectively. The default for <code>type</code> is
+<code>const</code> and for <code>season</code> and <code>exogen</code> the default is
+set to <code>NULL</code>.<br>
+Based on the same sample size the following information criteria and
+the final prediction error are computed:
+</p>
+<p style="text-align: center;"><code class="reqn">
+    AIC(n) = \ln \det(\tilde{\Sigma}_u(n)) + \frac{2}{T}n K^2 \quad, 
+  </code>
+</p>
+
+<p style="text-align: center;"><code class="reqn">
+    HQ(n) = \ln \det(\tilde{\Sigma}_u(n)) + \frac{2 \ln(\ln(T))}{T}n K^2 \quad,
+  </code>
+</p>
+
+<p style="text-align: center;"><code class="reqn">
+    SC(n) = \ln \det(\tilde{\Sigma}_u(n)) + \frac{\ln(T)}{T}n K^2 \quad,
+  </code>
+</p>
+
+<p style="text-align: center;"><code class="reqn">
+    FPE(n) = \left ( \frac{T + n^*}{T - n^*} \right )^K
+    \det(\tilde{\Sigma}_u(n)) \quad ,
+  </code>
+</p>
+
+<p>with <code class="reqn">\tilde{\Sigma}_u (n) = T^{-1} \sum_{t=1}^T \bold{\hat{u}}_t
+    \bold{\hat{u}}_t'</code> and <code class="reqn">n^*</code> is the total number of the
+parameters in each equation and <code class="reqn">n</code> assigns the lag order.  
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with the following elements:<br></p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>selection</code></td>
+<td>
+<p>Vector with the optimal lag number according to each
+criterium.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>criteria</code></td>
+<td>
+<p>A matrix containing the values of the criteria up to
+<code>lag.max</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Bernhard Pfaff</p>
+
+
+<h3>References</h3>
+
+<p>Akaike, H. (1969), Fitting autoregressive models for prediction,
+<em>Annals of the Institute of Statistical Mathematics</em>,
+<b>21</b>: 243-247.
+</p>
+<p>Akaike, H. (1971), Autoregressive model fitting for control,
+<em>Annals of the Institute of Statistical Mathematics</em>,
+<b>23</b>: 163-180.
+</p>
+<p>Akaike, H. (1973), Information theory and an extension of the maximum
+likelihood principle, in B. N. Petrov and F. Csáki (eds.), <em>2nd
+International Symposium on Information Theory</em>, Académia Kiadó,
+Budapest, pp. 267-281.
+</p>
+<p>Akaike, H. (1974), A new look at the statistical model identification,
+<abbr><span class="acronym">IEEE</span></abbr> <em>Transactions on Automatic Control</em>, <b>AC-19</b>:
+716-723.
+</p>
+<p>Hamilton, J. (1994), <em>Time Series Analysis</em>, Princeton
+University Press, Princeton.
+</p>
+<p>Hannan, E. J. and B. G. Quinn (1979), The determination of the order
+of an autoregression, <em>Journal of the Royal Statistical Society</em>,
+<b>B41</b>: 190-195.
+</p>
+<p>Lütkepohl, H. (2006), <em>New Introduction to Multiple Time Series
+Analysis</em>, Springer, New York.
+</p>
+<p>Quinn, B. (1980), Order determination for a multivariate
+autoregression, <em>Journal of the Royal Statistical Society</em>,
+<b>B42</b>: 182-185.
+</p>
+<p>Schwarz, G. (1978), Estimating the dimension of a model, <em>Annals
+of Statistics</em>, <b>6</b>: 461-464.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VAR</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Canada)
+VARselect(Canada, lag.max = 5, type="const")
+</code></pre>
+
+
+</div>

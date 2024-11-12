@@ -1,0 +1,130 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Otlog</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> One-truncated Logarithmic Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function,
+quantile function,
+and random generation
+for the one-truncated logarithmic distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dotlog(x, shape, log = FALSE)
+potlog(q, shape, log.p = FALSE)
+qotlog(p, shape)
+rotlog(n, shape)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+
+<p>Vector of quantiles. For the density, it should be a vector
+with integer values <code class="reqn">&gt; 1</code> in order for the probabilities
+to be positive.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>vector of probabilities.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Same as in <code>runif</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+
+<p>The parameter value <code class="reqn">c</code> described in in <code>logff</code>.
+Here it is called <code>shape</code> because <code class="reqn">0&lt;c&lt;1</code> is the range.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log, log.p</code></td>
+<td>
+
+<p>Logical.
+If <code>log.p = TRUE</code> then all probabilities <code>p</code> are
+given as <code>log(p)</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The one-truncated logarithmic distribution is a logarithmic
+distribution but with the probability of a one being zero. The
+other probabilities are scaled to add to unity.
+Some more details are given in <code>logff</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dotlog</code> gives the density,
+<code>potlog</code> gives the distribution function,
+<code>qotlog</code> gives the quantile function, and
+<code>rotlog</code> generates random deviates.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Given some response data, the <span class="pkg">VGAM</span> family function
+<code>otlog</code> estimates the parameter <code>shape</code>.
+Function <code>potlog()</code> suffers from the problems that
+<code>plog</code> sometimes has.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>Gaitdlog</code>,
+<code>otlog</code>,
+<code>rlog</code>,
+<code>Oilog</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dotlog(1:20, 0.5)
+rotlog(20, 0.5)
+
+## Not run:  shape &lt;- 0.8; x &lt;- 1:10
+plot(x, dotlog(x, shape = shape), type = "h", ylim = 0:1,
+     sub = "shape=0.8", las = 1, col = "blue", ylab = "Probability",
+     main = "1-truncated logarithmic distn: blue=PMF; orange=CDF")
+lines(x+0.1, potlog(x, shape), col = "orange", lty = 3, type = "h") 
+## End(Not run)
+</code></pre>
+
+
+</div>

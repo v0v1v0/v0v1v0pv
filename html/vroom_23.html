@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>locale</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create locales</h2>
+
+<h3>Description</h3>
+
+<p>A locale object tries to capture all the defaults that can vary between
+countries. You set the locale in once, and the details are automatically
+passed on down to the columns parsers. The defaults have been chosen to
+match R (i.e. US English) as closely as possible. See
+<code>vignette("locales")</code> for more details.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">locale(
+  date_names = "en",
+  date_format = "%AD",
+  time_format = "%AT",
+  decimal_mark = ".",
+  grouping_mark = ",",
+  tz = "UTC",
+  encoding = "UTF-8"
+)
+
+default_locale()
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>date_names</code></td>
+<td>
+<p>Character representations of day and month names. Either
+the language code as string (passed on to <code>date_names_lang()</code>)
+or an object created by <code>date_names()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>date_format, time_format</code></td>
+<td>
+<p>Default date and time formats.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>decimal_mark, grouping_mark</code></td>
+<td>
+<p>Symbols used to indicate the decimal
+place, and to chunk larger numbers. Decimal mark can only be <code style="white-space: pre;">⁠,⁠</code> or
+<code>.</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tz</code></td>
+<td>
+<p>Default tz. This is used both for input (if the time zone isn't
+present in individual strings), and for output (to control the default
+display). The default is to use "UTC", a time zone that does not use
+daylight savings time (DST) and hence is typically most useful for data.
+The absence of time zones makes it approximately 50x faster to generate
+UTC times than any other time zone.
+</p>
+<p>Use <code>""</code> to use the system default time zone, but beware that this
+will not be reproducible across systems.
+</p>
+<p>For a complete list of possible time zones, see <code>OlsonNames()</code>.
+Americans, note that "EST" is a Canadian time zone that does not have
+DST. It is <em>not</em> Eastern Standard Time. It's better to use
+"US/Eastern", "US/Central" etc.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>encoding</code></td>
+<td>
+<p>Default encoding.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">locale()
+locale("fr")
+
+# South American locale
+locale("es", decimal_mark = ",")
+</code></pre>
+
+
+</div>

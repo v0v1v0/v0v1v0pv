@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>centerPointRasterTemplate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Center Point Raster Template</h2>
+
+<h3>Description</h3>
+
+<p>Creates a <code>SpatRaster</code> template from a
+<code>SpatVector</code> point object in which the raster cells
+are centered on the vector points.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">centerPointRasterTemplate(rawPointData)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>rawPointData</code></td>
+<td>
+<p>A <code>SpatVector</code> object with points
+that will represent the center of each cell in the output
+template.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p><code>rawPointData</code> is a <code>SpatVector</code> object that
+contains x and y coordinates.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An empty <code>SpatRaster</code> designed to serve as a template for
+rasterizing <code>SpatVector</code> objects.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rasterize</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(terra)
+
+# Create point grid
+coords &lt;- data.frame(x = rep(seq(1:5), times = 5),
+                    y = unlist(lapply(1:5, FUN = function(x) {
+                      rep(x, times = 5)})))
+
+# Create data and add NAs to simulate uneven bottom depths
+dd &lt;- data.frame(SURFACE = 1:25,
+                d5M = 6:30,
+                d10M = 11:35,
+                d25M = 16:40)
+dd$d25M[c(1:5, 18:25)] &lt;- NA
+dd$d10M[c(3:5, 21:23)] &lt;- NA
+dd$d5M[c(4, 22)] &lt;- NA
+
+dd[,c("x","y")] &lt;- coords
+
+# Create SpatialPointsDataFrame
+sp &lt;- vect(dd, geom = c("x", "y"))
+
+# Here's the function
+template &lt;- centerPointRasterTemplate(rawPointData = sp)
+class(template)
+
+</code></pre>
+
+
+</div>

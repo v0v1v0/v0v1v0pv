@@ -1,0 +1,78 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visualize_viewshed</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>visualize_viewshed</h2>
+
+<h3>Description</h3>
+
+<p>The visualize_viewshed function is designed for the visualization
+of a viewshed analysis, providing users with various options for visualizing
+the results. The function works with a viewshed object and offers multiple
+plotting and output types.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visualize_viewshed(viewshed, plottype = "", outputtype = "")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>viewshed</code></td>
+<td>
+<p>Viewshed object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plottype</code></td>
+<td>
+<p>Character, specifying the type of visualization ("polygon" or
+"raster").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outputtype</code></td>
+<td>
+<p>Character, specifying the type of output object ("raster"
+or "polygon").</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Visualized viewshed as either a raster or polygon object,
+depending on the outputtype specified.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Load a viewpoint
+test_viewpoint &lt;- sf::read_sf(system.file("test_viewpoint.shp", package = "viewscape"))
+# load dsm raster
+dsm &lt;- terra::rast(system.file("test_dsm.tif", package ="viewscape"))
+#Compute viewshed
+viewshed &lt;- compute_viewshed(dsm = dsm,
+                             viewpoints = test_viewpoint,
+                             offset_viewpoint = 6)
+# Visualize the viewshed as polygons
+visualize_viewshed(viewshed, plottype = "polygon")
+# Visualize the viewshed as a raster
+visualize_viewshed(viewshed, plottype = "raster")
+# Get the visualized viewshed as a polygon object
+polygon_viewshed &lt;- visualize_viewshed(viewshed,
+                                       plottype = "polygon",
+                                       outputtype = "polygon")
+
+</code></pre>
+
+
+</div>

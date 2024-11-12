@@ -1,0 +1,206 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vsp</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Semi-Parametric Factor Analysis via Vintage Sparse PCA</h2>
+
+<h3>Description</h3>
+
+<p>This code implements TODO.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vsp(x, rank, ...)
+
+## Default S3 method:
+vsp(x, rank, ...)
+
+## S3 method for class 'matrix'
+vsp(
+  x,
+  rank,
+  ...,
+  center = FALSE,
+  recenter = FALSE,
+  degree_normalize = TRUE,
+  renormalize = FALSE,
+  tau_row = NULL,
+  tau_col = NULL,
+  kaiser_normalize_u = FALSE,
+  kaiser_normalize_v = FALSE,
+  rownames = NULL,
+  colnames = NULL
+)
+
+## S3 method for class 'Matrix'
+vsp(
+  x,
+  rank,
+  ...,
+  center = FALSE,
+  recenter = FALSE,
+  degree_normalize = TRUE,
+  renormalize = FALSE,
+  tau_row = NULL,
+  tau_col = NULL,
+  kaiser_normalize_u = FALSE,
+  kaiser_normalize_v = FALSE,
+  rownames = NULL,
+  colnames = NULL
+)
+
+## S3 method for class 'dgCMatrix'
+vsp(
+  x,
+  rank,
+  ...,
+  center = FALSE,
+  recenter = FALSE,
+  degree_normalize = TRUE,
+  renormalize = FALSE,
+  tau_row = NULL,
+  tau_col = NULL,
+  kaiser_normalize_u = FALSE,
+  kaiser_normalize_v = FALSE,
+  rownames = NULL,
+  colnames = NULL
+)
+
+## S3 method for class 'igraph'
+vsp(x, rank, ..., edge_weights = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Either a graph adjacency matrix, igraph::igraph or
+tidygraph::tbl_graph. If <code>x</code> is a matrix or Matrix::Matrix
+then <code>x[i, j]</code> should correspond to the edge going from node <code>i</code>
+to node <code>j</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rank</code></td>
+<td>
+<p>The number of factors to calculate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>These dots are for future extensions and must be empty.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>center</code></td>
+<td>
+<p>Should the adjacency matrix be row <em>and</em> column centered?
+Defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>recenter</code></td>
+<td>
+<p>Should the varimax factors be re-centered around the
+original factor means? Only used when <code>center = TRUE</code>, defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>degree_normalize</code></td>
+<td>
+<p>Should the regularized graph laplacian be used instead of the
+raw adjacency matrix? Defaults to <code>TRUE</code>. If <code>center = TRUE</code>, <code>A</code> will
+first be centered and then normalized.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>renormalize</code></td>
+<td>
+<p>Should the regularized graph laplacian be used instead of the
+raw adjacency matrix? Defaults to <code>TRUE</code>. If <code>center = TRUE</code>, <code>A</code> will
+first be centered and then normalized.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tau_row</code></td>
+<td>
+<p>Row regularization term. Default is <code>NULL</code>, in which case
+we use the row degree. Ignored when <code>degree_normalize = FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tau_col</code></td>
+<td>
+<p>Column regularization term. Default is <code>NULL</code>, in which case
+we use the column degree. Ignored when <code>degree_normalize = FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kaiser_normalize_u</code></td>
+<td>
+<p>Whether or not to use Kaiser normalization
+when rotating the left singular vectors <code>U</code>. Defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kaiser_normalize_v</code></td>
+<td>
+<p>Whether or not to use Kaiser normalization
+when rotating the right singular vectors <code>V</code>. Defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rownames</code></td>
+<td>
+<p>Character vector of row names of <code>x</code>. These row names
+are propagated into the row names of the <code>U</code> and <code>Z</code>. Defaults
+to <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colnames</code></td>
+<td>
+<p>Character vector of column names of <code>x</code>. These column names
+are propagated into the row names of the <code>V</code> and <code>Y</code>. Defaults
+to <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>edge_weights</code></td>
+<td>
+<p>When <code>x</code> is an igraph::igraph, an edge attribute
+to use to form a weighted adjacency matrix.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Sparse SVDs use <code>RSpectra</code> for performance.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>vsp</code>. TODO: Details
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(LRMF3)
+
+vsp(ml100k, rank = 2)
+
+</code></pre>
+
+
+</div>

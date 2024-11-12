@@ -1,0 +1,49 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>calculate_category_percentages</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate the percentage of categories in a data vector</h2>
+
+<h3>Description</h3>
+
+<p>This function calculates the percentage of each category in a given data vector and returns the top   10 categories along with their percentages.
+If the data vector is of Date class, it is converted to POSIXct. If the sum of the percentages is not   100%, an "Other" category is added to make up the difference, but only if the number of unique values exceeds  10.
+If the data vector is of POSIXct class and the smallest percentage is less than   1%, the function returns "Not enough occurrences."
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">calculate_category_percentages(data_vector)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>data_vector</code></td>
+<td>
+<p>A vector of categorical data.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>A character string detailing the top   10 categories and their percentages, or a special message indicating not enough occurrences or unsupported data type.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Example with a character vector
+data_vector &lt;- c("cat", "dog", "bird", "cat", "dog", "cat", "other")
+calculate_category_percentages(data_vector)
+
+# Example with a Date vector
+data_vector &lt;- as.Date(c("2020-01-01", "2020-01-02", "2020-01-03"))
+calculate_category_percentages(data_vector)
+</code></pre>
+
+
+</div>

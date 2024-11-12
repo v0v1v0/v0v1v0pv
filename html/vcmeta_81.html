@@ -1,0 +1,214 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>replicate.stdmean.ps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares and combines paired-samples standardized mean differences in original and
+follow-up studies</h2>
+
+<h3>Description</h3>
+
+<p>This function computes confidence intervals from an original study and a follow-up
+study where the effect size is a paired-samples standardized mean difference.
+Confidence intervals for the difference and average effect size are also computed.
+Equality of variances within or across studies is not assumed. The confidence level
+for the difference is 1 – 2*alpha, which is recommended for equivalence testing.
+Square root unweighted variances and single-condition standard deviation are options
+for the standardizer.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">replicate.stdmean.ps(
+  alpha,
+  m11,
+  m12,
+  sd11,
+  sd12,
+  cor1,
+  n1,
+  m21,
+  m22,
+  sd21,
+  sd22,
+  cor2,
+  n2,
+  stdzr
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m11</code></td>
+<td>
+<p>estimated mean for group 1 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m12</code></td>
+<td>
+<p>estimated mean for group 2 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd11</code></td>
+<td>
+<p>estimated SD for group 1 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd12</code></td>
+<td>
+<p>estimated SD for group 2 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor1</code></td>
+<td>
+<p>estimated correlation of paired observations in orginal study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>sample size in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m21</code></td>
+<td>
+<p>estimated mean for group 1 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m22</code></td>
+<td>
+<p>estimated mean for group 2 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd21</code></td>
+<td>
+<p>estimated SD for group 1 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd22</code></td>
+<td>
+<p>estimated SD for group 2 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor2</code></td>
+<td>
+<p>estimated correlation of paired observations in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>sample size in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stdzr</code></td>
+<td>
+
+<ul>
+<li>
+<p> set to 0 for square root unweighted average variance standardizer
+</p>
+</li>
+<li>
+<p> set to 1 for measurement 1 SD standardizer
+</p>
+</li>
+<li>
+<p> set to 2 for measurement 2 SD standardizer
+</p>
+</li>
+</ul>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A 4-row matrix. The rows are:
+</p>
+
+<ul>
+<li>
+<p> Row 1 summarizes the original study
+</p>
+</li>
+<li>
+<p> Row 2 summarizes the follow-up study
+</p>
+</li>
+<li>
+<p> Row 3 estimates the difference in standardized mean differences
+</p>
+</li>
+<li>
+<p> Row 4 estimates the average standardized mean difference
+</p>
+</li>
+</ul>
+<p>The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - standardized mean difference estimate (single study, difference, average)
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2021).
+“Design and analysis of replication studies.”
+<em>Organizational Research Methods</em>, <b>24</b>(3), 513–529.
+ISSN 1094-4281, <a href="https://doi.org/10.1177/1094428120911088">doi:10.1177/1094428120911088</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">replicate.stdmean.ps(alpha = .05, 86.22, 70.93, 14.89, 12.32, .765, 20, 
+                                  84.81, 77.24, 15.68, 16.95, .702, 75, 0)
+
+# Should return:
+#                         Estimate         SE        LL        UL
+#  Orginal:              1.0890300 0.22915553 0.6697353 1.5680085
+#  Follow-up:            0.4604958 0.09590506 0.2756687 0.6516096
+#  Original - Follow-up: 0.6552328 0.24841505 0.2466264 1.0638392
+#  Average:              0.7747629 0.12420752 0.5313206 1.0182052
+
+
+</code></pre>
+
+
+</div>

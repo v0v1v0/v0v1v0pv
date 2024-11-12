@@ -1,0 +1,113 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vComp</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Amino Acid Disbutions by Position at Various Length/Charge</h2>
+
+<h3>Description</h3>
+
+<p>Generates the probability of each amino acid to appear in each position within a peptide
+of a specific length or length/charge combination. Can either be the raw probability or the
+ratio between the probabilities of 2 peptide sets.
+</p>
+<p>Weights are centered at 1, meaning that there is no change in probability or signal from the
+global set. Weights above 1 indicate higher probability at the given position while
+weights below 1 indicate lower probability at the given position.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vComp.lc(Prot, ProtG, Length, Charge)
+
+vComp.l(Prot, ProtG, Length)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Prot</code></td>
+<td>
+
+<p>An <code>R</code> object, generally a <code>data.frame</code>. Contains peptides that are considered "hits"
+or selected peptides with their length,charge, and signal information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ProtG</code></td>
+<td>
+
+<p>An <code>R</code> object, generally a <code>data.frame</code>. Contains the set of
+peptides from which the argument <code>Prot</code> were selected with their
+corresponding length, charge, and signal information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Length</code></td>
+<td>
+
+<p>An <code>integer</code> value, indicating the desired peptide length to analyze
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Charge</code></td>
+<td>
+
+<p>An <code>integer</code> value, indicating the desired charge to analyze
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If raw probabilities are desired, the same object can be loaded into both the
+<code>Prot</code> and <code>ProtG</code> arguments.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns a <code>data.frame</code> that shows weights for each amino acid at each position
+within the peptide of the selected length. Also output a positional heatmap using the
+package <span class="pkg">ggplot2</span>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Cody Moore
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vMotif</code>, <code>genPep</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">protEx.Motif &lt;- data.frame(Peptides = c("PWRGPWARVGSG","GYNRVGQGSG","PNGYRSGVKGSG","GSG"),
+Length = c(12,10,12,3),Charge = c(2,1,2,0),Kd = c(0.2572361,2.8239730,3.3911868,281.3058),
+C_6uM = c(65011.48,47462.24,24778,2613.03),C_6uM2 = c(62637.81,20723.85,21313.67,2300.216))
+
+## Length/Charge Example ##
+
+vComp.lcEx &lt;- vComp.lc(protEx.Motif,protEx.Motif, 12,2)
+
+## Length Example ##
+
+vComp.lEx &lt;- vComp.l(protEx.Motif,protEx.Motif, 12)
+</code></pre>
+
+
+</div>

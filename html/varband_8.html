@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>varband_path</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Solve main optimization problem along a path of lambda</h2>
+
+<h3>Description</h3>
+
+<p>Compute the varband estimates along a path of tuning parameter values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">varband_path(S, w = FALSE, lasso = FALSE, lamlist = NULL, nlam = 60,
+  flmin = 0.01)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>S</code></td>
+<td>
+<p>The sample covariance matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w</code></td>
+<td>
+<p>Logical. Should we use weighted version of the penalty or not? If <code>TRUE</code>, we use general weight. If <code>FALSE</code>, use unweighted penalty. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lasso</code></td>
+<td>
+<p>Logical. Should we use l1 penalty instead of hierarchical group lasso penalty? Note that by using l1 penalty, we lose the banded structure in the resulting estimate. And when using l1 penalty, the becomes CSCS (Convex Sparse Cholesky Selection) introduced in Khare et al. (2016). Default value for <code>lasso</code> is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lamlist</code></td>
+<td>
+<p>A list of non-negative tuning parameters <code>lambda</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nlam</code></td>
+<td>
+<p>If lamlist is not provided, create a lamlist with length <code>node</code>. Default is 60.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>flmin</code></td>
+<td>
+<p>if lamlist is not provided, create a lamlist with ratio of the smallest and largest lambda in the list. Default is 0.01.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list object containing </p>
+
+<dl>
+<dt>path: </dt>
+<dd>
+<p>A array of dim (<code>p</code>, <code>p</code>, <code>nlam</code>) of estimates of L</p>
+</dd>
+<dt>lamlist: </dt>
+<dd>
+<p>a grid values of tuning parameters</p>
+</dd>
+</dl>
+<h3>See Also</h3>
+
+<p><code>varband</code> <code>varband_cv</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(123)
+n &lt;- 50
+true &lt;- varband_gen(p = 50, block = 5)
+x &lt;- sample_gen(L = true, n = n)
+S &lt;- crossprod(scale(x, center = TRUE, scale = FALSE))/n
+path_res &lt;- varband_path(S = S, w = FALSE, nlam = 40, flmin = 0.03)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,60 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>progression</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>general progression function</h2>
+
+<h3>Description</h3>
+
+<p><code>progression</code> returns the progression criterion with four methods. plr.nouri.2012, vfi, schell2014, cigts
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">progression(vfseries, method = c("plr.nouri.2012", "vfi", "schell2014",
+  "cigts"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vfseries</code></td>
+<td>
+<p>is a data frame. MUST contain the following columns: yearsfollowed', and 'eyeid'. Rows represent the single measurements. Other requirements, such as number of minimum measurements (rows), and necessary VF measurements could be found in each progression method's documentation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>selected from one or more from: plr.nouri.2012, vfi, schell2014, cigts. Default it ...</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>"stable", "worsening", or "improving" of measurements in <code>measmatrix</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4495761/">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4495761/</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vfseries)
+progression(vfseries)
+progression(vfseries[vfseries$eyeid == 1,])
+progression(vfseries[vfseries$eyeid == 2,])
+progression(vfseries, method=c("cigts"))
+</code></pre>
+
+
+</div>

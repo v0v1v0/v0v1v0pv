@@ -1,0 +1,275 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hdeffsev</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Hauck-Donner Effect: Severity Measures </h2>
+
+<h3>Description</h3>
+
+<p>Computes the severity of the
+Hauck-Donner effect for each regression coefficient
+of a VGLM regression.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hdeffsev(x, y, dy, ddy, allofit = FALSE, eta0 = 0, COPS0 = eta0,
+         severity.table = c("None", "Faint", "Weak",
+             "Moderate", "Strong", "Extreme", "Undetermined"))
+hdeffsev2(x, y, dy, ddy, allofit = FALSE, ndepends = FALSE,
+          eta0 = 0,
+          severity.table = c("None", "Faint", "Weak",
+              "Moderate", "Strong", "Extreme",
+              "Undetermined")[if (ndepends) TRUE else
+              c(1, 4, 6, 7)], tol0 = 0.1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, y</code></td>
+<td>
+
+<p>Numeric vectors;
+<code>x</code> are the estimates (sorted), and
+<code>y</code> are the signed Wald statistics.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dy, ddy</code></td>
+<td>
+
+<p>Numeric vectors;
+the first and second derivatives of the Wald statistics.
+They can be computed by <code>hdeff</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allofit</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> then other quantities are
+returned in a list.
+The default is a vector with elements selected from
+the argument <code>severity.table</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>severity.table</code></td>
+<td>
+
+<p>Character vector with 6 values plus
+the last value for initialization.
+Usually users should not assign anything to
+this argument.
+</p>
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eta0</code></td>
+<td>
+
+<p>Numeric. The hypothesized value.
+The default is appropriate for most symmetric
+<code>binomialff</code> links, and also
+for <code>poissonff</code> regression
+with the natural parameter.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ndepends</code></td>
+<td>
+
+<p>Logical. Use boundaries that depend on the
+sample size <code class="reqn">n</code>?
+For <code>hdeffsev2</code> the default is to use boundaries
+that do not depend on <code class="reqn">n</code>, and consequently
+there are fewer severity measures.
+These do not use the normal or tangent lines;
+instead they are based only on the signs of
+<code>dy</code> and <code>ddy</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>COPS0</code></td>
+<td>
+
+<p>Numeric. See Yee (2023).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol0</code></td>
+<td>
+
+<p>Numeric. Any estimate whose absolute value is less than
+<code>tol0</code> is assigned the first value of
+the argument <code>severity.table</code>, i.e., none.
+This is to handle a singularity at the origin:
+the estimates might be extremely close to 0.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><em>Note: The function
+<code>hdeffsev</code>
+has a bug or two in it but
+they should be fixed later this year (2024).</em>
+</p>
+
+<p>Function <code>hdeffsev</code> is currently rough-and-ready.
+It is possible to use the first two derivatives obtained
+from <code>hdeff</code> to categorize the severity of the
+the Hauck-Donner effect (HDE).
+It is effectively assumed that, starting at
+the origin
+and going right,
+the curve is made up of a convex segment followed by
+a concave segment and then the convex segment.
+Midway in the concave segment the first
+derivative is 0, and
+beyond that the HDE is really manifest because the
+derivative remains negative.
+</p>
+<p>For <code>"None"</code> the estimate lies on the convex
+part of the curve near the origin, hence there is
+very little HDE at all.
+</p>
+<p>For <code>"Weak"</code> the estimate lies on the
+concave part of the curve but the Wald statistic is still
+increasing as estimate gets away from 0, hence it is only
+a mild form of the HDE.
+</p>
+
+
+
+
+
+
+<p>For <code>"Moderate"</code>,
+<code>"Strong"</code>
+and <code>"Extreme"</code>
+the Wald statistic is
+decreasing as the estimate gets away from <code>eta0</code>,
+hence it
+really does exhibit the HDE.
+It is recommended that <code>lrt.stat</code> be used
+to compute
+LRT p-values, as they do not suffer from the HDE.
+</p>
+
+
+<h3>Value</h3>
+
+<p>By default this function
+(<code>hdeffsev</code>)
+returns a labelled vector with
+elements selected from
+<code>severity.table</code>.
+If <code>allofit = TRUE</code> then Yee (2022) gives details
+about some of the other list components,
+e.g., a quantity called
+<code>zeta</code> is the normal line projected onto the x-axis,
+and its first derivative gives additional
+information about the position
+of the estimate along the curve.
+</p>
+
+
+<h3>Note</h3>
+
+<p>These functions are likely to change in the short future
+because it is experimental and far from complete.
+Improvements are intended.
+</p>
+<p>The severity measures ideally should be based on
+tangent lines rather than normal lines so that the
+boundaries are independent of the sample size
+<code class="reqn">n</code>. Hence such boundaries differ a little
+from Yee (2022) which had a mixture of such.
+</p>
+<p>The functions were written specifically for
+<code>binomialff</code>, but they should work
+for some other family functions.
+</p>
+<p>Currently,
+in order for <code>"Strong"</code> to be assigned correctly,
+at least one such value is needed on the
+LHS and/or RHS each. From those, two other boundary
+points are obtained so that it creates two intervals.
+</p>
+
+
+
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee.  </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2022).
+On the Hauck-Donner effect in Wald tests:
+Detection, tipping points and parameter space characterization,
+<em>Journal of the American Statistical Association</em>,
+<b>117</b>, 1763–1774.
+<a href="https://doi.org/10.1080/01621459.2021.1886936">doi:10.1080/01621459.2021.1886936</a>.
+</p>
+
+
+<p>Yee, T. W. (2023).
+Some new results concerning the Wald tests and
+the parameter space.
+<em>In review</em>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>seglines</code>,
+<code>hdeff</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">deg &lt;- 4  # myfun is a function that approximates the HDE
+myfun &lt;- function(x, deriv = 0) switch(as.character(deriv),
+  '0' = x^deg * exp(-x),
+  '1' = (deg * x^(deg-1) - x^deg) * exp(-x),
+  '2' = (deg*(deg-1)*x^(deg-2) - 2*deg*x^(deg-1) + x^deg)*exp(-x))
+
+xgrid &lt;- seq(0, 10, length = 101)
+ansm &lt;- hdeffsev(xgrid, myfun(xgrid), myfun(xgrid, deriv = 1),
+                 myfun(xgrid, deriv = 2), allofit = TRUE)
+digg &lt;- 4
+cbind(severity = ansm$sev, 
+      fun      = round(myfun(xgrid), digg),
+      deriv1   = round(myfun(xgrid, deriv = 1), digg),
+      deriv2   = round(myfun(xgrid, deriv = 2), digg),
+      zderiv1  = round(1 + (myfun(xgrid, deriv = 1))^2 +
+                       myfun(xgrid, deriv = 2) * myfun(xgrid), digg))
+</code></pre>
+
+
+</div>

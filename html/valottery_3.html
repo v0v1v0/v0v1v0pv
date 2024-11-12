@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cash.5.2xday</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Cash 5 (twice daily)</h2>
+
+<h3>Description</h3>
+
+<p>Historical data for the Cash 5 twice daily game. Game Play: Pick five
+numbers from 1 through 34. Note: On April 11, 1999, Cash 5 switched
+to twice daily drawings.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cash.5.2xday
+</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 11,164 rows and 7 variables:
+</p>
+
+<dl>
+<dt>date</dt>
+<dd>
+<p>date of draw</p>
+</dd>
+<dt>time</dt>
+<dd>
+<p>time of drawing: day or night</p>
+</dd>
+<dt>N1</dt>
+<dd>
+<p>1st number in order</p>
+</dd>
+<dt>N2</dt>
+<dd>
+<p>2nd number in order</p>
+</dd>
+<dt>N3</dt>
+<dd>
+<p>3rd number in order</p>
+</dd>
+<dt>N4</dt>
+<dd>
+<p>4th number in order</p>
+</dd>
+<dt>N5</dt>
+<dd>
+<p>5th number in order</p>
+</dd>
+</dl>
+<h3>Source</h3>
+
+<p><a href="https://www.valottery.com">https://www.valottery.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">max.days &lt;- apply(subset(cash.5.2xday,time=="day",-(1:2)),1,max)
+max.nights &lt;- apply(subset(cash.5.2xday,time=="night",-(1:2)),1,max)
+op &lt;- par(mfrow=c(1,2))
+hist(max.days)
+hist(max.nights)
+par(op)
+</code></pre>
+
+
+</div>

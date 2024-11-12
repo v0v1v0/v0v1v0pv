@@ -1,0 +1,181 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tableone</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Display a summary Table (i.e. table one)</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#questioning"><img src="../help/figures/lifecycle-questioning.svg" alt="[Questioning]"></a>
+Wrapper function to produce a summary table (i.e. Table One).
+Create and render a summary table for a dataset.
+A typical example of a summary table are "table one", the first table in an applied medical research manuscript.
+</p>
+<p>Calculate summary statistics and present them in a formatted table
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tableone(
+  data,
+  title,
+  datasource,
+  footnote = "",
+  strata = NULL,
+  overall = TRUE,
+  summary_function = summarize_short,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>The dataframe or tibble to visualize</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>Table title to include in the rendered table. Input is a text string.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>datasource</code></td>
+<td>
+<p>String specifying the datasource underlying the data set</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>footnote</code></td>
+<td>
+<p>Table footnote to include in the rendered table. Input is a text string.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>strata</code></td>
+<td>
+<p>Character vector with column names to use for
+stratification in the summary table. Default: NULL , which indicates no stratification.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overall</code></td>
+<td>
+<p>If TRUE, the summary statistics for the overall dataset are also calculated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>summary_function</code></td>
+<td>
+<p>A function defining summary statistics for numeric and categorical values
+Pre-implemented functions are summarize_long and summarize_short</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Pass options to render_table</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A table-like data structure, possibly interactive depending on the choice of the engine
+</p>
+
+
+<h3>Example Output</h3>
+
+<p>tableone(engine = "gt")
+</p>
+<p><img src="../help/figures/tableone_gt_ex.png" width="65%" alt="tableone_gt_ex.png"></p>
+<p>tableone(engine = "DT")
+</p>
+<p><img src="../help/figures/tableone_DT_ex.png" width="65%" alt="tableone_DT_ex.png"></p>
+<p>tableone(engine = "kable")
+</p>
+<p><img src="../help/figures/tableone_kable_html_ex.png" width="65%" alt="tableone_kable_html_ex.png"></p>
+<p>tableone(engine = "kable", output_format = "latex")
+</p>
+<p><img src="../help/figures/tableone_kable_latex_ex.png" width="65%" alt="tableone_kable_latex_ex.png"></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# metadata for table
+t1_title &lt;- "Cohort Summary"
+t1_ds &lt;- "ADaM Interim Dataset for Time-to-Event Analysis"
+t1_fn &lt;- "My table one footnote"
+
+
+## table by treatment - without overall and render with GT
+tbl_gt &lt;-
+  adtte %&gt;%
+  dplyr::filter(SAFFL == "Y") %&gt;%
+  dplyr::select(AGE, AGEGR1, SEX, EVNTDESC, TRTA) %&gt;%
+  visR::tableone(
+    strata = "TRTA",
+    overall = FALSE,
+    title = t1_title,
+    datasource = t1_ds,
+    footnote = t1_fn,
+    engine = "gt"
+  )
+
+## table by treatment - without overall and render with DT
+tbl_DT &lt;-
+  adtte %&gt;%
+  dplyr::filter(SAFFL == "Y") %&gt;%
+  dplyr::select(AGE, AGEGR1, SEX, EVNTDESC, TRTA) %&gt;%
+  visR::tableone(
+    strata = "TRTA",
+    overall = FALSE,
+    title = t1_title,
+    datasource = t1_ds,
+    footnote = t1_fn,
+    engine = "DT"
+  )
+
+## table by treatment - without overall and render with kable
+tbl_kable_html &lt;-
+  adtte %&gt;%
+  dplyr::filter(SAFFL == "Y") %&gt;%
+  dplyr::select(AGE, AGEGR1, SEX, EVNTDESC, TRTA) %&gt;%
+  visR::tableone(
+    strata = "TRTA",
+    overall = FALSE,
+    title = t1_title,
+    datasource = t1_ds,
+    footnote = t1_fn,
+    engine = "kable"
+  )
+
+## table by treatment - without overall and render with kable as
+## a latex table format rather than html
+tbl_kable_latex &lt;-
+  adtte %&gt;%
+  dplyr::filter(SAFFL == "Y") %&gt;%
+  dplyr::select(AGE, AGEGR1, SEX, EVNTDESC, TRTA) %&gt;%
+  visR::tableone(
+    strata = "TRTA",
+    overall = FALSE,
+    title = t1_title,
+    datasource = t1_ds,
+    footnote = t1_fn,
+    output_format = "latex",
+    engine = "kable"
+  )
+
+</code></pre>
+
+
+</div>

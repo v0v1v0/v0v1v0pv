@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>testIntersection</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Test Intersection</h2>
+
+<h3>Description</h3>
+
+<p>Tests whether two rasters overlap. Used in
+<code style="white-space: pre;">⁠\code{\link[voluModel:diversityStack]{diversityStack}}⁠</code>
+function to verify all rasters in list overlap with the
+template raster.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">testIntersection(a, b)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>a</code></td>
+<td>
+<p>The first <code>SpatRaster</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b</code></td>
+<td>
+<p>The second <code>SpatRaster</code> object</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A logical vector stating whether the two
+inputs overlap
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(terra)
+rast1 &lt;- rast(ncol=10, nrow=10)
+values(rast1) &lt;- rep(0:1, 50)
+
+rast2 &lt;- rast(ncol=10, nrow=10)
+values(rast2) &lt;- c(rep(0, 50), rep(1,50))
+
+testIntersection(rast1, rast2)
+
+rast1 &lt;- crop(rast1, ext(10, 20, 30, 40))
+rast2 &lt;- crop(rast2, ext(-20, -10, -40, -30))
+
+testIntersection(rast1, rast2)
+
+</code></pre>
+
+
+</div>

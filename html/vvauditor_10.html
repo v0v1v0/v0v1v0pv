@@ -1,0 +1,73 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>check_no_duplicates_in_group</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check for No Duplicates in Group</h2>
+
+<h3>Description</h3>
+
+<p>This function checks if there is exactly one row per group in the provided dataframe.
+If there are multiple rows per group, the assertion fails.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">check_no_duplicates_in_group(
+  dataframe,
+  group_variables = NULL,
+  assertion_fail = "stop"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dataframe</code></td>
+<td>
+<p>The dataframe to be checked.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group_variables</code></td>
+<td>
+<p>The group variables as a character vector. The default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>assertion_fail</code></td>
+<td>
+<p>How the function reacts to a failure. This can be a "warning", where only a warning is given on the failure,
+or a "stop", where the function execution is stopped and the message is displayed, or an "AssertCollection", where the failure message is added to an assertion collection.</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p>Other assertions: 
+<code>check_numeric_or_integer_type()</code>,
+<code>check_posixct_type()</code>
+</p>
+<p>Other tests: 
+<code>check_double_columns()</code>,
+<code>check_numeric_or_integer_type()</code>,
+<code>check_posixct_type()</code>,
+<code>duplicates_in_column()</code>,
+<code>test_all_equal()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Create a dataframe with some groups having more than one row
+dataframe &lt;- data.frame(a = c(1, 1, 2), b = c(2, 2, 3), c = c("x", "x", "y"))
+# Check the uniqueness of rows per group
+check_no_duplicates_in_group(dataframe)
+</code></pre>
+
+
+</div>

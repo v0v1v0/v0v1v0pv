@@ -1,0 +1,122 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>get_biomarker_dataset</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Import the Biomarker data set</h2>
+
+<h3>Description</h3>
+
+<p>This function retrieves the Biomarker data set, a data set containing raw
+fluorescence amplification data: 24,576 amplification curves, of 50 cycles
+each.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">get_biomarker_dataset()
+</code></pre>
+
+
+<h3>Details</h3>
+
+<p>Data was gathered from Ruijter et al.
+(2013), <a href="https://doi.org/10.1016/j.ymeth.2012.08.011">doi:10.1016/j.ymeth.2012.08.011</a> but original source is by Vermeulen
+et al. (2009), <a href="https://doi.org/10.1016/S1470-2045%2809%2970154-8">doi:10.1016/S1470-2045(09)70154-8</a>.
+The tidy version of the data is kept at the repository of the source of
+<code>{vermeulen}</code> package. This function fetches such data and thus requires
+internet connection. It takes a few seconds to run.
+</p>
+<p>The Biomarker data set comprises a set of 59 targets previously identified as
+a 59-mRNA gene expression signature, that has been developed and validated for
+improved outcome prediction of children with neuroblastoma. In short, 59
+biomarkers and 5 reference genes were measured in 8 µl reactions in a
+384-well plate using the LightCycler480 SYBR Green Master (Roche) in a sample
+maximization experiment design. The 59 genes were carefully selected as being
+previously reported as prognostic genes in neuroblastoma in at least two
+independent studies. Each plate contained 366 cDNA samples (n = 1) from
+primary tumor biopsies, a 5-point 10-fold serial dilution series based on an
+external oligonucleotide standard (n = 3, from 150,000 to 15 copies), and a
+no template control (NTC, n = 3). Raw (baseline uncorrected) fluorescent data
+were exported from the LightCycler480 instrument software.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame with 24,576 amplification curves, of 50 cycles each:
+</p>
+
+<dl>
+<dt><code>plate</code></dt>
+<dd>
+<p>Plate identifier. Because one plate was used per gene, the
+name of the plate is the same as the values in <code>target</code>.</p>
+</dd>
+<dt><code>well</code></dt>
+<dd>
+<p>Well identifier.</p>
+</dd>
+<dt><code>dye</code></dt>
+<dd>
+<p>In all reactions the SYBR Green I master mix (Roche) was used,
+so the value is always <code>"SYBR"</code>.</p>
+</dd>
+<dt><code>target</code></dt>
+<dd>
+<p>Target identifier, in almost all cases the name of a gene.</p>
+</dd>
+<dt><code>target_type</code></dt>
+<dd>
+<p>Target type: either target of interest (<code>"toi"</code>) or
+reference target (<code>"ref"</code>).</p>
+</dd>
+<dt><code>sample</code></dt>
+<dd>
+<p>Sample identifier.</p>
+</dd>
+<dt><code>sample_type</code></dt>
+<dd>
+<p>Sample type.</p>
+</dd>
+<dt><code>copies</code></dt>
+<dd>
+<p>Standard copy number.</p>
+</dd>
+<dt><code>dilution</code></dt>
+<dd>
+<p>Dilution factor. Higher number means greater dilution.</p>
+</dd>
+<dt><code>cycle</code></dt>
+<dd>
+<p>PCR cycle.</p>
+</dd>
+<dt><code>fluor</code></dt>
+<dd>
+<p>Raw fluorescence values.</p>
+</dd>
+</dl>
+<h3>Source</h3>
+
+
+<ul>
+<li> <p><a href="https://medischebiologie.nl/wp-content/uploads/2019/02/qpcrdatamethods.zip">https://medischebiologie.nl/wp-content/uploads/2019/02/qpcrdatamethods.zip</a>
+</p>
+</li>
+<li> <p><a href="https://github.com/ramiromagno/vermeulen/tree/main/data-raw">https://github.com/ramiromagno/vermeulen/tree/main/data-raw</a>
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Takes ~ 10-30 sec
+head(get_biomarker_dataset())
+
+
+</code></pre>
+
+
+</div>

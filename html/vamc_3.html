@@ -1,0 +1,192 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>buildCurve</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Build Curve</h2>
+
+<h3>Description</h3>
+
+<p>Bootstrap discount factors from a yield curve.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">buildCurve(
+  swapRates,
+  tenors,
+  fixFreq = 6,
+  fixDCC = "Thirty360",
+  fltFreq = 6,
+  fltDCC = "Thirty360",
+  calendar = "General",
+  bdc = c("Actual", "Preceding", "Following", "Modified_Prec", "Modified_Foll"),
+  curveDate,
+  numSetDay,
+  yieldCurveDCC = "Thirty360",
+  holidays = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>swapRates</code></td>
+<td>
+<p>A vector of doubles of swap rates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tenors</code></td>
+<td>
+<p>A vector of integers of corresponding tenors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fixFreq</code></td>
+<td>
+<p>An integer of fixed leg frequency of payment in months. 
+</p>
+<p>Default is 6, semi-annual payments.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fixDCC</code></td>
+<td>
+<p>A string of fixed leg day count convention from four options:
+"Thirty360", "ACT360", "ACT365", or "ACTACT". 
+</p>
+<p>Default is "Thirty360".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fltFreq</code></td>
+<td>
+<p>An integer of floating leg frequency of payment in months. 
+</p>
+<p>Default is 6, semi-annual payments.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fltDCC</code></td>
+<td>
+<p>A string of floating leg day count convention from four options:
+"Thirty360", "ACT360", "ACT365", or "ACTACT". 
+</p>
+<p>Default is "Thirty360".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>calendar</code></td>
+<td>
+<p>A string of the desired calendar convention 
+from two options:
+</p>
+
+<ul>
+<li>
+<p> "NY": New York holiday calendar
+</p>
+</li>
+<li>
+<p> "General": all weekdays are business days
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bdc</code></td>
+<td>
+<p>A string of business day convention from five options: 
+</p>
+
+<ul>
+<li>
+<p> "Actual": No rolling on the date applied even if it is a non-business day
+</p>
+</li>
+<li>
+<p> "Preceding": 1st business day before holiday
+</p>
+</li>
+<li>
+<p> "Following": 1st business day after holiday
+</p>
+</li>
+<li>
+<p> "Modified_Prec": Same as "Preceding" unless it belongs to a different
+month, in which case 1st business day after holiday
+</p>
+</li>
+<li>
+<p> "Modified_Foll": Same as "Following" unless it belongs to a different
+month, in which case 1st business day before holiday
+</p>
+</li>
+</ul>
+<p>Default is "Actual".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>curveDate</code></td>
+<td>
+<p>A string in the format of "YYYY-MM-DD" of yield curve date.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numSetDay</code></td>
+<td>
+<p>An integer of settlement days from yield curve date.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>yieldCurveDCC</code></td>
+<td>
+<p>A string of yield curve day count convention from four options:
+"Thirty360", "ACT360", "ACT365", or "ACTACT". Default is "Thirty360".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>holidays</code></td>
+<td>
+<p>An optional vector dates of user-defined holidays. If provided, 
+within the given holidays range, the calendar provided in the parameter "calendar" 
+will not be applied; 
+</p>
+<p>If the date is not in the given holidays range, it will follow the calendar provided in
+the "calendar" parameter</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Outputs a data frame of strings of discount dates and doubles of
+discount factors.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rate &lt;- c(0.69, 0.77, 0.88, 1.01, 1.14, 1.38, 1.66, 2.15) * 0.01
+tenor &lt;- c(1, 2, 3, 4, 5, 7, 10, 30)
+fixFreq &lt;- 6
+fixDCC &lt;- "Thirty360"
+fltFreq &lt;- 6
+fltDCC &lt;- "ACT360"
+calendar &lt;- "NY"
+bdc &lt;- "Modified_Foll"
+curveDate &lt;- "2016-02-08"
+numSetDay &lt;- 2
+yieldCurveDCC &lt;- "Thirty360"
+holidays &lt;- NULL
+buildCurve(rate, tenor, fixFreq, fixDCC, fltFreq, fltDCC, calendar, bdc,
+           curveDate, numSetDay, yieldCurveDCC, holidays)
+</code></pre>
+
+
+</div>

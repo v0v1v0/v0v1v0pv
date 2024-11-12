@@ -1,0 +1,507 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cumulative</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Ordinal Regression with Cumulative Probabilities </h2>
+
+<h3>Description</h3>
+
+<p>Fits a cumulative link
+regression model to a (preferably ordered) factor response.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cumulative(link = "logitlink", parallel = FALSE,
+    reverse = FALSE, multiple.responses = FALSE,
+    ynames = FALSE, Thresh = NULL, Trev = reverse,
+    Tref = if (Trev) "M" else 1, whitespace = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to the <code class="reqn">J</code> cumulative probabilities.
+See <code>Links</code> for more choices,
+e.g., for the cumulative
+<code>probitlink</code>/<code>clogloglink</code>/...
+models.
+</p>
+</td>
+</tr></table>
+<table><tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+
+<p>A logical or formula specifying which terms have
+equal/unequal coefficients.
+See below for more information about the parallelism
+assumption.
+The default results in what some people call the
+<em>generalized ordered logit model</em> to be fitted.
+If <code>parallel = TRUE</code> then it does not apply to the
+intercept.
+</p>
+<p>The <em>partial proportional odds model</em> can be
+fitted by assigning this argument something like
+<code>parallel = TRUE ~ -1 + x3 + x5</code> so that
+there is one regression coefficient
+for <code>x3</code> and <code>x5</code>.
+Equivalently, setting
+<code>parallel = FALSE ~ 1 + x2 + x4</code> means <code class="reqn">M</code>
+regression coefficients for the intercept
+and <code>x2</code> and <code>x4</code>.
+It is important that the intercept is never parallel.
+See <code>CommonVGAMffArguments</code> for more
+information.
+</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>reverse</code></td>
+<td>
+
+<p>Logical.
+By default, the cumulative probabilities used are
+<code class="reqn">P(Y\leq 1)</code>, <code class="reqn">P(Y\leq 2)</code>,
+..., <code class="reqn">P(Y\leq J)</code>.
+If <code>reverse</code> is <code>TRUE</code> then
+<code class="reqn">P(Y\geq 2)</code>, <code class="reqn">P(Y\geq 3)</code>, ...,
+<code class="reqn">P(Y\geq J+1)</code> are used.
+</p>
+
+
+
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ynames</code></td>
+<td>
+
+<p>See <code>multinomial</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>multiple.responses</code></td>
+<td>
+
+<p>Logical.
+Multiple responses?
+If <code>TRUE</code> then the input should be
+a matrix with values <code class="reqn">1,2,\dots,L</code>,
+where <code class="reqn">L=J+1</code> is the
+number of levels.
+Each column of the matrix is a response,
+i.e., multiple responses.
+A suitable matrix can be obtained from
+<code>Cut</code>.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>Thresh</code></td>
+<td>
+
+<p>Character.
+The choices concern constraint matrices applied
+to the intercepts.
+They can be constrained to be
+equally-spaced (<em>equid</em>istant)
+etc.
+See <code>CommonVGAMffArguments</code> and
+<code>constraints</code> for general
+information.
+Basically, the choice is pasted to the end of
+<code>"CM."</code> and that function is called.
+This means users can easily write their own
+<code>CM.</code>-type function.
+</p>
+
+
+
+
+
+
+
+<p>If equally-spaced then the direction and the
+reference level are controlled
+by <code>Trev</code> and <code>Tref</code>, and
+the constraint matrix
+will be <code class="reqn">M</code> by 2, with the second
+column corresponding to the distance between
+the thresholds.
+</p>
+<p>If <code>"symm1"</code> then the fitted intercepts are
+<em>symmetric</em> about the median (<code class="reqn">M</code> odd)
+intercept.
+If <code class="reqn">M</code> is even then the median is the mean of
+the two most inner and adjacent intercepts.
+For this, <code>CM.symm1</code> is used to
+construct the appropriate constraint matrix.
+</p>
+<p>If <code>"symm0"</code> then the median intercept is 0
+by definition and the symmetry occurs about the
+origin. Thus the intercepts comprise pairs
+that differ by sign only.
+The appropriate constraint matrix is as with
+<code>"symm1"</code> but with the first column deleted.
+The choices <code>"symm1"</code> and <code>"symm0"</code>
+are effectively equivalent to
+<code>"symmetric"</code> and <code>"symmetric2"</code>
+respectively in <span class="pkg">ordinal</span>.
+</p>
+<p>For <code>"qnorm"</code> then
+<code>CM.qnorm</code> uses the
+<code>qnorm((1:M)/(M+1))</code> quantiles
+of the standard normal.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Trev, Tref</code></td>
+<td>
+
+<p>Support arguments for <code>Thresh</code>
+for equally-spaced intercepts.
+The logical argument <code>Trev</code> is
+applied first to give the direction
+(i.e., ascending or descending)
+before
+row <code>Tref</code> (ultimately numeric)
+of the first (intercept) constraint matrix
+is set to the reference level.
+See <code>constraints</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>whitespace</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for
+information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In this help file the response <code class="reqn">Y</code> is assumed
+to be a factor with ordered values <code class="reqn">1,2,\dots,J+1</code>.
+Hence <code class="reqn">M</code> is the number of linear/additive
+predictors <code class="reqn">\eta_j</code>;
+for <code>cumulative()</code> one has <code class="reqn">M=J</code>.
+
+</p>
+<p>This <span class="pkg">VGAM</span> family function fits the class of
+<em>cumulative link models</em> to (hopefully)
+an ordinal response.
+By default, the <em>non-parallel</em> cumulative logit model
+is fitted, i.e.,
+</p>
+<p style="text-align: center;"><code class="reqn">\eta_j = logit(P[Y \leq j])</code>
+</p>
+
+<p>where <code class="reqn">j=1,2,\dots,M</code> and
+the <code class="reqn">\eta_j</code> are not constrained to be parallel.
+This is also known as the <em>non-proportional odds model</em>.
+If the logit link is replaced by a complementary log-log link
+(<code>clogloglink</code>) then
+this is known as the <em>proportional-hazards model</em>.
+</p>
+<p>In almost all the literature, the constraint matrices
+associated with this family of models are known.
+For example, setting
+<code>parallel = TRUE</code> will make all constraint matrices
+(except for the intercept) equal to a vector of <code class="reqn">M</code> 1's.
+If the constraint matrices are equal, unknown and to
+be estimated,
+then this can be achieved by fitting the model as a
+reduced-rank vector generalized
+linear model (RR-VGLM; see <code>rrvglm</code>).
+Currently, reduced-rank vector generalized additive models
+(RR-VGAMs) have not been implemented here.
+</p>
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>No check is made to verify that the response is ordinal
+if the response is a matrix;
+see <code>ordered</code>.
+</p>
+<p>Boersch-Supan (2021) looks at sparse data and
+the numerical problems that result;
+see <code>sratio</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response should be either a matrix of counts
+(with row sums that
+are all positive), or a factor. In both cases,
+the <code>y</code> slot
+returned by
+<code>vglm</code>/<code>vgam</code>/<code>rrvglm</code>
+is the matrix
+of counts.
+The formula must contain an intercept term.
+Other <span class="pkg">VGAM</span> family functions for an ordinal response
+include
+<code>acat</code>,
+<code>cratio</code>,
+<code>sratio</code>.
+For a nominal (unordered) factor response, the multinomial
+logit model (<code>multinomial</code>) is more appropriate.
+</p>
+<p>With the logit link, setting <code>parallel =
+  TRUE</code> will fit a proportional odds model. Note
+that the <code>TRUE</code> here does not apply to
+the intercept term.  In practice, the validity
+of the <em>proportional odds assumption</em>
+needs to be checked, e.g., by a likelihood
+ratio test (LRT).  If acceptable on the data,
+then numerical problems are less likely
+to occur during the fitting, and there are
+less parameters. Numerical problems occur
+when the linear/additive predictors cross,
+which results in probabilities outside of
+<code class="reqn">(0,1)</code>; setting <code>parallel = TRUE</code>
+will help avoid this problem.
+</p>
+<p>Here is an example of the usage of the <code>parallel</code>
+argument.
+If there are covariates <code>x2</code>, <code>x3</code> and
+<code>x4</code>, then
+<code>parallel = TRUE ~ x2 + x3 -1</code> and
+<code>parallel = FALSE ~ x4</code> are equivalent.
+This would constrain the regression coefficients
+for <code>x2</code> and <code>x3</code> to be equal;
+those of the intercepts and <code>x4</code> would be different.
+</p>
+<p>If the data is inputted in <em>long</em> format
+(not <em>wide</em> format, as in <code>pneumo</code> below)
+and the self-starting initial values are not
+good enough then try using
+<code>mustart</code>,
+<code>coefstart</code> and/or
+<code>etatstart</code>.
+See the example below.
+</p>
+<p>To fit the proportional odds model one can use the
+<span class="pkg">VGAM</span> family function <code>propodds</code>.
+Note that <code>propodds(reverse)</code> is equivalent to
+<code>cumulative(parallel = TRUE, reverse = reverse)</code>
+(which is equivalent to
+<code>cumulative(parallel =</code>
+<code>TRUE, reverse = reverse, link = "logitlink")</code>).
+It is for convenience only. A call to
+<code>cumulative()</code> is preferred since it reminds the user
+that a parallelism assumption is made, as well as
+being a lot more flexible.
+</p>
+
+
+
+
+
+
+
+<p>Category specific effects may be modelled using
+the <code>xij</code>-facility; see
+<code>vglm.control</code> and <code>fill1</code>.
+</p>
+<p>With most <code>Thresh</code>old choices,
+the first few fitted regression coefficients
+need care in their interpretation.  For example,
+some values could be the distance away from
+the median intercept.  Typing something
+like <code>constraints(fit)[[1]]</code> gives the
+constraint matrix of the intercept term.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Agresti, A. (2013).
+<em>Categorical Data Analysis</em>,
+3rd ed. Hoboken, NJ, USA: Wiley.
+</p>
+<p>Agresti, A. (2010).
+<em>Analysis of Ordinal Categorical Data</em>,
+2nd ed. Hoboken, NJ, USA: Wiley.
+</p>
+
+
+
+
+
+
+
+
+
+
+<p>McCullagh, P. and Nelder, J. A. (1989).
+<em>Generalized Linear Models</em>, 2nd ed.
+London: Chapman &amp; Hall.
+</p>
+
+
+
+<p>Tutz, G. (2012).
+<em>Regression for Categorical Data</em>,
+Cambridge: Cambridge University Press.
+</p>
+<p>Tutz, G. and Berger, M. (2022).
+Sparser ordinal regression models based
+on parametric and additive location-shift
+approaches.
+<em>International Statistical Review</em>,
+<b>90</b>, 306–327.
+<a href="https://doi.org/10.1111/insr.12484">doi:10.1111/insr.12484</a>.
+</p>
+<p>Yee, T. W. (2010).
+The <span class="pkg">VGAM</span> package for categorical data analysis.
+<em>Journal of Statistical Software</em>,
+<b>32</b>, 1–34.
+<a href="https://doi.org/10.18637/jss.v032.i10">doi:10.18637/jss.v032.i10</a>.
+</p>
+
+
+<p>Yee, T. W. and Wild, C. J. (1996).
+Vector generalized additive models.
+<em>Journal of the Royal Statistical Society,
+Series B, Methodological</em>,
+<b>58</b>, 481–493.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>propodds</code>,
+<code>constraints</code>,
+<code>CM.ones</code>,
+<code>CM.equid</code>,
+<code>R2latvar</code>,
+<code>ordsup</code>,
+<code>prplot</code>,
+<code>margeff</code>,
+<code>acat</code>,
+<code>cratio</code>,
+<code>sratio</code>,
+<code>multinomial</code>,
+<code>CommonVGAMffArguments</code>,
+<code>pneumo</code>,
+<code>budworm</code>,
+<code>Links</code>,
+<code>hdeff.vglm</code>,
+<code>logitlink</code>,
+<code>probitlink</code>,
+<code>clogloglink</code>,
+<code>cauchitlink</code>,
+<code>logistic1</code>.
+</p>
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Proportional odds model (p.179) of McCullagh and Nelder (1989)
+pneumo &lt;- transform(pneumo, let = log(exposure.time))
+(fit &lt;- vglm(cbind(normal, mild, severe) ~ let,
+             cumulative(parallel = TRUE, reverse = TRUE), pneumo))
+depvar(fit)  # Sample proportions (good technique)
+fit@y        # Sample proportions (bad technique)
+weights(fit, type = "prior")  # Number of observations
+coef(fit, matrix = TRUE)
+constraints(fit)  # Constraint matrices
+apply(fitted(fit), 1, which.max)  # Classification
+apply(predict(fit, newdata = pneumo, type = "response"),
+      1, which.max)  # Classification
+R2latvar(fit)
+
+# Check that the model is linear in let ----------------------
+fit2 &lt;- vgam(cbind(normal, mild, severe) ~ s(let, df = 2),
+             cumulative(reverse = TRUE), data = pneumo)
+## Not run: 
+ plot(fit2, se = TRUE, overlay = TRUE, lcol = 1:2, scol = 1:2) 
+## End(Not run)
+
+# Check the proportional odds assumption with a LRT ----------
+(fit3 &lt;- vglm(cbind(normal, mild, severe) ~ let,
+              cumulative(parallel = FALSE, reverse = TRUE), pneumo))
+pchisq(2 * (logLik(fit3) - logLik(fit)), df =
+       length(coef(fit3)) - length(coef(fit)), lower.tail = FALSE)
+lrtest(fit3, fit)  # More elegant
+
+# A factor() version of fit ----------------------------------
+# This is in long format (cf. wide format above)
+Nobs &lt;- round(depvar(fit) * c(weights(fit, type = "prior")))
+sumNobs &lt;- colSums(Nobs)  # apply(Nobs, 2, sum)
+
+pneumo.long &lt;-
+  data.frame(symptoms = ordered(rep(rep(colnames(Nobs), nrow(Nobs)),
+                                        times = c(t(Nobs))),
+                                levels = colnames(Nobs)),
+             let = rep(rep(with(pneumo, let), each = ncol(Nobs)),
+                       times = c(t(Nobs))))
+with(pneumo.long, table(let, symptoms))  # Should be same as pneumo
+
+
+(fit.long1 &lt;- vglm(symptoms ~ let, data = pneumo.long, trace = TRUE,
+                   cumulative(parallel = TRUE, reverse = TRUE)))
+coef(fit.long1, matrix = TRUE)  # cf. coef(fit, matrix = TRUE)
+# Could try using mustart if fit.long1 failed to converge.
+mymustart &lt;- matrix(sumNobs / sum(sumNobs),
+                    nrow(pneumo.long), ncol(Nobs), byrow = TRUE)
+fit.long2 &lt;- vglm(symptoms ~ let, mustart = mymustart,
+                  cumulative(parallel = TRUE, reverse = TRUE),
+                  data = pneumo.long, trace = TRUE)
+coef(fit.long2, matrix = TRUE)  # cf. coef(fit, matrix = TRUE)
+</code></pre>
+
+
+</div>

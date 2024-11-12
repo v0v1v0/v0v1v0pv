@@ -1,0 +1,70 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bench_mark</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Lightweight Benchmarking Function</h2>
+
+<h3>Description</h3>
+
+<p>Evaluates provided expression in a loop and reports mean evaluation time.
+This is inferior to <code>microbenchmark</code> and other benchmarking tools in many
+ways except that it has zero dependencies or suggests which helps with
+package build and test times.  Used in vignettes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bench_mark(..., times = 1000L, deparse.width = 40)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>expressions to benchmark, are captured unevaluated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>times</code></td>
+<td>
+<p>how many times to loop, defaults to 1000</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>deparse.width</code></td>
+<td>
+<p>how many characters to deparse for labels</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Runs <code>gc()</code> before each expression is evaluated.  Expressions are evaluated
+in the order provided.  Attempts to estimate the overhead of the loop by
+running a loop that evaluates <code>NULL</code> the <code>times</code> times.
+</p>
+<p>Unfortunately because this computes the average of all iterations it is very
+susceptible to outliers in small sample runs, particularly with fast running
+code.  For that reason the default number of iterations is one thousand.
+</p>
+
+
+<h3>Value</h3>
+
+<p>NULL, invisibly, reports timings as a side effect as screen output
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">bench_mark(runif(1000), Sys.sleep(0.001), times=10)
+</code></pre>
+
+
+</div>

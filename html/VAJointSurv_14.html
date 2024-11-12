@@ -1,0 +1,120 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_marker</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plots a Markers Mean Curve with Pointwise Quantiles</h2>
+
+<h3>Description</h3>
+
+<p>Plots a Markers Mean Curve with Pointwise Quantiles
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_marker(
+  time_fixef,
+  time_rng,
+  fixef_vary,
+  x_range,
+  vcov_vary,
+  p = 0.95,
+  xlab = "Time",
+  ylab = "Marker",
+  newdata = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>time_fixef</code></td>
+<td>
+<p>the time-varying fixed effects. See .e.g.
+<code>poly_term</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time_rng</code></td>
+<td>
+<p>the time-varying random effects. See .e.g.
+<code>poly_term</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fixef_vary</code></td>
+<td>
+<p>fixed effect coefficients for <code>time_fixef</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_range</code></td>
+<td>
+<p>2D numeric vector with start and end points.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vcov_vary</code></td>
+<td>
+<p>the covariance matrix for <code>time_rng</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>coverage of the two quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab, ylab, ...</code></td>
+<td>
+<p>arguments passed to <code>plot</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p><code>data.frame</code> with data for the weights if any.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing data for plotting.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># load in the data
+library(survival)
+data(pbc, package = "survival")
+
+# re-scale by year
+pbcseq &lt;- transform(pbcseq, day_use = day / 365.25)
+pbc &lt;- transform(pbc, time_use = time / 365.25)
+
+# create the marker terms
+m1 &lt;- marker_term(
+  log(bili) ~ 1, id = id, data = pbcseq,
+  time_fixef = bs_term(day_use, df = 5L),
+  time_rng = poly_term(day_use, degree = 1L, raw = TRUE, intercept = TRUE))
+
+fixef_vary &lt;- c(-0.1048, 0.2583, 1.0578, 2.4006, 2.9734)
+vcov_vary &lt;- rbind(c(0.96580, 0.09543), c(0.09543,  0.03998))
+
+# plot marker's trajectory
+plot_marker(
+  time_fixef = m1$time_fixef,
+  time_rng = m1$time_rng,
+  fixef_vary = fixef_vary,
+  vcov_vary = vcov_vary, x_range = c(0,5))
+</code></pre>
+
+
+</div>

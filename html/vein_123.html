@@ -1,0 +1,73 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>temp_veh</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Expanded Vehicles data.frame by hour</h2>
+
+<h3>Description</h3>
+
+<p><code>temp_veh</code> multiplies
+vehicles with temporal factor
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">temp_veh(x, tfs, array = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Vehicles data.frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tfs</code></td>
+<td>
+<p>temporal factor</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>array</code></td>
+<td>
+<p>Logical, to return an array</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>data.table
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>temp_fact</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(net)
+data(pc_profile)
+x &lt;- age_ldv(x = net$ldv)
+dx &lt;- temp_veh(x = x, tfs = pc_profile[[1]])
+plot(Vehicles(as.data.frame(dx[, 1:50])))
+dx2 &lt;- temp_veh(x = x,
+                tfs = pc_profile[[1]],
+                array = TRUE)
+plot(EmissionsArray(dx2))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

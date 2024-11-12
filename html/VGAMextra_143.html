@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VARff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> VGLTSM family function for the
+Order–<code class="reqn">p</code> Vector Auto(R)egressive Model</h2>
+
+<h3>Description</h3>
+
+<p>Estimates an Order(<code class="reqn">p</code>) Vector Autoregressive Models (VAR(p)) with
+white noise random errors
+by maximum likelihood estimation using Fisher scoring.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">            VARff(VAR.order = 1,
+                  zero = c("var", "cov"),
+                  lmean = "identitylink",
+                  lvar  = "loglink",
+                  lcov  = "identitylink")
+                    
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>VAR.order</code></td>
+<td>
+
+<p>Length–1 (positive) integer vector. The order of the VAR to be 
+fitted.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Integer or character - string vector.
+Same as <code>MVNcov</code>.
+Details at <code>zero</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lmean, lvar, lcov</code></td>
+<td>
+
+<p>Same as <code>MVNcov</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Let <code class="reqn">\boldsymbol{x}_t = (x_{1, t}, \ldots, x_{K, t})^T</code> be a time dependent
+vector of responses, with index <code class="reqn">t = 1, \ldots, T</code>,
+and <code class="reqn">\boldsymbol{\varepsilon}_t = (\varepsilon_{1, t},
+\ldots, \varepsilon_{K, t})</code>
+white noise with covariance matrix 
+<code class="reqn">\boldsymbol{\textrm{V}}</code>.
+</p>
+<p><code>VARff</code> fits a linear model to the means of a 
+<code class="reqn">K</code>–variate normal distribution, where
+each variable, <code class="reqn">x_{i, t}</code>, <code class="reqn">i = 1, \ldots, K</code>,
+is a linear function of <code class="reqn">p</code>–past
+lags of itself and past <code class="reqn">p</code>–lags of the other variables.
+The model has the form
+</p>
+<p style="text-align: center;"><code class="reqn">\boldsymbol{x}_t = \boldsymbol{\Phi_1} \boldsymbol{x}_{t - 1} +
+\cdots + \boldsymbol{\Phi_p} \boldsymbol{x}_{t - p} +
+\boldsymbol{\varepsilon}_t,</code>
+</p>
+
+<p>where <code class="reqn">\boldsymbol{\Phi_j}</code> are 
+<code class="reqn">K \times K</code> matrices of coefficients, <code class="reqn">j = 1, \ldots, K</code>,
+to be estimated.
+</p>
+<p>The elements of the covariance matrix are intercept–only
+by default.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> 
+(see <code>vglmff-class</code>) to be
+used by VGLM/VGAM modelling functions, e.g.,
+<code>vglm</code> or <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>MVNcov</code>,
+<code>zero</code>,
+<code>Links</code>,
+<code>ECM.EngleGran</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(20170227)
+nn &lt;- 60
+var.data &lt;- data.frame(x2 = runif(nn, -2.5, 2.5))
+var.data &lt;- transform(var.data, y1 = rnorm(nn, 1.5 - 2 * x2, sqrt(exp(1.5))),
+                                y2 = rnorm(nn, 1.0 - 1 * x2, sqrt(exp(0.75))),
+                                y3 = rnorm(nn, 0.5 + 1 * x2, sqrt(exp(1.0))))
+
+fit.var &lt;- vglm(cbind(y1, y2, y3) ~ x2, VARff(VAR.order = 2),
+                trace = TRUE, data = var.data)
+coef(fit.var, matrix = TRUE)
+
+summary(fit.var)
+vcov(fit.var)
+</code></pre>
+
+
+</div>

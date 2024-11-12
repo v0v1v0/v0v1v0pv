@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tally_it</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>tally_it</h2>
+
+<h3>Description</h3>
+
+<p>Groups the input vcf data frame using a list of variables and tallies the number of occurrences
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tally_it(df, groupit, new_colname)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>A rearranged vcf dataframe (arrange_data)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groupit</code></td>
+<td>
+<p>A vector containing column names that data should be grouped by</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>new_colname</code></td>
+<td>
+<p>The name of the count column</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A dataframe with columns from the 'groupit' vector and the number of times each unique grouping occurs in the data
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Sample dataframe of 7 variants across 2 samples
+df &lt;- data.frame(
+  sample = c( "sample1", "sample1", "sample1", "sample2",
+              "sample2", "sample2", "sample2"),
+  CHROM = c("PB1", "PB2", "PB2", "LEO", "LEO", "LEO", "ALE"),
+  SegmentSize = c(2280, 2274, 2274, 1701, 1701, 1701, 1888 ),
+  minorfreq = c(0.04422785, 0.03738175, 0.01390202, 0.02927786,
+                0.03071955, 0.02626025, 0.02875321)
+)
+
+# Example 1: to get the sum of variants on every segment:
+groupit = c('sample','CHROM', "SegmentSize")
+tally_it(df, groupit, "snv_count")
+
+# Example 2: to get the count across genomes:
+groupit = c('sample')
+tally_it(df, groupit, "snv_count")
+
+</code></pre>
+
+
+</div>

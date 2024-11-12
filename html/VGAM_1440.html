@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Rcim</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Mark the Baseline of Row and Column on a Matrix data
+</h2>
+
+<h3>Description</h3>
+
+<p>Rearrange the rows and columns of the input so
+that the first row and first column are baseline.
+This function is for rank-zero row-column interaction models
+(RCIMs; i.e., general main effects models).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  Rcim(mat, rbaseline = 1, cbaseline = 1)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mat</code></td>
+<td>
+
+<p>Matrix, of dimension <code class="reqn">r</code> by <code class="reqn">c</code>.
+It is best that it is labelled with row and column names.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rbaseline, cbaseline</code></td>
+<td>
+
+<p>Numeric (row number of the matrix <code>mat</code>) or
+character (matching a row name of <code>mat</code>) that the user
+wants as the row baseline or reference level.
+Similarly <code>cbaseline</code> for the column.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a data preprocessing function for <code>rcim</code>.
+For rank-zero row-column interaction models this function
+establishes the baseline (or reference) levels of the matrix
+response with respect to the row and columns—these become
+the new first row and column.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Matrix of the same dimension as the input,
+with <code>rbaseline</code> and <code>cbaseline</code> specifying the
+first rows and columns.
+The default is no change in <code>mat</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is similar to <code>moffset</code>; see
+<code>moffset</code> for information about the differences.
+If numeric, the arguments
+<code>rbaseline</code>
+and
+<code>cbaseline</code>
+differ from arguments
+<code>roffset</code>
+and
+<code>coffset</code>
+in <code>moffset</code>
+by 1 (when elements of the matrix agree).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Alfian F. Hadi and T. W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>moffset</code>,
+<code>rcim</code>,
+<code>plotrcim0</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">(alcoff.e &lt;- moffset(alcoff, roffset = "6", postfix = "*"))
+(aa &lt;- Rcim(alcoff,    rbaseline = "11", cbaseline = "Sun"))
+(bb &lt;- moffset(alcoff,             "11",             "Sun", postfix = "*"))
+aa - bb  # Note the difference!
+</code></pre>
+
+
+</div>

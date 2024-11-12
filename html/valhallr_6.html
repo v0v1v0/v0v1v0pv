@@ -1,0 +1,65 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>print_trip</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Print Trip Summary and Turn-By-Turn Directions</h2>
+
+<h3>Description</h3>
+
+<p>Print Trip Summary and Turn-By-Turn Directions
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">print_trip(trip, all_details = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>trip</code></td>
+<td>
+<p>A trip response from <code>valhallr::route()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all_details</code></td>
+<td>
+<p>Boolean. Should we print each turn-by-turn instruction
+along with an overall summary?</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The input <code>trip</code> object, invisibly.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+  library(valhallr)
+  # set up origin and destination data
+  from &lt;- test_data("uottawa")
+  to &lt;- test_data("cdntirecentre")
+
+  # calculate the trip
+  trip &lt;- route(from = from, to = to)
+
+  # show overall trip information
+  print_trip(trip, all_details = FALSE)
+
+  # make an interactive map of the trip using the leaflet package
+  map_trip(trip, method = "leaflet")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

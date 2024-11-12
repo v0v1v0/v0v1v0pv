@@ -1,0 +1,116 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Examp2.5.3.1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Examp2.5.3.1 from Duchateau, L. and Janssen, P. and Rowlands, G. J. (1998).<em>Linear Mixed Models. An Introduction with applications in Veterinary Research</em>. International Livestock Research Institute.</h2>
+
+<h3>Description</h3>
+
+<p>Examp2.5.3.1 is used for inspecting probability distribution and to define a plausible process through
+linear models and generalized linear models.
+</p>
+
+
+<h3>Author(s)</h3>
+
+
+<ol><li>
+<p>  Muhammad Yaseen (<a href="mailto:myaseen208@gmail.com">myaseen208@gmail.com</a>)
+</p>
+</li></ol>
+<h3>References</h3>
+
+
+<ol><li>
+<p> Duchateau, L. and Janssen, P. and Rowlands, G. J. (1998).<em>Linear Mixed Models. An Introduction with applications in Veterinary Research</em>.
+International Livestock Research Institute.
+</p>
+</li></ol>
+<h3>See Also</h3>
+
+<p><code>ex124</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#-------------------------------------------------------------
+## Example 2.5.3.1 p-70
+#-------------------------------------------------------------
+ # PROC GLM DATA=ex125;
+ # CLASS drug dose region;
+ # MODEL pcv=region drug region*drug dose drug*dose;
+ # RANDOM region drug*region;
+ # RUN;
+
+
+ # PROC MIXED DATA=ex125;
+ # CLASS drug dose region;
+ # MODEL pcv=drug dose drug*dose / ddfm=satterth;
+ # RANDOM region drug*region;
+ # ESTIMATE 'drug dif' drug -1 1 drug*dose -0.5 -0.5 0.5 0.5;
+ # ESTIMATE 'Samorin mean' INTERCEPT 1 drug 0 1 dose 0.5 0.5
+ #                             drug*dose 0 0 0.5 0.5;
+ # ESTIMATE 'Samorin HvsL' dose 1 -1 drug*dose 0 0 1 -1;
+ # ESTIMATE 'Samorin high' INTERCEPT 1 drug 0 1 dose 1 0
+ #                             drug*dose 0 0 1 0;
+ # RUN;
+
+library(lme4)
+str(ex125)
+ex125$Region1 &lt;- factor(ex125$Region)
+ fm2.11 &lt;-
+  aov(
+      formula     = Pcv ~ Region1 + Drug + Error(Drug:Region1) + dose + dose:Drug
+    , data        = ex125
+    , projections = FALSE
+    , qr          = TRUE
+    , contrasts   = NULL
+  #  , ...
+    )
+ summary(fm2.11)
+
+ fm2.12 &lt;-
+  lmerTest::lmer(
+         formula    = Pcv ~ dose*Drug + (1|Region/Drug)
+       , data       = ex125
+       , REML       = TRUE
+       , control    = lmerControl()
+       , start      = NULL
+       , verbose    = 0L
+    #  , subset
+    #  , weights
+    #  , na.action
+    #  , offset
+       , contrasts  = list(dose = "contr.SAS", Drug = "contr.SAS")
+       , devFunOnly = FALSE
+    #  , ...
+       )
+ summary(fm2.12)
+ anova(object = fm2.12, ddf = "Satterthwaite")
+
+library(multcomp)
+Contrasts1 &lt;-
+          matrix(c(
+                  1, 0.5, 0, 0
+                , 0, 0, -1, -0.5
+                , 1, 1, 0, 0
+                , 0, 1, 0, 0
+                )
+               , ncol = 4
+               , byrow = TRUE
+               , dimnames = list(
+                  c("C1", "C2", "C3", "C4")
+                , rownames(summary(fm2.12)$coef)
+               )
+              )
+
+Contrasts1
+summary(glht(fm2.12, linfct=Contrasts1))
+
+</code></pre>
+
+
+</div>

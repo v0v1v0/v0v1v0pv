@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hessian3D</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>3D Volume Hessian</h2>
+
+<h3>Description</h3>
+
+<p>This function returns the eigenvalues of the hessian matrices for a 3D array or NIfTI volume.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hessian3D(image, mask, radius = 1, parallel = FALSE, cores = 2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>image</code></td>
+<td>
+<p>a 3D array or image of class <code>nifti</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mask</code></td>
+<td>
+<p>an array or <code>nifti</code> mask of voxels for which vesselness will be calculated,
+with more selective masking improving speed significantly.
+Note that mask should be in the same space as the image volume</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>radius</code></td>
+<td>
+<p>an integer specifying radius of the neighborhood (in voxels) for which the hessian should be calculated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+<p>is a logical value that indicates whether the user's computer
+is Linux or Unix (i.e. macOS), and should run the code in parallel</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cores</code></td>
+<td>
+<p>if parallel = TRUE, cores is an integer value that indicates how many cores
+the function should be run on</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of three eigenvalue volumes.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(neurobase)
+epi &lt;- readnii('path/to/epi')
+mask &lt;- epi!=0
+hesseigs &lt;- hessian3D(image = epi, mask = mask) 
+## End(Not run)
+</code></pre>
+
+
+</div>

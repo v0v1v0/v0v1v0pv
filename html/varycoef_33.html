@@ -1,0 +1,81 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>SVC_selection</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>SVC Model Selection</h2>
+
+<h3>Description</h3>
+
+<p>This function implements the variable selection for
+Gaussian process-based SVC models using a penalized maximum likelihood
+estimation (PMLE, Dambon et al., 2021, &lt;arXiv:2101.01932&gt;).
+It jointly selects the fixed and random effects of GP-based SVC models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">SVC_selection(obj.fun, mle.par, control = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj.fun</code></td>
+<td>
+<p>(<code>SVC_obj_fun</code>) <br>
+Function of class <code>SVC_obj_fun</code>. This is the output of
+<code>SVC_mle</code> with the <code>SVC_mle_control</code> parameter
+<code>extract_fun</code> set to <code>TRUE</code>. This objective function comprises
+of the whole SVC model on which the selection should be applied.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mle.par</code></td>
+<td>
+<p>(<code>numeric(2*q+1)</code>) <br>
+Numeric vector with estimated covariance parameters of unpenalized MLE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>(<code>list</code> or <code>NULL</code>) <br>
+List of control parameters for variable selection. Output of
+<code>SVC_selection_control</code>. If <code>NULL</code> is given, the 
+default values of <code>SVC_selection_control</code> are used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns an object of class <code>SVC_selection</code>. It contains parameter estimates under PMLE and the optimization as well as choice of the shrinkage parameters.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jakob Dambon
+</p>
+
+
+<h3>References</h3>
+
+<p>Dambon, J. A., Sigrist, F., Furrer, R. (2021).
+<em>Joint Variable Selection of both Fixed and Random Effects for
+Gaussian Process-based Spatially Varying Coefficient Models</em>,
+ArXiv Preprint <a href="https://arxiv.org/abs/2101.01932">https://arxiv.org/abs/2101.01932</a>
+</p>
+
+
+</div>

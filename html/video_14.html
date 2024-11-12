@@ -1,0 +1,161 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>video</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Video Player</h2>
+
+<h3>Description</h3>
+
+<p>A video player that can be embedded in HTML pages.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">video(
+  files,
+  format = NULL,
+  options = list(),
+  seek_ping_rate = 1000,
+  width = NULL,
+  height = NULL,
+  elementId = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>files</code></td>
+<td>
+<p>A vector of file paths or URLs pointing</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>format</code></td>
+<td>
+<p>An optional list of formats of <code>video</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>options</code></td>
+<td>
+<p>A named list of options to apply to the video. List of available options
+available in Details</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seek_ping_rate</code></td>
+<td>
+<p>Number of milliseconds between each update of 'input${id}_seek' while playing. Default is
+set to 1000. If set to 0, then 'input${id}_seek' will not exist.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width, height</code></td>
+<td>
+<p>Must be a valid CSS unit (like <code>'100%'</code>,
+<code>'400px'</code>, <code>'auto'</code>) or a number, which will be coerced to a
+string and have <code>'px'</code> appended. Use <code>NA</code> for it to use
+the original video width/height.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>elementId</code></td>
+<td>
+<p>HTML id tag to be given to the video player element</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Here are some more common options to implement:
+</p>
+
+<dl>
+<dt>autoplay</dt>
+<dd>
+<p>Whether or not the video will autoplay on load. NOTE: There is not a guarantee autoplay will work in the browser.
+</p>
+
+<dl>
+<dt><code>FALSE</code></dt>
+<dd>
+<p>Default: Video won't autoplay</p>
+</dd>
+<dt><code>TRUE</code></dt>
+<dd>
+<p>Video will use browser's autoplay</p>
+</dd>
+<dt><code>"muted"</code></dt>
+<dd>
+<p>Will mute the video and then manually call <code>play()</code> on <code>loadstart()</code>. Likely to work on browsers</p>
+</dd>
+<dt><code>"play"</code></dt>
+<dd>
+<p>Will call <code>play()</code> on <code>loadstart()</code>, similar to browser autoplay</p>
+</dd>
+</dl>
+</dd>
+<dt>controls</dt>
+<dd>
+<p>Determines whether or not the player has controls that the user can interact with. By default
+<code>video</code> will include controls even if not specified in the options.
+</p>
+</dd>
+<dt>poster</dt>
+<dd>
+<p>A URL to an image that displays before the video begins playing.
+This is often a frame of the video or a custom title screen.
+</p>
+</dd>
+</dl>
+<p>For a full list of available options check out <a href="https://videojs.com/guides/options/">https://videojs.com/guides/options/</a>
+</p>
+
+
+<h3>Value</h3>
+
+<p>A shiny.tag containing all of the required options for a <code>videojs</code> JS object to be initialised in a shiny application.
+</p>
+<p>On the server side there will be up to four additional objects available as inputs:
+</p>
+
+<dl>
+<dt><code>{id}_playing</code></dt>
+<dd>
+<p>A logical value as to whether or not the <code>video</code> is playing audio</p>
+</dd>
+<dt><code>{id}_seek</code></dt>
+<dd>
+<p>(If <code>seek_ping_rate &gt; 0</code>) the current time of the track loaded</p>
+</dd>
+<dt><code>{id}_duration</code></dt>
+<dd>
+<p>The duration of the track loaded</p>
+</dd>
+</dl>
+<h3>Examples</h3>
+
+<pre><code class="language-R">if (interactive()) {
+  library(shiny)
+
+  ui &lt;- fluidPage(
+    title = "howler.js Player",
+    video("https://vjs.zencdn.net/v/oceans.mp4")
+  )
+
+  server &lt;- function(input, output) {
+  }
+
+  runShiny(ui, server)
+}
+
+</code></pre>
+
+
+</div>

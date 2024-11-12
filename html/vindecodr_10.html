@@ -1,0 +1,65 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>valid_check_digit</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check for Valid VIN Check Digit</h2>
+
+<h3>Description</h3>
+
+<p>Calculates the VIN check digit and compares it to VIN position 9.
+For US-based VINs, this determines if the VIN is valid.
+This may not apply to VINs from outside of the United States.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">valid_check_digit(vin, value = FALSE, guess = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vin</code></td>
+<td>
+<p>character. The VIN to check. VINs must be compete, i.e. 17 digits
+with no wildcards.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>logical. Should the calculated check digit be returned instead?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>guess</code></td>
+<td>
+<p>logical. Should incorrect characters be replaced by the best
+guess at corrected characters?
+O -&gt; 0
+I -&gt; 1
+Q -&gt; 0</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>If <code>value</code> is <code>FALSE</code>, a logical value is returned.
+If <code>value</code> is <code>TRUE</code>, a character is returned.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">valid_check_digit("WDBEA30D3HA391172") # True
+valid_check_digit("WDBEA30D3HA391172", value = TRUE)
+valid_check_digit("WDBEA3QD3HA39I172", guess = TRUE)
+</code></pre>
+
+
+</div>

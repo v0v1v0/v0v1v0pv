@@ -1,0 +1,156 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>joint_ms_hess</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Computes the Hessian</h2>
+
+<h3>Description</h3>
+
+<p>Computes the Hessian
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">joint_ms_hess(
+  object,
+  par,
+  quad_rule = object$quad_rule,
+  cache_expansions = object$cache_expansions,
+  eps = 1e-04,
+  scale = 2,
+  tol = .Machine$double.eps^(3/5),
+  order = 4L,
+  gh_quad_rule = object$gh_quad_rule
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a joint_ms object from <code>joint_ms_ptr</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>parameter vector for where the lower bound is evaluated at.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quad_rule</code></td>
+<td>
+<p>list with nodes and weights for a quadrature rule for the
+integral from zero to one.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cache_expansions</code></td>
+<td>
+<p><code>TRUE</code> if the expansions in the numerical
+integration in the survival parts of the lower bound should be cached (not
+recomputed). This requires more memory and may be an advantage
+particularly with
+expansions that take longer to compute (like <code>ns_term</code> and
+<code>bs_term</code>). The computation time may be worse particularly if
+you use more threads as the CPU cache is not well utilized.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps, scale, tol, order</code></td>
+<td>
+<p>parameter to pass to psqn. See
+<code>psqn_hess</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gh_quad_rule</code></td>
+<td>
+<p>list with two numeric vectors called node and weight
+with Gauss–Hermite quadrature nodes and weights to handle delayed entry.
+A low number of quadrature nodes and weights is used when <code>NULL</code> is
+passed.
+This seems to work well when delayed entry happens at time with large
+marginal survival probabilities. The nodes and weights can be obtained e.g.
+from <code>fastGHQuad::gaussHermiteData</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with the following two Hessian matrices:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>hessian</code></td>
+<td>
+<p>Hessian matrix of the model parameters with the
+variational parameters profiled out.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hessian_all</code></td>
+<td>
+<p>Hessian matrix of the model and variational parameters.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># load in the data
+library(survival)
+data(pbc, package = "survival")
+
+# re-scale by year
+pbcseq &lt;- transform(pbcseq, day_use = day / 365.25)
+pbc &lt;- transform(pbc, time_use = time / 365.25)
+
+# create the marker terms
+m1 &lt;- marker_term(
+  log(bili) ~ 1, id = id, data = pbcseq,
+  time_fixef = bs_term(day_use, df = 5L),
+  time_rng = poly_term(day_use, degree = 1L, raw = TRUE, intercept = TRUE))
+m2 &lt;- marker_term(
+  albumin ~ 1, id = id, data = pbcseq,
+  time_fixef = bs_term(day_use, df = 5L),
+  time_rng = poly_term(day_use, degree = 1L, raw = TRUE, intercept = TRUE))
+
+# base knots on observed event times
+bs_term_knots &lt;-
+  with(pbc, quantile(time_use[status == 2], probs = seq(0, 1, by = .2)))
+
+boundary &lt;- c(bs_term_knots[ c(1, length(bs_term_knots))])
+interior &lt;- c(bs_term_knots[-c(1, length(bs_term_knots))])
+
+# create the survival term
+s_term &lt;- surv_term(
+  Surv(time_use, status == 2) ~ 1, id = id, data = pbc,
+  time_fixef = bs_term(time_use, Boundary.knots = boundary, knots = interior))
+
+# create the C++ object to do the fitting
+model_ptr &lt;- joint_ms_ptr(
+  markers = list(m1, m2), survival_terms = s_term,
+  max_threads = 2L, ders = list(0L, c(0L, -1L)))
+
+# find the starting values
+start_vals &lt;- joint_ms_start_val(model_ptr)
+
+# optimize lower bound
+fit &lt;- joint_ms_opt(object = model_ptr, par = start_vals, gr_tol = .01)
+
+# compute the Hessian
+hess &lt;- joint_ms_hess(object = model_ptr,par = fit$par)
+
+# standard errors of the parameters
+library(Matrix)
+sqrt(diag(solve(hess$hessian))) 
+</code></pre>
+
+
+</div>

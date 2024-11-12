@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>OZrain</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Daily Rainfall in Melbourne, Australia, 1981-1990</h2>
+
+<h3>Description</h3>
+
+<p>Amount of daily rainfall in Melbourne, Australia,
+1981-1990, measured in millimeters.  The amounts are integers with
+many zeros and three days of more than 500mm rain.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(OZrain)</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A time-series of length 3653 with the amount of daily rainfall in mm.
+Because of the two leap years 1984 and '88, we have constructed it
+with <code>ts(*, start=1981, frequency=365.25,
+    end = 1981+ (3653 - 1)/365.25)</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>There must be one extra observation since for the ten years with two
+leap years, there are only 3652 days.
+In 61 out of 100 days, there's no rain.
+</p>
+
+
+<h3>Source</h3>
+
+<p>‘<span class="file">rainfall.dat</span>’ in Rob J. Hyndman's <em>Time Series Data Library</em>,
+
+currently available at <a href="https://pkg.yangzhuoranyang.com/tsdl/">https://pkg.yangzhuoranyang.com/tsdl/</a>
+</p>
+<p>originally, Australian Bureau of Meteorology, <a href="https://www.abs.gov.au">https://www.abs.gov.au</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(OZrain)
+(n &lt;- length(OZrain)) ## should be 1 more than
+ISOdate(1990,12,31) - ISOdate(1981, 1,1)## but it's 2 ..
+
+has.rain &lt;- OZrain &gt; 0
+
+summary(OZrain[has.rain])# Median = 18,  Q3 = 50
+table(rain01 &lt;- as.integer(has.rain))
+table(rain4c &lt;- cut(OZrain, c(-.1, 0.5, 18.5, 50.1, 1000)))
+
+
+
+AIC(v1  &lt;- vlmc(rain01))# cutoff = 1.92
+AIC(v00 &lt;- vlmc(rain01, cut = 1.4))
+AIC(v0  &lt;- vlmc(rain01, cut = 1.5))
+
+
+
+hist(OZrain)
+hist(OZrain, breaks = c(0,1,5,10,50,1000), xlim = c(0,100))
+
+plot(OZrain, main = "Rainfall 1981-1990 in Melbourne")
+plot(OZrain, log="y", main = "Non-0 Rainfall [LOG scale]")
+
+lOZ &lt;- lowess(log10(OZrain[has.rain]), f= .05)
+lines(time(OZrain)[has.rain], 10^lOZ$y, col = 2, lwd = 2)
+</code></pre>
+
+
+</div>

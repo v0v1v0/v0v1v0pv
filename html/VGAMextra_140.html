@@ -1,0 +1,224 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>uninormalQlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Quantile regression:
+Link function for the quantiles of the normal distribution.
+</h2>
+
+<h3>Description</h3>
+
+
+<p>Computes the <code>uninormalQlink</code> transformation, its inverse and
+the first two derivatives.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">     uninormalQlink(theta, percentile = stop("Enter percentiles."),
+                    sd = NULL, wrt.param = NULL,
+                    bvalue = NULL, inverse = FALSE,
+                    deriv = 0, short = TRUE, tag = FALSE)
+                       
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character. This is <code class="reqn">\theta</code>
+('mean' parameter) but iy may 
+be <code class="reqn">\eta</code> depending on the other parameters.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentile</code></td>
+<td>
+
+<p>Numeric. A vector of percentiles of interest, denoted as <code>perc</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd</code></td>
+<td>
+
+<p>Numeric, positive. The 'standard deviation' parameter (required),
+denoted as <code class="reqn">\sigma</code>. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wrt.param</code></td>
+<td>
+
+<p>Positive integer, either <code class="reqn">1</code> or <code class="reqn">2</code>. The partial derivatives
+are computed with respect to one of the two linear predictors 
+involved with this link. Further details listed below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue, inverse, deriv, short, tag</code></td>
+<td>
+
+<p>See <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A 2-parameter link for the quantiles of the normal 
+distribution. It can only be used within 
+<code>uninormalff</code> as the first linear
+predictor. It is defined as
+
+
+
+
+
+</p>
+<p style="text-align: center;"><code class="reqn"> \tt{uninormalQlink}(\mu; \sigma) = \eta_1(\mu; \sigma) = 
+                \mu + \sigma \cdot \Phi^{-1}(perc), </code>
+</p>
+
+
+<p>where <code class="reqn">\Phi</code> is the error function
+(see, e.g., <code>erf</code>), 
+<code class="reqn">\mu in (-\infty, \infty)</code>, and <code class="reqn">\sigma &gt; 0</code>.
+This link is expressly a function of <code class="reqn">\theta = \mu</code>, therefore
+<code class="reqn">sigma</code> must be entered at every call.
+
+
+Numerical values of <code class="reqn">\sigma</code> out of range may 
+result in <code>Inf</code>, <code>-Inf</code>, <code>NA</code> or <code>NaN</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the <code>uninormalQlink</code> transformation of
+<code>theta</code>, i.e. <code class="reqn">\mu</code>, when <code>inverse = FALSE</code>.
+If <code>inverse = TRUE</code>, then <code class="reqn">\theta</code> becomes <code class="reqn">\eta</code>,
+and the inverse, <code class="reqn">\eta - \sigma \Phi^{-1}(perc)</code>,
+<em>for given</em> <code class="reqn">\sigma</code>, is returned.
+</p>
+<p>When <code>deriv = 1</code> <code>theta</code> becomes 
+<code class="reqn">\theta = (\mu, \sigma)= (\theta_1, \theta_2)</code>, and
+<code class="reqn">\eta = (\eta_1, \eta_2)</code> with 
+<code class="reqn">\eta_2 = \log~\sigma</code>,
+and the argument <code>wrt.param</code> must be
+considered:
+</p>
+<p>A) If <code>inverse = FALSE</code>, then 
+<code class="reqn">d</code> <code>eta1</code> / <code class="reqn">d</code> <code class="reqn">\mu</code> is returned when 
+<code>wrt.param = 1</code>, and
+<code class="reqn">d</code> <code>eta1</code> / <code class="reqn">d</code> <code class="reqn">\sigma</code> if
+<code>wrt.param = 2</code>.
+</p>
+<p>B) For <code>inverse = TRUE</code>, this link returns
+<code class="reqn">d</code> <code class="reqn">\mu</code> / <code class="reqn">d</code> <code>eta1</code> and
+<code class="reqn">d</code> <code class="reqn">\sigma</code> / <code class="reqn">d</code> <code>eta1</code> conformably arranged
+in a matrix, if <code>wrt.param = 1</code>,
+as a function of <code class="reqn">\theta_i</code>, <code class="reqn">i = 1, 2</code>.
+When <code>wrt.param = 2</code>, then
+<code class="reqn">d\mu</code> / <code class="reqn">d</code> <code>eta2</code> and 
+<code class="reqn">d\sigma</code> / <code class="reqn">d</code> <code>eta2</code>
+is returned.  
+
+
+
+
+
+
+
+
+
+
+
+</p>
+<p>For <code>deriv = 2</code>, the second derivatives in
+terms of <code>theta</code> are similarly returned.
+</p>
+
+
+
+
+
+
+<h3>Note</h3>
+
+<p>Numerical instability may occur for values of
+<code>sigma</code> too close
+to zero. Use argument <code>bvalue</code> to replace the former only before
+computing the link.
+</p>
+<p>If <code>theta</code> is character, then arguments <code>inverse</code> and
+<code>deriv</code> are ignored. See <code>Links</code>
+for further details.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>uninormalff</code>,
+<code>uninormal</code>,
+
+<code>Links</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    eta &lt;- seq(-3, 3, by = 0.1) # this is eta = log(Normal - Quantiles).
+    sigma  &lt;- exp(1)    # 'sigma' argument.
+    percentile &lt;- c(25, 50, 75, 95)  # some percentiles of interest.
+ 
+ ## E1. Get 'mean' values.
+   theta &lt;- uninormalQlink(theta = eta, percentile = percentile,
+                          sd = sigma, inverse = TRUE)  # Mu
+   
+ ## Not run: 
+ ## E2. Plot theta vs. eta, 'shape' fixed, for different percentiles.
+plot(theta[, 1], eta, type = "l", las = 1, lty = 2, lwd = 3,
+     ylim = c(-10, 10), xlim = c(-10, 10),
+     main = "uninormalQlink(theta; shape), fixed 'shape'.",
+     xlab = "Theta (scale)", ylab = "uninormalQlink")
+abline(v = 0, h = 0, col = "red")
+lines(theta[, 2], eta, lty = 2, lwd = 3, col = "blue")
+lines(theta[, 3], eta, lty = 2, lwd = 3, col = "orange")
+lines(theta[, 4], eta, lty = 2, lwd = 3, col = "red")
+legend("bottomright", c("25th Perc", "50th Perc", "75th Perc", "95th Perc"),
+      col = c("black", "blue", "orange", "red"), lty = c(2, 2, 2, 2),
+      lwd = rep(3, 4))
+
+ 
+## End(Not run)
+ 
+ ## E3. uninormalQlink() and its inverse ##
+    etabis  &lt;- uninormalQlink(theta = theta, percentile = percentile,
+                              sd = sigma, inverse = FALSE)
+    my.diff &lt;- eta - etabis
+    summary(my.diff)     # Zero
+</code></pre>
+
+
+</div>

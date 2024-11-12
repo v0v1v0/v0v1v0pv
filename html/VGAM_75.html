@@ -1,0 +1,193 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>betaff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> The Two-parameter Beta Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimation of the mean and precision parameters of the beta
+distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">betaff(A = 0, B = 1, lmu = "logitlink", lphi = "loglink",
+       imu = NULL, iphi = NULL,
+       gprobs.y = ppoints(8), gphi  = exp(-3:5)/4, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>A, B</code></td>
+<td>
+
+<p>Lower and upper limits of the distribution.
+The defaults correspond to the <em>standard beta distribution</em>
+where the response lies between 0 and 1.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lmu, lphi</code></td>
+<td>
+
+<p>Link function for the mean and precision parameters.
+The values <code class="reqn">A</code> and <code class="reqn">B</code> are extracted from the
+<code>min</code> and <code>max</code> arguments
+of <code>extlogitlink</code>.
+Consequently, only <code>extlogitlink</code> is allowed.
+</p>
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imu, iphi</code></td>
+<td>
+
+<p>Optional initial value for the mean and precision parameters
+respectively. A <code>NULL</code> value means a value is obtained in
+the <code>initialize</code> slot.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gprobs.y, gphi, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The two-parameter beta distribution can be written
+<code class="reqn">f(y) =</code>
+</p>
+<p style="text-align: center;"><code class="reqn">(y-A)^{\mu_1 \phi-1} \times
+    (B-y)^{(1-\mu_1) \phi-1} / [beta(\mu_1
+      \phi,(1-\mu_1) \phi) \times (B-A)^{\phi-1}]</code>
+</p>
+
+<p>for <code class="reqn">A &lt; y &lt; B</code>, and <code class="reqn">beta(.,.)</code> is the beta function
+(see <code>beta</code>).
+The parameter <code class="reqn">\mu_1</code> satisfies
+<code class="reqn">\mu_1 = (\mu - A) / (B-A)</code>
+where <code class="reqn">\mu</code> is the mean of <code class="reqn">Y</code>.
+That is, <code class="reqn">\mu_1</code> is the mean of of a
+standard beta distribution:
+<code class="reqn">E(Y) = A + (B-A) \times \mu_1</code>,
+and these are the fitted values of the object.
+Also, <code class="reqn">\phi</code> is positive
+and <code class="reqn">A &lt; \mu &lt; B</code>.
+Here, the limits <code class="reqn">A</code> and <code class="reqn">B</code> are <em>known</em>.
+</p>
+<p>Another parameterization of the beta distribution
+involving the raw
+shape parameters is implemented in <code>betaR</code>.
+</p>
+<p>For general <code class="reqn">A</code> and <code class="reqn">B</code>, the variance of <code class="reqn">Y</code> is
+<code class="reqn">(B-A)^2 \times \mu_1 \times (1-\mu_1) / (1+\phi)</code>.
+Then <code class="reqn">\phi</code> can be interpreted as
+a <em>precision</em> parameter
+in the sense that, for fixed <code class="reqn">\mu</code>,
+the larger the value of
+<code class="reqn">\phi</code>, the smaller the variance of <code class="reqn">Y</code>.
+Also, <code class="reqn">\mu_1
+  = shape1/(shape1+shape2)</code> and
+<code class="reqn">\phi = shape1+shape2</code>.
+Fisher scoring is implemented.
+</p>
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must have values in the
+interval (<code class="reqn">A</code>, <code class="reqn">B</code>).
+The user currently needs to manually choose <code>lmu</code> to
+match the input of arguments <code>A</code> and <code>B</code>, e.g.,
+with <code>extlogitlink</code>; see the example below.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Ferrari, S. L. P. and Francisco C.-N. (2004).
+Beta regression for modelling rates and proportions.
+<em>Journal of Applied Statistics</em>,
+<b>31</b>, 799–815.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>betaR</code>,
+
+<code>Beta</code>,
+<code>dzoabeta</code>,
+<code>genbetaII</code>,
+<code>betaII</code>,
+<code>betabinomialff</code>,
+<code>betageometric</code>,
+<code>betaprime</code>,
+<code>rbetageom</code>,
+<code>rbetanorm</code>,
+<code>kumar</code>,
+<code>extlogitlink</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">bdata &lt;- data.frame(y = rbeta(nn &lt;- 1000, shape1 = exp(0),
+                              shape2 = exp(1)))
+fit1 &lt;- vglm(y ~ 1, betaff, data = bdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+Coef(fit1)  # Useful for intercept-only models
+
+# General A and B, and with a covariate
+bdata &lt;- transform(bdata, x2 = runif(nn))
+bdata &lt;- transform(bdata, mu = logitlink(0.5 - x2, inverse = TRUE),
+                          prec = exp(3.0 + x2))  # prec == phi
+bdata &lt;- transform(bdata, shape2 = prec * (1 - mu),
+                          shape1 = mu * prec)
+bdata &lt;- transform(bdata,
+                   y = rbeta(nn, shape1 = shape1, shape2 = shape2))
+bdata &lt;- transform(bdata, Y = 5 + 8 * y)  # From 5--13, not 0--1
+fit &lt;- vglm(Y ~ x2, data = bdata, trace = TRUE,
+   betaff(A = 5, B = 13, lmu = extlogitlink(min = 5, max = 13)))
+coef(fit, matrix = TRUE)
+</code></pre>
+
+
+</div>

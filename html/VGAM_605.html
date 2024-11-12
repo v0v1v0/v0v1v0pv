@@ -1,0 +1,818 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gaitdpoisson</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Generally Altered, Inflated, Truncated
+and Deflated
+Poisson Regression
+</h2>
+
+<h3>Description</h3>
+
+<p>Fits a generally altered, inflated, truncated
+and deflated Poisson regression by MLE.
+The GAITD combo model having 7 types of special
+values is implemented.
+This allows mixtures of Poissons on nested
+and/or partitioned support as well as a
+multinomial logit model for (nonparametric)
+altered, inflated and deflated values.
+Truncation may include the upper tail.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">gaitdpoisson(a.mix = NULL, i.mix = NULL, d.mix = NULL,
+     a.mlm = NULL, i.mlm = NULL, d.mlm = NULL,
+     truncate = NULL, max.support = Inf,
+     zero = c("pobs", "pstr", "pdip"),
+     eq.ap = TRUE, eq.ip = TRUE, eq.dp = TRUE,
+     parallel.a = FALSE, parallel.i = FALSE, parallel.d = FALSE,
+     llambda.p = "loglink", llambda.a = llambda.p,
+     llambda.i = llambda.p, llambda.d = llambda.p,
+     type.fitted = c("mean", "lambdas", "pobs.mlm", "pstr.mlm",
+     "pdip.mlm", "pobs.mix", "pstr.mix", "pdip.mix",
+     "Pobs.mix", "Pstr.mix", "Pdip.mix", "nonspecial",
+     "Numer", "Denom.p", "sum.mlm.i", "sum.mix.i",
+     "sum.mlm.d", "sum.mix.d", "ptrunc.p",
+     "cdf.max.s"), gpstr.mix = ppoints(7) / 3,
+     gpstr.mlm = ppoints(7) / (3 + length(i.mlm)),
+     imethod = 1, mux.init = c(0.75, 0.5, 0.75),
+     ilambda.p = NULL, ilambda.a = ilambda.p,
+     ilambda.i = ilambda.p, ilambda.d = ilambda.p,
+     ipobs.mix = NULL, ipstr.mix = NULL, ipdip.mix = NULL,
+     ipobs.mlm = NULL, ipstr.mlm = NULL, ipdip.mlm = NULL,
+     byrow.aid = FALSE, ishrinkage = 0.95, probs.y = 0.35)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>truncate, max.support</code></td>
+<td>
+
+<p>Vector of truncated values, i.e., nonnegative integers.
+For the first seven arguments (for the <em>special</em> values)
+a <code>NULL</code> stands for an empty set, and
+the seven sets must be mutually disjoint.
+Argument <code>max.support</code> enables RHS-truncation,
+i.e., something equivalent to
+<code>truncate = (U+1):Inf</code> for some
+upper support point <code>U</code>
+specified by <code>max.support</code>.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a.mix, i.mix, d.mix</code></td>
+<td>
+
+<p>Vector of altered and inflated values corresponding
+to finite mixture models.
+These are described as <em>parametric</em> or structured.
+</p>
+<p>The parameter <code>lambda.p</code> is always estimated.
+If <code>length(a.mix)</code> is 1 or more then the parameter
+<code>pobs.mix</code> is estimated.
+If <code>length(i.mix)</code> is 1 or more then the parameter
+<code>pstr.mix</code> is estimated.
+If <code>length(d.mix)</code> is 1 or more then the parameter
+<code>pdip.mix</code> is estimated.
+</p>
+<p>If <code>length(a.mix)</code> is 2 or more then the parameter
+<code>lambda.a</code> is estimated.
+If <code>length(i.mix)</code> is 2 or more then the parameter
+<code>lambda.i</code> is estimated.
+If <code>length(d.mix)</code> is 2 or more then the parameter
+<code>lambda.d</code> is estimated.
+</p>
+
+
+<p>If <code>length(a.mix) == 1</code>, <code>length(i.mix) == 1</code> or
+<code>length(d.mix) == 1</code> then <code>lambda.a</code>,
+<code>lambda.i</code> and <code>lambda.d</code> are unidentifiable and
+therefore ignored. In such cases
+it would be equivalent to moving <code>a.mix</code> into
+<code>a.mlm</code>, etc.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p>Due to its great flexibility, it is easy to misuse this function
+and ideally the values of the above arguments should be well
+justified by the application on hand.
+Adding inappropriate or
+unnecessary values to these arguments willy-nilly
+is a recipe for disaster, especially for
+<code>i.mix</code> and <code>d.mix</code>.
+Using <code>a.mlm</code> effectively removes a subset of the data
+from the main analysis, therefore may result in a substantial
+loss of efficiency.
+For seeped values, <code>a.mix</code>, <code>a.mlm</code>, 
+<code>d.mix</code> and <code>d.mlm</code> can be used only.
+Heaped values can be handled by <code>i.mlm</code> and <code>i.mix</code>,
+as well as <code>a.mix</code> and <code>a.mlm</code>.
+Because of the NBP reason below, it sometimes may be necessary
+to specify deflated values to altered values.
+</p>
+
+
+
+
+
+
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a.mlm, i.mlm, d.mlm</code></td>
+<td>
+
+<p>Vector of altered, inflated and deflated values corresponding
+to the multinomial logit model (MLM) probabilities of
+observing those values—see <code>multinomial</code>.
+These are described as <em>nonparametric</em> or unstructured.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>llambda.p, llambda.a, llambda.i, llambda.d</code></td>
+<td>
+
+<p>Link functions for the parent,
+altered, inflated  and deflated distributions respectively.
+See <code>Links</code> for more choices and information.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>eq.ap, eq.ip, eq.dp</code></td>
+<td>
+
+<p>Single logical each.
+Constrain the rate parameters to be equal?
+See <code>CommonVGAMffArguments</code> for information.
+Having all three arguments <code>TRUE</code> gives
+greater stability in
+the estimation because of fewer parameters and therefore
+fewer initial values needed,
+however if so then one should try relax some of
+the arguments later.
+</p>
+
+<p>For the GIT–Pois submodel,
+after plotting the responses,
+if the distribution of the spikes
+above the nominal probabilities
+has roughly the same shape
+as the ordinary values then setting
+<code>eq.ip = TRUE</code> would be a good idea
+so that <code>lambda.i == lambda.p</code>.
+And if <code>i.mix</code> is of length 2 or a bit more, then
+<code>TRUE</code> should definitely be entertained.
+Likewise, for heaped or seeped data, setting
+<code>eq.ap = TRUE</code>
+(so that <code>lambda.p == lambda.p</code>)
+would be a good idea for the
+GAT–Pois if the shape of the altered probabilities
+is roughly the same as the parent distribution.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel.a, parallel.i, parallel.d</code></td>
+<td>
+
+<p>Single logical each.
+Constrain the MLM probabilities to be equal?
+If so then this applies to all 
+<code>length(a.mlm)</code> <code>pobs.mlm</code> probabilities
+or all
+<code>length(i.mlm)</code> <code>pstr.mlm</code> probabilities
+or all
+<code>length(d.mlm)</code> <code>pdip.mlm</code> probabilities.
+See <code>CommonVGAMffArguments</code>
+for information.
+The default means that the probabilities are generally
+unconstrained and unstructured and will follow the shape
+of the data.
+See <code>constraints</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.fitted</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>
+and below for information.
+The first value is the default, and this is usually the
+unconditional mean.
+Choosing an irrelevant value may result in
+an <code>NA</code> being returned and a warning, e.g.,
+<code>"pstr.mlm"</code> for a nonparametric GAT model.
+</p>
+
+<p>The choice <code>"lambdas"</code> returns a matrix with at least
+one column and up to three others,
+corresponding to all those estimated.
+In order, their <code>colnames</code> are
+<code>"lambda.p"</code>, <code>"lambda.a"</code>, <code>"lambda.i"</code>
+and <code>"lambda.d"</code>.
+For other distributions such as <code>gaitdlog</code>
+<code>type.fitted = "shapes"</code> is permitted and the
+<code>colnames</code> are
+<code>"shape.p"</code>, <code>"shape.a"</code>, <code>"shape.i"</code> and
+<code>"shape.d"</code>, etc.
+</p>
+<p>Option <code>"Pobs.mix"</code> provides more detail about
+<code>"pobs.mix"</code> by returning a matrix whose columns
+correspond to each altered value; the row sums
+(<code>rowSums</code>)
+of this matrix is <code>"pobs.mix"</code>.
+Likewise <code>"Pstr.mix"</code> about <code>"pstr.mix"</code>
+and <code>"Pdip.mix"</code> about <code>"pdip.mix"</code>. 
+</p>
+
+
+
+
+
+
+
+
+
+<p>The choice <code>"cdf.max.s"</code> is the CDF evaluated
+at <code>max.support</code> using the parent distribution,
+e.g., <code>ppois(max.support, lambda.p)</code> for
+<code>gaitdpoisson</code>.
+The value should be 1 if <code>max.support = Inf</code>
+(the default).
+The choice <code>"nonspecial"</code> is the probability of a
+nonspecial value.
+The choices <code>"Denom.p"</code> and <code>"Numer"</code>
+are quantities
+found in the GAITD combo PMF and are for convenience only.
+</p>
+<p>The choice <code>type.fitted = "pobs.mlm"</code> returns
+a matrix whose columns are
+the altered probabilities (Greek symbol <code class="reqn">\omega_s</code>).
+The choice <code>"pstr.mlm"</code> returns
+a matrix whose columns are
+the inflated probabilities (Greek symbol <code class="reqn">\phi_s</code>).
+The choice <code>"pdip.mlm"</code> returns
+a matrix whose columns are
+the deflated probabilities (Greek symbol <code class="reqn">\psi_s</code>).
+</p>
+<p>The choice <code>"ptrunc.p"</code> returns the probability of having
+a truncated value with respect to the parent distribution.
+It includes any truncated values in the upper tail
+beyond <code>max.support</code>.
+The probability of a value less than or equal to
+<code>max.support</code> with respect to the parent distribution
+is <code>"cdf.max.s"</code>.
+</p>
+
+
+
+
+<p>The choice <code>"sum.mlm.i"</code> adds two terms.
+This gives the probability of an inflated value,
+and the formula can be loosely written down
+as something like
+<code>"pstr.mlm" + "Numer" * dpois(i.mlm, lambda.p) / "Denom.p"</code>.
+The other three <code>"sum.m*"</code> arguments are similar.
+</p>
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gpstr.mix, gpstr.mlm</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+Gridsearch values for the two parameters.
+If failure occurs try a finer grid, especially closer to 0,
+and/or experiment with <code>mux.init</code>.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>imethod, ipobs.mix, ipstr.mix, ipdip.mix</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+Good initial values are difficult to compute because of
+the great flexibility of GAITD regression, therefore
+it is often necessary to use these arguments.
+A careful examination of a <code>spikeplot</code>
+of the data should lead to good choices.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipobs.mlm, ipstr.mlm, ipdip.mlm</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mux.init</code></td>
+<td>
+
+<p>Numeric, of length 3.
+General downward multiplier for initial values for
+the sample proportions (MLEs actually).
+This is under development and more details are
+forthcoming.
+In general, 1 means unchanged and values
+should lie in (0, 1], and values about 0.5 are recommended.
+The elements apply in order to altered, inflated and
+deflated (no distinction between mix and MLM).
+</p>
+
+
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilambda.p, ilambda.a, ilambda.i, ilambda.d</code></td>
+<td>
+
+<p>Initial values for the rate parameters;
+see <code>CommonVGAMffArguments</code> for information.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>probs.y, ishrinkage</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>byrow.aid</code></td>
+<td>
+
+<p>Details are at <code>Gaitdpois</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+By default, all the MLM probabilities are
+modelled as simple as possible (intercept-only) to
+help avoid numerical problems, especially when there
+are many covariates.
+The Poisson means are modelled by the covariates, and
+the default <code>zero</code> vector is pruned of any irrelevant values.
+To model all the MLM probabilities with covariates
+set <code>zero = NULL</code>, however, the number of regression
+coefficients could be excessive.
+</p>
+<p>For the MLM probabilities,
+to model <code>pobs.mix</code> only with covariates
+set <code>zero = c('pstr', 'pobs.mlm', 'pdip')</code>.
+Likewise,
+to model <code>pstr.mix</code> only with covariates
+set <code>zero = c('pobs', 'pstr.mlm', 'pdip')</code>.
+</p>
+<p>It is noted that, amongst other things,
+<code>zipoisson</code> and <code>zipoissonff</code> differ
+with respect to <code>zero</code>, and ditto for
+<code>zapoisson</code> and <code>zapoissonff</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The full
+GAITD–Pois combo model
+may be fitted with this family function.
+There are seven types of special values and all arguments for these
+may be used in a single model.
+Here, the MLM represents the nonparametric while the Pois
+refers to the Poisson mixtures.
+The defaults for this function correspond to an ordinary Poisson
+regression so that <code>poissonff</code> is called instead.
+A MLM with only one probability to model is equivalent to
+logistic regression
+(<code>binomialff</code> and <code>logitlink</code>).
+</p>
+
+<p>The order of the linear/additive predictors is best
+explained by an example.
+Suppose a combo model has
+<code>length(a.mix) &gt; 2</code> and
+<code>length(i.mix) &gt; 2</code>,
+<code>length(d.mix) &gt; 2</code>,
+<code>a.mlm = 3:5</code>,
+<code>i.mlm = 6:9</code> and
+<code>d.mlm = 10:12</code>, say.
+Then <code>loglink(lambda.p)</code> is the first.
+The second is <code>multilogitlink(pobs.mix)</code> followed
+by <code>loglink(lambda.a)</code> because <code>a.mix</code> is long enough.
+The fourth is <code>multilogitlink(pstr.mix)</code> followed
+by <code>loglink(lambda.i)</code> because <code>i.mix</code> is long enough.
+The sixth is <code>multilogitlink(pdip.mix)</code> followed
+by <code>loglink(lambda.d)</code> because <code>d.mix</code> is long enough.
+Next are the probabilities for the <code>a.mlm</code> values.
+Then are the probabilities for the <code>i.mlm</code> values.
+Lastly are the probabilities for the <code>d.mlm</code> values.
+All the probabilities are estimated by one big MLM
+and effectively
+the <code>"(Others)"</code> column of left over probabilities is
+associated with the nonspecial values.
+These might be called the
+<em>nonspecial baseline probabilities</em> (NBP).
+The dimension of the vector of linear/additive predictors here
+is <code class="reqn">M=17</code>.
+</p>
+
+<p>Two mixture submodels that may be fitted can be abbreviated
+GAT–Pois or
+GIT–Pois.
+For the GAT model
+the distribution being fitted is a (spliced) mixture
+of two Poissons with differing (partitioned) support.
+Likewise, for the GIT model
+the distribution being fitted is a mixture
+of two Poissons with nested support.
+The two rate parameters may be constrained to be equal using
+<code>eq.ap</code> and <code>eq.ip</code>.
+</p>
+
+
+
+
+
+<p>A good first step is to apply <code>spikeplot</code>
+for selecting
+candidate values for altering, inflating and deflating.
+Deciding between
+parametrically or nonparametrically can also be determined from
+examining the spike plot.  Misspecified
+<code>a.mix/a.mlm/i.mix/i.mlm/d.mix/d.mlm</code>
+will result in convergence problems
+(setting <code>trace = TRUE</code> is a <em>very</em> good idea.)
+This function currently does not handle multiple responses.
+Further details are at <code>Gaitdpois</code>.
+
+
+
+
+</p>
+
+<p>A well-conditioned data–model combination should pose no
+difficulties for the automatic starting value selection
+being successful.
+Failure to obtain initial values from this self-starting
+family function indicates the degree of inflation/deflation
+may be marginal and/or a misspecified model.
+If this problem is worth surmounting
+the arguments to focus on especially are
+<code>mux.init</code>,
+<code>gpstr.mix</code>, <code>gpstr.mlm</code>,
+<code>ipdip.mix</code> and <code>ipdip.mlm</code>.
+See below for the stepping-stone trick.
+</p>
+<p>Apart from the order of the linear/additive predictors,
+the following are (or should be) equivalent:
+<code>gaitdpoisson()</code> and <code>poissonff()</code>,
+<code>gaitdpoisson(a.mix = 0)</code>
+and <code>zapoisson(zero = "pobs0")</code>,
+<code>gaitdpoisson(i.mix = 0)</code>
+and <code>zipoisson(zero = "pstr0")</code>,
+<code>gaitdpoisson(truncate = 0)</code> and <code>pospoisson()</code>.
+Likewise, if
+<code>a.mix</code> and <code>i.mix</code> are assigned a scalar then
+it effectively moves that scalar to <code>a.mlm</code> and <code>i.mlm</code>
+because there is no <code>lambda.a</code>
+or <code>lambda.i</code> being estimated.
+Thus
+<code>gaitdpoisson(a.mix = 0)</code>
+and <code>gaitdpoisson(a.mlm = 0)</code>
+are the effectively same, and ditto for
+<code>gaitdpoisson(i.mix = 0)</code>
+and <code>gaitdpoisson(i.mlm = 0)</code>.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+<p>The <code>fitted.values</code> slot of the fitted object,
+which should be extracted by the
+generic function <code>fitted</code>,
+returns the mean <code class="reqn">\mu</code> by default.
+See the information above on <code>type.fitted</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Amateurs tend to be overzealous fitting
+zero-inflated models when the
+fitted mean is low—the warning of
+<code>ziP</code> should be heeded.
+For GAITD regression the warning applies more
+strongly and generally; here to <em>all</em>
+<code>i.mix</code>, <code>i.mlm</code>, <code>d.mix</code> and
+<code>d.mlm</code> values, not just 0.  Even one
+misspecified special value usually will cause
+convergence problems.
+</p>
+<p>Default values for this and similar family
+functions may change in the future, e.g.,
+<code>eq.ap</code> and <code>eq.ip</code>.  Important
+internal changes might occur too, such as the
+ordering of the linear/additive predictors and
+the quantities returned as the fitted values.
+</p>
+<p>Using <code>i.mlm</code> requires more caution
+than <code>a.mlm</code> because gross inflation
+is ideally needed for it to work safely.
+Ditto for <code>i.mix</code> versus <code>a.mix</code>.
+Data exhibiting deflation or little to no
+inflation will produce numerical problems,
+hence set <code>trace = TRUE</code> to monitor
+convergence.  More than c.10 IRLS iterations
+should raise suspicion.
+</p>
+<p>Ranking the four operators by difficulty,
+the easiest is truncation followed by
+alteration, then inflation and the most
+difficult is deflation.  The latter needs
+good initial values and the current default
+will probably not work on some data sets.
+Studying the spikeplot is time very well spent.
+In general it is very easy to specify an
+<em>overfitting</em> model so it is a good idea
+to split the data into training and test sets.
+</p>
+
+
+
+<p>This function is quite memory-hungry with
+respect to <code>length(c(a.mix, i.mix, d.mix,
+  a.mlm, i.mlm, d.mlm))</code>.  On consuming something
+different, because all values of the NBP vector
+need to be positive it pays to be economical
+with respect to <code>d.mlm</code> especially so
+that one does not consume up probabilities
+unnecessarily so to speak.
+</p>
+
+
+
+
+
+
+<p>It is often a good idea to set <code>eq.ip =
+  TRUE</code>, especially when <code>length(i.mix)</code>
+is not much more than 2 or the values of
+<code>i.mix</code> are not spread over the range
+of the response.  This way the estimation
+can borrow strength from both the inflated
+and non-inflated values.  If the <code>i.mix</code>
+values form a single small cluster then this
+can easily create estimation difficulties—the
+idea is somewhat similar to multicollinearity.
+The same holds for <code>d.mix</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Numerical problems can easily arise because
+of the exceeding flexibility of this
+distribution and/or the lack of sizeable
+inflation/deflation; it is a good idea to gain
+experience with simulated data first before
+applying it to real data.
+Numerical problems may arise if any of the
+special values are in remote places of the
+support, e.g., a value <code>y</code> such that
+<code>dpois(y, lambda.p)</code> is very close to
+0. This is because the ratio of two tiny values
+can be unstable.
+</p>
+<p>Good initial values may be difficult to obtain
+using self-starting procedures, especially
+when there are covariates.  If so, then it is
+advisable to use a trick: fit an intercept-only
+model first and then use <code>etastart =
+  predict(int.only.model)</code> to fit the model
+with covariates.  This uses the simpler model
+as a stepping-stone.
+</p>
+<p>The labelling of the linear/additive predictors
+has been abbreviated to reduce space.  For
+example, <code>multilogitlink(pobs.mix)</code> and
+<code>multilogitlink(pstr.mix)</code> would be more
+accurately <code>multilogitlink(cbind(pobs.mix,
+  pstr.mix))</code> because one grand MLM is fitted.
+This shortening may result in modifications
+needed in other parts of <span class="pkg">VGAM</span> to
+compensate.
+</p>
+<p>Because estimation involves a MLM, the restricted
+parameter space means that if the dip probabilities
+are large then the NBP may become too close to 0.
+If this is so then there are tricks to avoid a
+negative NBP.
+One of them is to model as many values of <code>d.mlm</code>
+as <code>d.mix</code>, hence the dip probabilities become
+modelled via the deflation distribution instead.
+Another trick to alter those special values rather than
+deflating them if the dip probabilities are large.
+</p>
+<p>Due to its complexity,
+the HDE test <code>hdeff</code> is currently
+unavailable for GAITD regressions.
+</p>
+<p>Randomized quantile residuals (RQRs) are
+available; see <code>residualsvglm</code>.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee</p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Ma, C. (2024).
+Generally altered, inflated, truncated and deflated regression.
+<em>Statistical Science</em>, <b>39</b> (in press).
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>Gaitdpois</code>,
+<code>multinomial</code>,
+<code>rootogram4</code>,
+<code>specials</code>,
+<code>plotdgaitd</code>,
+<code>spikeplot</code>,
+<code>meangaitd</code>,
+<code>KLD</code>,
+<code>goffset</code>,
+<code>Trunc</code>,
+<code>gaitdnbinomial</code>,
+<code>gaitdlog</code>,
+<code>gaitdzeta</code>,
+<code>multilogitlink</code>,
+<code>multinomial</code>,
+<code>residualsvglm</code>,
+<code>poissonff</code>,
+<code>zapoisson</code>,
+<code>zipoisson</code>,
+<code>pospoisson</code>,
+<code>CommonVGAMffArguments</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+i.mix &lt;- c(5, 10)  # Inflate these values parametrically
+i.mlm &lt;- c(14, 15)  # Inflate these values
+a.mix &lt;- c(1, 13)  # Alter these values
+tvec &lt;- c(3, 11)   # Truncate these values
+pstr.mlm &lt;- 0.1  # So parallel.i = TRUE
+pobs.mix &lt;- pstr.mix &lt;- 0.1
+max.support &lt;- 20; set.seed(1)
+gdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+gdata &lt;- transform(gdata, lambda.p = exp(2 + 0.0 * x2))
+gdata &lt;- transform(gdata,
+  y1 = rgaitdpois(nn, lambda.p, a.mix = a.mix, i.mix = i.mix,
+                  pobs.mix = pobs.mix, pstr.mix = pstr.mix,
+                  i.mlm = i.mlm, pstr.mlm = pstr.mlm,
+                  truncate = tvec, max.support = max.support))
+gaitdpoisson(a.mix = a.mix, i.mix = i.mix, i.mlm = i.mlm)
+with(gdata, table(y1))
+fit1 &lt;- vglm(y1 ~ 1, crit = "coef", trace = TRUE, data = gdata,
+             gaitdpoisson(a.mix = a.mix, i.mix = i.mix,
+                          i.mlm = i.mlm, parallel.i = TRUE,
+                          eq.ap = TRUE, eq.ip = TRUE, truncate =
+                          tvec, max.support = max.support))
+head(fitted(fit1, type.fitted = "Pstr.mix"))
+head(predict(fit1))
+t(coef(fit1, matrix = TRUE))  # Easier to see with t()
+summary(fit1)  # No HDE test by default but HDEtest = TRUE is ideal
+spikeplot(with(gdata, y1), lwd = 2)
+plotdgaitd(fit1, new.plot = FALSE, offset.x = 0.2, all.lwd = 2)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

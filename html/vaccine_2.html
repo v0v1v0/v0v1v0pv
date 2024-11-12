@@ -1,0 +1,60 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>as_table</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create table of estimates</h2>
+
+<h3>Description</h3>
+
+<p>Format estimates returned by <code>est_ce</code> as a table
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">as_table(..., which = "CR")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>One or more objects of class <code>"vaccine_est"</code> returned by
+<code>est_ce</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>which</code></td>
+<td>
+<p>One of c("CR", "CVE"); controls whether the table contains CR or
+CVE values.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A table of CR or CVE values
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(hvtn505)
+dat &lt;- load_data(time="HIVwk28preunblfu", event="HIVwk28preunbl", vacc="trt",
+                 marker="IgG_V2", covariates=c("age","BMI","bhvrisk"),
+                 weights="wt", ph2="casecontrol", data=hvtn505)
+
+ests_cox &lt;- est_ce(dat=dat, type="Cox", t_0=578)
+ests_np &lt;- est_ce(dat=dat, type="NP", t_0=578)
+ests_table &lt;- as_table(ests_cox, ests_np)
+head(ests_table)
+
+</code></pre>
+
+
+</div>

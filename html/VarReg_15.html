@@ -1,0 +1,234 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>semiVarReg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Semi parametric mean and variance regression</h2>
+
+<h3>Description</h3>
+
+<p><code>semiVarReg</code> performs semi-parametric mean and variance regression models. Currently, this is
+only designed for a single covariate that is fit in the mean and variance models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">semiVarReg(
+  y,
+  x,
+  cens.ind = NULL,
+  meanmodel = c("zero", "constant", "linear", "semi"),
+  mean.intercept = TRUE,
+  varmodel = c("constant", "linear", "semi"),
+  knots.m = 2,
+  knots.v = 2,
+  degree = 2,
+  mono.var = c("none", "inc", "dec"),
+  para.space = c("all", "positive", "negative"),
+  control = list(...),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Vector containing outcome data. Must be no missing data and any censored values must
+be set to the limits of detection.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Vector containing the covariate data. Must be no missing data and same length as <code>y</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cens.ind</code></td>
+<td>
+<p>Vector containing the censoring indicator, if applicable. There must be no missing
+data contained in the vector and this vector should be the same length as <code>y</code>.
+<code>"0"</code> values indicate uncensored data, <code>"1"</code> indicates right, or upper, censoring and
+<code>"-1"</code> indicates left, or lower, censoring. The default is <code>NULL</code> which indicates there
+is no censored data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>meanmodel</code></td>
+<td>
+<p>Text to specify the mean model to be fit to the data. The possible inputs are
+<code>"zero"</code>, <code>"constant"</code>, <code>"linear"</code> or <code>"semi"</code>. <code>"semi"</code>
+indicates a semi-parametric spline model, with the number of internal knots specified in
+<code>knots.m</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean.intercept</code></td>
+<td>
+<p>Logical argument  to indicate if the mean model is to include an intercept
+term. This option is only available in the censored mean model, and the default=<code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varmodel</code></td>
+<td>
+<p>Text to specify the variance model to be fit to the data. The possible inputs are
+<code>"constant"</code>, <code>"linear"</code> or <code>"semi"</code>. <code>"semi"</code> indicates a semi-parametric
+B-spline model, with the number of internal knots specified in <code>knots.v</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knots.m</code></td>
+<td>
+<p>Integer indicating the number of internal knots to be fit in the semi-parametric
+mean model. Knots are placed equidistantly over the covariate. The default value is <code>2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knots.v</code></td>
+<td>
+<p>Integer indicating the number of internal knots to be fit in the semi-parametric
+variance model. Knots are placed equidistantly over the covariate. The default value is <code>2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>degree</code></td>
+<td>
+<p>Integer indicating the degree of the splines fit in the mean and the variance models.
+The default value is <code>2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mono.var</code></td>
+<td>
+<p>Text to indicate whether the variance model is monotonic. Note that this is not
+available for the <code>"constant"</code> variance model. Options are <code>"none"</code>, <code>"inc"</code> or
+<code>"dec"</code>, with the default=<code>"none"</code>. <code>"Inc"</code> indicates increasing monotonic and
+<code>"dec"</code> indicates decreasing monotonic. If the variance model is linear, the parameter
+space is constrained (positive for increasing and negative for decreasing). For semi-parametric
+variance models, the appropriate monotonic B-splines are fit in the semi-parametric variance model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>para.space</code></td>
+<td>
+<p>Text to indicate the parameter space to search for scale2 parameter estimates.
+<code>"positive"</code> means only search positive parameter space, <code>"negative"</code> means search only
+negative parameter space and <code>"all"</code> means search all parameter spaces. Default is <code>all</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>list of control parameters. See <code>VarReg.control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be used to form the default control argument if it is not supplied
+directly</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>semiVarReg</code> returns an object of class <code>"VarReg"</code> which inherits some components from the class <code>"glm"</code>. This object of class <code>"VarReg"</code> is a list containing the following components:
+</p>
+
+<ul>
+<li>
+<p><code>modeltype</code>: Text indicating the model that was fit, indicating if a censored approach or an uncensored approach was performed.
+</p>
+</li>
+<li>
+<p><code>knots.m</code>, <code>knots.v</code>, <code>degree</code>, <code>meanmodel</code>, <code>varmodel</code>: Returning the input variables as described above
+</p>
+</li>
+<li>
+<p><code>converged</code>: Logical argument indicating if convergence occurred.
+</p>
+</li>
+<li>
+<p><code>iterations</code>: Total iterations performed.
+</p>
+</li>
+<li>
+<p><code>reldiff</code>: the positive convergence tolerance that occurred at the final iteration.
+</p>
+</li>
+<li>
+<p><code>loglik</code>: Numeric variable of the maximised log-likelihood.
+</p>
+</li>
+<li>
+<p><code>boundary</code>: Logical argument indicating if the MLE is on the boundary of the parameter space.
+</p>
+</li>
+<li>
+<p><code>aic.c</code>: Akaike information criterion corrected for small samples
+</p>
+</li>
+<li>
+<p><code>aic</code>: Akaike information criterion
+</p>
+</li>
+<li>
+<p><code>bic</code>: Bayesian information criterion
+</p>
+</li>
+<li>
+<p><code>hqc</code>: Hannan-Quinn information criterion
+</p>
+</li>
+<li>
+<p><code>mean.ind</code>: Vector of integer(s) indicating the column number(s) in the dataframe
+<code>data</code> that were fit in the mean model.
+</p>
+</li>
+<li>
+<p><code>mean</code>: Vector of the maximum likelihood estimates of the mean parameters.
+</p>
+</li>
+<li> <p><code>var.ind</code>: Vector of integer(s) indicating the column(s) in the dataframe
+<code>data</code> that were fit in the variance model.
+</p>
+</li>
+<li>
+<p><code>variance</code>: Vector of the maximum likelihood estimates of the variance parameters.
+</p>
+</li>
+<li>
+<p><code>cens.ind</code>: Integer indicating the column in the dataframe <code>data</code> that
+corresponds to the censoring indicator.
+</p>
+</li>
+<li>
+<p><code>data</code>: Dataframe containing the variables included in the model.</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(mcycle)
+## run a model with linear mean and linear variance:
+linmodel&lt;-semiVarReg(mcycle$accel, mcycle$times, meanmodel="linear", varmodel="linear",
+ maxit=10000)
+## run a model with semi-parametric mean (4 internal knots) and semi-parametric variance (2 knots):
+##not run
+##semimodel&lt;-semiVarReg(mcycle$accel, mcycle$times, meanmodel="semi", varmodel="semi",
+##knots.m=4, knots.v=2, maxit=10000)
+## run a model with semi-parametric mean (4 internal knots) and semi-parametric monotonic
+## variance (2 knots):
+## not run
+##semimodel_inc&lt;-semiVarReg(mcycle$accel, mcycle$times, meanmodel="semi", varmodel="semi",
+##knots.m=4, knots.v=2, mono.var="inc")
+</code></pre>
+
+
+</div>

@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>run.annotation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Run annotation on a set of VCF files</h2>
+
+<h3>Description</h3>
+
+<p>Takes a data frame with paths to VCF files, and runs ANNOVAR annotation on each file.
+To allow for smooth connections with downstream pipeline steps, the function returns a variant
+specification data frame that can be used as input to merging steps.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">run.annotation(vcf.specification, output.directory = NULL,
+  job.name.prefix = NULL, job.group = NULL, quiet = FALSE,
+  verify.options = !quiet)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vcf.specification</code></td>
+<td>
+<p>Data frame detailing VCF files to be processed, from <code>prepare.vcf.specification</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output.directory</code></td>
+<td>
+<p>Path to folder where code and log files should be stored in their respective subdirectories. 
+If not supplied, code and log files will be stored in the directory with each VCF file.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>job.name.prefix</code></td>
+<td>
+<p>Prefix to be added before VCF name in job name. Defaults to 'annotate', but should be changed if 
+running multiple callers to avoid</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>job.group</code></td>
+<td>
+<p>Group job should be associated with on cluster</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>Logical indicating whether to print commands to screen rather than submit them</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verify.options</code></td>
+<td>
+<p>Logical indicating whether to run verify.varitas.options</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Data frame with details of variant files
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">run.annotation(
+  data.frame(
+    sample.id = c('a', 'b'),
+    vcf = c('a.vcf', 'b.vcf'),
+    caller = c('mutect', 'mutect')
+  ),
+  output.directory = '.',
+  quiet = TRUE
+)
+
+</code></pre>
+
+
+</div>

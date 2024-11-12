@@ -1,0 +1,63 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ve</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vaccine efficacy estimation</h2>
+
+<h3>Description</h3>
+
+<p>Calculates vaccine efficacy and confidence interval as described in Dudasova et al., 2024, BMC Med Res Methodol
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ve(Fit, Data, nboot = 2000)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Fit</code></td>
+<td>
+<p>an object of class inheriting from <code>"glm"</code> representing the fitted model</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>a data frame containing the variables in the fitted model; data must include a column called "vaccine" with binary indicator of vaccination status</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nboot</code></td>
+<td>
+<p>a numeric value for number of bootstrap samples for confidence interval construction</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a value of vaccine efficacy <code>VE</code> and lower and upper bound of confidence interval <code>CI</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Load an example dataset
+data(data_temp)
+
+# Fit logistic model relating neutralizing titer to disease status
+logisticFit &lt;- glm(disease_any ~ nAb1, data = data_temp, family = binomial())
+
+# Estimate vaccine efficacy and 95\% confidence interval based on the fitted model
+ve(logisticFit, data_temp, nboot = 500)
+
+</code></pre>
+
+
+</div>

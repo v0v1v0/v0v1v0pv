@@ -1,0 +1,157 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>shortCallCondorPnL</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculates per share Profit and Loss (PnL) at expiration for Short Call Condor Option Strategy and draws its Bar Plot displaying PnL in the Plots tab.</h2>
+
+<h3>Description</h3>
+
+<p>This is a volatility strategy consisting of a short position in an ITM call option with a strike price X1L, a long position in an ITM call option with a higher strike price X2Ml, a long position in an OTM call option with a strike price X3Mu, and a short position in an OTM call option with a higher strike price X4H. All strikes are equidistant: X4H minus X3Mu equals to X3Mu minus X2Ml; equals to X2Mu minus X1L. This is a relatively low net credit trade. The trader or investor has a neutral  outlook (Kakushadze &amp; Serur, 2018).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">shortCallCondorPnL(
+  ST,
+  X1L,
+  X2Ml,
+  X3Mu,
+  X4H,
+  C1L,
+  C2Ml,
+  C3Mu,
+  C4H,
+  hl = 0,
+  hu = 2,
+  spot = spot,
+  pl = pl,
+  myData = myData,
+  myTibble = myTibble,
+  PnL = PnL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ST</code></td>
+<td>
+<p>Spot Price at time T.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X1L</code></td>
+<td>
+<p>Lower Strike Price or eXercise price for one ITM shorted Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X2Ml</code></td>
+<td>
+<p>Middle-low Strike Price or eXercise price for two middle strike bought Calls.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X3Mu</code></td>
+<td>
+<p>Middle-upper Strike Price or eXercise price for two middle strike bought Calls.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X4H</code></td>
+<td>
+<p>Higher Strike Price or eXercise price for one OTM shorted Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C1L</code></td>
+<td>
+<p>Call Premium or Call Price received for the one ITM shorted Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C2Ml</code></td>
+<td>
+<p>Call Premium or Call Price paid for the middle-low bought Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C3Mu</code></td>
+<td>
+<p>Call Premium or Call Price paid for the middle-upper bought Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C4H</code></td>
+<td>
+<p>Call Premium or Call Price received for the one OTM shorted Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hl</code></td>
+<td>
+<p>lower bound value for setting lower-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hu</code></td>
+<td>
+<p>upper bound value for setting upper-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spot</code></td>
+<td>
+<p>Spot Price</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pl</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myData</code></td>
+<td>
+<p>Data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myTibble</code></td>
+<td>
+<p>tibble</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PnL</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>According to conceptual details given by Cohen (2015), and a closed form solution provided by Kakushadze and Serur (2018), this method is developed, and the given examples are created, to compute per share Profit and Loss at expiration for Short Call Condor Option Strategy and draw its graph in the Plots tab.
+</p>
+
+
+<h3>Value</h3>
+
+<p>graph of the strategy
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">shortCallCondorPnL(52,45,50,55,60,10,7,4,3.)
+shortCallCondorPnL(415,400,420,440,460,50,35,22,16,hl=0.95,hu=1.125)
+</code></pre>
+
+
+</div>

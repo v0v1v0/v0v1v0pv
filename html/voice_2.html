@@ -1,0 +1,92 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>diarize</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Who spoke when?</h2>
+
+<h3>Description</h3>
+
+<p>Diarization of WAV audios.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">diarize(
+  fromWav,
+  toRttm = NULL,
+  autoDir = FALSE,
+  pycall = "~/miniconda3/envs/pyvoice38/bin/python3.8",
+  token = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fromWav</code></td>
+<td>
+<p>Either a file or a directory containing WAV files.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>toRttm</code></td>
+<td>
+<p>A directory to write RTTM files. If the default <code>toRttm = NULL</code> is used, <code>'./voiceAudios/rttm'</code> is created and used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>autoDir</code></td>
+<td>
+<p>Logical. Must the directories tree be created? Default: <code>FALSE</code>. See 'Details'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pycall</code></td>
+<td>
+<p>Python call. See <a href="https://github.com/filipezabala/voice">https://github.com/filipezabala/voice</a> for details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>token</code></td>
+<td>
+<p>Access token needed to instantiate pretrained speaker diarization pipeline from pyannote.audio. #1. Visit <a href="https://hf.co/pyannote/speaker-diarization">https://hf.co/pyannote/speaker-diarization</a> and accept user conditions. #2. Visit <a href="https://hf.co/pyannote/segmentation">https://hf.co/pyannote/segmentation</a> and accept user conditions. #3. Visit <a href="https://hf.co/settings/tokens">https://hf.co/settings/tokens</a> to create an access token. More details at <a href="https://github.com/pyannote/pyannote-audio">https://github.com/pyannote/pyannote-audio</a>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>When <code>autoDir = TRUE</code>, the following directories are created: <code>'../mp3'</code>,<code>'../rttm'</code>, <code>'../split'</code> and <code>'../musicxml'</code>. Use <code>getwd()</code> to find the parent directory <code>'../'</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>RTTM files in NIST standard. See 'voice::read_rttm'.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(voice)
+
+wavDir &lt;- list.files(system.file('extdata', package = 'wrassp'),
+pattern = glob2rx('*.wav'), full.names = TRUE)
+
+voice::diarize(fromWav = unique(dirname(wavDir)),
+toRttm = tempdir(),
+token = NULL) # Must enter a token! See documentation.
+
+(rttm &lt;- dir(tempdir(), '.[Rr][Tt][Tt][Mm]$', full.names = TRUE))
+file.info(rttm)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

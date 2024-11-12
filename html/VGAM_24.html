@@ -1,0 +1,182 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>AICvlm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Akaike's Information Criterion </h2>
+
+<h3>Description</h3>
+
+<p>Calculates the Akaike information criterion for a fitted model
+object for which a log-likelihood value has been obtained.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    AICvlm(object, ..., corrected = FALSE, k = 2)
+   AICvgam(object, ..., k = 2)
+ AICrrvglm(object, ..., k = 2)
+AICdrrvglm(object, ..., k = 2)
+AICqrrvglm(object, ..., k = 2)
+ AICrrvgam(object, ..., k = 2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>Some <span class="pkg">VGAM</span> object, for example, having
+class <code>vglm-class</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Other possible arguments fed into
+<code>logLik</code> in order to compute the log-likelihood.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>corrected</code></td>
+<td>
+
+<p>Logical, perform the finite sample correction?
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+
+<p>Numeric, the penalty per parameter to be used;
+the default is the classical AIC.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The following formula is used for VGLMs:
+<code class="reqn">-2 \mbox{log-likelihood} + k n_{par}</code>, where <code class="reqn">n_{par}</code> represents the number of
+parameters
+in the fitted model, and <code class="reqn">k = 2</code> for the usual AIC.
+One could assign <code class="reqn">k = \log(n)</code> (<code class="reqn">n</code> the number of observations)
+for the so-called BIC or SBC (Schwarz's Bayesian criterion).
+This is the function <code>AICvlm()</code>.
+</p>
+<p>This code relies on the log-likelihood being defined, and computed,
+for the object.
+When comparing fitted objects, the smaller the AIC, the better the fit.
+The log-likelihood and hence the AIC is only defined up to an additive
+constant.
+</p>
+<p>Any estimated scale parameter (in GLM parlance) is used as one
+parameter.
+</p>
+<p>For VGAMs and CAO the nonlinear effective degrees of freedom for each
+smoothed component is used. This formula is heuristic.
+These are the functions <code>AICvgam()</code> and <code>AICcao()</code>.
+</p>
+<p>The finite sample correction is usually recommended when the
+sample size is small or when the number of parameters is large.
+When the sample size is large their difference tends to be negligible.
+The correction is described in Hurvich and Tsai (1989), and is based
+on a (univariate) linear model with normally distributed errors.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns a numeric value with the corresponding AIC (or BIC, or ...,
+depending on <code>k</code>).
+</p>
+
+
+<h3>Warning </h3>
+
+<p>This code has not been double-checked.
+The general applicability of <code>AIC</code> for the VGLM/VGAM classes
+has not been developed fully.
+In particular, <code>AIC</code> should not be run on some <span class="pkg">VGAM</span> family
+functions because of violation of certain regularity conditions, etc.
+</p>
+
+
+<h3>Note</h3>
+
+<p>AIC has not been defined for QRR-VGLMs, yet.
+</p>
+<p>Using AIC to compare <code>posbinomial</code> models
+with, e.g., <code>posbernoulli.tb</code> models,
+requires <code>posbinomial(omit.constant = TRUE)</code>.
+See <code>posbinomial</code> for an example.
+A warning is given if it suspects a wrong <code>omit.constant</code> value
+was used.
+</p>
+<p>Where defined,
+<code>AICc(...)</code> is the same as <code>AIC(..., corrected = TRUE)</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee. </p>
+
+
+<h3>References</h3>
+
+<p>Hurvich, C. M. and Tsai, C.-L. (1989).
+Regression and time series model selection in small samples,
+<em>Biometrika</em>,
+<b>76</b>, 297–307.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p>VGLMs are described in <code>vglm-class</code>;
+VGAMs are described in <code>vgam-class</code>;
+RR-VGLMs are described in <code>rrvglm-class</code>;
+<code>AIC</code>,
+<code>BICvlm</code>,
+<code>TICvlm</code>,
+<code>drop1.vglm</code>,
+<code>extractAIC.vglm</code>.
+</p>
+
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pneumo &lt;- transform(pneumo, let = log(exposure.time))
+(fit1 &lt;- vglm(cbind(normal, mild, severe) ~ let,
+              cumulative(parallel = TRUE, reverse = TRUE), data = pneumo))
+coef(fit1, matrix = TRUE)
+AIC(fit1)
+AICc(fit1)  # Quick way
+AIC(fit1, corrected = TRUE)  # Slow way
+(fit2 &lt;- vglm(cbind(normal, mild, severe) ~ let,
+              cumulative(parallel = FALSE, reverse = TRUE), data = pneumo))
+coef(fit2, matrix = TRUE)
+AIC(fit2)
+AICc(fit2)
+AIC(fit2, corrected = TRUE)
+</code></pre>
+
+
+</div>

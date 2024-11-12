@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ef_hdv_scaled</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Scaling constant with speed emission factors of Heavy Duty Vehicles</h2>
+
+<h3>Description</h3>
+
+<p><code>ef_hdv_scaled</code> creates a list of scaled functions of emission factors. A scaled
+emission factor which at a speed of the dricing cycle (SDC) gives a desired value.
+This function needs a dataframe with local emission factors with a columns with
+the name "Euro_HDV" indicating the Euro equivalence standard, assuming that there are
+available local emission factors for several consecutive years.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ef_hdv_scaled(df, dfcol, SDC = 34.12, v, t, g, eu, gr = 0, l = 0.5, p)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>deprecated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dfcol</code></td>
+<td>
+<p>Column of the dataframe with the local emission factors eg df$dfcol</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SDC</code></td>
+<td>
+<p>Speed of the driving cycle</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>Category vehicle: "Coach", "Trucks" or "Ubus"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t</code></td>
+<td>
+<p>Sub-category of of vehicle: "3Axes", "Artic", "Midi", "RT, "Std" and "TT"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>Gross weight of each category: "&lt;=18", "&gt;18", "&lt;=15", "&gt;15 &amp; &lt;=18", "&lt;=7.5",
+"&gt;7.5 &amp; &lt;=12", "&gt;12 &amp; &lt;=14", "&gt;14 &amp; &lt;=20", "&gt;20 &amp; &lt;=26", "&gt;26 &amp; &lt;=28", "&gt;28 &amp; &lt;=32",
+"&gt;32", "&gt;20 &amp; &lt;=28", "&gt;28 &amp; &lt;=34", "&gt;34 &amp; &lt;=40", "&gt;40 &amp; &lt;=50" or "&gt;50 &amp; &lt;=60"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eu</code></td>
+<td>
+<p>Euro emission standard: "PRE", "I", "II", "III", "IV" and "V"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gr</code></td>
+<td>
+<p>Gradient or slope of road: -0.06, -0.04, -0.02, 0.00, 0.02. 0.04 or 0.06</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>l</code></td>
+<td>
+<p>Load of the vehicle: 0.0, 0.5 or 1.0</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>Pollutant: "CO", "FC", "NOx" or "HC"</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of scaled emission factors g/km
+</p>
+
+
+<h3>Note</h3>
+
+<p>The length of the list should be equal to the name of the age categories of
+a specific type of vehicle
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">{
+# Do not run
+CO &lt;- ef_cetesb(p = "CO", veh = "TRUCKS_SL_D", full = TRUE)
+lef &lt;- ef_hdv_scaled(dfcol = CO$CO,
+                     v = "Trucks",
+                     t = "RT",
+                     g = "&lt;=7.5",
+                     eu = CO$Euro_EqHDV,
+                     gr = 0,
+                     l = 0.5,
+                     p = "CO")
+length(lef)
+ages &lt;- c(1, 10, 20, 30, 40)
+EmissionFactors(do.call("cbind",
+   lapply(ages, function(i) {
+       data.frame(i = lef[[i]](1:100))
+}))) -&gt; df
+names(df) &lt;- ages
+colplot(df)
+}
+</code></pre>
+
+
+</div>

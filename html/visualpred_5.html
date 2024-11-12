@@ -1,0 +1,302 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mcacontour</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Contour plots and MCA function for classification modeling</h2>
+
+<h3>Description</h3>
+
+<p>This function presents visual graphics by means of Multiple correspondence Analysis projection.
+Interval variables are categorized to bins.
+Dependent classification variable is set as supplementary variable.
+Machine learning algorithm predictions are presented in a filled contour setting.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mcacontour(dataf=dataf,listconti,listclass,vardep,proba="",bins=8,
+Dime1="Dim.1",Dime2="Dim.2",classvar=1,intergrid=0,selec=0,
+title="",title2="",listacol="",depcol="",alpha1=0.8,alpha2=0.8,alpha3=0.7,modelo="glm",
+nodos=3,maxit=200,decay=0.01,sampsize=400,mtry=2,nodesize=5,
+ntree=400,ntreegbm=500,shrink=0.01,bag.fraction=1,n.minobsinnode=10,C=100,gamma=10)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dataf</code></td>
+<td>
+<p>data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>listconti</code></td>
+<td>
+<p>Interval variables to use, in format c("var1","var2",...).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>listclass</code></td>
+<td>
+<p>Class variables to use, in format c("var1","var2",...).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vardep</code></td>
+<td>
+<p>Dependent binary classification variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>proba</code></td>
+<td>
+<p>vector of probability predictions obtained externally (optional)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bins</code></td>
+<td>
+<p>Number of bins for categorize interval variables .</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dime1</code></td>
+<td>
+<p>FAMD Dimensions to consider. Dim.1 and Dim.2 by default.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dime2</code></td>
+<td>
+<p>FAMD Dimensions to consider. Dim.1 and Dim.2 by default.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>classvar</code></td>
+<td>
+<p>1 if dependent variable categories are plotted as supplementary</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>intergrid</code></td>
+<td>
+<p>scale of grid for contour:0 if automatic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selec</code></td>
+<td>
+<p>1 if stepwise logistic variable selection is required, 0 if not.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>plot main title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title2</code></td>
+<td>
+<p>plot subtitle</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>listacol</code></td>
+<td>
+<p>vector of colors for labels</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>depcol</code></td>
+<td>
+<p>vector of two colors for points</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha1</code></td>
+<td>
+<p>alpha transparency for majoritary class</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha2</code></td>
+<td>
+<p>alpha transparency for minoritary class</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha3</code></td>
+<td>
+<p>alpha transparency for fit probability plots</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modelo</code></td>
+<td>
+<p>name of model: "glm","gbm","rf,","nnet","svm".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodos</code></td>
+<td>
+<p>nnet: nodes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxit</code></td>
+<td>
+<p>nnet: iterations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>decay</code></td>
+<td>
+<p>nnet: decay</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sampsize</code></td>
+<td>
+<p>rf: sampsize</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mtry</code></td>
+<td>
+<p>rf: mtry</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodesize</code></td>
+<td>
+<p>rf: nodesize</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ntree</code></td>
+<td>
+<p>rf: ntree</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ntreegbm</code></td>
+<td>
+<p>gbm: ntree</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shrink</code></td>
+<td>
+<p>gbm: shrink</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bag.fraction</code></td>
+<td>
+<p>gbm: bag.fraction</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.minobsinnode</code></td>
+<td>
+<p>gbm:n.minobsinnode</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>svm Radial: C</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>svm Radial: gamma</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function applies MCA (Multiple Correspondence Analysis) in order to project points and categories of
+class variables in the same plot. In addition, interval variables listed in listconti are categorized to
+the number given in bins parameter (by default 8 bins). Further explanation about machine learning classification
+and contour curves, see the famdcontour function documentation.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with the following objects:</p>
+
+<dl>
+<dt>graph1</dt>
+<dd>
+<p>plot of points on MCA  two dimensions</p>
+</dd>
+<dt>graph2</dt>
+<dd>
+<p>plot of points and variables</p>
+</dd>
+<dt>graph3</dt>
+<dd>
+<p>plot of points and contour curves</p>
+</dd>
+<dt>graph4</dt>
+<dd>
+<p>plot of points, contour curves and variables</p>
+</dd>
+<dt>graph5</dt>
+<dd>
+<p>plot of points colored by fitted probability</p>
+</dd>
+<dt>graph6</dt>
+<dd>
+<p>plot of points colored by abs difference</p>
+</dd>
+<dt>df1</dt>
+<dd>
+<p> dataset used for graph1</p>
+</dd>
+<dt>df2</dt>
+<dd>
+<p> dataset used for graph2</p>
+</dd>
+<dt>df3</dt>
+<dd>
+<p> dataset used for graph3</p>
+</dd>
+<dt>df4</dt>
+<dd>
+<p> dataset used for graph4</p>
+</dd>
+<dt>listconti</dt>
+<dd>
+<p> interval variables used</p>
+</dd>
+<dt>listclass</dt>
+<dd>
+<p> class variables used</p>
+</dd>
+<dt>...</dt>
+<dd>
+<p>color schemes and other parameters </p>
+</dd>
+</dl>
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(breastwisconsin1)
+dataf&lt;-breastwisconsin1
+listconti=c( "clump_thickness","uniformity_of_cell_shape","mitosis")
+listclass=c("")
+vardep="classes"
+result&lt;-mcacontour(dataf=dataf,listconti,listclass,vardep)
+</code></pre>
+
+
+</div>

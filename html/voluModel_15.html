@@ -1,0 +1,186 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pointCompMap</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Comparative point mapping</h2>
+
+<h3>Description</h3>
+
+<p>A convenient wrapper around <code>ggplot</code>
+to generate formatted plots comparing two sets of
+occurrence point plots.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pointCompMap(
+  occs1,
+  occs2,
+  spName,
+  land = NA,
+  occs1Col = "#bd0026",
+  occs2Col = "#fd8d3c",
+  agreeCol = "black",
+  occs1Name = "Set 1",
+  occs2Name = "Set 2",
+  landCol = "gray",
+  waterCol = "steelblue",
+  ptSize = 1,
+  verbose = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>occs1</code></td>
+<td>
+<p>A <code>data.frame</code> with at least two columns
+named "longitude" and "latitude" or that
+can be coerced into this format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>occs2</code></td>
+<td>
+<p>A <code>data.frame</code> with at least two columns
+named "longitude" and "latitude" or that
+can be coerced into this format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spName</code></td>
+<td>
+<p>A character string with the species
+name to be used in the plot title.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>land</code></td>
+<td>
+<p>An optional coastline polygon shapefile
+of types <code>sf</code> or <code>SpatRaster</code> to provide geographic
+context for the occurrence points.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>occs1Col</code></td>
+<td>
+<p>Color for occurrence points on map</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>occs2Col</code></td>
+<td>
+<p>Color for occurrence points on map</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>agreeCol</code></td>
+<td>
+<p>Color for occurrence points shared
+between <code>occs1</code> and <code>occs2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>occs1Name</code></td>
+<td>
+<p>An optional name for the first set
+of occurrences, which will be color-coded to
+<code>occs1Col</code> in the resulting plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>occs2Name</code></td>
+<td>
+<p>An optional name for the first set
+of occurrences, which will be color-coded to
+<code>occs2Col</code> in the resulting plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>landCol</code></td>
+<td>
+<p>Color for land on map</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>waterCol</code></td>
+<td>
+<p>Color for water on map</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ptSize</code></td>
+<td>
+<p><code>numeric</code> value for <code>cex</code>;
+size of occurrence points on map.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p><code>logical</code>. Switching to <code>FALSE</code> mutes message describing
+which columns in <code>occs1</code> and <code>occs2</code> are interpreted as x and y coordinates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional optional arguments to pass to
+<code>ggplot</code> initial plot object.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>ggplot</code> plot object.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The x and y column names of <code>occs1</code> and <code>occs2</code>
+must match.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ggplot</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(5)
+occs &lt;- data.frame(cbind(decimalLatitude = sample(seq(7,35), 24),
+                         decimalLongitude = sample(seq(-97, -70), 24)))
+
+set.seed(0)
+occs1 &lt;- occs[sample(1:nrow(occs),
+                     size = 12, replace = FALSE),]
+set.seed(10)
+occs2 &lt;- occs[sample(1:nrow(occs),
+                     size = 12, replace = FALSE),]
+
+pointCompMap(occs1 = occs1, occs2 = occs2,
+             occs1Col = "red", occs2Col = "orange",
+             agreeCol = "purple",
+             occs1Name = "2D",
+             occs2Name = "3D",
+             waterCol = "steelblue",
+             spName = "Steindachneria argentea",
+             ptSize = 2,
+             verbose = FALSE)
+
+</code></pre>
+
+
+</div>

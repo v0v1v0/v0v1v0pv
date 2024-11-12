@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>write_pos_check</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Suggest a range check</h2>
+
+<h3>Description</h3>
+
+<p>Suggest a range check
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">write_pos_check(d, vars = names(d), only_positive = TRUE, file = stdout())
+
+suggest_pos_check(d, vars = names(d), only_positive = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+<p><code>data.frame</code>, used to generate the checks</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vars</code></td>
+<td>
+<p><code>character</code> optionally the subset of variables to be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>only_positive</code></td>
+<td>
+<p>if <code>TRUE</code> only numerical values for positive values are included</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>file</code></td>
+<td>
+<p>file to which the checks will be written to.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>suggest_pos_check</code> returns <code>validate::validator()</code> object with the suggested rules.
+<code>write_pos_check</code> write the rules to file and returns invisibly a named list of checks for each variable.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(SBS2000, package="validate")
+
+suggest_range_check(SBS2000)
+
+# checks the ranges of each variable
+suggest_range_check(SBS2000[-1], min=TRUE, max=TRUE)
+
+# checks the ranges of each variable
+suggest_range_check(SBS2000, vars=c("turnover", "other.rev"), min=FALSE, max=TRUE)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,157 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.varSelRFBoot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>plot a varSelRFBoot object</h2>
+
+<h3>Description</h3>
+
+<p>Plots of out-of-bag predictions and OOB error vs. number of variables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'varSelRFBoot'
+plot(x,  oobProb = TRUE,
+                  oobProbBoxPlot = FALSE,
+                  ErrorNum = TRUE,
+                  subject.names = NULL,
+                  class.to.plot = NULL,...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class varSelRFBoot, such as returned by
+function <code>varSelRFBoot</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>oobProb</code></td>
+<td>
+<p>If TRUE plot (average) out-of-bag predictions. See
+<code>prob.predictions</code> in <code>varSelRFBoot</code> for more
+details about the out-of-bag predictions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>oobProbBoxPlot</code></td>
+<td>
+<p>If TRUE plot a box-plot of out-of-bag predictions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ErrorNum</code></td>
+<td>
+<p>If TRUE plot OOB error (as returned by random forest)
+vs. the number of variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subject.names</code></td>
+<td>
+<p>If not NULL, a vector, of the same length as the
+number of cases (samples or subjects) with IDs for the
+cases/samples/subjects, that will be shown to the left of the
+average out-of-bag prediction.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>class.to.plot</code></td>
+<td>
+<p>If not NULL, an integer or a vector of
+integers. These integers are those class levels for which 
+out-of-bag predictions plots will be returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function is only used for its side effects of producing
+plots.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>The OOB Error rate is biased down (and can be
+severely biased down) because we do (potentially many) rounds of
+reducing the set of predictor variables until we minimize this OOB
+error rate. Note, however, that this is NOT the error rate reported as the
+estimate of the error rate for the procedure (for which we use the
+.632+ bootstrap rule).</p>
+
+
+<h3>Note</h3>
+
+<p>When plotting the out-of-bag predictions, we show one plot for each
+class. This is an overkill for two-class problems, but not necessarily
+for problems with more than two classes. Use <code>class.to.plot</code> to
+plot only those classes that interest you.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ramon Diaz-Uriarte <a href="mailto:rdiaz02@gmail.com">rdiaz02@gmail.com</a></p>
+
+
+<h3>References</h3>
+
+<p>Breiman, L. (2001) Random forests.
+<em>Machine Learning</em>, <b>45</b>, 5–32.
+</p>
+<p>Diaz-Uriarte, R. and Alvarez de Andres,
+S. (2005) Variable selection from random forests: application to gene
+expression
+data. Tech. report. <a href="http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html">http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html</a>
+</p>
+<p>Efron, B. &amp; Tibshirani, R. J. (1997) Improvements on cross-validation: the .632+ bootstrap method.
+<em>J. American Statistical Association</em>, <b>92</b>, 548–560.  
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>randomForest</code>,
+<code>varSelRF</code>,
+<code>summary.varSelRFBoot</code>,
+<code>varSelRFBoot</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+## This is a small example, but can take some time.
+
+x &lt;- matrix(rnorm(25 * 30), ncol = 30)
+x[1:10, 1:2] &lt;- x[1:10, 1:2] + 2
+cl &lt;- factor(c(rep("A", 10), rep("B", 15)))  
+
+rf.vs1 &lt;- varSelRF(x, cl, ntree = 200, ntreeIterat = 100,
+                   vars.drop.frac = 0.2)
+rf.vsb &lt;- varSelRFBoot(x, cl,
+                       bootnumber = 10,
+                       usingCluster = FALSE,
+                       srf = rf.vs1)
+rf.vsb
+summary(rf.vsb)
+plot(rf.vsb)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

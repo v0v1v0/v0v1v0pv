@@ -1,0 +1,165 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VLGrangerFunc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>VLGrangerFunc</h2>
+
+<h3>Description</h3>
+
+<p>VLGrangerFunc is a Variable-lag Granger Causality function. It tests whether <code>X</code> VL-Granger-causes <code>Y</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">VLGrangerFunc(
+  Y,
+  X,
+  alpha = 0.05,
+  maxLag,
+  gamma = 0.5,
+  autoLagflag = TRUE,
+  family = gaussian
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>is a numerical time series of effect</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>is a numerical time series of cause</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>is a significance level of f-test to determine whether <code>X</code> Granger-causes <code>Y</code>.  The default is 0.05.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxLag</code></td>
+<td>
+<p>is a maximum possible time delay. The default is 0.2*length(Y).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>is a parameter to determine whether <code>X</code> Granger-causes <code>Y</code> using BIC difference ratio. The default is  0.5.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>autoLagflag</code></td>
+<td>
+<p>is a flag for enabling the automatic lag inference function. The default is true.
+If it is set to be true, then maxLag is set automatically using cross-correlation.
+Otherwise, if it is set to be false, then the function takes the maxLag value to infer Granger causality.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>is a parameter of family of function for Generalized Linear Models function (glm). The default is <code>gaussian</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function returns of  whether <code>X</code> Granger-causes <code>Y</code>.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>ftest</code></td>
+<td>
+<p> F-statistic of Granger causality. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.val</code></td>
+<td>
+<p> A p-value from F-test. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BIC_H0</code></td>
+<td>
+<p>Bayesian Information Criterion (BIC) derived from <code>Y</code> regressing on <code>Y</code> past.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BIC_H1</code></td>
+<td>
+<p>Bayesian Information Criterion (BIC) derived from <code>Y</code> regressing on <code>Y</code>,<code>X</code> past. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>XgCsY</code></td>
+<td>
+<p>The flag is true if <code>X</code> Granger-causes <code>Y</code> using BIC difference ratio where <code>BICDiffRatio &gt;= gamma</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>XgCsY_ftest</code></td>
+<td>
+<p>The flag is true if <code>X</code> Granger-causes <code>Y</code> using f-test where <code>p.val&gt;=alpha</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>XgCsY_BIC</code></td>
+<td>
+<p>The flag is true if <code>X</code> Granger-causes <code>Y</code> using BIC where <code>BIC_H0&gt;=BIC_H1</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxLag</code></td>
+<td>
+<p>A maximum possible time delay.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H0</code></td>
+<td>
+<p>glm object of <code>Y</code> regressing on <code>Y</code> past.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H1</code></td>
+<td>
+<p>glm object of <code>Y</code> regressing on <code>Y,X</code> past. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>follOut</code></td>
+<td>
+<p> is a list of  variables from function <code>followingRelation</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BICDiffRatio</code></td>
+<td>
+<p> Bayesian Information Criterion difference ratio: <code>(BIC_H0-BIC_H1)/BIC_H0</code>.  </p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Generate simulation data
+TS &lt;- SimpleSimulationVLtimeseries()
+# Run the function
+out&lt;-VLGrangerFunc(Y=TS$Y,X=TS$X)
+
+</code></pre>
+
+
+</div>

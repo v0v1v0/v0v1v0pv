@@ -1,0 +1,56 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vineLogLik</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vine Log-likelihood Evaluation</h2>
+
+<h3>Description</h3>
+
+<p>Evaluate the log-likelihood of a <code>Vine</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vineLogLik(vine, data)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vine</code></td>
+<td>
+<p>A <code>Vine</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Data matrix of pseudo-observations.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">dimension &lt;- 3
+copulas &lt;- matrix(list(normalCopula(0.5), 
+                       claytonCopula(2.75),
+                       NULL, NULL),
+                  ncol = dimension - 1,
+                  nrow = dimension - 1,
+                  byrow = TRUE)
+vine &lt;- DVine(dimension = dimension, trees = 1, 
+              copulas = copulas)
+
+data &lt;- matrix(runif(dimension * 100), 
+               ncol = dimension, nrow = 100)
+               
+vineLogLik(vine, data)
+</code></pre>
+
+
+</div>

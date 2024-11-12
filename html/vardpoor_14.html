@@ -1,0 +1,124 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>residual_est</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Residual estimation of calibration</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimation residuals of calibration.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">residual_est(Y, X, weight, q, dataset = NULL, checking = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Matrix of the variable of interest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Matrix of the auxiliary variables for the calibration estimator. This is the matrix of the sample calibration variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weight</code></td>
+<td>
+<p>Weight variable. One dimensional object convertible to one-column <code>data.frame</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>Variable of the positive values accounting for heteroscedasticity. One dimensional object convertible to one-column <code>data.frame</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>Optional survey data object convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>checking</code></td>
+<td>
+<p>Optional variable if this variable is TRUE, then function checks data preparation errors, otherwise not checked. This variable by default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function implements the following estimator:
+</p>
+<p style="text-align: center;"><code class="reqn">e_k=Y_k-X_k^{'}B </code>
+</p>
+
+<p>where
+</p>
+<p style="text-align: center;"><code class="reqn">\hat{B} = \left(\sum_{s} weight_k q_k X_k X^{'}_{k} \right)^{-1} \left(\sum_{s} weight_k q_k X_k Y_k \right)</code>
+</p>
+<p>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with objects are returned by the function:
+</p>
+
+<ul>
+<li> <p><code>residuals</code> - a numeric <code>data.table</code> containing the estimated residuals of calibration.
+</p>
+</li>
+<li> <p><code>betas</code> - a numeric <code>data.table</code> containing the estimated coefficients of calibration.
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Sixten Lundstrom and Carl-Erik Sarndal. Estimation in the presence of Nonresponse and Frame Imperfections. Statistics Sweden, 2001, p. 43-44.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>domain</code>,   <code>lin.ratio</code>,    <code>linarpr</code>,
+<code>linarpt</code>,  <code>lingini</code>,      <code>lingini2</code>,
+<code>lingpg</code>,   <code>linpoormed</code>,   <code>linqsr</code>,
+<code>linrmpg</code>,  <code>vardom</code>,       <code>vardomh</code>,
+<code>varpoord</code>, <code>variance_est</code>, <code>variance_othstr</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">Y &lt;- matrix(rchisq(10, 3), 10, 1)
+X &lt;- matrix(rchisq(20, 3), 10, 2)
+w &lt;- rep(2, 10)
+q &lt;- rep(1, 10)
+residual_est(Y, X, w, q)
+
+### Test2
+Y &lt;- matrix(rchisq(10, 3), 10, 1)
+X &lt;- matrix(c(rchisq(10, 2), rchisq(10, 2) + 10), 10, 2)
+w &lt;- rep(2, 10)
+q &lt;- rep(1, 10)
+residual_est(Y, X, w, q)
+as.matrix(lm(Y ~ X - 1, weights = w * q)$residuals)
+
+</code></pre>
+
+
+</div>

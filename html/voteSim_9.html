@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>generate_discrete_copula_based</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Discrete Copula based scores</h2>
+
+<h3>Description</h3>
+
+<p>This function generates  discrete scores following marginals distributions linked by a copula
+#'
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">generate_discrete_copula_based(
+  n_voters,
+  n_candidates,
+  min = 0,
+  max = 10,
+  margins = list("default"),
+  cor_mat = 0
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>n_voters</code></td>
+<td>
+<p>integer, the number of voters to generate scores for.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_candidates</code></td>
+<td>
+<p>integer,  The number of candidates to generate scores for.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min</code></td>
+<td>
+<p>The minimum value of the  distribution, by default 0</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max</code></td>
+<td>
+<p>The maximum value of the  distribution, by default 10</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>margins</code></td>
+<td>
+<p>A list of n_candidates cumulative distribution vectors of length (max-min-1) : the last value of the cumulative distribution, 1, should be omitted. By default margin distribution are uniform distributions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor_mat</code></td>
+<td>
+<p>A matrix of correlation coefficients between the n_candidates distributions. By default all correlation coefficients are set up alternatively to 0.5 or -0.5.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A matrix of scores with 'n_candidates' rows and 'n_voters' columns.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Example for 3 candidates, binomial distributions
+ min=0
+ max=7
+n_candidates&lt;-3
+distribution&lt;-dbinom(x=(min:max), size=max, prob=0.7)
+distribution_cumul&lt;-cumsum(distribution)
+distribution_cumul&lt;-distribution_cumul[-length(distribution_cumul)]
+margins &lt;- matrix(rep(distribution_cumul, n_candidates), ncol=n_candidates)
+margins &lt;-as.list(as.data.frame(margins))
+cor_mat&lt;-matrix(c(1,0.8,0,0.8,1,0, 0,0,1), ncol=n_candidates)
+voting_situation &lt;- generate_discrete_copula_based(10, 3, max=max, margins=margins, cor_mat=cor_mat)
+</code></pre>
+
+
+</div>

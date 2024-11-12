@@ -1,0 +1,143 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>shortPutButterflyPnL</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculates per share Profit and Loss (PnL) at expiration for Short Put Butterfly Option Strategy and draws its Bar Plot displaying PnL in the Plots tab.</h2>
+
+<h3>Description</h3>
+
+<p>This is a volatility strategy consisting of a short position in an ITM put option (in the money put; strike price greater than spot price)  with a strike price X1H, a long position in two ATM (at the money) put options with a strike price X2, and a short position in an OTM put option (out of the money :  strike price less than spot price)  with a strike price X3L . The strikes are equidistant: X2 minus X3L equals to X1H minus X2. This is a net credit trade. In this sense, this is an income strategy However, the potential reward is sizably smaller than with a short straddle or a short strangle (albeit with a lower risk). The trader or investor has a neutral outlook (Kakushadze &amp; Serur, 2018).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">shortPutButterflyPnL(
+  ST,
+  X2,
+  X1H,
+  X3L,
+  P2,
+  P1H,
+  P3L,
+  hl = 0,
+  hu = 2,
+  spot = spot,
+  pl = pl,
+  myData = myData,
+  myTibble = myTibble,
+  PnL = PnL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ST</code></td>
+<td>
+<p>Spot Price at time T.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X2</code></td>
+<td>
+<p>Strike Price or eXercise price for two ATM bought Puts.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X1H</code></td>
+<td>
+<p>Higher Strike Price or eXercise price for one ITM shorted Put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X3L</code></td>
+<td>
+<p>Higher Strike Price or eXercise price for one OTM shorted Put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>P2</code></td>
+<td>
+<p>Put Premium or Put Price paid for the two ATM bought Puts.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>P1H</code></td>
+<td>
+<p>Put Premium or Put Price received for the first ITM shorted Put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>P3L</code></td>
+<td>
+<p>Put Premium or Put Price received for the one OTM shorted Put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hl</code></td>
+<td>
+<p>lower bound value for setting lower-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hu</code></td>
+<td>
+<p>upper bound value for setting upper-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spot</code></td>
+<td>
+<p>Spot Price</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pl</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myData</code></td>
+<td>
+<p>Data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myTibble</code></td>
+<td>
+<p>tibble</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PnL</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>According to conceptual details given by Cohen (2015), and a closed form solution provided by Kakushadze and Serur (2018), this method is developed, and the given examples are created, to compute per share Profit and Loss at expiration for Short Put Butterfly Option Strategy and draw its graph in the Plots tab.
+</p>
+
+
+<h3>Value</h3>
+
+<p>graph of the strategy
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">shortPutButterflyPnL(50,50,55,45,6,9,5)
+shortPutButterflyPnL(400,400,420,380,14,19,15,hl=0.9,hu=1.1)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,165 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopTau2Par</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Parameter of a Bivariate Copula for a given Kendall's Tau Value</h2>
+
+<h3>Description</h3>
+
+<p>This function computes the parameter of a (one parameter) bivariate copula
+for a given value of Kendall's tau.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopTau2Par(family, tau, check.taus = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>integer; single number or vector of size <code>n</code>; defines the
+bivariate copula family: <br><code>0</code> = independence copula <br><code>1</code> =
+Gaussian copula <br><code>2</code> = Student t copula (Here only the first
+parameter can be computed) <br><code>3</code> = Clayton copula <br><code>4</code> =
+Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; “survival Joe”) <br><code>23</code>
+= rotated Clayton copula (90 degrees) <br> '24' = rotated Gumbel copula
+(90 degrees) <br> '26' = rotated Joe copula (90 degrees) <br> '33' =
+rotated Clayton copula (270 degrees) <br> '34' = rotated Gumbel copula
+(270 degrees) <br> '36' = rotated Joe copula (270 degrees)<br> Note that
+(with exception of the t-copula) two parameter bivariate copula families
+cannot be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tau</code></td>
+<td>
+<p>numeric; single number or vector of size <code>n</code>; Kendall's tau
+value (vector with elements in <code class="reqn">[-1,1]</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.taus</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>; if <code>FALSE</code>, checks
+for family/tau-consistency are omitted (should only be used with care).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Parameter (vector) corresponding to the bivariate copula family and
+the value(s) of Kendall's tau (<code class="reqn">\tau</code>). </p>
+
+<table>
+<tr>
+<td style="text-align: left;"> No.
+(<code>family</code>) </td>
+<td style="text-align: left;"> Parameter (<code>par</code>) </td>
+</tr>
+<tr>
+<td style="text-align: left;"> <code style="white-space: pre;">⁠1, 2⁠</code> </td>
+<td style="text-align: left;">
+<code class="reqn">\sin(\tau \frac{\pi}{2})</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;"> <code style="white-space: pre;">⁠3, 13⁠</code> </td>
+<td style="text-align: left;">
+<code class="reqn">2\frac{\tau}{1-\tau}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;"> <code style="white-space: pre;">⁠4, 14⁠</code> </td>
+<td style="text-align: left;">
+<code class="reqn">\frac{1}{1-\tau}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;"> <code>5</code> </td>
+<td style="text-align: left;"> no closed form
+expression (numerical inversion) </td>
+</tr>
+<tr>
+<td style="text-align: left;"> <code style="white-space: pre;">⁠6, 16⁠</code> </td>
+<td style="text-align: left;"> no closed form
+expression (numerical inversion) </td>
+</tr>
+<tr>
+<td style="text-align: left;"> <code style="white-space: pre;">⁠23, 33⁠</code> </td>
+<td style="text-align: left;">
+<code class="reqn">2\frac{\tau}{1+\tau}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;"> <code style="white-space: pre;">⁠24, 34⁠</code> </td>
+<td style="text-align: left;">
+<code class="reqn">-\frac{1}{1+\tau}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;"> <code style="white-space: pre;">⁠26, 36⁠</code> </td>
+<td style="text-align: left;"> no closed form
+expression (numerical inversion) </td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>The number <code>n</code> can be chosen arbitrarily, but must agree across
+arguments.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jakob Stoeber, Eike Brechmann, Tobias Erhardt
+</p>
+
+
+<h3>References</h3>
+
+<p>Joe, H. (1997). Multivariate Models and Dependence Concepts.
+Chapman and Hall, London.
+</p>
+<p>Czado, C., U. Schepsmeier, and A. Min (2012). Maximum likelihood estimation
+of mixed C-vines with application to exchange rates. Statistical Modelling,
+12(3), 229-255.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopPar2Tau()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Example 1: Gaussian copula
+tau0 &lt;- 0.5
+rho &lt;- BiCopTau2Par(family = 1, tau = tau0)
+BiCop(1, tau = tau0)$par  # alternative
+
+## Example 2:
+vtau &lt;- seq(from = 0.1, to = 0.8, length.out = 100)
+thetaC &lt;- BiCopTau2Par(family = 3, tau = vtau)
+thetaG &lt;- BiCopTau2Par(family = 4, tau = vtau)
+thetaF &lt;- BiCopTau2Par(family = 5, tau = vtau)
+thetaJ &lt;- BiCopTau2Par(family = 6, tau = vtau)
+plot(thetaC ~ vtau, type = "l", ylim = range(thetaF))
+lines(thetaG ~ vtau, col = 2)
+lines(thetaF ~ vtau, col = 3)
+lines(thetaJ ~ vtau, col = 4)
+
+## Example 3: different copula families
+theta &lt;- BiCopTau2Par(family = c(3,4,6), tau = c(0.4, 0.5, 0.6))
+BiCopPar2Tau(family = c(3,4,6), par = theta)
+
+
+
+</code></pre>
+
+
+</div>

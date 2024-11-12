@@ -1,0 +1,116 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_prepare_docker</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate files necessary to build a Docker container for a vetiver model</h2>
+
+<h3>Description</h3>
+
+<p>Deploying a vetiver model via Docker requires several files. Use this
+function to create these needed files in the directory located at <code>path</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetiver_prepare_docker(
+  board,
+  name,
+  version = NULL,
+  path = ".",
+  predict_args = list(),
+  docker_args = list()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>board</code></td>
+<td>
+<p>A pin board, created by <code>board_folder()</code>, <code>board_connect()</code>,
+<code>board_url()</code> or another <code>board_</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>Pin name.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>version</code></td>
+<td>
+<p>Retrieve a specific version of a pin. Use <code>pin_versions()</code> to
+find out which versions are available and when they were created.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path</code></td>
+<td>
+<p>A path to write the Plumber file, Dockerfile, and lockfile,
+capturing the model's dependencies.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>predict_args</code></td>
+<td>
+<p>A list of optional arguments passed to <code>vetiver_api()</code>
+such as the prediction <code>type</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>docker_args</code></td>
+<td>
+<p>A list of optional arguments passed to
+<code>vetiver_write_docker()</code> such as the <code>lockfile</code> name or whether to use
+<code>rspm</code>. Do not pass <code>additional_pkgs</code> here, as this function uses
+<code>additional_pkgs = required_pkgs(board)</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function <code>vetiver_prepare_docker()</code> uses:
+</p>
+
+<ul>
+<li> <p><code>vetiver_write_plumber()</code> to create a Plumber file and
+</p>
+</li>
+<li> <p><code>vetiver_write_docker()</code> to create a Dockerfile and renv lockfile
+</p>
+</li>
+</ul>
+<p>These modular functions are available for more advanced use cases. For
+models such as keras and torch, you will need to edit the generated
+Dockerfile to, for example, <code style="white-space: pre;">⁠COPY requirements.txt requirements.txt⁠</code> or
+similar.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An invisible <code>TRUE</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(pins)
+b &lt;- board_temp(versioned = TRUE)
+cars_lm &lt;- lm(mpg ~ ., data = mtcars)
+v &lt;- vetiver_model(cars_lm, "cars_linear")
+vetiver_pin_write(b, v)
+
+vetiver_prepare_docker(b, "cars_linear", path = tempdir())
+
+</code></pre>
+
+
+</div>

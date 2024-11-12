@@ -1,0 +1,197 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mix2poisson</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Mixture of Two Poisson Distributions </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the three parameters of a mixture of two Poisson
+distributions by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mix2poisson(lphi = "logitlink", llambda = "loglink",
+            iphi = 0.5, il1 = NULL, il2 = NULL,
+            qmu = c(0.2, 0.8), nsimEIM = 100, zero = "phi")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>lphi, llambda</code></td>
+<td>
+
+<p>Link functions for the parameter <code class="reqn">\phi</code> and
+<code class="reqn">\lambda</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>iphi</code></td>
+<td>
+
+<p>Initial value for <code class="reqn">\phi</code>, whose value must lie
+between 0 and 1.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>il1, il2</code></td>
+<td>
+
+<p>Optional initial value for <code class="reqn">\lambda_1</code> and
+<code class="reqn">\lambda_2</code>. These values must be positive.
+The default is to compute initial values internally using
+the argument <code>qmu</code>.
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qmu</code></td>
+<td>
+
+<p>Vector with two values giving the probabilities relating
+to the sample quantiles for obtaining initial values for
+<code class="reqn">\lambda_1</code> and <code class="reqn">\lambda_2</code>.
+The two values are fed in as the <code>probs</code> argument into
+<code>quantile</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability function can be loosely written as
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y=y) = \phi \, Poisson(\lambda_1) +
+        (1-\phi) \, Poisson(\lambda_2)</code>
+</p>
+
+<p>where <code class="reqn">\phi</code> is the probability an observation belongs
+to the first group, and <code class="reqn">y=0,1,2,\ldots</code>.
+The parameter <code class="reqn">\phi</code>
+satisfies <code class="reqn">0 &lt; \phi &lt; 1</code>.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">\phi\lambda_1+(1-\phi)\lambda_2</code>
+and this is returned as the fitted values.
+By default, the three linear/additive predictors are
+<code class="reqn">(logit(\phi), \log(\lambda_1), \log(\lambda_2))^T</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>This <span class="pkg">VGAM</span> family function requires care for a successful
+application.
+In particular, good initial values are required because
+of the presence of local solutions. Therefore running
+this function with several different combinations of
+arguments such as <code>iphi</code>, <code>il1</code>, <code>il2</code>,
+<code>qmu</code> is highly recommended. Graphical methods such as
+<code>hist</code> can be used as an aid.
+</p>
+<p>With grouped data (i.e., using the <code>weights</code> argument)
+one has to use a large value of <code>nsimEIM</code>;
+see the example below.
+</p>
+<p>This <span class="pkg">VGAM</span> family function is experimental and
+should be used with care.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be integer-valued since
+<code>dpois</code> is invoked.
+</p>
+<p>Fitting this model successfully to data can be difficult
+due to local solutions and ill-conditioned data. It pays to
+fit the model several times with different initial values,
+and check that the best fit looks reasonable. Plotting
+the results is recommended. This function works better as
+<code class="reqn">\lambda_1</code> and <code class="reqn">\lambda_2</code> become
+more different.  The default control argument <code>trace =
+  TRUE</code> is to encourage monitoring convergence.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>rpois</code>,
+<code>poissonff</code>,
+<code>mix2normal</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  # Example 1: simulated data
+nn &lt;- 1000
+mu1 &lt;- exp(2.5)  # Also known as lambda1
+mu2 &lt;- exp(3)
+(phi &lt;- logitlink(-0.5, inverse = TRUE))
+mdata &lt;- data.frame(y = rpois(nn, ifelse(runif(nn) &lt; phi, mu1, mu2)))
+mfit &lt;- vglm(y ~ 1, mix2poisson, data = mdata)
+coef(mfit, matrix = TRUE)
+
+# Compare the results with the truth
+round(rbind('Estimated' = Coef(mfit), 'Truth' = c(phi, mu1, mu2)), 2)
+
+ty &lt;- with(mdata, table(y))
+plot(names(ty), ty, type = "h", main = "Orange=estimate, blue=truth",
+     ylab = "Frequency", xlab = "y")
+abline(v = Coef(mfit)[-1], lty = 2, col = "orange", lwd = 2)
+abline(v = c(mu1, mu2), lty = 2, col = "blue", lwd = 2)
+
+# Example 2: London Times data (Lange, 1997, p.31)
+ltdata1 &lt;- data.frame(deaths = 0:9,
+                      freq = c(162,267,271, 185,111,61,27,8,3,1))
+ltdata2 &lt;- data.frame(y = with(ltdata1, rep(deaths, freq)))
+
+# Usually this does not work well unless nsimEIM is large
+Mfit &lt;- vglm(deaths ~ 1, weight = freq, data = ltdata1,
+        mix2poisson(iphi=0.3, il1=1, il2=2.5, nsimEIM=5000))
+
+# This works better in general
+Mfit = vglm(y ~ 1, mix2poisson(iphi=0.3, il1=1, il2=2.5), ltdata2)
+coef(Mfit, matrix = TRUE)
+Coef(Mfit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

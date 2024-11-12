@@ -1,0 +1,276 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>weibullR</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Weibull Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the
+2-parameter Weibull distribution.
+No observations should be censored.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">weibullR(lscale = "loglink", lshape = "loglink",
+         iscale = NULL,   ishape = NULL, lss = TRUE, nrfs = 1,
+         probs.y = c(0.2, 0.5, 0.8), imethod = 1, zero = "shape")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape, lscale</code></td>
+<td>
+
+<p>Parameter link functions applied to the
+(positive) shape parameter (called <code class="reqn">a</code> below) and
+(positive) scale parameter (called <code class="reqn">b</code> below).
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape, iscale</code></td>
+<td>
+
+<p>Optional initial values for the shape and scale parameters.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nrfs</code></td>
+<td>
+
+<p>Currently this argument is ignored.
+Numeric, of length one, with value in <code class="reqn">[0,1]</code>.
+Weighting factor between Newton-Raphson and Fisher scoring.
+The value 0 means pure Newton-Raphson, while 1 means
+pure Fisher scoring.
+The default value uses a mixture of the two algorithms,
+and retaining
+positive-definite working weights.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>Initialization method used if there are censored observations.
+Currently only the values 1 and 2 are allowed.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero, probs.y, lss</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Weibull density for a response <code class="reqn">Y</code> is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;a,b) = a y^{a-1} \exp[-(y/b)^a] / (b^a)</code>
+</p>
+
+<p>for <code class="reqn">a &gt; 0</code>, <code class="reqn">b &gt; 0</code>, <code class="reqn">y &gt; 0</code>.
+The cumulative distribution function is
+</p>
+<p style="text-align: center;"><code class="reqn">F(y;a,b) = 1 - \exp[-(y/b)^a].</code>
+</p>
+
+<p>The mean of <code class="reqn">Y</code>
+is <code class="reqn">b \, \Gamma(1+ 1/a)</code>
+(returned as the fitted values),
+and the mode is
+at <code class="reqn">b\,(1-1/a)^{1/a}</code> when
+<code class="reqn">a&gt;1</code>.
+The density is unbounded for <code class="reqn">a&lt;1</code>.
+The <code class="reqn">k</code>th moment about the origin is
+<code class="reqn">E(Y^k) = b^k \,
+  \Gamma(1+ k/a)</code>.
+The hazard function
+is <code class="reqn">a t^{a-1} / b^a</code>.
+</p>
+<p>This <span class="pkg">VGAM</span> family function currently does not handle
+censored data.
+Fisher scoring is used to estimate the two parameters.
+Although the expected information matrices used here are valid
+in all regions of the parameter space,
+the regularity conditions for maximum
+likelihood estimation are satisfied only if <code class="reqn">a&gt;2</code>
+(according to Kleiber and Kotz (2003)).
+If this is violated then a warning message is issued.
+One can enforce <code class="reqn">a&gt;2</code> by
+choosing <code>lshape = logofflink(offset = -2)</code>.
+Common values of the shape parameter lie between 0.5 and 3.5.
+</p>
+<p>Summarized in Harper et al. (2011),
+for inference, there are 4 cases to consider.
+If <code class="reqn">a \le 1</code> then the MLEs are not consistent
+(and the smallest observation becomes a hyperefficient
+solution for the location parameter in the 3-parameter case).
+If <code class="reqn">1 &lt; a &lt; 2</code> then MLEs exist but are
+not asymptotically normal.
+If <code class="reqn">a = 2</code> then the MLEs exist and are normal
+and asymptotically
+efficient but with a slower convergence rate than
+when <code class="reqn">a &gt; 2</code>.
+If <code class="reqn">a &gt; 2</code> then MLEs have classical asymptotic properties.
+</p>
+<p>The 3-parameter (location is the third parameter) Weibull can
+be estimated by maximizing a profile log-likelihood (see,
+e.g., Harper et al. (2011) and Lawless (2003)), else try
+<code>gev</code> which is a better parameterization.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>This function is under development to handle
+other censoring situations.
+The version of this function which will handle
+censored data will be
+called <code>cenweibull()</code>. It is currently
+being written and will use
+<code>SurvS4</code> as input.
+It should be released in later versions of <span class="pkg">VGAM</span>.
+</p>
+<p>If the shape parameter is less than two then
+misleading inference may
+result, e.g., in the <code>summary</code>
+and <code>vcov</code> of the object.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Successful convergence depends on having
+reasonably good initial
+values. If the initial values chosen by this
+function are not good,
+make use the two initial value arguments.
+</p>
+<p>This <span class="pkg">VGAM</span> family function handles multiple responses.
+</p>
+<p>The Weibull distribution is often an
+alternative to the lognormal
+distribution. The inverse Weibull distribution,
+which is that of
+<code class="reqn">1/Y</code> where <code class="reqn">Y</code> has a Weibull(<code class="reqn">a,b</code>)
+distribution, is
+known as the log-Gompertz distribution.
+</p>
+<p>There are problems implementing the three-parameter Weibull
+distribution. These are because
+the classical regularity conditions for the
+asymptotic properties of the MLEs are not
+satisfied because the
+support of the distribution depends on one of
+the parameters.
+</p>
+<p>Other related distributions are the Maxwell and Rayleigh
+distributions.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Kleiber, C. and Kotz, S. (2003).
+<em>Statistical Size Distributions in Economics
+and Actuarial Sciences</em>,
+Hoboken, NJ, USA: Wiley-Interscience.
+</p>
+<p>Johnson, N. L. and Kotz, S. and Balakrishnan, N. (1994).
+<em>Continuous Univariate Distributions</em>,
+2nd edition, Volume 1, New York: Wiley.
+</p>
+<p>Lawless, J. F. (2003).
+<em>Statistical Models and Methods for Lifetime Data</em>,
+2nd ed.
+Hoboken, NJ, USA: John Wiley &amp; Sons.
+</p>
+<p>Rinne, Horst. (2009).
+<em>The Weibull Distribution: A Handbook</em>.
+Boca Raton, FL, USA: CRC Press.
+</p>
+<p>Gupta, R. D. and Kundu, D. (2006).
+On the comparison of Fisher information of the
+Weibull and GE distributions,
+<em>Journal of Statistical Planning and Inference</em>,
+<b>136</b>,
+3130–3144.
+</p>
+<p>Harper, W. V. and Eschenbach, T. G. and James, T. R. (2011).
+Concerns about Maximum Likelihood Estimation for
+the Three-Parameter Weibull Distribution:
+Case Study of Statistical Software,
+<em>The American Statistician</em>,
+<b>65(1)</b>,
+44–54.
+</p>
+<p>Smith, R. L. (1985).
+Maximum likelihood estimation in a class of nonregular cases.
+<em>Biometrika</em>, <b>72</b>, 67–90.
+</p>
+<p>Smith, R. L. and Naylor, J. C. (1987).
+A comparison of maximum likelihood and Bayesian estimators
+for the three-parameter Weibull distribution.
+<em>Applied Statistics</em>, <b>36</b>, 358–369.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>weibull.mean</code>,
+<code>dweibull</code>,
+<code>truncweibull</code>,
+<code>gev</code>,
+<code>lognormal</code>,
+<code>expexpff</code>,
+<code>maxwell</code>,
+<code>rayleigh</code>,
+<code>gumbelII</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">wdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))  # Complete data
+wdata &lt;- transform(wdata,
+            y1 = rweibull(nn, exp(1), scale = exp(-2 + x2)),
+            y2 = rweibull(nn, exp(2), scale = exp( 1 - x2)))
+fit &lt;- vglm(cbind(y1, y2) ~ x2, weibullR, wdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+vcov(fit)
+summary(fit)
+</code></pre>
+
+
+</div>

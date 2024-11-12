@@ -1,0 +1,150 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>shortIronButterflyPnL</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculates per share Profit and Loss (PnL) at expiration for Short Iron Butterfly Option Strategy and draws its Bar Plot displaying PnL in the Plots tab.</h2>
+
+<h3>Description</h3>
+
+<p>This volatility strategy is a combination of a bear put spread and a bull call spread and consists of a short position in an OTM put option (out of the money put : put Strike price is lower than spot price )  with a strike price X1L, a long position in an ATM (at the money)  put option and an ATM (at the money)  call option with a strike price X2M, and a short position in an OTM call option (out of the money call : call Strike price is higher than spot price ) with a strike price X3H. The strikes are equidistant: X2M minus X1L equals to X3H minus X2M . This is a net debit trade. The trader or investor has an outlook that is  neutral (Kakushadze &amp; Serur, 2018).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">shortIronButterflyPnL(
+  ST,
+  X1L,
+  X2M,
+  X3H,
+  P1L,
+  P2,
+  C2,
+  C3H,
+  hl = 0,
+  hu = 2,
+  spot = spot,
+  pl = pl,
+  myData = myData,
+  myTibble = myTibble,
+  PnL = PnL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ST</code></td>
+<td>
+<p>Spot Price at time T.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X1L</code></td>
+<td>
+<p>Lower Strike Price or eXercise price for one ITM shorted Put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X2M</code></td>
+<td>
+<p>Medium trike Price or eXercise price for  one bought Put and one bought Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X3H</code></td>
+<td>
+<p>Higher Strike Price or eXercise price for one OTM shorted Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>P1L</code></td>
+<td>
+<p>Put Premium or Put Price received for the first ITM shorted Put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>P2</code></td>
+<td>
+<p>Put Premium or Put Price paid for the bought Put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C2</code></td>
+<td>
+<p>Put Premium or Put Price paid for the bought Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C3H</code></td>
+<td>
+<p>Call Premium or Put Price received for the one OTM shorted Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hl</code></td>
+<td>
+<p>lower bound value for setting lower-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hu</code></td>
+<td>
+<p>upper bound value for setting upper-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spot</code></td>
+<td>
+<p>Spot Price</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pl</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myData</code></td>
+<td>
+<p>Data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myTibble</code></td>
+<td>
+<p>tibble</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PnL</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>According to conceptual details given by Cohen (2015), and a closed form solution provided by Kakushadze and Serur (2018), this method is developed, and the given examples are created, to compute per share Profit and Loss at expiration for Short Iron Butterfly Option Strategy and draw its graph in the Plots tab.
+</p>
+
+
+<h3>Value</h3>
+
+<p>graph of the strategy
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">shortIronButterflyPnL(52,45,50,55,2,4,7,5)
+shortIronButterflyPnL(405,400,410,420,8,12,14.5,9,hl=0.9,hu=1.1)
+</code></pre>
+
+
+</div>

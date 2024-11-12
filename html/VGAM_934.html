@@ -1,0 +1,114 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Max</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Maximums </h2>
+
+<h3>Description</h3>
+
+<p>Generic function for the <em>maximums</em> (maxima) of a model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Max(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p> An object for which the computation or
+extraction of
+a maximum (or maximums) is meaningful.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Other arguments fed into the specific
+methods function of the model. Sometimes they are fed
+into the methods function for <code>Coef</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Different models can define a maximum in different ways.
+Many models have no such notion or definition.
+</p>
+<p>Maximums occur in quadratic and additive ordination,
+e.g., CQO or CAO.
+For these models the maximum is the fitted value at the
+optimum. For quadratic ordination models there is a formula
+for the optimum but for additive ordination models the
+optimum must be searched for numerically. If it occurs
+on the boundary, then the optimum is undefined. For
+a valid optimum, the fitted value at the optimum is the maximum.
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>The value returned depends specifically on the methods
+function invoked.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2004).
+A new technique for maximum-likelihood
+canonical Gaussian ordination.
+<em>Ecological Monographs</em>,
+<b>74</b>, 685–701.
+</p>
+<p>Yee, T. W. (2006).
+Constrained additive ordination.
+<em>Ecology</em>, <b>87</b>, 203–213.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Max.qrrvglm</code>,
+<code>Tol</code>,
+<code>Opt</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+set.seed(111)  # This leads to the global solution
+hspider[,1:6] &lt;- scale(hspider[,1:6])  # Standardized environmental vars
+p1 &lt;- cqo(cbind(Alopacce, Alopcune, Alopfabr, Arctlute, Arctperi,
+                Auloalbi, Pardlugu, Pardmont, Pardnigr, Pardpull,
+                Trocterr, Zoraspin) ~
+          WaterCon + BareSand + FallTwig + CoveMoss + CoveHerb + ReflLux,
+          poissonff, Bestof = 2, data = hspider, Crow1positive = FALSE)
+Max(p1)
+
+index &lt;- 1:ncol(depvar(p1))
+persp(p1, col = index, las = 1, llwd = 2)
+abline(h = Max(p1), lty = 2, col = index)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

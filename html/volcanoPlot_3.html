@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>volcanoPlot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a volcano plot</h2>
+
+<h3>Description</h3>
+
+<p>Creates a paneled volcano plot showing the distribution of Adverse events. Options to highlight selected events and customize options are provided.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">volcanoPlot(data, highlights = c(), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data frame from getStats()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>highlights</code></td>
+<td>
+<p>A list providing a column and values to be highlighted in the chart</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Extra options to change the look of the plot. 'fillcol =
+c('sienna2', 'skyblue2', 'grey')': fill colors; 'pcutoff = 0.05': p value
+cutoff; ‘ecutoff = 1': estimate cutoff, 'GroupLabels = c(’Comparison
+Group', 'Reference Group')': custom group labels.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a volcano plot created with ggplot
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">settings&lt;-list(
+  stratification_col="AEBODSYS",
+  group_col="ARM",
+  reference_group="Placebo",
+  comparison_group="Xanomeline High Dose",
+  id_col="USUBJID"
+)
+stats&lt;-getStats(dfAE=safetyData::adam_adae, dfDemog = safetyData::adam_adsl, settings)
+volcanoPlot(stats)
+
+</code></pre>
+
+
+</div>

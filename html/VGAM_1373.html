@@ -1,0 +1,744 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>qrrvglm.control</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Control Function for QRR-VGLMs (CQO) </h2>
+
+<h3>Description</h3>
+
+<p>Algorithmic constants and parameters for a constrained quadratic
+ordination (CQO), by fitting a <em>quadratic reduced-rank vector
+generalized linear model</em> (QRR-VGLM), are set using this function.
+It is the control function for <code>cqo</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">qrrvglm.control(Rank = 1, Bestof = if (length(Cinit)) 1 else 10,
+    checkwz = TRUE, Cinit = NULL, Crow1positive = TRUE,
+    epsilon = 1.0e-06, EqualTolerances = NULL, eq.tolerances = TRUE,
+    Etamat.colmax = 10, FastAlgorithm = TRUE, GradientFunction = TRUE,
+    Hstep = 0.001, isd.latvar = rep_len(c(2, 1, rep_len(0.5, Rank)),
+    Rank), iKvector = 0.1, iShape = 0.1, ITolerances = NULL,
+    I.tolerances = FALSE, maxitl = 40, imethod = 1,
+    Maxit.optim = 250, MUXfactor = rep_len(7, Rank),
+    noRRR = ~ 1, Norrr = NA, optim.maxit = 20,
+    Parscale = if (I.tolerances) 0.001 else 1.0,
+    sd.Cinit = 0.02, SmallNo = 5.0e-13, trace = TRUE,
+    Use.Init.Poisson.QO = TRUE,
+    wzepsilon = .Machine$double.eps^0.75, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<p>In the following, <code class="reqn">R</code> is the <code>Rank</code>,
+<code class="reqn">M</code> is the number
+of linear predictors,
+and <code class="reqn">S</code> is the number of responses
+(species).
+Thus <code class="reqn">M=S</code> for binomial and Poisson responses, and
+<code class="reqn">M=2S</code> for the negative binomial and
+2-parameter gamma distributions.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>Rank</code></td>
+<td>
+
+<p>The numerical rank <code class="reqn">R</code> of the model, i.e., the
+number of ordination axes. Must be an element from the set
+{1,2,...,min(<code class="reqn">M</code>,<code class="reqn">p_2</code>)}
+where the vector of explanatory
+variables <code class="reqn">x</code> is partitioned
+into (<code class="reqn">x_1</code>,<code class="reqn">x_2</code>), which is
+of dimension <code class="reqn">p_1+p_2</code>.
+The variables making up <code class="reqn">x_1</code>
+are given by the terms in the <code>noRRR</code> argument,
+and the rest
+of the terms comprise <code class="reqn">x_2</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Bestof</code></td>
+<td>
+
+<p>Integer. The best of <code>Bestof</code> models
+fitted is returned.
+This argument helps guard against local solutions
+by (hopefully)
+finding the global solution from many fits.
+The argument has value
+1 if an initial value for <code class="reqn">C</code> is inputted
+using <code>Cinit</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>checkwz</code></td>
+<td>
+<p> logical indicating whether the
+diagonal elements of
+the working weight matrices should be checked
+whether they are
+sufficiently positive, i.e., greater
+than <code>wzepsilon</code>. If not,
+any values less than <code>wzepsilon</code> are
+replaced with this value.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Cinit</code></td>
+<td>
+
+<p>Optional initial <code class="reqn">C</code> matrix, which must
+be a <code class="reqn">p_2</code> by <code class="reqn">R</code>
+matrix. The default is to
+apply <code>.Init.Poisson.QO()</code> to obtain
+initial values.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Crow1positive</code></td>
+<td>
+
+<p>Logical vector of length <code>Rank</code>
+(recycled if necessary): are
+the elements of the first
+row of <code class="reqn">C</code> positive? For example,
+if <code>Rank</code> is 4, then
+specifying <code>Crow1positive = c(FALSE,
+      TRUE)</code> will force <code class="reqn">C[1,1]</code> and <code class="reqn">C[1,3]</code>
+to be negative,
+and <code class="reqn">C[1,2]</code> and <code class="reqn">C[1,4]</code> to be positive.
+This argument
+allows for a reflection in the ordination axes
+because the
+coefficients of the latent variables are
+unique up to a sign.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>epsilon</code></td>
+<td>
+
+<p>Positive numeric. Used to test for convergence
+for GLMs fitted in C.
+Larger values mean a loosening of the convergence criterion.
+If an error code of 3 is reported, try increasing this value.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eq.tolerances</code></td>
+<td>
+
+<p>Logical indicating whether each (quadratic) predictor will
+have equal tolerances. Having <code>eq.tolerances = TRUE</code>
+can help avoid numerical problems, especially with binary data.
+Note that the estimated (common) tolerance matrix may or may
+not be positive-definite. If it is  then it can be scaled to
+the <code class="reqn">R</code> by <code class="reqn">R</code> identity matrix, i.e., made equivalent
+to <code>I.tolerances = TRUE</code>. Setting <code>I.tolerances = TRUE</code>
+will <em>force</em> a common <code class="reqn">R</code> by <code class="reqn">R</code> identity matrix as
+the tolerance matrix to the data even if it is not appropriate.
+In general, setting <code>I.tolerances = TRUE</code> is
+preferred over <code>eq.tolerances = TRUE</code> because,
+if it works, it is much faster and uses less memory.
+However, <code>I.tolerances = TRUE</code> requires the
+environmental variables to be scaled appropriately.
+See <b>Details</b> for more details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>EqualTolerances</code></td>
+<td>
+
+<p>Defunct argument.
+Use <code>eq.tolerances</code> instead.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>Etamat.colmax</code></td>
+<td>
+
+<p>Positive integer, no smaller than <code>Rank</code>.
+Controls the amount
+of memory used by <code>.Init.Poisson.QO()</code>.
+It is the maximum
+number of columns allowed for the pseudo-response
+and its weights.
+In general, the larger the value, the better
+the initial value.
+Used only if <code>Use.Init.Poisson.QO = TRUE</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>FastAlgorithm</code></td>
+<td>
+
+<p>Logical.
+Whether a new fast algorithm is to be used. The fast
+algorithm results in a large speed increases
+compared to Yee (2004).
+Some details of the fast algorithm are found
+in Appendix A of Yee (2006).
+Setting <code>FastAlgorithm = FALSE</code> will give an error.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>GradientFunction</code></td>
+<td>
+
+<p>Logical. Whether <code>optim</code>'s
+argument <code>gr</code>
+is used or not, i.e., to compute gradient values.
+Used only if
+<code>FastAlgorithm</code> is <code>TRUE</code>.
+The default value is usually
+faster on most problems.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Hstep</code></td>
+<td>
+
+<p>Positive value. Used as the step size in
+the finite difference
+approximation to the derivatives
+by <code>optim</code>.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>isd.latvar</code></td>
+<td>
+
+<p>Initial standard deviations for the latent variables
+(site scores).
+Numeric, positive and of length <code class="reqn">R</code>
+(recycled if necessary).
+This argument is used only
+if <code>I.tolerances = TRUE</code>. Used by
+<code>.Init.Poisson.QO()</code> to obtain initial
+values for the constrained
+coefficients <code class="reqn">C</code> adjusted to a reasonable value.
+It adjusts the
+spread of the site scores relative to a
+common species tolerance of 1
+for each ordination axis. A value between 0.5 and 10
+is recommended;
+a value such as 10 means that the range of the
+environmental space is
+very large relative to the niche width of the species.
+The successive
+values should decrease because the
+first ordination axis should have
+the most spread of site scores, followed by
+the second ordination
+axis, etc.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iKvector, iShape</code></td>
+<td>
+
+<p>Numeric, recycled to length <code class="reqn">S</code> if necessary.
+Initial values used for estimating the
+positive <code class="reqn">k</code> and
+<code class="reqn">\lambda</code> parameters of the
+negative binomial and
+2-parameter gamma distributions respectively.
+For further information
+see <code>negbinomial</code> and <code>gamma2</code>.
+These arguments override the <code>ik</code> and <code>ishape</code>
+arguments in <code>negbinomial</code>
+and <code>gamma2</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>I.tolerances</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> then the (common)
+tolerance matrix is the
+<code class="reqn">R</code> by <code class="reqn">R</code> identity matrix by definition.
+Note that having
+<code>I.tolerances = TRUE</code>
+implies <code>eq.tolerances = TRUE</code>, but
+not vice versa. Internally, the quadratic
+terms will be treated as
+offsets (in GLM jargon) and so the models
+can potentially be fitted
+very efficiently. <em>However, it is a
+very good idea to center
+and scale all numerical variables in the <code class="reqn">x_2</code> vector</em>.
+See <b>Details</b> for more details.
+The success of <code>I.tolerances = TRUE</code> often
+depends on suitable values for <code>isd.latvar</code> and/or
+<code>MUXfactor</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ITolerances</code></td>
+<td>
+
+<p>Defunct argument.
+Use <code>I.tolerances</code> instead.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxitl</code></td>
+<td>
+
+<p>Maximum number of times the optimizer is called or restarted.
+Most users should ignore this argument.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>Method of initialization. A positive integer 1 or 2 or 3 etc.
+depending on the <span class="pkg">VGAM</span> family function.
+Currently it is used for <code>negbinomial</code> and
+<code>gamma2</code> only, and used within the C.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Maxit.optim</code></td>
+<td>
+
+<p>Positive integer. Number of iterations given to the function
+<code>optim</code> at each of the <code>optim.maxit</code>
+iterations.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>MUXfactor</code></td>
+<td>
+
+<p>Multiplication factor for detecting large offset values.
+Numeric,
+positive and of length <code class="reqn">R</code>
+(recycled if necessary). This argument
+is used only if <code>I.tolerances = TRUE</code>.
+Offsets are <code class="reqn">-0.5</code>
+multiplied by the sum of the squares of
+all <code class="reqn">R</code> latent variable
+values. If the latent variable values are
+too large then this will
+result in numerical problems. By too large,
+it is meant that the
+standard deviation of the latent variable
+values are greater than
+<code>MUXfactor[r] * isd.latvar[r]</code>
+for <code>r=1:Rank</code> (this is why
+centering and scaling all the numerical
+predictor variables in
+<code class="reqn">x_2</code> is recommended).
+A value about 3 or 4 is recommended.
+If failure to converge occurs, try a slightly lower value.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optim.maxit</code></td>
+<td>
+
+<p>Positive integer. Number of times <code>optim</code>
+is invoked. At iteration <code>i</code>, the <code>i</code>th value of
+<code>Maxit.optim</code> is fed into <code>optim</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>noRRR</code></td>
+<td>
+
+<p>Formula giving terms that are <em>not</em>
+to be included in the
+reduced-rank regression (or formation of
+the latent variables),
+i.e., those belong to <code class="reqn">x_1</code>.
+Those variables which do not make up the
+latent variable (reduced-rank
+regression) correspond to the <code class="reqn">B_1</code> matrix.
+The default is to omit the intercept term
+from the latent variables.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Norrr</code></td>
+<td>
+
+<p>Defunct. Please use <code>noRRR</code>.
+Use of <code>Norrr</code> will become an error soon.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Parscale</code></td>
+<td>
+
+<p>Numerical and positive-valued vector of length <code class="reqn">C</code>
+(recycled if necessary).
+Passed
+into <code>optim(..., control = list(parscale = Parscale))</code>;
+the elements of <code class="reqn">C</code> become <code class="reqn">C</code> / <code>Parscale</code>.
+Setting <code>I.tolerances = TRUE</code>
+results in line searches that
+are very large, therefore <code class="reqn">C</code> has to be scaled accordingly
+to avoid large step sizes.
+See <b>Details</b> for more information.
+It's probably best to leave this argument alone.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd.Cinit</code></td>
+<td>
+
+<p>Standard deviation of the initial values for the elements
+of <code class="reqn">C</code>.
+These are normally distributed with mean zero.
+This argument is used only
+if <code>Use.Init.Poisson.QO = FALSE</code>
+and <code class="reqn">C</code> is not inputted using <code>Cinit</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trace</code></td>
+<td>
+
+<p>Logical indicating if output should be produced for
+each iteration. The default is <code>TRUE</code> because the
+calculations are numerically intensive, meaning it may take
+a long time, so that the user might think the computer has
+locked up if <code>trace = FALSE</code>.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>SmallNo</code></td>
+<td>
+
+<p>Positive numeric between <code>.Machine$double.eps</code>
+and <code>0.0001</code>.
+Used to avoid under- or over-flow in the IRLS algorithm.
+Used only if <code>FastAlgorithm</code> is <code>TRUE</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Use.Init.Poisson.QO</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> then the
+function <code>.Init.Poisson.QO()</code> is
+used to obtain initial values for the
+canonical coefficients <code class="reqn">C</code>.
+If <code>FALSE</code> then random numbers are used instead.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wzepsilon</code></td>
+<td>
+
+<p>Small positive number used to test whether the
+diagonals of the working
+weight matrices are sufficiently positive.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Ignored at present. </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Recall that the central formula for CQO is
+</p>
+<p style="text-align: center;"><code class="reqn">\eta = B_1^T x_1 + A \nu +
+               \sum_{m=1}^M (\nu^T D_m \nu) e_m</code>
+</p>
+
+<p>where <code class="reqn">x_1</code> is a vector
+(usually just a 1 for an intercept),
+<code class="reqn">x_2</code> is a vector of environmental variables,
+<code class="reqn">\nu=C^T x_2</code> is
+a <code class="reqn">R</code>-vector of latent variables, <code class="reqn">e_m</code> is
+a vector of 0s but with a 1 in the <code class="reqn">m</code>th position.
+QRR-VGLMs are an extension of RR-VGLMs and
+allow for maximum
+likelihood solutions to constrained
+quadratic ordination (CQO) models.
+</p>
+
+
+
+
+
+
+
+
+
+<p>Having <code>I.tolerances = TRUE</code> means all the tolerance matrices
+are the order-<code class="reqn">R</code> identity matrix, i.e., it <em>forces</em>
+bell-shaped curves/surfaces on all species. This results in a
+more difficult optimization problem (especially for 2-parameter
+models such as the negative binomial and gamma) because of overflow
+errors and it appears there are more local solutions. To help avoid
+the overflow errors, scaling <code class="reqn">C</code> by the factor <code>Parscale</code>
+can help enormously. Even better, scaling <code class="reqn">C</code> by specifying
+<code>isd.latvar</code> is more understandable to humans. If failure to
+converge occurs, try adjusting <code>Parscale</code>, or better, setting
+<code>eq.tolerances = TRUE</code> (and hope that the estimated tolerance
+matrix is positive-definite). To fit an equal-tolerances model, it
+is firstly best to try setting <code>I.tolerances = TRUE</code> and varying
+<code>isd.latvar</code> and/or <code>MUXfactor</code> if it fails to converge.
+If it still fails to converge after many attempts, try setting
+<code>eq.tolerances = TRUE</code>, however this will usually be a lot slower
+because it requires a lot more memory.
+</p>
+<p>With a <code class="reqn">R &gt; 1</code> model, the latent variables are always uncorrelated,
+i.e., the variance-covariance matrix of the site scores is a diagonal
+matrix.
+</p>
+<p>If setting <code>eq.tolerances = TRUE</code> is
+used and the common
+estimated tolerance matrix is positive-definite
+then that model is
+effectively the same as the <code>I.tolerances = TRUE</code>
+model (the two are
+transformations of each other).
+In general, <code>I.tolerances = TRUE</code>
+is numerically more unstable and presents
+a more difficult problem
+to optimize; the arguments <code>isd.latvar</code>
+and/or <code>MUXfactor</code> often
+must be assigned some good value(s)
+(possibly found by trial and error)
+in order for convergence to occur.
+Setting <code>I.tolerances = TRUE</code>
+<em>forces</em> a bell-shaped curve or surface
+onto all the species data,
+therefore this option should be used with
+deliberation. If unsuitable,
+the resulting fit may be very misleading.
+Usually it is a good idea
+for the user to set <code>eq.tolerances = FALSE</code>
+to see which species
+appear to have a bell-shaped curve or surface.
+Improvements to the
+fit can often be achieved using transformations,
+e.g., nitrogen
+concentration to log nitrogen concentration.
+</p>
+<p>Fitting a CAO model (see <code>cao</code>)
+first is a good idea for
+pre-examining the data and checking whether
+it is appropriate to fit
+a CQO model.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>A list with components matching the input names.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>The default value of <code>Bestof</code> is a bare minimum
+for many datasets,
+therefore it will be necessary to increase its
+value to increase the
+chances of obtaining the global solution.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Note</h3>
+
+<p>When <code>I.tolerances = TRUE</code> it is a good idea to apply
+<code>scale</code> to all
+the numerical variables that make up
+the latent variable, i.e., those of <code class="reqn">x_2</code>.
+This is to make
+them have mean 0, and hence avoid large offset
+values which cause
+numerical problems.
+</p>
+<p>This function has many arguments that are common with
+<code>rrvglm.control</code> and <code>vglm.control</code>.
+</p>
+<p>It is usually a good idea to try fitting a model with
+<code>I.tolerances = TRUE</code> first, and
+if convergence is unsuccessful,
+then try <code>eq.tolerances = TRUE</code>
+and <code>I.tolerances = FALSE</code>.
+Ordination diagrams with
+<code>eq.tolerances = TRUE</code> have a natural
+interpretation, but
+with <code>eq.tolerances = FALSE</code> they are
+more complicated and
+requires, e.g., contours to be overlaid on
+the ordination diagram
+(see <code>lvplot.qrrvglm</code>).
+</p>
+
+<p>In the example below, an equal-tolerances CQO model
+is fitted to the
+hunting spiders data.
+Because <code>I.tolerances = TRUE</code>, it is a good idea
+to center all the <code class="reqn">x_2</code> variables first.
+Upon fitting the model,
+the actual standard deviation of the site scores
+are computed. Ideally,
+the <code>isd.latvar</code> argument should have had
+this value for the best
+chances of getting good initial values.
+For comparison, the model is
+refitted with that value and it should
+run more faster and reliably.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2004).
+A new technique for maximum-likelihood
+canonical Gaussian ordination.
+<em>Ecological Monographs</em>,
+<b>74</b>, 685–701.
+</p>
+<p>Yee, T. W. (2006).
+Constrained additive ordination.
+<em>Ecology</em>,
+<b>87</b>, 203–213.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>cqo</code>,
+<code>rcqo</code>,
+<code>Coef.qrrvglm</code>,
+<code>Coef.qrrvglm-class</code>,
+<code>optim</code>,
+<code>binomialff</code>,
+<code>poissonff</code>,
+<code>negbinomial</code>,
+<code>gamma2</code>.
+</p>
+
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  # Poisson CQO with equal tolerances
+set.seed(111)  # This leads to the global solution
+hspider[,1:6] &lt;- scale(hspider[,1:6])  # Good when I.tolerances = TRUE
+p1 &lt;- cqo(cbind(Alopacce, Alopcune, Alopfabr,
+                Arctlute, Arctperi, Auloalbi,
+                Pardlugu, Pardmont, Pardnigr,
+                Pardpull, Trocterr, Zoraspin) ~
+          WaterCon + BareSand + FallTwig +
+          CoveMoss + CoveHerb + ReflLux,
+          poissonff, data = hspider, eq.tolerances = TRUE)
+sort(deviance(p1, history = TRUE))  # Iteration history
+
+(isd.latvar &lt;- apply(latvar(p1), 2, sd))  # Approx isd.latvar
+
+# Refit the model with better initial values
+set.seed(111)  # This leads to the global solution
+p1 &lt;- cqo(cbind(Alopacce, Alopcune, Alopfabr,
+                Arctlute, Arctperi, Auloalbi,
+                Pardlugu, Pardmont, Pardnigr,
+                Pardpull, Trocterr, Zoraspin) ~
+          WaterCon + BareSand + FallTwig +
+          CoveMoss + CoveHerb + ReflLux,
+          I.tolerances = TRUE, poissonff, data = hspider,
+          isd.latvar = isd.latvar)  # Note this
+sort(deviance(p1, history = TRUE))  # Iteration history
+
+## End(Not run)
+</code></pre>
+
+
+</div>

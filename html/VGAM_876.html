@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>logLik.vlm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract Log-likelihood for VGLMs/VGAMs/etc. </h2>
+
+<h3>Description</h3>
+
+<p>Calculates the log-likelihood value or the
+element-by-element contributions of the log-likelihood.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vlm'
+logLik(object, summation = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>Some <span class="pkg">VGAM</span> object, for example, having
+class <code>vglmff-class</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>summation</code></td>
+<td>
+
+<p>Logical, apply <code>sum</code>?
+If <code>FALSE</code> then a <code class="reqn">n</code>-vector or
+<code class="reqn">n</code>-row matrix (with the number of responses as
+the number of columns) is returned.
+Each element is the contribution to the log-likelihood.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Currently unused.
+In the future:
+other possible arguments fed into
+<code>logLik</code> in order to compute the log-likelihood.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>By default, this function
+returns the log-likelihood of the object.
+Thus this code relies on the log-likelihood being defined,
+and computed, for the object.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns the log-likelihood of the object.
+If <code>summation = FALSE</code> then a <code class="reqn">n</code>-vector or
+<code class="reqn">n</code>-row matrix (with the number of responses as
+the number of columns) is returned.
+Each element is the contribution to the log-likelihood.
+The prior weights are assimulated within the answer.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Not all <span class="pkg">VGAM</span> family functions have had the
+<code>summation</code> checked.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Not all <span class="pkg">VGAM</span> family functions currently have the
+<code>summation</code> argument implemented.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee. </p>
+
+
+<h3>See Also</h3>
+
+<p>VGLMs are described in <code>vglm-class</code>;
+VGAMs are described in <code>vgam-class</code>;
+RR-VGLMs are described in <code>rrvglm-class</code>;
+<code>AIC</code>;
+<code>anova.vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">zdata &lt;- data.frame(x2 = runif(nn &lt;- 50))
+zdata &lt;- transform(zdata, Ps01    = logitlink(-0.5       , inverse = TRUE),
+                          Ps02    = logitlink( 0.5       , inverse = TRUE),
+                          lambda1 =  loglink(-0.5 + 2*x2, inverse = TRUE),
+                          lambda2 =  loglink( 0.5 + 2*x2, inverse = TRUE))
+zdata &lt;- transform(zdata, y1 = rzipois(nn, lambda = lambda1, pstr0 = Ps01),
+                          y2 = rzipois(nn, lambda = lambda2, pstr0 = Ps02))
+
+with(zdata, table(y1))  # Eyeball the data
+with(zdata, table(y2))
+fit2 &lt;- vglm(cbind(y1, y2) ~ x2, zipoisson(zero = NULL), data = zdata)
+
+logLik(fit2)  # Summed over the two responses
+sum(logLik(fit2, sum = FALSE))  # For checking purposes
+(ll.matrix &lt;- logLik(fit2, sum = FALSE))  # nn x 2 matrix
+colSums(ll.matrix)  # log-likelihood for each response
+</code></pre>
+
+
+</div>

@@ -1,0 +1,143 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>crpsDecompostion</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Decompostion of Continuous Ranked Probability Score</h2>
+
+<h3>Description</h3>
+
+<p>The CRPS measures the distance between the predicted and the observed cumulative density functions (CDFs) of scalar variables. Furthermore, the crpsDecomposition function provides the reliability and resolution terms obtained by the CRPS decomposition proposed by Hersbach. The alpha, beta matrices and Heavisides vectors of outliers calculated in the CRPS decomposition are also returned. To speed up calculation time, these matrices/vectors can then be used to recalculate the CRPS's in a bootstrap by using the crpsFromAlphaBeta function.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">      crpsDecomposition(obs, eps)
+      crpsFromAlphaBeta(alpha,beta,heaviside0,heavisideN)
+       </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>Vector of observations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>Matrix of ensemble forecast. Each column represent a member.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Matrix of alpha (returned from crpsDecomposition)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>Vector of beta (returned from crpsDecomposition)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>heaviside0</code></td>
+<td>
+<p>Vector of Heaviside for outlier i=0 (returned from crpsDecomposition)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>heavisideN</code></td>
+<td>
+<p>Vector of Heaviside for outlier i=N (returned from crpsDecomposition)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>CRPS</code></td>
+<td>
+<p>CRPS score</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CRPSpot</code></td>
+<td>
+<p>The potential CRPS (Resolution - Uncertainty)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Reli</code></td>
+<td>
+<p>The Reliability term of the CRPS</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Matrix (Nobservation rows x Nmember +1 columns) of alpha used in the CRPS decomposition.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>Matrix (Nobservation rows x Nmember +1 columns) of beta used in the CRPS decomposition.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>heaviside0</code></td>
+<td>
+<p>Vector (Nobservation length) of Heaviside for outlier i=0 used in the CRPS decomposition</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>heavisideN</code></td>
+<td>
+<p>Vector (Nobservation length) of Heaviside for outlier i=N used in the CRPS decomposition</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Ronald Frenette &lt;Ronald.Frenette@ec.gc.ca&gt;</p>
+
+
+<h3>References</h3>
+
+<p>G. Candille,  P. L. Houtekamer, and G. Pellerin: Verification of an Ensemble Prediction System against Observations, <em>Monthly Weather Review</em>,<b>135</b>, pp. 2688-2699 
+</p>
+<p>Hershcach, Hans, 2000. Decomposition of the Continuous Ranked Probability Score for Ensemble Prediction Systems. <em>Weather and Forecasting</em>, <b>15</b>, (5) pp. 559-570.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(precip.ensemble)
+x &lt;- precip.ensemble[seq(5,5170,5),]
+
+#Observations are in the column
+obs&lt;-x[,3]
+
+#Forecast values of ensemble are in the column 4 to 54
+eps&lt;-x[,4:54]
+
+#CRPS calculation 
+c&lt;-crpsDecomposition(obs,eps)
+
+#CRPS with alpha and beta
+#Resampling indices
+nObs&lt;-length(obs)
+i&lt;-sample(seq(nObs),nObs,replace=TRUE)
+crps2&lt;-crpsFromAlphaBeta(c$alpha[i,],c$beta[i,],c$heaviside0[i],c$heavisideN[i])
+
+</code></pre>
+
+
+</div>

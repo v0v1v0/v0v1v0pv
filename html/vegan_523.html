@@ -1,0 +1,136 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tolerance</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Species tolerances and sample heterogeneities</h2>
+
+<h3>Description</h3>
+
+<p>Species tolerances and sample heterogeneities.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tolerance(x, ...)
+
+## S3 method for class 'cca'
+tolerance(x, choices = 1:2, which = c("species","sites"),
+          scaling = "species", useN2 = TRUE, hill = FALSE, ...)
+
+## S3 method for class 'decorana'
+tolerance(x, data, choices = 1:4,
+          which = c("sites", "species"), useN2 = TRUE, ...)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>object of class <code>"cca"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>choices</code></td>
+<td>
+<p>numeric; which ordination axes to compute
+tolerances and heterogeneities for. Defaults to axes 1 and 2.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>which</code></td>
+<td>
+<p>character; one of <code>"species"</code> or <code>"sites"</code>,
+indicating whether species tolerances or sample heterogeneities
+respectively are computed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scaling</code></td>
+<td>
+<p>character or numeric; the ordination scaling to
+use. See <code>scores.cca</code> for details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hill</code></td>
+<td>
+<p>logical; if <code>scaling</code> is a character,
+these control whether Hill's scaling is used for (C)CA
+respectively. See <code>scores.cca</code> for details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>useN2</code></td>
+<td>
+<p>logical; should the bias in the tolerances /
+heterogeneities be reduced via scaling by Hill's N2?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Original input data used in <code>decorana</code>.  If
+missing, the function tries to get the same data as used in
+<code>decorana</code> call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments passed to other methods.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Function to compute species tolerances and site heterogeneity measures
+from unimodal ordinations (CCA &amp; CA). Implements Eq 6.47 and 6.48 from
+the Canoco 4.5 Reference Manual (pages 178–179).
+</p>
+
+
+<h3>Value</h3>
+
+<p>Matrix of tolerances/heterogeneities with some additional
+attributes: <code>which</code>, <code>scaling</code>, and <code>N2</code>, the latter of
+which will be <code>NA</code> if <code>useN2 = FALSE</code> or <code>N2</code> could not
+be estimated.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Gavin L. Simpson and Jari Oksanen (<code>decorana</code> method).</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(dune)
+data(dune.env)
+mod &lt;- cca(dune ~ ., data = dune.env)
+
+## defaults to species tolerances
+tolerance(mod)
+
+## sample heterogeneities for CCA axes 1:6
+tolerance(mod, which = "sites", choices = 1:6)
+## average should be 1 with scaling = "sites", hill = TRUE
+tol &lt;- tolerance(mod, which = "sites", scaling = "sites", hill = TRUE,
+   choices = 1:4)
+colMeans(tol)
+apply(tol, 2, sd)
+## Rescaling tries to set all tolerances to 1
+tol &lt;- tolerance(decorana(dune))
+colMeans(tol)
+apply(tol, 2, sd)
+</code></pre>
+
+
+</div>

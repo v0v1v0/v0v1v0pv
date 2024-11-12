@@ -1,0 +1,231 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lstsp</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Main function for the low rank plus sparse structure VAR model</h2>
+
+<h3>Description</h3>
+
+<p>Main function for the low-rank plus sparse structure VAR model
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lstsp(
+  data,
+  lambda.1 = NULL,
+  mu.1 = NULL,
+  lambda.1.seq = NULL,
+  mu.1.seq = NULL,
+  lambda.2 = NULL,
+  mu.2 = NULL,
+  lambda.3 = NULL,
+  mu.3 = NULL,
+  alpha_L = 0.25,
+  omega = NULL,
+  h = NULL,
+  step.size = NULL,
+  tol = 1e-04,
+  niter = 100,
+  backtracking = TRUE,
+  skip = 5,
+  cv = FALSE,
+  nfold = NULL,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A n by p dataset matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.1</code></td>
+<td>
+<p>tuning parameter for sparse component for the first step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu.1</code></td>
+<td>
+<p>tuning parameter for low rank component for the first step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.1.seq</code></td>
+<td>
+<p>a sequence of lambda to the left segment for cross-validation, it's not mandatory to provide</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu.1.seq</code></td>
+<td>
+<p>a sequence of mu to the left segment, low rank component tuning parameter</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.2</code></td>
+<td>
+<p>tuning parameter for sparse for the second step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu.2</code></td>
+<td>
+<p>tuning parameter for low rank for the second step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.3</code></td>
+<td>
+<p>tuning parameter for estimating sparse components</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu.3</code></td>
+<td>
+<p>tuning parameter for estimating low rank components</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha_L</code></td>
+<td>
+<p>a positive numeric value, indicating the restricted space of low rank component, default is 0.25</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>omega</code></td>
+<td>
+<p>tuning parameter for information criterion, the larger of omega, the fewer final selected change points</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>h</code></td>
+<td>
+<p>window size of the first rolling window step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>step.size</code></td>
+<td>
+<p>rolling step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>tolerance for the convergence in the second screening step, indicates when to stop</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>niter</code></td>
+<td>
+<p>the number of iterations required for FISTA algorithm</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>backtracking</code></td>
+<td>
+<p>A boolean argument to indicate use backtrack to FISTA model</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>skip</code></td>
+<td>
+<p>The number of observations need to skip near the boundaries</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cv</code></td>
+<td>
+<p>A boolean argument, indicates whether the user will apply cross validation to select tuning parameter, default is FALSE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nfold</code></td>
+<td>
+<p>An positive integer, the number of folds for cross validation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>If is TRUE, then it will print all information about current step.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list object including
+</p>
+
+<dl>
+<dt>data</dt>
+<dd>
+<p>the original dataset</p>
+</dd>
+<dt>q</dt>
+<dd>
+<p>the time lag for the time series, in this case, it is 1</p>
+</dd>
+<dt>cp</dt>
+<dd>
+<p>Final estimated change points</p>
+</dd>
+<dt>sparse_mats</dt>
+<dd>
+<p>Final estimated sparse components</p>
+</dd>
+<dt>lowrank_mats</dt>
+<dd>
+<p>Final estimated low rank components</p>
+</dd>
+<dt>est_phi</dt>
+<dd>
+<p>Final estimated model parameter, equals to sum of low rank and sparse components</p>
+</dd>
+<dt>time</dt>
+<dd>
+<p>Running time for the LSTSP algorithm</p>
+</dd>
+</dl>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+nob &lt;- 100
+p &lt;- 15
+brk &lt;- c(50, nob+1)
+rank &lt;- c(1, 3)
+signals &lt;- c(-0.7, 0.8)
+singular_vals &lt;- c(1, 0.75, 0.5)
+info_ratio &lt;- rep(0.35, 2)
+try &lt;- simu_var(method = "LS", nob = nob, k = p, lags = 1, brk = brk,
+                sigma = as.matrix(diag(p)), signals = signals,
+                rank = rank, singular_vals = singular_vals, info_ratio = info_ratio,
+                sp_pattern = "off-diagonal", spectral_radius = 0.9)
+data &lt;- try$series
+
+lambda1 = lambda2 = lambda3 &lt;- c(2.5, 2.5)
+mu1 = mu2 = mu3 &lt;- c(15, 15)
+fit &lt;- lstsp(data, lambda.1 = lambda1, mu.1 = mu1,
+             lambda.2 = lambda2, mu.2 = mu2,
+             lambda.3 = lambda3, mu.3 = mu3, alpha_L = 0.25,
+             step.size = 5, niter = 20, skip = 5,
+             cv = FALSE, verbose = FALSE)
+summary(fit)
+plot(fit, data, display = "cp")
+plot(fit, data, display = "param")
+
+</code></pre>
+
+
+</div>

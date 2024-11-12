@@ -1,0 +1,136 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>est_med</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimate mediation effects</h2>
+
+<h3>Description</h3>
+
+<p>Estimate mediation effects, including the natural direct effect
+(NDE), the natural indirect effect (NIE), and the proportion mediated
+(PM). See references for definitions of these objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">est_med(
+  dat,
+  type = "NP",
+  t_0,
+  nde = TRUE,
+  nie = TRUE,
+  pm = TRUE,
+  scale = "RR",
+  params_np = params_med_np()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dat</code></td>
+<td>
+<p>A data object returned by load_data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>One of c("NP", "Cox"). This specifies whether to estimate the
+effects using a marginalized Cox proportional hazards model or using a
+nonparametric estimator.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t_0</code></td>
+<td>
+<p>Time point of interest</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nde</code></td>
+<td>
+<p>Boolean. If TRUE, the natural direct effect is computed and
+returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nie</code></td>
+<td>
+<p>Boolean. If TRUE, the natural indirect effect is computed and
+returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pm</code></td>
+<td>
+<p>Boolean. If TRUE, the proportion mediated is computed and returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>One of c("RR", "VE"). This determines whether NDE and NIE
+estimates and CIs are computed on the risk ratio (RR) scale or the
+vaccine efficacy (VE) scale. The latter equals one minus the former.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>params_np</code></td>
+<td>
+<p>A list of options returned by <code>params_med_np</code>
+that are relevant if type="NP".</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A dataframe containing the following columns: </p>
+
+<ul>
+<li>
+<p><code>effect</code>: one of c("NDE", "NIE", "PM")
+</p>
+</li>
+<li>
+<p><code>est</code>: point estimate
+</p>
+</li>
+<li>
+<p><code>se</code>: standard error of point estimate
+</p>
+</li>
+<li>
+<p><code>ci_lower</code>: a confidence interval lower limit
+</p>
+</li>
+<li>
+<p><code>ci_upper</code>: a confidence interval upper limit
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Fay MP and Follmann DA (2023). Mediation Analyses for the Effect
+of Antibodies in Vaccination &lt;doi:10.48550/arXiv.2208.06465&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(hvtn505)
+dat &lt;- load_data(time="HIVwk28preunblfu", event="HIVwk28preunbl", vacc="trt",
+                 marker="IgG_V2", covariates=c("age","BMI","bhvrisk"),
+                 weights="wt", ph2="casecontrol", data=hvtn505)
+
+ests_np &lt;- est_med(dat=dat, type="NP", t_0=578)
+
+</code></pre>
+
+
+</div>

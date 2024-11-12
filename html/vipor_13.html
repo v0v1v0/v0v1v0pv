@@ -1,0 +1,77 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tukeyTexture</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate random positions based on Tukey texture algorithm</h2>
+
+<h3>Description</h3>
+
+<p>Generate partly random, partly constrained lateral displacements based on Tukey texture algorithm from Tukey and Tukey 1990
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tukeyTexture(
+  x,
+  jitter = TRUE,
+  thin = FALSE,
+  hollow = FALSE,
+  delta = diff(stats::quantile(x, c(0.25, 0.75))) * 0.03
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>the points to be jittered. really only used to calculate length</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>jitter</code></td>
+<td>
+<p>if TRUE add random jitter to each point</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thin</code></td>
+<td>
+<p>if TRUE then push points to the center in thin regions</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hollow</code></td>
+<td>
+<p>if TRUE then expand points outward to avoid “hollowness”</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>a “reasonably small value” used in edge straightening and thinning</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a vector of length length(x) giving displacements for each corresponding point in x
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x&lt;-rnorm(200)
+plot(tukeyTexture(x),x)
+x&lt;-1:100
+plot(tukeyTexture(x),x)
+plot(tukeyTexture(log10(counties$landArea),TRUE,TRUE),log10(counties$landArea),cex=.25)
+</code></pre>
+
+
+</div>

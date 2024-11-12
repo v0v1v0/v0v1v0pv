@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vamForSeurat</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>VAM wrapper for scRNA-seq data processed using the Seurat framework</h2>
+
+<h3>Description</h3>
+
+<p>Executes the Variance-adjusted Mahalanobis (VAM) method (<code>vamForCollection</code>) on 
+normalized scRNA-seq data stored in a Seurat object.
+If the Seurat <code>NormalizeData</code> method was used for normalization, the technical variance of each gene is computed as
+the proportion of technical variance (from <code>FindVariableFeatures</code>) multiplied by the variance of the  normalized counts. 
+If <code>SCTransform</code> was used for normalization, the technical variance for each gene is set
+to 1 (the normalized counts output by <code>SCTransform</code> should have variance 1 if there is only technical variation).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    vamForSeurat(seurat.data, gene.weights, gene.set.collection, 
+    	center=FALSE, gamma=TRUE, sample.cov=FALSE, return.dist=FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>seurat.data</code></td>
+<td>
+<p>The Seurat object that holds the scRNA-seq data. Assumes normalization has already been performed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gene.weights</code></td>
+<td>
+<p>See description in <code>vamForCollection</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gene.set.collection</code></td>
+<td>
+<p>List of m gene sets for which scores are computed.
+Each element in the list corresponds to a gene set and the list element is a vector
+of indices for the genes in the set. The index value is defined relative to the
+order of genes in the relevant <code>seurat.data</code> Assay object. Gene set names should be specified as list names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>center</code></td>
+<td>
+<p>See description in <code>vam</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>See description in <code>vam</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample.cov</code></td>
+<td>
+<p>If true, will use the a diagonal covariance matrix generated from the 
+sample variances to compute the squared adjusted Mahalanobis distances (this is equivalent to not specifying
+<code>tech.var</code> for the <code>vam</code> method). If false (default), will use the technical variances
+as determined based on the type of Seurat normalization.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>return.dist</code></td>
+<td>
+<p>If true, will return the squared adjusted Mahalanobis distances in a new Assay object called "VAM.dist". 
+Default is F.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Updated Seurat object that hold the VAM results in one or two new Assay objects:        
+</p>
+
+<ul>
+<li>
+<p> If <code>return.dist</code> is true, the matrix of squared adjusted Mahalanobis distances will be stored in new 
+Assay object called "VAM.dist". 
+</p>
+</li>
+<li>
+<p> The matrix of CDF values (1 minus the one-sided p-values) will be stored in new Assay object called "VAM.cdf". 
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><code>vam</code>,<code>vamForCollection</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    # Only run example code if Seurat package is available
+    if (requireNamespace("Seurat", quietly=TRUE) &amp; requireNamespace("SeuratObject", quietly=TRUE)) {
+        # Define a collection with one gene set for the first 10 genes
+        collection=list(set1=1:10)
+        # Execute on the pbmc_small scRNA-seq data set included with SeuratObject
+        # See vignettes for more detailed Seurat examples
+        vamForSeurat(seurat.data=SeuratObject::pbmc_small,
+            gene.set.collection=collection)
+    }
+</code></pre>
+
+
+</div>

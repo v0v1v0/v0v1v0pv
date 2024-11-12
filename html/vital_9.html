@@ -1,0 +1,100 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>aus_mortality</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Australian mortality data</h2>
+
+<h3>Description</h3>
+
+<p><code>aus_mortality</code> is an annual <code>vital</code> with three values:
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+Mortality: </td>
+<td style="text-align: left;"> Mortality rate </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+Exposure:  </td>
+<td style="text-align: left;"> Population at 30 June each year</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+Deaths:    </td>
+<td style="text-align: left;"> Number of deaths </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+</td>
+</tr>
+</table>
+<h3>Format</h3>
+
+<p>Time series of class <code>vital</code>
+</p>
+
+
+<h3>Details</h3>
+
+<p>The data is disaggregated using four keys:
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+Age:   </td>
+<td style="text-align: left;"> Age at death</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+Sex:   </td>
+<td style="text-align: left;"> male or female </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+State: </td>
+<td style="text-align: left;"> State of Australia</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+Code: </td>
+<td style="text-align: left;"> Short code for state</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+</td>
+</tr>
+</table>
+<p>The age group 100 also includes people who died aged older than 100.
+The data up to 1970 were taken from the Australian Demographic Data Bank
+(<a href="https://pkg.robjhyndman.com/addb/">https://pkg.robjhyndman.com/addb/</a>). From 1971, the data come from the
+Australian Human Mortality Database (<a href="https://aushd.org">https://aushd.org</a>). There may be
+some discontinuities introduced due to different methods being used to prepare
+the data before and after 1971. Note that "ACTOT" includes both the ACT and overseas territories
+and is only available up to 2003. The data exclusively from the ACT begins in 1971.
+</p>
+
+
+<h3>Source</h3>
+
+<p>Australian Human Mortality Database
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(ggplot2)
+aus_mortality
+aus_mortality |&gt;
+  dplyr::filter(State=="Victoria", Sex != "total") |&gt;
+  autoplot(Exposure) +
+  ylab("Population at 30 June (thousands)")
+
+</code></pre>
+
+
+</div>

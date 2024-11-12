@@ -1,0 +1,168 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vgCalcRange</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Range of a Variance Gamma Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Given the parameter vector <code>param</code> or the idividual parameter values  
+<code class="reqn">(c,\sigma,\theta,\nu)</code> of a variance gamma 
+distribution, this function determines the range outside of which the density
+function is negligible, to a specified tolerance. The parameterization used
+is the <code class="reqn">(c,\sigma,\theta,\nu)</code> one (see
+<code>dvg</code>). To use another parameterization, use
+<code>vgChangePars</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  vgCalcRange(vgC = 0, sigma = 1, theta = 0, nu = 1, 
+    param = c(vgC, sigma, theta, nu), tol = 10^(-5), density = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vgC</code></td>
+<td>
+<p>The location parameter <code class="reqn">c</code>, default is 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma</code></td>
+<td>
+<p>The spread parameter <code class="reqn">\sigma</code>, default is 1, 
+must be positive.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+<p>The asymmetry parameter <code class="reqn">\theta</code>, default is 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nu</code></td>
+<td>
+<p>The shape parameter <code class="reqn">\nu</code>, default is 1, must be 
+positive.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>param</code></td>
+<td>
+<p>Specifying the parameters as a vector which takes the form 
+<code>c(vgC,sigma,theta,nu)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>Tolerance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>density</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, the bounds are for the density
+function. If <code>FALSE</code>, they should be for the probability
+distribution, but this has not yet been implemented.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Extra arguments for calls to <code>uniroot</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Users may either specify the values of the parameters individually or as a
+vector. If both forms are specifed but with different values, then the 
+values specified by vector <code>param</code> will always overwrite the other ones.
+</p>
+<p>The particular variance gamma distribution being considered is
+specified by the value of the parameter <code>param</code>.
+</p>
+<p>If <code>density = TRUE</code>, the function gives a range, outside of which
+the density is less than the given tolerance. Useful for plotting the
+density. Also used in determining break points for the separate
+sections over which numerical integration is used to determine the
+distribution function. The points are found by using
+<code>uniroot</code> on the density function.
+</p>
+<p>If <code>density = FALSE</code>, the function returns the message:
+"<code>Distribution function bounds not yet implemented</code>".
+</p>
+
+
+<h3>Value</h3>
+
+<p>A two-component vector giving the lower and upper ends of the range.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>David Scott <a href="mailto:d.scott@auckland.ac.nz">d.scott@auckland.ac.nz</a>, 
+Christine Yang Dong <a href="mailto:c.dong@auckland.ac.nz">c.dong@auckland.ac.nz</a></p>
+
+
+<h3>References</h3>
+
+<p>Seneta, E. (2004). Fitting the variance-gamma model to financial data.
+<em>J. Appl. Prob.</em>, 41A:177–187.
+Kotz, S, Kozubowski, T. J., and Podgórski,
+K. (2001). 
+The Laplace Distribution and Generalizations. <em>Birkhauser</em>,
+Boston, 349 p.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>dvg</code>, <code>vgChangePars</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Use the following rules for vgCalcRange when plotting graphs for dvg,
+## ddvg and pvg.
+## if nu &lt; 2, use:
+##   maxDens &lt;- dvg(vgMode(param = c(vgC, sigma, theta, nu)),
+##   param = c(vgC, sigma, theta, nu), log = FALSE)
+##   vgRange &lt;- vgCalcRange(param = c(vgC, sigma, theta, nu),
+##     tol = 10^(-2)*maxDens, density = TRUE)
+
+## if nu &gt;= 2 and theta &lt; 0, use:
+##   vgRange &lt;- c(vgC-2,vgC+6)
+## if nu &gt;= 2 and theta &gt; 0, use:
+##   vgRange &lt;- c(vgC-6,vgC+2)
+## if nu &gt;= 2 and theta = 0, use:
+##   vgRange &lt;- c(vgC-4,vgC+4)
+
+param &lt;- c(0,0.5,0,0.5)
+maxDens &lt;- dvg(vgMode(param = param), param = param)
+vgRange &lt;- vgCalcRange(param = param, tol = 10^(-2)*maxDens)
+vgRange
+curve(dvg(x, param = param), vgRange[1], vgRange[2])
+curve(dvg(x, param = param), vgRange[1], vgRange[2])
+
+param &lt;- c(2,2,0,3)
+vgRange &lt;- c(2-4,2+4)
+vgRange
+curve(dvg(x, param = param), vgRange[1], vgRange[2])
+## Not run: vgCalcRange(param = param, tol = 10^(-3), density = FALSE)
+</code></pre>
+
+
+</div>

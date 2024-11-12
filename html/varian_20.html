@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vm_stan</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a Stan class VM object</h2>
+
+<h3>Description</h3>
+
+<p>Internal function to create and compile a Stan model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vm_stan(design = c("V -&gt; Y", "V -&gt; M -&gt; Y", "V", "X -&gt; V", "X -&gt; V -&gt; Y",
+  "X -&gt; M -&gt; V"), useU = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>design</code></td>
+<td>
+<p>A character string indicating the type of model to be run.  One of
+“V -&gt; Y” for variability predicting an outcome,
+“V -&gt; M -&gt; Y” for mediation of variability on an outcome,
+“V” to take posterior samples of individual variability estimates alone.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>useU</code></td>
+<td>
+<p>A logical value whether the latent intercept estimated in Stage 1 should
+also be used as a predictor.  Defaults to <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments passed to <code>stan_model</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A compiled Stan model.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Joshua F. Wiley &lt;josh@elkhartgroup.com&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Make Me!
+## Not run: 
+  test1 &lt;- vm_stan("V -&gt; Y", useU=TRUE)
+  test2 &lt;- vm_stan("V -&gt; Y", useU=FALSE)
+  test3 &lt;- vm_stan("V -&gt; M -&gt; Y", useU=TRUE)
+  test4 &lt;- vm_stan("V -&gt; M -&gt; Y", useU=FALSE)
+  test5 &lt;- vm_stan("V")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

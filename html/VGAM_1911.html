@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>yulesimon</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Yule-Simon Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimating the shape parameter of the Yule-Simon distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">yulesimon(lshape = "loglink", ishape = NULL, nsimEIM = 200,
+          zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape</code></td>
+<td>
+
+<p>Link function for the shape parameter,
+called
+<code class="reqn">\rho</code> below.
+See <code>Links</code> for more choices and
+for general information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape</code></td>
+<td>
+
+<p>Optional initial value for the (positive) parameter.
+See <code>CommonVGAMffArguments</code> for more information.
+The default is to obtain an initial value internally.
+Use this argument
+if the default fails.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability function is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\rho) = \rho*beta(y,\rho+1),</code>
+</p>
+
+<p>where the parameter <code class="reqn">\rho&gt;0</code>,
+<code class="reqn">beta</code> is the <code>beta</code> function,
+and <code class="reqn">y=1,2,\ldots</code>.
+The function <code>dyules</code> computes this
+probability function.
+The mean of <code class="reqn">Y</code>, which is returned as fitted values, is
+<code class="reqn">\rho/(\rho-1)</code>
+provided <code class="reqn">\rho &gt; 1</code>.
+The variance of <code class="reqn">Y</code> is
+<code class="reqn">\rho^2/((\rho-1)^2 (\rho-2))</code>
+provided <code class="reqn">\rho &gt; 2</code>.
+</p>
+<p>The distribution was named after
+Udny Yule and Herbert A. Simon.
+Simon originally called it the Yule distribution.
+This family function can handle multiple responses.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Simon, H. A. (1955).
+On a class of skew distribution functions.
+<em>Biometrika</em>,
+<b>42</b>,
+425–440.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ryules</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ydata &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+ydata &lt;- transform(ydata, y = ryules(nn, shape = exp(1.5 - x2)))
+with(ydata, table(y))
+fit &lt;- vglm(y ~ x2, yulesimon, data = ydata, trace = TRUE)
+coef(fit, matrix = TRUE)
+summary(fit)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vw_handler_add_effect</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add a side-effect to a JavaScript handler</h2>
+
+<h3>Description</h3>
+
+<p>With a JavaScript handler, once you have calculated a value
+based on the handler's arguments (e.g. <code>name</code>, <code>value</code>) you will
+likely want to produce a side-effect based on that calculated value.
+This function helps you do that.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vw_handler_add_effect(vw_handler, body_effect, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vw_handler</code></td>
+<td>
+<p><code>vw_handler</code> created using <code>vw_handler_signal()</code> or
+<code>vw_handler_event()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>body_effect</code></td>
+<td>
+<p><code>character</code>, the name of a defined handler-body,
+or the text of the body of a handler-function</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional <em>named</em> parameters to be interpolated into the
+text of the handler_body</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The calculation of a value is meant to be separate from the
+production of a side-effect. This way, the code for a side-effect
+can be used for any type of handler.
+</p>
+<p>You are supplying the <code>body_effect</code> to an effect-handler. This
+takes a single argument, <code>x</code>, representing the
+calculated value. Doing this allows us to chain side-effects together;
+be careful not to modify <code>x</code> in any of the code you provide.
+</p>
+<p>To see what side-effects are available in this package's handler-library,
+call <code>vw_handler_add_effect()</code> without any arguments. You may notice that
+some of the effects, like <code>"element_text"</code>, require additional parameters,
+in this case, <code>selector</code>.
+</p>
+<p>Those parameters with a default value of <code>NULL</code> require you to supply
+a value; those with sensible defaults are optional.
+</p>
+<p>To provide the parameters, call
+<code>vw_handler_add_effect()</code> with <em>named</em> arguments corresponding to the
+names of the parameters. See the examples for details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>modified copy of <code>vw_handler</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vw_handler_signal()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  # list all the available effect-handlers
+  vw_handler_add_effect()
+
+  # build a signal handler that prints some text,
+  # then the value, to the console
+  vw_handler_signal("value") %&gt;%
+    vw_handler_add_effect("console", label = "signal value:")
+
+</code></pre>
+
+
+</div>

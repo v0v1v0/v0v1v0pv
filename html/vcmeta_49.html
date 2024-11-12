@@ -1,0 +1,144 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.lm.mean2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Meta-regression analysis for 2-group mean differences</h2>
+
+<h3>Description</h3>
+
+<p>This function estimates the intercept and slope coefficients in a
+meta-regression model where the dependent variable is a 2-group
+mean difference. The estimates are OLS estimates with robust standard
+errors that accommodate residual heteroscedasticity.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.lm.mean2(alpha, m1, m2, sd1, sd2, n1, n2, X)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m1</code></td>
+<td>
+<p>vector of estimated means for group 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m2</code></td>
+<td>
+<p>vector of estimated means for group 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd1</code></td>
+<td>
+<p>vector of estimated SDs for group 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd2</code></td>
+<td>
+<p>vector of estimated SDs for group 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>vector of group 1 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>vector of group 2 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>matrix of predictor values</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix. The first row is for the intercept with one additional
+row per predictor. The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - OLS estimate
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> t - t-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+<li>
+<p> df - degrees of freedom
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2009).
+“Meta-analytic interval estimation for standardized and unstandardized mean differences.”
+<em>Psychological Methods</em>, <b>14</b>(3), 225–238.
+ISSN 1939-1463, <a href="https://doi.org/10.1037/a0016619">doi:10.1037/a0016619</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">n1 &lt;- c(65, 30, 29, 45, 50)
+n2 &lt;- c(67, 32, 31, 20, 52)
+m1 &lt;- c(31.1, 32.3, 31.9, 29.7, 33.0)
+m2 &lt;- c(34.1, 33.2, 30.6, 28.7, 26.5)
+sd1 &lt;- c(7.1, 8.1, 7.8, 6.8, 7.6)
+sd2 &lt;- c(7.8, 7.3, 7.5, 7.2, 6.8)
+x1 &lt;- c(4, 6, 7, 7, 8)
+x2 &lt;- c(1, 0, 0, 0, 1)
+X &lt;- matrix(cbind(x1, x2), 5, 2)
+meta.lm.mean2(.05, m1, m2, sd1, sd2, n1, n2, X)
+
+# Should return:
+#    Estimate        SE         t     p         LL        UL  df
+# b0   -15.20 3.4097610 -4.457791 0.000 -21.902415 -8.497585 418
+# b1     2.35 0.4821523  4.873979 0.000   1.402255  3.297745 418
+# b2     2.85 1.5358109  1.855697 0.064  -0.168875  5.868875 418
+
+
+</code></pre>
+
+
+</div>

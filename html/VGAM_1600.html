@@ -1,0 +1,163 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>seglines</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Hauck-Donner Effects: Segmented Lines Plot </h2>
+
+<h3>Description</h3>
+
+<p>Plots the piecewise segmented curve made up of
+Wald statistics versus estimates,
+using a colour code for the HDE severity.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">seglines(x, y, dy, ddy, lwd = 2, cex = 2, plot.it = TRUE,
+   add.legend = TRUE, cex.legend = 1,
+   position.legend = "topleft", eta0 = NA, COPS0 = NA,
+   lty.table = c("solid", "dashed", "solid", "dashed",
+                 "solid", "dashed", "solid"),
+   col.table = rainbow.sky[-5], pch.table = 7:1,
+   severity.table = c("None", "Faint", "Weak", "Moderate",
+   "Strong", "Extreme", "Undetermined"), FYI = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, y, dy, ddy</code></td>
+<td>
+
+<p>Same as <code>hdeffsev</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwd, cex</code></td>
+<td>
+
+<p>Graphical parameters: line width, and character expansion.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.it</code></td>
+<td>
+
+<p>Logical, plot it? If <code>FALSE</code> then the other
+graphical arguments are ignored.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add.legend, position.legend</code></td>
+<td>
+
+<p>Logical and character; add a legend?
+The other argument is fed
+into <code>legend</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex.legend</code></td>
+<td>
+
+<p>Self-explanatory.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>severity.table, eta0, COPS0</code></td>
+<td>
+
+<p>Same as <code>hdeffsev</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lty.table, col.table, pch.table</code></td>
+<td>
+
+<p>Graphical parameters for the 7 different types of segments.
+Usually users should not assign anything to these arguments.
+Setting <code>pch.table = NULL</code> will
+suppress <code>pch</code> symbols from the legend.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>FYI, ...</code></td>
+<td>
+
+<p>Should be ignored.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function was written to
+complement <code>hdeffsev</code>
+and is rough-and-ready.
+It plots the signed Wald statistics as a function of
+the estimates, and uses a colour-code to indicate
+the severity of the
+Hauck-Donner effect (HDE).
+This can be obtained from its first two derivatives.
+</p>
+
+
+<h3>Value</h3>
+
+<p>This function returns the severity of the HDE,
+possibly invisibly.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is likely to change in the short future
+because it is experimental and far from complete.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee.  </p>
+
+
+<h3>See Also</h3>
+
+<p><code>hdeff</code>,
+<code>hdeffsev</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">deg &lt;- 4  # myfun is a function that approximates the HDE
+myfun &lt;- function(x, deriv = 0) switch(as.character(deriv),
+  '0' = x^deg * exp(-x),
+  '1' = (deg * x^(deg-1) - x^deg) * exp(-x),
+  '2' = (deg * (deg-1) * x^(deg-2) - 2*deg * x^(deg-1) +
+         x^deg) * exp(-x))
+## Not run: 
+curve(myfun, 0, 10, col = "white")
+xgrid &lt;- seq(0, 10, length = 101)
+seglines(xgrid, myfun(xgrid), myfun(xgrid, deriv = 1),
+         COPS0 = 2,
+         myfun(xgrid, deriv = 2), pch.table = NULL,
+         position = "bottom")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>anovalmerVoxel</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Computes voxelwise analysis of variance (ANOVA) tables for a Linear Mixed Effects Model.</h2>
+
+<h3>Description</h3>
+
+<p>This function computes analysis of variance tables for the fitted models after running a Linear Mixed Effect Model using the lmerTest() function and the anova function in that package.
+The analysis will run in all voxels in the mask and will return the analysis of variance table for each voxel.
+Please check the lmerTest documentation for further information about specific arguments used in anova.lmerModLmerTest. Multi-model calls are disabled.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">anovalmerVoxel(image, mask, fourdOut = NULL, formula, subjData,
+  ddf = "Satterthwaite", type = 3, mc.preschedule = TRUE, ncores = 1,
+  ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>image</code></td>
+<td>
+<p>Input image of type 'nifti' or vector of path(s) to images. If multiple paths, the script will call mergeNifti() and merge across time.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mask</code></td>
+<td>
+<p>Input mask of type 'nifti' or path to mask. Must be a binary mask</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fourdOut</code></td>
+<td>
+<p>To be passed to mergeNifti, This is the path and file name without the suffix to save the fourd file. Default (NULL) means script won't write out 4D image.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>Must be a formula passed to lmer()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subjData</code></td>
+<td>
+<p>Dataframe containing all the covariates used for the analysis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ddf</code></td>
+<td>
+<p>Which approximation of DDF to be used. To be passed to anova.lmerModLmerTest. Defaults to "Satterthwaite"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Type of hypothesis to be test (defined from SAS terminology). Defaults to 3. To be passed to anova.lmerModLmerTest</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mc.preschedule</code></td>
+<td>
+<p>Argument to be passed to mclapply, whether or not to preschedule the jobs. More info in parallel::mclapply</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncores</code></td>
+<td>
+<p>Number of cores to use</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments passed to lmer()</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns list of models fitted to each voxel over the masked images passed to function.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+image &lt;- oro.nifti::nifti(img = array(1:1600, dim =c(4,4,4,25)))
+mask &lt;- oro.nifti::nifti(img = array(c(rep(0,15), rep(1,1)), dim = c(4,4,4,1)))
+set.seed(1)
+covs &lt;- data.frame(x = runif(25), y = runif(25), id = rep(1:5,5))
+fm1 &lt;- "~ x + y + (1|id)"
+models &lt;- anovalmerVoxel(image, mask, formula = fm1, subjData = covs, ncores = 1, REML=TRUE)
+
+</code></pre>
+
+
+</div>

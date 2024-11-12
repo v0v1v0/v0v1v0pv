@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vega_schema</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create string for schema-URL</h2>
+
+<h3>Description</h3>
+
+<p>Useful if you are creating a vegaspec manually.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vega_schema(
+  library = c("vega_lite", "vega"),
+  version = NULL,
+  major = is.null(version)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>library</code></td>
+<td>
+<p><code>character</code>, either <code>"vega"</code> or <code>"vega_lite"</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>version</code></td>
+<td>
+<p><code>character</code>, version of library, e.g. <code>"5.2.0"</code>;
+if <code>version</code> is provided, <code>major</code> defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>major</code></td>
+<td>
+<p><code>logical</code> return major version-tags rather than the
+tags for the specific versions supported by this package</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>character</code> URL for schema
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  vega_schema()
+  vega_schema("vega", major = FALSE)
+  vega_schema("vega_lite", version = "5.2.0")
+
+  # creating a spec by hand
+  spec &lt;-
+    list(
+      `$schema` = vega_schema(),
+      width = 300,
+      height = 300
+      # and so on
+    ) %&gt;%
+    as_vegaspec()
+
+</code></pre>
+
+
+</div>

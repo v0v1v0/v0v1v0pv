@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_sort</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Sort a set of intervals.</h2>
+
+<h3>Description</h3>
+
+<p>Sort a set of intervals.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_sort(x, by_size = FALSE, by_chrom = FALSE, reverse = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by_size</code></td>
+<td>
+<p>sort by interval size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by_chrom</code></td>
+<td>
+<p>sort within chromosome</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>reverse</code></td>
+<td>
+<p>reverse sort order</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/sort.html">https://bedtools.readthedocs.io/en/latest/content/tools/sort.html</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr8", 500,    1000,
+  "chr8", 1000,   5000,
+  "chr8", 100,    200,
+  "chr1", 100,    300,
+  "chr1", 100,    200
+)
+
+# sort by chrom and start
+bed_sort(x)
+
+# reverse sort order
+bed_sort(x, reverse = TRUE)
+
+# sort by interval size
+bed_sort(x, by_size = TRUE)
+
+# sort by decreasing interval size
+bed_sort(x, by_size = TRUE, reverse = TRUE)
+
+# sort by interval size within chrom
+bed_sort(x, by_size = TRUE, by_chrom = TRUE)
+
+</code></pre>
+
+
+</div>

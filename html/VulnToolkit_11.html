@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>noaa</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Downloads NOAA CO-OPS tide data</h2>
+
+<h3>Description</h3>
+
+<p>Scrapes water level data (and other measurements) from NOAA CO-OPS website. NOAA's site limits the time period for data downloads, but these constraints are avoided by 'noaa()'. Requires 
+internet connection and curl (check availablility using 'Sys.which("curl")').
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">noaa(begindate = "begindate", enddate = "enddate", station = "8467150",
+met = FALSE, units = "meters", datum = "MHW", interval = "HL", time = "GMT", 
+continuous = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>begindate</code></td>
+<td>
+<p>first day of data to download. Format must be YYYYMMDD. If 
+left unspecified, the first complete day of data will be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>enddate</code></td>
+<td>
+<p>final day of data to download. Format must be YYYYMMDD. If left 
+unspecified, the last complete day of data will be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>station</code></td>
+<td>
+<p>station number, found on the NOAA Tides and Currents website 
+(https://www.tidesandcurrents.noaa.gov/stations.html?type=Water+Levels).
+Station numbers can be numeric or a character string (necessary if first 
+character is a zero). Default station is Bridgeport, CT.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>met</code></td>
+<td>
+<p>whether meteorological data should be returned. This value can be 'TRUE' or 
+'FALSE'; if 'TRUE', all ancillary parameters are returned. At present, this only 
+works with 6-minute and hourly data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>units</code></td>
+<td>
+<p>can be 'feet' or 'meters'. Default is 'meters'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>datum</code></td>
+<td>
+<p>vertical reference datum, set to 'MHW' by default. Can be 'station', 'NAVD', 
+'MLLW', 'MLW', 'MSL', 'MTL', 'MHW', 'MHHW', or 'IGLD' (some datums are not available 
+at some sites)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>interval</code></td>
+<td>
+<p>sets measurement interval; can be 'HL' (default), '6 minute', 'hourly', or 'monthly'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time</code></td>
+<td>
+<p>can be 'LST', 'GMT', or 'LST/LDT'. Not all time zones are available for all data. 
+GMT appears to have wider availability than LST, so it is the default.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>continuous</code></td>
+<td>
+<p>determines whether a continuous time series is produced, with lengthy gaps 
+in data filled in with NAs. By default, this is <code>FALSE</code>. This option only applies 
+to data at evenly spaced intervals (i.e., <code>6 minute</code> or <code>hourly</code>)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Download water level and other data from NOAA CO-OPS website.
+</p>
+
+
+<h3>Value</h3>
+
+<p>dataset a dataframe with water levels, associated time stamps, a station ID column, 
+and tide type (if interval is set to <code>HL</code>). The NOAA CO-OPS website has many odd data 
+availabilty problems. Some data are not available in all time intervals or time zones.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Example requires an internet connection
+bport2013 &lt;- noaa(begindate = 20130101, enddate = 20131231, 
+  station = "8467150", interval = "6 minute")
+
+test2.1 &lt;- noaa(begindate = "20100101", enddate = "20120101", interval = "hourly") 
+test2.2 &lt;- noaa(begindate = "20100101", enddate = "20120101", interval = "hourly", 
+               continuous = TRUE) 
+nrow(test2.1) # includes data on NOAA site (incomplete record)
+nrow(test2.2) # fills gaps with NAs 
+test2.3 &lt;- noaa(begindate = "20100101", enddate = "20120101", interval = "hourly", 
+               met = TRUE) 
+
+## End(Not run)
+</code></pre>
+
+
+</div>

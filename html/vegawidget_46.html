@@ -1,0 +1,139 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vw_handler_signal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Construct a JavaScript handler</h2>
+
+<h3>Description</h3>
+
+<p>A Vega listener needs a JavaScript handler-function to call
+when the object-being-listened-to changes. For instance, shiny-getters and
+add-listeners functions each have an argument called
+<code>body_value</code>, which these functions help you build.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vw_handler_signal(body_value)
+
+vw_handler_data(body_value)
+
+vw_handler_event(body_value)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>body_value</code></td>
+<td>
+<p><code>character</code>, the name of a defined handler-body,
+or the text of the body of a handler-function</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>There are two types of handlers defined in this package's handler-library.
+To see the handlers that are defined for each, call the function
+without any arguments:
+</p>
+
+<ul>
+<li> <p><code>vw_handler_signal()</code>
+</p>
+</li>
+<li> <p><code>vw_handler_data()</code>
+</p>
+</li>
+<li> <p><code>vw_handler_event()</code>
+</p>
+</li>
+</ul>
+<p>With a JavaScript handler, you are trying to do two types of things:
+</p>
+
+<ul>
+<li>
+<p> calculate a value based on the handler's arguments
+</p>
+</li>
+<li>
+<p> produce a side-effect based on that calculated value
+</p>
+</li>
+</ul>
+<p>Let's look at a concrete example.
+A <a href="https://vega.github.io/vega/docs/api/view/"><em>signal</em> handler</a>
+will take arguments <code>name</code> and <code>value</code>. Let's say that we want to
+return the value. We could do this two ways:
+</p>
+
+<ul>
+<li> <p><code>vw_handler_signal("value")</code>: use this package's handler library
+</p>
+</li>
+<li> <p><code>vw_handler_signal("return value;")</code>: supply the body of the
+handler-function yourself
+</p>
+</li>
+</ul>
+<p>In the list above, the two calls do exactly the same thing, they build a
+JavaScript function that returns the <code>value</code> provided by whatever is calling
+the signal-handler. This will be a valid signal-handler, however, we will
+likely want a signal-handler to <em>do</em> something with that value, which is
+why we may wish to add a side-effect.
+</p>
+<p>Let's say we want the handler to print the value to the JavaScript console.
+We would create the signal-handler, then add an effect to print the result
+to the console.
+</p>
+<p><code>vw_handler_signal("value") %&gt;% vw_handler_add_effect("console")</code>
+</p>
+<p>We can add as many effects as we like; for more information,
+please see the documentation for <code>vw_handler_add_effect()</code>.
+</p>
+<p>Please be aware that these functions do <em>not</em> check for the correctness
+of JavaScript code you supply - any errors you make will not be apparent
+until your visualization is rendered in a browser.
+</p>
+<p>One last note, if <code>body_value</code> is already a <code>vw_handler</code>, these functions
+are no-ops; they will return the <code>body_value</code> unchanged.
+</p>
+
+
+<h3>Value</h3>
+
+<p>object with S3 class <code>vw_handler</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vw_handler_add_effect()</code>,
+<a href="https://vega.github.io/vega/docs/api/view/">vega-view</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  # list all the available signal-handlers
+  vw_handler_signal()
+
+  # list all the available data-handlers
+  vw_handler_data()
+
+  # list all the available event-handlers
+  vw_handler_event()
+
+  # use a defined signal-handler
+  vw_handler_signal("value")
+
+  # define your own signal-handler
+  vw_handler_signal("return value;")
+</code></pre>
+
+
+</div>

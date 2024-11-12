@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineMatrixNormalize</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Normalization of R-Vine Matrix</h2>
+
+<h3>Description</h3>
+
+<p>An <code>RVineMatrix()</code> is permuted to achieve a natural ordering (i.e.
+<code>diag(RVM$Matrix) == d:1</code>)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineMatrixNormalize(RVM)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p><code>RVineMatrix()</code> defining the R-vine structure</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p>An <code>RVineMatrix()</code> in natural ordering with
+entries in <code>RVM$names</code> keeping track of the reordering.</p>
+</td>
+</tr></table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+Matrix &lt;- matrix(c(5, 2, 3, 1, 4,
+                   0, 2, 3, 4, 1,
+                   0, 0, 3, 4, 1,
+                   0, 0, 0, 4, 1,
+                   0, 0, 0, 0, 1), 5, 5)
+family &lt;- matrix(1,5,5)
+
+par &lt;- matrix(c(0, 0.2, 0.9, 0.5, 0.8,
+                0,   0, 0.1, 0.6, 0.9,
+                0,   0,   0, 0.7, 0.5,
+                0,   0,   0,   0, 0.8,
+                0,   0,   0,   0,   0), 5, 5)
+
+# define RVineMatrix object
+RVM &lt;- RVineMatrix(Matrix, family, par)
+
+# normalise the RVine
+RVineMatrixNormalize(RVM)
+
+</code></pre>
+
+
+</div>

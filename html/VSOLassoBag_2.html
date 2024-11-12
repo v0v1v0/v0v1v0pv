@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>kneedle</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Kneedle Algorithm: to detect elbow point(s) on the curve</h2>
+
+<h3>Description</h3>
+
+<p>An internal function utilized by VSOLassoBag.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">kneedle(res, S = 10, auto.loose = TRUE, min.S = 0.1, loosing.factor = 0.5)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>res</code></td>
+<td>
+<p>a dataframe with variables and observed frequency</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>S</code></td>
+<td>
+<p>numeric, determines how aggressive the elbow points on the curve to be called, smaller means more aggressive and larger means more conservative</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>auto.loose</code></td>
+<td>
+<p>if TRUE, will reduce 'kneedle.S' in case no elbow point is found with the set 'kneedle.S'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min.S</code></td>
+<td>
+<p>a numeric value determines the minimal value that 'kneedle.S' will be loosed to.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>loosing.factor</code></td>
+<td>
+<p>a numeric value range in (0,1), which 'kneedle.S' is multiplied by to reduce itself.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>the original input dataframe along with the elbow point indicator "elbow.point" with elbow point(s) marked with "*", "Diff" the difference curve, "Thres" the threshold.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://ieeexplore.ieee.org/document/5961514">Original Kneedle Algorithm</a>, the algorithm utilized in LassoBag has been modified.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">load(system.file("extdata/Results.RData", package="VSOLassoBag"))
+kneedle(Results)
+</code></pre>
+
+
+</div>

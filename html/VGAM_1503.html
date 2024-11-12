@@ -1,0 +1,148 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>riceff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Rice Distribution Family Function</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the two parameters of a Rice distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">riceff(lsigma = "loglink", lvee = "loglink", isigma = NULL,
+       ivee = NULL, nsimEIM = 100, zero = NULL, nowarning = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>nowarning</code></td>
+<td>
+<p> Logical. Suppress a warning?
+Ignored for <span class="pkg">VGAM</span> 0.9-7 and higher.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lvee, lsigma</code></td>
+<td>
+
+<p>Link functions for the <code class="reqn">v</code> and <code class="reqn">\sigma</code>
+parameters.  See <code>Links</code> for more choices and for
+general information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ivee, isigma</code></td>
+<td>
+
+<p>Optional initial values for the parameters.
+If convergence failure occurs (this <span class="pkg">VGAM</span> family function
+seems to require good initial values) try using these arguments.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Rician distribution has density function
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;v,\sigma) =
+  \frac{y}{\sigma^2} \, \exp(-(y^2+v^2) / (2\sigma^2)) \,
+           I_0(y v / \sigma^2)
+  </code>
+</p>
+
+<p>where <code class="reqn">y &gt; 0</code>,
+<code class="reqn">v &gt; 0</code>,
+<code class="reqn">\sigma &gt; 0</code> and <code class="reqn">I_0</code> is the
+modified Bessel function of the
+first kind with order zero.
+When <code class="reqn">v = 0</code> the Rice distribution reduces to a Rayleigh
+distribution.
+The mean is
+<code class="reqn">\sigma \sqrt{\pi/2} \exp(z/2)
+       ((1-z) I_0(-z/2)-z I_1(-z/2))</code>
+(returned as the fitted values) where
+<code class="reqn">z=-v^2/(2 \sigma^2)</code>.
+Simulated Fisher scoring is implemented.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see
+<code>vglmff-class</code>).  The object is used by modelling
+functions such as <code>vglm</code> and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Convergence problems may occur for data where <code class="reqn">v=0</code>;
+if so, use <code>rayleigh</code> or possibly use an
+<code>identity</code> link.
+</p>
+<p>When <code class="reqn">v</code> is large (greater than 3, say) then the mean is
+approximately <code class="reqn">v</code> and the standard deviation
+is approximately
+<code class="reqn">\sigma</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Rice, S. O. (1945).
+Mathematical Analysis of Random Noise.
+<em>Bell System Technical Journal</em>,
+<b>24</b>, 46–156.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>drice</code>,
+<code>rayleigh</code>,
+<code>besselI</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  sigma &lt;- exp(1); vee &lt;- exp(2)
+rdata &lt;- data.frame(y = rrice(n &lt;- 1000, sigma, vee = vee))
+fit &lt;- vglm(y ~ 1, riceff, data = rdata, trace = TRUE, crit = "c")
+c(with(rdata, mean(y)), fitted(fit)[1])
+coef(fit, matrix = TRUE)
+Coef(fit)
+summary(fit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

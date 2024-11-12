@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tune</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Tuning of the thresholding and interpretation steps of VSURF</h2>
+
+<h3>Description</h3>
+
+<p>This function allows to tune the "thresholding" and "interpretation step" of
+VSURF, without rerunning all computations.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tune(x, ...)
+
+## S3 method for class 'VSURF_thres'
+tune(x, nmin = 1, ...)
+
+## S3 method for class 'VSURF_interp'
+tune(x, nsd = 1, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class <code>VSURF_thres</code> or <code>VSURF_interp</code>, which
+is the result of the <code>VSURF_thres</code> or <code>VSURF_interp</code>
+function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nmin</code></td>
+<td>
+<p>Number of times the "minimum value" is multiplied to set
+threshold value. See details below.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsd</code></td>
+<td>
+<p>Number of times the standard deviation of the minimum value of
+<code>err.interp</code> is multiplied. See details below.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In <code>VSURF_thres</code> function, the actual threshold is performed
+like this: only variables with a mean VI larger than <code>nmin</code> *
+<code>min.thres</code> are kept.  The function <code>tune.VSURF_thres</code> allows you
+to change the value of <code>nmin</code> (which multiply the estimated threshold
+value <code>min.thres</code>), without rerunning all computations.  To get a
+softer threshold than default, choose a value of <code>nmin</code> less than 1,
+and to get a harder one, choose a value larger than 1.
+</p>
+<p>In <code>VSURF_interp</code> function, the smallest model (and hence its
+corresponding variables) having a mean OOB error rate less than
+<code>err.min</code> + <code>nsd</code> * <code>sd.min</code> is selected.  The function
+<code>tune.VSURF_interp</code> allows to change the value of <code>nsd</code> (which
+multiply the standard deviation of the minimum OOB error rate
+<code>sd.min</code>), without rerunning all computations.  To get a larger model
+than default, choose a value of <code>nsd</code> less than 1, and to get a smaller
+one, choose a value larger than 1.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object with the same structure than the original output (from
+<code>VSURF_thres</code> or <code>VSURF_interp</code>).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Robin Genuer, Jean-Michel Poggi and Christine Tuleau-Malot
+</p>
+
+
+<h3>References</h3>
+
+<p>Genuer, R. and Poggi, J.M. and Tuleau-Malot, C. (2010),
+<em>Variable selection using random forests</em>, Pattern Recognition Letters
+31(14), 2225-2236
+</p>
+<p>Genuer, R. and Poggi, J.M. and Tuleau-Malot, C. (2015),
+<em>VSURF: An R Package for Variable Selection Using Random Forests</em>,
+The R Journal 7(2):19-33
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VSURF</code>, <code>VSURF_thres</code>,
+<code>VSURF_interp</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Not run: 
+data(iris)
+iris.thres &lt;- VSURF_thres(iris[,1:4], iris[,5], ntree = 100, nfor.thres = 20)
+iris.thres.tuned &lt;- tune(iris.thres, nmin = 10)
+iris.thres.tuned
+iris.interp &lt;- VSURF_interp(iris[,1:4], iris[,5], vars = iris.thres$varselect.thres,
+                            nfor.interp = 10)
+iris.interp.tuned &lt;- tune(iris.interp, nsd = 10)
+iris.interp.tuned
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

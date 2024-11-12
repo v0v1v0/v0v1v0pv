@@ -1,0 +1,210 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>genbetaIIDist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Generalized Beta Distribution of the Second King</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, inverse distribution (quantile function)
+and random generation for the Generalized Beta of the Second Kind (GB2).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  dgen.betaII(x, scale = 1.0, shape1.a = 1.0, shape2.p = 1.0, shape3.q = 1.0, 
+             log = FALSE)
+  pgen.betaII(q, scale = 1.0, shape1.a = 1.0, shape2.p = 1.0, shape3.q = 1.0, 
+             lower.tail = TRUE, log.p = FALSE)
+  qgen.betaII(p, scale = 1.0, shape1.a = 1.0, shape2.p = 1.0, shape3.q = 1.0, 
+             lower.tail = TRUE, log.p = FALSE)
+  rgen.betaII(n, scale = 1.0, shape1.a = 1.0, shape2.p = 1.0, shape3.q = 1.0)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+
+<p>Vector of quantiles.
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+
+<p>Vector of probabilities.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+
+<p>Number of observations. If <code>length(n) &gt; 1</code>, its length is taken to be
+the numbre required.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale, shape1.a, shape2.p, shape3.q</code></td>
+<td>
+ 
+<p>Strictly positive scale and shape parameters.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log, log.p, lower.tail</code></td>
+<td>
+
+<p>Same meaning as in <code>Beta</code>
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The GB2 Distribution is defined by the probability density (pdf)
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \frac{a x^{ap - 1}}{b^{ap} B(p, q) [1 + (y/b)^{a}]^{p + q},}</code>
+</p>
+
+<p>for <code class="reqn">y &gt; 0</code>, and <code class="reqn">b, a, p, q &gt; 0</code>.
+Here, <code class="reqn">B(p, q)</code> is the beta function as in 
+<code>beta</code>.
+</p>
+<p>The GB2 Distribution and the Beta Distribution 
+(see <code>Beta</code>) are linked, as follows:
+Let <code class="reqn">X</code> be a random variable with the Beta density and parameters 
+<code class="reqn">p = shape_{1}</code> and <code class="reqn">q = shape_{2}</code>. 
+Then, introducing additional <code class="reqn">b = scale</code> and
+<code class="reqn">a = shape</code> parameters, the variable
+</p>
+<p style="text-align: center;"><code class="reqn">Y = \frac{(x/b)^{a}}{1 + (x/b)^{a}}</code>
+</p>
+ 
+<p>has the GB2 Distribution, with parameters <code class="reqn">b, a, p, q</code>.
+</p>
+<p>The GB2 <code class="reqn">k^{th}</code> moment exists for <code class="reqn">-ap &lt; k &lt; aq</code> 
+and is given by
+</p>
+<p style="text-align: center;"><code class="reqn">E(Y^{k}) = \frac{b^{k} B(p + k/a, q - k/a)}{B(p, q)}</code>
+</p>
+ 
+<p>or, equivalently, 
+</p>
+<p style="text-align: center;"><code class="reqn">E(Y^{k}) = \frac{b^{k} \Gamma(p + k/a) \Gamma(q - k/a)}
+                   {\Gamma(p) \Gamma(q)}).</code>
+</p>
+ 
+<p>Here, <code class="reqn">\Gamma(\cdot)</code> is the gamma function as in
+<code>gamma</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dgen.betaII()</code> returns the density (p.d.f), <code>pgen.betaII()</code> gives 
+the distribution function (p.d.f), <code>qgen.betaII()</code> gives the quantile
+function (Inverse Distribution function), and <code>rgen.betaII()</code> generates 
+random numbers from the GB2 distribution.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Values of the <code>shape2.p</code> parameter moderately close to zero may imply 
+obtaning numerical values too close to zero or values represented as zero 
+in computer arithmetic from the function <code>rgen.betaII()</code>.
+</p>
+<p>Additionally, for specific values of the arguments <code>x, q, p</code> such as 
+<code>Inf, -Inf, NaN</code> and <code>NA</code>, the functions <code>qgen.betaII()</code>, 
+<code>pgen.betaII()</code> and <code>qgen.betaII()</code> will return the limit when 
+the argument tends to such value. 
+</p>
+<p>In particular, the quantile <code>qgen.betaII()</code> retunrs zero for negative
+values and <code class="reqn">Inf</code> for missed probabilities greater than 1.0.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and T. W. Yee</p>
+
+
+<h3>References</h3>
+
+<p>Abramowitz, M. and Stegun, I. A. (1972) 
+<em>Handbook of Mathematical Functions with Formulas, Graphs, and 
+Mathematical Tables</em>, 
+<b>ch.6</b>, p.255. Dover, New York, USA.
+</p>
+<p>Kleiber, C. and Kotz, S. (2003) 
+<em>Statistical Size Distributions in Economics and Actuarial Sciences</em>.
+Wiley Series in Probability and Statistics. 
+Hoboken, New Jersey, USA.
+</p>
+<p>McDonald, J. B. and Xu, Y. J. (1995)
+A generalization of the beta distribution with applications.
+<em>Journal of Econometrics</em>, <b>66</b>, p.133–152.
+</p>
+<p>McDonald, J. B. (1984)
+Some generalized functions for the size distribution of income.
+<em>Econometrica</em>, <b>52</b>, p.647–663.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Beta</code>,
+<code>beta</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+  # Setting parameters to both examples below.
+  b  &lt;- exp(0.4)      # Scale parameter.
+  a  &lt;- exp(0.5)      # Shape1.a
+  p  &lt;- exp(0.3)      # Shape2.p
+  q  &lt;- exp(1.4)      # Shape3.q
+  
+  # (1) ______________  
+  probs.y &lt;- seq(0.0, 1.0, by = 0.01)
+  data.1  &lt;- qgen.betaII(p = probs.y, scale = b, shape1.a = a, 
+                        shape2.p = p, shape3.q = q)
+  max(abs(pgen.betaII(q = data.1, scale = b, shape1.a = a, 
+                     shape2.p = p, shape3.q = q)) - probs.y) # Should be 0.
+ 
+  # (2)_________________
+  xx    &lt;- seq(0, 10.0, length = 200)
+  yy    &lt;- dgen.betaII(xx, scale = b, shape1.a = a, shape2.p = p, shape3.q = q)
+  qtl   &lt;- seq(0.1, 0.9, by = 0.1)
+  d.qtl &lt;- qgen.betaII(qtl, scale = b, shape1.a = a, shape2.p = p, shape3.q = q)
+  plot(xx, yy, type = "l", col = "red", 
+       main = "Red is the GB2 density, blue is the GB2 Distribution Function",
+       sub  = "Brown dashed lines represent the 10th, ..., 90th percentiles",
+       las = 1, xlab = "x", ylab = "", xlim = c(0, 3), ylim = c(0,1))
+  abline(h = 0, col = "navy", lty = 2)
+  abline(h = 1, col = "navy", lty = 2)
+  lines(xx, pgen.betaII(xx, scale = b, shape1.a = a, 
+                       shape2.p = b, shape3.q = q), col= "blue")
+  lines(d.qtl, dgen.betaII(d.qtl, scale = b, shape1.a = a, 
+                        shape2.p = p, shape3.q = q), 
+                        type ="h", col = "brown", lty = 3)
+ 
+</code></pre>
+
+
+</div>

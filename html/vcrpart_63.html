@@ -1,0 +1,341 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>otsplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Time-series plot for longitudinal ordinal data</h2>
+
+<h3>Description</h3>
+
+<p>Plots multiple ordinal sequences in a <code class="reqn">x</code> (usually
+time) versus <code class="reqn">y</code> (response variable) scatterplot. The sequences 
+are displayed by jittered frequency-weighted parallel lines.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">
+## Default S3 method:
+otsplot(x, y, subject, weights, groups,
+        control = otsplot_control(), filter = NULL, 
+        main, xlab, ylab, xlim, ylim, ...)
+
+otsplot_control(cex = 1, lwd = 1/4, col = NULL,
+                hide.col = grey(0.8), seed = NULL,
+                lorder = c("background", "foreground") ,
+                lcourse = c("upwards", "downwards"),
+                grid.scale = 1/5, grid.lwd = 1/2,
+                grid.fill =  grey(0.95), grid.col = grey(0.6),          
+                layout = NULL, margins = c(5.1, 4.1, 4.1, 3.1),
+                strip.fontsize = 12, strip.fill =  grey(0.9),
+                pop = TRUE, newpage = TRUE, maxit = 500L)
+
+otsplot_filter(method = c("minfreq", "cumfreq", "linear"), level = NULL) 
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a <code>numeric</code> or <code>factor</code> vector for the <code>x</code>
+axis, e.g. time.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>an <code>ordered</code> factor vector for the <code>y</code> axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subject</code></td>
+<td>
+<p>a <code>factor</code> vector that identifies the subject,
+i.e., allocates elements in <code>x</code> and <code>y</code> to the subject
+i.e. observation unit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>a numeric vector of weights of length equal the number
+of subjects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groups</code></td>
+<td>
+<p>a <code>numeric</code> or <code>factor</code> vector of group
+memberships of length equal the number of subjects. When specified,
+one panel is generated for each distinct membership value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>control parameters produced by <code>otsplot_control</code>,
+such as line colors or the scale of translation zones.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filter</code></td>
+<td>
+<p>an <code>otsplot_filter</code> object which defines line 
+coloring options. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main, xlab, ylab</code></td>
+<td>
+<p>title and axis labels for the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim, ylim</code></td>
+<td>
+<p>the x limits <code>c(x1, x2)</code> resp. y limits
+<code>(y1,y2)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional undocumented arguments.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex</code></td>
+<td>
+<p>expansion factor for the squared symbols.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwd</code></td>
+<td>
+<p>expansion factor for line widths. The expansion is
+relative to the size of the squared symbols.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>color palette vector for line coloring.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hide.col</code></td>
+<td>
+<p>Color for ordinal time-series filtered-out by the
+<code>filter</code> specification in <code>otsplot</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>an integer specifying which seed should be set at the
+beginning.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lorder</code></td>
+<td>
+<p>line ordering. Either <code>"background"</code> or
+<code>"foreground"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lcourse</code></td>
+<td>
+<p>Method to connect simultaneous elements with the
+preceding and following ones. Either <code>"upwards"</code> (default) or
+<code>"downwards"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grid.scale</code></td>
+<td>
+<p>expansion factor for the translation zones.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grid.lwd</code></td>
+<td>
+<p>expansion factor for the borders of translation
+zones.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grid.fill</code></td>
+<td>
+<p>the fill color for translation zones.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grid.col</code></td>
+<td>
+<p>the border color for translation zones.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>strip.fontsize</code></td>
+<td>
+<p>fontsize of titles in stripes that appear
+when a <code>groups</code> vector is assigned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>strip.fill</code></td>
+<td>
+<p>color of strips that appear when a <code>groups</code>
+vector is assigned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>layout</code></td>
+<td>
+<p>an integer vector <code>c(nr, nc)</code> specifying the
+number of rows and columns of the panel arrangement when the
+<code>groups</code> argument is used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>margins</code></td>
+<td>
+<p>a numeric vector <code>c(bottom, left, top, right)</code>
+specifying the space on the margins of the plot. See also
+the argument <code>mar</code> in <code>par</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pop</code></td>
+<td>
+<p>logical scalar. Whether the viewport tree should be popped
+before return.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newpage</code></td>
+<td>
+<p>logical scalar. Whether <code>grid.newpage()</code> should be
+called previous to the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxit</code></td>
+<td>
+<p>maximal number of iteration for the algorithm that
+computes the translation arrangement.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>character string. Defines the filtering
+function. Available are <code>"minfreq"</code>, <code>"cumfreq"</code> and
+<code>"linear"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>numeric scalar between 0 and 1. The frequency threshold
+for the filtering methods <code>"minfreq"</code> and <code>"cumfreq"</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function is a scaled down version of the <code>seqpcplot</code>
+function of the <span class="pkg">TraMineR</span> package, implemented in the <span class="pkg">grid</span>
+graphics environment.
+</p>
+<p>The <code>filter</code> argument serves to specify filters to fade out less 
+interesting patterns. The filtered-out patterns are displayed in the
+<code>hide.col</code> color. The <code>filter</code> argument expects an object 
+produced by <code>otsplot_filter</code>.
+</p>
+<p><code>otsplot_filter("minfreq", level = 0.05)</code> colors patterns with a 
+support of at least 5% (within a
+group). <code>otsplot_filter("cumfreq", level = 0.75)</code> 
+highlight the 75% most frequent patterns (within
+group). <code>otsplot_filter("linear")</code>  
+linearly greys out patterns with low support.
+</p>
+<p>The implementation adopts a color palette which was originally
+generated by the <span class="pkg">colorspace</span> package (Ihaka et al., 2013). The
+authors are grateful for these codes.  
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>otsplot</code> returns an object of class
+<code>otsplot</code>.
+</p>
+<p><code>otsplot_control</code> returns an object of class
+<code>otsplot_control</code> and <code>otsplot_filter</code> an object
+of class <code>otsplot_filter</code>. Both these object types are
+specifically designed as input arguments of <code>otsplot</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin and Gilbert Ritschard</p>
+
+
+<h3>References</h3>
+
+<p>Burgin, R. and G. Ritschard (2014). A Decorated Parallel Coordinate 
+Plot for Categorical Longitudinal Data, <em>The American
+Statistician</em> <b>68</b>(2), 98–103. 
+</p>
+<p>Ihaka, R., P. Murrell, K. Hornik, J. C. Fisher and A. Zeileis (2013).
+colorspace: Color Space Manipulation. R package version 1.2-4. URL
+<a href="https://CRAN.R-project.org/package=colorspace">https://CRAN.R-project.org/package=colorspace</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## ------------------------------------------------------------------- #
+## Dummy example: 
+##
+## Plotting artificially generated ordinal longitudinal data
+## ------------------------------------------------------------------- #
+
+## load the data
+data(vcrpart_1)
+vcrpart_1 &lt;- vcrpart_1[1:40,]
+
+## plot the data
+otsplot(x = vcrpart_1$wave, y = vcrpart_1$y, subject = vcrpart_1$id)
+
+## using 'groups'
+groups &lt;- rep(c("A", "B"), each = nrow(vcrpart_1) / 2L)
+otsplot(x = vcrpart_1$wave, y = vcrpart_1$y, subject = vcrpart_1$id,
+        groups = groups)
+
+## color series with supports over 30%
+otsplot(x = vcrpart_1$wave, y = vcrpart_1$y, subject = vcrpart_1$id,
+        filter = otsplot_filter("minfreq", level = 0.3))
+
+## highlight the 50% most frequent series
+otsplot(x = vcrpart_1$wave, y = vcrpart_1$y, subject = vcrpart_1$id,
+        filter = otsplot_filter("cumfreq", level = 0.5))
+
+## linearly grey out series with low support 
+otsplot(x = vcrpart_1$wave, y = vcrpart_1$y, subject = vcrpart_1$id,
+        filter = otsplot_filter("linear"))
+
+## subject-wise plot 
+otsplot(x = vcrpart_1$wave, y = vcrpart_1$y,
+        subject = vcrpart_1$id, groups = vcrpart_1$id)
+</code></pre>
+
+
+</div>

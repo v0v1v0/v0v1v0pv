@@ -1,0 +1,82 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VIM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>variability independent of mean (VIM)</h2>
+
+<h3>Description</h3>
+
+<p>Please feel free to contact us, if you have any advice and find any bug!
+</p>
+<p>Version History:
+</p>
+<p>Version 0.1.0: The first version.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">VIM(data,id,repeat.vars)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a width type data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>the name of variable indicating the subjects, e.g., "ID"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>repeat.vars</code></td>
+<td>
+<p>the name of variables indicating the repeated measurement data, e.g., c("x1","x2","x3")</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vim</code></td>
+<td>
+<p>the VIM of each subject</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coef</code></td>
+<td>
+<p>the coefficients fitted from the regression of "sntd ~ k*avg^p"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r.squared,adj.r.squared</code></td>
+<td>
+<p>the r-squared and adjusted r-squared of the regression</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(123)
+df &lt;- data.frame( "ID" = paste("ID", seq(1,100,1), sep = ""),
+                  "x1" = sample(90:220, size = 100, replace = TRUE),
+                  "x2" = sample(90:220, size = 100, replace = TRUE),
+                  "x3" = sample(90:220, size = 100, replace = TRUE),
+                  "x4" = sample(90:220, size = 100, replace = TRUE),
+                  "x5" = sample(90:220, size = 100, replace = TRUE))
+rst &lt;- VIM(data=df,id="ID",repeat.vars=paste0("x",1:5))
+</code></pre>
+
+
+</div>

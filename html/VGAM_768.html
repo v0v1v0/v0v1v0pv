@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>is.crossing</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Quantile Crossing Detection</h2>
+
+<h3>Description</h3>
+
+<p>Returns a logical from testing whether an object such
+as an extlogF1() VGLM object
+has crossing quantiles.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">is.crossing.vglm(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>an object such as
+a <code>vglm</code> object with
+family function <code>extlogF1</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>additional optional arguments.
+Currently unused.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function was specifically written for
+a <code>vglm</code> with family function <code>extlogF1</code>.
+It examines the fitted quantiles to see if any cross.
+Note that if one uses regression splines such as
+<code>bs</code> and
+<code>ns</code>
+then it is possible that they cross at values of the
+covariate space that are not represented by actual data.
+One could use linear interpolation between fitted values
+to get around this problem.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A logical.
+If <code>TRUE</code> then one can try fit a similar model by
+combining columns of the constraint matrices so that
+crossing no longer holds; see <code>fix.crossing</code>.
+For LMS-Box-Cox type quantile regression models
+it is impossible for the quantiles to cross, by definition,
+hence <code>FALSE</code> is returned;
+see <code>lms.bcn</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>extlogF1</code>,
+<code>fix.crossing</code>,
+<code>lms.bcn</code>.
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  ooo &lt;- with(bmi.nz, order(age))
+bmi.nz &lt;- bmi.nz[ooo, ]  # Sort by age
+with(bmi.nz, plot(age, BMI, col = "blue"))
+mytau &lt;- c(50, 93, 95, 97) / 100  # Some quantiles are quite close
+fit1 &lt;- vglm(BMI ~ ns(age, 7), extlogF1(mytau), bmi.nz, trace = TRUE)
+plot(BMI ~ age, bmi.nz, col = "blue", las = 1,
+     main = "Partially parallel (darkgreen) &amp; nonparallel quantiles",
+     sub = "Crossing quantiles are orange")
+is.crossing(fit1)
+matlines(with(bmi.nz, age), fitted(fit1), lty = 1, col = "orange") 
+## End(Not run)
+</code></pre>
+
+
+</div>

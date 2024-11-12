@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>approxWeights</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Monte Carlo approximation of chi-bar-square weights</h2>
+
+<h3>Description</h3>
+
+<p>The chi-bar-square distribution <code class="reqn">\bar{\chi}^2(I,C)</code> is a mixture of chi-square distributions. The function provides
+a method to approximate the weights of the mixture components, when the number of components is known as well as the
+degrees of freedom of each chi-square distribution in the mixture, and given a vector of simulated values from the target
+<code class="reqn">\bar{\chi}^2(I,C)</code> distribution. Note that the estimation is based on (pseudo)-random Monte Carlo samples. For reproducible
+results, one should fix the seed of the (pseudo)-random number generator.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">approxWeights(x, df, q)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a vector of i.i.d. random realizations of the target chi-bar-square distribution</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>a vector containing the degrees of freedom of the chi-squared components</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>the empirical quantile of <code>x</code> used to choose the <code class="reqn">p-2</code> values <code class="reqn">c_1, \dots, c_{p-2}</code> (see Details)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Let us assume that there are <code class="reqn">p</code> components in the mixture, with degrees of
+freedom between <code class="reqn">n_1</code> and <code class="reqn">n_p</code>. By definition of a mixture distribution, we have :
+</p>
+<p style="text-align: center;"><code class="reqn"> P(\bar{\chi}^2(I,C) \leq c) = \sum_{i=n_1}^{n_p} w_i P(\chi^2_{i} \leq c)</code>
+</p>
+
+<p>Choosing <code class="reqn">p-2</code> values <code class="reqn">c_1, \dots, c_{p-2}</code>, the function will generate a system of <code class="reqn">p-2</code> equations
+according to the above relationship, and add two additional relationships stating that the sum of all the weights is
+equal to 1, and that the sum of odd weights and of even weights is equal to 1/2, so that we end up with a system a <code class="reqn">p</code>
+equations with <code class="reqn">p</code> variables.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector containing the estimated weights, as well as their covariance matrix.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Charlotte Baey &lt;<a href="mailto:charlotte.baey@univ-lille.fr">charlotte.baey@univ-lille.fr</a>&gt;
+</p>
+
+
+</div>

@@ -1,0 +1,98 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>isBalanced</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check Whether Design Is Balanced Or Not</h2>
+
+<h3>Description</h3>
+
+<p>Assess whether an experimental design is balanced or not.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">isBalanced(form, Data, na.rm = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>form</code></td>
+<td>
+<p>(formula) object defining the experimental design.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>(data.frame) containing all variables appearing in 'form'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>(logical) TRUE = delete rows where any is NA, FALSE = NAs are not removed, if there are NAs in the
+response variable and all information in independent variables is available, then only the design is checked.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is for internal use only. Thus, it is not exported.
+</p>
+<p>The approach taken here is to check whether each cell defined by one level of a factor are all equal or
+not. Here, data is either balanced or unbalanced, there is no concept of "planned unbalancedness" as
+discussed e.g. in Searle et al. (1992) p.4. The expanded (simplified) formula is divided into main factors
+and nested factors, where the latter are interaction terms. The <code class="reqn">N</code>-dimensional contingency table, <code class="reqn">N</code> being the
+number of main factors, is checked for all cells containing the same number. If there are differences, the
+dataset is classified as "unbalanced". All interaction terms are tested individually. Firstly, a single factor 
+is generated from combining factor levels of the first <code class="reqn">(n-1)</code> variables in the interaction term. The last variable
+occuring in the interaction term is then recoded as factor-object with <code class="reqn">M</code> levels. <code class="reqn">M</code> is the number of factor
+levels within each factor level defined by the first <code class="reqn">(n-1)</code> variables in the interaction term. This is done to 
+account for the independence within sub-classes emerging from the combination of the first <code class="reqn">(n-1)</code> variables.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(logical) TRUE if data is balanced, FALSE if data is unbalanced (according to the definition of balance used)
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Not run: 
+data1 &lt;- data.frame(site=gl(3,8), lot=factor(rep(c(2,3,1,2,3,1), 
+rep(4,6))), day=rep(1:12, rep(2,12)), y=rnorm(24,25,1))
+
+# not all combinations of 'site' and 'lot' in 'data1'
+
+VCA:::isBalanced(y~site+lot+site:lot:day, data1)
+
+# balanced design for this model
+
+VCA:::isBalanced(y~lot+lot:day, data1)
+
+# gets unbalanced if observation is NA
+
+data1[1,"y"] &lt;- NA
+VCA:::isBalanced(y~lot+lot:day, data1)
+VCA:::isBalanced(y~lot+lot:day, data1, FALSE)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

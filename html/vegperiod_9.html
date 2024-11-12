@@ -1,0 +1,121 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>read.DWDstations</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fetch list of DWD weather stations</h2>
+
+<h3>Description</h3>
+
+<p>Get a listing of advertised stations of Germany's National Meteorological
+Service (Deutscher Wetterdienst, DWD). The list differs for station type,
+time period and resolution. The list of advertised stations is usually not
+identical with currently available stations.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">read.DWDstations(type = "climate", period = "recent", resolution = "daily")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>string. Stations can be of type ‘<span class="samp">⁠"climate"⁠</span>’ offering a range
+of meteorological parameters or of type ‘<span class="samp">⁠"precipitation"⁠</span>’ solely
+recording rainfall.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>string specifying a time span. The last 1.5 years are
+called ‘<span class="samp">⁠"recent"⁠</span>’. Data from the individual beginning of measurements
+up to a year ago are labelled ‘<span class="samp">⁠"historical"⁠</span>’.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>resolution</code></td>
+<td>
+<p>string. Temporal resolution of the data can be
+‘<span class="samp">⁠"daily"⁠</span>’ or ‘<span class="samp">⁠"monthly"⁠</span>’. ‘<span class="samp">⁠"daily"⁠</span>’ being the common
+resolution.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The freely accessible part of the Climate Data Center of Germany's National
+Meteorological Service (Deutscher Wetterdienst, DWD) is part of DWD's
+mandate for basic supply of information (termed "Grundversorgung").
+This service may be used without any restrictions (no fees will be
+charged and in general there are no restrictions for the use the data),
+provided that the source is indicated as laid down in the
+<a href="http://www.gesetze-im-internet.de/geonutzv/BJNR054700013.html">"GeoNutzV"</a>
+ordinance. The source reference shall roughly meet the following rules:
+</p>
+
+<ul>
+<li>
+<p> Where data are used without modification, the source reference shall
+read "Source: Deutscher Wetterdienst" or just consist of the DWD logo.
+</p>
+</li>
+<li>
+<p> If the data are modified, the source reference shall specify as
+precisely as possible the extent of such, e.g. "Based on data from
+Deutscher Wetterdienst, figures rounded".
+</p>
+</li>
+</ul>
+<p>A more detailed description of the rules can be found in the official and
+legally binding German
+<a href="https://opendata.dwd.de/climate_environment/CDC/Nutzungsbedingungen_German.pdf">Nutzungsbedingungen</a>
+or the translated <a href="https://opendata.dwd.de/climate_environment/CDC/Terms_of_use.pdf">Terms
+of use</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data.frame with all weather stations. It's not guaranteed that all
+advertised staions are available for download. Watch out for the end data
+of observation. Stations with recent data have a current end date.
+The data.frame contains the variables id, from, to, elev, lat, long, name,
+state.
+</p>
+
+
+<h3>References</h3>
+
+<p>Freely accessible DWD data available via the
+<a href="https://www.dwd.de/EN/climate_environment/cdc/cdc_node_en.html">Climate Data Center</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# stations with daily climate data
+stations &lt;- read.DWDstations()
+
+# precipitation stations with monthly historical data
+precip &lt;- read.DWDstations(type='precip', period='historical',
+                           resolution='monthly')
+
+# list stations with daily data updated within last week
+stat.daily &lt;- read.DWDstations(period='recent')
+stat.daily.recent &lt;- stat.daily[stat.daily$to &gt; (Sys.Date() - 7), ]
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

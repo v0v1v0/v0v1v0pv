@@ -1,0 +1,107 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sendTasks</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Send prepared task to Mturk and record the API-returned HIT ids.</h2>
+
+<h3>Description</h3>
+
+<p>Send prepared task to Mturk and record the API-returned HIT ids.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sendTasks(
+  hit_type = NULL,
+  hit_layout = NULL,
+  type = NULL,
+  tasksrecord = NULL,
+  tasksids = NULL,
+  HITidspath = NULL,
+  n_assignments = "1",
+  expire_in_seconds = as.character(60 * 60 * 8),
+  batch_annotation = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>hit_type</code></td>
+<td>
+<p>find from the Mturk requester's dashboard</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hit_layout</code></td>
+<td>
+<p>find from the Mturk requester's dashboard</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>one of WI, T8WSI, R4WSI</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tasksrecord</code></td>
+<td>
+<p>output of recordTasks()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tasksids</code></td>
+<td>
+<p>ids of tasks to send in numeric form. If left unspecified, the whole batch will be posted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>HITidspath</code></td>
+<td>
+<p>path to record the returned HITids</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_assignments</code></td>
+<td>
+<p>number of of assignments per task. For the validation tasks, people almost always want 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>expire_in_seconds</code></td>
+<td>
+<p>default 8 hours</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>batch_annotation</code></td>
+<td>
+<p>add if needed</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Pairs the local ids with Mturk ids and save them to specified paths
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list containing two elements:
+</p>
+
+<ul><li>
+<p>current_HIT_ids:A vector of the HIT IDs returned by the API.</p>
+</li></ul>
+<ul><li>
+<p>map_ids:A data frame that maps the tasksids to their corresponding HIT ids.
+</p>
+</li></ul>
+</div>

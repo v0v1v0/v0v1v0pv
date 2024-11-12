@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>prepare.fastq.specification</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>prepare.fastq.specification</h2>
+
+<h3>Description</h3>
+
+<p>Prepare FASTQ specification data frame to standardized format for downstream analyses.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">prepare.fastq.specification(sample.details, sample.id.column = 1,
+  fastq.columns = c(2, 3), patient.id.column = NA,
+  tissue.column = NA)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>sample.details</code></td>
+<td>
+<p>Data frame where each row represents a sample to be run. Must contain sample ID, path to tumour BAM, and path to normal BAM.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample.id.column</code></td>
+<td>
+<p>Index or string giving column of <code>sample.details</code> that contains the sample ID</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fastq.columns</code></td>
+<td>
+<p>Index or string giving column(s) of <code>sample.details</code> that contain path to FASTQ files</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>patient.id.column</code></td>
+<td>
+<p>Index or string giving column of <code>sample.details</code> that contains the patient ID</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tissue.column</code></td>
+<td>
+<p>Index or string giving column of <code>sample.details</code> that contains information on tissue (tumour/ normal)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function prepares a data frame that can be used to run alignment.
+For paired-end reads, this data frame will contain three columns with names: sample.id, reads, mates
+For single-end reads, the data frame will contain two columns with names: sample.id, reads
+</p>
+
+
+<h3>Value</h3>
+
+<p>Data frame with one row per sample to be run
+</p>
+
+
+</div>

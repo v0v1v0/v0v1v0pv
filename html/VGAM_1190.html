@@ -1,0 +1,181 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Polono</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Poisson Lognormal Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function and random
+generation for the Poisson lognormal distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dpolono(x, meanlog = 0, sdlog = 1, bigx = 170, ...)
+ppolono(q, meanlog = 0, sdlog = 1,
+        isOne = 1 - sqrt( .Machine$double.eps ), ...)
+rpolono(n, meanlog = 0, sdlog = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+<p>vector of quantiles.</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+If <code>length(n) &gt; 1</code> then the length is taken to be the number required.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>meanlog, sdlog </code></td>
+<td>
+
+<p>the mean and standard deviation of the normal distribution
+(on the log scale).
+They match the arguments in
+<code>Lognormal</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bigx</code></td>
+<td>
+
+<p>Numeric.
+This argument is for handling large values of <code>x</code> and/or
+when <code>integrate</code> fails.
+A first order Taylor series approximation
+[Equation (7) of Bulmer (1974)]
+is used at values of <code>x</code> that are greater or equal to this argument.
+For <code>bigx = 10</code>,
+he showed that the approximation has a relative error less than
+0.001 for values of <code>meanlog</code> and
+<code>sdlog</code> “likely to be encountered in practice”.
+The argument can be assigned <code>Inf</code> in which case
+the approximation is not used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>isOne </code></td>
+<td>
+
+<p>Used to test whether the cumulative probabilities have
+effectively reached unity.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Arguments passed into
+<code>integrate</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Poisson lognormal distribution is similar to the negative
+binomial in that it can be motivated by a Poisson distribution whose
+mean parameter comes from a right skewed distribution (gamma for the
+negative binomial and lognormal for the Poisson lognormal distribution).
+</p>
+
+
+
+
+
+<h3>Value</h3>
+
+<p><code>dpolono</code> gives the density,
+<code>ppolono</code> gives the distribution function, and
+<code>rpolono</code> generates random deviates.
+</p>
+
+
+
+<h3>Note</h3>
+
+<p>By default,
+<code>dpolono</code> involves numerical integration that is performed using
+<code>integrate</code>. Consequently, computations are very
+slow and numerical problems may occur
+(if so then the use of <code>...</code> may be needed).
+Alternatively, for extreme values of <code>x</code>, <code>meanlog</code>,
+<code>sdlog</code>, etc., the use of <code>bigx = Inf</code> avoids the call to
+<code>integrate</code>, however the answer may be a little
+inaccurate.
+</p>
+<p>For the maximum likelihood estimation of the 2 parameters a <span class="pkg">VGAM</span>
+family function called <code>polono()</code>, say, has not been written yet.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee.
+Some anonymous soul kindly wrote <code>ppolono()</code> and
+improved the original <code>dpolono()</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>Bulmer, M. G. (1974).
+On fitting the Poisson lognormal distribution to species-abundance data.
+<em>Biometrics</em>,
+<b>30</b>,
+101–110.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>lognormal</code>,
+<code>poissonff</code>,
+<code>negbinomial</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">meanlog &lt;- 0.5; sdlog &lt;- 0.5; yy &lt;- 0:19
+sum(proby &lt;- dpolono(yy, m = meanlog, sd = sdlog))  # Should be 1
+max(abs(cumsum(proby) - ppolono(yy, m = meanlog, sd = sdlog)))  # 0?
+
+## Not run:  opar = par(no.readonly = TRUE)
+par(mfrow = c(2, 2))
+plot(yy, proby, type = "h", col = "blue", ylab = "P[Y=y]", log = "",
+     main = paste0("Poisson lognormal(m = ", meanlog,
+                  ", sdl = ", sdlog, ")"))
+
+y &lt;- 0:190  # More extreme values; use the approxn &amp; plot on a log scale
+(sum(proby &lt;- dpolono(y, m = meanlog, sd = sdlog, bigx = 100)))  # 1?
+plot(y, proby, type = "h", col = "blue", ylab = "P[Y=y] (log)", log = "y",
+     main = paste0("Poisson lognormal(m = ", meanlog,
+                  ", sdl = ", sdlog, ")"))  # Note the kink at bigx
+
+# Random number generation
+table(y &lt;- rpolono(n = 1000, m = meanlog, sd = sdlog))
+hist(y, breaks = ((-1):max(y))+0.5, prob = TRUE, border = "blue")
+par(opar) 
+## End(Not run)
+</code></pre>
+
+
+</div>

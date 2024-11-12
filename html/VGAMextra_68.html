@@ -1,0 +1,262 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>invgamma2mr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> 2 - parameter Inverse Gamma Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the 2-parameter Inverse Gamma distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  invgamma2mr(lmu      = "loglink", 
+              lshape   = logofflink(offset = -2), 
+              parallel = FALSE, 
+              ishape   = NULL, 
+              imethod  = 1, 
+              zero     = "shape") 
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmu, lshape</code></td>
+<td>
+
+<p>Link functions applied to the (positives) <em>mu</em> and <em>shape</em>
+parameters (called <code class="reqn">\mu</code> and <code class="reqn">a</code> respectively), 
+according to <code>gamma2</code>.
+See <code>CommonVGAMffArguments</code> for further information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+
+<p>Same as <code>gamma2</code>.
+Details at <code>CommonVGAMffArguments</code>.  
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape</code></td>
+<td>
+
+<p>Optional initial value for <em>shape</em>, same as 
+<code>gamma2</code>
+
+
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>Same as <code>gamma2</code>.
+
+
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Numeric or character vector. Position or name(s) of the 
+parameters/linear predictors to be 
+modeled as intercept–only. Default is <code>"shape"</code>. Details at 
+<code>CommonVGAMffArguments</code>.
+
+
+
+
+
+
+
+
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Gamma distribution and the Inverse Gamma distribution are related 
+as follows:Let <em>X</em> be a random variable distributed as 
+<code class="reqn">Gamma (a, \beta)</code>,  where <code class="reqn">a &gt; 0</code> 
+denotes the <em>shape</em> parameter and <code class="reqn">\beta &gt; 0</code> is the 
+<em>scale</em> paramater. Then <code class="reqn">Y = 1/X</code> is an Inverse Gamma 
+random variable with parameters <em>scale</em> = <code class="reqn">a</code> and 
+<em>shape</em> = <code class="reqn">1/\beta</code>. 
+</p>
+<p>The Inverse Gamma density function is given by
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\mu, a) = \frac{(a - 1)^{a} \mu^{a}}{\Gamma(a)}y^{-a- 1} \
+                    e^{-\mu(a - 1)/y},</code>
+</p>
+
+
+
+
+
+
+
+<p>for <code class="reqn">\mu &gt; 0</code>, <code class="reqn">a &gt; 0</code> and <code class="reqn">y &gt; 0</code>.
+Here, <code class="reqn">\Gamma(\cdot)</code> is the gamma function, as in 
+<code>gamma</code>. The mean of <em>Y</em> is 
+<code class="reqn">\mu=\mu</code> (returned as the fitted values) with variance 
+<code class="reqn">\sigma^2 = \mu^2 / (a - 2)</code> 
+if <code class="reqn">a &gt; 2</code>, else is infinite. Thus, the 
+<em>link function</em> for the <em>shape</em> parameter is 
+<code>logloglink</code>. Then, by default, the two 
+linear/additive predictors are <code class="reqn">\eta_1=\log(\mu)</code>, 
+and <code class="reqn">\eta_2=\log(a)</code>, i.e in the VGLM context, 
+<code class="reqn">\eta = (log(\mu), loglog(a)</code>
+</p>
+<p>This <span class="pkg">VGAM</span> family function handles <em>multiple</em> reponses by 
+implementing Fisher scoring and unlike 
+<code>gamma2</code>, the working-weight matrices
+are <em>not</em> diagonal.
+
+
+The Inverse Gamma distribution is right-skewed and either for small values
+of <code class="reqn">a</code> (plus modest <code class="reqn">\mu</code>) or very large values of 
+<code class="reqn">\mu</code> (plus moderate <code class="reqn">a &gt; 2</code>), the density has 
+values too close to zero.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>Note that <code>zero</code> can be a <b>numeric</b> or a <b>character</b> 
+vector specifying the position of the names 
+(partially or not) of the linear predictor modeled as intercept only.
+In this family function such names are
+</p>
+<p><code>c("mu", "shape")</code>.
+</p>
+<p>Numeric values can be entered as usual.
+See <code>CommonVGAMffArguments</code> 
+for further details.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be strictly positive.
+
+
+</p>
+<p>If <code>mu</code> and <code>shape</code> are vectors, then <code>rinvgamma(n = n,
+  shape = shape, scale = mu/(shape - 1)</code> will generate random inverse gamma 
+variates of this parameterization, etc.; 
+see <code>invgammaDist</code>.
+
+
+
+</p>
+<p>Given the math relation between the Gamma and the Inverse Gamma
+distributions, the parameterization of this <span class="pkg">VGAM</span> family function 
+underlies on the parametrization of the 2-parameter gamma distribution 
+described in the monograph
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Victor Miranda and T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>McCullagh, P. and Nelder, J. A. (1989)
+<em>Generalized Linear Models</em>, 
+2nd ed. London, UK. Chapman &amp; Hall.
+
+
+
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>invgammaDist</code>,
+<code>gamma2</code> for the 2-parameter gamma distribution,
+<code>GammaDist</code>,
+<code>CommonVGAMffArguments</code>,
+
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#------------------------------------------------------------------------#
+# Essentially fitting a 2-parameter inverse gamma distribution
+# with 2 responses.
+
+set.seed(101)
+y1 = rinvgamma(n = 500, scale = exp(2.0), shape = exp(2.0))
+y2 = rinvgamma(n = 500, scale = exp(2.5), shape = exp(2.5))
+gdata &lt;- data.frame(y1, y2)
+
+fit1 &lt;- vglm(cbind(y1, y2) ~ 1, 
+            family = invgamma2mr(zero = NULL, 
+            
+                                 # OPTIONAL INITIAL VALUE
+                                 # ishape = exp(2),
+                                 
+                                 imethod = 1),
+            data = gdata, trace = TRUE)
+
+Coef(fit1)
+c(Coef(fit1), log(mean(gdata$y1)), log(mean(gdata$y2)))
+summary(fit1)
+vcov(fit1, untransform = TRUE)
+
+#------------------------------------------------------------------------#
+# An example including one covariate.
+# Note that the x2 affects the shape parameter, which implies that both,
+# 'mu' and 'shape' are affected.
+# Consequently, zero must be set as NULL !
+
+x2    &lt;- runif(1000)
+gdata &lt;- data.frame(y3 = rinvgamma(n = 1000, 
+                                   scale = exp(2.0), 
+                                   shape = exp(2.0 + x2)))
+
+fit2 &lt;- vglm(y3 ~ x2, 
+            family = invgamma2mr(lshape = "loglink", zero = NULL), 
+            data = gdata, trace = TRUE)
+
+coef(fit2, matrix = TRUE)
+summary(fit2)
+vcov(fit2)
+
+</code></pre>
+
+
+</div>

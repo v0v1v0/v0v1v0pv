@@ -1,0 +1,119 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.lm.cronbach</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Meta-regression analysis for Cronbach reliabilities</h2>
+
+<h3>Description</h3>
+
+<p>This function estimates the intercept and slope coefficients in a
+meta-regression model where the dependent variable is a log-complement
+Cronbach reliablity. The estimates are OLS estimates with robust standard
+errors that accommodate residual heteroscedasticity. The exponentiated slope
+estimate for a predictor variable describes a multiplicative change in
+non-reliability associated with a 1-unit increase in that predictor
+variable, controlling for all other predictor variables in the model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.lm.cronbach(alpha, n, rel, r, X)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>vector of sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rel</code></td>
+<td>
+<p>vector of estimated reliabilities</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r</code></td>
+<td>
+<p>number of measurements (e.g., items)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>matrix of predictor values</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is for the intercept with one additional
+row per predictor.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - exponentiated OLS estimate
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> z - z-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the exponentiated confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the exponentiated confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2010).
+“Varying coefficient meta-analytic methods for alpha reliability.”
+<em>Psychological Methods</em>, <b>15</b>(4), 368–385.
+ISSN 1939-1463, <a href="https://doi.org/10.1037/a0020142">doi:10.1037/a0020142</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">n &lt;- c(583, 470, 546, 680)
+rel &lt;- c(.91, .89, .90, .89)
+x1 &lt;- c(1, 0, 0, 0)
+X &lt;- matrix(x1, 4, 1)
+meta.lm.cronbach(.05, n, rel, 10, X)
+
+# Should return:
+#      Estimate         SE          z     p         LL          UL
+# b0 -2.2408328 0.03675883 -60.960391 0.000 -2.3128788 -2.16878684
+# b1 -0.1689006 0.07204625  -2.344336 0.019 -0.3101087 -0.02769259
+
+
+</code></pre>
+
+
+</div>

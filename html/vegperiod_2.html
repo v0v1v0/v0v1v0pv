@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>method_ETCCDI</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vegetation Start and End Method "ETCCDI"</h2>
+
+<h3>Description</h3>
+
+<p>The <code>ETCCDI</code> or <code>StdMeteo</code> method was defined by  Expert Team on Climate Change Detection and Indices and is often known as Growing season Length (GSL) and widely used in climate change studies.
+</p>
+
+
+<h3>Calculation</h3>
+
+
+
+<h4>Implementation of start</h4>
+
+<p>first span of at least 6 consecutive days with daily mean temperature TG &gt; 5°C
+</p>
+<div class="sourceCode"><pre># mark days warmer than 5°C
+df$period &lt;- ifelse(df$Tavg &gt; Tmin, 1, 0)
+
+# find first six day span per year
+start &lt;- tapply(df$period, df$year, FUN=function(x){
+  sixer &lt;- as.numeric(stats::filter(x, rep(1, 6), sides=1))
+  doy &lt;- which(!is.na(sixer) &amp; sixer == 6)
+  ifelse(length(doy) == 0, NA, min(doy))
+})
+</pre></div>
+
+
+
+<h4>Implementation of end</h4>
+
+<p>first span after July 1st of 6 consecutive days with TG &lt; 5°C.
+</p>
+<div class="sourceCode"><pre># 1. July is DOY 182 and DOY 183 in leap years
+years &lt;- unique(df$year)
+leap_year &lt;- ifelse((years%%4==0 &amp; years%%100!=0) | years%%400==0, TRUE, FALSE)
+jul1 &lt;- ifelse(leap_year, 183L, 182L)
+
+# mark days colder than 5°C
+df$period &lt;- ifelse(df$Tavg &lt; Tmin, 1, 0)
+
+# find first six day span per year
+end &lt;- ifelse(leap_year, 366L, 365L)
+for(i in seq_along(years)){
+  temp &lt;- df[df$year == years[i] &amp; df$DOY &gt; jul1[i], ]
+  temp$six &lt;-  as.numeric(stats::filter(temp$period, rep(1, 6), sides=1))
+  possible.end &lt;- temp[!is.na(temp$six) &amp; temp$six == 6, "DOY"]
+  if(length(possible.end) &gt; 0)
+    end[i] &lt;- min(possible.end)
+}
+</pre></div>
+
+
+
+<h3>References</h3>
+
+<p>Definition recommended by the CCl/CLIVAR/JCOMM Expert Team on Climate Change Detection and Indices (ETCCDI) http://etccdi.pacificclimate.org/list_27_indices.shtml http://www.climdex.org/indices.html
+</p>
+<p>European Climate Assessment (ECA) http://eca.knmi.nl/indicesextremes/indicesdictionary.php
+</p>
+<p>ETCCDI (2009) Climate Change Indices: Definitions of the 27 core indices. http://etccdi.pacificclimate.org/list_27_indices.shtml
+Frich, P., Alexander, L., Della-Marta, P., Gleason, B., Haylock, M., Klein Tank, A. and Peterson, T. (2002) Observed coherent changes in climatic extremes during the second half of the twentieth century. Climate Research, 19, 193–212. https://doi.org/10.3354/cr019193.
+http://www.climateknowledge.org/heat_waves/Doc2004_Frich_Extremes_Index_ClimResearch_2002.pdf
+</p>
+<p>Zhang, X., Alexander, L., Hegerl, G. C., Jones, P., Tank, A. K., Peterson, T. C., Trewin, B. and Zwiers, F. W. (2011) Indices for monitoring changes in extremes based on daily temperature and precipitation data. Wiley Interdisciplinary Reviews: Climate Change, 2(6), 851–870. https://doi.org/10.1002/wcc.147.
+</p>
+
+
+</div>

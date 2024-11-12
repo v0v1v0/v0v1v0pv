@@ -1,0 +1,203 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.VSURF</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot of VSURF results</h2>
+
+<h3>Description</h3>
+
+<p>This function plots 4 graphs illustrating VSURF results.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VSURF'
+plot(
+  x,
+  step = "all",
+  var.names = FALSE,
+  imp.mean = TRUE,
+  imp.sd = TRUE,
+  nvar.imp.mean = length(x$imp.mean.dec),
+  nvar.imp.sd = length(x$imp.sd.dec),
+  nvar.interp = length(x$varselect.thres),
+  nvar.pred = length(x$varselect.pred),
+  ...
+)
+
+## S3 method for class 'VSURF_thres'
+plot(
+  x,
+  var.names = FALSE,
+  imp.mean = TRUE,
+  imp.sd = TRUE,
+  nvar.imp.mean = length(x$imp.mean.dec),
+  nvar.imp.sd = length(x$imp.sd.dec),
+  ...
+)
+
+## S3 method for class 'VSURF_interp'
+plot(x, var.names = FALSE, nvar.interp = length(x$varselect.thres), ...)
+
+## S3 method for class 'VSURF_pred'
+plot(x, var.names = FALSE, nvar.pred = length(x$varselect.pred), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class <code>VSURF</code>, <code>VSURF_thres</code>,
+<code>VSURF_interp</code> or <code>VSURF_pred</code>, which is the result of the
+<code>VSURF</code> function (or resp. <code>VSURF_thres</code>,
+<code>VSURF_interp</code> or <code>VSURF_pred</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>step</code></td>
+<td>
+<p>A character string indicating which step must be plotted (default is "all").
+Available choices are "thres", "interp", "pred".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.names</code></td>
+<td>
+<p>If FALSE (default) xticks are the numbering given by the
+sorting of VI mean, if TRUE they are the variables names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imp.mean</code></td>
+<td>
+<p>If TRUE (default) VI mean is plotted, if FALSE it is not.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imp.sd</code></td>
+<td>
+<p>If TRUE (default) VI standard deviation is plotted, if FALSE
+it is not.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nvar.imp.mean</code></td>
+<td>
+<p>The number of variables to be kept for the VI mean plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nvar.imp.sd</code></td>
+<td>
+<p>The number of variables to be kept for the VI standard
+deviation plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nvar.interp</code></td>
+<td>
+<p>The number of variables to be kept for the "interp" plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nvar.pred</code></td>
+<td>
+<p>The number of variables to be kept for the "pred" plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Arguments to be passed to <code>par</code> (they will affect
+all plots) or to others methods of plot.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The 2 graphs of the top row correspond to the "thresholding step" (and only
+these 2 graphs are plotted by the <code>plot.VSURF_thres</code> function).  The
+top left graph plots the mean variable importance in decreasing order (black
+curve). The red horizontal line represent the value of the threshold.  The
+top right graph plots the standard deviation of variable importance with
+variables ordered according to their mean variable importance in decreasing
+order (black curve). The green line represents the predictions given by a
+CART tree fitted to the black curve (the standard deviations). Finally, the
+dotted horizontal red line represents the minimum value of the CART
+predictions, which actually is the value of the threshold.
+</p>
+<p>The bottom left graph corresponds to the "interpretation step" (and only
+this graph is plotted by the <code>plot.VSURF_interp</code> function). It plots
+the mean OOB error rate of embedded random forests models (from the one with
+only one variable as predictor, to the one with all variables kept after the
+"thresholding step"). The vertical red line indicates the retained model.
+</p>
+<p>The bottom right graph corresponds to the "prediction step" (and only this
+graph is plotted by the <code>plot.VSURF_pred</code> function). It plots the mean
+OOB error rate of embedded random forests models (the difference, here,
+being that variables are added to the model in a step-wise manner). The
+retained model is the final one.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Robin Genuer, Jean-Michel Poggi and Christine Tuleau-Malot
+</p>
+
+
+<h3>References</h3>
+
+<p>Genuer, R. and Poggi, J.M. and Tuleau-Malot, C. (2010),
+<em>Variable selection using random forests</em>, Pattern Recognition Letters
+31(14), 2225-2236
+</p>
+<p>Genuer, R. and Poggi, J.M. and Tuleau-Malot, C. (2015),
+<em>VSURF: An R Package for Variable Selection Using Random Forests</em>,
+The R Journal 7(2):19-33
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VSURF</code>, <code>summary.VSURF</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Not run: 
+data(iris)
+iris.vsurf &lt;- VSURF(iris[,1:4], iris[,5])
+plot(iris.vsurf)
+plot(iris.vsurf, var.names=TRUE)
+plot(iris.vsurf, step="thres")
+
+# A more interesting example with toys data (see \code{\link{toys}})
+# (a few minutes to execute) and intermediate functions
+data(toys)
+toys.vsurf &lt;- VSURF(toys$x, toys$y)
+plot(toys.vsurf)
+plot(toys.vsurf, nvar.imp.mean = 50, nvar.imp.sd = 50)
+toys.thres &lt;- VSURF_thres(toys$x, toys$y)
+plot(toys.thres)
+plot(toys.thres, nvar.imp.mean = 70, imp.sd = FALSE)
+toys.interp &lt;- VSURF_interp(toys$x, toys$y, vars = toys.thres$varselect.thres)
+plot(toys.interp, var.names = TRUE)
+toys.pred &lt;- VSURF_pred(toys$x, toys$y, err.interp = toys.interp$err.interp,
+                        varselect.interp = toys.interp$varselect.interp)
+plot(toys.pred, var.names = TRUE)
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

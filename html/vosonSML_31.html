@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Collect.web</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Collect hyperlinks from web pages</h2>
+
+<h3>Description</h3>
+
+<p>Collects hyperlinks from web pages and structures the data into a dataframe with the class names
+<code>"datasource"</code> and <code>"web"</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'web'
+Collect(credential, pages = NULL, writeToFile = FALSE, verbose = FALSE, ...)
+
+collect_web_hyperlinks(pages = NULL, writeToFile = FALSE, verbose = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>credential</code></td>
+<td>
+<p>A <code>credential</code> object generated from <code>Authenticate</code> with class name <code>"web"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pages</code></td>
+<td>
+<p>Dataframe. Dataframe of web pages to crawl. The dataframe must have the columns <code>page</code> (character),
+<code>type</code> (character) and <code>max_depth</code> (integer). Each row is a seed web page to crawl, with the <code>page</code>
+value being the page URL. The <code>type</code> value is type of crawl as either <code>"int"</code>, <code>"ext"</code> or
+<code>"all"</code>, directing the crawler to follow only internal links, follow only external links (different domain to
+the seed page) or follow all links. The <code>max_depth</code> value determines how many levels of hyperlinks to follow
+from the seed site.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>writeToFile</code></td>
+<td>
+<p>Logical. Write collected data to file. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical. Output additional information. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional parameters passed to function. Not used in this method.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>tibble</code> object with class names <code>"datasource"</code> and <code>"web"</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+pages &lt;- tibble::tibble(page = c("http://vosonlab.net",
+                                 "https://rsss.cass.anu.edu.au"),
+                        type = c("int", "all"),
+                        max_depth = c(2, 2))
+
+webData &lt;- webAuth |&gt;
+  Collect(pages, writeToFile = TRUE)
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

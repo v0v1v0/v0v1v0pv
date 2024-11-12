@@ -1,0 +1,70 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>collapse_ages</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Collapse upper ages into a single age group. Counts are summed while
+rates are recomputed where possible.</h2>
+
+<h3>Description</h3>
+
+<p>Collapse upper ages into a single age group. Counts are summed while
+rates are recomputed where possible.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">collapse_ages(.data, max_age = 100)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>.data</code></td>
+<td>
+<p>A vital object including an age variable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_age</code></td>
+<td>
+<p>Maximum age to include in the collapsed age group.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If the object includes deaths,
+population and mortality rates, then deaths and population are summed and
+mortality rates are recomputed as deaths/population. But if the object contains
+mortality rates but not deaths and population, then the last rate remains
+unchanged (and a warning is generated).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vital object with the same variables as <code>.data</code>, but with the upper
+ages collapsed into a single age group.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Rob J Hyndman
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">aus_mortality |&gt;
+ dplyr::filter(State == "Victoria", Sex == "female") |&gt;
+ collapse_ages(max_age = 85)
+</code></pre>
+
+
+</div>

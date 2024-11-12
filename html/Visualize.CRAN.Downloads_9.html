@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>processPckg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>main function to analyze a list of packages in a given time frame</h2>
+
+<h3>Description</h3>
+
+<p>main function to analyze a list of packages in a given time frame
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">processPckg(
+  pckg.lst,
+  t0 = lastyear.date(),
+  t1 = today(),
+  opts = list(),
+  device = "PDF",
+  dirSave = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>pckg.lst</code></td>
+<td>
+<p>list of packages to process</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t0</code></td>
+<td>
+<p>initial date, begining of the time period given in "YYYY-MM-DD" format</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t1</code></td>
+<td>
+<p>final date, ending of the time period given in "YYYY-MM-DD" format</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>opts</code></td>
+<td>
+<p>a list of different options available for customizing the output</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>device</code></td>
+<td>
+<p>string to select the output format: 'PDF'/'PNG'/'JPEG' or 'screen'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dirSave</code></td>
+<td>
+<p>name of a valid directory where to save the file, eg. do not specify this argument or enter "." for using the current working directory</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# device is set to "screen" so no files are generated and plots will appear on "screen"
+# alternative to 'device' are "PDF"/"PNG"/"JPEG"
+processPckg("ehelp", device="screen")
+processPckg(c("ehelp","plotly","ggplot2"), "2001-01-01", device="screen")
+processPckg(c("ehelp","plotly","ggplot2"), "2001-01-01", opts="nostatic", device="screen")
+processPckg(c("ehelp","plotly","ggplot2"), "2001-01-01",
+	opts=c("nostatic","nocombined","nointeractive"), device="screen")
+
+
+</code></pre>
+
+
+</div>

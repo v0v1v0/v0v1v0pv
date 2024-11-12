@@ -1,0 +1,144 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>aggregate,validation-method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Aggregate validation results</h2>
+
+<h3>Description</h3>
+
+<p>Aggregate results of a validation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'validation'
+aggregate(x, by = c("rule", "record"), drop = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class <code>validation</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>Report on violations per rule (default) or per record?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drop</code></td>
+<td>
+<p>drop list attribute if the result is list of length 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Arguments to be passed to or from other methods.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>By default, a <code>data.frame</code> with the following columns.
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+  keys </td>
+<td style="text-align: left;"> If confront was called with <code>key=</code>
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  <code>npass</code> </td>
+<td style="text-align: left;"> Number of items passed</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  <code>nfail</code> </td>
+<td style="text-align: left;"> Number of items failing</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  <code>nNA</code> </td>
+<td style="text-align: left;"> Number of items resulting in <code>NA</code>
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  <code>rel.pass</code> </td>
+<td style="text-align: left;"> Relative number of items passed</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  <code>rel.fail</code> </td>
+<td style="text-align: left;"> Relative number of items failing</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  <code>rel.NA</code> </td>
+<td style="text-align: left;"> Relative number of items resulting in <code>NA</code>
+</td>
+</tr>
+</table>
+<p>If <code>by='rule'</code> the relative numbers are computed with respect to the number 
+of records for which the rule was evaluated. If <code>by='record'</code> the relative numbers
+are computed with respect to the number of rules the record was tested agains. 
+</p>
+<p>When <code>by='record'</code> and not all validation results have the same dimension structure,
+a list of <code>data.frames</code> is returned.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other validation-methods: 
+<code>all,validation-method</code>,
+<code>any,validation-method</code>,
+<code>barplot,validation-method</code>,
+<code>check_that()</code>,
+<code>compare()</code>,
+<code>confront()</code>,
+<code>event()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>plot,validation-method</code>,
+<code>sort,validation-method</code>,
+<code>summary()</code>,
+<code>validation-class</code>,
+<code>values()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data(retailers)
+retailers$id &lt;- paste0("ret",1:nrow(retailers))
+v &lt;- validator(
+    staff.costs/staff &lt; 25
+  , turnover + other.rev==total.rev)
+
+cf &lt;- confront(retailers,v,key="id")
+a &lt;- aggregate(cf,by='record')
+head(a)
+
+# or, get a sorted result:
+s &lt;- sort(cf, by='record')
+head(s)
+
+
+</code></pre>
+
+
+</div>

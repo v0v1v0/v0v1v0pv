@@ -1,0 +1,162 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>write_juice</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Exporting tables for Juice</h2>
+
+<h3>Description</h3>
+
+<p>This function produce txt files as inport formats for <strong>Juice</strong>
+(<a href="https://www.sci.muni.cz/botany/juice/">https://www.sci.muni.cz/botany/juice/</a>).
+</p>
+<p>This function produces two output files to be imported into a <strong>Juice</strong>
+file: A vegetation table produced by <code>crosstable()</code> and a header table.
+Both tables share the file name plus a suffix (<code>table</code> for the
+vegetation table and <code>header</code> for the header).
+</p>
+<p>For the import in <strong>Juice</strong>, you go to the menu
+<code style="white-space: pre;">⁠File -&gt; Import -&gt; Table -&gt; from Spreadsheet File (e.g. EXCEL Table)⁠</code> and
+then follow the wizard.
+Do not forget to select the proper settings in the wizard: 1) 'Character
+delimiting columns: Comma' (for default argument values). 2) 'Use the second
+column as layer information: Unchecked'. 3) 'Cover values: Percentage
+Values'.
+</p>
+<p>To further import the header table you need to go to the menu
+<code style="white-space: pre;">⁠File -&gt; Import -&gt; Header Data -&gt; From Comma Delimited File⁠</code>.
+</p>
+<p>In the <code>header</code> (see <strong>Value</strong>), the first column (<code style="white-space: pre;">⁠Table number⁠</code>)
+corresponds to the plot number assigned by <strong>Juice</strong> at import, while
+the column (<code style="white-space: pre;">⁠Releve number⁠</code>) is the number originally assigned to the plot
+(e.g. <strong>Turboveg</strong> ID).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">write_juice(data, file, formula, ...)
+
+## S4 method for signature 'vegtable,character,formula'
+write_juice(
+  data,
+  file,
+  formula,
+  FUN,
+  db_name = "Plot Observations",
+  header,
+  coords,
+  sep = ",",
+  ...
+)
+
+read_juice(file, encoding = "LATIN-1", sep = ";", na = "", ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>An object of class vegtable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>file</code></td>
+<td>
+<p>Character value indicating the name of output files (without
+file extension).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>A formula passed to <code>crosstable()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments. While <code>write_juice()</code> passes them to the
+function <code>crosstable()</code>, <code>read_juice()</code> passes those arguments to
+<code>readLines()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>FUN</code></td>
+<td>
+<p>Funtion passed to <code>crosstable()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>db_name</code></td>
+<td>
+<p>Name for data set displayed in inport wizard.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>header</code></td>
+<td>
+<p>Variables of header to be exported.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coords</code></td>
+<td>
+<p>Names of coordinate variables in header of <code>data</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sep</code></td>
+<td>
+<p>Separator used to split rows into columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>encoding</code></td>
+<td>
+<p>Argument passed to <code>readLines</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na</code></td>
+<td>
+<p>Character used as not available values.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>For <code>read_juice()</code>, a list with two elements: A data frame of species by
+plot (<code>cross_table</code>), and a data frame with header data (<code>header</code>).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miguel Alvarez <a href="mailto:kamapu78@gmail.com">kamapu78@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Subset and transform cover values to percentage
+vegetation &lt;- Kenya_veg[1:20, ]
+vegetation &lt;- cover_trans(x = vegetation, to = "cover_percent", rule = "middle")
+
+## Write in tempdir
+write_juice(data = vegetation, file = file.path(tempdir(), "SWEA"),
+    formula = cover_percent ~ ReleveID + AcceptedName, FUN = mean,
+    header = c("ReleveID", "COMM_TYPE"))
+## Installed 'Juice' version of 'Wetlands_veg'
+Veg &lt;- file.path(path.package("vegtable"), "juice", "Wetlands_juice.txt")
+Veg &lt;- read_juice(Veg)
+
+summary(Veg)
+</code></pre>
+
+
+</div>

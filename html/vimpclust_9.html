@@ -1,0 +1,252 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sparsewkm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Sparse weighted k-means</h2>
+
+<h3>Description</h3>
+
+<p>This function performs sparse weighted k-means on a set 
+of observations described by numerical and/or categorical variables.
+It generalizes the sparse clustering algorithm introduced in
+Witten &amp; Tibshirani (2010) to any type of data (numerical, categorical
+or a mixture of both). The weights of the variables indicate their importance
+in the clustering process and discriminant variables are thus selected by 
+means of weights set to 0.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sparsewkm(
+  X,
+  centers,
+  lambda = NULL,
+  nlambda = 20,
+  nstart = 10,
+  itermaxw = 20,
+  itermaxkm = 10,
+  renamelevel = TRUE,
+  verbose = 1,
+  epsilonw = 1e-04
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>a dataframe of dimension <code>n</code> (observations) by <code>p</code> (variables) with
+numerical, categorical or mixed data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>centers</code></td>
+<td>
+<p>an integer representing the number of clusters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda</code></td>
+<td>
+<p>a vector of numerical values (or a single value) providing 
+a grid of values for the regularization parameter. If NULL (by default), the function computes its 
+own lambda sequence of length <code>nlambda</code> (see details).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nlambda</code></td>
+<td>
+<p>an integer indicating the number of values for the regularization parameter. 
+By default, <code>nlambda=20</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nstart</code></td>
+<td>
+<p>an integer representing the number of random starts in the k-means algorithm.
+By default, <code>nstart=10</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>itermaxw</code></td>
+<td>
+<p>an integer indicating the maximum number of iterations for the inside 
+loop over the weights <code>w</code>. By default, <code>itermaxw=20</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>itermaxkm</code></td>
+<td>
+<p>an integer representing the maximum number of iterations in the k-means 
+algorithm. By default, <code>itermaxkm=10</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>renamelevel</code></td>
+<td>
+<p>a boolean. If TRUE (default option), each level of a categorical variable
+is renamed as <code>'variable_name=level_name'</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>an integer value. If <code>verbose=0</code>, the function stays silent, if <code>verbose=1</code> (default option), it  prints
+whether the stopping criterion over the weights <code>w</code> is satisfied.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>epsilonw</code></td>
+<td>
+<p>a positive numerical value. It provides the precision of the stopping 
+criterion over <code>w</code>. By default, <code>epsilonw =1e-04</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Sparse weighted k-means performs clustering on mixed data (numerical and/or categorical), and automatically
+selects the most discriminant variables by setting to zero the weights of the non-discriminant ones. 
+</p>
+<p>The mixted data is first preprocessed: numerical variables are scaled to zero mean and unit variance;
+categorical variables are transformed into dummy variables, and scaled – in mean and variance – with
+respect to the relative frequency of each level. 
+</p>
+<p>The algorithm is based on the optimization of a cost function which is the weighted between-class variance penalized
+by a group L1-norm. The groups are implicitely defined: each numerical variable constitutes its own group, the levels 
+associated to one categorical variable constitute a group. The importance of the penalty term may be adjusted through
+the regularization parameter <code>lambda</code>.
+</p>
+<p>The output of the algorithm is two-folded: one gets a partitioning of the data set and a vector of weights associated
+to each variable. Some of the weights are equal to 0, meaning that the associated variables do not participate in the
+clustering process. If <code>lambda</code> is equal to zero, there is no penalty applied to the weighted between-class variance in the 
+optimization procedure. The larger the value of <code>lambda</code>, the larger the penalty term and the number of variables with
+null weights. Furthemore, the weights associated to each level of a categorical variable are also computed.
+</p>
+<p>Since it is difficult to choose the regularization parameter <code>lambda</code> without prior knowledge,
+the function builds automatically a grid of parameters and finds a partition and vector of weights for each 
+value of the grid.
+</p>
+<p>Note also that the columns of the data frame <code>X</code> must be of class factor for 
+categorical variables.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lambda</code></td>
+<td>
+<p>a numerical vector containing the regularization parameters (a grid of values).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>W</code></td>
+<td>
+<p>a <code>p</code> by <code>length(lambda)</code> matrix. It contains the weights associated to each variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Wm</code></td>
+<td>
+<p>a <code>q</code> by <code>length(lambda)</code> matrix, where <code>q</code> is the 
+number of numerical variables plus the number of levels of the categorical 
+variables. It contains the weights associated to the numerical variables and to the levels of the categorical
+variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cluster</code></td>
+<td>
+<p>a <code>n</code> by <code>length(lambda)</code> integer matrix. It contains the 
+cluster memberships, for each value of the regularization parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sel.init.feat</code></td>
+<td>
+<p>a numerical vector of the same length as <code>lambda</code>, giving the 
+number of selected variables for each value of the regularization parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sel.trans.feat</code></td>
+<td>
+<p>a numerical vector of the same length as <code>lambda</code>, giving the 
+number of selected numerical variables and levels of categorical variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X.transformed</code></td>
+<td>
+<p>a matrix of size <code>n</code> by <code>q</code>, containing the transformed data: numerical variables scaled to 
+zero mean and unit variables, categorical variables transformed into dummy variables, scaled (in means and variance)
+with respect to the relative frequency of the levels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>index</code></td>
+<td>
+<p>a numerical vector indexing the variables and allowing to group together the levels of a
+categorical variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bss.per.feature</code></td>
+<td>
+<p>a matrix of size <code>q</code> by <code>length(lambda)</code>. 
+It contains the between-class variance computed on the <code>q</code> transformed variables (numerical variables and 
+levels of categorical variables).</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Witten, D. M., &amp; Tibshirani, R. (2010). A framework for feature 
+selection in clustering. Journal of the American Statistical Association, 
+105(490), 713-726.
+</p>
+<p>Chavent, M. &amp; Lacaille, J. &amp; Mourer, A. &amp; Olteanu, M. (2020). 
+Sparse k-means for mixed data via group-sparse clustering, ESANN proceedings.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>plot.spwkm</code>, <code>info_clust</code>, 
+<code>groupsparsewkm</code>, <code>recodmix</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(HDdata)
+
+out &lt;- sparsewkm(X = HDdata[,-14], centers = 2)
+# grid of automatically selected regularization parameters
+out$lambda
+k &lt;- 10
+# weights of the variables for the k-th regularization parameter
+out$W[,k]
+# weights of the numerical variables and of the levels 
+out$Wm[,k]
+# partitioning obtained for the k-th regularization parameter
+out$cluster[,k]
+# number of selected variables
+out$sel.init.feat
+# between-class variance on each variable
+out$bss.per.feature[,k]
+# between-class variance
+sum(out$bss.per.feature[,k])
+
+</code></pre>
+
+
+</div>

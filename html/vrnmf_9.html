@@ -1,0 +1,281 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>volnmf_main</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Volume-regularized NMF</h2>
+
+<h3>Description</h3>
+
+<p><code>volnmf_main</code> enables volume-regularized factorization of a matrix <code>B</code> using the following objective function:
+<code class="reqn">F = ||B*Q - C*R||^2 + w.vol*volume(R)</code>. Matrix <code>C</code> is required to be non-negative and having either column or row vectors on the simplex.
+Matrix <code>R</code> can optionally have non-negativity constraint. Matrix <code>Q</code> can optionally be identity matrix or any unitary.
+The latter option is used to decompose co-occurence matrix <code>vol_P</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">volnmf_main(
+  vol,
+  B = NULL,
+  volnmf = NULL,
+  n.comp = 3,
+  n.reduce = n.comp,
+  do.nmf = TRUE,
+  iter.nmf = 100,
+  seed = NULL,
+  domain = "covariance",
+  volf = "logdet",
+  wvol = NULL,
+  delta = 1e-08,
+  n.iter = 500,
+  err.cut = 1e-16,
+  vol.iter = 20,
+  c.iter = 20,
+  extrapolate = TRUE,
+  accelerate = FALSE,
+  acc.C = 4/5,
+  acc.R = 3/4,
+  C.constraint = "col",
+  C.bound = 1,
+  R.constraint = "pos",
+  R.majorate = FALSE,
+  C.init = NULL,
+  R.init = NULL,
+  Q.init = NULL,
+  anchor = NULL,
+  Ctrue = NULL,
+  verbose = TRUE,
+  record = 100,
+  verbose.nmf = FALSE,
+  record.nmf = NULL,
+  mutation.run = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vol</code></td>
+<td>
+<p>An output object of vol_preprocess().</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>B</code></td>
+<td>
+<p>A numeric matrix. A matrix to factorize (by default NULL). If not given than matrix <code>B</code> is taken to be a square root decomposition of <code class="reqn">P = B*t(B)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>volnmf</code></td>
+<td>
+<p>An output object of <code>volnmf.main</code>. An option is useful to re-estimate solution using different parameters (by default NULL).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.comp</code></td>
+<td>
+<p>An integer. Number of components to extract (by default 3). Defines number of columns in matrix <code class="reqn">C</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.reduce</code></td>
+<td>
+<p>An integer. Dimensional reduction of matrix B (number of columns) if taken as a square root decomposition of <code>volP</code> (by default equal to <code>n.comp</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>do.nmf</code></td>
+<td>
+<p>A boolean. Estimate standard solution with <code>w.vol=0</code> as initialization before applying volume regularization (by default <code>TRUE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iter.nmf</code></td>
+<td>
+<p>An integer. Number of iterations to get solution with <code>w.vol=0</code> if the former requested (by default <code>1,000</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>An integer. Fix seed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>domain</code></td>
+<td>
+<p>A character. Optimize unitary rotation matrix <code>Q</code> ("covariance") or keep it as identity matrix (as in standard NMF). By default "covariance".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>volf</code></td>
+<td>
+<p>A character. Function that approximate volume. Can have values of "logdet" or "det" (by default "logdet").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wvol</code></td>
+<td>
+<p>A numeric. A weight of volume-regularized term <code>volume(R)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>A numeric. Logdet regularization term <code>log(det(R) + delta)</code> (by default 1e-8).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.iter</code></td>
+<td>
+<p>An integer. Number of iterations (by default <code>1,000</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>err.cut</code></td>
+<td>
+<p>A numeric. Relative error in determinant between iterations to stop algorithm (by default <code>1e-8</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vol.iter</code></td>
+<td>
+<p>An integer. Number of iterations to update volume-regularized matrix <code>R</code> at each alternating step.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>c.iter</code></td>
+<td>
+<p>An integer. Number of iterations to update simplex matrix <code>C</code> at each alternating step.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extrapolate</code></td>
+<td>
+<p>A numeric. Do Nesterov extrapolation inside blocks of R and C optimization (by default TRUE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>accelerate</code></td>
+<td>
+<p>A numeric. Do acceleration each update after R and C blocks estimated via Nesterov-like extrapolation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>acc.C</code></td>
+<td>
+<p>A numeric. Acceleration parameter of matrix C.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>acc.R</code></td>
+<td>
+<p>A numeric. Acceleration parameter of matrix R.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C.constraint</code></td>
+<td>
+<p>A character. Constraint either sum of columns ("col") or sum of rows ("row) to be equal to <code>C.bound</code> (By default "col").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C.bound</code></td>
+<td>
+<p>A numeric. A simplex constraint on matrix C vectors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R.constraint</code></td>
+<td>
+<p>A character. Set up non-negativity ("pos") constraint on elements of <code>R</code> (by default "pos", alternative "no").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R.majorate</code></td>
+<td>
+<p>A boolean. Majorate logdet each iteration of <code>volnmf_logdet()</code> (by default FALSE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C.init</code></td>
+<td>
+<p>Numeric matrices. Initialization of matrices <code>C, R, Q</code> (by default <code>NULL</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R.init</code></td>
+<td>
+<p>Numeric matrices. Initialization of matrices <code>C, R, Q</code> (by default <code>NULL</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Q.init</code></td>
+<td>
+<p>Numeric matrices. Initialization of matrices <code>C, R, Q</code> (by default <code>NULL</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>anchor</code></td>
+<td>
+<p>An output object of <code>AnchorFree()</code>. Object is used optionally to initialize matrices (by default <code>NULL</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Ctrue</code></td>
+<td>
+<p>A matrix. Correct matrix C if known. Useful for benchmark.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>A boolean. Print per-iteration information (by default FALSE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>record</code></td>
+<td>
+<p>A numeric. Record parameters every 'record' iterations (by default <code>NULL</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose.nmf</code></td>
+<td>
+<p>A boolean. Print per-iteration information for standard NMF (by default FALSE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>record.nmf</code></td>
+<td>
+<p>A numeric. Record parameters every 'record' iterations for standard NMF (by default <code>NULL</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mutation.run</code></td>
+<td>
+<p>A boolean. Assess goodness of solution using reflection test if mutation.run=TRUE (applicable only to analysis of mutation patterns).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>List of objects:
+</p>
+<p><code>C, R, Q</code> Factorization matrices.
+</p>
+<p><code>C.init, R.init, Q.init</code> Initialization matrices for volume-regularized optimization.
+</p>
+<p><code>C.rand, R.rand, Q.rand</code> Random initialization matrices for NMF optimization <code>(w.vol=0)</code>.
+</p>
+<p><code>rec</code> a list of objects that record and store state of matrices each <code>record</code> iterations.
+</p>
+
+
+</div>

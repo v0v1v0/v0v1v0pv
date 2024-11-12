@@ -1,0 +1,160 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dispindmorisita</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Morisita index of intraspecific aggregation</h2>
+
+<h3>Description</h3>
+
+<p>Calculates the Morisita index of dispersion, standardized index values, and the so called clumpedness and uniform indices.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dispindmorisita(x, unique.rm = FALSE, crit = 0.05, na.rm = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>community data matrix, with sites (samples) as rows and
+species as columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>unique.rm</code></td>
+<td>
+<p>logical, if <code>TRUE</code>, unique species (occurring
+in only one sample) are removed from the result.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>crit</code></td>
+<td>
+<p>two-sided p-value used to calculate critical
+Chi-squared values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>logical.
+Should missing values (including <code>NaN</code>) be omitted from the
+calculations?</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Morisita index of dispersion is defined as (Morisita 1959, 1962):
+</p>
+<p><code>Imor = n * (sum(xi^2) - sum(xi)) / (sum(xi)^2 - sum(xi))</code>
+</p>
+<p>where <code class="reqn">xi</code> is the count of individuals in sample <code class="reqn">i</code>, and
+<code class="reqn">n</code> is the number of samples (<code class="reqn">i = 1, 2, \ldots, n</code>).
+<code class="reqn">Imor</code> has values from 0 to <code class="reqn">n</code>. In uniform (hyperdispersed)
+patterns its value falls between 0 and 1, in clumped patterns it falls
+between 1 and <code class="reqn">n</code>. For increasing sample sizes (i.e. joining
+neighbouring quadrats), <code class="reqn">Imor</code> goes to <code class="reqn">n</code> as the
+quadrat size approaches clump size. For random patterns,
+<code class="reqn">Imor = 1</code> and counts in the samples follow Poisson
+frequency distribution.
+</p>
+<p>The deviation from random expectation (null hypothesis)
+can be tested using critical values of the Chi-squared
+distribution with <code class="reqn">n-1</code> degrees of freedom.
+Confidence intervals around 1 can be calculated by the clumped
+<code class="reqn">Mclu</code> and uniform <code class="reqn">Muni</code> indices (Hairston et al. 1971, Krebs
+1999) (Chi2Lower and Chi2Upper refers to e.g. 0.025 and 0.975 quantile
+values of the Chi-squared distribution with <code class="reqn">n-1</code> degrees of
+freedom, respectively, for <code>crit = 0.05</code>):
+</p>
+<p><code>Mclu = (Chi2Lower - n + sum(xi)) / (sum(xi) - 1)</code>
+</p>
+<p><code>Muni = (Chi2Upper - n + sum(xi)) / (sum(xi) - 1)</code>
+</p>
+<p>Smith-Gill (1975) proposed scaling of Morisita index from [0, n]
+interval into [-1, 1], and setting up -0.5 and 0.5 values as
+confidence limits around random distribution with rescaled value 0. To
+rescale the Morisita index, one of the following four equations apply
+to calculate the standardized index <code class="reqn">Imst</code>:
+</p>
+<p>(a) <code>Imor &gt;= Mclu &gt; 1</code>: <code>Imst = 0.5 + 0.5 (Imor - Mclu) / (n - Mclu)</code>,
+</p>
+<p>(b) <code>Mclu &gt; Imor &gt;= 1</code>: <code>Imst = 0.5 (Imor - 1) / (Mclu - 1)</code>,
+</p>
+<p>(c) <code>1 &gt; Imor &gt; Muni</code>: <code>Imst = -0.5 (Imor - 1) / (Muni - 1)</code>,
+</p>
+<p>(d) <code>1 &gt; Muni &gt; Imor</code>: <code>Imst = -0.5 + 0.5 (Imor - Muni) / Muni</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p> Returns a data frame with as many rows as the number of columns
+in the input data, and with four columns. Columns are: <code>imor</code> the
+unstandardized Morisita index, <code>mclu</code> the clumpedness index,
+<code>muni</code> the uniform index, <code>imst</code> the standardized Morisita
+index, <code>pchisq</code> the Chi-squared based probability for the null
+hypothesis of random expectation.
+</p>
+
+
+<h3>Note</h3>
+
+<p> A common error found in several papers is that when standardizing
+as in the case (b), the denominator is given as <code>Muni - 1</code>. This
+results in a hiatus in the [0, 0.5] interval of the standardized
+index. The root of this typo is the book of Krebs (1999), see the Errata
+for the book (Page 217,
+<a href="https://www.zoology.ubc.ca/~krebs/downloads/errors_2nd_printing.pdf">https://www.zoology.ubc.ca/~krebs/downloads/errors_2nd_printing.pdf</a>).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Péter Sólymos, <a href="mailto:solymos@ualberta.ca">solymos@ualberta.ca</a></p>
+
+
+<h3>References</h3>
+
+<p>Morisita, M. 1959. Measuring of the dispersion of individuals and
+analysis of the distributional patterns.  <em>Mem. Fac. Sci. Kyushu
+Univ. Ser. E</em> 2, 215–235.
+</p>
+<p>Morisita, M. 1962. Id-index, a measure of dispersion of individuals.
+<em>Res. Popul. Ecol.</em> 4, 1–7.
+</p>
+<p>Smith-Gill, S. J. 1975. Cytophysiological basis of disruptive pigmentary
+patterns in the leopard frog, <em>Rana pipiens</em>. II.  Wild type and
+mutant cell specific patterns. <em>J. Morphol.</em> 146, 35–54.
+</p>
+<p>Hairston, N. G., Hill, R. and Ritte, U. 1971. The interpretation of
+aggregation patterns. In: Patil, G. P., Pileou, E. C. and Waters,
+W. E. eds. <em>Statistical Ecology 1: Spatial Patterns and Statistical
+Distributions</em>. Penn. State Univ. Press, University Park.
+</p>
+<p>Krebs, C. J. 1999. <em>Ecological Methodology</em>. 2nd ed. Benjamin
+Cummings Publishers.  </p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(dune)
+x &lt;- dispindmorisita(dune)
+x
+y &lt;- dispindmorisita(dune, unique.rm = TRUE)
+y
+dim(x) ## with unique species
+dim(y) ## unique species removed
+</code></pre>
+
+
+</div>

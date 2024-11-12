@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>validateTopic</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create validation tasks for topic model selection</h2>
+
+<h3>Description</h3>
+
+<p>Create validation tasks for topic model selection
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">validateTopic(type, n, text = NULL, vocab, beta, theta = NULL, thres = 20)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Task structures to be specified. Must be one of "WI" (word intrusion),
+"T8WSI" (top 8 word set intrusion), and "R4WSI" (random 4 word set intrusion).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>The number of desired tasks</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text</code></td>
+<td>
+<p>The pool of documents to be shown to the Mturk workers</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vocab</code></td>
+<td>
+<p>A character vector specifying the words in the corpus. Usually, it
+can be found in topic model output.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>A matrix of word probabilities for each topic. Each row represents a
+topic and each column represents a word. Note this should not be in the logged form.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+<p>A matrix of topic proportions. Each row represents a document and each
+clums represents a topic. Must be specified if task = "T8WSI" or "R4WSI".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thres</code></td>
+<td>
+<p>the threshold to draw words from, default to top 50 words.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Users need to fit their own topic models.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix of validation tasks. Each row represents a task and each column
+represents an aspect of a task, including the topic label, the document text (for
+"T8WSI" and "R4WSI"), and five words, including four non-intrusive words and one
+intrusive word.
+</p>
+
+
+</div>

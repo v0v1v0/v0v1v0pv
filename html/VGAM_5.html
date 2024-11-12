@@ -1,0 +1,139 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>AA.Aa.aa</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> The AA-Aa-aa Blood Group System </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the parameter of the
+AA-Aa-aa blood group system,
+with or without Hardy Weinberg equilibrium.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">AA.Aa.aa(linkp = "logitlink", linkf = "logitlink", inbreeding = FALSE,
+         ipA = NULL, ifp = NULL, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>linkp, linkf</code></td>
+<td>
+
+<p>Link functions applied to <code>pA</code> and <code>f</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipA, ifp</code></td>
+<td>
+
+<p>Optional initial values for <code>pA</code> and <code>f</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inbreeding</code></td>
+<td>
+
+<p>Logical. Is there inbreeding?
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This one or two parameter model involves a probability called <code>pA</code>.
+The probability of getting a count in the first column of the
+input (an AA) is <code>pA*pA</code>.
+When <code>inbreeding = TRUE</code>, an additional parameter <code>f</code> is used.
+If <code>inbreeding = FALSE</code> then <code class="reqn">f = 0</code> and Hardy-Weinberg
+Equilibrium (HWE) is assumed.
+The EIM is used if <code>inbreeding = FALSE</code>.
+</p>
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Setting <code>inbreeding = FALSE</code> makes estimation difficult
+with non-intercept-only models.
+Currently, this code seems to work with intercept-only models.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The input can be a 3-column matrix of counts, where the columns
+are AA, Ab and aa
+(in order).
+Alternatively, the input can be a 3-column matrix of
+proportions (so each row adds to 1) and the <code>weights</code>
+argument is used to specify the total number of counts for each row.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Weir, B. S. (1996).
+<em>Genetic Data Analysis II: Methods for Discrete Population
+Genetic Data</em>,
+Sunderland, MA: Sinauer Associates, Inc.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>AB.Ab.aB.ab</code>,
+<code>ABO</code>,
+<code>A1A2A3</code>,
+<code>MNSs</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">y &lt;- cbind(53, 95, 38)
+fit1 &lt;- vglm(y ~ 1, AA.Aa.aa, trace = TRUE)
+fit2 &lt;- vglm(y ~ 1, AA.Aa.aa(inbreeding = TRUE), trace = TRUE)
+rbind(y, sum(y) * fitted(fit1))
+Coef(fit1)  # Estimated pA
+Coef(fit2)  # Estimated pA and f
+summary(fit1)
+</code></pre>
+
+
+</div>

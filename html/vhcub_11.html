@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RCDI.values</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Relative Codon Deoptimization Index (RCDI)</h2>
+
+<h3>Description</h3>
+
+<p>Measure the Relative Codon Deoptimization Index (RCDI) of DNA sequence.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RCDI.values(fasta.virus, fasta.host, enc.host, set.len= 5)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fasta.virus</code></td>
+<td>
+<p>a data frame with virus seq_name and its DNA sequence.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fasta.host</code></td>
+<td>
+<p>a data frame with host seq_name and its DNA sequence.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>enc.host</code></td>
+<td>
+<p>a data frame of a hosts' ENc values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>set.len</code></td>
+<td>
+<p>a number represents a percent that will be used as reference genes from the total host genes.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For more information about RCDI <a href="https://bmcresnotes.biomedcentral.com/articles/10.1186/1756-0500-3-87">Puigbò et al., 2010</a>
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data.frame containing the computed ENc values for each DNA sequences within df.fasta.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ali Mostafa Anwar <a href="mailto:ali.mo.anwar@std.agr.cu.edu.eg">ali.mo.anwar@std.agr.cu.edu.eg</a> and Mohmed Soudy <a href="mailto:MohmedSoudy2009@gmail.com">MohmedSoudy2009@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+# read DNA from fasta file
+fasta &lt;- fasta.read("virus.fasta", "host.fasta")
+fasta.v &lt;- fasta[[1]]
+fasta.h &lt;- fasta[[2]]
+
+# Calculate RCDI
+
+enc.df.host &lt;- ENc.values(fasta.h)
+
+
+rcdi.df &lt;- RCDI.values(fasta.v, fasta.h, enc.df.host)
+
+</code></pre>
+
+
+</div>

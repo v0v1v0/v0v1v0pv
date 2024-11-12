@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>indicator</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Define indicators for data</h2>
+
+<h3>Description</h3>
+
+<p>An indicator maps a data frame, or each record in a data frame to a number.
+The purpose of this class is to store and apply expressions that define
+indicators.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">indicator(..., .file, .data)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>A comma-separated list of indicator definitions</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.file</code></td>
+<td>
+<p>(optional) A character vector of file locations</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><code>syntax</code>, <code>add_indicators</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># create an indicator for the number of missing x in data set
+
+
+I &lt;- indicator( 
+ sum(is.na(.))               # number of missing variables
+ , sum(is.na(.[c("x","y")])) # number of missing x and y
+ , mean(is.na(.))            # fraction of missing variables
+ , sum(x)
+ , mean(x)
+) 
+
+dat &lt;- data.frame(x=1:2, y=c(NA,1))
+C &lt;- confront(dat, I)
+values(C)
+</code></pre>
+
+
+</div>

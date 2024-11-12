@@ -1,0 +1,107 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>downloadPBDB</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Download Occurrences from the Paleobiology Database</h2>
+
+<h3>Description</h3>
+
+<p>Downloads a data frame of Paleobiology Database fossil occurrences.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">downloadPBDB(Taxa, StartInterval = "Pliocene",
+  StopInterval = "Pleistocene")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Taxa</code></td>
+<td>
+<p>a character vector</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>StartInterval</code></td>
+<td>
+<p>a character vector</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>StopInterval</code></td>
+<td>
+<p>a character vector</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Downloads a data frame of Paleobiology Database fossil occurrences matching certain taxonomic groups and age range. This is simply a convenience function for rapid data download, and only returns the most generically useful fields. Go directly to the Paleobiology Database to make more complex searches or access additional fields. This function makes use of the RCurl package.
+</p>
+
+<ul>
+<li>
+<p>ocurrence_no: The Paleobiology Database occurrence number.
+</p>
+</li>
+<li>
+<p>collection_no: The Paleobiology Database collection number.
+</p>
+</li>
+<li>
+<p>reference_no: The Paleobiology Database reference number.
+</p>
+</li>
+<li>
+<p>Classifications: The stated Linnean classification of the occurence from phylum through genus. See <code>cleanTaxonomy</code> for how to simplify these fields.
+</p>
+</li>
+<li>
+<p>accepted_name: The highest resolution taxonomic name assigned to the occurrence.
+</p>
+</li>
+<li>
+<p>Geologic Intervals: The earliest possible age of the occurrence and latest possible age of the occurrence, expressed in terms of geologic intervals. See <code>constrainAge</code> for how to simplify these fields.
+</p>
+</li>
+<li>
+<p>Numeric Ages: The earliest possible age of the occurrence and latest possible age of the occurrence, expressed as millions of years ago.
+</p>
+</li>
+<li>
+<p>Geolocation: Both present-day and rotated paleocoordinates of the occurrence. The geoplate id used by the rotation model is also included. The key for geoplate ids can be found in the Paleobiology Database API documentation.
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>a data frame
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andrew A. Zaffos
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Download a test dataset of Ypresian bivalves.
+# DataPBDB&lt;-downloadPBDB(Taxa="Bivalvia",StartInterval="Ypresian",StopInterval="Ypresian")
+
+# Download a test dataset of Ordovician-Silurian trilobites and brachiopods.
+# DataPBDB&lt;-downloadPBDB(c("Trilobita","Brachiopoda"),"Ordovician","Silurian")
+
+</code></pre>
+
+
+</div>

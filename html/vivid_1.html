@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>as.data.frame.vivid</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>as.data.frame.vivid</h2>
+
+<h3>Description</h3>
+
+<p>Takes a matrix of class <code>vivid</code> and turn it into a data frame
+containing variable names, Vimp and Vint values, and the row and column index from the original
+matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vivid'
+as.data.frame(x, row.names = NULL, optional = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A matrix of class 'vivid' to be converted to a data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>row.names</code></td>
+<td>
+<p>NULL or a character vector giving the row names for the data frame. Missing values are not allowed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optional</code></td>
+<td>
+<p>Logical. If TRUE, setting row names and converting column names (to syntactic names: see
+make.names) is optional. Note that all of R's base package as.data.frame() methods use optional
+only for column names treatment, basically with the meaning of data.frame(*, check.names = !optional). See also the make.names argument of the matrix method.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed to or from methods.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame of Vimp and Vint values and their index from the vivid matrix.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> 
+library(ranger)
+aq &lt;- na.omit(airquality)
+aq &lt;- aq[1:20,]# for speed
+rF &lt;- ranger(Ozone ~ ., data = aq, importance = "permutation")
+myMat &lt;- vivi(fit = rF, data = aq, response = "Ozone")
+myDf &lt;- as.data.frame(myMat)
+myDf
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>waldff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Wald Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the parameter of the standard Wald distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">waldff(llambda = "loglink", ilambda = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>llambda,ilambda</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The standard Wald distribution is a special case of the
+inverse Gaussian distribution with <code class="reqn">\mu=1</code>.
+It has a density that can be written as
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\lambda) = \sqrt{\lambda/(2\pi y^3)}
+       \; \exp\left(-\lambda (y-1)^2/(2 y)\right)</code>
+</p>
+
+<p>where <code class="reqn">y&gt;0</code> and <code class="reqn">\lambda&gt;0</code>.
+The mean of <code class="reqn">Y</code> is <code class="reqn">1</code>
+(returned as the fitted values) and its variance is
+<code class="reqn">1/\lambda</code>.
+By default, <code class="reqn">\eta=\log(\lambda)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The <span class="pkg">VGAM</span> family function <code>inv.gaussianff</code>
+estimates the location parameter <code class="reqn">\mu</code> too.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Johnson, N. L. and Kotz, S. and Balakrishnan, N. (1994).
+<em>Continuous Univariate Distributions</em>,
+2nd edition,
+Volume 1,
+New York: Wiley.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>inv.gaussianff</code>,
+<code>rinv.gaussian</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">wdata &lt;- data.frame(y = rinv.gaussian(1000, mu =  1, exp(1)))
+wfit &lt;- vglm(y ~ 1, waldff(ilambda = 0.2), wdata, trace = TRUE)
+coef(wfit, matrix = TRUE)
+Coef(wfit)
+summary(wfit)
+</code></pre>
+
+
+</div>

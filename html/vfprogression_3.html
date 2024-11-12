@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotTdProbabilities</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Value plotting function for 24-2 or 30-2 visual field measurement:</h2>
+
+<h3>Description</h3>
+
+<p><code>plotTdProbabilities</code> plots the following 24-2 or 30-2 visual field measurement: TD probs, and PD probs:
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotTdProbabilities(tdprob, cex = 2, rectangle.color = "black",
+  rectangle.width = 0.16, margins = c(2, 1, 2, 2) + 0.1, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>tdprob</code></td>
+<td>
+<p>a vector contains TD probs/PD probs measurement. For 24-2 VF <code>tdprob</code> should have 52 or 54 elements. For 30-2 VF, <code>tdprob</code> should have 74 or 76 elements.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex</code></td>
+<td>
+<p>a numeric variable for label size (default: 2).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rectangle.color</code></td>
+<td>
+<p>a string variable defines label color (default: 'black').</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rectangle.width</code></td>
+<td>
+<p>a numeric variable defines label width (default: '0.16').</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>margins</code></td>
+<td>
+<p>a vector define the plot margins (default: c(2, 1, 2, 2)+0.1).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other variables to be added.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>value plot for TD prob and PD prob input.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vfseries)
+tdprob = t(vfseries[1, grepl('^tdp[0-9]+', colnames(vfseries))])
+plotTdProbabilities(tdprob)
+title(main = "Total Deviation Probability", line = 3)
+tdprob = t(vfseries[1, grepl('^pdp[0-9]+', colnames(vfseries))])
+plotTdProbabilities(tdprob)
+title(main = "Pattern Deviation Probability", line = 3)
+</code></pre>
+
+
+</div>

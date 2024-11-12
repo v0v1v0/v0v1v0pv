@@ -1,0 +1,132 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>barplot,validatorComparison-method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Barplot of validatorComparison object</h2>
+
+<h3>Description</h3>
+
+<p>The performance of versions of a data set with regard to rule-based quality
+requirements can be compared using using <code>compare</code>. The result is a
+<code>validatorComparison</code> object. This method creates a stacked bar plot of
+the results.  See also <code>plot,validatorComparison-method</code> for a line
+chart.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'validatorComparison'
+barplot(
+  height,
+  las = 1,
+  cex.axis = 0.8,
+  cex.legend = cex.axis,
+  wrap = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p>object of class <code>validatorComparison</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>las</code></td>
+<td>
+<p>[<code>numeric</code>] in <code>{0,1,2,3}</code> determining axis label rotation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex.axis</code></td>
+<td>
+<p>[<code>numeric</code>] Magnification with respect to the current
+setting of <code>cex</code> for axis annotation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex.legend</code></td>
+<td>
+<p>[<code>numeric</code>] Magnification with respect to the current
+setting of <code>cex</code> for legend annotation and title.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wrap</code></td>
+<td>
+<p>[<code>logical</code>] Toggle wrapping of x-axis labels when their width
+exceeds the width of the column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Graphical parameters passed to <code>barplot.default</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>Before plotting, underscores (<code>_</code>) and dots (<code>.</code>) in x-axis labels
+are replaced with spaces.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other comparing: 
+<code>as.data.frame,cellComparison-method</code>,
+<code>as.data.frame,validatorComparison-method</code>,
+<code>barplot,cellComparison-method</code>,
+<code>cells()</code>,
+<code>compare()</code>,
+<code>match_cells()</code>,
+<code>plot,cellComparison-method</code>,
+<code>plot,validatorComparison-method</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(retailers)
+
+rules &lt;- validator(turnover &gt;=0, staff&gt;=0, other.rev&gt;=0)
+
+# start with raw data
+step0 &lt;- retailers
+
+# impute turnovers
+step1 &lt;- step0
+step1$turnover[is.na(step1$turnover)] &lt;- mean(step1$turnover,na.rm=TRUE)
+
+# flip sign of negative revenues
+step2 &lt;- step1
+step2$other.rev &lt;- abs(step2$other.rev)
+  
+# create an overview of differences, comparing to the previous step
+compare(rules, raw = step0, imputed = step1, flipped = step2, how="sequential")
+
+# create an overview of differences compared to raw data
+out &lt;- compare(rules, raw = step0, imputed = step1, flipped = step2)
+out
+
+# graphical overview
+plot(out)
+barplot(out)
+
+# transform data to data.frame (easy for use with ggplot)
+as.data.frame(out)
+
+
+</code></pre>
+
+
+</div>

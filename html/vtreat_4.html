@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>as_rquery_plan</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Convert vtreatment plans into a sequence of rquery operations.</h2>
+
+<h3>Description</h3>
+
+<p>Convert vtreatment plans into a sequence of rquery operations.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">as_rquery_plan(treatmentplans, ..., var_restriction = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>treatmentplans</code></td>
+<td>
+<p>vtreat treatment plan or list of vtreat treatment plan sharing same outcome and outcome type.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>not used, force any later arguments to bind to names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var_restriction</code></td>
+<td>
+<p>character, if not null restrict to producing these variables.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>list(optree_generator (ordered list of functions), temp_tables (named list of tables))
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rquery_prepare</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+if(requireNamespace("rquery", quietly = TRUE)) {
+   dTrainC &lt;- data.frame(x= c('a', 'a', 'a', 'b' ,NA , 'b'),
+                         z= c(1, 2, NA, 4, 5, 6),
+                         y= c(FALSE, FALSE, TRUE, FALSE, TRUE, TRUE),
+                         stringsAsFactors = FALSE)
+   dTrainC$id &lt;- seq_len(nrow(dTrainC))
+   treatmentsC &lt;- designTreatmentsC(dTrainC, c("x", "z"), 'y', TRUE)
+   print(prepare(treatmentsC, dTrainC))
+   rqplan &lt;- as_rquery_plan(list(treatmentsC))
+   ops &lt;- flatten_fn_list(rquery::local_td(dTrainC), rqplan$optree_generators)
+   cat(format(ops))
+   if(requireNamespace("rqdatatable", quietly = TRUE)) {
+      treated &lt;- rqdatatable::ex_data_table(ops, tables = rqplan$tables)
+      print(treated[])
+   }
+   if(requireNamespace("DBI", quietly = TRUE) &amp;&amp;
+      requireNamespace("RSQLite", quietly = TRUE)) {
+      db &lt;- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+      source_data &lt;- rquery::rq_copy_to(db, "dTrainC", dTrainC,
+                               overwrite = TRUE, temporary = TRUE)
+
+      rest &lt;- rquery_prepare(db, rqplan, source_data, "dTreatedC", 
+                                  extracols = "id")
+      resd &lt;- DBI::dbReadTable(db, rest$table_name)
+      print(resd)
+
+      rquery::rq_remove_table(db, source_data$table_name)
+      rquery::rq_remove_table(db, rest$table_name)
+      DBI::dbDisconnect(db)
+   }
+}
+
+</code></pre>
+
+
+</div>

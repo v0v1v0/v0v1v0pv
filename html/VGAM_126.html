@@ -1,0 +1,149 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>borel.tanner</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Borel-Tanner Distribution Family Function</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the parameter of a Borel-Tanner distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">borel.tanner(Qsize = 1, link = "logitlink", imethod = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Qsize</code></td>
+<td>
+
+<p>A positive integer.
+It is called <code class="reqn">Q</code> below and is the initial queue size.
+The default value <code class="reqn">Q = 1</code> corresponds to the Borel
+distribution.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function for the parameter;
+see <code>Links</code> for more choices and for general
+information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+Valid values are 1, 2, 3 or 4.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Borel-Tanner distribution (Tanner, 1953) describes the
+distribution of the total number of customers served before a
+queue vanishes given a single queue with random arrival times
+of customers (at a constant rate <code class="reqn">r</code> per unit time, and
+each customer taking a constant time <code class="reqn">b</code> to be served).
+Initially the queue has <code class="reqn">Q</code> people and the first one starts
+to be served.
+The two parameters appear in the density only in the form of the
+product <code class="reqn">rb</code>, therefore we use <code class="reqn">a=rb</code>, say, to denote
+the single parameter to be estimated.  The density function is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;a) =
+  \frac{ Q }{(y-Q)!} y^{y-Q-1} a^{y-Q}  \exp(-ay)
+  </code>
+</p>
+
+<p>where <code class="reqn">y=Q,Q+1,Q+2,\ldots</code>.
+The case <code class="reqn">Q=1</code> corresponds to the <em>Borel</em> distribution
+(Borel, 1942).
+For the <code class="reqn">Q=1</code> case it is necessary for <code class="reqn">0 &lt; a &lt; 1</code> for the
+distribution to be proper.
+The Borel distribution is a basic Lagrangian distribution of the
+first kind.
+The Borel-Tanner distribution is an <code class="reqn">Q</code>-fold convolution of the
+Borel distribution.
+</p>
+<p>The mean is <code class="reqn">Q/(1-a)</code> (returned as the fitted values) and the
+variance is <code class="reqn">Q a / (1-a)^3</code>.
+The distribution has a very long tail unless <code class="reqn">a</code> is small.
+Fisher scoring is implemented.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Tanner, J. C. (1953).
+A problem of interference between two queues.
+<em>Biometrika</em>, <b>40</b>, 58–69.
+</p>
+<p>Borel, E. (1942).
+Sur l'emploi du theoreme de Bernoulli pour faciliter le
+calcul d'une infinite de coefficients.
+Application au probleme de l'attente a un guichet.
+<em>Comptes Rendus, Academie des Sciences, Paris, Series A</em>,
+<b>214</b>, 452–456.
+</p>
+<p>Johnson N. L., Kemp, A. W. and Kotz S. (2005).
+<em>Univariate Discrete Distributions</em>,
+3rd edition,
+p.328.
+Hoboken, New Jersey: Wiley.
+</p>
+<p>Consul, P. C. and Famoye, F. (2006).
+<em>Lagrangian Probability Distributions</em>,
+Boston, MA, USA: Birkhauser.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rbort</code>,
+<code>poissonff</code>,
+<code>felix</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">bdata &lt;- data.frame(y = rbort(n &lt;- 200))
+fit &lt;- vglm(y ~ 1, borel.tanner, bdata, trace = TRUE, crit = "c")
+coef(fit, matrix = TRUE)
+Coef(fit)
+summary(fit)
+</code></pre>
+
+
+</div>

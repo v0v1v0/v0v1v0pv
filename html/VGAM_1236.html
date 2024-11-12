@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predictqrrvglm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Predict Method for a CQO fit </h2>
+
+<h3>Description</h3>
+
+<p>Predicted values based on a constrained quadratic ordination (CQO)
+object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">predictqrrvglm(object, newdata = NULL,
+    type = c("link", "response", "latvar", "terms"),
+    se.fit = FALSE, deriv = 0, dispersion = NULL,
+    extra = object@extra, varI.latvar = FALSE, refResponse = NULL, ...)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p> Object of class inheriting from <code>"qrrvglm"</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+
+<p>An optional data frame in which to look for variables with which
+to predict. If omitted, the fitted linear predictors are used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type, se.fit, dispersion, extra</code></td>
+<td>
+
+<p>See <code>predictvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>deriv</code></td>
+<td>
+<p> Derivative. Currently only 0 is handled. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varI.latvar, refResponse</code></td>
+<td>
+
+<p>Arguments passed into <code>Coef.qrrvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Currently undocumented. </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Obtains predictions
+from a fitted CQO object.
+Currently there are lots of limitations of this function; it is
+unfinished.
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>See <code>predictvglm</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is not robust and has not been checked fully.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2004).
+A new technique for maximum-likelihood
+canonical Gaussian ordination.
+<em>Ecological Monographs</em>,
+<b>74</b>, 685–701.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>cqo</code>,
+<code>calibrate.qrrvglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  set.seed(1234)
+hspider[, 1:6] &lt;- scale(hspider[, 1:6])  # Standardize the X vars
+p1 &lt;- cqo(cbind(Alopacce, Alopcune, Alopfabr, Arctlute,
+                Arctperi, Auloalbi, Pardlugu, Pardmont,
+                Pardnigr, Pardpull, Trocterr, Zoraspin) ~
+          WaterCon + BareSand + FallTwig + CoveMoss + CoveHerb + ReflLux,
+          poissonff, data = hspider, Crow1positive = FALSE, I.toler = TRUE)
+sort(deviance(p1, history = TRUE))  # A history of all the iterations
+head(predict(p1))
+
+# The following should be all 0s:
+max(abs(predict(p1, newdata = head(hspider)) - head(predict(p1))))
+max(abs(predict(p1, newdata = head(hspider), type = "res")-head(fitted(p1))))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

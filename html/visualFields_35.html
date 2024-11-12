@@ -1,0 +1,353 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>nvgenerate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Normative values generation and management</h2>
+
+<h3>Description</h3>
+
+<p>Functions to generate and handle normative values. Check section
+<code>Structure of normative values</code> below for details about how to generate
+functioning normative values
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">nvgenerate(
+  vf,
+  method = "pointwise",
+  probs = c(0, 0.005, 0.01, 0.02, 0.05, 0.95, 0.98, 0.99, 0.995, 1),
+  name = "",
+  perimetry = "static automated perimetry",
+  strategy = "",
+  size = "",
+  agem = agelm(vf),
+  tdfun = tddef(agem),
+  ghfun = ghdef(0.85),
+  pdfun = pddef(ghfun)
+)
+
+agelm(vf)
+
+tddef(agem)
+
+ghdef(perc = 0.85)
+
+pddef(ghfun = ghdef(0.85))
+
+lutdef(vf, probs, type = "quantile", ...)
+
+gdef(agem, sdtd, sdpd)
+
+lutgdef(g, probs, type = "quantile", ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vf</code></td>
+<td>
+<p>visual field data with sensitivity values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>method to generate normative values, pointwise ('<code>pointwise</code>')
+or smoothed with 2-dimensional quadratic functions ('<code>smooth</code>')</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>probs</code></td>
+<td>
+<p>numeric vector of probabilities with values in <code>[0,1]</code>.
+The values 0 and 1 must be included</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>name for the normative values, e.g., "SUNY-IU pointwise NVs".
+Default is blank</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>perimetry</code></td>
+<td>
+<p>perimetry used to obtain normative data, e.g.,
+"static automated perimetry" (default)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>strategy</code></td>
+<td>
+<p>psychophysical strategy used to obtain threshold values, e.g.,
+"SITA standard". Default is blank</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size</code></td>
+<td>
+<p>stimulus size, if the same size was used for all visual field
+locations or empty (default)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>agem</code></td>
+<td>
+<p>age model to construct the function to obtain TD values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tdfun</code></td>
+<td>
+<p>Function for the calculation of total deviation maps</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ghfun</code></td>
+<td>
+<p>function used for determination of the GH and PD values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pdfun</code></td>
+<td>
+<p>Function for the calculation of pattern deviation maps</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>perc</code></td>
+<td>
+<p>the percentile to obtain the ranked TD value as
+reference for the general height (GH) of the visual field.
+Default is the 85th percentile, thus <code>0.85</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>type of estimation for the weighted quantile values. See
+<code>wtd.quantile</code> for details. Default is '<code>quantile</code>'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be passed to or from methods</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sdtd</code></td>
+<td>
+<p>standard deviations obtained for TD values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sdpd</code></td>
+<td>
+<p>standard deviations obtained for PD values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>a table with global indices</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>nvgenerate</code> returns a list with normative values
+</p>
+<p><code>agelm</code> returns a list with coefficients and a function defining
+a linear age model
+</p>
+<p><code>tddef</code> returns a function for the computation of TD values
+</p>
+<p><code>ghdef</code> returns a function for the computation of the general height
+</p>
+<p><code>pddef</code> returns a function for the computation of PD values
+</p>
+<p><code>lutdef</code> returns a look up table and a function for the
+computation of the probability values for TD and PD
+</p>
+<p><code>gdef</code> returns a function to compute global indices
+</p>
+<p><code>lutgdef</code> returns a look up table and a function for the
+computation of the probability values for global indices
+</p>
+
+
+<h3>Structure of normative values</h3>
+
+<p>This is one of the most complex structures in visualFields. It is necessary
+to be able to run statistical analyses of visual fields obtained from
+perimetry and it requires data from healthy eyes for its generation. The
+normative values are only as good as the data they are generated from. Two
+common ways to generate full normative values from a dataset of healthy eyes,
+are provided in the package, depending on the <code>method</code> selected. The first
+one, <code>method="pointwise"</code>, generates normative values directly from
+pointwise statistics. The second one, <code>method="smooth"</code>, uses a 2D
+quadratic functions to smooth out those pointwise statistics. Variations
+or improvements can be regenerated by copying the code in those functions and
+editing it.
+</p>
+
+<ul>
+<li>
+<p><code>info</code> information regarding normative values. Info is not necessary
+to carry out statistics, but is useful for the generation of reports. The
+fields need not be the same as the ones listed here, although these are used
+in the reports in <code>vfsfa</code> for single field analysis and
+<code>vfspa</code> for series progression analysis.
+</p>
+
+<ul>
+<li>
+<p><code>name</code> name of the normative values
+</p>
+</li>
+<li>
+<p><code>perimetry</code> perimetry device for which normative values are intended
+</p>
+</li>
+<li>
+<p><code>strategy</code> psychophysical strategy
+</p>
+</li>
+<li>
+<p><code>size</code> stimulus size, e.g. Goldmann size III, size V
+</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>agem</code> The normative values' age model. The default methods' generate
+age linear models with coefficients for each location in <code>locmap</code> in
+<code>coeff</code> and the function definining the model in <code>model</code>
+</p>
+</li>
+<li>
+<p><code>sd</code> standard deviations of the sensitivities, <code>s</code>, total
+deviation (TD) values, <code>td</code>, and pattern deviation (PD) values, <code>pd</code>
+</p>
+</li>
+<li>
+<p><code>luts</code> Lookup tables to obtain probability levels for TD and PD values.
+</p>
+
+<ul>
+<li>
+<p><code>probs</code> probability levels
+</p>
+</li>
+<li>
+<p><code>td</code>, <code>pd</code> lookup tables for TD and PD values at each location
+in <code>locmaps</code>
+</p>
+</li>
+<li>
+<p><code>global</code> lookup table for the following global visual field indices
+</p>
+
+<ul>
+<li>
+<p><code>ms</code> mean sensitivity (MS) calculated as the unweithed average
+over locations' values
+</p>
+</li>
+<li>
+<p><code>ss</code> standard deviation of sensitivity calculated as the
+unweithed standard deviation over locations' values
+</p>
+</li>
+<li>
+<p><code>md</code> mean deviation (MD) calculated as the weithed average
+over locations' values. Weights are the inverse of the standard
+deviation in <code>sd</code> for TD at each location.
+</p>
+</li>
+<li>
+<p><code>sd</code> standard deviation of total deviation calculated as the
+weithed standard deviation over locations' values. Weights are the inverse of the standard
+deviation in <code>sd</code> for TD at each location.
+</p>
+</li>
+<li>
+<p><code>pmd</code> pattern mean deviation calculated as the weithed average
+over locations' values. Weights are the inverse of the standard
+deviation in <code>sd</code> for PD at each location.
+</p>
+</li>
+<li>
+<p><code>psd</code> pattern standard deviation calculated as the weithed
+standard deviation over locations' values. Weights are the inverse
+of the standard deviation in <code>sd</code> for PD at each location.
+</p>
+</li>
+<li>
+<p><code>gh</code> general height. This is defined traditionally for the 24-2
+and the 30-2 as the approximatelly the 85th percentile of TD values
+</p>
+</li>
+<li>
+<p><code>vfi</code> the oddly defined visual field index
+</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>tdfun</code> a function defining how to obtain the TD values. Typically, it
+is a function of age and sensitivity values and it is defined as sensitivity
+values minus the age-corrected mean normal obtained as defined in <code>agem</code>.
+Thus, TD values are negative is visual field sensitivity values are below
+mean normal and positive if they are above mean normal
+</p>
+</li>
+<li>
+<p><code>ghfun</code> a function defining how to obtain the general height
+</p>
+</li>
+<li>
+<p><code>pdfun</code> a function defining how to obtain the PD values. Tipically, they
+are obtaines as the TD values minus the general height
+</p>
+</li>
+<li>
+<p><code>glfun</code> a function defining how to obtain different global indices
+</p>
+</li>
+<li>
+<p><code>tdpfun</code>, <code>pdpfun</code>, <code>glpfun</code> mapping functions to get
+the probability levels corresponding to TD, PD and global indices values and
+based on the lookup tables defined in <code>luts</code>
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># generate normative values from SUNY-IU dataset of healthy eyes
+# pointwise
+sunyiu_24d2_pw &lt;- nvgenerate(vfctrSunyiu24d2, method = "pointwise",
+                             name      = "SUNY-IU pointwise NVs",
+                             perimetry = "static automated perimetry",
+                             strategy  = "SITA standard",
+                             size      = "Size III")
+# smooth
+sunyiu_24d2 &lt;- nvgenerate(vfctrSunyiu24d2, method = "smooth",
+                          name      = "SUNY-IU smoothed NVs",
+                          perimetry = "static automated perimetry",
+                          strategy  = "SITA standard",
+                          size      = "Size III")
+</code></pre>
+
+
+</div>

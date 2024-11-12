@@ -1,0 +1,106 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dowdall_method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Dowdall Method</h2>
+
+<h3>Description</h3>
+
+<p>This is an alternative Borda method. Voters are required 
+to assign preference scores to every candidate and one 
+score value cannot be shared by two or more candidates. 
+For a voter, his 1st choice gets 1, his 2nd choice gets 
+1/2, his 3rd choice gets 1/3... The candidate who gets 
+the most points wins. For the function 
+<code>dowdall_method</code>, ranks, rather than true 
+values, are used. So 1, 3, 5 are ranked as 1, 2, 3, and the 
+scores are 1/1, 1/2, 1/3.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dowdall_method(x, stop = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class <code>vote</code>. The ballots in 
+the object should not have duplicated values and NAs.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stop</code></td>
+<td>
+<p>default is FALSE, when ballots do have 
+duplicated values or NAs, error will not be raised, but 
+the winner will be NULL. If TRUE, an error will be raised.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list object.
+</p>
+
+<ul>
+<li>
+<p> (1) <code>call</code> the function call.
+</p>
+</li>
+<li>
+<p> (2) <code>method</code> the counting method.
+</p>
+</li>
+<li>
+<p> (3) <code>candidate</code> candidate names.
+</p>
+</li>
+<li>
+<p> (4) <code>candidate_num</code> number of candidate.
+</p>
+</li>
+<li>
+<p> (5) <code>ballot_num</code> number of ballots in x.
+</p>
+</li>
+<li>
+<p> (6) <code>valid_ballot_num</code> number of ballots that are 
+used to compute the result.
+</p>
+</li>
+<li>
+<p> (7) <code>winner</code> the winners.
+</p>
+</li>
+<li>
+<p> (8) <code>other_info</code> total scores.
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+
+<ul><li>
+<p> https://en.wikipedia.org/wiki/Borda_count
+</p>
+</li></ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">raw &lt;- list2ballot(string = 
+    c("51: a&gt;c&gt;b&gt;d", "5: c&gt;b&gt;d&gt;a", "23: b&gt;c&gt;d&gt;a", "21: d&gt;c&gt;b&gt;a")
+)
+vote &lt;- create_vote(raw, xtype = 3, candidate = c("a", "b", "c", "d"))
+y1 &lt;- borda_method(vote) # winner is c
+y2 &lt;- dowdall_method(vote) # winner is a
+</code></pre>
+
+
+</div>

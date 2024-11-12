@@ -1,0 +1,290 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>table.stats</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Verification statistics for a 2 by 2  Contingency Table </h2>
+
+<h3>Description</h3>
+
+<p>Provides a variety of statistics for a data
+summarized in a 2 by 2 contingency table. </p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">       	table.stats(obs, pred, fudge = 0.01, silent = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p> Either a vector of contingency table counts, a vector of binary observations, or a 2 by 2 matrix in the form of a contingency table. (See note below.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred</code></td>
+<td>
+<p>Either null or a vector of binary forecasts. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fudge</code></td>
+<td>
+<p>A numeric fudge factor to be added to each cell of the contingency table in order to avoid division by zero.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>silent</code></td>
+<td>
+<p>Should warning statements be surpressed.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>tab.out</code></td>
+<td>
+<p> Contingency table</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>TS</code></td>
+<td>
+<p>Threat score a.k.a. Critical success index (CSI) </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>TS.se</code></td>
+<td>
+<p>Standard Error for TS</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>POD</code></td>
+<td>
+<p>Hit Rate aka probability of detection</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>POD.se</code></td>
+<td>
+<p>Standard Error for POD</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M</code></td>
+<td>
+<p>Miss rate</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>F</code></td>
+<td>
+<p>False Alarm RATE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>F.se</code></td>
+<td>
+<p>Standard Error for F</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>FAR</code></td>
+<td>
+<p>False Alarm RATIO</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>FAR.se</code></td>
+<td>
+<p>Standard Error for FAR</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>HSS</code></td>
+<td>
+<p>Heidke Skill Score</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>HSS.se</code></td>
+<td>
+<p>Standard Error for HSS</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PSS</code></td>
+<td>
+<p>Peirce Skill Score</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PSS.se</code></td>
+<td>
+<p>Standard Error for PSS</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>KSS</code></td>
+<td>
+<p>Kuiper's Skill Score </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PC</code></td>
+<td>
+<p>Percent correct - events along the diagonal.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PC.se</code></td>
+<td>
+<p>Standard Error for PC</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BIAS</code></td>
+<td>
+<p>Bias</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ETS</code></td>
+<td>
+<p>Equitable Threat Score</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ETS.se</code></td>
+<td>
+<p>Standard Error for ETS</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+<p>Odds Ratio</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log.theta</code></td>
+<td>
+<p>Log Odds Ratio</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LOR.se</code></td>
+<td>
+<p>Standard Error for Log Odds Ratio</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.h</code></td>
+<td>
+<p>Degrees of freedom for log.theta</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>orss</code></td>
+<td>
+<p>Odds ratio skill score, aka Yules's Q</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ORSS.se</code></td>
+<td>
+<p>Standard Error for Odds ratio skill score</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eds</code></td>
+<td>
+<p>Extreme Dependency Score</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>esd.se</code></td>
+<td>
+<p>Standard Error for EDS</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seds</code></td>
+<td>
+<p>Symmetric Extreme Dependency Score</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seds.se</code></td>
+<td>
+<p>Standard Error for Symmetric Extreme Dependency Score</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>EDI</code></td>
+<td>
+<p>Extreme Dependency Index</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>EDI.se</code></td>
+<td>
+<p>Standard Error for EDI</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SEDI</code></td>
+<td>
+<p>Symmetric EDI</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SEDI.se</code></td>
+<td>
+<p>Standard Error for SEDI</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>Initially, table.stats was an internal function used by verify for binary events and multi.cont for categorical events. But occassionally, it is nice to use it directly.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich</p>
+
+
+<h3>References</h3>
+
+ 
+<p>Jolliffe, I.T. and D.B. Stephenson (2003). Forecast verification: a practitioner's guide in atmospheric science. John Wiley and Sons.  See chapter 3 concerning categorical events. 
+</p>
+<p>Stephenson, D.B. (2000).  "Use of 'Odds Ratio for Diagnosing Forecast Skill." <em>Weather and Forecasting</em> <b>15</b> 221-232.  
+</p>
+<p>Hogan, R.J., O'Connor E.J. and Illingworth, 2009.  "Verification of cloud-fraction forecasts." <em>Q.J.R. Meteorol. Soc.</em> <b>135</b>, 1494-1511.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>verify</code> and <code>multi.cont</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">DAT&lt;- matrix(c(28, 23, 72, 2680 ), ncol = 2) ## Finley
+table.stats(DAT)
+</code></pre>
+
+
+</div>

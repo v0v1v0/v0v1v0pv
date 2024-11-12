@@ -1,0 +1,158 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vis_miss</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualise a data.frame to display missingness.</h2>
+
+<h3>Description</h3>
+
+<p><code>vis_miss</code> provides an at-a-glance ggplot of the missingness inside a
+dataframe, colouring cells according to missingness, where black indicates
+a missing cell and grey indicates a present cell. As it returns a ggplot
+object, it is very easy to customize and change labels.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vis_miss(
+  x,
+  cluster = FALSE,
+  sort_miss = FALSE,
+  show_perc = TRUE,
+  show_perc_col = TRUE,
+  large_data_size = 9e+05,
+  warn_large_data = TRUE,
+  facet
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a data.frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cluster</code></td>
+<td>
+<p>logical. TRUE specifies that you want to use hierarchical
+clustering (mcquitty method) to arrange rows according to missingness.
+FALSE specifies that you want to leave it as is. Default value is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sort_miss</code></td>
+<td>
+<p>logical. TRUE arranges the columns in order of missingness.
+Default value is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show_perc</code></td>
+<td>
+<p>logical. TRUE now adds in the \
+in the whole dataset into the legend. Default value is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show_perc_col</code></td>
+<td>
+<p>logical. TRUE adds in the \
+column into the x axis. Can be disabled with FALSE. Default value is TRUE.
+No missingness percentage column information will be presented when <code>facet</code>
+argument is used. Please see the <code>naniar</code> package to provide missingness
+summaries over groups.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>large_data_size</code></td>
+<td>
+<p>integer default is 900000 (given by
+'nrow(data.frame) * ncol(data.frame)“). This can be changed. See
+note for more details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>warn_large_data</code></td>
+<td>
+<p>logical - warn if there is large data? Default is TRUE
+see note for more details</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>facet</code></td>
+<td>
+<p>(optional) bare variable name, if you want to create a faceted
+plot, with one plot per level of the variable. No missingness percentage
+column information will be presented when <code>facet</code> argument is used. Please
+see the <code>naniar</code> package to provide missingness summaries over groups.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The missingness summaries in the columns are rounded to the nearest integer.
+For more detailed summaries, please see the summaries in the <code>naniar</code> R
+package, specifically, <code>naniar::miss_var_summary()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>ggplot2</code> object displaying the position of missing values in the
+dataframe, and the percentage of values missing and present.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Some datasets might be too large to plot, sometimes creating a blank
+plot - if this happens, I would recommend downsampling the data, either
+looking at the first 1,000 rows or by taking a random sample. This means
+that you won't get the same "look" at the data, but it is better than
+a blank plot! See example code for suggestions on doing this.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vis_dat()</code> <code>vis_guess()</code> <code>vis_expect()</code> <code>vis_cor()</code> <code>vis_compare()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+vis_miss(airquality)
+
+vis_miss(airquality, cluster = TRUE)
+
+vis_miss(airquality, sort_miss = TRUE)
+
+vis_miss(airquality, facet = Month)
+
+## Not run: 
+# if you have a large dataset, you might want to try downsampling:
+library(nycflights13)
+library(dplyr)
+flights %&gt;%
+  sample_n(1000) %&gt;%
+  vis_miss()
+
+flights %&gt;%
+  slice(1:1000) %&gt;%
+  vis_miss()
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

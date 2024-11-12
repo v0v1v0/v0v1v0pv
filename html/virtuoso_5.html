@@ -1,0 +1,114 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vos_connect</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Connect to a Virtuoso Server over ODBC</h2>
+
+<h3>Description</h3>
+
+<p>Connect to a Virtuoso Server over ODBC
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vos_connect(
+  driver = NULL,
+  uid = "dba",
+  pwd = "dba",
+  host = "localhost",
+  port = "1111",
+  system_odbcinst = find_odbcinst(),
+  local_odbcinst = odbcinst_path()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>driver</code></td>
+<td>
+<p>Name of the Driver line in the ODBC configuration</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>uid</code></td>
+<td>
+<p>User id. Defaults to "dba"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pwd</code></td>
+<td>
+<p>Password. Defaults to "dba"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>host</code></td>
+<td>
+<p>IP address of the Virtuoso Server</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>port</code></td>
+<td>
+<p>Port used by Virtuoso. Defaults to
+the Virtuoso standard port, 1111</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>system_odbcinst</code></td>
+<td>
+<p>Path to the system <code>odbcinst.ini</code> file. (Does not
+require write access.) Default will attempt to find the file for your system.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>local_odbcinst</code></td>
+<td>
+<p>Path to the local odbcinst we should use.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Default parameters are appropriate for the automatic installer
+provided by the package and for the default settings typically used by
+local Virtuoso installers.  Adjust these only if you are connecting to a
+remote virtuoso server that is not controlled from the R package.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a DBI connection to the Virtuoso database.  This can
+be passed to additional virtuoso functions such as <code>vos_import()</code>
+or <code>vos_query()</code>, and can also be used as a standard DBI or dplyr
+database backend.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vos_install()</code>, <code>vos_start()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">status &lt;- vos_status()
+
+if(has_virtuoso()){
+## start up
+vos_start()
+con &lt;- vos_connect()
+}
+
+</code></pre>
+
+
+</div>

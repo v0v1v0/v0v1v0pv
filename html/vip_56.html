@@ -1,0 +1,424 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vi_permute</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Permutation-based variable importance</h2>
+
+<h3>Description</h3>
+
+<p>Compute permutation-based variable importance scores for the predictors in a
+model; for details on the algorithm, see Greenwell and Boehmke (2020).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vi_permute(object, ...)
+
+## Default S3 method:
+vi_permute(
+  object,
+  feature_names = NULL,
+  train = NULL,
+  target = NULL,
+  metric = NULL,
+  smaller_is_better = NULL,
+  type = c("difference", "ratio"),
+  nsim = 1,
+  keep = TRUE,
+  sample_size = NULL,
+  sample_frac = NULL,
+  reference_class = NULL,
+  event_level = NULL,
+  pred_wrapper = NULL,
+  verbose = FALSE,
+  parallel = FALSE,
+  parallelize_by = c("features", "repetitions"),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>A fitted model object (e.g., a
+randomForest object).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional optional arguments to be passed on to
+foreach (e.g., <code>.packages</code> or <code>.export</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>feature_names</code></td>
+<td>
+<p>Character string giving the names of the predictor
+variables (i.e., features) of interest. If <code>NULL</code> (the default) then they
+will be inferred from the <code>train</code> and <code>target</code> arguments (see below). It is
+good practice to always specify this argument.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>train</code></td>
+<td>
+<p>A matrix-like R object (e.g., a data frame or matrix)
+containing the training data. If <code>NULL</code> (the default) then the
+internal <code>get_training_data()</code> function will be called to try and extract it
+automatically. It is good practice to always specify this argument.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>target</code></td>
+<td>
+<p>Either a character string giving the name (or position) of the
+target column in <code>train</code> or, if <code>train</code> only contains feature
+columns, a vector containing the target values used to train <code>object</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metric</code></td>
+<td>
+<p>Either a function or character string specifying the
+performance metric to use in computing model performance (e.g., RMSE for
+regression or accuracy for binary classification). If <code>metric</code> is a
+function, then it requires two arguments, <code>actual</code> and <code>predicted</code>,
+and should return a single, numeric value. Ideally, this should be the same
+metric that was used to train <code>object</code>. See <code>list_metrics()</code> for a list of
+built-in metrics.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smaller_is_better</code></td>
+<td>
+<p>Logical indicating whether or not a smaller value
+of <code>metric</code> is better. Default is <code>NULL</code>. Must be supplied if
+<code>metric</code> is a user-supplied function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Character string specifying how to compare the baseline and
+permuted performance metrics. Current options are <code>"difference"</code> (the
+default) and <code>"ratio"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsim</code></td>
+<td>
+<p>Integer specifying the number of Monte Carlo replications to
+perform. Default is 1. If <code>nsim &gt; 1</code>, the results from each replication
+are simply averaged together (the standard deviation will also be returned).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keep</code></td>
+<td>
+<p>Logical indicating whether or not to keep the individual
+permutation scores for all <code>nsim</code> repetitions. If <code>TRUE</code> (the
+default) then the individual variable importance scores will be stored in an
+attribute called <code>"raw_scores"</code>. (Only used when <code>nsim &gt; 1</code>.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_size</code></td>
+<td>
+<p>Integer specifying the size of the random sample to use
+for each Monte Carlo repetition. Default is <code>NULL</code> (i.e., use all of the
+available training data). Cannot be specified with <code>sample_frac</code>. Can be
+used to reduce computation time with large data sets.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_frac</code></td>
+<td>
+<p>Proportion specifying the size of the random sample to use
+for each Monte Carlo repetition. Default is <code>NULL</code> (i.e., use all of the
+available training data). Cannot be specified with <code>sample_size</code>. Can be
+used to reduce computation time with large data sets.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>reference_class</code></td>
+<td>
+<p>Deprecated, use <code>event_level</code> instead.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>event_level</code></td>
+<td>
+<p>String specifying which factor level of <code>truth</code> to
+consider as the "event". Options are <code>"first"</code> (the default) or <code>"second"</code>.
+This argument is only applicable for binary classification when <code>metric</code> is
+one of <code>"roc_auc"</code>, <code>"pr_auc"</code>, or <code>"youden"</code>. This argument is passed on to
+the corresponding yardstick metric.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred_wrapper</code></td>
+<td>
+<p>Prediction function that requires two arguments,
+<code>object</code> and <code>newdata</code>. The output of this function should be
+determined by the <code>metric</code> being used:
+</p>
+
+<ul>
+<li>
+<p> Regression - A numeric vector of predicted outcomes.
+</p>
+</li>
+<li>
+<p> Binary classification - A vector of predicted class labels (e.g., if using
+misclassification error) or a vector of predicted class probabilities for the
+reference class (e.g., if using log loss or AUC).
+</p>
+</li>
+<li>
+<p> Multiclass classification - A vector of predicted class labels (e.g., if
+using misclassification error) or a A matrix/data frame of predicted class
+probabilities for each class (e.g., if using log loss or AUC).
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical indicating whether or not to print information during
+the construction of variable importance scores. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+<p>Logical indicating whether or not to run <code>vi_permute()</code>
+in parallel (using a backend provided by the foreach
+package). Default is <code>FALSE</code>. If <code>TRUE</code>, a
+foreach-compatible backend must be provided by must be
+provided. Note that <code>set.seed()</code> will not not work with
+foreach's parellelized for loops; for a workaround, see
+<a href="https://github.com/koalaverse/vip/issues/145">this solution</a>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallelize_by</code></td>
+<td>
+<p>Character string specifying whether to parallelize
+across features (<code>parallelize_by = "features"</code>) or repetitions
+(<code>parallelize_by = "reps"</code>); the latter is only useful whenever
+<code>nsim &gt; 1</code>. Default is <code>"features"</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A tidy data frame (i.e., a tibble object) with two
+columns:
+</p>
+
+<ul>
+<li> <p><code>Variable</code> - the corresponding feature name;
+</p>
+</li>
+<li> <p><code>Importance</code> - the associated importance, computed as the average change in
+performance after a random permutation (or permutations, if <code>nsim &gt; 1</code>) of
+the feature in question.
+</p>
+</li>
+</ul>
+<p>If <code>nsim &gt; 1</code>, then an additional column (<code>StDev</code>) containing the standard
+deviation of the individual permutation scores for each feature is also
+returned; this helps assess the stability/variation of the individual
+permutation importance for each feature.
+</p>
+
+
+<h3>References</h3>
+
+<p>Brandon M. Greenwell and Bradley C. Boehmke, The R Journal (2020) 12:1,
+pages 343-366.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+#
+# Regression example
+#
+
+library(ranger)   # for fitting random forests
+
+# Simulate data from Friedman 1 benchmark; only x1-x5 are important!
+trn &lt;- gen_friedman(500, seed = 101)  # ?vip::gen_friedman
+
+# Prediction wrapper
+pfun &lt;- function(object, newdata) {
+  # Needs to return vector of predictions from a ranger object; see
+  # `ranger::predcit.ranger` for details on making predictions
+  predict(object, data = newdata)$predictions
+}
+
+# Fit a (default) random forest
+set.seed(0803) # for reproducibility
+rfo &lt;- ranger(y ~ ., data = trn)
+
+# Compute permutation-based VI scores
+set.seed(2021)  # for reproducibility
+vis &lt;- vi(rfo, method = "permute", target = "y", metric = "rsq",
+          pred_wrapper = pfun, train = trn)
+print(vis)
+
+# Same as above, but using `vi_permute()` directly
+set.seed(2021)  # for reproducibility
+vi_permute(rfo, target = "y", metric = "rsq", pred_wrapper = pfun
+           train = trn)
+
+# Plot VI scores (could also replace `vi()` with `vip()` in above example)
+vip(vis, include_type = TRUE)
+
+# Mean absolute error
+mae &lt;- function(truth, estimate) {
+  mean(abs(truth - estimate))
+}
+
+# Permutation-based VIP with user-defined MAE metric
+set.seed(1101)  # for reproducibility
+vi_permute(rfo, target = "y", metric = mae, smaller_is_better = TRUE,
+           pred_wrapper = pfun, train = trn)
+
+# Same as above, but using `yardstick` package instead of user-defined metric
+set.seed(1101)  # for reproducibility
+vi_permute(rfo, target = "y", metric = yardstick::mae_vec,
+           smaller_is_better = TRUE, pred_wrapper = pfun, train = trn)
+
+#
+# Classification (binary) example
+#
+
+library(randomForest)  # another package for fitting random forests
+
+# Complete (i.e., imputed version of titanic data); see `?vip::titanic_mice`
+head(t1 &lt;- titanic_mice[[1L]])
+t1$pclass &lt;- as.ordered(t1$pclass)  # makes more sense as an ordered factor
+
+# Fit another (default) random forest
+set.seed(2053)  # for reproducibility
+(rfo2 &lt;- randomForest(survived ~ ., data = t1))
+
+# Define prediction wrapper for predicting class labels from a
+# "randomForest" object
+pfun_class &lt;- function(object, newdata) {
+  # Needs to return factor of classifications
+  predict(object, newdata = newdata, type = "response")
+}
+
+# Sanity check
+pfun_class(rfo2, newdata = head(t1))
+##   1   2   3   4   5   6
+## yes yes yes  no yes  no
+## Levels: no yes
+
+# Compute mean decrease in accuracy
+set.seed(1359)  # for reproducibility
+vi(rfo2,
+   method = "permute",
+   train = t1,
+   target = "survived",
+   metric = "accuracy",  # or pass in `yardstick::accuracy_vec` directly
+   # smaller_is_better = FALSE,  # no need to set for built-in metrics
+   pred_wrapper = pfun_class,
+   nsim = 30  # use 30 repetitions
+)
+## # A tibble: 5 × 3
+##   Variable Importance   StDev
+##   &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;
+## 1 sex          0.228  0.0110
+## 2 pclass       0.0825 0.00505
+## 3 age          0.0721 0.00557
+## 4 sibsp        0.0346 0.00430
+## 5 parch        0.0183 0.00236
+
+# Define prediction wrapper for predicting class probabilities from a
+# "randomForest" object
+pfun_prob &lt;- function(object, newdata) {
+  # Needs to return vector of class probabilities for event level of interest
+  predict(object, newdata = newdata, type = "prob")[, "yes"]
+}
+
+# Sanity check
+pfun_prob(rfo2, newdata = head(t1))  # estiated P(survived=yes | x)
+##     1     2     3     4     5     6
+## 0.990 0.864 0.486 0.282 0.630 0.078
+
+# Compute mean increase in Brier score
+set.seed(1411)  # for reproducibility
+vi(rfo2,
+   method = "permute",
+   train = t1,
+   target = "survived",
+   metric = yardstick::brier_class_vec,  # or pass in `"brier"` directly
+   smaller_is_better = FALSE,  # need to set when supplying a function
+   pred_wrapper = pfun_prob,
+   nsim = 30  # use 30 repetitions
+)
+
+## # A tibble: 5 × 3
+## Variable Importance   StDev
+##   &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;
+## 1 sex          0.210  0.00869
+## 2 pclass       0.0992 0.00462
+## 3 age          0.0970 0.00469
+## 4 parch        0.0547 0.00273
+## 5 sibsp        0.0422 0.00200
+
+# Some metrics, like AUROC, treat one class as the "event" of interest. In
+# such cases, it's important to make sure the event level (which typically
+# defaults to which ever event class comes first in alphabetical order)
+# matches the event class that corresponds to the prediction wrappers
+# returned probabilities. To do this, you can (and should) set the
+# `event_class` argument. For instance, our prediction wrapper specified
+# `survived = "yes"` as the event of interest, but this is considered the
+# second event:
+levels(t1$survived)
+## [1] "no"  "yes"
+
+# So, we need to specify the second class as the event of interest via the
+# `event_level` argument (otherwise, we would get the negative of the results
+# we were hoping for; a telltale sign the event level and prediction wrapper
+do not match)
+set.seed(1413)  # for reproducibility
+vi(rfo,
+   method = "permute",
+   train = t1,
+   target = "survived",
+   metric = "roc_auc",
+   event_level = "second",  # use "yes" as class label/"event" of interest
+   pred_wrapper = pfun_prob,
+   nsim = 30  # use 30 repetitions
+)
+
+## # A tibble: 5 × 3
+## Variable Importance   StDev
+##   &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;
+## 1 sex          0.229  0.0137
+## 2 pclass       0.0920 0.00533
+## 3 age          0.0850 0.00477
+## 4 sibsp        0.0283 0.00211
+## 5 parch        0.0251 0.00351
+
+## End(Not run)
+</code></pre>
+
+
+</div>

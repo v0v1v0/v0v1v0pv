@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>custom_ia</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Map gaze data to newly defined interest areas</h2>
+
+<h3>Description</h3>
+
+<p><code>custom_ia</code> uses a lookup data frame to map Left and Right gaze data
+to newly defined/supplied interest areas for each recording event. The lookup data
+should contain columns Event, IA_LABEL, IA_ID, Top, Bottom, Left, Right, which 
+specify the Interest area label, its corresponding ID, and the boundaries (in
+pixel values) for each recording event. The function will overwrite existing
+columns RIGHT_INTEREST_AREA_LABEL, RIGHT_INTEREST_AREA_ID, 
+LEFT_INTEREST_AREA_LABEL, and LEFT_INTEREST_AREA_ID.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">custom_ia(data, iaLookup = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data table object output by <code>prep_data</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iaLookup</code></td>
+<td>
+<p>A data frame object containing by-event mapping information.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data table object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(VWPre)
+# Map gaze data to newly defined interest areas...
+df &lt;- custom_ia(data = dat, iaLookup = LookUpDF)
+ 
+# For a more complete tutorial on VWPre plotting functions:
+vignette("SR_Interest_Areas", package="VWPre")
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

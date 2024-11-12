@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>calc_pvals</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate one-way test and pairwise tests</h2>
+
+<h3>Description</h3>
+
+<p>Internal function for calculating 3-class group test (either one-way ANOVA or
+Kruskal-Wallis test) and pairwise tests (either t-test or Wilcoxon test) on
+multi-column data against an outcome parameter with 3 levels.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">calc_pvals(
+  outcome,
+  data,
+  pcutoff = 0.05,
+  padj.method = "BH",
+  group_test = c("anova", "kruskal.test"),
+  pairwise_test = c("t.test", "wilcoxon"),
+  exact = FALSE,
+  filter_pairwise = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>outcome</code></td>
+<td>
+<p>Outcome vector with 3 groups, ideally as a factor. If it is
+not a factor, this will be coerced to a factor. This must have exactly 3
+levels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Dataframe or matrix with variables in columns</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pcutoff</code></td>
+<td>
+<p>Cut-off for p-value significance</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>padj.method</code></td>
+<td>
+<p>Can be any method available in <code>p.adjust</code> or <code>"qvalue"</code>.
+The option "none" is a pass-through.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group_test</code></td>
+<td>
+<p>Specifies statistical test for 3-class group comparison.
+"anova" means one-way ANOVA, "kruskal.test" means Kruskal-Wallis test.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pairwise_test</code></td>
+<td>
+<p>Specifies statistical test for pairwise comparisons</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>exact</code></td>
+<td>
+<p>Logical which is only used with <code>pairwise_test = "wilcoxon"</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filter_pairwise</code></td>
+<td>
+<p>Logical. If <code>TRUE</code> (the default) p-value adjustment on
+pairwise statistical tests is only conducted on attributes which reached
+the threshold for significance after p-value adjustment on the group
+statistical test.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a list with first element representing a data frame of
+unadjusted p-values and the second element adjusted p-values. Each dataframe
+contains 4 columns: the first column is the 3-way comparison (LRT or ANOVA).
+Columns 2-4 are pairwise comparisons between groups A vs B, A vs C and
+B vs C, where A, B, C are the 3 levels in the outcome factor.
+</p>
+
+
+</div>

@@ -1,0 +1,159 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>varbvs.properties</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Accessing Properties of Fitted varbvs Models</h2>
+
+<h3>Description</h3>
+
+<p>All these functions are <code>methods</code> for class
+<code>"varbvs"</code> objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'varbvs'
+nobs(object, ...)
+## S3 method for class 'varbvs'
+case.names(object, ...)
+## S3 method for class 'varbvs'
+variable.names(object, full = FALSE,
+                                include.threshold = 0.01, ...)
+## S3 method for class 'varbvs'
+labels(object, ...)
+## S3 method for class 'varbvs'
+coef(object, ...)
+## S3 method for class 'varbvsmix'
+coef(object, ...)
+## S3 method for class 'varbvs'
+confint(object, parm, level = 0.95, ...)
+## S3 method for class 'varbvs'
+fitted(object, ...)
+## S3 method for class 'varbvs'
+resid(object, type = c("deviance","response"), ...)
+## S3 method for class 'varbvs'
+residuals(object, type = c("deviance","response"), ...)
+## S3 method for class 'varbvs'
+deviance(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object inheriting from class <code>varbvs</code>, usually
+the result of calling function <code>varbvs</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>full</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, names of all variables (columns
+of <code>X</code>) are returned, including variables that have zero
+probability of being included in the regression model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>include.threshold</code></td>
+<td>
+<p>When <code>full = FALSE</code>, names of all
+variables (columns of <code>X</code>) with "averaged" posterior inclusion
+probability greater than <code>include.threshold</code> are returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parm</code></td>
+<td>
+<p>Confidence intervals are computed for these selected
+variables. These may either be specified as numbers (column indices
+of <code>varbvs</code> input matrix <code>X</code>) or names (column names of
+<code>X</code>). If not specified, confidence intervals will be computed
+for the top 5 variables by posterior inclusion probability.
+Confidence intervals are not provided for covariates (columns of
+<code>Z</code>); see below for details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>Size of confidence level.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Type of residuals to be returned. This argument is only
+relevant for logistic regression models (<code>family =
+    "binomial"</code>). See <code>varbvs</code> for more details about the
+two available types of residuals for logistic regression.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments passed to or from other methods.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The generic accessor functions <code>nobs</code>, <code>case.names</code>,
+<code>variable.names</code> and <code>labels</code> can be used to extract various
+useful properties of the fitted <code>varbvs</code> model. Method
+<code>labels</code>, in particular, returns the names of the candidate
+variables (columns of <code>X</code>) which may be used, for example, to
+plot posterior inclusion probabilities or effect estimates.
+</p>
+<p><code>coef</code> returns a matrix containing the posterior estimates of the
+regression coefficients at each hyperparameter setting, as well as an
+additional column containing "averaged" coefficient estimates.
+</p>
+<p><code>confint</code> returns confidence intervals (also, equivalently in
+this case, "credible intervals") for all selected variables
+<code>parm</code>. These are <em>conditional</em> confidence intervals; that
+is, conditioned on each variable being included in the regression
+model.
+</p>
+<p>The <code>confint</code> return value is different from the usual confidence
+interval (e.g., for an <code>lm</code> result) because a
+confidence interval is provided for each hyperparameter setting, as
+well as an additional "averaged" confidence interval. The confidence
+intervals are returned a list, with one list element per selected
+variable, and each list element is a matrix with columns giving lower
+and upper confidence limits for each hyperparameter setting, as well
+as the averaged limits.
+</p>
+<p>Note that confidence intervals cannot currently be requested for
+covariates (columns of <code>Z</code>).
+</p>
+<p><code>fitted</code> returns a matrix containing the predicted (or "fitted")
+values of the outcome at each hyperparameter setting. For the logistic
+regression model (<code>family = "binomial"</code>), each matrix entry gives
+the probability that the binary outcome is equal to 1.
+</p>
+<p>Likewise, <code>resid</code> and <code>residuals</code> each return a matrix
+containing the model residuals at each hyperparameter setting.
+</p>
+<p><code>deviance</code> returns the deviance for the fitted model at each
+hyperparameter setting.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>varbvs</code>, <code>nobs</code>,
+<code>case.names</code>, 
+<code>variable.names</code>, <code>labels</code>,
+<code>coef</code>, <code>coef</code>,
+<code>fitted</code>, <code>residuals</code>,
+<code>deviance</code>
+</p>
+
+
+</div>

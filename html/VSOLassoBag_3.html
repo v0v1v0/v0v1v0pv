@@ -1,0 +1,81 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>LessPermutation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Reduce permutation times</h2>
+
+<h3>Description</h3>
+
+<p>Reduce permutation times by fitting generalized pareto distribution of the right tail data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">LessPermutation(
+  X,
+  x0,
+  fitting.method = "mle",
+  search.step = 0.01,
+  fit.cutoff = 0.05,
+  when.to.fit = 0.05
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>a vector of data recording the permutation values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x0</code></td>
+<td>
+<p>observed value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fitting.method</code></td>
+<td>
+<p>method to fit GPD, default is "mle", alternative "gd"(gradient descend)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>search.step</code></td>
+<td>
+<p>the length of step (this param * length(X)) to find threshold. Default 0.01</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fit.cutoff</code></td>
+<td>
+<p>the cutoff of p value to judge whether it fits well to GPD, default is 0.05</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>when.to.fit</code></td>
+<td>
+<p>a cutoff to tell how many sample values are bigger than the target value then we don't need to fit GPD. it is a portion.Default 0.05</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>p value of the observed value in the permutation test
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x = POT::rgpd(200, 1, 2, 0.25)
+LessPermutation(x,1,fitting.method='gd')
+</code></pre>
+
+
+</div>

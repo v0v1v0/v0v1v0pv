@@ -1,0 +1,59 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>EmpCDF</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Corrected Empirical CDF</h2>
+
+<h3>Description</h3>
+
+<p>The empirical CDF with tail correction, ensuring that its output is never
+0 or 1.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">EmpCDF(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>numeric vector of observations</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The corrected empirical CDF is defined as
+</p>
+<p style="text-align: center;"><code class="reqn">
+F_n(x) = \frac{1}{n + 1} \min\biggl\{1, \sum_{i = 1}^n 1(X_i \le x)\biggr\}
+</code>
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>A function with signature <code style="white-space: pre;">⁠function(x)⁠</code> that returns <code class="reqn">F_n(x)</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># fit ECDF on simulated data
+x &lt;- rnorm(100)
+cdf &lt;- EmpCDF(x)
+
+# output is bounded away from 0 and 1
+cdf(-50)
+cdf(50)
+</code></pre>
+
+
+</div>

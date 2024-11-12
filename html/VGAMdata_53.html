@@ -1,0 +1,201 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>genpoisson</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Generalized Poisson Regression </h2>
+
+<h3>Description</h3>
+
+<p>Estimation of the two-parameter generalized Poisson distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">genpoisson(llambda = "rhobitlink", ltheta = "loglink",
+           ilambda = NULL, itheta = NULL, imethod = 1,
+           ishrinkage = 0.95, zero = "lambda")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>llambda, ltheta</code></td>
+<td>
+
+<p>Parameter link functions for <code class="reqn">\lambda</code> and <code class="reqn">\theta</code>.
+See <code>Links</code> for more choices.
+The <code class="reqn">\lambda</code> parameter lies at least within the interval
+<code class="reqn">[-1,1]</code>; see below for more details,
+and an alternative link is <code>rhobitlink</code>.
+The <code class="reqn">\theta</code> parameter is positive, therefore the default is the
+log link.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilambda, itheta</code></td>
+<td>
+
+<p>Optional initial values for <code class="reqn">\lambda</code> and <code class="reqn">\theta</code>.
+The default is to choose values internally.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>An integer with value <code>1</code> or <code>2</code> or <code>3</code> which
+specifies the initialization method for the parameters.
+If failure to converge occurs try another value
+and/or else specify a value for <code>ilambda</code> and/or <code>itheta</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishrinkage, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This family function is <em>not</em> recommended for use;
+instead try
+<code>genpoisson1</code> or
+<code>genpoisson2</code>.
+For underdispersion with respect to the Poisson
+try the GTE (generally-truncated expansion) method
+described by Yee and Ma (2023).
+</p>
+<p>The generalized Poisson distribution has density
+</p>
+<p style="text-align: center;"><code class="reqn">f(y)=\theta(\theta+\lambda y)^{y-1} \exp(-\theta-\lambda y) / y!</code>
+</p>
+
+<p>for <code class="reqn">\theta &gt; 0</code> and <code class="reqn">y = 0,1,2,\ldots</code>.
+Now <code class="reqn">\max(-1,-\theta/m) \leq \lambda \leq 1</code>
+where <code class="reqn">m (\geq 4)</code> is the greatest positive
+integer satisfying <code class="reqn">\theta + m\lambda &gt; 0</code>
+when <code class="reqn">\lambda &lt; 0</code>
+[and then <code class="reqn">P(Y=y) = 0</code> for <code class="reqn">y &gt; m</code>].
+Note the complicated support for this distribution means,
+for some data sets,
+the default link for <code>llambda</code> will not always work, and
+some tinkering may be required to get it running.
+</p>
+<p>As Consul and Famoye (2006) state on p.165, the lower limits
+on <code class="reqn">\lambda</code> and <code class="reqn">m \ge 4</code> are imposed
+to ensure that there are at least 5 classes with nonzero
+probability when <code class="reqn">\lambda</code> is negative.
+</p>
+<p>An ordinary Poisson distribution corresponds
+to <code class="reqn">\lambda = 0</code>.
+The mean (returned as the fitted values) is
+<code class="reqn">E(Y) = \theta / (1 - \lambda)</code>
+and the variance is <code class="reqn">\theta / (1 - \lambda)^3</code>.
+</p>
+<p>For more information see Consul and Famoye (2006) for a summary and
+Consul (1989) for full details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions such
+as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Monitor convergence!
+This family function is fragile.
+Don't get confused because <code>theta</code>
+(and not <code>lambda</code>) here really
+matches more closely with <code>lambda</code> of
+<code>dpois</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This family function handles multiple responses.
+This distribution is potentially useful for dispersion modelling.
+Convergence problems may occur when <code>lambda</code> is very close
+to 0 or 1.
+If a failure occurs then you might want to try something like
+<code>llambda = extlogitlink(min = -0.9, max = 1)</code>
+to handle the LHS complicated constraint,
+and if that doesn't work, try
+<code>llambda = extlogitlink(min = -0.8, max = 1)</code>, etc.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee.
+Easton Huch derived the EIM and it has been implemented
+in the <code>weights</code> slot.
+</p>
+
+
+<h3>References</h3>
+
+<p>Consul, P. C. (1989).
+<em>Generalized Poisson Distributions:
+Properties and Applications</em>.
+New York, USA: Marcel Dekker.
+</p>
+<p>Consul, P. C. and Famoye, F. (2006).
+<em>Lagrangian Probability Distributions</em>,
+Boston, USA: Birkhauser.
+</p>
+<p>Jorgensen, B. (1997).
+<em>The Theory of Dispersion Models</em>.
+London: Chapman &amp; Hall
+</p>
+<p>Yee, T. W. and Ma, C. (2024).
+Generally altered, inflated, truncated and deflated regression.
+<em>Statistical Science</em>, <b>39</b> (in press).
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>genpoisson1</code>,
+<code>genpoisson2</code>,
+<code>poissonff</code>,
+<code>dpois</code>.
+<code>dgenpois0</code>,
+<code>rhobitlink</code>,
+<code>extlogitlink</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+gdata &lt;- data.frame(x2 = runif(nn &lt;- 500))  # NBD data:
+gdata &lt;- transform(gdata, y1 = rnbinom(nn, exp(1), mu = exp(2 - x2)))
+fit &lt;- vglm(y1 ~ x2, genpoisson, data = gdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+summary(fit) 
+## End(Not run)
+</code></pre>
+
+
+</div>

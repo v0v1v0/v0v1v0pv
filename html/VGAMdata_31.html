@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Oapospois</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> One-Altered Logarithmic Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random
+generation for the one-altered positive-Poisson distribution
+with parameter <code>pobs1</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">doapospois(x, lambda, pobs1 = 0, log = FALSE)
+poapospois(q, lambda, pobs1 = 0)
+qoapospois(p, lambda, pobs1 = 0)
+roapospois(n, lambda, pobs1 = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, n, p</code></td>
+<td>
+<p> Same <code>Unif</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda, log</code></td>
+<td>
+
+<p>Same as <code>Otpospois</code>).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pobs1</code></td>
+<td>
+
+<p>Probability of (an observed) one, called <code class="reqn">pobs1</code>.
+The default value of <code>pobs1 = 0</code> corresponds
+to the response having a 1-truncated positive-Poisson distribution.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability function of <code class="reqn">Y</code> is 1 with probability <code>pobs1</code>,
+else a 1-truncated
+positive-Poisson(lambda)
+distribution.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>doapospois</code> gives the density and
+<code>poapospois</code> gives the distribution function,
+<code>qoapospois</code> gives the quantile function, and
+<code>roapospois</code> generates random deviates.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The argument <code>pobs1</code> is recycled to the required length, and
+must have values which lie in the interval <code class="reqn">[0,1]</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>oapospoisson</code>,
+<code>Oipospois</code>,
+<code>Otpospois</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">lambda &lt;- 3; pobs1 &lt;- 0.30; x &lt;- (-1):7
+doapospois(x, lambda = lambda, pobs1 = pobs1)
+table(roapospois(100, lambda = lambda, pobs1 = pobs1))
+
+## Not run:  x &lt;- 0:10
+barplot(rbind(doapospois(x, lambda = lambda, pobs1 = pobs1),
+                dpospois(x, lambda = lambda)),
+        beside = TRUE, col = c("blue", "orange"), cex.main = 0.7, las = 1,
+        ylab = "Probability", names.arg = as.character(x),
+        main = paste("OAPP(lambda = ", lambda, ", pobs1 = ", pobs1,
+                   ") [blue] vs",  " PosPoisson(lambda = ", lambda,
+                   ") [orange] densities", sep = "")) 
+## End(Not run)
+</code></pre>
+
+
+</div>

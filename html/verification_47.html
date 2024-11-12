@@ -1,0 +1,113 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rcrv</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Reduced centered random variable</h2>
+
+<h3>Description</h3>
+
+<p>The RCRV provides information on the reliability of an ensemble system
+in terms of the bias and the dispersion. A perfectly reliable system as no bias and a 
+dispersion equal to 1. The observational error is taken into account </p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">      rcrv(obs,epsMean,epsVariance,obsError)
+       </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>A vector of observations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>epsMean</code></td>
+<td>
+<p>A vector of the means of the ensemble</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>epsVariance</code></td>
+<td>
+<p>A vector of the variances of the ensemble</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obsError</code></td>
+<td>
+<p>Observational error</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>bias</code></td>
+<td>
+<p>The weighted bias between the ensemble and the observation.  A value equal to 0 indicates no bias.  A positive (negative) value indicates a positive (negative) bias</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>disp</code></td>
+<td>
+<p>The dispersion of the ensemble.
+A value equal to 1 indicates no dispersion.
+A value greater (smaller) then 1 indicates underdispersion (overdispersion)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Vector of y. Mean of y equals bias and standard deviation of y equals dispersion</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obsError</code></td>
+<td>
+<p>Observational error (passed to function)</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Ronald Frenette &lt;Ronald.Frenette@ec.gc.ca&gt;</p>
+
+
+<h3>References</h3>
+
+<p>G. Candille, C. P. L. Houtekamer, and G. Pellerin: Verification of an Ensemble Prediction System against Observations, <em>Monthly Weather Review</em>,<b>135</b>, pp. 2688-2699
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data(precip.ensemble) 
+#Observations are in the column
+obs&lt;-precip.ensemble[,3] 
+
+#Forecast values of ensemble are in the column 4 to 54
+eps&lt;-precip.ensemble[,4:54]   
+
+#Means and variances of the ensemble
+mean&lt;-apply(eps,1,mean)
+var&lt;-apply(eps,1,var)
+
+#observation error of 0.5mm 
+sig0 &lt;- 0.5 
+
+rcrv(obs,mean,var,sig0)
+
+</code></pre>
+
+
+</div>

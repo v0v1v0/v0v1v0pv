@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>taxonAlpha</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Additive Diversity Partitioning functions</h2>
+
+<h3>Description</h3>
+
+<p>Functions for calculating alpha, beta, and gamma richness of a community matrix under the Additive Diversity partitioning paradigm of R. Lande.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">taxonAlpha(CommunityMatrix)
+
+meanAlpha(CommunityMatrix)
+
+taxonBeta(CommunityMatrix)
+
+sampleBeta(CommunityMatrix)
+
+totalBeta(CommunityMatrix)
+
+totalGamma(CommunityMatrix)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>CommunityMatrix</code></td>
+<td>
+<p>a matrix</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>Takes a community matrix (see <code>presenceMatrix</code> or <code>abundanceMatrix</code>) and returns the either the alpha, beta, or gamma richness of a community matrix.
+</p>
+<p>These functions were originally presented in Holland, SM (2010) "Additive diversity partitioning in palaeobiology: revisiting Sepkoski’s question" <em>Paleontology</em> 53:1237-1254.
+</p>
+
+<ul>
+<li>
+<p><code>taxonAlpha(CommunityMatrix)</code> Calculates the contribution to alpha diversity of each taxon.
+</p>
+</li>
+<li>
+<p><code>meanAlpha(CommunityMatrix)</code> Calculates the average alpha diversity of all samples.
+</p>
+</li>
+<li>
+<p><code>taxonBeta(CommunityMatrix)</code> Calculates the contribution to beta diversity of each taxon.
+</p>
+</li>
+<li>
+<p><code>sampleBeta(CommunityMatrix)</code> Calculates the contribution to beta diversity of each sample.
+</p>
+</li>
+<li>
+<p><code>totalBeta(CommunityMatrix)</code> Calculates the total beta diversity.
+</p>
+</li>
+<li>
+<p><code>totalGamma(CommunityMatrix)</code> Calculates the richness of all samples in the community matrix.
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>A vector of the alpha, beta, or gamma richness of a taxon, sample, or entire community matrix.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andrew A. Zaffos
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Download a test dataset of pleistocene bivalves.
+# DataPBDB&lt;-downloadPBDB(Taxa="Bivalvia",StartInterval="Pleistocene",StopInterval="Pleistocene")
+
+# Create a community matrix with tectonic plates as "samples"
+# CommunityMatrix&lt;-abundanceMatrix(DataPBDB,"geoplate")
+
+# Calculate the average richness of all samples in a community.
+# meanAlpha(CommunityMatrix)
+
+# The beta diversity of all samples in a community.
+# totalBeta(CommunityMatrix)
+
+# This is, by definition, equivalent to the gamma diversity - mean alpha diversity.
+# totalBeta(CommunityMatrix)==(totalGamma(CommunityMatrix)-meanAlpha(CommunityMatrix))
+
+</code></pre>
+
+
+</div>

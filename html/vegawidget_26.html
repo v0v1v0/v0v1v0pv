@@ -1,0 +1,194 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vegawidget</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a Vega/Vega-Lite htmlwidget</h2>
+
+<h3>Description</h3>
+
+<p>The main use of this package is to render a <code>vegawidget</code>,
+which is also an <code>htmlwidget</code>. This function builds a <code>vegawidget</code>
+using a <code>vegaspec</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vegawidget(
+  spec,
+  embed = NULL,
+  width = NULL,
+  height = NULL,
+  elementId = NULL,
+  base_url = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>spec</code></td>
+<td>
+<p>An object to be coerced to <code>vegaspec</code>, a Vega/Vega-Lite specification</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>embed</code></td>
+<td>
+<p><code>list</code> to specify
+<a href="https://github.com/vega/vega-embed#options">vega-embed</a> options,
+see <strong>Details</strong> on how this is set if <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p><code>integer</code>, if specified, the total rendered width (in pixels)
+of the chart - valid only for single-view charts and layered charts;
+the default is to use the width in the chart specification</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p><code>integer</code>, if specified, the total rendered height (in pixels)
+of the chart - valid only for single-view charts and layered charts;
+the default is to use the height in the chart specification</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>elementId</code></td>
+<td>
+<p><code>character</code>, explicit element ID for the vegawidget,
+useful if you have other JavaScript that needs to explicitly
+discover and interact with a specific vegawidget</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>base_url</code></td>
+<td>
+<p><code>character</code>, the base URL to prepend to data-URL elements
+in the vegaspec. This could be the path
+to a local directory that contains a local file referenced in the spec.
+It could be the base for a remote URL. Please note that by specifying
+the <code>base_url</code> here, you will override any <code>loader</code> that you specify
+using <code>vega_embed()</code>. Please note that this does not work with
+<code>knitr</code>. See examples.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments passed to <code>htmlwidgets::createWidget()</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If <code>embed</code> is <code>NULL</code>, <code>vegawidget()</code> uses:
+</p>
+
+<ul>
+<li> <p><code>getOption("vega.embed")</code>, if that is NULL:
+</p>
+</li>
+<li>
+<p> an empty call to <code>vega_embed()</code>
+</p>
+</li>
+</ul>
+<p>The most-important arguments to <code>vega_embed()</code> are:
+</p>
+
+<ul>
+<li> <p><code>renderer</code>, to specify <code>"canvas"</code> (default) or <code>"svg"</code>
+</p>
+</li>
+<li> <p><code>actions</code>,  to specify action-links
+for <code>export</code>, <code>source</code>, <code>compiled</code>, and <code>editor</code>
+</p>
+</li>
+</ul>
+<p>If either <code>width</code> or <code>height</code> is specified, the <code>autosize()</code> function
+is used to override the width and height of the <code>spec</code>. There are some
+important provisions:
+</p>
+
+<ul>
+<li>
+<p> Specifying <code>width</code> and <code>height</code> is
+<a href="https://vega.github.io/vega-lite/docs/size.html#limitations">effective only for single-view charts and layered charts</a>.
+It will not work for concatenated, faceted, or repeated charts.
+</p>
+</li>
+<li>
+<p> In the <code>spec</code>, the default interpretation of width and height
+is to describe the dimensions of the
+<strong>plotting rectangle</strong>, not including the space used by the axes, labels,
+etc. Here, <code>width</code> and <code>height</code> describe the dimensions
+of the <strong>entire</strong> rendered chart, including axes, labels, etc.
+</p>
+</li>
+</ul>
+<p>Please note that if you are using a remote URL to refer to a dataset in
+your vegaspec, it may not render properly in the RStudio IDE,
+due to a security policy set by RStudio. If you open the chart in a
+browser, it should render properly.
+</p>
+
+
+<h3>Value</h3>
+
+<p>S3 object of class <code>vegawidget</code> and <code>htmlwidget</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://github.com/vega/vega-embed#options">vega-embed options</a>,
+<code>vega_embed()</code>, <code>vw_autosize()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  vegawidget(spec_mtcars, width = 350, height = 350)
+
+  # vegaspec with a data URL
+  spec_precip &lt;-
+    list(
+      `$schema` = vega_schema(),
+      data = list(url = "seattle-weather.csv"),
+      mark = "tick",
+      encoding = list(
+        x = list(field = "precipitation", type = "quantitative")
+      )
+    ) %&gt;%
+    as_vegaspec()
+
+  # define local path to file
+  path_local &lt;- system.file("example-data", package = "vegawidget")
+
+  # render using local path (does not work with knitr)
+  vegawidget(spec_precip, base_url = path_local)
+
+## Not run: 
+  # requires network-access
+
+  # define remote path to file
+  url_remote &lt;- "https://vega.github.io/vega-datasets/data"
+
+  # render using remote path
+  # note: does not render in RStudio IDE; open using browser
+  vegawidget(spec_precip, base_url = url_remote)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

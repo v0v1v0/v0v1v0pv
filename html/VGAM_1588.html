@@ -1,0 +1,151 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Zipfmb</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Zipf-Mandelbrot Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random
+generation for the Mandelbrot distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dzipfmb(x, shape, start = 1, log = FALSE)
+pzipfmb(q, shape, start = 1, lower.tail = TRUE, log.p = FALSE)
+qzipfmb(p, shape, start = 1)
+rzipfmb(n, shape, start = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>vector of (non-negative integer) quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>vector of quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>vector of probabilities.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of random values to return.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+<p>vector of positive shape parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start</code></td>
+<td>
+<p>integer, the minimum value of the support of the
+distribution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log, log.p</code></td>
+<td>
+<p>logical; if TRUE, probabilities p are given
+as log(p)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail</code></td>
+<td>
+<p>logical; if TRUE (default), probabilities
+are P[X &lt;= x], otherwise, P[X &gt; x].</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability mass function of the Zipf-Mandelbrot distribution
+is given by
+</p>
+<p style="text-align: center;"><code class="reqn">\Pr(Y=y;s) =
+  \frac{s \; \Gamma(y_{min})}{\Gamma(y_{min}-s)}
+  \cdot
+  \frac{\Gamma(y-s)}{\Gamma(y+1)}</code>
+</p>
+
+<p>where <code class="reqn">0 \leq b &lt; 1</code> and the starting value start
+being by default 1.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dzipfmb</code> gives the density,
+<code>pzipfmb</code> gives the distribution function,
+<code>qzipfmb</code> gives the quantile function, and
+<code>rzipfmb</code> generates random deviates.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>M. Chou, with edits by T. W. Yee.</p>
+
+
+<h3>References</h3>
+
+<p>Mandelbrot, B. (1961).
+On the theory of word frequencies and on related Markovian
+models of discourse.
+In R. Jakobson, <em>Structure of Language and its Mathematical
+Aspects</em>,
+pp. 190–219, Providence, RI, USA. American Mathematical Society.
+</p>
+<p>Moreno-Sanchez, I. and Font-Clos, F. and Corral, A. (2016).
+Large-Scale Analysis of Zipf's Law in English Texts.
+<em>PLos ONE</em>, <b>11</b>(1), 1–19.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Zipf</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">aa &lt;- 1:10
+(pp &lt;- pzipfmb(aa, shape = 0.5, start = 1))
+cumsum(dzipfmb(aa, shape = 0.5, start = 1))  # Should be same
+qzipfmb(pp, shape = 0.5, start = 1) - aa  # Should be  all 0s
+
+rdiffzeta(30, 0.5)
+
+## Not run: x &lt;- 1:10
+plot(x, dzipfmb(x, shape = 0.5), type = "h", ylim = 0:1,
+     sub = "shape=0.5", las = 1, col = "blue", ylab = "Probability",
+     main = "Zipf-Mandelbrot distribution: blue=PMF; orange=CDF")
+lines(x+0.1, pzipfmb(x, shape = 0.5), col = "red", lty = 3, type = "h")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

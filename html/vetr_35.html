@@ -1,0 +1,239 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vet_token</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vetting Tokens With Custom Error Messages</h2>
+
+<h3>Description</h3>
+
+<p>Utility function to generate vetting tokens with attached error messages.
+You should only need to use this if the error message produced naturally by
+<code>vetr</code> is unclear.  Several predefined tokens created by this function
+are also documented here.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vet_token(exp, err.msg = "%s")
+
+NO.NA
+
+NO.INF
+
+GTE.0
+
+LTE.0
+
+GT.0
+
+LT.0
+
+INT.1
+
+INT.1.POS
+
+INT.1.NEG
+
+INT.1.POS.STR
+
+INT.1.NEG.STR
+
+INT
+
+INT.POS
+
+INT.NEG
+
+INT.POS.STR
+
+INT.NEG.STR
+
+NUM.1
+
+NUM.1.POS
+
+NUM.1.NEG
+
+NUM
+
+NUM.POS
+
+NUM.NEG
+
+CHR.1
+
+CHR
+
+CPX
+
+CPX.1
+
+LGL
+
+LGL.1
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>exp</code></td>
+<td>
+<p>an expression which will be captured but not evaluated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>err.msg</code></td>
+<td>
+<p>character(1L) a message that tells the user what the
+expected value should be, should contain a "%s" for <code>sprintf</code>
+to use (e.g. "%s should be greater than 2").</p>
+</td>
+</tr>
+</table>
+<h3>Format</h3>
+
+<p>An object of class <code>call</code> of length 2.
+</p>
+<p>An object of class <code>call</code> of length 2.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+<p>An object of class <code>call</code> of length 3.
+</p>
+
+
+<h3>Details</h3>
+
+<p>Allows you to supply error messages for vetting to use for each error
+token.  Your token should not contain top level <code>&amp;&amp;</code> or <code>||</code>.  If
+it does your error message will not be reported because <code>vetr</code> looks for
+error messages attached to atomic tokens.  If your token must involve
+top level <code>&amp;&amp;</code> or <code>||</code>, use <code>I(x &amp;&amp; y)</code> to ensure that
+your error message is used by <code>vet</code>, but beware than in doing so you do
+not use templates within the <code>I</code> call as everything therein will be
+interpreted as a vetting expression rather than a template.
+</p>
+<p>Error messages are typically of the form "%s should be XXX".
+</p>
+<p>This package ships with many predefined tokens for common use cases. They
+are listed in the <code>Usage</code> section of this documentation.  The tokens
+are named in format <code>TYPE[.LENGTH][.OTHER]</code>.  For example
+<code>INT</code> will vet an integer vector, <code>INT.1</code> will vet a scalar integer
+vector, and <code>INT.1.POS.STR</code> will vet a strictly positive integer vector.
+At this time tokens are predefined for the basic types as scalars or
+any-length vectors.  Some additional checks are available (e.g. positive only
+values).
+</p>
+<p>Every one of the predefined vetting tokens documented here implicitly
+disallows NAs.  Numeric tokens also disallow infinite values. If you wish
+to allow NAs or infinite values just use a template object (e.g.
+<code>integer(1L)</code>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>a quoted expressions with <code>err.msg</code> attribute set
+</p>
+
+
+<h3>Note</h3>
+
+<p><strong>This will only work with standard tokens containing <code>.</code></strong>.  Anything
+else will be interpreted as a template token.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vet()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Predefined tokens:
+vet(INT.1, 1:2)
+vet(INT.1 || LGL, 1:2)
+vet(INT.1 || LGL, c(TRUE, FALSE))
+
+## Check squareness
+mx &lt;- matrix(1:3)
+SQR &lt;- vet_token(nrow(.) == ncol(.), "%s should be square")
+vet(SQR, mx)
+
+## Let `vetr` make up error message; note `quote` vs `vet_token`
+## Often, `vetr` does fine without explictly specified err msg:
+SQR.V2 &lt;- quote(nrow(.) == ncol(.))
+vet(SQR.V2, mx)
+
+## Combine some tokens, notice how we use `quote` at the combining
+## step:
+NUM.MX &lt;- vet_token(matrix(numeric(), 0, 0), "%s should be numeric matrix")
+SQR.NUM.MX &lt;- quote(NUM.MX &amp;&amp; SQR)
+vet(SQR.NUM.MX, mx)
+
+## If instead we used `vet_token` the overall error message
+## is not used; instead it falls back to the error message of
+## the specific sub-token that fails:
+NUM.MX &lt;- vet_token(matrix(numeric(), 0, 0), "%s should be numeric matrix")
+SQR.NUM.MX.V2 &lt;-
+  vet_token(NUM.MX &amp;&amp; SQR, "%s should be a square numeric matrix")
+vet(SQR.NUM.MX.V2, mx)
+</code></pre>
+
+
+</div>

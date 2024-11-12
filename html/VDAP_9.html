@@ -1,0 +1,130 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>QCKd</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Quality Control of Peptides Based on Reproducibility and Kd
+</h2>
+
+<h3>Description</h3>
+
+<p>Filter out peptides based on reproducibility between replicate
+concentrations and relative dissociation constants (Kd). Peptides
+must have a signal ratio between 0.5 and 2.0. A second reference file
+may be loaded with the same peptides referenced against another sample.
+Peptides are then compared based upon relative Kd value which must be at
+least one log10 apart.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">QCKd(File1, File2 = NULL, Kd = FALSE, QC = TRUE, ColSet1 = NULL,
+ColSet2 = NULL, ColSet3 = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>File1</code></td>
+<td>
+
+<p>An R object, usually a <code>data.frame</code> generally created by the function <code>FLoad()</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>File2</code></td>
+<td>
+
+<p>An R object, usually a <code>data.frame</code> generally created by the function <code>FLoad()</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Kd</code></td>
+<td>
+
+<p>A <code>logical</code> value, if <code>Kd = TRUE</code> then peptides will be filtered by Kd against
+the argument <code>File2</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>QC</code></td>
+<td>
+
+<p>A <code>logical</code> value, if <code>QC = TRUE</code> then peptides will be filtered by ratios of
+signal between replicates. Ratios must be between 0.5 to 2.0 to remain in the dataset.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ColSet1</code></td>
+<td>
+
+<p>A sequence value, represents the two columns that are replicates at a single concentration.
+Peptides must fit QC criteria in all given <code>ColSets</code> to remain in the dataset.
+ColSets may be omitted if less than three concentrations are to be compared. Ex: 2:3
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ColSet2</code></td>
+<td>
+
+<p>A sequence value, represents the two columns that are replicates at a single concentration.
+Peptides must fit QC criteria in all given <code>ColSets</code> to remain in the dataset.
+ColSets may be omitted if less than three concentrations are to be compared. Ex: 6:7</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ColSet3</code></td>
+<td>
+
+<p>A sequence value, represents the two columns that are replicates at a single concentration.
+Peptides must fit QC criteria in all given <code>ColSets</code> to remain in the dataset.
+ColSets may be omitted if less than three concentrations are to be compared. Ex: 4:5</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Either the <code>QC</code> or <code>Kd</code> filter may be applied by itself of both simultaneously.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>data.frame</code> will be returned with peptides filtered out that do not meet the
+given criteria for either the <code>QC</code> or <code>Kd</code> filters.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Cody Moore</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+protEx.QCKd &lt;- data.frame(Peptides = c("PWRGPWARVGSG","GYNRVGQGSG","PNGYRSGVKGSG","GSG"),
+Length = c(12,10,12,3),Charge = c(2,1,2,0),Kd = c(0.2572361,2.8239730,3.3911868,281.3058),
+C_6uM = c(65011.48,47462.24,24778,2613.03),C_6uM2 = c(62637.81,20723.85,21313.67,2300.216))
+
+## All peptides filtered out due to same Kd value between files ##
+
+QCKdEx &lt;- QCKd(protEx.QCKd, protEx.QCKd,Kd = TRUE, QC = TRUE, ColSet1 = 5:6)
+
+## QC control only ##
+
+QCKdEx &lt;- QCKd(protEx.QCKd, QC = TRUE, ColSet1 = 5:6)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,132 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>propodds</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Proportional Odds Model for Ordinal Regression </h2>
+
+<h3>Description</h3>
+
+<p>Fits the proportional odds model
+to a (preferably ordered) factor response.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">propodds(reverse = TRUE, whitespace = FALSE, ynames = FALSE,
+   Thresh = NULL, Trev = reverse, Tref = if (Trev) "M" else 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>reverse, whitespace</code></td>
+<td>
+
+<p>Logical.
+Fed into arguments of the same name in
+<code>cumulative</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ynames</code></td>
+<td>
+
+<p>See <code>multinomial</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Thresh, Trev, Tref</code></td>
+<td>
+
+<p>Fed into arguments of the same name in
+<code>cumulative</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <em>proportional odds model</em> is a special case from the
+class of <em>cumulative link models</em>.
+It involves a logit link applied to cumulative probabilities
+and a strong <em>parallelism</em> assumption.
+A parallelism assumption means there is less chance of
+numerical problems because the fitted probabilities will remain
+between 0 and 1; however
+the <em>parallelism</em> assumption ought to be checked,
+e.g., via a likelihood ratio test.
+This <span class="pkg">VGAM</span> family function is merely a shortcut for
+<code>cumulative(reverse = reverse, link = "logit", parallel = TRUE)</code>.
+Please see <code>cumulative</code> for more details on this
+model.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>No check is made to verify that the response is ordinal if the
+response is a matrix; see <code>ordered</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>See <code>cumulative</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>cumulative</code>,
+<code>R2latvar</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Fit the proportional odds model, McCullagh and Nelder (1989,p.179)
+pneumo &lt;- transform(pneumo, let = log(exposure.time))
+(fit &lt;- vglm(cbind(normal, mild, severe) ~ let, propodds, pneumo))
+depvar(fit)  # Sample proportions
+weights(fit, type = "prior")  # Number of observations
+coef(fit, matrix = TRUE)
+constraints(fit)  # Constraint matrices
+summary(fit)
+
+# Check that the model is linear in let ----------------------
+fit2 &lt;- vgam(cbind(normal, mild, severe) ~ s(let, df = 2), propodds,
+             pneumo)
+## Not run:  plot(fit2, se = TRUE, lcol = 2, scol = 2) 
+
+# Check the proportional odds assumption with a LRT ----------
+(fit3 &lt;- vglm(cbind(normal, mild, severe) ~ let,
+              cumulative(parallel = FALSE, reverse = TRUE), pneumo))
+pchisq(deviance(fit) - deviance(fit3),
+       df = df.residual(fit) - df.residual(fit3), lower.tail = FALSE)
+lrtest(fit3, fit)  # Easier
+</code></pre>
+
+
+</div>

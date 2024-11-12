@@ -1,0 +1,95 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>build_nhtsa_url</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Build a NHTSA URL</h2>
+
+<h3>Description</h3>
+
+<p>A family of functions to build URLs for the National Highway Transportation
+Safety Administration (NHTSA) vehicle identification number (VIN) decoder API.
+</p>
+<p>The <code>build_nhtsa_url()</code> function returns a closure containing the appropriate
+endpoint and file format request to pass to the NHTSA VIN API.
+</p>
+
+<ul>
+<li> <p><code>build_vin_url()</code> takes a single VIN in a character string and returns
+an appropriately-formatted url for a NHTSA API request via the
+/vehicles/DecodeVINValues/ endpoint.
+</p>
+</li>
+<li> <p><code>build_vin_batch_url()</code> takes up to 50 VINs in a character vector and
+returns appropriately-formatted url for a NHTSA API request via the
+/vehicles/DecodeVINBatchValues/ endpoint.
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">build_nhtsa_url(endpoint, format = "json", ...)
+
+build_vin_url(vin, ...)
+
+build_vin_batch_url(vin, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>endpoint</code></td>
+<td>
+<p>a string containing the appropriate endpoint. Candidate
+endpoints can be found at https://vpic.nhtsa.dot.gov/api/</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>format</code></td>
+<td>
+<p>the file format to return from the API, one of 'json', 'xml',
+or 'csv'. Defaults to 'json'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments to passed on to derived builder functions</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vin</code></td>
+<td>
+<p>a string containing the VIN to query.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+
+<ul>
+<li> <p><code>build_nhtsa_url()</code> returns a function which will in turn build a url which
+points to the specified endpoint on the NHTSA API
+</p>
+</li>
+<li> <p><code>build_vin_url()</code> returns a url as a string, formatted to query the NHTSA
+<code>DecodeVinValues</code> endpoint and decode a single VIN.
+</p>
+</li>
+<li> <p><code>build_vin_batch_url()</code> returns a url as a string, formatted to query the NHTSA
+<code style="white-space: pre;">⁠DecodeVinBatch Values⁠</code> endpoint and decode multiple VINs in one call.
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">vin_url_xml &lt;- build_nhtsa_url("/vehicles/DecodeVINValues/", format = "xml")
+build_vin_url("3VWLL7AJ9BM053541")
+build_vin_batch_url(c("3VWLL7AJ9BM053541", "JH4KA3140KC015221"))
+</code></pre>
+
+
+</div>

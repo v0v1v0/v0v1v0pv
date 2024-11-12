@@ -1,0 +1,68 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bin_cast</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Bin vpr data</h2>
+
+<h3>Description</h3>
+
+<p>Formats <code>oce</code> style VPR data into depth averaged bins using <code>ctd_cast</code> and <code>bin_calculate</code>
+This function is used inside <code>concentration_category</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bin_cast(ctd_roi_oce, imageVolume, binSize, rev = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ctd_roi_oce</code></td>
+<td>
+<p><code>oce</code> ctd format VPR data from <code>vpr_oce_create</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imageVolume</code></td>
+<td>
+<p>the volume of VPR images used for calculating concentrations (mm^3)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>binSize</code></td>
+<td>
+<p>passed to <code>bin_calculate</code>, determines size of depth bins over which data is averaged</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rev</code></td>
+<td>
+<p>logical value,passed to <code>bin_calculate</code> if TRUE, binning will begin at bottom of each cast,
+this controls data loss due to uneven binning over depth. If bins begin at
+bottom, small amounts of data may be lost at the surface of each cast, if
+binning begins at surface (rev = FALSE), small amounts of data may be lost
+at bottom of each cast</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Image volume calculations can change based on optical setting of VPR as well as autodeck setting used to process images
+For IML2018051 (S2) image volume was calculated as 108155 mm^3 by seascan (6.6 cubic inches)
+For COR2019002 S2 image volume was calculated as 83663 mm^3 and S3 image volume was calculated as 366082 mm^3
+</p>
+
+
+<h3>Value</h3>
+
+<p>A dataframe of depth averaged bins of VPR data over an entire cast with calculated concentration values
+</p>
+
+
+</div>

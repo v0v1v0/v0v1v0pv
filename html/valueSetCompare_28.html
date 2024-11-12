@@ -1,0 +1,165 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compute_F_statistics</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>compute_F_statistics</h2>
+
+<h3>Description</h3>
+
+<p>This function computes F-statistics for specified utility columns in a data frame.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compute_F_statistics(
+  df,
+  utility_columns,
+  utility_combinations = NULL,
+  weight_column = "VAS",
+  weight_range = c(0:100),
+  sample_size = nrow(df),
+  number_of_samples = 1000,
+  variant_fun = .cut_variable,
+  breaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100),
+  graph_title = "",
+  x_axis_title = "",
+  y_axis_title = "",
+  y_min_value = NULL,
+  y_max_value = NULL,
+  F_stats_groups = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>A data frame containing the utility and weight columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>utility_columns</code></td>
+<td>
+<p>A character vector specifying the names of utility columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>utility_combinations</code></td>
+<td>
+<p>A matrix with two rows indicating the utility columns combinations. Default is all possible combinations of the elements of utility_columns taken 2 at a time.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weight_column</code></td>
+<td>
+<p>A character string specifying the name of the weight column. Default is "VAS".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weight_range</code></td>
+<td>
+<p>A numeric vector specifying the range of weights. Default is c(0:100).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_size</code></td>
+<td>
+<p>An integer specifying the sample size for bootstrapping. Default is 1000.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>number_of_samples</code></td>
+<td>
+<p>An integer specifying the number of bootstrap samples. Default is 1000.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>variant_fun</code></td>
+<td>
+<p>A function to be applied for factorizing the weight column. Default is .cut_variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>breaks</code></td>
+<td>
+<p>A numeric vector specifying the breaks for the 'cut' method. Default is c(0,10,20,30,40,50,60,70,80,90,100).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>graph_title</code></td>
+<td>
+<p>A character string specifying the title of the plot. Default is an empty string.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_axis_title</code></td>
+<td>
+<p>A character string specifying the title for the x-axis. Default is an empty string.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_axis_title</code></td>
+<td>
+<p>A character string specifying the title for the y-axis. Default is an empty string.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_min_value</code></td>
+<td>
+<p>A numeric value specifying the minimum value for the y-axis. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_max_value</code></td>
+<td>
+<p>A numeric value specifying the maximum value for the y-axis. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>F_stats_groups</code></td>
+<td>
+<p>An optional data frame of pre-computed group-based F-statistics. Default is NULL.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing two elements: 'df' which is a data frame of weighted statistics, and 'plot' which is the ggplot object representing the ribbon plot.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+  # Define dimension names for EQ-5D-3L and EQ-5D-5L
+  dim.names.3L &lt;- c("mobility", "selfcare", "activity", "pain", "anxiety")
+  dim.names.5L &lt;- c("mobility5L", "selfcare5L", "activity5L", "pain5L", "anxiety5L")
+  # Compute EQ-5D scores using the eq5dsuite package
+  cdta$EQ5D3L &lt;- eq5dsuite::eq5d3l(x = cdta,
+                                   country = "US", 
+                                   dim.names = dim.names.3L)
+  cdta$EQ5D5L &lt;- eq5dsuite::eq5d5l(x = cdta, 
+                                   country = "US", 
+                                   dim.names = dim.names.5L)
+  cdta$EQXW &lt;- eq5dsuite::eqxw(x = cdta, 
+                               country = "US", 
+                               dim.names = dim.names.5L)
+  # Define combinations of utility columns for F-statistics calculation
+  utility_combinations &lt;- matrix(c("EQ5D5L", "EQ5D3L", "EQ5D5L", "EQXW"), nrow = 2)
+  # Compute F-statistics for the utility columns
+  result &lt;- compute_F_statistics(df = cdta, 
+                                 utility_columns = c("EQ5D3L", "EQ5D5L", "EQXW"), 
+                                 utility_combinations = utility_combinations)
+  # Plot the results
+  print(result$plot)
+
+</code></pre>
+
+
+</div>

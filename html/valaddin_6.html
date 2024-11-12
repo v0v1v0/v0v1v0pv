@@ -1,0 +1,406 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>firmly</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Apply a function firmly</h2>
+
+<h3>Description</h3>
+
+<p><code>firmly</code> transforms a function into a function with input validation
+checks. <code>loosely</code> undoes the application of <code>firmly</code>, by returning
+the original function (without checks). <code>is_firm</code> is a predicate
+function that checks whether an object is a firmly applied function, i.e.,
+a function created by <code>firmly</code>.
+<br><br>
+Use <code>%checkin%</code> to apply <code>firmly</code> as an operator. Since this
+allows you to keep checks and arguments adjacent, it is the preferred way to
+use <code>firmly</code> in scripts and packages.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">firmly(.f, ..., .checklist = list(), .warn_missing = character(),
+       .error_class = character())
+
+.checks %checkin% .f
+
+loosely(.f, .keep_check = FALSE, .keep_warning = FALSE)
+
+is_firm(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>.f</code></td>
+<td>
+<p>Interpreted function, i.e., closure.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Input-validation check formula(e).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.checklist</code></td>
+<td>
+<p>List of check formulae. (These are combined with check
+formulae provided via <code>...</code>.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.warn_missing</code></td>
+<td>
+<p>Arguments of <code>.f</code> whose absence should raise a
+warning (character).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.error_class</code></td>
+<td>
+<p>Subclass of the error condition to be raised when an
+input validation error occurs (character).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.checks</code></td>
+<td>
+<p>List of check formulae, optionally containing character
+vectors named <code>.warn_missing</code>, <code>.error_class</code>, corresponding to
+the similarly named arguments.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.keep_check, .keep_warning</code></td>
+<td>
+<p>Should existing checks, resp.
+missing-argument warnings, be kept?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object to test.</p>
+</td>
+</tr>
+</table>
+<h3>Check Formulae</h3>
+
+<p>An <strong>input validation check</strong> is specified by a <strong>check
+formula</strong>, a special formula of the form
+</p>
+<pre>&lt;scope&gt; ~ &lt;predicate&gt;</pre>
+<p>where the right-hand side expresses <em>what</em> to check, and the left-hand
+side expresses <em>where</em> to check it.
+</p>
+<p>The right-hand side <code>&lt;predicate&gt;</code> is a <strong>predicate</strong> function,
+i.e, a one-argument function that returns either <code>TRUE</code> or
+<code>FALSE</code>. It is the condition to check/enforce. The left-hand side
+<code>&lt;scope&gt;</code> is an expression specifying what the condition is to be
+applied to: whether the condition is to be applied to all
+(non-<code>...</code>) arguments of <code>.f</code> (the case of “global
+scope”), or whether the condition is to be selectively applied to certain
+expressions of the arguments (the case of “local scope”).
+</p>
+<p>According to <strong>scope</strong>, there are two classes of check formulae:
+</p>
+
+<ul><li> <p><strong>Check formulae of global scope</strong>
+</p>
+<pre>&lt;string&gt; ~ &lt;predicate&gt;</pre>
+<pre>~&lt;predicate&gt;</pre>
+<div class="sourceCode"><pre>\item \strong{Check formulae of local scope}
+  \preformatted{list(&lt;check_item&gt;, &lt;check_item&gt;, ...) ~ &lt;predicate&gt;}
+</pre></div>
+</li></ul>
+<h4>Check Formulae of Global Scope</h4>
+
+<p>A <strong>global check formula</strong> is a succinct way of asserting that the
+function <code>&lt;predicate&gt;</code> returns <code>TRUE</code> when called on each
+(non-<code>...</code>) argument of <code>.f</code>. Each argument for which
+<code>&lt;predicate&gt;</code> <em>fails</em>—returns <code>FALSE</code> or is itself not
+evaluable—produces an error message, which is auto-generated unless a
+custom error message is supplied by specifying the string
+<code>&lt;string&gt;</code>.
+</p>
+<div class="sourceCode"><pre>\subsection{Example}{
+  The condition that all (non-\code{\dots}) arguments of a function must
+  be numerical can be enforced by the check formula
+  \preformatted{~is.numeric}
+  or
+  \preformatted{"Not numeric" ~ is.numeric}
+  if the custom error message \code{"Not numeric"} is to be used (in lieu
+  of an auto-generated error message).
+}
+</pre></div>
+
+
+
+<h4>Check Formulae of Local Scope</h4>
+
+<p>A <strong>local check formula</strong> imposes argument-specific conditions. Each
+<strong>check item</strong> <code>&lt;check_item&gt;</code> is a formula of the form <code>~
+    &lt;expression&gt;</code> (one-sided) or <code>&lt;string&gt; ~ &lt;expression&gt;</code>; it imposes
+the condition that the function <code>&lt;predicate&gt;</code> is <code>TRUE</code> for the
+expression <code>&lt;expression&gt;</code>. As for global check formulae, each check
+item for which <code>&lt;predicate&gt;</code> fails produces an error message, which
+is auto-generated unless a custom error message is supplied by a string
+as part of the left-hand side of the check item (formula).
+</p>
+<div class="sourceCode"><pre>\subsection{Example}{
+  The condition that \code{x} and \code{y} must differ for the function
+  \code{function(x, y) {1 / (x - y)}} can be enforced by the local
+  check formula
+  \preformatted{list(~x - y) ~ function(.) abs(.) &gt; 0}
+  or
+  \preformatted{list("x, y must differ" ~ x - y) ~ function(.) abs(.) &gt; 0}
+  if the custom error message \code{"x, y must differ"} is to be used (in
+  lieu of an auto-generated error message).
+}
+</pre></div>
+
+
+
+<h4>Anonymous Predicate Functions</h4>
+
+<p>Following the
+<a href="https://cran.r-project.org/package=magrittr"><span class="pkg">magrittr</span></a>
+package, an anonymous (predicate) function of a single argument <code>.</code>
+can be concisely expressed by enclosing the body of such a function
+within curly braces <code>{ }</code>.
+</p>
+<div class="sourceCode"><pre>\subsection{Example}{
+  The (onsided, global) check formula
+  \preformatted{~{. &gt; 0}}
+  is equivalent to the check formula \code{~function(.) {. &gt; 0}}
+}
+</pre></div>
+
+
+
+<h3>Value</h3>
+
+
+
+<h4><code>firmly</code></h4>
+
+<p><code>firmly</code> does nothing when there is nothing to do: <code>.f</code> is
+returned, unaltered, when both <code>.checklist</code> and <code>.warn_missing</code>
+are empty, or when <code>.f</code> has no named argument and
+<code>.warn_missing</code> is empty.
+</p>
+<div class="sourceCode"><pre>Otherwise, \code{firmly} again returns a function that behaves
+\emph{identically} to \code{.f}, but also performs input validation:
+before a call to \code{.f} is attempted, its inputs are checked, and if
+any check fails, an error halts further execution with a message
+tabulating every failing check. (If all checks pass, the call to
+\code{.f} respects lazy evaluation, as usual.)
+
+\subsection{Subclass of the input-validation error object}{
+  The subclass of the error object is \code{.error_class}, unless
+  \code{.error_class} is \code{character()}. In the latter case, the
+  subclass of the error object is that of the existing error object, if
+  \code{.f} is itself a firmly applied function, or it is
+  \code{"simpleError"}, otherwise.
+}
+
+\subsection{Formal Arguments and Attributes}{
+  \code{firmly} preserves the attributes and formal arguments of
+  \code{.f} (except that the \code{"class"} attribute gains the component
+  \code{"firm_closure"}, unless it already contains it).
+}
+</pre></div>
+
+
+
+<h4><code>%checkin%</code></h4>
+
+<p><code>%checkin%</code> applies the check formula(e) in the list <code>.checks</code>
+to <code>.f</code>, using <code>firmly</code>. The <code>.warn_missing</code> and
+<code>.error_class</code> arguments of <code>firmly</code> may be specified as named
+components of <code>.checks</code>.
+</p>
+
+
+
+<h4><code>loosely</code></h4>
+
+<p><code>loosely</code> returns <code>.f</code>, unaltered, when <code>.f</code> is not a
+firmly applied function, or both <code>.keep_check</code> and
+<code>.keep_warning</code> are <code>TRUE</code>.
+</p>
+<div class="sourceCode"><pre>Otherwise, \code{loosely} returns the underlying (original) function,
+stripped of any input validation checks imposed by \code{firmly}, unless
+one of the flags \code{.keep_check}, \code{.keep_warning} is switched on:
+if \code{.keep_check}, resp. \code{.keep_warning}, is \code{TRUE},
+\code{loosely} retains any existing checks, resp. missing-argument
+warnings, of \code{.f}.
+</pre></div>
+
+
+
+<h4><code>is_firm</code></h4>
+
+<p><code>is_firm</code> returns <code>TRUE</code> if <code>x</code> is a firmly applied
+function (i.e., has class <code>"firm_closure"</code>), and <code>FALSE</code>,
+otherwise.
+</p>
+
+
+
+<h3>See Also</h3>
+
+<p><code>firmly</code> is enhanced by a number of helper functions:
+</p>
+
+<ul>
+<li>
+<p> To verify that a check formula is syntactically correct, use the
+predicates <code>is_check_formula</code>, <code>is_checklist</code>.
+</p>
+</li>
+<li>
+<p> To make custom check-formula generators, use
+<code>localize</code>.
+</p>
+</li>
+<li>
+<p> Pre-made check-formula generators are provided to facilitate
+argument checks for types,
+scalar objects, and
+other common data structures and input
+assumptions. These functions are prefixed by <code>vld_</code>, for
+convenient browsing and look-up in editors and IDE's that support name
+completion.
+</p>
+</li>
+<li>
+<p> To access the components of a firmly applied function, use
+<code>firm_core</code>, <code>firm_checks</code>,
+<code>firm_error</code>, <code>firm_args</code>, (or simply
+<code>print</code> the function to display its components).
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+
+dlog &lt;- function(x, h) (log(x + h) - log(x)) / h
+
+# Require all arguments to be numeric (auto-generated error message)
+dlog_fm &lt;- firmly(dlog, ~is.numeric)
+dlog_fm(1, .1)    # [1] 0.9531018
+dlog_fm("1", .1)  # Error: "FALSE: is.numeric(x)"
+
+# Require all arguments to be numeric (custom error message)
+dlog_fm &lt;- firmly(dlog, "Not numeric" ~ is.numeric)
+dlog_fm("1", .1)  # Error: "Not numeric: `x`"
+
+# Alternatively, "globalize" a localized checker (see ?localize, ?globalize)
+dlog_fm &lt;- firmly(dlog, globalize(vld_numeric))
+dlog_fm("1", .1)  # Error: "Not double/integer: `x`"
+
+# Predicate functions can be specified anonymously or by name
+dlog_fm &lt;- firmly(dlog, list(~x, ~x + h, ~abs(h)) ~ function(x) x &gt; 0)
+dlog_fm &lt;- firmly(dlog, list(~x, ~x + h, ~abs(h)) ~ {. &gt; 0})
+is_positive &lt;- function(x) x &gt; 0
+dlog_fm &lt;- firmly(dlog, list(~x, ~x + h, ~abs(h)) ~ is_positive)
+dlog_fm(1, 0)  # Error: "FALSE: is_positive(abs(h))"
+
+# Describe checks individually using custom error messages
+dlog_fm &lt;-
+  firmly(dlog,
+         list("x not positive" ~ x, ~x + h, "Division by 0 (=h)" ~ abs(h)) ~
+           is_positive)
+dlog_fm(-1, 0)
+# Errors: "x not positive", "FALSE: is_positive(x + h)", "Division by 0 (=h)"
+
+# Specify checks more succinctly by using a (localized) custom checker
+req_positive &lt;- localize("Not positive" ~ is_positive)
+dlog_fm &lt;- firmly(dlog, req_positive(~x, ~x + h, ~abs(h)))
+dlog_fm(1, 0)  # Error: "Not positive: abs(h)"
+
+# Combine multiple checks
+dlog_fm &lt;- firmly(dlog,
+                  "Not numeric" ~ is.numeric,
+                  list(~x, ~x + h, "Division by 0" ~ abs(h)) ~ {. &gt; 0})
+dlog_fm("1", 0)  # Errors: "Not numeric: `x`", check-eval error, "Division by 0"
+
+# Any check can be expressed using isTRUE
+err_msg &lt;- "x, h differ in length"
+dlog_fm &lt;- firmly(dlog, list(err_msg ~ length(x) - length(h)) ~ {. == 0L})
+dlog_fm(1:2, 0:2)  # Error: "x, h differ in length"
+dlog_fm &lt;- firmly(dlog, list(err_msg ~ length(x) == length(h)) ~ isTRUE)
+dlog_fm(1:2, 0:2)  # Error: "x, h differ in length"
+
+# More succinctly, use vld_true
+dlog_fm &lt;- firmly(dlog, vld_true(~length(x) == length(h), ~all(abs(h) &gt; 0)))
+dlog_fm(1:2, 0:2)
+# Errors: "Not TRUE: length(x) == length(h)", "Not TRUE: all(abs(h) &gt; 0)"
+
+dlog_fm(1:2, 1:2)  # [1] 0.6931472 0.3465736
+
+# loosely recovers the underlying function
+identical(loosely(dlog_fm), dlog)  # [1] TRUE
+
+# Use .warn_missing when you want to ensure an argument is explicitly given
+# (see vignette("valaddin") for an elaboration of this particular example)
+as_POSIXct &lt;- firmly(as.POSIXct, .warn_missing = "tz")
+Sys.setenv(TZ = "EST")
+as_POSIXct("2017-01-01 03:14:16")  # [1] "2017-01-01 03:14:16 EST"
+                                   # Warning: "Argument(s) expected ... `tz`"
+as_POSIXct("2017-01-01 03:14:16", tz = "UTC")  # [1] "2017-01-01 03:14:16 UTC"
+loosely(as_POSIXct)("2017-01-01 03:14:16")     # [1] "2017-01-01 03:14:16 EST"
+
+# Use firmly to constrain undesirable behavior, e.g., long-running computations
+fib &lt;- function(n) {
+  if (n &lt;= 1L) return(1L)
+  Recall(n - 1) + Recall(n - 2)
+}
+fib &lt;- firmly(fib, list("`n` capped at 30" ~ ceiling(n)) ~ {. &lt;= 30L})
+fib(21)  # [1] 17711 (NB: Validation done only once, not for every recursive call)
+fib(31)  # Error: `n` capped at 30
+
+# Apply fib unrestricted
+loosely(fib)(31)  # [1] 2178309 (may take several seconds to finish)
+
+# firmly won't force an argument that's not involved in checks
+g &lt;- firmly(function(x, y) "Pass", list(~x) ~ is.character)
+g(c("a", "b"), stop("Not signaled"))  # [1] "Pass"
+
+# In scripts and packages, it is recommended to use the operator %checkin%
+vec_add &lt;- list(
+  ~is.numeric,
+  list(~length(x) == length(y)) ~ isTRUE,
+  .error_class = "inputError"
+) %checkin%
+  function(x, y) {
+    x + y
+  }
+
+# Or call firmly with .f explicitly assigned to the function
+vec_add2 &lt;- firmly(
+  ~is.numeric,
+  list(~length(x) == length(y)) ~ isTRUE,
+  .f = function(x, y) {
+    x + y
+  },
+  .error_class = "inputError"
+)
+
+all.equal(vec_add, vec_add2)  # [1] TRUE
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

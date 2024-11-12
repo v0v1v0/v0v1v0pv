@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vcovVC</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate Variance-Covariance Matrix of Variance Components of 'VCA' objects</h2>
+
+<h3>Description</h3>
+
+<p>This function computes the variance-covariance matrix of variance components (VC) either
+applying the approach given in the <code class="reqn">1^{st}</code> reference ('method="scm"') or using
+the approximation given in the <code class="reqn">2^{nd}</code> reference ('method="gb"').
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vcovVC(obj, method = NULL, quiet = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(VCA) object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>(character) string, optionally specifying whether to use the algorithm given in the
+1st reference ("scm") or in the 2nd refernce ("gb"). If not not supplied, the 
+option is used coming with the 'VCA' object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = will suppress any warning, which will be issued otherwise</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is called on a 'VCA' object, which can be the sole argument. In this case the value
+assigned to element 'VarVC.method' of the 'VCA' object will be used.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(matrix) corresponding to variance-covariance matrix of variance components
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>,
+Florian Dufey <a href="mailto:florian.dufey@roche.com">florian.dufey@roche.com</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Searle, S.R, Casella, G., McCulloch, C.E. (1992), Variance Components, Wiley New York
+</p>
+<p>Giesbrecht, F.G. and Burns, J.C. (1985), Two-Stage Analysis Based on a Mixed Model: Large-Sample
+Asymptotic Theory and Small-Sample Simulation Results, Biometrics 41, p. 477-486
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(realData)
+dat1 &lt;- realData[realData$PID==1,]
+fit  &lt;- anovaVCA(y~lot/calibration/day/run, dat1) 
+vcovVC(fit)
+vcovVC(fit, "scm")		# Searle-Casella-McCulloch method (1st reference)
+vcovVC(fit, "gb")		# Giesbrecht and Burns method (2nd reference)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

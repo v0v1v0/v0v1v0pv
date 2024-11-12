@@ -1,0 +1,186 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCop</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Constructing BiCop-objects</h2>
+
+<h3>Description</h3>
+
+<p>This function creates an object of class <code>BiCop</code> and checks for
+family/parameter consistency.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCop(family, par, par2 = 0, tau = NULL, check.pars = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>An integer defining the bivariate copula family: <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula) <br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>7</code> = BB1 copula <br><code>8</code> = BB6 copula <br><code>9</code> = BB7 copula <br><code>10</code> = BB8 copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; <code style="white-space: pre;">⁠survival Joe'') \cr `17` = rotated BB1 copula (180 degrees; ⁠</code>survival BB1”)<br><code>18</code> = rotated BB6 copula (180 degrees; <code style="white-space: pre;">⁠survival BB6'')\cr `19` = rotated BB7 copula (180 degrees; ⁠</code>survival BB7”)<br><code>20</code> = rotated BB8 copula (180 degrees; “survival BB8”)<br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'27' = rotated BB1 copula (90 degrees) <br>
+'28' = rotated BB6 copula (90 degrees) <br>
+'29' = rotated BB7 copula (90 degrees) <br>
+'30' = rotated BB8 copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br>
+'37' = rotated BB1 copula (270 degrees) <br>
+'38' = rotated BB6 copula (270 degrees) <br>
+'39' = rotated BB7 copula (270 degrees) <br>
+'40' = rotated BB8 copula (270 degrees) <br>
+'104' = Tawn type 1 copula <br>
+'114' = rotated Tawn type 1 copula (180 degrees) <br>
+'124' = rotated Tawn type 1 copula (90 degrees) <br>
+'134' = rotated Tawn type 1 copula (270 degrees) <br>
+'204' = Tawn type 2 copula <br>
+'214' = rotated Tawn type 2 copula (180 degrees) <br>
+'224' = rotated Tawn type 2 copula (90 degrees) <br>
+'234' = rotated Tawn type 2 copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>Copula parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>Second parameter for bivariate copulas with two parameters (t,
+BB1, BB6, BB7, BB8, Tawn type 1 and type 2; default is <code>par2 = 0</code>).
+<code>par2</code> should be an positive integer for the Students's t copula
+<code>family = 2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tau</code></td>
+<td>
+<p>numeric; value of Kendall's tau; has to lie in the interval
+(-1, 1). Can only be used with one-parameter families and the t copula.
+If <code>tau</code> is provided, <code>par</code> will be ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.pars</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>; if <code>FALSE</code>, checks
+for family/parameter-consistency are omitted (should only be used with
+care).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class <code>BiCop()</code>. It is a list containing
+information about the bivariate copula. Its components are:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>family, par, par2</code></td>
+<td>
+<p>copula family number and parameter(s),</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>npars</code></td>
+<td>
+<p>number of parameters,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>familyname</code></td>
+<td>
+<p>name of the copula family,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tau</code></td>
+<td>
+<p>Kendall's tau,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>Blomqvist's beta,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>taildep</code></td>
+<td>
+<p>lower and upper tail dependence coefficients,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>the call that created the object.</p>
+</td>
+</tr>
+</table>
+<p>Objects of this class are also returned by the <code>BiCopEst()</code> and
+<code>BiCopSelect()</code> functions. In this case, further information about
+the fit is added.
+</p>
+
+
+<h3>Note</h3>
+
+<p>For a comprehensive summary of the model, use <code>summary(object)</code>;
+to see all its contents, use <code>str(object)</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Thomas Nagler
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopPDF()</code>,
+<code>BiCopHfunc()</code>,
+<code>BiCopSim()</code>,
+<code>BiCopEst()</code>,
+<code>BiCopSelect()</code>,
+<code>plot.BiCop()</code>,
+<code>contour.BiCop()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## create BiCop object for bivariate t-copula
+obj &lt;- BiCop(family = 2, par = 0.4, par2 = 6)
+obj
+
+## see the object's content or a summary
+str(obj)
+summary(obj)
+
+## a selection of functions that can be used with BiCop objects
+simdata &lt;- BiCopSim(300, obj)  # simulate data
+BiCopPDF(0.5, 0.5, obj) # evaluate density in (0.5,0.5)
+plot(obj)  # surface plot of copula density
+contour(obj)  # contour plot with standard normal margins
+print(obj)  # brief overview of BiCop object
+summary(obj)  # comprehensive overview of BiCop object
+
+</code></pre>
+
+
+</div>

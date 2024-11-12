@@ -1,0 +1,356 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ECM.EngleGran</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> VGLTSM family function for the
+Two–dimensional Error–Correction Model 
+(Engle and Granger, 1987) for <code class="reqn">I(1)</code>–variables</h2>
+
+<h3>Description</h3>
+
+<p>Estimates a bidimensional error-correction model of
+order–(<code class="reqn">K</code>, <code class="reqn">L</code>), as proposed by Engle–Granger
+(Two step–approach; 1987), with bivariate normal errors
+by maximum likelihood estimation using Fisher scoring.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">      ECM.EngleGran(ecm.order = c(1, 1),
+                    zero = c("var", "cov"),
+                    resids.pattern = c("intercept", "trend",
+                                       "neither", "both")[1],
+                    lag.res = 1, 
+                    lmean = "identitylink",
+                    lvar  = "loglink",
+                    lcov  = "identitylink",
+                    ordtsDyn = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ecm.order</code></td>
+<td>
+
+<p>Length–2 (positive) integer vector. The order of the ECM model.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Integer or character–string vector.
+
+Details at <code>zero</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>resids.pattern</code></td>
+<td>
+
+<p>Character. How the static linear regression
+<code class="reqn">y_{2, t} \sim y_{1, t}</code> must be 
+settle to estimate the residuals <code class="reqn">\widehat{z_t}</code>.
+The default is a linear model with intercept, and no 
+trend term.
+See below for details. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag.res</code></td>
+<td>
+
+<p>Numeric, single positive integer. The error
+term for the long–run equilibrium path is
+lagged up to order <code>lag.res</code>. See below
+for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lmean, lvar, lcov</code></td>
+<td>
+
+<p>Same as <code>MVNcov</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ordtsDyn</code></td>
+<td>
+
+<p>Positive integer. Allows to compare the estimated coefficients with
+those provided by the package 'tsDyn'. See below for further details.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is an implementation of the two–step approach as
+proposed by Engle–Granger [1987] to estimate an
+order–(<code class="reqn">K</code>, <code class="reqn">L</code>) bidimensional error correction
+model (ECM) with bivariate normal errors. 
+</p>
+<p>This ECM class models the dynamic behaviour of two 
+cointegrated <code class="reqn">I(1)</code>-variables,
+say <code class="reqn">y_{1, t}</code> and <code class="reqn">y_{2, t}</code> with,
+probably, <code class="reqn">y_{2, t}</code> a function of 
+<code class="reqn">y_{1, t}</code>.
+Note, the response must be a two–column matrix,
+where the first entry is the regressor,
+i.e, <code class="reqn">y_{1, t}</code> above, and the regressand in the
+second colum. See Example 2 below.
+</p>
+<p>The general specification of the ECM class described by 
+this family function is
+</p>
+<p style="text-align: center;"><code class="reqn"> \Delta y_{1, t} |\Phi_{t - 1} =
+~\phi_{0, 1} + \gamma_1 \widehat{z}_{t - k} +
+ \sum_{i = 1}^K \phi_{1, i} \Delta y_{2, t - i} +
+ \sum_{j = 1}^L \phi_{2, j} \Delta y_{1, t - j} +
+ \varepsilon_{1, t},</code>
+</p>
+
+<p style="text-align: center;"><code class="reqn"> \Delta y_{2, t} |\Phi_{t - 1}=
+~\psi_{0, 1} + \gamma_2 \widehat{z}_{t - k} +
+ \sum_{i = 1}^K \psi_{1, i} \Delta y_{1, t - i} +
+ \sum_{j = 1}^L \psi_{2, j} \Delta y_{2, t - j} +
+ \varepsilon_{2, t}.</code>
+</p>
+
+<p>Under the binormality assumption on the errors
+<code class="reqn">(\varepsilon_{1, t}, \varepsilon_{2, t})^T</code> with covariance matrix <code class="reqn">\boldsymbol{\textrm{V}}</code>,
+model above can be seen as a
+VGLM fitting linear models over the conditional means,
+<code class="reqn">\mu_{\Delta y_{1, t} } = E(\Delta y_{1, t} | \Phi_{t - 1})</code> and
+<code class="reqn">\mu_{\Delta y_{2, t} } = E(\Delta y_{2, t} | \Phi_{t - 1} )</code>,
+producing
+</p>
+<p style="text-align: center;"><code class="reqn"> (\Delta y_{1, t} |\Phi_{t - 1} , 
+\Delta y_{2, t} |\Phi_{t - 1} )^T \sim N_{2}(\mu_{\Delta y_{1, t}}  , 
+\mu_{\Delta y_{2, t}}, \boldsymbol{\textrm{V}})</code>
+</p>
+
+<p>The covariance matrix is assumed 
+to have elements 
+<code class="reqn">\sigma_1^2, \sigma_2^2,</code> and 
+<code class="reqn">\textrm{Cov}_{12}.</code>
+</p>
+<p>Hence, the parameter vector is
+</p>
+<p style="text-align: center;"><code class="reqn">\boldsymbol{\theta} = 
+    (\phi_{0, 1}, \gamma_1, \phi_{1, i}, \phi_{2, j},
+                      \psi_{0, 1}, \gamma_2, \psi_{1, i}, \psi_{2, j},
+                      \sigma_1^2, \sigma_2^2, \textrm{Cov}_{12})^T,</code>
+</p>
+
+<p>for <code class="reqn">i = 1, \ldots, K</code> and <code class="reqn">j = 1, \ldots, L</code>. 
+</p>
+<p>The linear predictor is
+</p>
+<p style="text-align: center;"><code class="reqn">\boldsymbol{\eta} = (\mu_{\Delta y_{1, t}  },
+                          \mu_{\Delta y_{2, t} },
+                          {\color{blue}\texttt{loglink}}~\sigma_1^2,
+                          {\color{blue}\texttt{loglink}}~\sigma_2^2,
+                          \textrm{Cov}_{12})^T.</code>
+</p>
+
+<p>The estimated cointegrated vector,
+<code class="reqn">\boldsymbol{\widehat{\beta^{\star}}}</code> = <code class="reqn">(1, -\boldsymbol{\widehat{\beta})}^T</code> is obtained by linear regression
+depending upon <code>resids.pattern</code>,
+as follows:
+</p>
+<p>1) <code class="reqn">y_{2, t} = \beta_0 + \beta_1 y_{1, t} + z_t</code>, 
+if <code>resids.pattern = "intercept"</code>,
+</p>
+<p>2) <code class="reqn">y_{2, t} = \beta_1 y_{1, t} + \beta_2 t + z_t</code>, 
+if <code>resids.pattern = "trend"</code>,
+</p>
+<p>3) <code class="reqn">y_{2, t} = \beta_1 y_{1, t} + z_t</code>, 
+if <code>resids.pattern = "neither"</code>, or else,
+</p>
+<p>4) <code class="reqn">y_{2, t} = \beta_0 + \beta_1 y_{1, t} + \beta_2 t + z_t</code>, 
+if <code>resids.pattern = "both"</code>,
+</p>
+<p>where <code class="reqn">\boldsymbol{\widehat{\beta}} = 
+(\widehat{\beta_0}, \widehat{\beta_1}, \widehat{\beta_2})^T,</code> and <code class="reqn">z_t</code> assigns the error term.
+</p>
+<p>Note, the <em>estimated residuals</em>, 
+<code class="reqn">\widehat{z_t}</code> are (internally) computed
+from any of the linear models 1) – 4) selected, and then lagged
+up to order <code>alg.res</code>,
+and embedded as explanatories in models 
+<code class="reqn">\Delta y_{1, t} |\Phi_{t - 1}</code> and
+<code class="reqn">\Delta y_{3, t} |\Phi_{t - 1}</code> above.
+By default, <code class="reqn">\widehat{z}_{t - 1}</code>
+are considered (as <code>lag.res</code> = 1), although it may be any lag
+<code class="reqn">\widehat{z}_{t - k}</code>, for <code class="reqn">k &gt; 0</code>. 
+Change this through argument <code>lag.res</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> 
+(see <code>vglmff-class</code>) to be
+used by VGLM/VGAM modelling functions, e.g.,
+<code>vglm</code> or <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Reduced–Rank VGLMs  (RR-VGLMs) can be utilized to aid the increasing
+number of parameters as <code class="reqn">K</code> and <code class="reqn">L</code> grows.
+See <code>rrvglm</code>.
+</p>
+<p>By default, <code class="reqn">\sigma_1^2, \sigma_2^2</code> and  <code class="reqn">\textrm{Cov}_{12}</code>
+are intercept–only. Set argument <code>zero</code> accordingly to change this.
+</p>
+<p>Package <span class="pkg">tsDyn</span> also has routines to fit ECMs.
+However, the bivariate–ECM handled (similar to that one 
+above) differs in their parametrization:
+<span class="pkg">tsDyn</span> considers the <em>current</em> estimated residual,
+<code class="reqn">\widehat{z}_t</code> instead of 
+<code class="reqn">\widehat{z}_{t - 1}</code> in models
+<code class="reqn">\Delta y_{1, t} |\Phi_{t - 1}</code> and
+<code class="reqn">\Delta y_{2, t} |\Phi_{t - 1}</code>.
+</p>
+<p>See Example 3 below which compares ECMs
+fitted with <span class="pkg">VGAMextra</span> and <span class="pkg">tsDyn</span>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda
+</p>
+
+
+<h3>References</h3>
+
+<p>Engle, R.F. and Granger C.W.J. (1987)
+Co-integration and error correction: Representation, estimation and
+testing.
+<em>Econometrica</em>, <span class="pkg">55</span>(2), 251–276.
+</p>
+<p>Pfaff, B. (2011)
+<em>Analysis of Integrated and Cointegrated Time Series with <code>R</code>.</em>
+Seattle, Washington, USA: <em>Springer</em>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>MVNcov</code>,
+<code>rrvglm</code>,
+<code>CommonVGAMffArguments</code>,
+<code>Links</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Example 1. Comparing the Engle -- Granger procedure carried oud by two procedures.
+##            ECM.EngleGran() makes easier the fitting process.
+## Here, we will use:
+## A) The R code 4.2, in Chapter 4, Pfaff (2011).
+##    This code 1) generates artificial data and 2) fits an ECM, following
+##    the Engle --Granger procedure. 
+## B) The ECM.EngleGran() family function to fit the same model assuming
+##    bivariate normal innovations. 
+## The downside in the R code 4.2 is the assumption of no--correlation among
+## the errors. These are generated indenpendently.
+## A)
+## STEP 1. Set up the data (R code as in Pfaff (2011)).
+nn &lt;- 100
+set.seed(123456)
+e1 &lt;- rnorm(nn)   # Independent of e2
+e2 &lt;- rnorm(nn)
+y1 &lt;-  cumsum(e1)
+y2 &lt;- 0.6 * y1 + e2
+lr.reg &lt;- lm(y2 ~ y1)
+error &lt;- residuals(lr.reg)
+error.lagged &lt;- error[-c(nn - 1, nn)]
+dy1 &lt;- diff(y1)
+dy2 &lt;- diff(y2)
+diff.dat &lt;- data.frame(embed(cbind(dy1, dy2), 2))
+colnames(diff.dat) &lt;- c('dy1', 'dy2', 'dy1.1', 'dy2.1')
+
+##  STEP 2. Fit the ECM model, using lm(), R code as in Pfaff (2011).
+ecm.reg &lt;- lm(dy2 ~ error.lagged + dy1.1 + dy2.1, data = diff.dat)
+
+summary(ecm.reg)
+
+
+## B) Now, using ECM.EngleGran() and VGLMs, the steps at A) can be skipped. 
+## Enter the I(1)--variables in the response vector only, putting down the
+## the dependent variable from the I(1) set, i.e. y2, in the second column.
+
+coint.data &lt;- data.frame(y1 = y1, y2 = y2)
+fit.ECM &lt;- vglm(cbind(y1, y2) ~ 1, ECM.EngleGran, data = coint.data, trace = TRUE)
+
+## Check coefficients ##
+coef(fit.ECM, matrix = TRUE)  ## Compare 'Diff2' with summary(ecm.reg)
+coef(summary(ecm.reg))
+
+head(depvar(fit.ECM))   # The estimated differences (first order)
+vcov(fit.ECM)
+constraints(fit.ECM, matrix = TRUE)
+
+## Not run: 
+### Example 2.  Here, we compare ECM.EngleGran() from VGAMextra with VECM() from
+##              package "tsDyn" when fitting an ECM(1, 1). We will make use of
+##              the argument 'ordtsDyn' so that the outcomes can be compared.
+
+library("tsDyn")  # Need to be installed first.
+fit.tsDyn1 &lt;- with(coint.data, VECM(cbind(y2, y1), lag = 1, estim = "2OLS")) #  MODEL 1
+summary(fit.tsDyn1)
+
+### Fit same model using ECM.EngleGran(). NOTE: Set ordtsDyn = 1 !!          #  MODEL 2
+fit.ECM.2 &lt;- vglm(cbind(y1, y2) ~ 1, ECM.EngleGran(ecm.order = c(1, 1),
+                  resids.pattern = "neither", ordtsDyn = 1),
+                  data = coint.data, trace = TRUE)
+
+coef.ECM.2 &lt;- coef(fit.ECM.2, matrix = TRUE)
+fit.tsDyn1$coefficients                      ## From pakage 'tsDyn'.
+t(coef.ECM.2[, 1:2][c(2, 1, 4, 3), ][, 2:1]) ## FROM VGAMextra 
+
+
+### Example 3. An ECM(2, 2), with residuals estimated by OLS, with NO intercept
+###            and NO trend term. The data set is 'zeroyld', from package tsDyn.
+###            ECM.EngleGran() and with VECM() willbe compared again.
+data(zeroyld, package = "tsDyn")
+
+# Fit a VECM with Engle-Granger 2OLS estimator:
+vecm.eg &lt;- VECM(zeroyld, lag=2, estim = "2OLS") 
+summary(vecm.eg)
+
+# For the same data, fit a VECM with ECM.EngleGran(), from VGAMextra.
+# Set ordtsDyn = 1 for compatibility! 
+fit.ECM.3 &lt;- vglm(cbind(long.run, short.run) ~ 1, ECM.EngleGran(ecm.order = c(2, 2),
+                                  resids.pattern = "neither", ordtsDyn = 1),
+                  data = zeroyld, trace = TRUE)
+coef.ECM.3 &lt;- coef(fit.ECM.3, matrix = TRUE)
+
+#### Compare results
+vecm.eg$coefficients                               # From tsDyn
+t(coef.ECM.3[, 1:2][c(2, 1, 5, 3, 6, 4 ),][, 2:1]) # FROM VGAMextra
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>PR.order</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Improved Augmented Regression Method for Predictive Regression
+</h2>
+
+<h3>Description</h3>
+
+<p>Function to select the order p by AIC or BIC 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">PR.order(x, y, pmax = 10)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p> predictor or a matrix of predictors in column</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p> variable to be predicted, usually stock return</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pmax</code></td>
+<td>
+<p> maximum order for order selection </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Kim J.H., 2014, Predictive Regression: Improved Augmented Regression Method, Journal of Empirical Finance 25, 13-15.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>p.aic </code></td>
+<td>
+<p>order chosen by AIC</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.aic </code></td>
+<td>
+<p>order chosen by BIC</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>Kim J.H., 2014, Predictive Regression: Improved Augmented Regression Method, Journal of Empirical Finance 25, 13-15.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jae H. Kim
+</p>
+
+
+<h3>References</h3>
+
+<p>Kim J.H., 2014, Predictive Regression: Improved Augmented Regression Method, Journal of Empirical Finance 25, 13-15.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data(data1)
+# Replicating Table 5 (excess return)
+y=data1$ret.nyse.vw*100 -data1$tbill*100
+x=cbind(log(data1$dy.nyse), data1$tbill*100); k=ncol(x) 
+
+p=PR.order(x,y,pmax=10)$p.bic;  # AR(1) 
+</code></pre>
+
+
+</div>

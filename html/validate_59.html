@@ -1,0 +1,207 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>contains_exactly</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check records using a predifined table of (im)possible values</h2>
+
+<h3>Description</h3>
+
+<p>Given a set of keys or key combinations, check whether all thos combinations
+occur, or check that they do not occur.  Supports globbing and regular
+expressions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">contains_exactly(keys, by = NULL, allow_duplicates = FALSE)
+
+contains_at_least(keys, by = NULL)
+
+contains_at_most(keys, by = NULL)
+
+does_not_contain(keys)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>keys</code></td>
+<td>
+<p>A data frame or bare (unquoted) name of a data
+frame passed as a reference to <code>confront</code> (see examples).
+The column names of <code>keys</code> must also occurr in the columns
+of the data under scrutiny.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>A bare (unquoted) variable or list of variable names that occur in
+the data under scrutiny. The data will be split into groups according to
+these variables and the check is performed on each group.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allow_duplicates</code></td>
+<td>
+<p><code>[logical]</code> toggle whether key combinations can occur 
+more than once.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<table>
+<tr>
+<td style="text-align: left;">
+  <code>contains_exactly</code> </td>
+<td style="text-align: left;"> dataset contains exactly the key set, no more, no less. </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  <code>contains_at_least</code>
+</td>
+<td style="text-align: left;"> dataset contains at least the given keys. </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  <code>contains_at_most</code> </td>
+<td style="text-align: left;"> all keys in the data set are contained the given keys. </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  <code>does_not_contain</code> </td>
+<td style="text-align: left;"> The keys are interpreted as forbidden key combinations. </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>For <code>contains_exactly</code>, <code>contains_at_least</code>, and
+<code>contains_at_most</code> a <code>logical</code> vector with one entry for each
+record in the dataset. Any group not conforming to the test keys will have
+<code>FALSE</code> assigned to each record in the group (see examples).
+</p>
+<p>For <code>contains_at_least</code>: a <code>logical</code> vector equal to the number of
+records under scrutiny. It is <code>FALSE</code> where key combinations do not match
+any value in <code>keys</code>.
+</p>
+<p>For <code>does_not_contain</code>:  a <code>logical</code> vector with size equal to the
+number of records under scrutiny. It is <code>FALSE</code> where key combinations
+do not match any value in <code>keys</code>.
+</p>
+
+
+<h3>Globbing</h3>
+
+<p>Globbing is a simple method of defining string patterns where the asterisks
+(<code>*</code>) is used a wildcard. For example, the globbing pattern
+<code>"abc*"</code> stands for any string starting with <code>"abc"</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other cross-record-helpers: 
+<code>do_by()</code>,
+<code>exists_any()</code>,
+<code>hb()</code>,
+<code>hierarchy()</code>,
+<code>is_complete()</code>,
+<code>is_linear_sequence()</code>,
+<code>is_unique()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Check that data is present for all quarters in 2018-2019
+dat &lt;- data.frame(
+    year    = rep(c("2018","2019"),each=4)
+  , quarter = rep(sprintf("Q%d",1:4), 2)
+  , value   = sample(20:50,8)
+)
+
+# Method 1: creating a data frame in-place (only for simple cases)
+rule &lt;- validator(contains_exactly(
+           expand.grid(year=c("2018","2019"), quarter=c("Q1","Q2","Q3","Q4"))
+          )
+        )
+out &lt;- confront(dat, rule)
+values(out)
+
+# Method 2: pass the keyset to 'confront', and reference it in the rule.
+# this scales to larger key sets but it needs a 'contract' between the
+# rule definition and how 'confront' is called.
+
+keyset &lt;- expand.grid(year=c("2018","2019"), quarter=c("Q1","Q2","Q3","Q4"))
+rule &lt;- validator(contains_exactly(all_keys))
+out &lt;- confront(dat, rule, ref=list(all_keys = keyset))
+values(out)
+
+## Globbing (use * as a wildcard)
+
+# transaction data 
+transactions &lt;- data.frame(
+    sender   = c("S21", "X34", "S45","Z22")
+  , receiver = c("FG0", "FG2", "DF1","KK2")
+  , value    = sample(70:100,4)
+)
+
+# forbidden combinations: if the sender starts with "S", 
+# the receiver can not start "FG"
+forbidden &lt;- data.frame(sender="S*",receiver = "FG*")
+
+rule &lt;- validator(does_not_contain(glob(forbidden_keys)))
+out &lt;- confront(transactions, rule, ref=list(forbidden_keys=forbidden))
+values(out)
+
+
+## Quick interactive testing
+# use 'with':
+with(transactions, does_not_contain(forbidden)) 
+
+
+
+## Grouping 
+
+# data in 'long' format
+dat &lt;- expand.grid(
+  year = c("2018","2019")
+  , quarter = c("Q1","Q2","Q3","Q4")
+  , variable = c("import","export")
+)
+dat$value &lt;- sample(50:100,nrow(dat))
+
+
+periods &lt;- expand.grid(
+  year = c("2018","2019")
+  , quarter = c("Q1","Q2","Q3","Q4")
+)
+
+rule &lt;- validator(contains_exactly(all_periods, by=variable))
+
+out &lt;- confront(dat, rule, ref=list(all_periods=periods))
+values(out)
+
+# remove one  export record
+
+dat1 &lt;- dat[-15,]
+out1 &lt;- confront(dat1, rule, ref=list(all_periods=periods))
+values(out1)
+values(out1)
+
+</code></pre>
+
+
+</div>

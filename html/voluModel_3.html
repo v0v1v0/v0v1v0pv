@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bottomRaster</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Bottom raster generation</h2>
+
+<h3>Description</h3>
+
+<p>Samples deepest depth values from a
+<code>SpatVector</code> data frame and generates a <code>SpatRaster</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bottomRaster(rawPointData)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>rawPointData</code></td>
+<td>
+<p>A <code>SpatVector</code> object from which
+bottom variables will be sampled. See Details for more about format.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p><code>rawPointData</code> is a <code>SpatVector</code> object that
+contains measurements of a single environmental variable (e.g.
+salinity, temperature, etc.) with x, y, and z coordinates. The
+measurements in the <code>data.frame</code> should be organized so that each
+column is a depth slice, increasing in depth from left to right. The
+function was designed around the oceanographic data shapefiles supplied
+by the World Ocean Atlas
+(<a href="https://www.ncei.noaa.gov/access/world-ocean-atlas-2018/">https://www.ncei.noaa.gov/access/world-ocean-atlas-2018/</a>).
+The function selects the "deepest" (rightmost) measurement at each
+x, y coordinate pair that contains data. These measurements are then
+rasterized at the resolution and extent of the x,y coordinates, under
+the assumption that x and y intervals are equal and represent the center
+of a cell.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>SpatRaster</code> designed to approximate sea bottom
+measurements for modeling species' distributions and/or niches.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(terra)
+
+# Create point grid
+coords &lt;- data.frame(x = rep(seq(1:5), times = 5),
+                    y = unlist(lapply(1:5, FUN = function(x) {
+                      rep(x, times = 5)})))
+
+# Create data and add NAs to simulate uneven bottom depths
+dd &lt;- data.frame(SURFACE = 1:25,
+                d5M = 6:30,
+                d10M = 11:35,
+                d25M = 16:40)
+dd$d25M[c(1:5, 18:25)] &lt;- NA
+dd$d10M[c(3:5, 21:23)] &lt;- NA
+dd$d5M[c(4, 22)] &lt;- NA
+
+dd[,c("x","y")] &lt;- coords
+
+# Create SpatialPointsDataFrame
+sp &lt;- vect(dd, geom = c("x", "y"))
+
+# Here's the function
+result &lt;- bottomRaster(rawPointData = sp)
+plot(result)
+
+</code></pre>
+
+
+</div>

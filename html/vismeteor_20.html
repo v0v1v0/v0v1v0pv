@@ -1,0 +1,186 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vmgeom</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visual magnitude distribution of geometric distributed meteor magnitudes</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random generation for the
+visual magnitude distribution of geometric distributed meteor magnitudes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dvmgeom(m, lm, r, log = FALSE, perception.fun = NULL)
+
+pvmgeom(m, lm, r, lower.tail = TRUE, log = FALSE, perception.fun = NULL)
+
+qvmgeom(p, lm, r, lower.tail = TRUE, perception.fun = NULL)
+
+rvmgeom(n, lm, r, perception.fun = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>numeric; the meteor magnitude.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lm</code></td>
+<td>
+<p>numeric; limiting magnitude.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r</code></td>
+<td>
+<p>numeric; the population index. It is the only parameter of the distribution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, probabilities p are given as <code>log(p)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>perception.fun</code></td>
+<td>
+<p>function; perception probability function (optional).
+Default is vmperception.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail</code></td>
+<td>
+<p>logical; if <code>TRUE</code> (default) probabilities are
+<code class="reqn">P[M &lt; m]</code>, otherwise, <code class="reqn">P[M \ge m]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>numeric; probability.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>numeric; count of meteor magnitudes.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In visual meteor observation, it is common to estimate meteor magnitudes in integer values.
+Hence, this distribution is discrete and has the density
+</p>
+<p style="text-align: center;"><code class="reqn">
+    {\displaystyle P[X = x] \sim f(x) \, \mathrm r^{-x}} \,\mathrm{,}
+</code>
+</p>
+
+<p>where <code class="reqn">x \ge -0.5</code> is the difference between the limiting magnitude <code>lm</code>
+and the meteor magnitude <code>m</code> and <code class="reqn">f(x)</code> is the perception probability function.
+This distribution is thus a product of the
+perception probabilities and the
+actual geometric distribution of the meteor magnitudes.
+Therefore, the parameter <code>p</code> of the geometric distribution is <code>p = 1 - 1/r</code>.
+</p>
+<p>The parameter <code>lm</code> indicate what the parameter <code>m</code> refers to.
+<code>m</code> must be an integer meteor magnitude.
+The length of the vector <code>lm</code> must then be equal to the length of the vector <code>m</code>
+or <code>lm</code> is a scalar value.
+In case of <code>rvmgeom</code>, the length of the vector <code>lm</code> must be <code>n</code> or <code>lm</code> is a scalar value.
+</p>
+<p>If the perception probabilities function <code>perception.fun</code> is given,
+it must have the signature <code style="white-space: pre;">⁠function(x)⁠</code> and must return the perception probabilities of
+the difference <code>x</code> between the limiting magnitude and the meteor magnitude.
+If <code>x &gt;= 15.0</code>, the <code>perception.fun</code> function should return the perception probability of <code>1.0</code>.
+If <code>log = TRUE</code> is given, the logarithm value of the perception probabilities
+must be returned. <code>perception.fun</code> is resolved using match.fun.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dvmgeom</code> gives the density, <code>pvmgeom</code> gives the distribution function,
+<code>qvmgeom</code> gives the quantile function, and <code>rvmgeom</code> generates random deviates.
+</p>
+<p>The length of the result is determined by <code>n</code> for <code>rvmgeom</code>, and is the maximum
+of the lengths of the numerical vector arguments for the other functions.
+</p>
+<p>Since the distribution is discrete, <code>qvmgeom</code> and <code>rvmgeom</code> always return integer values.
+<code>qvmgeom</code> can return <code>NaN</code> value with a warning.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>vmperception
+stats::Geometric
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">N &lt;- 100
+r &lt;- 2.0
+limmag &lt;- 6.5
+(m &lt;- seq(6, -7))
+
+# discrete density of `N` meteor magnitudes
+(freq &lt;- round(N * dvmgeom(m, limmag, r)))
+
+# log likelihood function
+lld &lt;- function(r) {
+    -sum(freq * dvmgeom(m, limmag, r, log=TRUE))
+}
+
+# maximum likelihood estimation (MLE) of r
+est &lt;- optim(2, lld, method='Brent', lower=1.1, upper=4)
+
+# estimations
+est$par # mean of r
+
+# generate random meteor magnitudes
+m &lt;- rvmgeom(N, r, lm=limmag)
+
+# log likelihood function
+llr &lt;- function(r) {
+    -sum(dvmgeom(m, limmag, r, log=TRUE))
+}
+
+# maximum likelihood estimation (MLE) of r
+est &lt;- optim(2, llr, method='Brent', lower=1.1, upper=4, hessian=TRUE)
+
+# estimations
+est$par # mean of r
+sqrt(1/est$hessian[1][1]) # standard deviation of r
+
+m &lt;- seq(6, -4, -1)
+p &lt;- vismeteor::dvmgeom(m, limmag, r)
+barplot(
+    p,
+    names.arg = m,
+    main = paste0('Density (r = ', r, ', limmag = ', limmag, ')'),
+    col = "blue",
+    xlab = 'm',
+    ylab = 'p',
+    border = "blue",
+    space = 0.5
+)
+axis(side = 2, at = pretty(p))
+</code></pre>
+
+
+</div>

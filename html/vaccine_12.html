@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_ce</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plotting controlled effect curves</h2>
+
+<h3>Description</h3>
+
+<p>Plot CR and/or CVE curves
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_ce(
+  ...,
+  which = "CR",
+  density_type = "none",
+  dat = NA,
+  zoom_x = "zoom in",
+  zoom_y = "zoom out"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>One or more objects of class <code>"vaccine_est"</code> returned by
+<code>est_ce</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>which</code></td>
+<td>
+<p>One of c("CR", "CVE"); controls whether to plot CR curves or CVE
+curves.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>density_type</code></td>
+<td>
+<p>One of c("none", "kde", "kde edge").
+Controls the type of estimator used for the background marker density
+plot. For "none", no density plot is displayed. For "kde", a weighted
+kernel density estimator is used. For "kde edge", a modified version of
+"kde" is used that allows for a possible point mass at the left edge of
+the marker distribution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dat</code></td>
+<td>
+<p>The data object originally passed into <code>est_ce</code>. It is
+only necessary to pass this in if <code>density_type</code> is not set to
+"none".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zoom_x</code></td>
+<td>
+<p>Either one of c("zoom in", "zoom out") or a vector of
+length 2. Controls the zooming on the X-axis. The default "zoom in" will
+set the zoom limits to the plot estimates. Choosing "zoom out" will set
+the zoom limits to show the entire distribution of the marker. Entering a
+vector of length 2 will set the left and right zoom limits explicitly.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zoom_y</code></td>
+<td>
+<p>Either "zoom out" or a vector of length 2. Controls the zooming
+on the Y-axis. The default "zoom out" will show the entire vertical range
+of the estimates. Entering a vector of length 2 will set the lower and
+upper zoom limits explicitly.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A plot of CR/CVE estimates
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(hvtn505)
+dat &lt;- load_data(time="HIVwk28preunblfu", event="HIVwk28preunbl", vacc="trt",
+                 marker="IgG_V2", covariates=c("age","BMI","bhvrisk"),
+                 weights="wt", ph2="casecontrol", data=hvtn505)
+
+ests_cox &lt;- est_ce(dat=dat, type="Cox", t_0=578)
+ests_np &lt;- est_ce(dat=dat, type="NP", t_0=578)
+plot_ce(ests_cox, ests_np)
+
+</code></pre>
+
+
+</div>

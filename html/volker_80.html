@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>labs_replace</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Replace item value names in a column by their labels</h2>
+
+<h3>Description</h3>
+
+<p>Replace item value names in a column by their labels
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">labs_replace(
+  data,
+  col,
+  codes,
+  col_from = "value_name",
+  col_to = "value_label",
+  na.missing = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A tibble.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>The column holding item values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>codes</code></td>
+<td>
+<p>The codebook to use: A tibble with the columns
+value_name and value_label.
+Can be created by the codebook function, e.g. by calling
+<code>codes &lt;- codebook(data, myitemcolumn)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col_from</code></td>
+<td>
+<p>The tidyselect column with source values, defaults to value_name.
+If the column is not found in the codebook, the first column is used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col_to</code></td>
+<td>
+<p>The tidyselect column with target values, defaults to value_label.
+If the column is not found in the codebook, the second column is used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.missing</code></td>
+<td>
+<p>By default, the column is converted to a factor with levels combined from the codebook and the data.
+Set na.missing to TRUE to set all levels not found in the codes to NA.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Tibble with new labels.
+</p>
+
+
+</div>

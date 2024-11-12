@@ -1,0 +1,153 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_model</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a vetiver object for deployment of a trained model</h2>
+
+<h3>Description</h3>
+
+<p>A <code>vetiver_model()</code> object collects the information needed to store, version,
+and deploy a trained model. Once your <code>vetiver_model()</code> object has been
+created, you can:
+</p>
+
+<ul>
+<li>
+<p> store and version it as a pin with <code>vetiver_pin_write()</code>
+</p>
+</li>
+<li>
+<p> create an API endpoint for it with <code>vetiver_api()</code>
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetiver_model(
+  model,
+  model_name,
+  ...,
+  description = NULL,
+  metadata = list(),
+  save_prototype = TRUE,
+  save_ptype = deprecated(),
+  versioned = NULL
+)
+
+new_vetiver_model(
+  model,
+  model_name,
+  description,
+  metadata,
+  prototype,
+  versioned
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>A trained model, such as an <code>lm()</code> model or a tidymodels
+<code>workflows::workflow()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model_name</code></td>
+<td>
+<p>Model name or ID.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other method-specific arguments passed to <code>vetiver_ptype()</code>
+to compute an input data prototype, such as <code>prototype_data</code> (a sample of
+training features).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>description</code></td>
+<td>
+<p>A detailed description of the model. If omitted, a brief
+description of the model will be generated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metadata</code></td>
+<td>
+<p>A list containing additional metadata to store with the pin.
+When retrieving the pin, this will be stored in the <code>user</code> key, to
+avoid potential clashes with the metadata that pins itself uses.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>save_prototype</code></td>
+<td>
+<p>Should an input data prototype be stored with the model?
+The options are <code>TRUE</code> (the default, which stores a zero-row slice of the
+training data), <code>FALSE</code> (no input data prototype for visual documentation or
+checking), or a dataframe to be used for both checking at prediction time
+<em>and</em> examples in API visual documentation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>save_ptype</code></td>
+<td>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>versioned</code></td>
+<td>
+<p>Should the model object be versioned when stored with
+<code>vetiver_pin_write()</code>? The default, <code>NULL</code>, will use the default for the
+<code>board</code> where you store the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prototype</code></td>
+<td>
+<p>An input data prototype. If <code>NULL</code>, there is no checking of
+new data at prediction time.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>You can provide your own data to <code>save_prototype</code> to use as examples in the
+visual documentation created by <code>vetiver_api()</code>. If you do this,
+consider checking that your input data prototype has the same structure
+as your training data (perhaps with <code>hardhat::scream()</code>) and/or simulating
+data to avoid leaking PII via your deployed model.
+</p>
+<p>Some models, like <code>ranger::ranger()</code>, <a href="https://tensorflow.rstudio.com/">keras</a>,
+and <a href="https://torch.mlverse.org/">luz (torch)</a>,
+<em>require</em> that you pass in example training data as <code>prototype_data</code>
+or else explicitly set <code>save_prototype = FALSE</code>. For non-rectangular data
+input to models, such as image input for a keras or torch model, we currently
+recommend that you turn off prototype checking via <code>save_prototype = FALSE</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A new <code>vetiver_model</code> object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+cars_lm &lt;- lm(mpg ~ ., data = mtcars)
+vetiver_model(cars_lm, "cars-linear")
+
+</code></pre>
+
+
+</div>

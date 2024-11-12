@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>viralx_knn</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Explain K-Nearest Neighbors Model</h2>
+
+<h3>Description</h3>
+
+<p>Explains the predictions of a K-Nearest Neighbors (KNN) model for CD4 and
+viral load data using the DALEX and DALEXtra packages. It provides insights
+into the specified variable's impact on the KNN model's predictions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">viralx_knn(vip_featured, hiv_data, knn_hyperparameters, vip_train, vip_new)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vip_featured</code></td>
+<td>
+<p>The name of the variable to be explained.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hiv_data</code></td>
+<td>
+<p>The data frame containing the CD4 and viral load data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knn_hyperparameters</code></td>
+<td>
+<p>A list of hyperparameters to be tuned for the KNN model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vip_train</code></td>
+<td>
+<p>The training data used for creating the explainer object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vip_new</code></td>
+<td>
+<p>A new observation for which to generate explanations.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame containing explanations for the specified variable.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">hiv_data &lt;- train2
+knn_hyperparameters &lt;- list(neighbors = 5, weight_func = "optimal", dist_power = 0.3304783)
+vip_featured &lt;- c("cd_2022")
+vip_train &lt;- hiv_data
+vip_new &lt;- vip_train[1,]
+viralx_knn(vip_featured, hiv_data, knn_hyperparameters, vip_train, vip_new)
+</code></pre>
+
+
+</div>

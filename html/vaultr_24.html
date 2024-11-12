@@ -1,0 +1,370 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vault_test_server</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Control a test vault server</h2>
+
+<h3>Description</h3>
+
+<p>Control a server for use with testing.  This is designed to be
+used only by other packages that wish to run tests against a vault
+server.  You will need to set <code>VAULTR_TEST_SERVER_BIN_PATH</code> to
+point at the directory containing the vault binary, to the binary
+itself, or to the value <code>auto</code> to try and find it on your <code>PATH</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vault_test_server(
+  https = FALSE,
+  init = TRUE,
+  if_disabled = testthat::skip,
+  quiet = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>https</code></td>
+<td>
+<p>Logical scalar, indicating if a https-using server
+should be created, rather than the default vault dev-mode
+server.  This is still <em>entirely</em> insecure, and uses self
+signed certificates that are bundled with the package.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>init</code></td>
+<td>
+<p>Logical scalar, indicating if the https-using server
+should be initialised.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>if_disabled</code></td>
+<td>
+<p>Callback function to run if the vault server is
+not enabled.  The default, designed to be used within tests, is
+<code>testthat::skip</code>.  Alternatively, inspect the
+<code style="white-space: pre;">⁠$enabled⁠</code> property of the returned object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>Logical, indicating if startup should be quiet and
+not print messages</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Once created with <code>vault_test_server</code>, a server will stay
+alive for as long as the R process is alive <em>or</em> until the
+<code>vault_server_instance</code> object goes out of scope and is
+garbage collected.  Calling <code style="white-space: pre;">⁠$kill()⁠</code> will explicitly stop
+the server, but this is not strictly needed.  See below for
+methods to control the server instance.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>Starting a server in test mode must <em>not</em> be used for production
+under any circumstances.  As the name suggests,
+<code>vault_test_server</code> is a server suitable for <em>tests</em> only and
+lacks any of the features required to make vault secure.  For
+more information, please see the the official Vault
+documentation on development servers:
+https://developer.hashicorp.com/vault/docs/concepts/dev-server
+</p>
+
+
+<h3>Super class</h3>
+
+<p><code>vaultr::vault_client_object</code> -&gt; <code>vault_server_instance</code>
+</p>
+
+
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>port</code></dt>
+<dd>
+<p>The vault port (read-only).</p>
+</dd>
+<dt><code>addr</code></dt>
+<dd>
+<p>The vault address; this is suitable for using with
+vault_client (read-only).</p>
+</dd>
+<dt><code>token</code></dt>
+<dd>
+<p>The vault root token, from when the testing vault
+server was created.  If the vault is rekeyed this will no
+longer be accurate (read-only).</p>
+</dd>
+<dt><code>keys</code></dt>
+<dd>
+<p>Key shares from when the vault was initialised
+(read-only).</p>
+</dd>
+<dt><code>cacert</code></dt>
+<dd>
+<p>Path to the https certificate, if running in
+https mode (read-only).</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-vault_server_instance-new"><code>vault_server_instance$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_server_instance-version"><code>vault_server_instance$version()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_server_instance-client"><code>vault_server_instance$client()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_server_instance-env"><code>vault_server_instance$env()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_server_instance-export"><code>vault_server_instance$export()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_server_instance-clear_cached_token"><code>vault_server_instance$clear_cached_token()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_server_instance-kill"><code>vault_server_instance$kill()</code></a>
+</p>
+</li>
+</ul>
+<details open><summary>Inherited methods</summary><ul>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="format"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-format"><code>vaultr::vault_client_object$format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="help"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-help"><code>vaultr::vault_client_object$help()</code></a></span></li>
+</ul></details><hr>
+<a id="method-vault_server_instance-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a <code>vault_server_instance</code> object. Not typically
+called by users.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_server_instance$new(bin, port, https, init, quiet = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>bin</code></dt>
+<dd>
+<p>Path to the vault binary</p>
+</dd>
+<dt><code>port</code></dt>
+<dd>
+<p>Port to use</p>
+</dd>
+<dt><code>https</code></dt>
+<dd>
+<p>Logical, indicating if we should use TLS/https</p>
+</dd>
+<dt><code>init</code></dt>
+<dd>
+<p>Logical, indicating if we should initialise</p>
+</dd>
+<dt><code>quiet</code></dt>
+<dd>
+<p>Logical, indicating if startup should be quiet</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_server_instance-version"></a>
+
+
+
+<h4>Method <code>version()</code>
+</h4>
+
+<p>Return the server version, as a numeric_version
+object.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_server_instance$version()</pre></div>
+
+
+<hr>
+<a id="method-vault_server_instance-client"></a>
+
+
+
+<h4>Method <code>client()</code>
+</h4>
+
+<p>Create a new client that can use this server.  The
+client will be a vault_client object.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_server_instance$client(login = TRUE, quiet = TRUE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>login</code></dt>
+<dd>
+<p>Logical, indicating if the client should login to
+the server (default is <code>TRUE</code>).</p>
+</dd>
+<dt><code>quiet</code></dt>
+<dd>
+<p>Logical, indicating if informational messages
+should be suppressed.  Default is <code>TRUE</code>, in contrast with
+most other methods.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_server_instance-env"></a>
+
+
+
+<h4>Method <code>env()</code>
+</h4>
+
+<p>Return a named character vector of environment
+variables that can be used to communicate with this vault
+server (<code>VAULT_ADDR</code>, <code>VAULT_TOKEN</code>, etc).
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_server_instance$env()</pre></div>
+
+
+<hr>
+<a id="method-vault_server_instance-export"></a>
+
+
+
+<h4>Method <code>export()</code>
+</h4>
+
+<p>Export the variables returned by the <code style="white-space: pre;">⁠$env()⁠</code>
+method to the environment.  This makes them available to
+child processes.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_server_instance$export()</pre></div>
+
+
+<hr>
+<a id="method-vault_server_instance-clear_cached_token"></a>
+
+
+
+<h4>Method <code>clear_cached_token()</code>
+</h4>
+
+<p>Clear any session-cached token for this server.
+This is intended for testing new authentication backends.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_server_instance$clear_cached_token()</pre></div>
+
+
+<hr>
+<a id="method-vault_server_instance-kill"></a>
+
+
+
+<h4>Method <code>kill()</code>
+</h4>
+
+<p>Kill the server.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_server_instance$kill()</pre></div>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Try and start a server; if one is not enabled (see details
+# above) then this will return NULL
+server &lt;- vault_test_server(if_disabled = message)
+
+if (!is.null(server)) {
+  # We now have a server running on an arbitrary high port - note
+  # that we are running over http and in dev mode: this is not at
+  # all suitable for production use, just for tests
+  server$addr
+
+  # Create clients using the client method - by default these are
+  # automatically authenticated against the server
+  client &lt;- server$client()
+  client$write("/secret/password", list(value = "s3cret!"))
+  client$read("/secret/password")
+
+  # The server stops automatically when the server object is
+  # garbage collected, or it can be turned off with the
+  # 'kill' method:
+  server$kill()
+  tryCatch(client$status(), error = function(e) message(e$message))
+}
+</code></pre>
+
+
+</div>

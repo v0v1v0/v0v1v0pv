@@ -1,0 +1,113 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>logLik.loglm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Log-Likelihood of a loglm Object</h2>
+
+<h3>Description</h3>
+
+<p>Calculates the log-likelihood value of the <code>loglm</code> model represented by <code>object</code> 
+evaluated at the estimated coefficients.
+</p>
+<p>It allows the use of <code>AIC</code> and <code>BIC</code>, which require
+that a <code>logLik</code> method exists to extract the corresponding log-likelihood for the 
+model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'loglm'
+logLik(object, ..., zero=1E-10)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>A <code>loglm</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>For compatibility with the S3 generic; not used here</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+<p>value used to replace zero frequencies in calculating the log-likelihood</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If cell frequencies have not been stored with the <code>loglm</code> object
+(via the argument <code>keep.frequencies = TRUE</code>), they are obtained
+using <code>update</code>.
+</p>
+<p>This function calculates the log-likelihood in a way that allows for non-integer
+frequencies, such as the case where 0.5 has been added to all cell frequencies
+to allow for sampling zeros.  If the frequencies still contain zero values,
+those are replaced by the value of <code>start</code>.
+</p>
+<p>For integer frequencies, it gives the same result as the corresponding
+model fit using <code>glm</code>, whereas <code>glm</code>
+returns <code>-Inf</code> if there are any non-integer frequencies.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns an object of class <code>logLik</code>. 
+This is a number with one attribute, <code>"df"</code> (degrees of freedom), 
+giving the number of (estimated) parameters in the model. </p>
+
+
+<h3>Author(s)</h3>
+
+<p>Achim Zeileis</p>
+
+
+<h3>See Also</h3>
+
+<p><code>loglm</code>, <code>AIC</code>, <code>BIC</code>,
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Titanic, package="datasets")  
+
+require(MASS)
+titanic.mod1 &lt;- loglm(~ (Class * Age * Sex) + Survived, data=Titanic)
+titanic.mod2 &lt;- loglm(~ (Class * Age * Sex) + Survived*(Class + Age + Sex), data=Titanic)
+titanic.mod3 &lt;- loglm(~ (Class * Age * Sex) + Survived*(Class + Age * Sex), data=Titanic)
+
+logLik(titanic.mod1)
+AIC(titanic.mod1, titanic.mod2, titanic.mod3)
+BIC(titanic.mod1, titanic.mod2, titanic.mod3)
+
+# compare with models fit using glm()
+titanic &lt;- as.data.frame(Titanic)
+titanic.glm1 &lt;- glm(Freq ~ (Class * Age * Sex) + Survived, 
+                    data=titanic, family=poisson)
+titanic.glm2 &lt;- glm(Freq ~ (Class * Age * Sex) + Survived*(Class + Age + Sex), 
+                    data=titanic, family=poisson)
+titanic.glm3 &lt;- glm(Freq ~ (Class * Age * Sex) + Survived*(Class + Age * Sex), 
+                    data=titanic, family=poisson)
+
+logLik(titanic.glm1)
+AIC(titanic.glm1, titanic.glm2, titanic.glm3)
+BIC(titanic.glm1, titanic.glm2, titanic.glm3)
+
+</code></pre>
+
+
+</div>

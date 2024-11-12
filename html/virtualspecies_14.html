@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotSuitabilityToProba</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualise the function that was used to transform environmental suitability into
+probability of occurrence</h2>
+
+<h3>Description</h3>
+
+<p>This function plots the relationships between the environmental suitability
+and the probability of occurrence, which is used to generate the presence-
+absence distribution. 
+It requires the output from <code>convertToPA</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotSuitabilityToProba(sp, add = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>sp</code></td>
+<td>
+<p>the output from <code>convertToPA</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, the relationship
+will be added to the currently active graph.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further arguments to be passed to <code>plot</code>. See 
+<code>plot</code> and <code>par</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Create an example stack with two environmental variables
+a &lt;- matrix(rep(dnorm(1:100, 50, sd = 25)), 
+            nrow = 100, ncol = 100, byrow = TRUE)
+env &lt;- c(rast(a * dnorm(1:100, 50, sd = 25)),
+         rast(a * 1:100))
+names(env) &lt;- c("variable1", "variable2")
+
+parameters &lt;- formatFunctions(variable1 = c(fun = 'dnorm', mean = 1e-04, 
+                                             sd = 1e-04),
+                              variable2 = c(fun = 'linearFun', a = 1, b = 0))
+# Generation of the virtual species
+sp1 &lt;- generateSpFromFun(env, parameters)
+sp1
+
+
+# Converting to presence-absence, probablistic method, logistic conversion
+# A species with a low prevalence:
+
+sp1.lowprev &lt;- convertToPA(sp1, species.prevalence = 0.1)
+plotSuitabilityToProba(sp1.lowprev)
+
+# A species with a high prevalence:
+
+sp1.highprev &lt;- convertToPA(sp1, species.prevalence = 0.9)
+plotSuitabilityToProba(sp1.lowprev)
+
+# Converting to presence-absence, probablistic method, linear conversion
+# A species with a low prevalence:
+
+sp1.lowprev &lt;- convertToPA(sp1, species.prevalence = 0.1,
+                           prob.method = "linear")
+plotSuitabilityToProba(sp1.highprev)
+
+# A species with a high prevalence:
+
+sp1.highprev &lt;- convertToPA(sp1, species.prevalence = 0.9,
+                           prob.method = "linear")
+plotSuitabilityToProba(sp1.highprev)
+
+</code></pre>
+
+
+</div>

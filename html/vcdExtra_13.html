@@ -1,0 +1,145 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>split3d</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Subdivide a 3D Object
+</h2>
+
+<h3>Description</h3>
+
+<p>Subdivides a <code>shape3d</code> object or a list of <code>shape3d</code> objects
+into objects of the same shape along a given dimension
+according to the proportions or frequencies specified in vector(s).
+</p>
+<p><code>split3d</code> is the basic workhorse used in <code>mosaic3d</code>,
+but may be useful in other contexts.
+</p>
+<p><code>range3d</code> and <code>center3d</code> are utility functions, also useful in other contexts.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">
+split3d(obj, ...)
+
+## S3 method for class 'shape3d'
+split3d(obj, p, dim, space = 0.1, ...)
+
+## S3 method for class 'list'
+split3d(obj, p, dim, space = 0.1, ...)
+
+range3d(obj)
+
+center3d(obj)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+
+<p>A <code>shape3d</code> object, or a list composed of them
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Other arguments for split3d methods
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+
+<p>For a single <code>shade3d</code> object, a vector of proportions
+(or a vector of non-negative numbers which will be normed to proportions)
+indicating the number of subdivisions and their scaling along dimension <code>dim</code>.
+For a list of <code>shade3d</code> objects, a matrix whose columns indicate the
+subdivisions of each object.  
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dim</code></td>
+<td>
+
+<p>The dimension along which the object is to be subdivided.
+Either an integer: 1, 2, or 3, or a character: "x", "y", or "z".
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>space</code></td>
+<td>
+
+<p>The total space used to separate the copies of the object along
+dimension <code>dim</code>.
+The unit inter-object space is therefore <code>space/(length(p)-1)</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The resulting list of <code>shape3d</code> objects is actually composed of <em>copies</em>
+of the input object(s), scaled according to the proportions in <code>p</code>
+and then translated to make their range along the splitting dimension
+equal to that of the input object(s).  
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>split3d</code> returns a list of <code>shape3d</code> objects.
+</p>
+<p><code>range3d</code> returns a 2 x 3 matrix, whose first row contains
+the minima on dimensions x, y, z, and whose second row contains
+the maxima.
+</p>
+<p><code>center3d</code> returns a numeric vector containing
+the means of the minima and maxima on dimensions x, y, z.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Duncan Murdoch, with refinements by Michael Friendly
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>mosaic3d</code>
+</p>
+<p><code>shapelist3d</code> for the plotting of lists of <code>shape3d</code> objects.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">if (require(rgl)) {
+  open3d()
+  cube &lt;- cube3d(alpha=0.4)
+  sl1 &lt;- split3d(cube, c(.2, .3, .5), 1)
+  col &lt;- c("#FF000080", "#E5E5E580", "#0000FF80")
+  shapelist3d(sl1, col=col)
+	
+  open3d()
+  p &lt;- matrix(c(.6, .4, .5, .5, .2, .8), nrow=2)
+  sl2 &lt;- split3d(sl1, p, 2)
+  shapelist3d(sl2, col=col)	
+  }
+</code></pre>
+
+
+</div>

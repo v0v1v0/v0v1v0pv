@@ -1,0 +1,157 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>od_table</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate Tidy Origin-Destination Data using Valhalla</h2>
+
+<h3>Description</h3>
+
+<p>This function creates a tidy (i.e. long) table of
+origin-destination trip data using the Valhalla routing engine. For a set
+of o origins and d destinations, it returns a tibble with (o x d) rows with
+the travel distance and time between each pair. It can handle several
+different travel modes and routing options.
+</p>
+<p>This function is a user-friendly wrapper around<code>valhalla::sources_to_targets()</code>,
+which calls the Valhalla API directly. <code>sources_to_targets()</code> offers finer-
+grained control over API options, and so this latter function may be more
+useful for advanced users.
+</p>
+<p>Notable features of <code>od_matrix()</code>:
+</p>
+
+<ul>
+<li>
+<p> You can specify human-readable indices with <code>from_id_col</code> and
+<code>to_id_col</code>. (Valhalla's API only returns zero-indexed integer
+identifiers.)
+</p>
+</li>
+<li>
+<p> You can specify a <code>batch_size</code> to break computation into
+several smaller API calls, to prevent your Valhalla instance from running
+out of memory. This seems especially important for pedestrian routing,
+where I've sometimes needed to use a batch size as small as 5.
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">od_table(
+  froms,
+  from_id_col,
+  tos,
+  to_id_col,
+  costing = "auto",
+  batch_size = 100,
+  minimum_reachability = 500,
+  verbose = FALSE,
+  hostname = "localhost",
+  port = 8002
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>froms</code></td>
+<td>
+<p>A tibble containing origin locations in columns named <code>lat</code> and
+<code>lon</code>, and an optional column with human-readable names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>from_id_col</code></td>
+<td>
+<p>The name of the column in <code>froms</code> that contains
+human-readable names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tos</code></td>
+<td>
+<p>A tibble containing destination locations in columns named <code>lat</code>
+and <code>lon</code>, and an optional column with human-readable names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>to_id_col</code></td>
+<td>
+<p>The name of the column in <code>tos</code> that contains human-readable
+names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>costing</code></td>
+<td>
+<p>The travel costing method: at present "auto", "bicycle", and
+"pedestrian" are supported.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>batch_size</code></td>
+<td>
+<p>The number of origin points to process per API call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minimum_reachability</code></td>
+<td>
+<p>The minimum number of nodes a candidate network
+needs to have before it is included. Try increasing this value (e.g. to
+500) if Valhalla is getting stuck in small disconnected road networks.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Boolean. Defaults to FALSE. If TRUE, it will provide updates on
+on the batching process (if applicable).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hostname</code></td>
+<td>
+<p>Hostname or IP address of your Valhalla instance. Defaults to "localhost".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>port</code></td>
+<td>
+<p>The port your Valhalla instance is monitoring. Defaults to 8002.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A tibble showing the trip distances and times from each origin to each named destination.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(dplyr)
+library(valhallr)
+# set up our inputs
+origins &lt;- bind_rows(test_data("parliament"), test_data("uottawa"), test_data("cntower"))
+destinations &lt;- bind_rows(test_data("cdntirecentre"), test_data("parliament"))
+
+# generate a tidy origin-destination table
+od &lt;- od_table (froms = origins,
+                from_id_col = "name",
+                tos = destinations,
+                to_id_col = "name",
+                costing = "auto",
+                batch_size = 100,
+                minimum_reachability = 500)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

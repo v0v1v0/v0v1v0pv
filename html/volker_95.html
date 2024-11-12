@@ -1,0 +1,164 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_metrics</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Output a plot with distribution parameters such as the mean values</h2>
+
+<h3>Description</h3>
+
+<p>The plot type depends on the number of selected columns:
+</p>
+
+<ul>
+<li>
+<p> One metric column: see plot_metrics_one
+</p>
+</li>
+<li>
+<p> Multiple metric columns: see plot_metrics_items
+</p>
+</li>
+</ul>
+<p>Group comparisons:
+</p>
+
+<ul>
+<li>
+<p> One metric column and one grouping column: see plot_metrics_one_grouped
+</p>
+</li>
+<li>
+<p> Multiple metric columns and one grouping column: see plot_metrics_items_grouped
+</p>
+</li>
+<li>
+<p> Multiple metric columns and multiple grouping columns: see plot_metrics_items_grouped_items (not yet implemented)
+</p>
+</li>
+</ul>
+<p>By default, if you provide two column selections, the second selection is treated as categorical.
+Setting the metric-parameter to TRUE will call the appropriate functions for correlation analysis:
+</p>
+
+<ul>
+<li>
+<p> Two metric columns: see plot_metrics_one_cor
+</p>
+</li>
+<li>
+<p> Multiple metric columns and one metric column : see plot_metrics_items_cor
+</p>
+</li>
+<li>
+<p> Two metric column selections: see plot_metrics_items_cor_items
+</p>
+</li>
+</ul>
+<p>Parameters that may be passed to the metric functions
+(see the respective function help):
+</p>
+
+<ul>
+<li> <p><strong>ci</strong>: Plot confidence intervals for means or correlation coefficients.
+</p>
+</li>
+<li> <p><strong>box</strong>: Visualise the distribution by adding boxplots.
+</p>
+</li>
+<li> <p><strong>log</strong>: In scatter plots, you can use a logarithmic scale.
+Be aware, that zero values will be omitted because their log value is undefined.
+</p>
+</li>
+<li> <p><strong>method</strong>: By default, correlations are calculated using Pearson’s R.
+You can choose Spearman’s Rho with the methods-parameter.
+</p>
+</li>
+<li> <p><strong>limits</strong>: The scale limits are automatically guessed by the package functions (work in progress).
+Use the limits-parameter to manually fix any misleading graphs.
+</p>
+</li>
+<li> <p><strong>title</strong>: All plots usually get a title derived from the column attributes or column names.
+Set to FALSE to suppress the title or provide a title of your choice as a character value.
+</p>
+</li>
+<li> <p><strong>labels</strong>: Labels are extracted from the column attributes.
+Set to FALSE to output bare column names and values.
+</p>
+</li>
+<li> <p><strong>numbers</strong>: Controls whether to display correlation coefficients on the plot.
+</p>
+</li>
+</ul>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_metrics(data, cols, cross = NULL, metric = FALSE, clean = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>A tidy column selection,
+e.g. a single column (without quotes)
+or multiple columns selected by methods such as starts_with().</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross</code></td>
+<td>
+<p>Optional, a grouping column (without quotes).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metric</code></td>
+<td>
+<p>When crossing variables, the cross column parameter can contain categorical or metric values.
+By default, the cross column selection is treated as categorical data.
+Set metric to TRUE, to treat it as metric and calculate correlations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clean</code></td>
+<td>
+<p>Prepare data by data_clean.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other parameters passed to the appropriate plot function.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A ggplot object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(volker)
+data &lt;- volker::chatgpt
+
+plot_metrics(data, sd_age)
+
+</code></pre>
+
+
+</div>

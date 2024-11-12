@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visregList</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Join multiple visreg objects together in a list</h2>
+
+<h3>Description</h3>
+
+<p>This function takes multiple visreg objects, from separate calls to
+<code>visreg()</code>, and joins them together in a single object.  The single object
+will be of type <code>visregList</code> unless <code>collapse=TRUE</code> is specified, in
+which case the list will be collapsed back down into a single <code>visreg</code>
+object.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visregList(..., labels, collapse=FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p><code>visreg</code> objects, as produced by calls to <code>visreg</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+
+<p>A character vector with length corresponding to the number of <code>visreg</code>
+objects passed to the function that provides labels for the different
+objects in subsequent plots.  Only has an effect if <code>collapse=TRUE</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>collapse</code></td>
+<td>
+
+<p>If <code>TRUE</code>, the resulting object will be collapsed down into a single
+<code>visreg</code> object.  If <code>FALSE</code>, the resulting object will be a
+<code>visregList</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>visreg</code> or <code>visregList</code> object, depending on the value of
+<code>collapse</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Patrick Breheny
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>visreg</code>
+<code>plot.visreg</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fit &lt;- lm(Ozone ~ Solar.R + Wind + Temp, data=airquality)
+v1 &lt;- visreg(fit, "Wind", plot=FALSE, alpha=0.2)
+v2 &lt;- visreg(fit, "Wind", plot=FALSE, alpha=0.01)
+vv1 &lt;- visregList(v1, v2, collapse=FALSE)
+vv2 &lt;- visregList(v1, v2, collapse=TRUE,
+                  labels=c("Confidence: 0.80", "Confidence: 0.99"))
+op &lt;- par(mfrow=c(1,2))
+plot(vv1)
+par(op)
+plot(vv2)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,118 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>oipospoisson</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> One-inflated Positive Poisson Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Fits a 1-inflated positive Poisson distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">oipospoisson(lpstr1 = "logitlink", llambda = "loglink",
+   type.fitted = c("mean", "lambda", "pobs1", "pstr1", "onempstr1"),
+   ilambda = NULL, gpstr1 = (1:19)/20, gprobs.y = (1:19)/20,
+   imethod = 1, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lpstr1, llambda</code></td>
+<td>
+
+<p>For <code>lpstr1</code>: the same idea as <code>zipoisson</code>
+except it applies to a structural 1.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilambda, gpstr1, gprobs.y, imethod</code></td>
+<td>
+
+<p>For initial values.
+See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.fitted, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The 1-inflated positive Poisson distribution is a mixture
+distribution of the
+positive (0-truncated) Poisson
+distribution with some probability of obtaining a (structural) 1.
+Thus there are two sources for obtaining the value 1.
+It is similar to a zero-inflated Poisson model, except
+the Poisson is replaced by a positive Poisson and the 0 is replaced
+by 1.
+This distribution is written here
+in a way that retains a similar notation to the
+zero-inflated Poisson, i.e., the
+probability <code class="reqn">P[Y=1]</code> involves another parameter <code class="reqn">\phi</code>.
+See <code>zipoisson</code>.
+</p>
+<p>This family function can handle multiple responses.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+<code>rrvglm</code> and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Under- or over-flow may occur if the data is ill-conditioned.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>Oipospois</code>,
+<code>pospoisson</code>,
+<code>oapospoisson</code>,
+<code>otpospoisson</code>,
+<code>zipoisson</code>,
+<code>poissonff</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: set.seed(1)
+pdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))  # Artificial data
+pdata &lt;- transform(pdata, pstr1 = 0.5, lambda = exp(3 - x2))
+pdata &lt;- transform(pdata, y1 = roipospois(nn, lambda, pstr1 = pstr1))
+with(pdata, table(y1))
+fit1 &lt;- vglm(y1 ~ x2, oipospoisson, data = pdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+
+## End(Not run)</code></pre>
+
+
+</div>

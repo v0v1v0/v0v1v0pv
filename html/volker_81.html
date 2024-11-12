@@ -1,0 +1,63 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>labs_restore</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Restore labels from the codebook store in the codebook attribute.</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">labs_restore(data, cols = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>A tidyselect column selection.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>You can store labels before mutate operations by calling
+labs_store.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(dplyr)
+library(volker)
+
+volker::chatgpt |&gt;
+  labs_store() |&gt;
+  mutate(sd_age = 2024 - sd_age) |&gt;
+  labs_restore() |&gt;
+  tab_metrics(sd_age)
+</code></pre>
+
+
+</div>

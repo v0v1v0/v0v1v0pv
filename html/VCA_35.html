@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getGB</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Giesbrecht &amp; Burns Approximation of the Variance-Covariance Matrix of Variance Components</h2>
+
+<h3>Description</h3>
+
+<p>Compute variance covariance matrix of variance components of a linear mixed model
+via the method stated in Giesbrecht and Burns (1985).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getGB(obj, tol = 1e-12)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(object) with list-type structure, e.g. <code>VCA</code> object fitted by ANOVA
+or a premature <code>VCA</code> object fitted by REML</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>(numeric) values &lt; 'tol' will be considered being equal to zero</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is not intended to be called by users and therefore not exported.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(matrix) corresponding to the Giesbrecht &amp; Burns approximation
+of the variance-covariance matrix of variance components
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>,
+Florian Dufey <a href="mailto:florian.dufey@roche.com">florian.dufey@roche.com</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Searle, S.R, Casella, G., McCulloch, C.E. (1992), Variance Components, Wiley New York
+</p>
+<p>Giesbrecht, F.G. and Burns, J.C. (1985), Two-Stage Analysis Based on a Mixed Model: Large-Sample
+Asymptotic Theory and Small-Sample Simulation Results, Biometrics 41, p. 477-486
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vcovVC</code>, <code>remlVCA</code>, <code>remlMM</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_3)
+fit &lt;- anovaVCA(y~day/run, dataEP05A2_3)
+fit &lt;- solveMME(fit)		# some additional matrices required
+getGB(fit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

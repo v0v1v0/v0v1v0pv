@@ -1,0 +1,105 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hm_dcm_data_gen</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Artificial data generating function for the hidden-Markov DCM based on the given Q-matrix</h2>
+
+<h3>Description</h3>
+
+<p><code>hm_dcm_data_gen()</code> returns the artificially generated item response data for the HM-DCM
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hm_dcm_data_gen(
+  I = 500,
+  Q,
+  min_theta = 0.2,
+  max_theta = 0.8,
+  att_cor = 0.1,
+  seed = 17
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>I</code></td>
+<td>
+<p>the number of assumed respondents</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Q</code></td>
+<td>
+<p>the <code class="reqn">J \times K</code> binary matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min_theta</code></td>
+<td>
+<p>the minimum value of the item parameter <code class="reqn">\theta_{jht}</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_theta</code></td>
+<td>
+<p>the maximum value of the item parameter <code class="reqn">\theta_{jht}</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>att_cor</code></td>
+<td>
+<p>the true value of the correlation among attributes (default: 0.1)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>the seed value used for random number generation (default: 17)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list including:
+</p>
+
+<dl>
+<dt>X</dt>
+<dd>
+<p>the generated artificial item response data</p>
+</dd>
+<dt>alpha_true</dt>
+<dd>
+<p>the generated true vale of the attribute mastery pattern, matrix form</p>
+</dd>
+<dt>alpha_patt_true</dt>
+<dd>
+<p>the generated true vale of the attribute mastery pattern, string form</p>
+</dd>
+</dl>
+<h3>References</h3>
+
+<p>Yamaguchi, K., &amp; Martinez, A. J. (2024). Variational Bayes
+inference for hidden Markov diagnostic classification models. <em>British Journal
+of Mathematical and Statistical Psychology</em>, 77(1), 55–79. <a href="https://doi.org/10.1111/bmsp.12308">doi:10.1111/bmsp.12308</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">indT = 3
+Q = sim_Q_J30K3
+hm_sim_Q = lapply(1:indT,function(time_point) Q)
+hm_sim_data = hm_dcm_data_gen(Q=hm_sim_Q,I=200)
+
+</code></pre>
+
+
+</div>

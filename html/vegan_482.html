@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>goodness.metaMDS</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Goodness of Fit and Shepard Plot for Nonmetric Multidimensional Scaling </h2>
+
+<h3>Description</h3>
+
+<p>Function <code>goodness.metaMDS</code> find goodness of fit measure for
+points in nonmetric multidimensional scaling, and function
+<code>stressplot</code> makes a <code>Shepard</code> diagram.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'metaMDS'
+goodness(object, dis, ...)
+## Default S3 method:
+stressplot(object, dis, pch, p.col = "blue", l.col = "red", 
+    lwd = 2, ...) 
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>A result object from <code>metaMDS</code>, 
+<code>monoMDS</code> or <code>isoMDS</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dis</code></td>
+<td>
+<p>Dissimilarities.  This should not be used with
+<code>metaMDS</code> or <code>monoMDS</code>, but must be used with
+<code>isoMDS</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pch</code></td>
+<td>
+<p>Plotting character for points.  Default is dependent on the
+number of points. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.col, l.col</code></td>
+<td>
+<p>Point and line colours.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwd</code></td>
+<td>
+<p>Line width. For <code>monoMDS</code> the default is
+<code>lwd = 1</code> if more than two lines are drawn, and <code>lwd = 2</code> 
+otherwise.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other parameters to functions, e.g. graphical parameters.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Function <code>goodness.metaMDS</code> finds a goodness of fit statistic
+for observations (points).  This is defined so that sum of squared
+values is equal to squared stress.  Large values indicate poor fit.
+The absolute values of the goodness statistic depend on the
+definition of the stress: <code>isoMDS</code> expresses
+stress in percents, and therefore its goodness values are 100 times
+higher than those of <code>monoMDS</code> which expresses the
+stress as a proportion.
+</p>
+<p>Function <code>stressplot</code> draws a Shepard diagram which is a plot
+of ordination distances and monotone or linear fit line against
+original dissimilarities.  In addition, it displays two
+correlation-like statistics on the goodness of fit in the graph.
+The nonmetric fit is based on stress <code class="reqn">S</code> and defined as <code class="reqn">R^2
+  = 1-S^2</code>.  The “linear fit” is the squared
+correlation between fitted values and ordination distances. For
+<code>monoMDS</code>, the “linear fit” and <code class="reqn">R^2</code>
+from “stress type 2” are equal.
+</p>
+<p>Both functions can be used with <code>metaMDS</code>,
+<code>monoMDS</code> and <code>isoMDS</code>.  The original
+dissimilarities should not be given for <code>monoMDS</code> or
+<code>metaMDS</code> results (the latter tries to reconstruct the
+dissimilarities using <code>metaMDSredist</code> if
+<code>isoMDS</code> was used as its engine).  With
+<code>isoMDS</code> the dissimilarities must be given.  In
+either case, the functions inspect that dissimilarities are
+consistent with current ordination, and refuse to analyse
+inconsistent dissimilarities.  Function <code>goodness.metaMDS</code> is
+generic in <span class="pkg">vegan</span>, but you must spell its name completely with
+<code>isoMDS</code> which has no class.
+</p>
+
+
+<h3>Value</h3>
+
+<p> Function <code>goodness</code> returns a vector of values. Function
+<code>stressplot</code> returns invisibly an object with items for
+original dissimilarities, ordination distances and fitted values.  </p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jari Oksanen. </p>
+
+
+<h3>See Also</h3>
+
+<p><code>metaMDS</code>,  <code>monoMDS</code>, 
+<code>isoMDS</code>, <code>Shepard</code>. Similar
+diagrams for eigenvector ordinations can be drawn with
+<code>stressplot.wcmdscale</code>, <code>stressplot.cca</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(varespec)
+mod &lt;- metaMDS(varespec)
+stressplot(mod)
+gof &lt;- goodness(mod)
+gof
+plot(mod, display = "sites", type = "n")
+points(mod, display = "sites", cex = 2*gof/mean(gof))
+</code></pre>
+
+
+</div>

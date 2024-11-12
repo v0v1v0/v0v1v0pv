@@ -1,0 +1,119 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cdf.lmscreg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Cumulative Distribution Function for LMS Quantile Regression </h2>
+
+<h3>Description</h3>
+
+<p>Computes the cumulative distribution function (CDF) for
+observations, based on a LMS quantile regression.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cdf.lmscreg(object, newdata = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>A <span class="pkg">VGAM</span> quantile regression model, i.e.,
+an object produced by modelling functions such as
+<code>vglm</code> and <code>vgam</code> with a family
+function beginning with <code>"lms."</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p> Data frame where the predictions are
+to be made. If missing, the original data is used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Parameters which are passed into functions such as
+<code>cdf.lms.yjn</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The CDFs returned here are values lying in [0,1] giving
+the relative probabilities associated with the quantiles
+<code>newdata</code>.  For example, a value near 0.75 means it is
+close to the upper quartile of the distribution.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector of CDF values lying in [0,1].
+</p>
+
+
+<h3>Note</h3>
+
+<p>The data are treated like quantiles, and the
+percentiles are returned. The opposite is performed by
+<code>qtplot.lmscreg</code>.
+</p>
+<p>The CDF values of the model have been placed in
+<code>@post$cdf</code> when the model was fitted.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2004).
+Quantile regression via vector generalized additive models.
+<em>Statistics in Medicine</em>, <b>23</b>, 2295–2315.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>deplot.lmscreg</code>,
+<code>qtplot.lmscreg</code>,
+<code>lms.bcn</code>,
+<code>lms.bcg</code>,
+<code>lms.yjn</code>,
+<code>CommonVGAMffArguments</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fit &lt;- vgam(BMI ~ s(age, df=c(4, 2)), lms.bcn(zero = 1), data = bmi.nz)
+head(fit@post$cdf)
+head(cdf(fit))  # Same
+head(depvar(fit))
+head(fitted(fit))
+
+cdf(fit, data.frame(age = c(31.5, 39), BMI = c(28.4, 24)))
+</code></pre>
+
+
+</div>

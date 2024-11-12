@@ -1,0 +1,125 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cover_trans</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Convert cover scales to percent cover</h2>
+
+<h3>Description</h3>
+
+<p>Convert values of a categorical cover scale to percentage values.
+</p>
+<p>This function requires as input a coverconvert object which contains
+the conversion tables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'character,coverconvert'
+cover_trans(x, conversion, from = NULL, rule = "top", zeroto = 0.1, ...)
+
+## S4 method for signature 'factor,coverconvert'
+cover_trans(x, conversion, ...)
+
+## S4 method for signature 'numeric,coverconvert'
+cover_trans(x, conversion, ...)
+
+## S4 method for signature 'vegtable,missing'
+cover_trans(x, to, replace = FALSE, rule = "top", zeroto = 0.1, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Either a factor or character vector, or a vegtable object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>conversion</code></td>
+<td>
+<p>An object of class vegtable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>from</code></td>
+<td>
+<p>Scale name of values in <code>x</code> as character value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rule</code></td>
+<td>
+<p>A character value indicating the rule applied for cover
+transformation. Three rules are implemented for transformation,
+either <code>top</code> (values transformed to the top of the range),
+<code>middle</code> (transformation at the midpoint), and
+<code>bottom</code> (conversion at the lowest value of the range).
+In the later case, if the bottom is zero cover, a fictive bottom value
+can be set by <code>'zeroto'</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zeroto</code></td>
+<td>
+<p>Value set for transformation of classes with bottom at 0%
+cover.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments passed from or to other methods.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>to</code></td>
+<td>
+<p>Name of the column in slot <code>samples</code> for writing converted values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>replace</code></td>
+<td>
+<p>Logical value indicating whether existing cover values should
+be replaced by the new computed values or not.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Either a vector or a vegtable object.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miguel Alvarez <a href="mailto:kamapu78@gmail.com">kamapu78@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Check the available scales
+summary(Kenya_veg@coverconvert)
+
+## Conversion by default 'top' rule
+Kenya_veg &lt;- cover_trans(Kenya_veg, to = "percent")
+summary(as.factor(Kenya_veg@samples$percent))
+
+## Conversion by 'middle' rule
+Kenya_veg &lt;- cover_trans(Kenya_veg, to = "percent", rule = "middle", replace = TRUE)
+summary(as.factor(Kenya_veg@samples$percent))
+
+## Conversion by 'bottom' rule
+Kenya_veg &lt;- cover_trans(Kenya_veg, to = "percent", rule = "bottom", replace = TRUE)
+summary(as.factor(Kenya_veg@samples$percent))
+</code></pre>
+
+
+</div>

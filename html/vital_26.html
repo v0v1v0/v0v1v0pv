@@ -1,0 +1,92 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>generate.mdl_vtl_df</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate responses from a mable</h2>
+
+<h3>Description</h3>
+
+<p>Use a fitted model to simulate future data with similar
+behaviour to the response.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'mdl_vtl_df'
+generate(x, new_data = NULL, h = NULL, bootstrap = FALSE, times = 1, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A mable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>new_data</code></td>
+<td>
+<p>Future data needed for generation (should include the time index and exogenous regressors)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>h</code></td>
+<td>
+<p>The simulation horizon (can be used instead of <code>new_data</code> for regular time series with no exogenous regressors).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bootstrap</code></td>
+<td>
+<p>If <code>TRUE</code>, then forecast distributions are computed using simulation with resampled errors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>times</code></td>
+<td>
+<p>The number of replications.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Innovations are sampled by the model's assumed error distribution.
+If <code>bootstrap</code> is <code>TRUE</code>, innovations will be sampled from the model's residuals.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vital object with simulated values.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Rob J Hyndman and Mitchell O'Hara-Wild
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">aus_mortality |&gt;
+  dplyr::filter(State == "Victoria") |&gt;
+  model(lc = LC(Mortality)) |&gt;
+  generate(times = 3, bootstrap = TRUE)
+
+</code></pre>
+
+
+</div>

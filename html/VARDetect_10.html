@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>detection_check</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function for detection performance check</h2>
+
+<h3>Description</h3>
+
+<p>Function for detection performance check
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">detection_check(pts.final, brk, nob, critval = 5)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>pts.final</code></td>
+<td>
+<p>a list of estimated change points</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>brk</code></td>
+<td>
+<p>the true change points</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nob</code></td>
+<td>
+<p>length of time series</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>critval</code></td>
+<td>
+<p>critical value for selection rate. Default value is 5. Specifically, to compute the selection rate,  a selected break point is counted as a “success” for the <code class="reqn">j</code>-th true break point, <code class="reqn">t_j</code>, if it falls in the interval <code class="reqn">[t_j - {(t_{j} - t_{j-1})}/{critval}, t_j + {(t_{j+1} - t_{j})}/{critval}]</code>, <code class="reqn">j = 1,\dots, m_0</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a matrix of detection summary results, including the absolute error, selection rate and relative location. The absolute error of the locations of the estimated break points is defined as <code class="reqn">{error}_j =|\tilde{t}_j^f - t_j|</code>, <code class="reqn">j = 1,\dots, m_0</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># an example of 10 replicates result
+set.seed(1)
+nob &lt;- 1000
+brk &lt;- c(333, 666, nob+1)
+cp.list &lt;- vector('list', 10)
+for(i in 1:10){
+    cp.list[[i]] &lt;-  brk[1:2] + sample(c(-50:50),1)
+}
+# some replicate fails to detect all the change point
+cp.list[[2]] &lt;- cp.list[[2]][1]
+cp.list[4] &lt;- list(NULL)      # setting 4'th element to NULL.
+# some replicate overestimate the number of change point
+cp.list[[3]] &lt;- c(cp.list[[3]], 800)
+cp.list
+res &lt;- detection_check(cp.list, brk, nob, critval = 5)
+res
+# use a stricter critical value
+res &lt;- detection_check(cp.list, brk, nob, critval = 10)
+res
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>fitVCA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fit Variance Component Model by ANOVA or REML</h2>
+
+<h3>Description</h3>
+
+<p>Function serves as interface to functions <code>anovaVCA</code> and <code>remlVCA</code>
+for fitting a variance component models (random models) either by ANOVA or REML. All arguments applicable
+to either one of these functions can be specified (see <code>anovaVCA</code> or <code>remlVCA</code> for details).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">fitVCA(
+  form,
+  Data,
+  method = c("anova", "reml"),
+  scale = TRUE,
+  VarVC = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>form</code></td>
+<td>
+<p>(formula) specifiying the variance component model (see <code>anovaVCA</code> and/or <code>remlVCA</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>(data.frame)  containing all variables referenced in 'form'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>(character) either "anova" to use ANOVA Type-I estimation of variance components or "reml" to use 
+restricted maximum likelihood (REML) estimation of variance component</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>(logical) TRUE = scale values of the response aiming to avoid numerical problems
+when numbers are either very small or very large, FALSE = use original scale</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VarVC</code></td>
+<td>
+<p>(logical) TRUE = variance-covariance matrix of variance components will be computed, FALSE = it will not
+be computed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments to be passed to function <code>anovaVCA</code> or function <code>remlVCA</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>fitLMM</code>, <code>anovaVCA</code>, <code>remlVCA</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+#load data (CLSI EP05-A2 Within-Lab Precision Experiment) 
+data(dataEP05A2_2)
+
+# perform ANOVA-estimation of variance components
+res.anova &lt;- fitVCA(y~day/run, dataEP05A2_2, "anova")
+# perform REML-estimation of variance components
+res.reml &lt;- fitVCA(y~day/run, dataEP05A2_2, "reml")
+
+# compare scaling vs. not scaling the response
+fit0 &lt;- fitVCA(y~day/run, dataEP05A2_2, "anova", scale=TRUE)
+fit1 &lt;- fitVCA(y~day/run, dataEP05A2_2, "anova", scale=FALSE)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

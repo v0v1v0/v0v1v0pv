@@ -1,0 +1,117 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.ave.prop2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for an average proportion difference in
+2-group studies</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and confidence interval for an
+average proportion difference from two or more studies.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.ave.prop2(alpha, f1, f2, n1, n2, bystudy = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f1</code></td>
+<td>
+<p>vector of group 1 frequency counts</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f2</code></td>
+<td>
+<p>vector of group 2 frequency counts</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>vector of group 1 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>vector of group 2 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bystudy</code></td>
+<td>
+<p>logical to also return each study estimate (TRUE) or not</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is the average estimate across all studies.  If bystudy
+is TRUE, there is 1 additional row for each study.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated effect size
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG, Price RM (2014).
+“Meta-analysis methods for risk differences.”
+<em>British Journal of Mathematical and Statistical Psychology</em>, <b>67</b>(3), 371–387.
+ISSN 00071102, <a href="https://doi.org/10.1111/bmsp.12024">doi:10.1111/bmsp.12024</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">n1 &lt;- c(204, 201, 932, 130, 77)
+n2 &lt;- c(106, 103, 415, 132, 83)
+f1 &lt;- c(24, 40, 93, 14, 5)
+f2 &lt;- c(12, 9, 28, 3, 1)
+meta.ave.prop2(.05, f1, f2, n1, n2, bystudy = TRUE)
+
+# Should return:
+#             Estimate         SE            LL         UL
+# Average 0.0567907589 0.01441216  2.854345e-02 0.08503807
+# Study 1 0.0009888529 0.03870413 -7.486985e-02 0.07684756
+# Study 2 0.1067323481 0.04018243  2.797623e-02 0.18548847
+# Study 3 0.0310980338 0.01587717 -2.064379e-05 0.06221671
+# Study 4 0.0837856174 0.03129171  2.245499e-02 0.14511624
+# Study 5 0.0524199553 0.03403926 -1.429577e-02 0.11913568
+
+
+</code></pre>
+
+
+</div>

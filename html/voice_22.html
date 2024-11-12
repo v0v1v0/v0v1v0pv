@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>read_rttm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Read RTTM files</h2>
+
+<h3>Description</h3>
+
+<p>Read Rich Transcription Time Marked (RTTM) files in <code>fromRttm</code> directory.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">read_rttm(fromRttm)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>fromRttm</code></td>
+<td>
+<p>A directory/folder containing RTTM files.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The Rich Transcription Time Marked (RTTM) files are space-delimited text files containing one turn per line defined by NIST - National Institute of Standards and Technology. Each line containing ten fields:
+</p>
+<p><code>type</code> Type: segment type; should always by SPEAKER.
+</p>
+<p><code>file</code> File ID: file name; basename of the recording minus extension (e.g., rec1_a).
+</p>
+<p><code>chnl</code> Channel ID: channel (1-indexed) that turn is on; should always be 1.
+</p>
+<p><code>tbeg</code> Turn Onset – onset of turn in seconds from beginning of recording.
+</p>
+<p><code>tdur</code> Turn Duration – duration of turn in seconds.
+</p>
+<p><code>ortho</code> Orthography Field – should always by &lt;NA&gt;.
+</p>
+<p><code>stype</code> Speaker Type – should always be &lt;NA&gt;.
+</p>
+<p><code>name</code> Speaker Name – name of speaker of turn; should be unique within scope of each file.
+</p>
+<p><code>conf</code> Confidence Score – system confidence (probability) that information is correct; should always be &lt;NA&gt;.
+</p>
+<p><code>slat</code> Signal Lookahead Time – should always be &lt;NA&gt;.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list containing data frames obtained from standard RTTM files. See 'Details'.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://www.nist.gov/system/files/documents/itl/iad/mig/KWS15-evalplan-v05.pdf">https://www.nist.gov/system/files/documents/itl/iad/mig/KWS15-evalplan-v05.pdf</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>voice::enrich_rttm</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(voice)
+
+url0 &lt;- 'https://raw.githubusercontent.com/filipezabala/voiceAudios/main/rttm/sherlock0.rttm'
+download.file(url0, destfile = paste0(tempdir(), '/sherlock0.rttm'))
+url1 &lt;- 'https://raw.githubusercontent.com/filipezabala/voiceAudios/main/rttm/sherlock1.rttm'
+download.file(url0, destfile = paste0(tempdir(), '/sherlock1.rttm'))
+
+(rttm &lt;- voice::read_rttm(tempdir()))
+class(rttm)
+lapply(rttm, class)
+</code></pre>
+
+
+</div>

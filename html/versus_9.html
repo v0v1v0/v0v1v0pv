@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>value_diffs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get the differing values from a comparison</h2>
+
+<h3>Description</h3>
+
+<p>Get the differing values from a comparison
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">value_diffs(comparison, column)
+
+value_diffs_stacked(comparison, column = everything())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>comparison</code></td>
+<td>
+<p>The output of <code>compare()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>column</code></td>
+<td>
+<p>&lt;<code>tidy-select</code>&gt;. The output will show the differing values
+for the provided columns.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>value_diffs()</code></td>
+<td>
+<p>A data frame with one row for each element
+of <code>col</code> found to be unequal between the input tables (
+<code>table_a</code> and <code>table_b</code> from the original <code>compare()</code> output)
+The output table has the column specified by <code>column</code> from each of the
+input tables, plus the <code>by</code> columns. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td>
+<code>value_diffs_stacked()</code>, <code>value_diffs_all()</code>
+</td>
+<td>
+<p>A data frame containing
+the <code>value_diffs()</code> outputs for the specified columns combined row-wise
+using <code>dplyr::bind_rows()</code>. If <code>dplyr::bind_rows()</code> is not possible
+due to incompatible types, values are converted to character first.
+<code>value_diffs_all()</code> is the same as <code>value_diffs_stacked()</code> with
+<code>column = everything()</code></p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">comp &lt;- compare(example_df_a, example_df_b, by = car)
+value_diffs(comp, disp)
+value_diffs_stacked(comp, c(disp, mpg))
+</code></pre>
+
+
+</div>

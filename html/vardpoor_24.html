@@ -1,0 +1,195 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>variance_est</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variance estimation for sample surveys by the ultimate cluster method</h2>
+
+<h3>Description</h3>
+
+<p>Computes the variance estimation by the ultimate cluster method.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">variance_est(
+  Y,
+  H,
+  PSU,
+  w_final,
+  N_h = NULL,
+  fh_zero = FALSE,
+  PSU_level = TRUE,
+  PSU_sort = NULL,
+  period = NULL,
+  dataset = NULL,
+  msg = "",
+  checking = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Variables of interest. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H</code></td>
+<td>
+<p>The unit stratum variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PSU</code></td>
+<td>
+<p>Primary sampling unit variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_final</code></td>
+<td>
+<p>Weight variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>N_h</code></td>
+<td>
+<p>Number of primary sampling units in population for each stratum (and period if <code>period</code> is not <code>NULL</code>). If <code>N_h = NULL</code> and <code>fh_zero = FALSE</code> (default), <code>N_h</code> is estimated from sample data as sum of weights (<code>w_final</code>) in each stratum (and period if <code>period</code> is not <code>NULL</code>).
+Optional for single-stage sampling design as it will be estimated from sample data. Recommended for multi-stage sampling design as <code>N_h</code> can not be correctly estimated from the sample data in this case. If <code>N_h</code> is not used in case of multi-stage sampling design (for example, because this information is not available), it is advisable to set <code>fh_zero = TRUE</code>.
+If <code>period</code> <b>is</b> <code>NULL</code>. A two-column matrix with rows for each stratum. The first column should contain stratum code. The second column - the number of primary sampling units in the population of each stratum.
+If <code>period</code> <b>is not</b> <code>NULL</code>. A three-column matrix with rows for each intersection of strata and period. The first column should contain period. The second column should contain stratum code. The third column - the number of primary sampling units in the population of each stratum and period.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fh_zero</code></td>
+<td>
+<p>by default FALSE; <code>fh</code> is calculated as division of n_h and N_h in each strata, if TRUE, <code>fh</code> value is zero in each strata.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PSU_level</code></td>
+<td>
+<p>by default TRUE; if PSU_level is TRUE, in each strata <code>fh</code> is calculated as division of count of PSU in sample (n_h) and count of PSU in frame (N_h). if PSU_level is FALSE, in each strata <code>fh</code> is calculated as division of count of units in sample (n_h) and count of units in frame (N_h), which calculated as sum of weights.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PSU_sort</code></td>
+<td>
+<p>optional; if PSU_sort is defined, then variance is calculated for systematic sample.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>Optional variable for the survey periods. If supplied, the values for each period are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>an optional name of the individual dataset  <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>msg</code></td>
+<td>
+<p>an optional printed text, when function print error.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>checking</code></td>
+<td>
+<p>Optional variable if this variable is TRUE, then function checks data preparation errors, otherwise not checked. This variable by default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If we assume that <code class="reqn">n_h \geq 2</code> for all <code class="reqn">h</code>, that is, two or more PSUs are selected from each stratum, then the variance of <code class="reqn">\hat{\theta}</code> can be estimated from the variation among the estimated PSU totals of the variable <code class="reqn">Z</code>:
+</p>
+<p style="text-align: center;"><code class="reqn">\hat{V} \left(\hat{\theta} \right)=\sum\limits_{h=1}^{H} \left(1-f_h \right) \frac{n_h}{n_{h}-1} \sum\limits_{i=1}^{n_h} \left( z_{hi\bullet}-\bar{z}_{h\bullet\bullet}\right)^2, </code>
+</p>
+
+<p>where
+<code class="reqn">\bullet</code>
+<code class="reqn">z_{hi\bullet}=\sum\limits_{j=1}^{m_{hi}} \omega_{hij} z_{hij}</code>
+</p>
+<p><code class="reqn">\bullet</code>
+<code class="reqn">\bar{z}_{h\bullet\bullet}=\frac{\left( \sum\limits_{i=1}^{n_h} z_{hi\bullet} \right)}{n_h}</code>
+</p>
+<p><code class="reqn">\bullet</code>
+<code class="reqn">f_h</code> is the sampling fraction of PSUs within stratum
+</p>
+<p><code class="reqn">\bullet</code>
+<code class="reqn">h</code> is the stratum number, with a total of H strata
+</p>
+<p><code class="reqn">\bullet</code>
+<code class="reqn">i</code> is the primary sampling unit (PSU) number within stratum <code class="reqn">h</code>, with a total of <code class="reqn">n_h</code> PSUs
+</p>
+<p><code class="reqn">\bullet</code>
+<code class="reqn">j</code> is the household number within cluster <code class="reqn">i</code> of stratum <code class="reqn">h</code>, with a total of <code class="reqn">m_{hi}</code> household
+</p>
+<p><code class="reqn">\bullet</code>
+<code class="reqn">w_{hij}</code> is the sampling weight for household <code class="reqn">j</code> in PSU <code class="reqn">i</code> of stratum <code class="reqn">h</code>
+</p>
+<p><code class="reqn">\bullet</code>
+<code class="reqn">z_{hij}</code> denotes the observed value of the analysis variable <code class="reqn">z</code> for household <code class="reqn">j</code> in PSU <code class="reqn">i</code> of stratum <code class="reqn">h</code>
+</p>
+
+
+<h3>Value</h3>
+
+<p>a <code>data.table</code> containing the  values of the variance estimation by totals.
+</p>
+
+
+<h3>References</h3>
+
+<p>Morris H. Hansen, William N. Hurwitz, William G. Madow, (1953), Sample survey methods and theory Volume I Methods and applications, 257-258, Wiley. <br>
+Guillaume Osier and Emilio Di Meglio. The linearisation approach implemented by Eurostat for the first wave of EU-SILC: what could be done from the second onwards? 2012 <br>
+Eurostat Methodologies and Working papers, Standard error estimation for the EU-SILC indicators of poverty and social exclusion, 2013, URL <a href="http://ec.europa.eu/eurostat/documents/3859598/5927001/KS-RA-13-029-EN.PDF">http://ec.europa.eu/eurostat/documents/3859598/5927001/KS-RA-13-029-EN.PDF</a>. <br> 
+Yves G. Berger, Tim Goedeme, Guillame Osier (2013). Handbook on standard error estimation and other related sampling issues in EU-SILC, URL <a href="https://ec.europa.eu/eurostat/cros/content/handbook-standard-error-estimation-and-other-related-sampling-issues-ver-29072013_en">https://ec.europa.eu/eurostat/cros/content/handbook-standard-error-estimation-and-other-related-sampling-issues-ver-29072013_en</a> <br>
+Eurostat Methodologies and Working papers, Handbook on precision requirements and variance estimation for ESS household surveys, 2013, URL <a href="http://ec.europa.eu/eurostat/documents/3859598/5927001/KS-RA-13-029-EN.PDF">http://ec.europa.eu/eurostat/documents/3859598/5927001/KS-RA-13-029-EN.PDF</a>. <br></p>
+
+
+<h3>See Also</h3>
+
+<p><code>domain</code>,   <code>lin.ratio</code>,    <code>linarpr</code>,
+<code>linarpt</code>,  <code>lingini</code>,      <code>lingini2</code>,
+<code>lingpg</code>,   <code>linpoormed</code>,   <code>linqsr</code>,
+<code>linrmpg</code>,  <code>residual_est</code>, <code>vardom</code>,
+<code>vardomh</code>, <code>varpoord</code>,     <code>variance_othstr</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">Ys &lt;- rchisq(10, 3)
+w &lt;- rep(2, 10)
+PSU &lt;- 1 : length(Ys)
+H &lt;- rep("Strata_1", 10)
+
+# by default without using fh_zero (finite population correction)
+variance_est(Y = Ys, H = H, PSU = PSU, w_final = w)
+
+
+## Not run: 
+ # without using fh_zero (finite population correction)
+ variance_est(Y = Ys, H = H, PSU = PSU, w_final = w, fh_zero = FALSE)
+ 
+ # with using fh_zero (finite population correction)
+ variance_est(Y = Ys, H = H, PSU = PSU, w_final = w, fh_zero = TRUE)
+ 
+## End(Not run)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vicmap_query</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Establish Vicmap Query</h2>
+
+<h3>Description</h3>
+
+<p>Begin a Vicmap WFS query by selecting a WFS layer. The record must be available as a
+Web Feature Service (WFS) layer (listed in <code>listLayers()</code>)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vicmap_query(layer, CRS = 4283, wfs_version = "2.0.0")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>layer</code></td>
+<td>
+<p>vicmap layer to query. Options are listed in <code>listLayers()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CRS</code></td>
+<td>
+<p>Coordinate Reference System (default is 4283)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wfs_version</code></td>
+<td>
+<p>The current version of WFS is 2.0.0.
+GeoServer supports versions 2.0.0, 1.1.0, and 1.0.0.
+However in order for filtering to be correctly applied wfs_version must be 2.0.0 (default is 2.0.0)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The returned <code>vicmap_promise</code> object is not data, rather it is a 'promise' of the data that can
+be returned if <code>collect()</code> is used; which returns an <code>sf</code> object.
+</p>
+
+
+<h3>Value</h3>
+
+<p>object of class <code>vicmap_promise</code>, which is a 'promise' of the data that can  be returned if <code>collect()</code> is used
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+try(
+vicmap_query(layer = "open-data-platform:hy_watercourse")
+)
+
+</code></pre>
+
+
+</div>

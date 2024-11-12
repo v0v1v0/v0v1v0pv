@@ -1,0 +1,105 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>value_5L</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function to value EQ-5D-5L scores for any country and group by gender and age</h2>
+
+<h3>Description</h3>
+
+<p>Function to value EQ-5D-5L descriptive system to index value.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">value_5L(
+  eq5dresponse_data,
+  mo,
+  sc,
+  ua,
+  pd,
+  ad,
+  country = "England",
+  groupby = NULL,
+  agelimit = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>eq5dresponse_data</code></td>
+<td>
+<p>the data containing eq5d responses</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mo</code></td>
+<td>
+<p>column name for EQ-5D-5L mobility</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sc</code></td>
+<td>
+<p>column name for response for EQ-5D-5L self care</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ua</code></td>
+<td>
+<p>column name for response for EQ-5D-5L usual activities</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pd</code></td>
+<td>
+<p>column name for response for EQ-5D-5L pain/discomfort</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ad</code></td>
+<td>
+<p>column name for response for EQ-5D-5L anxiety/depression</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>country</code></td>
+<td>
+<p>country of interest, by default is England</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groupby</code></td>
+<td>
+<p>male or female -grouping by gender, default NULL</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>agelimit</code></td>
+<td>
+<p>vector of ages to show upper and lower limits, default NULL</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>index value  if success, negative values for failure
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data &lt;- data.frame(
+  age = c(10, 20), sex = c("M", "F"),
+  mo = c(1, 2), sc = c(1, 2), ua = c(3, 4), pd = c(3, 4), ad = c(3, 4)
+)
+value_5L(data, "mo", "sc", "ua", "pd", "ad", "England", NULL, c(10, 70))
+</code></pre>
+
+
+</div>

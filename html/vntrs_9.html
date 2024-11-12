@@ -1,0 +1,153 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vntrs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variable neighborhood trust region search</h2>
+
+<h3>Description</h3>
+
+<p>This function performs variable neighborhood trust region search.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vntrs(f, npar, minimize = TRUE, controls = NULL, quiet = TRUE, seed = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>f</code></td>
+<td>
+<p>A function that computes value, gradient, and Hessian of the function to be
+optimized and returns them as a named list with elements <code>value</code>,
+<code>gradient</code>, and <code>hessian</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>npar</code></td>
+<td>
+<p>The number of parameters of <code>f</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minimize</code></td>
+<td>
+<p>If <code>TRUE</code>, <code>f</code> gets minimized. If <code>FALSE</code>, maximized.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>controls</code></td>
+<td>
+<p>Either <code>NULL</code> or a named list with the following elements. Missing
+elements are set to the default values in parentheses.
+</p>
+
+<ul>
+<li> <p><code>init_runs</code> (<code>5</code>):
+The number of initial searches.
+</p>
+</li>
+<li> <p><code>init_min</code> (<code>-1</code>):
+The minimum argument value for the random initialization.
+</p>
+</li>
+<li> <p><code>init_max</code> (<code>1</code>):
+The maximum argument value for the random initialization.
+</p>
+</li>
+<li> <p><code>init_iterlim</code> (<code>20</code>):
+The number of iterations for the initial searches.
+</p>
+</li>
+<li> <p><code>neighborhoods</code> (<code>5</code>):
+The number of nested neighborhoods.
+</p>
+</li>
+<li> <p><code>neighbors</code> (<code>5</code>):
+The number of neighbors in each neighborhood.
+</p>
+</li>
+<li> <p><code>beta</code> (<code>0.05</code>):
+A non-negative weight factor to account for the function's curvature in the
+selection of the neighbors. If <code>beta = 0</code>, the curvature is ignored.
+The higher the value, the higher the probability of selecting a neighbor in
+the direction of the highest function curvature.
+</p>
+</li>
+<li> <p><code>iterlim</code> (<code>1000</code>):
+The maximum number of iterations to be performed before the local search is
+terminated.
+</p>
+</li>
+<li> <p><code>tolerance</code> (<code>1e-6</code>):
+A positive scalar giving the tolerance for comparing different optimal
+arguments for equality.
+</p>
+</li>
+<li> <p><code>time_limit</code> (<code>NULL</code>):
+The time limit in seconds for the algorithm.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>If <code>TRUE</code>, progress messages are suppressed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>Set a seed for the sampling of the random starting points.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame. Each row contains information of an identified optimum. The
+first <code>npar</code> columns <code>"p1"</code>,...,<code>"p&lt;npar&gt;"</code> store the argument
+values, the next column <code>"value"</code> has the optimal function values and
+the last column <code>"global"</code> contains <code>TRUE</code> for global optima and
+<code>FALSE</code> for local optima.
+</p>
+
+
+<h3>References</h3>
+
+<p>Bierlaire et al. (2009) "A Heuristic for Nonlinear Global Optimization"
+<a href="https://doi.org/10.1287/ijoc.1090.0343">doi:10.1287/ijoc.1090.0343</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rosenbrock &lt;- function(x) {
+  stopifnot(is.numeric(x))
+  stopifnot(length(x) == 2)
+  f &lt;- expression(100 * (x2 - x1^2)^2 + (1 - x1)^2)
+  g1 &lt;- D(f, "x1")
+  g2 &lt;- D(f, "x2")
+  h11 &lt;- D(g1, "x1")
+  h12 &lt;- D(g1, "x2")
+  h22 &lt;- D(g2, "x2")
+  x1 &lt;- x[1]
+  x2 &lt;- x[2]
+  f &lt;- eval(f)
+  g &lt;- c(eval(g1), eval(g2))
+  h &lt;- rbind(c(eval(h11), eval(h12)), c(eval(h12), eval(h22)))
+  list(value = f, gradient = g, hessian = h)
+}
+vntrs(f = rosenbrock, npar = 2, seed = 1, controls = list(neighborhoods = 1))
+
+</code></pre>
+
+
+</div>

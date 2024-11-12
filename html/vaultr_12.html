@@ -1,0 +1,280 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vault_client_cubbyhole</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Cubbyhole secret store</h2>
+
+<h3>Description</h3>
+
+<p>Cubbyhole secret store
+</p>
+<p>Cubbyhole secret store
+</p>
+
+
+<h3>Details</h3>
+
+<p>Interact with vault's cubbyhole key-value store.  This is useful
+for storing simple key-value data without versioning or metadata
+(c.f. vault_client_kv2) that is scoped to your
+current token only and not accessible to anyone else.  For more
+details please see the vault documentation
+https://developer.hashicorp.com/vault/docs/secrets/cubbyhole
+</p>
+
+
+<h3>Super class</h3>
+
+<p><code>vaultr::vault_client_object</code> -&gt; <code>vault_client_cubbyhole</code>
+</p>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-vault_client_cubbyhole-new"><code>vault_client_cubbyhole$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_cubbyhole-read"><code>vault_client_cubbyhole$read()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_cubbyhole-write"><code>vault_client_cubbyhole$write()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_cubbyhole-list"><code>vault_client_cubbyhole$list()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_cubbyhole-delete"><code>vault_client_cubbyhole$delete()</code></a>
+</p>
+</li>
+</ul>
+<details open><summary>Inherited methods</summary><ul>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="format"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-format"><code>vaultr::vault_client_object$format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="help"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-help"><code>vaultr::vault_client_object$help()</code></a></span></li>
+</ul></details><hr>
+<a id="method-vault_client_cubbyhole-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a <code>vault_client_cubbyhole</code> object. Not typically
+called by users.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_cubbyhole$new(api_client)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>api_client</code></dt>
+<dd>
+<p>A vault_api_client object</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_cubbyhole-read"></a>
+
+
+
+<h4>Method <code>read()</code>
+</h4>
+
+<p>Read a value from your cubbyhole
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_cubbyhole$read(path, field = NULL, metadata = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>Path for the secret to read, such as
+<code style="white-space: pre;">⁠/cubbyhole/mysecret⁠</code></p>
+</dd>
+<dt><code>field</code></dt>
+<dd>
+<p>Optional field to read from the secret.  Each
+secret is stored as a key/value set (represented in R as a
+named list) and this is equivalent to using <code style="white-space: pre;">⁠[[field]]⁠</code>
+on the return value.  The default, <code>NULL</code>, returns the
+full set of values.</p>
+</dd>
+<dt><code>metadata</code></dt>
+<dd>
+<p>Logical, indicating if we should return
+metadata for this secret (lease information etc) as an
+attribute along with the values itself.  Ignored if
+<code>field</code> is specified.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_cubbyhole-write"></a>
+
+
+
+<h4>Method <code>write()</code>
+</h4>
+
+<p>Write data into your cubbyhole.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_cubbyhole$write(path, data)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>Path for the secret to write, such as
+<code style="white-space: pre;">⁠/cubbyhole/mysecret⁠</code></p>
+</dd>
+<dt><code>data</code></dt>
+<dd>
+<p>A named list of values to write into the vault at
+this path.  This <em>replaces</em> any existing values.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_cubbyhole-list"></a>
+
+
+
+<h4>Method <code>list()</code>
+</h4>
+
+<p>List data in the vault at a give path.  This can
+be used to list keys, etc (e.g., at <code style="white-space: pre;">⁠/cubbyhole⁠</code>).
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_cubbyhole$list(path, full_names = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>The path to list</p>
+</dd>
+<dt><code>full_names</code></dt>
+<dd>
+<p>Logical, indicating if full paths (relative
+to the vault root) should be returned.</p>
+</dd>
+<dt><code>value</code></dt>
+<dd>
+<p>A character vector (of zero length if no keys are
+found).  Paths that are "directories" (i.e., that contain
+keys and could themselves be listed) will be returned with
+a trailing forward slash, e.g. <code style="white-space: pre;">⁠path/⁠</code></p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_cubbyhole-delete"></a>
+
+
+
+<h4>Method <code>delete()</code>
+</h4>
+
+<p>Delete a value from the vault
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_cubbyhole$delete(path)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>The path to delete</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+server &lt;- vaultr::vault_test_server(if_disabled = message)
+if (!is.null(server)) {
+  client &lt;- server$client()
+
+  # Shorter path for easier reading:
+  cubbyhole &lt;- client$secrets$cubbyhole
+  cubbyhole
+
+  # Write a value
+  cubbyhole$write("cubbyhole/secret", list(key = "value"))
+  # List it
+  cubbyhole$list("cubbyhole")
+  # Read it
+  cubbyhole$read("cubbyhole/secret")
+  # Delete it
+  cubbyhole$delete("cubbyhole/secret")
+
+  # cleanup
+  server$kill()
+}
+</code></pre>
+
+
+</div>

@@ -1,0 +1,310 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>olmm-methods</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Methods for <code>olmm</code> objects</h2>
+
+<h3>Description</h3>
+
+<p>Standard methods for computing on <code>olmm</code>
+objects.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'olmm'
+anova(object, ...)
+
+## S3 method for class 'olmm'
+coef(object, which = c("all", "fe"), ...)
+
+## S3 method for class 'olmm'
+fixef(object, which = c("all", "ce", "ge"), ...)
+
+## S3 method for class 'olmm'
+model.matrix(object, which = c("fe", "fe-ce", "fe-ge",
+             "re", "re-ce", "re-ge"), ...)
+
+## S3 method for class 'olmm'
+neglogLik2(object, ...)
+
+## S3 method for class 'olmm'
+ranef(object, norm = FALSE, ...)
+
+## S3 method for class 'olmm'
+ranefCov(object, ...) 
+
+## S3 method for class 'olmm'
+simulate(object, nsim = 1, seed = NULL,
+         newdata = NULL, ranef = TRUE, ...)
+
+## S3 method for class 'olmm'
+terms(x, which = c("fe-ce", "fe-ge", "re-ce", "re-ge"), ...)
+
+## S3 method for class 'olmm'
+VarCorr(x, sigma = 1., ...)
+
+## S3 method for class 'olmm'
+weights(object, level = c("observation", "subject"), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object, x</code></td>
+<td>
+<p>an <code>olmm</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>which</code></td>
+<td>
+<p>optional character string. For  <code>coef</code> and
+<code>fixef</code>, it indicates whether <code>"all"</code>
+coefficients, the fixed effects <code>"fe"</code>, the category-specific
+fixed effects <code>"ce"</code> (i.e. non-proportional odds) or the global
+fixed effects <code>"ge"</code> (i.e. proportional odds) should be
+extracted. For <code>model.matrix</code> it indicates whether the model
+matrix of the fixed- (<code>"fe"</code>) or the random effects (<code>"re"</code>)
+should be extracted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>character string. Whether the results should be on the
+observation level (<code>level = "observation"</code>) or on the subject
+level (<code>level = "subject"</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>norm</code></td>
+<td>
+<p>logical. Whether residuals should be divided by their
+standard deviation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsim</code></td>
+<td>
+<p>number of response vectors to simulate.  Defaults to 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>an object specifying if and how the random number
+generator should be initialized. See <code>simulate</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>a data frame with predictor variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ranef</code></td>
+<td>
+<p>either a logical or a matrix (see
+<code>predict.olmm</code>). Whether the simulated responses should
+be conditional on random effects. If <code>TRUE</code>, the <code>newdata</code>
+data frame must contain the subject identification
+variable. Further, if all subjects in <code>newdata</code> are in
+<code>object</code>, the simulation will be based on the estimated random
+effects as obtained with <code>ranef</code>. If any subject in
+<code>newdata</code> is not in <code>object</code> the random effects are
+simulated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma</code></td>
+<td>
+<p>ignored but obligatory argument from original generic.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>potential further arguments passed to methods.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>anova</code> implements log-likelihood ratio tests for model  
+comparisons, based on the marginal likelihood. At the time being, 
+at least two models must be assigned.
+</p>
+<p><code>neglogLik2</code> returns the marginal maximum likelihood of the
+fitted model times minus 2. 
+</p>
+<p><code>ranefCov</code> extracts the variance-covariance matrix of
+the random effects. Similarly, <code>VarCorr</code> extracts the
+estimated variances, standard deviations and correlations of the
+random effects.  
+</p>
+<p><code>resid</code> extracts the residuals of Li and Sheperd
+(2012). By default, the marginal outcome distribution is used to
+compute these residuals. The conditional residuals can be computed by
+assigning <code>ranef = TRUE</code> as a supplementary argument.   
+</p>
+<p><code>simulate</code> simulates ordinal responses based on the
+input model. 
+</p>
+<p>Further, undocumented methods are <code>deviance</code>,
+<code>extractAIC</code>, <code>fitted</code>,
+<code>formula</code>, <code>getCall</code>,
+<code>logLik</code>, <code>model.frame</code>,
+<code>nobs</code>, <code>update</code>, <code>vcov</code>.  
+</p>
+<p>The <code>anova</code> implementation is based on codes of the 
+<span class="pkg">lme4</span> package. The authors are grateful for these codes. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>The <code>anova.olmm</code> method returns an object of class
+<code>anova</code>, see also <code>anova</code>.
+</p>
+<p>The <code>coef.olmm</code>, <code>coefficients.olmm</code>,
+<code>fixef</code>, <code>fixef.glm</code> and
+<code>fixef.olmm</code> methods return named <code>numeric</code>
+vectors. See also <code>coef</code> and
+<code>coefficients</code>. 
+</p>
+<p>The <code>deviance.olmm</code> method returns a single numeric,
+see also <code>deviance</code>.
+</p>
+<p>The <code>formula.olmm</code> method extracts the model formula,
+which is an object of class <code>formula</code>. See also
+<code>formula</code>. 
+</p>
+<p>The <code>getCall.olmm</code> method extracts the call for fitting
+the model, which is an object of class <code>call</code>. See also
+<code>call</code>. 
+</p>
+<p>The <code>logLik.olmm</code> method returns an object of class
+<code>logLik</code>, which is a single numeric with a few attributes. See
+also <code>logLik</code>.
+</p>
+<p>The <code>neglogLik2</code> and <code>neglogLik2.olmm</code>
+methods return a single numeric.  
+</p>
+<p>The <code>model.frame.olmm</code> and
+<code>model.matrix.olmm</code> methods return the model frame and
+the model matrix of the <code>olmm</code> object. See also
+<code>model.frame</code> and <code>model.matrix</code>.
+</p>
+<p>The <code>ranef</code> and <code>ranef.olmm</code> methods
+return a matrix with the estimated random effects.
+</p>
+<p>The <code>ranefCov</code> and <code>ranefCov.olmm</code>
+methods return an object of class <code>matrix</code>. The
+<code>VarCorr</code> and <code>VarCorr.olmm</code> methods
+return an object of class
+<code>VarCorr.olmm</code>. <code>print.VarCorr.olmm</code> returns an
+object of class <code>VarCorr.olmm</code>.
+</p>
+<p>The <code>resid.olmm</code> and <code>residuals.olmm</code>
+methods return a numeric vector.
+</p>
+<p>The <code>simulate.olmm</code> method returns a <code>data.frame</code>
+including simulated responses based on the input model.
+</p>
+<p>The <code>terms.olmm</code> method returns an object of class
+<code>terms</code>. See also <code>terms</code>.
+</p>
+<p>The <code>update.olmm</code> method will update and (by default)
+re-fit a model. It returns an object of class <code>olmm</code>. See also
+<code>update</code>. 
+</p>
+<p>The <code>vcov.olmm</code> method extracts a <code>matrix</code> with
+the variances and covariances of the fixed effects of the model. See
+also <code>vcov</code>.
+</p>
+<p>The <code>weights.olmm</code> method extracts a <code>numeric</code>
+vector with the model weights. See also <code>weights</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>References</h3>
+
+<p>Agresti, A. (2010). <em>Analysis of Ordinal Categorical Data</em> (2
+ed.). New Jersey, USA: John Wiley &amp; Sons.
+</p>
+<p>Tutz, G. (2012). <em>Regression for Categorical Data</em>. New York,
+USA: Cambridge Series in Statistical and Probabilistic Mathematics. 
+</p>
+<p>Li, C. and B. E. Sheperd (2012). A New Residual for Ordinal
+Outcomes, <em>Biometrika</em>, <b>99</b>(2), 437–480.
+</p>
+<p>Bates, D., M. Maechler, B. M. Bolker and S. Walker (2015). Fitting
+Linear Mixed-Effects Models Using lme4, <em>Journal of Statistical
+Software</em>, <b>67</b>(1), 1–48.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>olmm</code>, <code>predict.olmm</code>,
+<code>olmm_gefp</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## --------------------------------------------------------- #
+## Example: Schizophrenia (see also example of 'olmm')
+## --------------------------------------------------------- #
+
+data(schizo)
+
+schizo &lt;- schizo[1:181,]
+schizo$id &lt;- droplevels(schizo$id)
+
+## anova comparison
+## ----------------
+
+## fit two alternative models for the 'schizo' data
+model.0 &lt;- olmm(imps79o ~ tx + sqrt(week) + re(1|id), schizo)
+model.1 &lt;- olmm(imps79o ~ tx + sqrt(week)+tx*sqrt(week)+re(1|id),schizo)
+anova(model.0, model.1)
+
+## simulate responses
+## ------------------
+
+## simulate responses based on estimated random effects
+simulate(model.0, newdata = schizo[1, ], ranef = TRUE, seed = 1)
+simulate(model.0, newdata = schizo[1, ], seed = 1,
+         ranef = ranef(model.0)[schizo[1, "id"],,drop=FALSE])
+## simulate responses based on simulated random effects
+newdata &lt;- schizo[1, ]
+newdata$id &lt;- factor("123456789")
+simulate(model.0, newdata = newdata, ranef = TRUE)
+
+## other methods
+## -------------
+
+coef(model.1)
+fixef(model.1)
+head(model.matrix(model.1, "fe-ge"))
+head(weights(model.1))
+ranefCov(model.1)
+head(resid(model.1))
+terms(model.1, "fe-ge")
+VarCorr(model.1)
+head(weights(model.1, "subject"))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,60 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>http_interactions</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get the http interactions of the current cassette</h2>
+
+<h3>Description</h3>
+
+<p>Get the http interactions of the current cassette
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">http_interactions()
+</code></pre>
+
+
+<h3>Value</h3>
+
+<p>object of class <code>HTTPInteractionList</code> if there is a current
+cassette in use, or <code>NullList</code> if no cassette in use
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+vcr_configure(dir = tempdir())
+insert_cassette("foo_bar")
+webmockr::webmockr_allow_net_connect()
+library(crul)
+cli &lt;- crul::HttpClient$new("https://hb.opencpu.org/get")
+one &lt;- cli$get(query = list(a = 5))
+z &lt;- http_interactions()
+z
+z$interactions
+z$used_interactions
+# on eject, request written to the cassette
+eject_cassette("foo_bar")
+
+# insert cassette again
+insert_cassette("foo_bar")
+# now interactions will be present 
+z &lt;- http_interactions()
+z$interactions
+z$used_interactions
+invisible(cli$get(query = list(a = 5)))
+z$used_interactions
+
+# cleanup
+unlink(file.path(tempdir(), "foo_bar.yml"))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

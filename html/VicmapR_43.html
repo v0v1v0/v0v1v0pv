@@ -1,0 +1,117 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cql_geom_predicates</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>CQL Geometry Predicates</h2>
+
+<h3>Description</h3>
+
+<p>Functions to construct a CQL expression to be used
+to filter results from <code>vicmap_query()</code>.
+See <a href="https://docs.geoserver.org/stable/en/user/filter/ecql_reference.html#spatial-predicate">the geoserver CQL documentation for details</a>.
+The sf object is automatically simplified to a less complex sf object
+to reduce the complexity of the Web Service call. Subsequent in-memory
+filtering may be needed to achieve exact results.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">EQUALS(geom)
+
+DISJOINT(geom)
+
+INTERSECTS(geom)
+
+TOUCHES(geom)
+
+CROSSES(geom)
+
+WITHIN(geom)
+
+CONTAINS(geom)
+
+OVERLAPS(geom)
+
+RELATE(geom, pattern)
+
+BBOX(coords, crs = NULL)
+
+DWITHIN(
+  geom,
+  distance,
+  units = c("meters", "feet", "statute miles", "nautical miles", "kilometers")
+)
+
+BEYOND(
+  geom,
+  distance,
+  units = c("meters", "feet", "statute miles", "nautical miles", "kilometers")
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>geom</code></td>
+<td>
+<p>an <code>sf</code>/<code>sfc</code>/<code>sfg</code> or <code>bbox</code> object (from the <code>sf</code> package)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pattern</code></td>
+<td>
+<p>spatial relationship specified by a DE-9IM matrix pattern.
+A DE-9IM pattern is a string of length 9 specified using the characters
+<code style="white-space: pre;">⁠*TF012⁠</code>. Example: <code>'1*T***T**'</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coords</code></td>
+<td>
+<p>the coordinates of the bounding box as four-element numeric
+vector <code>c(xmin, ymin, xmax, ymax)</code>, a <code>bbox</code> object from the <code>sf</code>
+package (the result of running <code>sf::st_bbox()</code> on an <code>sf</code> object), or
+an <code>sf</code> object which then gets converted to a bounding box on the fly.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>crs</code></td>
+<td>
+<p>(Optional) A numeric value or string containing an SRS code. If
+<code>coords</code> is a <code>bbox</code> object with non-empty crs, it is taken from that.
+(For example, <code>'EPSG:3005'</code> or just <code>3005</code>. The default is to use the CRS of
+the queried layer)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>distance</code></td>
+<td>
+<p>numeric value for distance tolerance</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>units</code></td>
+<td>
+<p>units that distance is specified in. One of
+<code>"feet"</code>, <code>"meters"</code>, <code>"statute miles"</code>, <code>"nautical miles"</code>, <code>"kilometers"</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The code for these cql predicates was developed by the bcdata team: <a href="https://bcgov.github.io/bcdata/reference/cql_geom_predicates.html">https://bcgov.github.io/bcdata/reference/cql_geom_predicates.html</a>
+</p>
+
+
+<h3>Value</h3>
+
+<p>a CQL expression to be passed on to the WFS call
+</p>
+
+
+</div>

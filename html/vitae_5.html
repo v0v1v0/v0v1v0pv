@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bibliography_entries</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Print bibliography section</h2>
+
+<h3>Description</h3>
+
+<p>Given a bibliography file, this function will generate bibliographic entries
+for one or more types of bib entry.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bibliography_entries(file, startlabel = NULL, endlabel = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>file</code></td>
+<td>
+<p>A path to a bibliography file understood by <code>rmarkdown::pandoc_citeproc_convert()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>startlabel</code></td>
+<td>
+<p>Defunct.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>endlabel</code></td>
+<td>
+<p>Defunct.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A dataset representing the bibliographic entries, suitable for
+generating a reference section in a document.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Mitchell O'Hara-Wild &amp; Rob J Hyndman
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Create a bibliography from a set of packages
+bib &lt;- tempfile(fileext = ".bib")
+knitr::write_bib(c("vitae", "tibble"), bib)
+
+# Import the bibliography entries into a CV
+bibliography_entries(bib)
+
+# The order of these entries can be customised using `dplyr::arrange()`
+bibliography_entries(bib) %&gt;%
+  arrange(desc(title))
+
+# For more complex fields like author, you can also sort by component fields.
+# For example, use `author$family` to sort by family names.
+bibliography_entries(bib) %&gt;%
+  arrange(desc(author$family))
+
+</code></pre>
+
+
+</div>

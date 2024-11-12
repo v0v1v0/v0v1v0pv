@@ -1,0 +1,180 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vctrs-conditions</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Custom conditions for vctrs package</h2>
+
+<h3>Description</h3>
+
+<p>These functions are called for their side effect of raising
+errors and warnings.
+These conditions have custom classes and structures to make
+testing easier.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">stop_incompatible_type(
+  x,
+  y,
+  ...,
+  x_arg,
+  y_arg,
+  action = c("combine", "convert"),
+  details = NULL,
+  message = NULL,
+  class = NULL,
+  call = caller_env()
+)
+
+stop_incompatible_cast(
+  x,
+  to,
+  ...,
+  x_arg,
+  to_arg,
+  details = NULL,
+  message = NULL,
+  class = NULL,
+  call = caller_env()
+)
+
+stop_incompatible_op(
+  op,
+  x,
+  y,
+  details = NULL,
+  ...,
+  message = NULL,
+  class = NULL,
+  call = caller_env()
+)
+
+stop_incompatible_size(
+  x,
+  y,
+  x_size,
+  y_size,
+  ...,
+  x_arg,
+  y_arg,
+  details = NULL,
+  message = NULL,
+  class = NULL,
+  call = caller_env()
+)
+
+allow_lossy_cast(expr, x_ptype = NULL, to_ptype = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, y, to</code></td>
+<td>
+<p>Vectors</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>..., class</code></td>
+<td>
+<p>Only use these fields when creating a subclass.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_arg, y_arg, to_arg</code></td>
+<td>
+<p>Argument names for <code>x</code>, <code>y</code>, and <code>to</code>. Used in
+error messages to inform the user about the locations of incompatible
+types.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>action</code></td>
+<td>
+<p>An option to customize the incompatible type message depending
+on the context. Errors thrown from <code>vec_ptype2()</code> use <code>"combine"</code> and
+those thrown from <code>vec_cast()</code> use <code>"convert"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>details</code></td>
+<td>
+<p>Any additional human readable details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>message</code></td>
+<td>
+<p>An overriding message for the error. <code>details</code> and
+<code>message</code> are mutually exclusive, supplying both is an error.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>The execution environment of a currently
+running function, e.g. <code>caller_env()</code>. The function will be
+mentioned in error messages as the source of the error. See the
+<code>call</code> argument of <code>abort()</code> for more information.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_ptype, to_ptype</code></td>
+<td>
+<p>Suppress only the casting errors where <code>x</code>
+or <code>to</code> match these prototypes.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code style="white-space: pre;">⁠stop_incompatible_*()⁠</code> unconditionally raise an error of class
+<code>"vctrs_error_incompatible_*"</code> and <code>"vctrs_error_incompatible"</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Most of the time, `maybe_lossy_cast()` returns its input normally:
+maybe_lossy_cast(
+  c("foo", "bar"),
+  NA,
+  "",
+  lossy = c(FALSE, FALSE),
+  x_arg = "",
+  to_arg = ""
+)
+
+# If `lossy` has any `TRUE`, an error is thrown:
+try(maybe_lossy_cast(
+  c("foo", "bar"),
+  NA,
+  "",
+  lossy = c(FALSE, TRUE),
+  x_arg = "",
+  to_arg = ""
+))
+
+# Unless lossy casts are allowed:
+allow_lossy_cast(
+  maybe_lossy_cast(
+    c("foo", "bar"),
+    NA,
+    "",
+    lossy = c(FALSE, TRUE),
+    x_arg = "",
+    to_arg = ""
+  )
+)
+
+</code></pre>
+
+
+</div>

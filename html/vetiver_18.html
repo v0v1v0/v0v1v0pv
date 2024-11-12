@@ -1,0 +1,157 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>handler_startup.train</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Model handler functions for API endpoint</h2>
+
+<h3>Description</h3>
+
+<p>These are developer-facing functions, useful for supporting new model types.
+Each model supported by <code>vetiver_model()</code> uses two handler functions
+in <code>vetiver_api()</code>:
+</p>
+
+<ul>
+<li>
+<p> The <code>handler_startup</code> function executes when the API starts. Use this
+function for tasks like loading packages. A model can use the default
+method here, which is <code>NULL</code> (to do nothing at startup).
+</p>
+</li>
+<li>
+<p> The <code>handler_predict</code> function executes at each API call. Use this
+function for calling <code>predict()</code> and any other tasks that must be executed
+at each API call.
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'train'
+handler_startup(vetiver_model)
+
+## S3 method for class 'train'
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'gam'
+handler_startup(vetiver_model)
+
+## S3 method for class 'gam'
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'glm'
+handler_predict(vetiver_model, ...)
+
+handler_startup(vetiver_model)
+
+## Default S3 method:
+handler_startup(vetiver_model)
+
+handler_predict(vetiver_model, ...)
+
+## Default S3 method:
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'keras.engine.training.Model'
+handler_startup(vetiver_model)
+
+## S3 method for class 'keras.engine.training.Model'
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'kproto'
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'lm'
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'luz_module_fitted'
+handler_startup(vetiver_model)
+
+## S3 method for class 'luz_module_fitted'
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'Learner'
+handler_startup(vetiver_model)
+
+## S3 method for class 'Learner'
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'ranger'
+handler_startup(vetiver_model)
+
+## S3 method for class 'ranger'
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'recipe'
+handler_startup(vetiver_model)
+
+## S3 method for class 'recipe'
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'model_stack'
+handler_startup(vetiver_model)
+
+## S3 method for class 'model_stack'
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'workflow'
+handler_startup(vetiver_model)
+
+## S3 method for class 'workflow'
+handler_predict(vetiver_model, ...)
+
+## S3 method for class 'xgb.Booster'
+handler_startup(vetiver_model)
+
+## S3 method for class 'xgb.Booster'
+handler_predict(vetiver_model, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vetiver_model</code></td>
+<td>
+<p>A deployable <code>vetiver_model()</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments passed to <code>predict()</code>, such as prediction <code>type</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>These are two generics that use the class of <code>vetiver_model$model</code>
+for dispatch.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>handler_startup</code> function should return invisibly, while a
+<code>handler_predict</code> function should return a function with the signature
+<code style="white-space: pre;">⁠function(req)⁠</code>. The request body (<code>req$body</code>) consists of the new data
+at prediction time; this function should return predictions either as a
+tibble or as a list coercable to a tibble via <code>tibble::as_tibble()</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+cars_lm &lt;- lm(mpg ~ ., data = mtcars)
+v &lt;- vetiver_model(cars_lm, "cars_linear")
+handler_startup(v)
+handler_predict(v)
+
+</code></pre>
+
+
+</div>

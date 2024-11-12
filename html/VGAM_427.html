@@ -1,0 +1,130 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>N1pois</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Linear Model and Poisson
+Mixed Data Type
+Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density,
+and random generation
+for the (four parameter bivariate)
+Linear Model–Poisson copula distribution.
+</p>
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dN1pois(x1, x2, mean = 0, sd = 1, lambda, apar = 0,
+        doff = 5, copula = "gaussian", log = FALSE)
+rN1pois(n, mean = 0, sd = 1, lambda, apar = 0,
+        doff = 5, copula = "gaussian")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x1, x2</code></td>
+<td>
+<p>vector of quantiles.
+The valid values of <code>x2</code> are nonnegative
+integers.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Same as <code>rnorm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>copula</code></td>
+<td>
+
+<p>See <code>N1poisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean, sd, lambda, apar</code></td>
+<td>
+
+<p>See <code>N1poisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>doff</code></td>
+<td>
+
+<p>See <code>N1poisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical.
+If <code>TRUE</code> then the logarithm is returned.
+</p>
+
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See <code>N1poisson</code>, the <span class="pkg">VGAM</span>
+family functions for estimating the
+parameter by maximum likelihood estimation,
+for details.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dN1pois</code> gives the probability density/mass function,
+<code>rN1pois</code> generates random deviate and returns
+a two-column matrix.
+</p>
+
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>N1poisson</code>,
+<code>rnorm</code>,
+<code>rpois</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  
+nn &lt;- 1000; mymu &lt;- 1; sdev &lt;- exp(1)
+apar &lt;- rhobitlink(0.4, inverse = TRUE)
+lambda &lt;- loglink(1, inverse = TRUE)
+mat &lt;- rN1pois(nn, mymu, sdev, lambda, apar)
+pndata &lt;- data.frame(y1 = mat[, 1], y2 = mat[, 2])
+with(pndata, plot(jitter(y1), jitter(y2), col = 4))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

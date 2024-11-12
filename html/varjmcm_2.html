@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>covjmcm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimate the covariance of estimated parameters using the explicit formula</h2>
+
+<h3>Description</h3>
+
+<p><code>covjmcm</code> is a combination of <code>covjmcm_mcd</code>, <code>covjmcm_acd</code>, and <code>covjmcm_hpc</code>.
+It identifies the corresponding type of the model, i.e. MCD, ACD, or HPC, and calculates the estimation
+of the covariance of estimated parameters using explicit formula,
+which is the inverse of the estimated Fisher's information matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">covjmcm(object)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a fitted joint mean-covariance model of class "jmcmMod", returned by the function <code>jmcm</code>.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>an estimated covariance matrix of the estimated parameters.
+</p>
+
+
+<h3>References</h3>
+
+<p>[1] Pourahmadi, M., "Maximum likelihood estimation of generalised linear models for multivariate normal covariance matrix," Biometrika
+87(2), 425–435 (2000).
+</p>
+<p>[2] M. Maadooliat, M. Pourahmadi and J. Z. Huang, "Robust estimation of the correlation
+matrix of longitudinal data", Statistics and Computing 23, 17-28, (2013).
+</p>
+<p>[3]  W. Zhang, C. Leng, and C. Y. Tang(2015), "A joint modelling approach for longitudinal studies,"
+Journal of the Royal Statistical Society. Series B. 77, 219-238.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>covjmcm_mcd</code>, <code>covjmcm_acd</code>, and <code>covjmcm_hpc</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## balanced data
+cattleA &lt;- cattle[cattle$group=='A', ]
+fit.mcd &lt;- jmcm(weight|id|I(ceiling(day/14+1))~1|1,
+               data = cattleA, cov.method = "mcd",
+               triple = c(8,3,4))
+cov.mcd &lt;- covjmcm(fit.mcd)  ##same as covjmcm_mcd(fit.mcd)
+## unbalanced data
+## This may take about 1.25 min.
+
+fit.hpc &lt;- jmcm(I(sqrt(cd4)) | id | time ~ 1 | 1,
+                data = aids, triple = c(8,1,1),
+                cov.method = "hpc")
+cov.hpc &lt;- covjmcm(fit.hpc)  ##same as covjmcm_hpc(fit.hpc)
+</code></pre>
+
+
+</div>

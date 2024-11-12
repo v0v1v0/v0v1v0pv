@@ -1,0 +1,285 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>betabinomial</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Beta-binomial Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Fits a beta-binomial distribution by maximum
+likelihood estimation.  The two parameters
+here are the mean and correlation coefficient.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">betabinomial(lmu = "logitlink", lrho = "logitlink",
+   irho = NULL, imethod = 1,
+   ishrinkage = 0.95, nsimEIM = NULL, zero = "rho")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmu, lrho</code></td>
+<td>
+
+<p>Link functions applied to the two parameters.
+See <code>Links</code> for more choices.
+The defaults ensure the parameters remain
+in <code class="reqn">(0,1)</code>,
+however, see the warning below.
+For <code>lrho</code>,
+<code>log1plink</code>
+(with an offset <code>log(size - 1)</code>
+for <code class="reqn">\eta_2</code>)
+and <code>cloglink</code> may be very
+good choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>irho</code></td>
+<td>
+
+<p>Optional initial value for the correlation parameter.  If given,
+it must be in <code class="reqn">(0,1)</code>, and is recyled to the necessary
+length. Assign this argument a value if a convergence failure
+occurs.  Having <code>irho = NULL</code> means an initial value is
+obtained internally, though this can give unsatisfactory results.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>An integer with value <code>1</code> or <code>2</code> or ...,
+which specifies the initialization method for <code class="reqn">\mu</code>.
+If failure to converge occurs try the another value
+and/or else specify a value for <code>irho</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Specifyies which
+linear/additive predictor is to be modelled as an intercept
+only.  If assigned, the single value can be either <code>1</code> or
+<code>2</code>.  The default is to have a single correlation parameter.
+To model both parameters as functions of the covariates assign
+<code>zero = NULL</code>.
+See <code>CommonVGAMffArguments</code>
+for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishrinkage, nsimEIM</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+The argument <code>ishrinkage</code> is used only if <code>imethod
+  = 2</code>.  Using the argument <code>nsimEIM</code> may offer large
+advantages for large values of <code class="reqn">N</code> and/or large data sets.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>There are several parameterizations of the beta-binomial
+distribution.  This family function directly models the mean
+and correlation parameter, i.e.,
+the probability of success.
+The model can be written
+<code class="reqn">T|P=p \sim Binomial(N,p)</code>
+where <code class="reqn">P</code> has a beta distribution with shape parameters
+<code class="reqn">\alpha</code> and <code class="reqn">\beta</code>. Here,
+<code class="reqn">N</code> is the number of trials (e.g., litter size),
+<code class="reqn">T=NY</code> is the number of successes, and
+<code class="reqn">p</code> is the probability of a success (e.g., a malformation).
+That is, <code class="reqn">Y</code> is the <em>proportion</em> of successes. Like
+<code>binomialff</code>, the fitted values are the
+estimated probability
+of success (i.e., <code class="reqn">E[Y]</code> and not <code class="reqn">E[T]</code>)
+and the prior weights <code class="reqn">N</code> are attached separately on the
+object in a slot.
+</p>
+<p>The probability function is
+</p>
+<p style="text-align: center;"><code class="reqn">P(T=t) = {N \choose t} \frac{Be(\alpha+t, \beta+N-t)}
+                  {Be(\alpha, \beta)}</code>
+</p>
+
+<p>where <code class="reqn">t=0,1,\ldots,N</code>, and <code class="reqn">Be</code> is the
+<code>beta</code> function
+with shape parameters <code class="reqn">\alpha</code> and <code class="reqn">\beta</code>.
+Recall <code class="reqn">Y = T/N</code> is the real response being modelled.
+</p>
+<p>The default model is <code class="reqn">\eta_1 = logit(\mu)</code>
+and <code class="reqn">\eta_2 = logit(\rho)</code> because both
+parameters lie between 0 and 1.
+The mean (of <code class="reqn">Y</code>) is
+<code class="reqn">p=\mu=\alpha/(\alpha+\beta)</code>
+and the variance (of <code class="reqn">Y</code>) is
+<code class="reqn">\mu(1-\mu)(1+(N-1)\rho)/N</code>.
+Here, the correlation <code class="reqn">\rho</code> is given by
+<code class="reqn">1/(1 + \alpha + \beta)</code>
+and is the correlation between the <code class="reqn">N</code> individuals
+within a litter. A <em>litter effect</em> is typically reflected
+by a positive value of <code class="reqn">\rho</code>. It is known as the
+<em>over-dispersion parameter</em>.
+</p>
+<p>This family function uses Fisher scoring.
+Elements of the second-order expected
+derivatives with respect to <code class="reqn">\alpha</code> and
+<code class="reqn">\beta</code> are computed numerically, which may
+fail for large <code class="reqn">\alpha</code>, <code class="reqn">\beta</code>,
+<code class="reqn">N</code> or else take a long time.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>.
+</p>
+<p>Suppose <code>fit</code> is a fitted beta-binomial
+model. Then <code>depvar(fit)</code>
+are the sample proportions <code class="reqn">y</code>,
+<code>fitted(fit)</code> returns estimates of
+<code class="reqn">E(Y)</code>,
+and <code>weights(fit, type = "prior")</code> returns
+the number of trials <code class="reqn">N</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>If the estimated rho parameter is close
+to 0 then
+a good solution is to use
+<code>extbetabinomial</code>.
+Or you could try
+<code>lrho = "rhobitlink"</code>.
+</p>
+
+
+<p>This family function is prone to numerical
+difficulties due to the expected information
+matrices not being positive-definite or
+ill-conditioned over some regions of the
+parameter space.  If problems occur try
+setting <code>irho</code> to some numerical
+value, <code>nsimEIM = 100</code>, say, or
+else use <code>etastart</code> argument of
+<code>vglm</code>, etc.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function processes the input in the same way
+as <code>binomialff</code>. But it does not handle
+the case <code class="reqn">N=1</code> very well because there are two
+parameters to estimate, not one, for each row of the input.
+Cases where <code class="reqn">N=1</code> can be omitted via the
+<code>subset</code> argument of <code>vglm</code>.
+</p>
+<p>The <em>extended</em> beta-binomial distribution
+of Prentice (1986) 
+implemented by <code>extbetabinomial</code>
+is the preferred <span class="pkg">VGAM</span>
+family function for BBD regression.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Moore, D. F. and Tsiatis, A. (1991).
+Robust estimation of the variance in moment
+methods for
+extra-binomial and extra-Poisson variation.
+<em>Biometrics</em>,
+<b>47</b>, 383–401.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>extbetabinomial</code>,
+<code>betabinomialff</code>,
+<code>Betabinom</code>,
+<code>binomialff</code>,
+<code>betaff</code>,
+<code>dirmultinomial</code>,
+<code>log1plink</code>,
+<code>cloglink</code>,
+<code>lirat</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Example 1
+bdata &lt;- data.frame(N = 10, mu = 0.5, rho = 0.8)
+bdata &lt;- transform(bdata,
+            y = rbetabinom(100, size = N, prob = mu, rho = rho))
+fit &lt;- vglm(cbind(y, N-y) ~ 1, betabinomial, bdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+head(cbind(depvar(fit), weights(fit, type = "prior")))
+
+
+# Example 2
+fit &lt;- vglm(cbind(R, N-R) ~ 1, betabinomial, lirat,
+            trace = TRUE, subset = N &gt; 1)
+coef(fit, matrix = TRUE)
+Coef(fit)
+t(fitted(fit))
+t(depvar(fit))
+t(weights(fit, type = "prior"))
+
+
+# Example 3, which is more complicated
+lirat &lt;- transform(lirat, fgrp = factor(grp))
+summary(lirat)  # Only 5 litters in group 3
+fit2 &lt;- vglm(cbind(R, N-R) ~ fgrp + hb, betabinomial(zero = 2),
+             data = lirat, trace = TRUE, subset = N &gt; 1)
+coef(fit2, matrix = TRUE)
+## Not run:  with(lirat, plot(hb[N &gt; 1], fit2@misc$rho,
+         xlab = "Hemoglobin", ylab = "Estimated rho",
+         pch = as.character(grp[N &gt; 1]), col = grp[N &gt; 1])) 
+## End(Not run)
+## Not run:   # cf. Figure 3 of Moore and Tsiatis (1991)
+with(lirat, plot(hb, R / N, pch = as.character(grp), col = grp,
+         xlab = "Hemoglobin level", ylab = "Proportion Dead",
+         main = "Fitted values (lines)", las = 1))
+smalldf &lt;- with(lirat, lirat[N &gt; 1, ])
+for (gp in 1:4) {
+  xx &lt;- with(smalldf, hb[grp == gp])
+  yy &lt;- with(smalldf, fitted(fit2)[grp == gp])
+  ooo &lt;- order(xx)
+  lines(xx[ooo], yy[ooo], col = gp, lwd = 2)
+} 
+## End(Not run)
+</code></pre>
+
+
+</div>

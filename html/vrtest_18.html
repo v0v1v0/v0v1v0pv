@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Subsample.test</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Subsampling test of Whang and Kim (2003) </h2>
+
+<h3>Description</h3>
+
+<p>The function returns the p-values of the subsampling test.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Subsample.test(y, kvec)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p> a vector of time series, typically  financial return </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kvec</code></td>
+<td>
+<p> a vector of holding periods </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The block lengths are chosen internally using the rule proposed in Whang and Kim (2003)
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Holding.Period</code></td>
+<td>
+<p>holding periods used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Block.Length</code></td>
+<td>
+<p>block lengths chosen</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pval</code></td>
+<td>
+<p>p-values of the test for each block length used</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p> Jae H. Kim </p>
+
+
+<h3>References</h3>
+
+<p> WHANG,Y.-J., J. KIM, 2003, A Multiple Variance Ratio Test Using Subsampling, Economics Letters, 79, 225-230.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(exrates)
+y &lt;- exrates$ca                  
+nob &lt;- length(y)
+r &lt;- log(y[2:nob])-log(y[1:(nob-1)])   
+kvec &lt;- c(2,5,10)
+Subsample.test(r,kvec)
+</code></pre>
+
+
+</div>

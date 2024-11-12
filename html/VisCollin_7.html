@@ -1,0 +1,214 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>colldiag</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Collinearity Diagnostics</h2>
+
+<h3>Description</h3>
+
+<p>Calculates condition indexes and variance decomposition proportions in order to test
+for collinearity among the independent variables of a regression model and
+identifies the sources of collinearity if present.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">colldiag(mod, scale = TRUE, center = FALSE, add.intercept = FALSE)
+
+## S3 method for class 'colldiag'
+print(x, dec.places = 3, fuzz = NULL, fuzzchar = ".", ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mod</code></td>
+<td>
+<p>A model object, such as computed by <code>lm</code> or <code>glm</code>, or a data-frame to be used as predictors in
+such a model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>If <code>FALSE</code>, the data are left unscaled. If <code>TRUE</code>, the data are scaled, typically
+to mean 0 and variance 1 using <code>scale</code>.
+Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>center</code></td>
+<td>
+<p>If TRUE, data are centered. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add.intercept</code></td>
+<td>
+<p>if <code>TRUE</code>, an intercept is added. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A <code>colldiag</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dec.places</code></td>
+<td>
+<p>Number of decimal places to use when printing</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fuzz</code></td>
+<td>
+<p>Variance decomposition proportions less than <em>fuzz</em> are printed as <em>fuzzchar</em></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fuzzchar</code></td>
+<td>
+<p>Character for small variance decomposition proportion values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be passed on to or from other methods (unused)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>colldiag</code> is an implementation of the regression collinearity diagnostic procedures found in Belsley, Kuh, and Welsch (1980). These procedures examine the “conditioning” of the matrix of independent variables.
+</p>
+<p>It computes the condition indexes of the model matrix. If the largest condition index (the condition number) is
+<em>large</em> (Belsley et al suggest 30 or higher), then there may be collinearity problems.
+All <em>large</em> condition indexes may be worth investigating.
+</p>
+<p><code>colldiag</code> also provides further information that may help to identify the source of these problems,
+the <em>variance decomposition proportions</em> associated with each condition index.
+If a large condition index is associated two or more variables with <em>large</em> variance decomposition proportions,
+these variables may be causing collinearity problems.  Belsley et al suggest that a <em>large</em> proportion is
+50 percent or more.
+</p>
+<p>Note that such collinearity diagnostics are often provided by other software
+for the model matrix including
+the constant term for the intercept (e.g., SAS PROC REG, with the option COLLIN).
+However, these are generally useless and misleading unless the intercept has some
+real interpretation and the origin of the regressors is contained within the
+prediction space, as explained by Fox (1997, p. 351). The default values
+for <code>scale</code>, <code>center</code> and <code>add.intercept</code> exclude the constant
+term, and correspond to the SAS option COLLINNOINT.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>"colldiag"</code> object, containing:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>condindx</code></td>
+<td>
+<p>A one-column matrix of condition indexes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pi</code></td>
+<td>
+<p>A square matrix of variance decomposition proportions. The rows refer to the principal component dimensions,
+the columns to the predictor variables.</p>
+</td>
+</tr>
+</table>
+<p><code>print.colldiag</code> prints the condition indexes as the first column of a table with the variance decomposition
+proportions beside them. <code>print.colldiag</code> has a <code>fuzz</code> option to suppress printing of small numbers.
+If fuzz is used, small values are replaces by a period “.”. <code>Fuzzchar</code> can be used to specify an alternative character.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Missing data is silently omitted in these calculations
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>John Hendrickx
+</p>
+
+
+<h3>Source</h3>
+
+<p>These functions were taken from the (now defunct) <code>perturb</code> package by John Hendrickx.
+He credits the Stata program <code>coldiag</code> by Joseph Harkness <a href="mailto:joe.harkness@jhu.edu">joe.harkness@jhu.edu</a>, Johns Hopkins University.
+</p>
+
+
+<h3>References</h3>
+
+<p>Belsley, D.A.,  Kuh, E. and Welsch, R. (1980).
+<cite>Regression Diagnostics</cite>, New York: John Wiley &amp; Sons.
+</p>
+<p>Belsley, D.A. (1991).
+<cite>Conditioning diagnostics, collinearity and weak data in regression</cite>.
+New York: John Wiley &amp; Sons.
+</p>
+<p>Fox, J. (1997). <cite>Applied Regression Analysis, Linear Models, and Related Methods</cite>.
+thousand Oaks, CA: Sage Publications.
+</p>
+<p>Friendly, M., &amp; Kwan, E. (2009).
+Where’s Waldo: Visualizing Collinearity Diagnostics. <em>The American Statistician</em>, <b>63</b>, 56–65.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>lm</code>, <code>scale</code>, <code>svd</code>,
+<code>[car]</code><code>vif</code>, <code>[rms]</code><code>vif</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(cars)
+cars.mod &lt;- lm (mpg ~ cylinder + engine + horse + weight + accel + year,
+                data=cars)
+car::vif(cars.mod)
+
+# SAS PROC REG / COLLIN option, including the intercept
+colldiag(cars.mod, add.intercept = TRUE)
+
+# Default settings: scaled, not centered, no intercept, like SAS PROC REG / COLLINNOINT
+colldiag(cars.mod)
+
+(cd &lt;- colldiag(cars.mod, center=TRUE))
+
+# fuzz small values
+print(cd, fuzz = 0.5)
+
+# Biomass data
+data(biomass)
+
+biomass.mod &lt;- lm (biomass ~ H2S + sal + Eh7 + pH + buf + P + K +
+                             Ca + Mg + Na + Mn + Zn + Cu + NH4,
+                   data=biomass)
+car::vif(biomass.mod)
+
+cd &lt;- colldiag(biomass.mod, center=TRUE)
+# simplified display
+print(colldiag(biomass.mod, center=TRUE), fuzz=.3)
+
+# None yet
+</code></pre>
+
+
+</div>

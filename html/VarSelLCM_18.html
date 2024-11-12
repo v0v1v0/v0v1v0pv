@@ -1,0 +1,100 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plots of an instance of <code>VSLCMresults</code>
+</h2>
+
+<h3>Description</h3>
+
+<p>This function proposes different plots of an instance of <code>VSLCMresults</code>.
+It permits to visualize:
+</p>
+
+<ul>
+<li>
+<p>the discriminative power of the variables (type="bar" or type="pie"). The larger is the discriminative power of a variable, the more explained are the clusters by this variable.
+</p>
+</li>
+<li>
+<p>the probabilities of misclassification (type="probs-overall" or type="probs-class").
+</p>
+</li>
+<li>
+<p>the distribution of a signle variable (y is the name of the variable and type="boxplot" or type="cdf").
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'VSLCMresults,character'
+plot(x, y, type = "boxplot", ylim = c(1,
+  x@data@d))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>instance of  <code>VSLCMresults</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>character. The name of the variable to ploted (only used if type="boxplot" or type="cdf").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>character. The type of plot ("bar": barplot of the disciminative power, "pie": pie of the discriminative power, "probs-overall": histogram of the probabilities of misclassification, "probs-class": histogram of the probabilities of misclassification per cluster, "boxplot": boxplot of a single variable per cluster, "cdf": distribution of a single variable per cluster).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylim</code></td>
+<td>
+<p>numeric. Define the range of the most discriminative variables to considered (only use if type="pie" or type="bar")</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+require(VarSelLCM)
+
+# Data loading:
+# x contains the observed variables
+# z the known statu (i.e. 1: absence and 2: presence of heart disease)
+data(heart)
+ztrue &lt;- heart[,"Class"]
+x &lt;- heart[,-13]
+
+# Cluster analysis with variable selection (with parallelisation)
+res_with &lt;- VarSelCluster(x, 2, nbcores = 2, initModel=40)
+
+# Summary of the probabilities of missclassification
+plot(res_with, type="probs-class")
+
+# Discriminative power of the variables (here, the most discriminative variable is MaxHeartRate)
+plot(res_with)
+
+# Boxplot for the continuous variable MaxHeartRate
+plot(res_with, y="MaxHeartRate")
+
+# Empirical and theoretical distributions (to check that the distribution is well-fitted)
+plot(res_with, y="MaxHeartRate", type="cdf")
+
+# Summary of categorical variable
+plot(res_with, y="Sex")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

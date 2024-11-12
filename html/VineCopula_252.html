@@ -1,0 +1,194 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineGrad</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Gradient of the Log-Likelihood of an R-Vine Copula Model</h2>
+
+<h3>Description</h3>
+
+<p>This function calculates the gradient of the log-likelihood of a
+d-dimensional R-vine copula model with respect to the copula parameter and
+evaluates it on a given copula data set.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineGrad(
+  data,
+  RVM,
+  par = RVM$par,
+  par2 = RVM$par2,
+  start.V = NA,
+  posParams = (RVM$family &gt; 0)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>An N x d data matrix (with uniform margins).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p>An <code>RVineMatrix()</code> object including the structure and
+the pair-copula families and parameters. <br>
+Only the following copula
+families are allowed in <code>RVM$family</code> <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula)<br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; “survival Joe”) <br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>A d x d matrix with the pair-copula parameters (optional;
+default: <code>par = RVM$par</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>A d x d matrix with the second parameters of pair-copula
+families with two parameters (optional; default: <code>par2 = RVM$par2</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start.V</code></td>
+<td>
+<p>Transformations (h-functions and log-likelihoods of each
+pair-copula) of previous calculations (see output; default: <code>start.V = NA</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>posParams</code></td>
+<td>
+<p>A d x d matrix indicating which copula has to be considered
+in the gradient (default: <code>posParams = (RVM$family &gt; 0)</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The ordering of the gradient is due to the ordering of the R-vine matrix.
+The gradient starts at the lower right corner of the R-vine matrix and goes
+column by column to the left and up, i.e. the first entry of the gradient is
+the last entry of the second last column of the <code>par</code>-matrix followed
+by the last entry of the third last column and the second last entry of this
+column. If there is a copula family with two parameters, i.e. the t-copula,
+the derivative with respect to the second parameter is at the end of the
+gradient vector in order of their occurrence.
+</p>
+
+
+<h3>Value</h3>
+
+<p>gradient The calculated gradient of the log-likelihood value
+of the R-vine copula model. (three matrices: <code>direct</code>, <code>indirect</code>
+and <code>value</code>).
+</p>
+
+
+<h3>Note</h3>
+
+<p>The gradient for R-vine copula models with two parameter Archimedean
+copulas, i.e. BB1, BB6, BB7, BB8 and their rotated versions can not yet be calculated.
+The derivatives of these bivariate copulas are more complicated.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier, Jakob Stoeber
+</p>
+
+
+<h3>References</h3>
+
+<p>Dissmann, J. F., E. C. Brechmann, C. Czado, and D. Kurowicka
+(2013). Selecting and estimating regular vine copulae and application to
+financial returns. Computational Statistics &amp; Data Analysis, 59 (1), 52-69.
+</p>
+<p>Schepsmeier, U. and J. Stoeber (2014)
+Derivatives and Fisher information of bivariate copulas.
+Statistical Papers, 55(2), 525-542.
+online first: <a href="https://link.springer.com/article/10.1007/s00362-013-0498-x">https://link.springer.com/article/10.1007/s00362-013-0498-x</a>.
+</p>
+<p>Web supplement: Derivatives and Fisher Information of bivariate copulas.
+<a href="https://mediatum.ub.tum.de/node?id=1119201">https://mediatum.ub.tum.de/node?id=1119201</a>
+</p>
+<p>Stoeber, J. and U. Schepsmeier (2013). Estimating standard errors in regular
+vine copula models. Computational Statistics, 28 (6), 2679-2707
+<a href="https://link.springer.com/article/10.1007/s00180-013-0423-8#">https://link.springer.com/article/10.1007/s00180-013-0423-8#</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopDeriv()</code>,
+<code>BiCopDeriv2()</code>,
+<code>BiCopHfuncDeriv()</code>,
+<code>BiCopHfuncDeriv2()</code>, <br><code>RVineMatrix()</code>,
+<code>RVineMLE()</code>,
+<code>RVineHessian()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# define 5-dimensional R-vine tree structure matrix
+Matrix &lt;- c(5, 2, 3, 1, 4,
+            0, 2, 3, 4, 1,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 1)
+Matrix &lt;- matrix(Matrix, 5, 5)
+
+# define R-vine pair-copula family matrix
+family &lt;- c(0, 1, 3, 4, 4,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 3,
+            0, 0, 0, 0, 0)
+family &lt;- matrix(family, 5, 5)
+
+# define R-vine pair-copula parameter matrix
+par &lt;- c(0, 0.2, 0.9, 1.5, 3.9,
+         0, 0, 1.1, 1.6, 0.9,
+         0, 0, 0, 1.9, 0.5,
+         0, 0, 0, 0, 4.8,
+         0, 0, 0, 0, 0)
+par &lt;- matrix(par, 5, 5)
+
+# define second R-vine pair-copula parameter matrix
+par2 &lt;- matrix(0, 5, 5)
+
+# define RVineMatrix object
+RVM &lt;- RVineMatrix(Matrix = Matrix, family = family,
+                   par = par, par2 = par2,
+                   names = c("V1", "V2", "V3", "V4", "V5"))
+
+# simulate a sample of size 300 from the R-vine copula model
+set.seed(123)
+simdata &lt;- RVineSim(300, RVM)
+
+# compute the gradient of the first row of the data
+out2 &lt;- RVineGrad(simdata[1,], RVM)
+out2$gradient
+
+</code></pre>
+
+
+</div>

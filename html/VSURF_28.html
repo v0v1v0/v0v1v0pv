@@ -1,0 +1,338 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VSURF_thres</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Thresholding step of VSURF</h2>
+
+<h3>Description</h3>
+
+<p>Thresholding step is dedicated to roughly eliminate irrelevant variables a the
+dataset. This is the first step of the <code>VSURF</code> function. For
+refined variable selection, see VSURF other steps: <code>VSURF_interp</code>
+and <code>VSURF_pred</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">VSURF_thres(x, ...)
+
+## Default S3 method:
+VSURF_thres(
+  x,
+  y,
+  mtry = max(floor(ncol(x)/3), 1),
+  ntree.thres = 500,
+  nfor.thres = 20,
+  nmin = 1,
+  RFimplem = "randomForest",
+  parallel = FALSE,
+  clusterType = "PSOCK",
+  ncores = parallel::detectCores() - 1,
+  verbose = TRUE,
+  ntree = NULL,
+  ...
+)
+
+## S3 method for class 'formula'
+VSURF_thres(formula, data, ..., na.action = na.fail)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, formula</code></td>
+<td>
+<p>A data frame or a matrix of predictors, the columns represent
+the variables. Or a formula describing the model to be fitted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>others parameters to be passed on to the <code>randomForest</code>
+function (see ?randomForest for further information).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>A response vector (must be a factor for classification problems and
+numeric for regression ones).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mtry</code></td>
+<td>
+<p>Number of variables randomly sampled as candidates at each split.
+Standard parameter of <code>randomForest</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ntree.thres</code></td>
+<td>
+<p>Number of trees of each forest grown.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nfor.thres</code></td>
+<td>
+<p>Number of forests grown.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nmin</code></td>
+<td>
+<p>Number of times the "minimum value" is multiplied to set
+threshold value. See details below.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RFimplem</code></td>
+<td>
+<p>Choice of the random forests implementation to use :
+"randomForest" (default), "ranger" or "Rborist" (not that if "Rborist" is
+chosen, "randoForest" will still be used for the first step
+<code>VSURF_thres</code>). If a vector of length 3 is given, each coordinate is
+passed to each intermediate function: <code>VSURF_thres</code>,
+<code>VSURF_interp</code>, <code>VSURF_pred</code>, in this order.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+<p>A logical indicating if you want VSURF to run in parallel on
+multiple cores (default to FALSE). If a vector of length 3 is given,
+each coordinate is passed to each intermediate function: <code>VSURF_thres</code>,
+<code>VSURF_interp</code>, <code>VSURF_pred</code>, in this order.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clusterType</code></td>
+<td>
+<p>Type of the multiple cores cluster used to run VSURF in
+parallel. Must be chosen among "PSOCK" (default: SOCKET cluster available
+locally on all OS), "FORK" (local too, only available for Linux and Mac
+OS), "MPI" (can be used on a remote cluster, which needs <code>snow</code> and
+<code>Rmpi</code> packages installed), "ranger" and "Rborist" for internal
+parallelizations of those packages (not that if "Rborist" is
+chosen, "SOCKET" will still be used for the first step
+<code>VSURF_thres</code>). If a vector of length 2 is given, each
+coordinate is passed to each intermediate function: <code>VSURF_thres</code>,
+<code>VSURF_interp</code>, in this order.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncores</code></td>
+<td>
+<p>Number of cores to use. Default is set to the number of cores
+detected by R minus 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>A logical indicating if information about method's progress
+(included progress bars for each step) must be printed (default to TRUE).
+Adds a small extra overload.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ntree</code></td>
+<td>
+<p>(deprecated) Number of trees in each forest grown for
+"thresholding step".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data frame containing the variables in the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.action</code></td>
+<td>
+<p>A function to specify the action to be taken if NAs are
+found.  (NOTE: If given, this argument must be named, and as
+<code>randomForest</code> it is only used with the formula-type call.)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>First, <code>nfor.thres</code> random forests are computed using the function
+<code>randomForest</code> with arguments <code>importance=TRUE</code>, and our choice of
+default values for <code>ntree</code> and <code>mtry</code> (which are higher than default
+in <code>randomForest</code> to get a more stable variable importance
+measure). Then variables are sorted according to their mean variable
+importance (VI), in decreasing order. This order is kept all along the
+procedure.  Next, a threshold is computed: <code>min.thres</code>, the minimum
+predicted value of a pruned CART tree fitted to the curve of the standard
+deviations of VI.  Finally, the actual thresholding is performed: only
+variables with a mean VI larger than <code>nmin</code> * <code>min.thres</code> are kept.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>VSURF_thres</code>, which is a list with the
+following components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>varselect.thres</code></td>
+<td>
+<p>A vector of indices of selected variables, sorted
+according to their mean VI, in decreasing order.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imp.varselect.thres</code></td>
+<td>
+<p>A vector of importance of the
+<code>varselect.thres</code> variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min.thres</code></td>
+<td>
+<p>The minimum predicted value of a pruned CART tree fitted to
+the curve of the standard deviations of VI.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>num.varselect.thres</code></td>
+<td>
+<p>The number of selected variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imp.mean.dec</code></td>
+<td>
+<p>A vector of the variables importance means (over
+<code>nfor.thres</code> runs), in decreasing order.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imp.mean.dec.ind</code></td>
+<td>
+<p>The ordering index vector associated to the sorting
+of variables importance means.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imp.sd.dec</code></td>
+<td>
+<p>A vector of standard deviations of all variables
+importance. The order is given by <code>imp.mean.dec.ind</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean.perf</code></td>
+<td>
+<p>The mean OOB error rate, obtained by a random forests build
+with all variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred.pruned.tree</code></td>
+<td>
+<p>The predictions of the CART tree fitted to the curve
+of the standard deviations of VI.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nmin</code></td>
+<td>
+<p>Value of the parameter in the call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>comput.time</code></td>
+<td>
+<p>Computation time.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RFimplem</code></td>
+<td>
+<p>The RF implementation used to run
+<code>VSURF_thres</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncores</code></td>
+<td>
+<p>The number of cores used to run <code>VSURF_thres</code> in parallel
+(NULL if VSURF_thres did not run in parallel).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clusterType</code></td>
+<td>
+<p>The type of the cluster used to run <code>VSURF_thres</code> in
+parallel (NULL if VSURF_thres did not run in parallel).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>The original call to <code>VSURF</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>terms</code></td>
+<td>
+<p>Terms associated to the formula (only if formula-type call was
+used).</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Robin Genuer, Jean-Michel Poggi and Christine Tuleau-Malot
+</p>
+
+
+<h3>References</h3>
+
+<p>Genuer, R. and Poggi, J.M. and Tuleau-Malot, C. (2010),
+<em>Variable selection using random forests</em>, Pattern Recognition Letters
+31(14), 2225-2236
+</p>
+<p>Genuer, R. and Poggi, J.M. and Tuleau-Malot, C. (2015),
+<em>VSURF: An R Package for Variable Selection Using Random Forests</em>, The
+R Journal 7(2):19-33
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VSURF</code>, <code>tune</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data(iris)
+iris.thres &lt;- VSURF_thres(iris[,1:4], iris[,5])
+iris.thres
+
+## Not run: 
+# A more interesting example with toys data (see \code{\link{toys}})
+# (a few minutes to execute)
+data(toys)
+toys.thres &lt;- VSURF_thres(toys$x, toys$y)
+toys.thres
+## End(Not run)
+
+</code></pre>
+
+
+</div>

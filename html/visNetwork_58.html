@@ -1,0 +1,303 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visPhysics</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Network visualization Physics options</h2>
+
+<h3>Description</h3>
+
+<p>Network visualization Physics options. For full documentation, have a look at visDocumentation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visPhysics(
+  graph,
+  solver = NULL,
+  maxVelocity = NULL,
+  minVelocity = NULL,
+  timestep = NULL,
+  barnesHut = NULL,
+  forceAtlas2Based = NULL,
+  repulsion = NULL,
+  hierarchicalRepulsion = NULL,
+  stabilization = NULL,
+  adaptiveTimestep = NULL,
+  wind = NULL,
+  enabled = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>graph</code></td>
+<td>
+<p>: a visNetwork object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>solver</code></td>
+<td>
+<p>: String. Default to 'barnesHut'.    You can select your own solver. Possible options: 'barnesHut', 'repulsion', 'hierarchicalRepulsion', 'forceAtlas2Based'. When setting the hierarchical layout, the hierarchical repulsion solver is automaticaly selected, regardless of what you fill in here.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxVelocity</code></td>
+<td>
+<p>: Number. Default to 50. The physics module limits the maximum velocity of the nodes to increase the time to stabilization. This is the maximum value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minVelocity</code></td>
+<td>
+<p>: Number. Default to 0.1. Once the minimum velocity is reached for all nodes, we assume the network has been stabilized and the simulation stops.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>timestep</code></td>
+<td>
+<p>: Number. Default to 0.5. The physics simulation is discrete. This means we take a step in time, calculate the forces, move the nodes and take another step. If you increase this number the steps will be too large and the network can get unstable. If you see a lot of jittery movement in the network, you may want to reduce this value a little.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>barnesHut, </code></td>
+<td>
+<p>named list of options
+</p>
+
+<ul>
+<li>
+<p>"theta" : Number. Default to 0.5. This parameter determines the boundary between consolidated long range forces and individual short range forces. To oversimplify higher values are faster but generate more errors, lower values are slower but with less errors.
+</p>
+</li>
+<li>
+<p>"gravitationalConstant" : Number. Default to -2000. Gravity attracts. We like repulsion. So the value is negative. If you want the repulsion to be stronger, decrease the value (so -10000, -50000).
+</p>
+</li>
+<li>
+<p>"centralGravity" : Number. Default to 0.3. There is a central gravity attractor to pull the entire network back to the center.
+</p>
+</li>
+<li>
+<p>"springLength" : Number. Default to 95. The edges are modelled as springs. This springLength here is the the rest length of the spring.
+</p>
+</li>
+<li>
+<p>"springConstant" : Number. Default to 0.04. This is how 'sturdy' the springs are. Higher values mean stronger springs.
+</p>
+</li>
+<li>
+<p>"damping" : Number. Default to 0.09. Accepted range: [0 .. 1]. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.
+</p>
+</li>
+<li>
+<p>"avoidOverlap" : Number. Default to 0. Accepted range: [0 .. 1]. When larger than 0, the size of the node is taken into account. The distance will be calculated from the radius of the encompassing circle of the node for both the gravity model. Value 1 is maximum overlap avoidance.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>forceAtlas2Based, </code></td>
+<td>
+<p>named list of options
+</p>
+
+<ul>
+<li>
+<p>"theta" : Number. Default to 0.5. This parameter determines the boundary between consolidated long range forces and individual short range forces. To oversimplify higher values are faster but generate more errors, lower values are slower but with less errors.
+</p>
+</li>
+<li>
+<p>"gravitationalConstant" : Number. Default to -50. Gravity attracts. We like repulsion. So the value is negative. If you want the repulsion to be stronger, decrease the value (so -10000, -50000).
+</p>
+</li>
+<li>
+<p>"centralGravity" : Number. Default to 0.01. There is a central gravity attractor to pull the entire network back to the center.
+</p>
+</li>
+<li>
+<p>"springLength" : Number. Default to 100. The edges are modelled as springs. This springLength here is the the rest length of the spring.
+</p>
+</li>
+<li>
+<p>"springConstant" : Number. Default to 0.08. This is how 'sturdy' the springs are. Higher values mean stronger springs.
+</p>
+</li>
+<li>
+<p>"damping" : Number. Default to 0.4. Accepted range: [0 .. 1]. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.
+</p>
+</li>
+<li>
+<p>"avoidOverlap" : Number. Default to 0. Accepted range: [0 .. 1]. When larger than 0, the size of the node is taken into account. The distance will be calculated from the radius of the encompassing circle of the node for both the gravity model. Value 1 is maximum overlap avoidance.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>repulsion, </code></td>
+<td>
+<p>named list of options
+</p>
+
+<ul>
+<li>
+<p>"nodeDistance" : Number. Default to 100. This is the range of influence for the repulsion.
+</p>
+</li>
+<li>
+<p>"centralGravity" : Number. Default to 0.2. There is a central gravity attractor to pull the entire network back to the center.
+</p>
+</li>
+<li>
+<p>"springLength" : Number. Default to 200. The edges are modelled as springs. This springLength here is the the rest length of the spring.
+</p>
+</li>
+<li>
+<p>"springConstant" : Number. Default to 0.05. This is how 'sturdy' the springs are. Higher values mean stronger springs.
+</p>
+</li>
+<li>
+<p>"damping" : Number. Default to 0.09. Accepted range: [0 .. 1]. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hierarchicalRepulsion, </code></td>
+<td>
+<p>named list of options
+</p>
+
+<ul>
+<li>
+<p>"nodeDistance" : Number. Default to 120. This is the range of influence for the repulsion.
+</p>
+</li>
+<li>
+<p>"centralGravity" : Number. Default to 0.0. There is a central gravity attractor to pull the entire network back to the center.
+</p>
+</li>
+<li>
+<p>"springLength" : Number. Default to 100. The edges are modelled as springs. This springLength here is the the rest length of the spring.
+</p>
+</li>
+<li>
+<p>"springConstant" : Number. Default to 0.01. This is how 'sturdy' the springs are. Higher values mean stronger springs.
+</p>
+</li>
+<li>
+<p>"damping" : Number. Default to 0.09. Accepted range: [0 .. 1]. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.
+</p>
+</li>
+<li>
+<p>"avoidOverlap" : Number. Default to 0. Accepted range: [0 .. 1]. When larger than 0, the size of the node is taken into account. The distance will be calculated from the radius of the encompassing circle of the node for both the gravity model. Value 1 is maximum overlap avoidance.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stabilization, </code></td>
+<td>
+<p>Just a boolean, or a named list of options
+</p>
+
+<ul>
+<li>
+<p>"enabled" : Boolean. Default to true. Toggle the stabilization. This is an optional property. If undefined, it is automatically set to true when any of the properties of this object are defined.
+</p>
+</li>
+<li>
+<p>"iterations" : Number. Default to 1000. The physics module tries to stabilize the network on load up til a maximum number of iterations defined here. If the network stabilized with less, you are finished before the maximum number.
+</p>
+</li>
+<li>
+<p>"updateInterval" : Number. Default to 50. When stabilizing, the DOM can freeze. You can chop the stabilization up into pieces to show a loading bar for instance. The interval determines after how many iterations the stabilizationProgress event is triggered.
+</p>
+</li>
+<li>
+<p>"onlyDynamicEdges" : Boolean. Default to false. If you have predefined the position of all nodes and only want to stabilize the dynamic smooth edges, set this to true. It freezes all nodes except the invisible dynamic smooth curve support nodes. If you want the visible nodes to move and stabilize, do not use this.
+</p>
+</li>
+<li>
+<p>"fit" : Boolean. Default to true. Toggle whether or not you want the view to zoom to fit all nodes when the stabilization is finished.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>adaptiveTimestep</code></td>
+<td>
+<p>:    Boolean. Default to true. If this is enabled, the timestep will intelligently be adapted (only during the stabilization stage if stabilization is enabled!) to greatly decrease stabilization times. The timestep configured above is taken as the minimum timestep. This can be further improved by using the improvedLayout algorithm.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wind, </code></td>
+<td>
+<p>Named list. A force that pushes all non-fixed nodes in the given direction. Requires all nodes are connected to nodes which are fixed, otherwise non-attached nodes will keep moving indefinitely.
+</p>
+
+<ul>
+<li>
+<p>"x" : Number. Default to 0. The amount of force to be applied pushing non-fixed nodes to the right (positive value) or to the left (negative value).
+</p>
+</li>
+<li>
+<p>"y" : Number. Default to 0. The amount of force to be applied pushing non-fixed nodes downwards (positive value) or upwards (negative value).
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>enabled</code></td>
+<td>
+<p>:    Boolean. Default to true. Toggle the physics system on or off. This property is optional. If you define any of the options below and enabled is undefined, this will be set to true.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>See online documentation <a href="https://datastorm-open.github.io/visNetwork/">https://datastorm-open.github.io/visNetwork/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>visNodes for nodes options, visEdges for edges options, visGroups for groups options, 
+visLegend for adding legend, visOptions for custom option, visLayout &amp; visHierarchicalLayout for layout, 
+visPhysics for control physics, visInteraction for interaction, visNetworkProxy &amp; visFocus &amp; visFit for animation within shiny,
+visDocumentation, visEvents, visConfigure ...
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+nodes &lt;- data.frame(id = 1:10)
+edges &lt;- data.frame(from = round(runif(8)*10), to = round(runif(8)*10))
+
+visNetwork(nodes, edges) %&gt;%
+ visPhysics(solver = "repulsion")
+
+visNetwork(nodes, edges) %&gt;%
+ visPhysics(solver = "forceAtlas2Based", forceAtlas2Based = list(gravitationalConstant = -10))
+ 
+visNetwork(nodes, edges) %&gt;%
+ visPhysics(stabilization = FALSE)
+
+
+</code></pre>
+
+
+</div>

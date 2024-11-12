@@ -1,0 +1,227 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>evsivar</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate the expected value of sample information for an estimation problem</h2>
+
+<h3>Description</h3>
+
+<p>Calculate the expected value of sample information for an estimation problem.  This computes the expected reduction in variance in some quantity of interest from a study of a certain design that informs the parameters of interest.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">evsivar(
+  outputs,
+  inputs,
+  study = NULL,
+  datagen_fn = NULL,
+  pars = NULL,
+  n = 100,
+  aux_pars = NULL,
+  method = NULL,
+  nsim = NULL,
+  verbose = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>outputs</code></td>
+<td>
+<p>a vector of values for the quantity of interest, sampled from the uncertainty distribution of this quantity that is induced by the uncertainty about the parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inputs</code></td>
+<td>
+<p>Matrix or data frame of samples from the uncertainty
+distribution of the input parameters of the decision model.   The number
+of columns should equal the number of parameters, and the columns should
+be named.    This should have the same number of rows as there are samples
+in <code>outputs</code>, and each row of the samples in <code>outputs</code> should
+give the model output evaluated at the corresponding parameters.
+</p>
+<p>Users of <span class="pkg">heemod</span> can create an object of this form, given an object
+produced by <code>run_psa</code> (<code>obj</code>, say), with <code>import_heemod_inputs</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>study</code></td>
+<td>
+<p>Name of one of the built-in study types supported by this
+package for EVSI calculation.  If this is supplied, then the columns of
+<code>inputs</code> that correspond to the parameters governing the study data
+should be identified in <code>pars</code>.
+</p>
+<p>Current built-in studies are
+</p>
+<p><code>"binary"</code> A study with a binary outcome observed on one sample of
+individuals.   Requires one parameter: the probability of the outcome. The
+sample size is specifed in the <code>n</code> argument to <code>evsi()</code>, and the
+binomially-distributed outcome is named <code>X1</code>.
+</p>
+<p><code>"trial_binary"</code> Two-arm trial with a binary outcome.   Requires two
+parameters: the probability of the outcome in arm 1 and 2 respectively.
+The sample size is the same in each arm, specifed in the <code>n</code> argument
+to <code>evsi()</code>, and the binomial outcomes are named <code>X1</code> and
+<code>X2</code> respectively.
+</p>
+<p><code>"normal_known"</code> A study of a normally-distributed outcome, with a
+known standard deviation, on one sample of individuals.  Likewise the
+sample size is specified in the <code>n</code> argument to <code>evsi()</code>.  The
+standard deviation defaults to 1, and can be changed by specifying
+<code>sd</code> as a component of the <code>aux_pars</code> argument, e.g.
+<code>evsi(..., aux_pars=list(sd=2))</code>.
+</p>
+<p>Either <code>study</code> or <code>datagen_fn</code> should be supplied to
+<code>evsi()</code>.
+</p>
+<p>For the EVSI calculation methods where explicit Bayesian analyses of the
+simulated data are performed, the prior parameters for these built-in studies
+are supplied in the <code>analysis_args</code> argument to <code>evsi()</code>.  These
+assume Beta priors for probabilities, and Normal priors for the mean of a
+normal outcome.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>datagen_fn</code></td>
+<td>
+<p>If the proposed study is not one of the built-in types
+supported, it can be specified in this argument as an R function to sample
+predicted data from the study.  This function should have the following
+specification:
+</p>
+
+<ol>
+<li>
+<p> the function's first argument should be a data frame of parameter
+simulations, with one row per simulation and one column per parameter.
+The parameters in this data frame must all be found in <code>inputs</code>,
+but need not necessarily be in the same order or include all of them.
+</p>
+</li>
+<li>
+<p> the function should return a data frame.
+</p>
+</li>
+<li>
+<p> the returned data frame should have number of rows equal to the number
+of parameter simulations in <code>inputs</code>.
+</p>
+</li>
+<li>
+<p> if <code>inputs</code> is considered as a sample from the posterior, then
+<code>datagen_fn(inputs)</code> returns a corresponding sample from the
+posterior predictive distribution, which includes two sources of
+uncertainty: (a) uncertainty about the parameters and (b) sampling
+variation in observed data given fixed parameter values.
+</p>
+</li>
+<li>
+<p> the function can optionally have more than one argument. If so, these
+additional arguments should be given default values in the definition of
+<code>datagen_fn</code>.  If there is an argument called <code>n</code>, then it is
+interpreted as the sample size for the proposed study.
+</p>
+</li>
+</ol>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pars</code></td>
+<td>
+<p>Character vector identifying which parameters are learned from the proposed study.
+This is required for the moment matching and importance sampling methods,
+and these should be columns of <code>inputs</code>.   This is not required for the nonparametric
+regression methods.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>Sample size of future study, or vector of alternative sample sizes.
+This is understood by the built-in study designs.  For studies specified
+by the user with <code>datagen_fn</code>, if <code>datagen_fn</code> has an argument
+<code>n</code>, then this is interpreted as the sample size.  However if
+calling <code>evsi</code> for a user-specified design where
+<code>datagen_fn</code> does not have an <code>n</code> argument, then any <code>n</code>
+argument supplied to <code>evsi</code> will be ignored.
+</p>
+<p>Currently this
+shortcut is not supported if more than one quantity is required to
+describe the sample size, for example, trials with unbalanced arms.  In
+that case, you will have to hard-code the required sample sizes into
+<code>datagen_fn</code>.
+</p>
+<p>For the nonparametric regression and importance sampling methods, the
+computation is simply repeated for each sample size supplied here.
+</p>
+<p>The moment matching method uses a regression model to estimate the
+dependency of the EVSI on the sample size, hence to enable EVSI to be
+calculated efficiently for any number of sample sizes (Heath et al. 2019).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aux_pars</code></td>
+<td>
+<p>A list of additional fixed arguments to supply to the
+function to generate the data, whether that is a built-in study design or user-defined
+function supplied in <code>datagen_fn</code>.  For example, <code>evsi(..., aux_pars = list(sd=2))</code> defines the fixed
+standard deviation in the <code>"normal_known"</code> model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>See <code>evsi</code>, only nonparametric regression methods are
+currently supported in <code>evsivar</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsim</code></td>
+<td>
+<p>Number of simulations from the model to use for calculating
+EVPPI.  The first <code>nsim</code> rows of the objects in <code>inputs</code> and
+<code>outputs</code> are used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>If <code>TRUE</code>, then messages are printed
+describing each step of the calculation, if the method supplies
+these.  Can be useful to see the progress of slow calculations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments understood by specific methods, e.g. <code>gam_formula</code>
+and other controlling options (see <code>evppi</code>) can be passed to the
+nonparametric regression used inside the moment matching method.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame with a column <code>pars</code>, indicating the parameter(s), and a column <code>evsi</code>, giving the corresponding EVSI.  If there are EVSI estimates for multiple sample sizes, the sample size is returned in the column <code>n</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>Jackson, C., Presanis, A., Conti, S., &amp; De Angelis, D. (2019). Value of information:
+Sensitivity analysis and research design in Bayesian evidence synthesis.
+Journal of the American Statistical Association, 114(528), 1436-1449.
+</p>
+
+
+</div>

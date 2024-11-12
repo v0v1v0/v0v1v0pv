@@ -1,0 +1,66 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vineParameters</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Parameters of a Vine</h2>
+
+<h3>Description</h3>
+
+<p>Retrieve or set the parameters of a <code>Vine</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vineParameters(vine)
+vineParameters(vine) &lt;- value
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vine</code></td>
+<td>
+<p>A <code>Vine</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>Vector with the parameters of the copulas in the pair-copula 
+construction. This vector is the result of the concatenation of the 
+<code>parameters</code> slots of the <code>copula</code> objects in the 
+<code>copulas</code> slot of the <code>Vine</code> object (by rows).</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">dimension &lt;- 5
+copulas &lt;- matrix(c(list(tCopula(-0.25, df = 2),
+                         tCopula(-0.5, df = 4),
+                         tCopula(0.25, df = 6),
+                         tCopula(0.5, df = 8)),
+                    rep(list(NULL), 12)),
+                  ncol = dimension - 1, 
+                  nrow = dimension - 1,
+                  byrow = TRUE)
+vine &lt;- DVine(dimension = dimension, trees = 1, 
+              copulas = copulas)
+dimnames(vine) &lt;- c("A", "B", "C", "D", "E")
+
+vineParameters(vine)
+show(vine)
+
+vineParameters(vine) &lt;- c(-0.25, 3, -0.5, 5, 0.25, 7, 0.5, 9)
+
+vineParameters(vine)
+show(vine)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,366 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visreg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualization of regression functions</h2>
+
+<h3>Description</h3>
+
+<p>A function for visualizing regression models quickly and easily.
+Default plots contain a confidence band, prediction line, and partial
+residuals.  Factors, transformations, conditioning, interactions, and a
+variety of other options are supported.  The <code>visreg</code> function
+performs the calculations and, if <code>plot=TRUE</code> (the default), these
+calculations are passed to <code>plot.visreg</code> for plotting.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visreg(fit, xvar, by, breaks=3, type=c("conditional", "contrast"),
+data=NULL, trans=I, scale=c("linear","response"), xtrans,  alpha=.05,
+nn=101, cond=list(), jitter=FALSE, collapse=FALSE, plot=TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fit</code></td>
+<td>
+
+<p>The fitted model object you wish to visualize.  Any object with
+'predict' and 'model.frame' methods are supported, including lm,
+glm, gam, rlm, coxph, and many more.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xvar</code></td>
+<td>
+
+<p>Character string specifying the variable to be put on the x-axis of
+your plot.  Both continuous variables and factors are supported.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+
+<p>(Optional) A variable allowing you to divide your plot into
+cross-sections based on levels of the <code>by</code> variable;
+particularly useful for visualizing models with interactions.
+Supplied as a character string.  Uses the lattice package.  Both
+continuous variables and factors are supported.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>breaks</code></td>
+<td>
+
+<p>If a continuous variable is used for the <code>by</code> option, the
+<code>breaks</code> argument controls the values at which the
+cross-sections are taken. By default, cross-sections are taken at
+the 10th, 50th, and 90th quantiles.  If <code>breaks</code> is a single
+number, it specifies the number of breaks.  If <code>breaks</code> is a
+vector of numbers, it specifies the values at which the
+cross-sections are to be taken.  Each partial residuals appears
+exactly once in the plot, in the panel it is closest to. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+    
+<p>The type of plot to be produced.  The following options are
+supported:
+</p>
+
+<ul>
+<li>
+<p> If 'conditional' is selected, the plot returned shows the
+value of the variable on the x-axis and the change in response on
+the y-axis, holding all other variables constant (by default,
+median for numeric variables and most common category for factors).
+</p>
+</li>
+<li>
+<p> If 'contrast' is selected, the plot returned shows the effect
+on the expected value of the response by moving the x variable away
+from a reference point on the x-axis (for numeric variables, this is
+taken to be the mean).
+</p>
+</li>
+</ul>
+<p>For more details, see references.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+
+<p>The data frame used to fit the model.  Typically, visreg() can
+figure out where the data is, so it is not necessary to provide
+this.  In some cases, however, the data set cannot be located and
+must be supplied explicitly.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trans</code></td>
+<td>
+
+<p>(Optional) A function specifying a transformation for the vertical
+axis.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+
+<p>By default, the model is plotted on the scale of the linear
+predictor.  If <code>scale='response'</code> for a glm, the inverse link
+function will be applied so that the model is plotted on the scale
+of the original response.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xtrans</code></td>
+<td>
+
+<p>(Optional) A function specifying a transformation for the horizontal
+axis.  Note that, for model terms such as <code>log(x)</code>, visreg
+automatically plots on the original axis (see examples).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+
+<p>Alpha level (1-coverage) for the confidence band displayed in the
+plot (default: 0.05).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nn</code></td>
+<td>
+
+<p>Controls the smoothness of the line and confidence band.  Increasing
+this number will add to the computational burden, but produce a
+smoother plot (default: 101).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cond</code></td>
+<td>
+
+<p>Named list specifying conditional values of other explanatory
+variables. By default, conditional plots in visreg are constructed
+by filling in other explanatory variables with the median (for
+numeric variables) or most common category (for factors), but this
+can be overridden by specifying their values using <code>cond</code> (see
+examples).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>jitter</code></td>
+<td>
+
+<p>Adds a small amount of noise to <code>xvar</code>.  Potentially useful if
+many observations have exactly the same value.  Default is FALSE.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>collapse</code></td>
+<td>
+
+<p>If the <code>predict</code> method for <code>fit</code> returns a matrix, should
+this be returns as multiple visreg objects bound together as a list
+(<code>collapse=FALSE</code>) or collapsed down to a single <code>visreg</code>
+object (<code>collapse=TRUE</code>).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+
+<p>Send the calculations to <code>plot.visreg</code>?  Default is
+TRUE.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Graphical parameters (e.g., <code>ylab</code>) can be passed to the
+function to customize the plots.  If <code>by=TRUE</code>, lattice
+parameters can be passed, such as layout (see examples below).
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See <code>plot.visreg</code> for plotting options, such as changing
+the appearance of points, lines, confidence bands, etc.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>visreg</code> or <code>visregList</code> object (which is simply a list
+of <code>visreg</code> objects).  A <code>visreg</code> object has three
+components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>fit</code></td>
+<td>
+<p>A data frame with <code>nn</code> rows containing the fit of the
+model as <code>xvar</code> varies, along with lower and upper confidence
+bounds (named <code>visregFit</code>, <code>visregLwr</code>, and
+<code>visregUpr</code>, respectively). The fitted matrix of coefficients.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>res</code></td>
+<td>
+<p>A data frame with <code>n</code> rows, where <code>n</code> is the
+number of observations in the original data set used to model.  This
+frame contains information about the residuals, named
+<code>visregReg</code> and <code>visregPos</code>; the latter records whether
+the residual was positive or negative.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>meta</code></td>
+<td>
+<p>Contains meta-information needed to construct plots, such
+as the name of the x and y variables, whether there were any
+<code>by</code> variables, etc.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Patrick Breheny and Woodrow Burchett
+</p>
+
+
+<h3>References</h3>
+
+
+<ul>
+<li> <p><a href="http://pbreheny.github.io/visreg">http://pbreheny.github.io/visreg</a>
+</p>
+</li>
+<li>
+<p> Breheny, P. and Burchett, W. (2017), Visualizing regression
+models using visreg.
+<a href="https://journal.r-project.org/archive/2017/RJ-2017-046/index.html">https://journal.r-project.org/archive/2017/RJ-2017-046/index.html</a>
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><a href="http://pbreheny.github.io/visreg">http://pbreheny.github.io/visreg</a>
+<code>plot.visreg</code>
+<code>visreg2d</code>
+<code>visreg-faq</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">###################
+## Linear models ##
+###################
+
+## Basic
+fit &lt;- lm(Ozone ~ Solar.R + Wind + Temp, data=airquality)
+visreg(fit)
+visreg(fit, "Wind", type="contrast")
+visreg(fit, "Wind", type="conditional")
+
+## Factors
+airquality$Heat &lt;- cut(airquality$Temp, 3, labels=c("Cool","Mild","Hot"))
+fit.heat &lt;- lm(Ozone ~ Solar.R + Wind + Heat, data=airquality)
+visreg(fit.heat, "Heat", type="contrast")
+visreg(fit.heat, "Heat", type="conditional")
+
+## Transformations
+fit1 &lt;- lm(Ozone ~ Solar.R + Wind + Temp + I(Wind^2), data=airquality)
+fit2 &lt;- lm(log(Ozone) ~ Solar.R + Wind + Temp, data=airquality)
+fit3 &lt;- lm(log(Ozone) ~ Solar.R + Wind + Temp + I(Wind^2), data=airquality)
+visreg(fit1, "Wind")
+visreg(fit2, "Wind", trans=exp, ylab="Ozone")
+visreg(fit3, "Wind", trans=exp, ylab="Ozone")
+
+## Conditioning
+visreg(fit, "Wind", cond=list(Temp=50))
+visreg(fit, "Wind", print.cond=TRUE)
+visreg(fit, "Wind", cond=list(Temp=100))
+
+## Interactions
+fit.in1 &lt;- lm(Ozone~ Solar.R + Wind*Heat, data=airquality)
+visreg(fit.in1, "Wind", by="Heat")
+visreg(fit.in1, "Heat", by="Wind")
+visreg(fit.in1, "Wind", by="Heat", type="contrast")
+visreg(fit.in1, "Heat", by="Wind", breaks=6)
+visreg(fit.in1, "Heat", by="Wind", breaks=c(0,10,20))
+
+## Overlay
+visreg(fit.in1, "Wind", by="Heat", overlay=TRUE)
+
+######################
+## Nonlinear models ##
+######################
+
+## Logistic regression
+data("birthwt", package="MASS")
+birthwt$race &lt;- factor(birthwt$race, labels=c("White","Black","Other"))
+birthwt$smoke &lt;- factor(birthwt$smoke, labels=c("Nonsmoker","Smoker"))
+fit &lt;- glm(low~age+race+smoke+lwt, data=birthwt, family="binomial")
+visreg(fit, "lwt",
+       xlab="Mother's Weight", ylab="Log odds (low birthweight)")
+visreg(fit, "lwt", scale="response", partial=FALSE,
+       xlab="Mother's Weight", ylab="P(low birthweight)")
+visreg(fit, "lwt", scale="response", partial=FALSE,
+       xlab="Mother's Weight", ylab="P(low birthweight)", rug=2)
+
+## Proportional hazards
+require(survival)
+data(ovarian)
+ovarian$rx &lt;- factor(ovarian$rx)
+fit &lt;- coxph(Surv(futime, fustat) ~ age + rx, data=ovarian)
+visreg(fit, "age", ylab="log(Hazard ratio)")
+
+## Robust regression
+require(MASS)
+fit &lt;- rlm(Ozone ~ Solar.R + Wind*Heat, data=airquality)
+visreg(fit, "Wind", cond=list(Heat="Mild"))
+
+## And more...; anything with a 'predict' method should work
+
+## Return raw components of plot
+v &lt;- visreg(fit, "Wind", cond=list(Heat="Mild"))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compute.means</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Compute the Formant Means (or Medians or Standard Deviations) of a Data Frame of Vowel Data </h2>
+
+<h3>Description</h3>
+
+<p>Computes the mean formant values (or medians or standard deviations) for uniquely named vowels, in a data frame of vowel formant data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compute.means(vowels, separate=FALSE, speaker=NA)
+
+compute.medians(vowels, separate=FALSE, speaker=NA)
+
+compute.sds(vowels, separate=FALSE, speaker=NA)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vowels</code></td>
+<td>
+<p> a required data frame of one of two formats - either: speaker_id, vowel_id, context, F1, F2, F3, F1_glide, F2_glide, F3_glide, or: speaker_id, vowel_id, context, F1, F2, F1_glide, F2_glide.  The context column and glide columns can be blank. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>separate</code></td>
+<td>
+<p> if TRUE, calculates means separately for each speaker_id in the vowels data frame.  Otherwise, if FALSE, the default, calculates one set of means over all speakers.  "separate" trumps "speaker" </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>speaker</code></td>
+<td>
+<p> optionally, the speaker_id to extract from the data frame for averaging.  If NA, the default, the function averages across all speakers in the data frame </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Compute the mean formant values the median formant values or the standard deviations in vowel formant data data frames.  These can take either a data frame with F1, F2, and F3 data or just one with F1 and F2 data (such as that resulting from Lobanov or Watt \&amp; Fabricius normalization)
+</p>
+<p>compute.sds() mostly exists for use by the add.spread.vowelplot() function.
+</p>
+
+
+<h3>Value</h3>
+
+<p> compute.means() and compute.medians() return either a data frame in the format speaker_id, vowel_id, N, F1, F2, F3, F1_glide, F2_glide, F3_glide with the attribute "mean.values" == TRUE or a data frame in the format speaker_id, vowel_id, N, F1, F2, F1_glide, F2_glide with the attributes "mean.values" == TRUE and "no.f3s" == TRUE.  The resulting data frame also has whatever value (if any) the input data frame had for the attributes "norm.method" and "norm.variant" 
+</p>
+<p>The compute.medians() and compute.sds() functions have the same return values except instead of the attribute "mean.values", they have the attribute "median.values" or "standard.devs" respectively</p>
+
+
+<h3>Warning </h3>
+
+<p>The development of the library and this function are ongoing.  The arguments to the function may change in future version.</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Kendall, Tyler &lt;tsk@uoregon.edu&gt; </p>
+
+
+<h3>References</h3>
+
+<p> Thomas, Erik R. and Tyler Kendall. 2007. NORM: The vowel normalization and plotting suite. [ Online Resource: http://lingtools.uoregon.edu/norm/ ]
+</p>
+
+
+<h3>See Also</h3>
+
+ <p><code>norm.lobanov</code>, <code>norm.wattfabricius</code>, <code>vowelplot</code> <code>add.spread.vowelplot</code> </p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> 
+data(ohiovowels)
+means &lt;- compute.means(ohiovowels)
+vowelplot(means, color="vowels", labels="vowels")
+
+ohd.means &lt;- compute.means(ohiovowels, speaker="OHDMTV_M")
+vowelplot(ohd.means, color="vowels", labels="none")
+add.spread.vowelplot(ohiovowels, speaker="OHDMTV_M", color="vowels", sd.mult=1)
+</code></pre>
+
+
+</div>

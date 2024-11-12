@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>calcSSE_Acoef</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Sum of squared errors (SSE) between coefficients of two VARs</h2>
+
+<h3>Description</h3>
+
+<p>Compute sum of squared errors of coefficients of lagged endogenous
+variables (Acoef) of two VAR models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">calcSSE_Acoef(Acoef1, Acoef2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>Acoef1, Acoef2</code></td>
+<td>
+<p>Each one is a list object with K-by-K coefficient
+matrices of lagged endogenous variables. See help(Acoef_sh), or,
+help(Acoef).</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>Consider VAR(p) model:
+</p>
+<p style="text-align: center;"><code class="reqn">y_t = A_1 y_{t-1} + ... + A_p y_{t-p} + C d_t + e_t.</code>
+</p>
+
+<p>The SSE of two VAR(p) models is expressed as
+</p>
+<p style="text-align: center;"><code class="reqn">sum_{k=1}^p sum_{i=1}^K sum_{j=1}^K ( (A_k)_{ij} - (A_k')_{ij} )^2.</code>
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>SSE value.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Canada, package = "vars")
+y &lt;- diff(Canada)
+estim1 &lt;- VARshrink(y, p = 2, type = "const", method = "fbayes")
+Acoef1 &lt;- Acoef_sh(estim1)
+estim2 &lt;- VARshrink(y, p = 2, type = "const", method = "ridge")
+Acoef2 &lt;- Acoef_sh(estim2)
+calcSSE_Acoef(Acoef1, Acoef2)
+</code></pre>
+
+
+</div>

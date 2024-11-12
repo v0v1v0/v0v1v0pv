@@ -1,0 +1,68 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vgParam</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Parameter Sets for Variance Gamma Distribution</h2>
+
+<h3>Description</h3>
+
+<p>These objects store different parameter sets of the Variance Gamma
+distribution for testing or demonstrating purpose as
+matrixes. Specifically, the parameter sets <code>vgSmallShape</code> and
+<code>vgLargeShape</code> have constant (standard) location and spread
+parameters of <code class="reqn">c</code>=0 and <code class="reqn">\sigma</code>=1; where asymmetry
+and shape parameters vary from <code class="reqn">\theta</code>=(-2, 0, 2) and
+<code class="reqn">\nu</code>=(0.5, 1, 2) for <code>vgSmallShape</code> and
+<code class="reqn">\theta</code>=(-4, -2, 0, 2, 4) and <code class="reqn">\nu</code>=(0.25, 0.5, 1,
+2, 4) for <code>vgLargeShape</code>.
+</p>
+<p>The parameter sets <code>vgSmallParam</code> and <code>vgLargeParam</code> have varied
+values of all 4 parameters. <code>vgSmallParam</code> contains all of the parameter
+combinations from <code class="reqn">c</code>=(-2, 0, 2), <code class="reqn">\sigma</code>=(0.5, 1, 2),
+<code class="reqn">\theta</code>=(-2, 0, 2) and <code class="reqn">\nu</code>=(0.5, 1, 2).
+<code>vgLargeParam</code> contains all of the parameter combinations from
+<code class="reqn">c</code>=(-4, -2, 0, 2, 4), <code class="reqn">\sigma</code>=(0.25, 0.5, 1, 2, 4),
+<code class="reqn">\theta</code>=(-4, -2, 0, 2, 4) and <code class="reqn">\nu</code>=(0.25, 0.5, 1, 2, 4).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  data(vgParam)
+</code></pre>
+
+
+<h3>Format</h3>
+
+<p><code>vgSmallShape</code>: a 9 by 4 matrix;
+<code>vgLargeShape</code>: a 25 by 4 matrix;
+<code>vgSmallParam</code>: a 81 by 4 matrix;
+<code>vgLargeParam</code>: a 625 by 4 matrix.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>David Scott <a href="mailto:d.scott@auckland.ac.nz">d.scott@auckland.ac.nz</a>,
+Christine Yang Dong <a href="mailto:c.dong@auckland.ac.nz">c.dong@auckland.ac.nz</a></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vgParam)
+## Testing the accuracy of vgMean
+for (i in 1:nrow(vgSmallParam)) {
+    param &lt;- vgSmallParam[i,]
+    x &lt;- rvg(10000,param = param)
+    sampleMean &lt;- mean(x)
+    funMean &lt;- vgMean(param = param)
+    difference &lt;- abs(sampleMean - funMean)
+    print(difference)
+}
+
+</code></pre>
+
+
+</div>

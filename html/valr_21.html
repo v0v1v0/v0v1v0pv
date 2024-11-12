@@ -1,0 +1,119 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_shift</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Adjust intervals by a fixed size.</h2>
+
+<h3>Description</h3>
+
+<p>Out-of-bounds intervals are removed by default.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_shift(x, genome, size = 0, fraction = 0, trim = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>genome</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size</code></td>
+<td>
+<p>number of bases to shift. positive numbers shift right, negative shift left.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fraction</code></td>
+<td>
+<p>define <code>size</code> as a fraction of interval</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trim</code></td>
+<td>
+<p>adjust coordinates for out-of-bounds intervals</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>ivl_df
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/shift.html">https://bedtools.readthedocs.io/en/latest/content/tools/shift.html</a>
+</p>
+<p>Other single set operations: 
+<code>bed_cluster()</code>,
+<code>bed_complement()</code>,
+<code>bed_flank()</code>,
+<code>bed_genomecov()</code>,
+<code>bed_merge()</code>,
+<code>bed_partition()</code>,
+<code>bed_slop()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 25, 50,
+  "chr1", 100, 125
+)
+
+genome &lt;- tibble::tribble(
+  ~chrom, ~size,
+  "chr1", 125
+)
+
+bed_glyph(bed_shift(x, genome, size = -20))
+
+x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end, ~strand,
+  "chr1", 100,    150,  "+",
+  "chr1", 200,    250,  "+",
+  "chr2", 300,    350,  "+",
+  "chr2", 400,    450,  "-",
+  "chr3", 500,    550,  "-",
+  "chr3", 600,    650,  "-"
+)
+
+genome &lt;- tibble::tribble(
+  ~chrom, ~size,
+  "chr1", 1000,
+  "chr2", 2000,
+  "chr3", 3000
+)
+
+bed_shift(x, genome, 100)
+
+bed_shift(x, genome, fraction = 0.5)
+
+# shift with respect to strand
+stranded &lt;- dplyr::group_by(x, strand)
+bed_shift(stranded, genome, 100)
+
+</code></pre>
+
+
+</div>

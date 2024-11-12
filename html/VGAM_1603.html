@@ -1,0 +1,118 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>setup.smart</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Smart Prediction Setup </h2>
+
+<h3>Description</h3>
+
+<p>Sets up smart prediction in one of two modes:
+<code>"write"</code> and <code>"read"</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">setup.smart(mode.arg, smart.prediction = NULL, max.smart = 30)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mode.arg</code></td>
+<td>
+
+<p><code>mode.arg</code> must be <code>"write"</code> or <code>"read"</code>.  If in
+<code>"read"</code> mode then <code>smart.prediction</code> must be assigned the
+data structure <code>.smart.prediction</code> that was created while
+fitting. This is stored in <code>object@smart.prediction</code> or
+<code>object$smart.prediction</code> where
+<code>object</code> is the name of the fitted object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smart.prediction</code></td>
+<td>
+
+<p>If in <code>"read"</code> mode then <code>smart.prediction</code> must be assigned
+the list of data dependent parameters, which is stored
+on the fitted object.
+Otherwise, <code>smart.prediction</code> is ignored. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.smart</code></td>
+<td>
+
+<p><code>max.smart</code> is the initial length of the list
+<code>.smart.prediction</code>. It is not important because
+<code>.smart.prediction</code> is made larger if needed.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is only required by programmers writing a modelling
+function such as <code>lm</code>
+and <code>glm</code>, or a prediction functions of such,
+e.g., <code>predict.lm</code>.
+The function
+<code>setup.smart</code> operates by mimicking the operations of a
+first-in first-out stack (better known as a <em>queue</em>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>Nothing is returned.
+</p>
+
+
+<h3>Side Effects</h3>
+
+<p>In <code>"write"</code> mode
+<code>.smart.prediction</code> in
+<code>smartpredenv</code>
+is assigned an empty list with <code>max.smart</code> components.
+In <code>"read"</code> mode
+<code>.smart.prediction</code> in
+<code>smartpredenv</code>
+is assigned <code>smart.prediction</code>.
+Then
+<code>.smart.prediction.counter</code> in
+<code>smartpredenv</code>
+is assigned the value 0, and
+<code>.smart.prediction.mode</code> and <code>.max.smart</code> are written to
+<code>smartpredenv</code> too.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>lm</code>,
+<code>predict.lm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+setup.smart("write")  # Put at the beginning of lm
+
+## End(Not run)
+
+## Not run: # Put at the beginning of predict.lm
+setup.smart("read", smart.prediction = object$smart.prediction)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

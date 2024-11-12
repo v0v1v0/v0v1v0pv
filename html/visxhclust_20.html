@@ -1,0 +1,54 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>optimal_score</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Find minimum or maximum score in a vector</h2>
+
+<h3>Description</h3>
+
+<p>This function is meant to be used with compute_metric. For Gap statistic,
+use <code>cluster::maxSE()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">optimal_score(x, method = c("firstmax", "globalmax", "firstmin", "globalmin"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a numeric vector</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>one of "firstmax", "globalmax", "firstmin" or "globalmin"</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>the index (not k) of the identified maximum or minimum score
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data_to_cluster &lt;- iris[c("Petal.Length", "Sepal.Length")]
+dmat &lt;- compute_dmat(data_to_cluster, "euclidean", TRUE)
+clusters &lt;- compute_clusters(dmat, "complete")
+res &lt;- compute_metric(dmat, clusters, "dunn")
+optimal_score(res$score, method = "firstmax")
+</code></pre>
+
+
+</div>

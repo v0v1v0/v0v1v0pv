@@ -1,0 +1,429 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>stv</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Single Transferable Vote
+</h2>
+
+<h3>Description</h3>
+
+<p>Count votes using the single transferable voting method, also known as ranked choice voting or instant runoff. Raftery et al. (2021) describes the functionality in great detail.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">stv(votes, nseats = NULL, eps = 0.001, equal.ranking = FALSE, 
+  fsep = '\t', ties = c("f", "b"), constant.quota = FALSE,
+  quota.hare = FALSE, group.nseats = NULL, group.members = NULL,
+  complete.ranking = FALSE, invalid.partial = FALSE,
+  impute.missing = FALSE, verbose = FALSE, seed = 1234, 
+  quiet = FALSE, digits = 3, ...)
+
+## S3 method for class 'vote.stv'
+summary(object, ..., complete.ranking = FALSE, digits = 3)
+
+## S3 method for class 'vote.stv'
+view(object, ...)
+
+## S3 method for class 'vote.stv'
+plot(x, xlab = "Count", ylab = "Preferences", point.size = 2, ...)
+
+## S3 method for class 'vote.stv'
+image(x, xpref = 2, ypref = 1, all.pref = FALSE, proportion = TRUE, ...)
+
+## S3 method for class 'vote.stv'
+complete.ranking(object, ...)
+
+correct.ranking(votes, partial = FALSE, quiet = FALSE)
+
+impute.ranking(votes, equal.ranking = FALSE, quiet = TRUE)
+
+remove.candidate(votes, can, quiet = TRUE)
+
+ordered.tiebreak(vmat, seed = NULL)
+
+ordered.preferences(vmat)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>votes</code></td>
+<td>
+<p>Matrix or data frame containing the votes. Rows correspond to the votes,  columns correspond to the candidates. If it is a character string it is interpreted as a file name from which the votes are to be read. See below for more details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nseats</code></td>
+<td>
+<p>Number of candidates to be elected. By default it is half the number of candidates standing.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>Value added to the quota. I.e. the STV default Droop quota is computed as <br><code>number_of_first_preferences/(number_of_seats + 1) + eps</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>equal.ranking</code></td>
+<td>
+<p>If <code>TRUE</code> equal preferences are allowed, see below.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fsep</code></td>
+<td>
+<p>If <code>votes</code> is a file name, this argument gives the column separator in the file.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ties</code></td>
+<td>
+<p>Method used to break ties. By default the forwards tie-breaking is used (“f”). Value “b” invokes the backwards tie-breaking method, see O'Neill (2004).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constant.quota</code></td>
+<td>
+<p>Logical determining if the quota should be kept constant for all counts.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quota.hare</code></td>
+<td>
+<p>Changes quota calculation method from (default) Droop (<code>FALSE</code>) to Hare (<code>TRUE</code>). STV Hare quota method is computed as <br><code>number_of_first_preferences/number_of_seats + eps</code>. The actual Hare formula would entail <code>eps = 0</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group.nseats</code></td>
+<td>
+<p>Minimum number of candidates to be elected who are members of a given group. I.e., number of reserved seats for a subset of candidates defined by the <code>group.members</code> argument.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group.members</code></td>
+<td>
+<p>Vector of candidate names or indices who are eligible for reserved seats given by <code>group.nseats</code>. If it is a vector of indices, the order of candidates is assumed to correspond to the columns of <code>votes</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>impute.missing</code></td>
+<td>
+<p>Logical. If <code>TRUE</code> and if the data contains values of <code class="reqn">-1</code>, those ranks are imputed while all other ranks that are equal or larger than the imputed value are shifted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical. If <code>TRUE</code> the progress of the count will be printed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>Integer. Seed of the random number generator. Only used if there are ties that cannot be resolved by the tie-breaking method. If set to <code>NULL</code>, the RNG is not initialized.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>If <code>TRUE</code> no output is printed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object, x</code></td>
+<td>
+<p>Object of class <code>vote.stv</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>complete.ranking</code></td>
+<td>
+<p>Logical. If <code>TRUE</code> a complete ranking is generated conditioned on the number of seats <code>nseats</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>invalid.partial</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, partially invalid votes are corrected by removing ranking starting with the first incorrect rank, see Details below.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>How many significant digits to be used in the output table.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab, ylab</code></td>
+<td>
+<p>Labels of the x- and y-axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>point.size</code></td>
+<td>
+<p>Size of the points in the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xpref, ypref</code></td>
+<td>
+<p>Preference for the x- and y-axis, respectively, for showing the joined distribution of the votes. It is not used if <code>all.pref</code> is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.pref</code></td>
+<td>
+<p>Logical. If <code>TRUE</code> the marginal distribution of all preferences is shown in the image. Otherwise, the joint distribution of <code>xpref</code> and <code>ypref</code> is shown.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>proportion</code></td>
+<td>
+<p>If <code>TRUE</code> the preferences are shown as proportions across the x-axis, otherwise raw vote counts are shown. Only available when <code>all.pref</code> is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments passed to the underlying functions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>partial</code></td>
+<td>
+<p>Logical. The same meaning as <code>invalid.partial</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>can</code></td>
+<td>
+<p>Vector of candiate name(s) or indices to be removed from the set of votes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vmat</code></td>
+<td>
+<p>Matrix of valid votes.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For a description of the single transferable vote system see <a href="https://imstat.org/elections/single-transferable-voting-system/">https://imstat.org/elections/single-transferable-voting-system/</a>.
+</p>
+<p>The input data <code>votes</code> is structured as follows: Row <code class="reqn">i</code> contains the preferences of voter <code class="reqn">i</code> numbered <code class="reqn">1, 2, \dots, r, 0,0,0,0</code>, in some order. The columns correspond to the candidates. The dimnames of the columns are the names of the candidates; if these are not supplied then the candidates are lettered A, B, C, .... If the dataset contains missing values (<code>NA</code>), they are replaced by zeros, representing lower preferences that were not expressed. 
+</p>
+<p>By default the preferences are not allowed to contain duplicates per vote. However, if the argument <code>equal.ranking</code> is set to <code>TRUE</code>, votes are allowed to have the same ranking for multiple candidates. The desired format is such that for each preference <code class="reqn">i</code> that does not have any duplicate, there must be exactly <code class="reqn">i-1</code> preferences <code class="reqn">j</code> with <code class="reqn">0 &lt; j &lt; i</code>. For example, valid ordered preferences are <code class="reqn">1,1,3,4,\dots</code>, or <code class="reqn">1,2,3,3,3,6,\dots</code>, but NOT <code class="reqn">1,1,2,3,\dots</code>, or NOT <code class="reqn">1,2,3,3,3,5,6,\dots</code>. If the data contain such invalid votes, they are automatically corrected and a warning is issued by calling the <code>correct.ranking</code> function. 
+</p>
+<p>If equal ranking is not alowed (<code>equal.ranking = FALSE</code>), the argument <code>invalid.partial</code> can be used to make ballots containing duplicates or gaps partially valid. If it is <code>TRUE</code>, a ballot is considered valid up to a preference that is in normal case not allowed. For example, ballots <code class="reqn">1,2,3,4,4,6</code> or <code class="reqn">1,2,3,5,6,7</code> would be both converted into <code class="reqn">1,2,3,0,0,0</code>, because the ballots contain valid ranking only up to the third preference. 
+</p>
+<p>The <code>correct.ranking</code> function does the above corrections for all records, regardless if they contain duplicates or not. Its argument <code>partial</code> determines if ballots are partially set to 0 (<code>TRUE</code>), or if it is complete re-ranking, as allowed when <code>equal.ranking = TRUE</code>. It can either be used by calling it explicitly, otherwise it is called by <code>stv</code> if <code>equal.ranking = TRUE</code> or <code>invalid.partial = TRUE</code>. The function is also called from within the <code>condorcet</code> function. The <code>remove.candidate</code> function removes the given candidate(s) and adjusts the ranked votes accordingly by calling the <code>correct.ranking</code> function.
+</p>
+<p>The function allows the user to impute missing values. It can be used for example, if a voter has a conflict of interest with one or more candidates and not voting for them would unfairly decrease the chances of those candidates being elected. (Note that missing values are not to be confused with lower preferences that are not expressed.) Preferences to be imputed should be set to <code class="reqn">-1</code> and the argument <code>impute.missing</code> to <code>TRUE</code>. Each such preference is imputed using the median rank value over the remaining votes. When computing the median rank across the votes, any value of zero is replaced by the median of the ranks not used in the corresponding vote. For example, for a ballot <code class="reqn">1,2,3,0,0,0</code>, the three zeros are replaced by the median of <code class="reqn">4, 5, 6</code>, i.e. by <code class="reqn">5</code>, which is then used to compute the missing median rank. If the final imputed rank is larger than the number of non-zero preferences (e.g. if in a ballot <code class="reqn">1,2,0,-1,0</code> the imputed value for the fourth candidate would be larger than 3), the preference is set to zero and a warning is issued.
+The described functionality is implemented in the <code>impute.ranking</code> function, which is called automatically from <code>stv</code> if <code>impute.missing = TRUE</code>. It can be used explicitly as well.
+</p>
+<p>By default, ties in the STV algorithm are resolved using the forwards tie-breaking method, see Newland and Briton (Section 5.2.5). Argument <code>ties</code> can be set to “b” in order to use the backwards tie-breaking method, see O'Neill (2004). In addition, both methods are complemented by the following “ordered” method: Prior to the STV election candidates are ordered by the number of 1st preferences. Equal ranks are resolved by moving to the number of 2nd preferences, then 3rd and so on. Remaining ties are broken by random draws. Such complete ordering is used to break any tie that cannot be resolved by the forwards or backwards method. If there is at least one tie during the processing, the output contains a row indicating in which count a tie-break happened (see the <code>ties</code> element in the Value section for an explanation of the symbols).
+</p>
+<p>The ordered tiebreaking described above can be analysed from outside of the <code>stv</code> function by using the <code>ordered.tiebreak</code> function for viewing the a-priori ordering (the highest number is the best and lowest is the worst). Such ranking is produced by comparing candidates along the columns of the matrix returned by <code>ordered.preferences</code>.
+</p>
+<p>The <code>plot</code> function shows the evolution of the total score for each candidate as well as the quota. The <code>image</code> function visualizes the joint distribution of two preferences (if <code>all.pref=FALSE</code>) as well as the marginal distribution of all preferences (if <code>all.pref=TRUE</code>). The joint distribution can be shown either as proportions (if <code>proportion=TRUE</code>) or raw vote counts (if <code>proportion=FALSE</code>).
+</p>
+<p>Method <code>complete.ranking</code> produces a complete ranking of the candidates, conditioned on the number of seats selected in the <code>nseats</code> argument. It is called from the <code>summary</code> function if the <code>complete.ranking</code> argument is set to <code>TRUE</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Function <code>stv</code> returns an object of class <code>vote.stv</code> which is a list with the following objects:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>elected</code></td>
+<td>
+<p>Vector of names of the elected candidates in the order in which they were elected.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>preferences</code></td>
+<td>
+<p>Matrix of preferences. Columns correspond to the candidates and rows to the counts (i.e. voting rounds).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quotas</code></td>
+<td>
+<p>Vector of quotas, one for each count.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>elect.elim</code></td>
+<td>
+<p>Matrix of the same shape as <code>preferences</code>. Value 1 means that the corresponding candidate was elected in that round; value -1 means an elimination.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>equal.pref.allowed</code></td>
+<td>
+<p>Input argument <code>equal.ranking</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ties</code></td>
+<td>
+<p>Character vector indicating if and what tie-break happened in each count. Possible values: “” (no tie-break), “f” (forward tie-breaking method only), “fo” (forward method and ordered method), “fos” (forward method and ordered method and sampling). If the backwards tie-breaking method is used, these values are “b”, “bo” and “bos”.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Input data (possibly corrected) with invalid votes removed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>invalid.votes</code></td>
+<td>
+<p>Matrix of invalid votes that were removed from the original dataset.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>corrected.votes</code></td>
+<td>
+<p>List containing data about corrected votes if any. It has three or four elements, <code>original</code> (matrix of the raw votes that were corrected), (optionally) <code>imputed</code> (imputed values if any), <code>new</code> (the corrected values), <code>index</code> (index of those votes within the input <code>votes</code> dataset).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>reserved.seats</code></td>
+<td>
+<p>Number of reserved seats (<code>group.nseats</code>), or <code>NULL</code> if none.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group.members</code></td>
+<td>
+<p>Vector of candidates eligible for reserved seats, or <code>NULL</code> if none.</p>
+</td>
+</tr>
+</table>
+<p>The <code>summary</code> function returns a data frame where columns are counts and transfers, and rows are the quota, the candidates, ties and the elected and eliminated candidates. Various attributes of the data frame contain more information about the results.
+</p>
+<p>The <code>correct.ranking</code> (<code>impute.ranking</code>) function returns a matrix of votes with corrected (imputed) preferences.
+</p>
+<p><code>remove.candidate</code> returns a matrix of votes with the given candidates removed and preferences corrected.
+</p>
+<p><code>complete.ranking</code> returns a data frame with a full ordering of the candidates.
+</p>
+<p><code>ordered.preferences</code> returns a matrix with number of preferences for each candidate and preference. These are the same values as seen by <code>image(..., all.pref = TRUE)</code>.
+</p>
+<p><code>ordered.tiebreak</code> returns the ranking for each candidate based on <code>ordered.preferences()</code>, with the highest number being the best and the lowest number being the worst. Its attribute “sampled” indicates if there was random sampling involved in ranking each candidate. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Bernard Silverman, Hana Sevcikova, Adrian Raftery
+</p>
+
+
+<h3>References</h3>
+
+<p>Raftery, A.E., Sevcikova, H. and Silverman, B.W. (2021). The vote Package: Single Transferable Vote and Other Electoral Systems in R. The R Journal, 13(2), 673-696. <a href="https://doi.org/10.32614/RJ-2021-086">doi:10.32614/RJ-2021-086</a>.
+</p>
+<p>R.A. Newland and F.S. Britton (1997). How to conduct an election by the Single Transferable Vote. ERS 3rd Edition. <a href="http://www.rosenstiel.co.uk/stvrules/index.html">http://www.rosenstiel.co.uk/stvrules/index.html</a>
+</p>
+<p><a href="https://imstat.org/elections/single-transferable-voting-system/">https://imstat.org/elections/single-transferable-voting-system/</a>
+</p>
+<p><a href="https://en.wikipedia.org/wiki/Single_transferable_vote">https://en.wikipedia.org/wiki/Single_transferable_vote</a>
+</p>
+<p>J.C. O'Neill (2004). Tie-Breaking with the Single Transferable Vote. Voting Matters, 18, 14-17. <a href="https://www.votingmatters.org.uk/ISSUE18/I18P6.PDF">https://www.votingmatters.org.uk/ISSUE18/I18P6.PDF</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Reproducing example from Wikipedia
+# https://en.wikipedia.org/wiki/Single_transferable_vote#Example
+# Uses eps=1
+data(food_election)
+stv.food &lt;- stv(food_election, nseats = 3, eps = 1)
+summary(stv.food)
+## Not run: 
+view(stv.food)
+## End(Not run)
+
+# Example of the IMS Council voting
+data(ims_election)
+stv.ims &lt;- stv(ims_election, nseats = 5)
+## Not run: 
+view(stv.ims)
+plot(stv.ims)
+image(stv.ims)
+
+# write election results into a csv file
+s &lt;- summary(stv.ims)
+write.csv(s, "myfile.csv")
+## End(Not run)
+
+# produce complete ranking
+summary(stv.ims, complete.ranking = TRUE)
+
+## Not run: 
+# Example of Dublin West 2002 elections
+# https://en.wikipedia.org/wiki/Dublin_West#2002_general_election
+data(dublin_west)
+stv(dublin_west, nseats = 3, eps = 1)
+## End(Not run)
+
+# Example of a small committee dataset
+# with four candidates (C) and four
+# voting committee members (uses tie-breaking)
+votes &lt;- data.frame(C1=c(3,2,1,3), C2=c(2,1,2,4),
+                    C3=c(4,3,3,1), C4=c(1,4,4,2))
+stv(votes, nseats = 2, verbose = TRUE)
+
+# Example with equal ranking and correction
+votes &lt;- data.frame(C1=c(3,2,1,3), C2=c(1,1,2,0),
+                    C3=c(4,3,3,1), C4=c(1,4,2,2))
+stv(votes, nseats = 2, equal.ranking = TRUE)
+# vote #3 was corrected by stv which used this data:
+correct.ranking(votes, quiet = TRUE)
+
+# Example of imputing preferences
+# (third voter has a conflict of interest with candidate C2)
+votes &lt;- data.frame(C1=c(3,2,1,3), C2=c(2,1,-1,0),
+                    C3=c(4,3,3,1), C4=c(1,4,2,2))
+res &lt;- stv(votes, nseats = 2, impute.missing = TRUE)
+corrected.votes(res)
+# imputed rank 2, as it is the median(c(2, 1, 4))
+# where the last 4 was derived as the median of missing ranks 
+# in vote four. The imputation can be also performed via
+impute.ranking(votes)   
+
+# Example of using reserved seats: 
+# e.g. reserve two seats for students
+stv(ims_election, nseats = 5, group.nseats = 2, 
+    group.members = c("Declan", "Claire", "Oscar")) # students
+    
+# Example of removing candidates from original votes
+stv(remove.candidate(ims_election, c("Jasper", "Tilmann")), nseats = 5)
+
+# Example of accepting partially invalid ballots
+res &lt;- stv(ims_election, invalid.partial = TRUE)
+
+# There are now 24 invalid votes instead of 29, 
+# because 5 were corrected (ranking before the first 
+# gap/tie is valid, after that it is 0)
+corrected.votes(res)
+invalid.votes(res)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,260 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tvcm-methods</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Methods for <code>tvcm</code> objects</h2>
+
+<h3>Description</h3>
+
+<p>Standard methods for computing on <code>tvcm</code>
+objects.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'tvcm'
+coef(object, ...)
+
+## S3 method for class 'tvcm'
+depth(x, root = FALSE, ...)
+
+## S3 method for class 'tvcm'
+extract(object, what = c(
+              "control", "model", 
+              "nodes", "sctest", "p.value",
+              "devgrid", "cv", "selected",
+              "coef", "sd", "var"),
+        steps = NULL, ...)
+
+## S3 method for class 'tvcm'
+neglogLik2(object, ...)
+
+## S3 method for class 'tvcm'
+predict(object, newdata = NULL,
+        type = c("link", "response", "prob", "class",
+          "node", "coef", "ranef"),
+        ranef = FALSE, na.action = na.pass, ...)
+
+## S3 method for class 'tvcm'
+splitpath(tree, steps = 1L,
+         details = FALSE, ...)
+
+## S3 method for class 'tvcm'
+summary(object, ...)
+
+## S3 method for class 'tvcm'
+width(x, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object, tree, x</code></td>
+<td>
+<p>an object of class <code>tvcm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>root</code></td>
+<td>
+<p>logical scalar. Should the root count be counted in
+<code>depth</code>?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>steps</code></td>
+<td>
+<p>integer vector. The iteration steps from which
+information should be extracted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>an optional data frame in which to look for variables 
+with which to predict, if omitted, the fitted values are used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>character string. Denotes for <code>predict</code> the
+type of predicted value. See <code>predict.glm</code> or
+<code>predict.olmm</code>. <code>"response"</code> and <code>"prob"</code>
+are identical.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.action</code></td>
+<td>
+<p>function determining what should be done with missing
+values for fixed effects in <code>newdata</code>. The default is to
+predict <code>NA</code>: see <code>na.pass</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ranef</code></td>
+<td>
+<p>logical scalar or matrix indicating whether prediction
+should be based on random effects. See
+<code>predict.olmm</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>what</code></td>
+<td>
+<p>a character specifying the quantities to <code>extract</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>details</code></td>
+<td>
+<p>logical scalar. Whether detail results like
+coefficient constancy tests or loss minimizing grid search should be 
+shown.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments passed to the calls.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>predict</code> function has two additional options for the
+<code>type</code> argument. The option <code>"node"</code> calls the node id and
+<code>"coef"</code> predicts the coefficients corresponding to an
+observation. In cases of multiple <code>vc</code> terms for the same
+predictor, the coefficients are summed up.
+</p>
+<p>The <code>splitpath</code> function allows to backtrack the
+partitioning procedure. By default, it shows which split was chosen in
+the first iteration. The interesting iteration(s) can be selected by
+the <code>steps</code> argument. With <code>details = TRUE</code> it is also
+possible to backtrack the coefficient constancy tests and/or the loss
+reduction statistics.  
+</p>
+<p><code>summary</code> computes summary statistics of the fitted model, 
+including the estimated coefficients. The varying coefficient are printed
+by means of a printed decision tree. Notice that in cases there is no split
+for the varying coefficient, the average coefficient will be among the 
+fixed effects.	
+</p>
+<p>Further undocumented, available methods are: <code>fitted</code>,
+<code>formula</code>, <code>getCall</code>,
+<code>logLik</code>, <code>model.frame</code>,
+<code>nobs</code>, <code>print</code>, <code>ranef</code>,
+<code>resid</code>, and <code>weights</code>. All these
+methods have the same arguments as the corresponding default methods. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>The <code>coef.tvcm</code> and <code>coefficients.tvcm</code>
+methods return a <code>list</code> with model
+coefficients. Slot <code>vc</code> stores varying coefficients, <code>fe</code>
+fixed coefficients and <code>re</code> coefficients on random effects.
+</p>
+<p>The <code>depth.tvcm</code> method returns a integer vector with
+the depth of the trees of every varying
+coefficient. <code>width.tvcm</code> returns a integer vector with
+the width of the trees.  
+</p>
+<p>The <code>extract</code> and <code>extract.tvcm</code> methods
+allow to extract further information of <code>tvcm</code> objects, such as
+the underlying regression model. The type of the return value depends
+on the input for argument <code>what</code>.
+</p>
+<p>The <code>formula.tvcm</code> method extracts the model formula,
+which is an object of class <code>formula</code>. See also
+<code>formula</code>.
+</p>
+<p>The methods <code>fitted.tvcm</code> and
+<code>predict.fvcm</code> return an object of class <code>numeric</code>
+or <code>matrix</code>, depending on the used model or the specification of
+the argument <code>type</code>.
+</p>
+<p>The <code>getCall.tvcm</code> method extracts the call for fitting
+the model, which is an object of class <code>call</code>. See also
+<code>call</code>. 
+</p>
+<p>The <code>logLik.tvcm</code> method returns an object of class
+<code>logLik</code>, see also <code>logLik</code>.
+</p>
+<p>The <code>model.frame.tvcm</code> method returns a
+<code>data.frame</code>. See also <code>model.frame</code>.
+</p>
+<p>The <code>neglogLik2.tvcm</code> method returns a single numeric,
+see also <code>neglogLik2</code>.
+</p>
+<p>The <code>nobs.tvcm</code> method extracts the number of
+observations used to fit the model. See also
+<code>nobs.tvcm</code>. 
+</p>
+<p>The <code>print.tvcm</code> and <code>summary.tvcm</code>
+methods return <code>NULL</code>. 
+</p>
+<p>The <code>ranef.tvcm</code> method returns an object of class
+<code>matrix</code> with values for the random effects. See also
+<code>ranef.olmm</code> and <code>ranef</code>.
+</p>
+<p>The <code>resid.tvcm</code> and <code>residuals.tvcm</code>
+methods return  a <code>numeric</code> or a <code>matrix</code>, depending on the
+used model or the type of residuals. See the help of the
+<code>resid</code> method of the used model.
+</p>
+<p>The methods <code>splitpath</code> and
+<code>splitpath.tvcm</code> return an object of class
+<code>splitpath.tvcm</code> that contains information on splitting when
+building the tree.
+</p>
+<p>The <code>weights.tvcm</code> method extracts a <code>numeric</code>
+vector with the model weights. See also <code>weights</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>See Also</h3>
+
+<p><code>tvcm</code>, <code>tvcm-assessment</code>,
+<code>tvcm-plot</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## ------------------------------------------------------------------- #
+## Dummy example:
+##
+## Apply various methods on a 'tvcm' object fitted on the 'vcrpart_2'
+## data. Cross-validation is omitted to accelerate the computations.
+## ------------------------------------------------------------------- #
+
+data(vcrpart_2)
+
+model &lt;- tvcm(y ~ -1 + vc(z1, z2) + vc(z1, z2, by = x1) + x2,
+              data = vcrpart_2, family = gaussian(), subset = 1:90,
+              control = tvcm_control(cv = FALSE))
+
+coef(model)
+extract(model, "selected")
+extract(model, "model")
+predict(model, newdata = vcrpart_2[91:100,], type = "node")
+predict(model, newdata = vcrpart_2[91:100,], type = "response")
+splitpath(model, steps = 1)
+summary(model, digits = 2)
+</code></pre>
+
+
+</div>

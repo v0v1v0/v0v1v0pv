@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>SfcArray-class</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Array of '<code>sf</code>'-derived class data</h2>
+
+<h3>Description</h3>
+
+<p>Array class for easier navigation of vector spatial datasets
+</p>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>stack</code></td>
+<td>
+<p>A <code>list</code> of <code>sf</code>-class objects or <code>sfc</code>-class objects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>index</code></td>
+<td>
+<p>A <code>vector</code>, <code>matrix</code> or <code>array</code> type object. Includes either the indices of layers in the stack, or their names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dim</code></td>
+<td>
+<p>A <code>numeric</code> vector. Same as for <code>array</code>, creates <code>proxy</code> procedurally.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The class implements structures to organize entire '<code>sfc</code>' and '<code>sf</code>' objects that share coordinate reference systems. The 'SfcArray' class is derived from '<code>XArray</code>' and represents arrays of geometry sets. The '<code>SfArray</code>' class is derived from '<code>SfArray</code>', that allows the wrapping of '<code>sf</code>' objects with attributes. Subsetting rules were defined using the proxy object in the <code>@index</code> slot. See examples for implementations. 
+</p>
+<p>The classes have two slots:
+<code>@stack</code>: A <code>list</code> object with multiple '<code>sf</code>' class layers, the actual data.
+<code>@index</code>: A proxy object that represents the organization of the layers.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An '<code>SfcArray</code>' or '<code>SfArray</code>'-class object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># example data
+  library(sf) 
+  data(paleocoastlines) 
+  st &lt;-paleocoastlines@stack
+  ind &lt;- 1:nlayers(st)
+  dim(ind) &lt;- c(3,2)
+  dimnames(ind) &lt;- list(age=c(0, 10, 20), c("margin", "coastlines"))
+  sa&lt;- SfcArray(stack=st, index=ind)
+  
+</code></pre>
+
+
+</div>

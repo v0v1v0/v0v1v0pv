@@ -1,0 +1,152 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_map</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate summaries from overlapping intervals.</h2>
+
+<h3>Description</h3>
+
+<p>Apply functions like <code>min()</code> and <code>max()</code> to intersecting intervals.
+<code>bed_map()</code> uses <code>bed_intersect()</code> to identify intersecting intervals, so
+output columns will be suffixed with <code>.x</code> and <code>.y</code>. Expressions that refer to
+input columns from <code>x</code> and <code>y</code> columns must take these suffixes into account.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_map(x, y, ..., min_overlap = 1)
+
+concat(.data, sep = ",")
+
+values_unique(.data, sep = ",")
+
+values(.data, sep = ",")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>name-value pairs specifying column names and expressions to apply</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min_overlap</code></td>
+<td>
+<p>minimum overlap for intervals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.data</code></td>
+<td>
+<p>data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sep</code></td>
+<td>
+<p>separator character</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Book-ended intervals can be included by setting <code>min_overlap = 0</code>.
+</p>
+<p>Non-intersecting intervals from <code>x</code> are included in the result with <code>NA</code>
+values.
+</p>
+<p>input tbls are grouped by <code>chrom</code> by default, and additional
+groups can be added using <code>dplyr::group_by()</code>. For example,
+grouping by <code>strand</code> will constrain analyses to the same strand. To
+compare opposing strands across two tbls, strands on the <code>y</code> tbl can
+first be inverted using <code>flip_strands()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>ivl_df
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/map.html">https://bedtools.readthedocs.io/en/latest/content/tools/map.html</a>
+</p>
+<p>Other multiple set operations: 
+<code>bed_closest()</code>,
+<code>bed_coverage()</code>,
+<code>bed_intersect()</code>,
+<code>bed_subtract()</code>,
+<code>bed_window()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+ ~chrom, ~start, ~end,
+ 'chr1', 100,    250,
+ 'chr2', 250,    500
+)
+
+y &lt;- tibble::tribble(
+ ~chrom, ~start, ~end, ~value,
+ 'chr1', 100,    250,  10,
+ 'chr1', 150,    250,  20,
+ 'chr2', 250,    500,  500
+)
+
+bed_glyph(bed_map(x, y, value = sum(value)), label = 'value')
+
+# summary examples
+bed_map(x, y, .sum = sum(value))
+
+bed_map(x, y, .min = min(value), .max = max(value))
+
+# identify non-intersecting intervals to include in the result
+res &lt;- bed_map(x, y, .sum = sum(value))
+x_not &lt;- bed_intersect(x, y, invert = TRUE)
+dplyr::bind_rows(res, x_not)
+
+# create a list-column
+bed_map(x, y, .values = list(value))
+
+# use `nth` family from dplyr
+bed_map(x, y, .first = dplyr::first(value))
+
+bed_map(x, y, .absmax = abs(max(value)))
+
+bed_map(x, y, .count = length(value))
+
+bed_map(x, y, .vals = values(value))
+
+# count defaults are NA not 0; differs from bedtools2 ...
+bed_map(x, y, .counts = dplyr::n())
+
+# ... but NA counts can be coverted to 0's
+dplyr::mutate(bed_map(x, y, .counts = dplyr::n()), .counts = ifelse(is.na(.counts), 0, .counts))
+
+</code></pre>
+
+
+</div>

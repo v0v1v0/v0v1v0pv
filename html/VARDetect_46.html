@@ -1,0 +1,68 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary.VARDetect.simu.result</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>A function to summarize the results for simulation</h2>
+
+<h3>Description</h3>
+
+<p>A function to summarize the results for simulation class <code>VARDetect.simu.result</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VARDetect.simu.result'
+summary(object, critical = 5, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>A S3 object of class <code>VARDetect.simu.result</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>critical</code></td>
+<td>
+<p>A positive integer, set as the critical value defined in selection rate, to control the range of success, default is 5</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>not in use</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A series of summary, including the selection rate, Hausdorff distance, and statistical measurements, running times
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+nob &lt;- 4000; p &lt;- 15
+brk &lt;- c(floor(nob / 3), floor(2 * nob / 3), nob + 1)
+m &lt;- length(brk); q.t &lt;- 1
+sp_density &lt;- rep(0.05, m * q.t)
+signals &lt;- c(-0.6, 0.6, -0.6)
+try_simu &lt;- simu_tbss(nreps = 3, simu_method = "sparse", nob = nob,
+                      k = p, lags = q.t, brk = brk, sigma = diag(p),
+                      signals = signals, sp_density = sp_density,
+                      sp_pattern = "random", est_method = "sparse",
+                      q = q.t, refit = TRUE)
+summary(try_simu, critical = 5)
+
+</code></pre>
+
+
+</div>

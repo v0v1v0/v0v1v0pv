@@ -1,0 +1,148 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>replicate.ratio.prop2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares and combines 2-group proportion ratios in original and follow-up
+studies</h2>
+
+<h3>Description</h3>
+
+<p>This function computes confidence intervals from an original study and a
+follow-up study where the effect size is a 2-group proportion ratio.
+Confidence intervals for the ratio and geometric average of effect sizes
+are also computed. The confidence level for the ratio of ratios is 1 – 2*alpha,
+which is recommended for equivalence testing.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">replicate.ratio.prop2(alpha, f11, f12, n11, n12, f21, f22, n21, n22)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f11</code></td>
+<td>
+<p>frequency count for group 1 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f12</code></td>
+<td>
+<p>frequency count for group 2 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n11</code></td>
+<td>
+<p>sample size for group 1 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n12</code></td>
+<td>
+<p>sample size for group 2 in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f21</code></td>
+<td>
+<p>frequency count for group 1 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f22</code></td>
+<td>
+<p>frequency count for group 2 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n21</code></td>
+<td>
+<p>sample size for group 1 in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n22</code></td>
+<td>
+<p>sample size for group 2 in follow-up study</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A 4-row matrix. The rows are:
+</p>
+
+<ul>
+<li>
+<p> Row 1 summarizes the original study
+</p>
+</li>
+<li>
+<p> Row 2 summarizes the follow-up study
+</p>
+</li>
+<li>
+<p> Row 3 estimates the ratio of proportion ratios
+</p>
+</li>
+<li>
+<p> Row 4 estimates the geometric average proportion ratio
+</p>
+</li>
+</ul>
+<p>The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - proportion difference estimate (single study, ratio, average)
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2021).
+“Design and analysis of replication studies.”
+<em>Organizational Research Methods</em>, <b>24</b>(3), 513–529.
+ISSN 1094-4281, <a href="https://doi.org/10.1177/1094428120911088">doi:10.1177/1094428120911088</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">replicate.ratio.prop2(.05, 21, 16, 40, 40, 19, 13, 60, 60)
+
+# Should return:
+#                      Estimate        LL       UL
+# Original:           1.3076923 0.8068705 2.119373
+# Follow-up:          1.4528302 0.7939881 2.658372
+# Original/Follow-up: 0.9000999 0.4703209 1.722611
+# Average:            1.3783522 0.9362893 2.029132
+
+
+</code></pre>
+
+
+</div>

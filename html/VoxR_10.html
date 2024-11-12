@@ -1,0 +1,81 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>filter_noise</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Statistical filtering of a point cloud.</h2>
+
+<h3>Description</h3>
+
+<p>Implements the Statistical Outliers Removal (SOR) filter available in
+<a href="https://www.cloudcompare.org/doc/wiki/index.php?title=SOR_filter">CloudCompare</a>.
+Computes the distance of each point to its <code>k</code> nearest neighbours and considers
+a point as noise if it is further than the average distance (for the entire point cloud)
+plus <code>sigma</code> times the standard deviation away from other points.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">filter_noise(data, k, sigma, store_noise, message)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data.frame or data.table containing the x, y, z, ... coordinates of a point cloud.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>numeric. The number of nearest neighbours to use. Default = 5.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma</code></td>
+<td>
+<p>numeric. The multiplier of standard deviation to consider a point as noise. Default = 1.5.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>store_noise</code></td>
+<td>
+<p>logical. Should the noisy points be retained ? Default = FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>message</code></td>
+<td>
+<p>logical. If FALSE, messages are disabled. Default = TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>If <code>store_noise = TRUE</code> the input data is returned with an additional field ("Noise")
+where points that are classified as noise points are labaled with 2 and the points not classified as noise are labeled as 1.
+If <code>store_noise = FALSE</code> only the points that were not classified as noise are returned.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#- import tls data
+tls=data.table::fread(system.file("extdata", "Tree_t0.asc", package="VoxR"))
+
+#- run noise filter
+clean=VoxR::filter_noise(tls,store_noise = TRUE)
+
+#- plot the result (noise in red)
+rgl::open3d()
+rgl::plot3d(clean,col=clean$Noise,add=TRUE)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visClusteringByGroup</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Network visualization clustering options - by group</h2>
+
+<h3>Description</h3>
+
+<p>Network visualization clustering options - by group.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visClusteringByGroup(
+  graph,
+  groups,
+  label = "Cluster on group : ",
+  shape = "database",
+  color = "grey",
+  force = FALSE,
+  scale_size = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>graph</code></td>
+<td>
+<p>: a visNetwork object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groups</code></td>
+<td>
+<p>: Character/vector. groups we want to cluster</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label</code></td>
+<td>
+<p>: Character. Label put before value(s). See example</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+<p>: Character. Shape of cluster(s) if different shapes between nodes or <code>force = T</code>. "database" per default</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color</code></td>
+<td>
+<p>: Character. Color of cluster(s) if different colors between nodes or <code>force = T</code>. "grey" per default</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>force</code></td>
+<td>
+<p>: If <code>force = FALSE</code>, Set shape and color of nodes if all equal, else directly default shape and color</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale_size</code></td>
+<td>
+<p>: Set size based on cluster population ? Default to TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+ 
+ nodes &lt;- data.frame(id = 1:10, label = paste("Label", 1:10), 
+   group = sample(c("A", "B"), 10, replace = TRUE))
+ edges &lt;- data.frame(from = c(2,5,10), to = c(1,2,10))
+
+ visNetwork(nodes, edges) %&gt;%
+   visGroups(groupname = "A", color = "red", shape = "database") %&gt;%
+   visGroups(groupname = "B", color = "yellow", shape = "triangle") %&gt;%
+   visClusteringByGroup(groups = c("B"), label = "Group : ", 
+     shape = "ellipse", color = "blue", force = TRUE) %&gt;%
+   visLegend()
+ 
+</code></pre>
+
+
+</div>

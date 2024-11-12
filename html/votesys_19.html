@@ -1,0 +1,58 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>votesys-package</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Voting Systems, Instant-Runoff Voting, Borda Method, Various Condorcet Methods</h2>
+
+<h3>Description</h3>
+
+<p>This package provides different methods for counting ballots, which 
+can be used in election, decision making and evaluation. The basic 
+idea is: different forms of ballots can all be transformed into a 
+score matrix; then the score matrix can be put into different 
+counting methods. The functions 
+in this package provide more flexibility to deal with duplicated 
+values (ties) and missing values. And the comparison of results 
+of different methods is also made easy.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jiang Wu
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Suppose we have the following ballot data
+raw &lt;- list2ballot(
+    x = list(
+        c('m', 'n', 'c', 'k'), c('n', 'c', 'k', 'm'), 
+        c('c', 'k', 'n', 'm'), c('k', 'c', 'n', 'm'), c(NA, NA, NA, NA)
+    ) , 
+    n = c(42, 26, 15, 17, 3)
+)
+
+# Step 1: check validity of ballots. Delete  
+# some of them, if needed.
+check_validity &lt;- check_dup_wrong(raw, 
+    xtype = 3, 
+    candidate = c("m", "n", "k", "c")
+)
+raw &lt;- raw[- check_validity$row_all_na]
+
+# Step 2: create a vote object
+vote &lt;- create_vote(raw, xtype = 3, candidate = c("m", "n", "k", "c"))
+
+# Step 3: use one or more methods
+y &lt;- plurality_method(vote) # winner is m
+y &lt;- irv_method(vote) # winner is k
+y &lt;- cdc_simple(vote) # winner is n
+y &lt;- cdc_rankedpairs(vote) # winner is n
+</code></pre>
+
+
+</div>

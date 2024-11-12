@@ -1,0 +1,156 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineHessian</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Hessian Matrix of the Log-Likelihood of an R-Vine Copula Model</h2>
+
+<h3>Description</h3>
+
+<p>This function calculates the Hessian matrix of the log-likelihood of a
+d-dimensional R-vine copula model with respect to the copula parameter and
+evaluates it on a given copula data set.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineHessian(data, RVM)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>An N x d data matrix (with uniform margins).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p>An <code>RVineMatrix()</code> object including the structure, the
+pair-copula families, and the parameters. <br>
+Only the following copula
+families are allowed in <code>RVM$family</code> <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula)<br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; “survival Joe”) <br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>hessian</code></td>
+<td>
+<p>The calculated Hessian matrix of the log-likelihood
+value of the R-vine copula model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>der</code></td>
+<td>
+<p>The product of the gradient
+vector with its transposed version.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>The Hessian matrix is not available for R-vine copula models with two
+parameter Archimedean copulas, i.e. BB1, BB6, BB7, BB8 and their rotated
+versions.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier, Jakob Stoeber
+</p>
+
+
+<h3>References</h3>
+
+<p>Dissmann, J. F., E. C. Brechmann, C. Czado, and D. Kurowicka
+(2013). Selecting and estimating regular vine copulae and application to
+financial returns. Computational Statistics &amp; Data Analysis, 59 (1), 52-69.
+</p>
+<p>Schepsmeier, U. and J. Stoeber (2014)
+Derivatives and Fisher information of bivariate copulas.
+Statistical Papers, 55(2), 525-542.
+online first: <a href="https://link.springer.com/article/10.1007/s00362-013-0498-x">https://link.springer.com/article/10.1007/s00362-013-0498-x</a>.
+</p>
+<p>Web supplement: Derivatives and Fisher Information of bivariate copulas.
+<a href="https://mediatum.ub.tum.de/node?id=1119201">https://mediatum.ub.tum.de/node?id=1119201</a>
+</p>
+<p>Stoeber, J. and U. Schepsmeier (2013). Estimating standard errors in regular
+vine copula models. Computational Statistics, 28 (6), 2679-2707
+<a href="https://link.springer.com/article/10.1007/s00180-013-0423-8#">https://link.springer.com/article/10.1007/s00180-013-0423-8#</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopDeriv()</code>,
+<code>BiCopDeriv2()</code>,
+<code>BiCopHfuncDeriv()</code>,
+<code>BiCopHfuncDeriv2()</code>, <br><code>RVineMatrix()</code>,
+<code>RVineMLE()</code>,
+<code>RVineGrad()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# define 5-dimensional R-vine tree structure matrix
+Matrix &lt;- c(5, 2, 3, 1, 4,
+            0, 2, 3, 4, 1,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 1)
+Matrix &lt;- matrix(Matrix, 5, 5)
+
+# define R-vine pair-copula family matrix
+family &lt;- c(0, 1, 3, 4, 4,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 3,
+            0, 0, 0, 0, 0)
+family &lt;- matrix(family, 5, 5)
+
+# define R-vine pair-copula parameter matrix
+par &lt;- c(0, 0.2, 0.9, 1.5, 3.9,
+         0, 0, 1.1, 1.6, 0.9,
+         0, 0, 0, 1.9, 0.5,
+         0, 0, 0, 0, 4.8,
+         0, 0, 0, 0, 0)
+par &lt;- matrix(par, 5, 5)
+
+# define second R-vine pair-copula parameter matrix
+par2 &lt;- matrix(0, 5, 5)
+
+# define RVineMatrix object
+RVM &lt;- RVineMatrix(Matrix = Matrix, family = family,
+                   par = par, par2 = par2,
+                   names = c("V1", "V2", "V3", "V4", "V5"))
+
+# simulate a sample of size 300 from the R-vine copula model
+set.seed(123)
+simdata &lt;- RVineSim(300, RVM)
+
+# compute the Hessian matrix of the first row of the data
+out2 &lt;- RVineHessian(simdata[1,], RVM)
+out2$hessian
+
+</code></pre>
+
+
+</div>

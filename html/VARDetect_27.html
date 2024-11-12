@@ -1,0 +1,59 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_granger</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function to plot Granger causality networks</h2>
+
+<h3>Description</h3>
+
+<p>A function to plot Granger causal network for each segment via estimated sparse component. Note that if it has multiple lags, it only provides the first order Granger causality plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_granger(est_mats, threshold = 0.1, layout)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>est_mats</code></td>
+<td>
+<p>A list of numeric sparse matrices, indicating the estimated sparse components for each segment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threshold</code></td>
+<td>
+<p>A numeric positive value, used to determine the threshold to present the edges</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>layout</code></td>
+<td>
+<p>A character string, indicates the layout for the igraph plot argument</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A series of plots of Granger networks of VAR model parameters
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(1)
+est_mats &lt;- list(matrix(rnorm(400, 0, 1), 20, 20))
+plot_granger(est_mats, threshold = 2, layout = "circle")
+plot_granger(est_mats, threshold = 2, layout = "star")
+plot_granger(est_mats, threshold = 2, layout = "nicely")
+</code></pre>
+
+
+</div>

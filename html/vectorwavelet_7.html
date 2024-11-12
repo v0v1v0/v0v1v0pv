@@ -1,0 +1,286 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>qmwc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute quadruple wavelet coherence</h2>
+
+<h3>Description</h3>
+
+<p>Compute quadruple wavelet coherence
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">qmwc(
+  y,
+  x1,
+  x2,
+  x3,
+  pad = TRUE,
+  dj = 1/12,
+  s0 = 2 * dt,
+  J1 = NULL,
+  max.scale = NULL,
+  mother = "morlet",
+  param = -1,
+  lag1 = NULL,
+  sig.level = 0.95,
+  sig.test = 0,
+  nrands = 300,
+  quiet = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>time series 1 in matrix format (<code>m</code> rows x 2 columns). The
+first column should contain the time steps and the second column should
+contain the values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x1</code></td>
+<td>
+<p>time series 2 in matrix format (<code>m</code> rows x 2 columns). The
+first column should contain the time steps and the second column should
+contain the values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x2</code></td>
+<td>
+<p>time series 3 in matrix format (<code>m</code> rows x 2 columns). The
+first column should contain the time steps and the second column should
+contain the values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x3</code></td>
+<td>
+<p>time series 4 in matrix format (<code>m</code> rows x 2 columns). The
+first column should contain the time steps and the second column should
+contain the values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pad</code></td>
+<td>
+<p>pad the values will with zeros to increase the speed of the
+transform. Default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dj</code></td>
+<td>
+<p>spacing between successive scales. Default is 1/12.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s0</code></td>
+<td>
+<p>smallest scale of the wavelet. Default is <code>2*dt</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>J1</code></td>
+<td>
+<p>number of scales - 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.scale</code></td>
+<td>
+<p>maximum scale. Computed automatically if left unspecified.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mother</code></td>
+<td>
+<p>type of mother wavelet function to use. Can be set to
+<code>morlet</code>, <code>dog</code>, or <code>paul</code>. Default is <code>morlet</code>.
+Significance testing is only available for <code>morlet</code> wavelet.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>param</code></td>
+<td>
+<p>nondimensional parameter specific to the wavelet function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag1</code></td>
+<td>
+<p>vector containing the AR(1) coefficient of each time series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sig.level</code></td>
+<td>
+<p>significance level. Default is <code>0.95</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sig.test</code></td>
+<td>
+<p>type of significance test. If set to 0, use a regular
+<code class="reqn">\chi^2</code> test. If set to 1, then perform a time-average test. If set to
+2, then do a scale-average test.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nrands</code></td>
+<td>
+<p>number of Monte Carlo randomizations. Default is 300.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>Do not display progress bar. Default is <code>FALSE</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Return a <code>vectorwavelet</code> object containing:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>coi</code></td>
+<td>
+<p>matrix containg cone of influence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rsq</code></td>
+<td>
+<p>matrix of wavelet coherence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>phase</code></td>
+<td>
+<p>matrix of phases</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>vector of periods</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>vector of scales</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dt</code></td>
+<td>
+<p>length of a time step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t</code></td>
+<td>
+<p>vector of times</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xaxis</code></td>
+<td>
+<p>vector of values used to plot xaxis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s0</code></td>
+<td>
+<p>smallest scale of the wavelet </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dj</code></td>
+<td>
+<p>spacing between successive scales</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mother</code></td>
+<td>
+<p>mother wavelet used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>type of <code>vectorwavelet</code> object created (<code>qmwc</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>signif</code></td>
+<td>
+<p>matrix containg <code>sig.level</code> percentiles of wavelet coherence
+based on the Monte Carlo AR(1) time series</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Tunc Oygur (info@tuncoygur.com.tr)
+</p>
+
+
+<h3>References</h3>
+
+<p>T. Oygur, G. Unal.. Vector wavelet coherence for multiple time series.
+<em>Int. J. Dynam. Control (2020).</em>
+</p>
+<p>T. Oygur, G. Unal. 2017. The large fluctuations of the stock
+return and financial crises evidence from Turkey: using wavelet
+coherency and VARMA modeling to forecast stock return.
+<em>Fluctuation and Noise Letters</em>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">old.par &lt;- par(no.readonly=TRUE)
+
+t &lt;- (-100:100)
+
+y &lt;- sin(t*2*pi)+sin(t*2*pi/4)+sin(t*2*pi/8)+sin(t*2*pi/16)+sin(t*2*pi/32)+sin(t*2*pi/64)
+x1 &lt;- sin(t*2*pi/16)
+x2 &lt;- sin(t*2*pi/32)
+x3 &lt;- sin(t*2*pi/64)
+
+y &lt;- cbind(t,y)
+x1 &lt;- cbind(t,x1)
+x2 &lt;- cbind(t,x2)
+x3 &lt;- cbind(t,x3)
+
+## Quadruple wavelet coherence
+result &lt;- qmwc(y, x1, x2, x3, nrands = 10)
+
+result &lt;- qmwc(y, x1, x2, x3)
+
+
+## Plot wavelet coherence and make room to the right for the color bar
+## Note: plot function can be used instead of plot.vectorwavelet
+par(oma = c(0, 0, 0, 1), mar = c(5, 4, 4, 5) + 0.1,  pin = c(3,3))
+plot.vectorwavelet(result, plot.cb = TRUE, main = "Plot quadruple wavelet coherence")
+
+par(old.par)
+
+</code></pre>
+
+
+</div>

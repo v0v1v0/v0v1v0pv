@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vlda</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Weighted Linear Discriminant Analysis</h2>
+
+<h3>Description</h3>
+
+<p>Extension of the qda() of package 'MASS' (not the lda() function) to calculate a LDA incorporating individual, cell-wise uncertainties,
+e.g. if the uncertainties are expressed as individual variances for each measurand.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vlda(x, uncertainties, grouping, prior)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>frame or matrix containing the data to be discriminated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>uncertainties</code></td>
+<td>
+<p>data frame or matrix containing the values for uncertainties per cell. Uncertainties should be relative errors, e.g. the relative standard deviation of the  measurand</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grouping</code></td>
+<td>
+<p>a factor or character vector specifying the group for each observation (row).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prior</code></td>
+<td>
+<p>the prior probabilities of class membership. If unspecified, the class proportions for the training set are used. If present, the probabilities should be specified in the order of the factor levels.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Uncertainties can be considered in a statistical analysis either by each measured variable, by each observation or by using the individual, cell-wise uncertainties.
+There are several methods for incorporating variable-wise or observation-wise uncertainties into a QDA, most of them using the uncertainties as weights for the variables or observations of the data set.
+The term 'cell-wise uncertainties' describe a data set of $d$ analysed variables where each observation has an individual uncertainty for each of the $d$ variables conforming it.
+Hence, a data set of $n \times d$ data values has associated a data set of $n \times d$ individual uncertainties.
+Instead of weighting the columns or rows of the data set, the vlda() function uses uncertainties to recalculate better estimates of the group variances and group means.
+It is internally very similar to the <code>vqda</code> function, but with an averaged group variance for all groups.
+If the presence of uncertainties is not accounted for, the decision rules  are based on the group variances calculated by the given data set.
+But this observed group variance might deviate notably from the group variance, which can be estimated including the uncertainties.
+This methodological framework does not only allow to incorporate cell-wise uncertainties, but also would largely be valid if the information about the co-dependency between uncertainties within each observation would be reported.
+</p>
+
+
+<h3>Value</h3>
+
+<p>object of class 'vlda' containing the following components:
+<code>prior</code> the prior probabilities used.
+<code>counts</code> counts per group.
+<code>means</code> the group means.
+<code>generalizedMeans</code> the group means calculated by the function <code>generalized_mean</code>
+<code>groupVarCorrected</code> the group variances calculated by the function <code>calc_estimate_true_var</code>
+<code>lev</code> the levels of the grouping factor.
+<code>grouping</code> the factor specifying the class for each observation.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Solveig Pospiech, package 'MASS'
+</p>
+
+
+<h3>References</h3>
+
+<p>Pospiech, S., R. Tolosana-Delgado and K.G. van den Boogaart (2020) Discriminant Analysis for Compositional Data Incorporating Cell-Wise Uncertainties, Mathematical Geosciences
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># for non-compositional data:
+data("dataobs")
+data("uncertainties")
+mylda = vlda(x = dataobs[, 1:2], uncertainties = uncertainties[, 1:2], grouping = dataobs$Group)
+mypred = predict(mylda, newdata = dataobs[, 1:2], newerror = uncertainties[, 1:2])
+forplot = cbind(dataobs, LG1 = mypred$posterior[,1])
+if (require("ggplot2")) {
+  scatter_plot = ggplot(data = forplot, aes(x = Var1, y = Var2)) +
+    geom_point(aes(shape = Group, color = LG1))
+  if (require("ggthemes")) {
+    scatter_plot = scatter_plot +
+        scale_color_gradientn(colours = colorblind_pal()(5))
+  }
+  scatter_plot
+}
+
+# for compositional data
+data("dataobs_coda")
+data("uncertainties_coda")
+require(compositions)
+# generate ilr-transformation (from package 'compositions')
+data_ilr = ilr(dataobs_coda[, 1:3])
+uncert_ilr = t(simplify2array(apply(uncertainties_coda[, 1:3],1,
+                       function(Delta) clrvar2ilr(diag(Delta)))))
+uncert_ilr = compositions::rmult(uncert_ilr) # change class into rmult from package 'compositions'
+mylda_coda = vlda(x = data_ilr, uncertainties = uncert_ilr, grouping = dataobs_coda$Group)
+mypred_coda = predict(mylda_coda, newdata = data_ilr, newerror = uncert_ilr)
+forplot_coda = cbind(dataobs_coda, LG1 = mypred_coda$posterior[,1])
+# if 'ggtern' is installed, you can plot via ggtern:
+# if (require("ggtern")) {
+#   ternary_plot = ggtern(data = forplot_coda, aes(x = Var1, y = Var2, z = Var3)) +
+#     geom_point(aes(shape = Group, color = LG1))
+#   if (require("ggthemes")) {
+#     ternary_plot = ternary_plot +
+#         scale_color_gradientn(colours = colorblind_pal()(5))
+#   }
+#   ternary_plot
+# }
+
+</code></pre>
+
+
+</div>

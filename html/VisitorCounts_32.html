@@ -1,0 +1,333 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visitation_model</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visitation Model</h2>
+
+<h3>Description</h3>
+
+<p>Fits a time series model that uses social media posts and popularity of the social media to model visitation to recreational sites.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visitation_model(
+  onsite_usage,
+  popularity_proxy = NULL,
+  suspected_periods = c(12, 6, 4, 3),
+  proportion_of_variance_type = c("leave_out_first", "total"),
+  max_proportion_of_variance = 0.995,
+  log_ratio_cutoff = 0.2,
+  window_length = "auto",
+  num_trend_components = 2,
+  criterion = c("cross-correlation", "MSE", "rank"),
+  possible_lags = -36:36,
+  leave_off = 6,
+  estimated_change = 0,
+  order_of_polynomial_approximation = 7,
+  order_of_derivative = 1,
+  ref_series = NULL,
+  constant = 0,
+  beta = "estimate",
+  slope = 0,
+  is_input_logged = FALSE,
+  spline = FALSE,
+  parameter_estimates = c("joint", "separate"),
+  omit_trend = TRUE,
+  trend = c("linear", "none", "estimated"),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>onsite_usage</code></td>
+<td>
+<p>A vector which stores monthly on-site usage for a particular social media platform and recreational site.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>popularity_proxy</code></td>
+<td>
+<p>A vector which stores a time series which may be used as a proxy for the monthly popularity of social media over time. The length of <code>popularity_proxy</code> must be the same as that of <code>onsite_usage</code>. The default option is NULL, in which case, no proxy needs to be supplied. Note that this vector cannot have a value of 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>suspected_periods</code></td>
+<td>
+<p>A vector which stores the suspected periods in the descending order of importance. The default option is c(12,6,4,3), corresponding to 12, 6, 4, and 3 months if observations are monthly.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>proportion_of_variance_type</code></td>
+<td>
+<p>A character string specifying the option for choosing the maximum number of eigenvalues based on the proportion of total variance explained. If "leave_out_first" is chosen, then the contribution made by the first eigenvector is ignored; otherwise, if "total" is chosen, then the contribution made by all the eigenvectors is considered.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_proportion_of_variance</code></td>
+<td>
+<p>A numeric specifying the proportion of total variance explained using the method specified in <code>proportion_of_variance_type</code>. The default option is 0.995.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log_ratio_cutoff</code></td>
+<td>
+<p>A numeric specifying the threshold for the deviation between the estimated period and candidate periods in suspected_periods. The default option is 0.2, which means that if the absolute log ratio between the estimated and candidate period is within 0.2 (approximately a 20 percent difference), then the estimated period is deemed equal to the candidate period.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>window_length</code></td>
+<td>
+<p>A character string or positive integer specifying the window length for the SSA estimation. If "auto" is chosen, then the algorithm automatically selects the window length by taking a multiple of 12 which does not exceed half the length of <code>onsite_usage</code>. The default option is "auto".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>num_trend_components</code></td>
+<td>
+<p>A positive integer specifying the number of eigenvectors to be chosen for describing the trend in SSA. The default option is 2. This is relevant only when <code>trend</code> is "estimated".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>criterion</code></td>
+<td>
+<p>A character string specifying the criterion for estimating the lag in <code>popularity_proxy</code>. If "cross-correlation" is chosen, it chooses the lag that maximizes the correlation coefficient between lagged <code>popularity_proxy</code> and <code>onsite_usage</code>. If "MSE" is chosen, it does so by identifying the lagged <code>popularity_proxy</code> whose derivative is closest to that of <code>onsite_usage</code> by minimizing the mean squared error. If "rank" is chosen, it does so by firstly ranking the square errors of the derivatives and identifying the lag which would minimize the mean rank.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>possible_lags</code></td>
+<td>
+<p>A numeric vector specifying all the candidate lags for <code>popularity_proxy</code>. The default option is -36:36.  This is relevant only when <code>trend</code> is "estimated".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>leave_off</code></td>
+<td>
+<p>A positive integer specifying the number of observations to be left off when estimating the lag. The default option is 6. This is relevant only when <code>trend</code> is "estimated".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estimated_change</code></td>
+<td>
+<p>A numeric specifying the estimated change in the visitation trend. The default option is 0, implying no change in the trend.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order_of_polynomial_approximation</code></td>
+<td>
+<p>A numeric specifying the order of the polynomial approximation of the difference between time series used in <code>estimate_lag</code>. The default option is 7, the seventh-degree polynomial. This is relevant only when <code>trend</code> is "estimated".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order_of_derivative</code></td>
+<td>
+<p>A numeric specifying the order of derivative for the approximated difference between lagged <code>popularity_proxy</code> and <code>onsite_usage</code>. The default option is 1, the first derivative. This is relevant only when <code>trend</code> is "estimated".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ref_series</code></td>
+<td>
+<p>A numeric vector specifying the original visitation series. The default option is NULL, implying that no such series is available. If such series is available, then its length must be the same as that of <code>onsite_usage</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constant</code></td>
+<td>
+<p>A numeric specifying the constant term (beta0) in the model. This constant is understood as the mean log adjusted monthly visitation relative to the base month. The default option is 0, implying that the (logged) <code>onsite_usage</code> does not require any constant shift, which is unusual. If <code>ref_series</code> is supplied, the constant is overwritten by the least squares estimate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>A numeric or a character string specifying the seasonality adjustment factor (beta1). The default option is "estimate", in which case, it is estimated by using the Fisher's z-transformed lag-12 autocorrelation. Even if an actual value is supplied, if <code>ref_series</code> is supplied, it is overwritten by the least squares estimate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>slope</code></td>
+<td>
+<p>A numeric specifying the slope coefficient (beta2) in the model. This constant is applicable only when <code>trend</code> is set to "linear". The default option is 0, implying that the linear trend is absent.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>is_input_logged</code></td>
+<td>
+<p>A Boolean describing whether the <code>onsite_usage</code>, <code>ref_series</code>, and <code>popularity_proxy</code> are in the log scale. The default option is FALSE, in which case the inputs will be assumed to not be logged and will be logged before making forecasts. Setting it to TRUE will assume the inputs are logged.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spline</code></td>
+<td>
+<p>A Boolean specifying whether or not to use a smoothing spline for the lag estimation. This is relevant only when <code>trend</code> is "estimated".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parameter_estimates</code></td>
+<td>
+<p>A character string specifying how to estimate beta and constant parameters should a reference series be supplied. Both options use least squares estimates, but "separate" indicates that the differenced series should be used to estimate beta separately from the constant, while "joint" indicates to estimate both using non-differenced detrended series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>omit_trend</code></td>
+<td>
+<p>This is obsolete and is left only for compatibility. In other words, <code>trend</code> will overwrite any option chosen in <code>omit_trend</code>. If <code>trend</code> is NULL, then <code>trend</code> is overwritten according to <code>omit_trend</code>. It is a Boolean specifying whether or not to consider the trend component to be 0. The default option is TRUE, in which case, the trend component is 0. If it is set to FALSE, then it is estimated using data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trend</code></td>
+<td>
+<p>A character string specifying how the trend is modeled. Can be any of NULL, "linear", "none", and "estimated", where "none" and "estimated" correspond to <code>omit_trend</code> being TRUE and FALSE, respectively. If NULL, then it follows the value specified in <code>omit_trend</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed onto the smoothing spline (<code>smooth.spline</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>visitation_fit</code></td>
+<td>
+<p>A vector storing fitted values of visitation model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>differenced_fit</code></td>
+<td>
+<p>A vector storing differenced fitted values of visitation model. (Equal to <code>diff(visitation_fit)</code>.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constant</code></td>
+<td>
+<p>A numeric storing estimated constant term used in the model (beta0).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>A numeric storing the estimated seasonality adjustment factor (beta1).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>slope</code></td>
+<td>
+<p>A numeric storing estimated slope coefficient term used in the model (beta2).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>proxy_decomposition</code></td>
+<td>
+<p>A "decomposition" object representing the automatic decomposition obtained from <code>popularity_proxy</code> (see <code>auto_decompose</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time_series_decomposition</code></td>
+<td>
+<p>A "decomposition" object representing the automatic decomposition obtained from <code>onsite_usage</code> (see <code>auto_decompose</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>forecasts_needed</code></td>
+<td>
+<p>An integer representing the number of forecasts of <code>popularity_proxy</code> needed to obtain all fitted values. Negative values indicate extra observations which may be useful for predictions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag_estimate</code></td>
+<td>
+<p>A list storing both the MSE-based estimate and rank-based estimates for the lag.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>criterion</code></td>
+<td>
+<p>A string; one of "cross-correlation", "MSE", or "rank", specifying the method used to select the appropriate lag.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ref_series</code></td>
+<td>
+<p>The reference series, if one was supplied.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>omit_trend</code></td>
+<td>
+<p>Whether or not trend was considered 0 in the model. This is obsolete and is left only for compatibility.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trend</code></td>
+<td>
+<p>The trend used in the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>The model call.</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p>See <code>predict.visitation_model</code> for forecast methods, <code>estimate_lag</code> for details on the lag estimation, and <code>auto_decompose</code> for details on the automatic decomposition of time series using singular spectrum analysis (SSA). See the package Rssa for details regarding singular spectrum analysis.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+### load data --------------------
+
+data("park_visitation")
+data("flickr_userdays")
+
+park &lt;- "YELL" #Yellowstone National Park
+pud_ts &lt;- ts(park_visitation[park_visitation$park == park,]$pud, start = 2005, frequency = 12)
+nps_ts &lt;- ts(park_visitation[park_visitation$park == park,]$nps, start = 2005, frequency = 12)
+
+
+### fit three models ---------------
+
+vm_pud_linear &lt;- visitation_model(onsite_usage = pud_ts,
+                                  ref_series = nps_ts,
+                                  parameter_estimates = "joint",
+                                  trend = "linear")
+vm_pud_only &lt;- visitation_model(onsite_usage = pud_ts,
+                                popularity_proxy = flickr_userdays,
+                                trend = "estimated")
+vm_ref_series &lt;- visitation_model(onsite_usage = pud_ts,
+                                  popularity_proxy = flickr_userdays,
+                                  ref_series = nps_ts,
+                                  parameter_estimates = "separate",
+                                  possible_lags = -36:36,
+                                  trend = "none")
+
+
+### visualize fit ------------------
+
+plot(vm_pud_linear, ylim = c(-3,3), difference = TRUE)
+lines(diff(nps_ts), col = "red")
+
+plot(vm_pud_only, ylim = c(-3,3), difference = TRUE)
+lines(diff(nps_ts), col = "red")
+
+plot(vm_ref_series, ylim = c(-3,3), difference = TRUE)
+lines(diff(nps_ts), col = "red")
+
+
+</code></pre>
+
+
+</div>

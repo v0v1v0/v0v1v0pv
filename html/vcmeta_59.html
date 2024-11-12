@@ -1,0 +1,159 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.lm.stdmean.ps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Meta-regression analysis for paired-samples standardized mean differences</h2>
+
+<h3>Description</h3>
+
+<p>This function estimates the intercept and slope coefficients in a
+meta-regression model where the dependent variable is a paired-samples
+standardized mean difference. The estimates are OLS estimates with
+robust standard errors that accommodate residual heteroscedasticity.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.lm.stdmean.ps(alpha, m1, m2, sd1, sd2, cor, n, X, stdzr)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m1</code></td>
+<td>
+<p>vector of estimated means for measurement 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m2</code></td>
+<td>
+<p>vector of estimated means for measurement 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd1</code></td>
+<td>
+<p>vector of estimated SDs for measurement 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd2</code></td>
+<td>
+<p>vector of estimated SDs for measurement 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor</code></td>
+<td>
+<p>vector of estimated correlations for paired measurements</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>vector of sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>matrix of predictor values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stdzr</code></td>
+<td>
+
+<ul>
+<li>
+<p> set to 0 for square root unweighted average variance standardizer
+</p>
+</li>
+<li>
+<p> set to 1 for measurement 1 SD standardizer
+</p>
+</li>
+<li>
+<p> set to 2 for measurement 2 SD standardizer
+</p>
+</li>
+</ul>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is for the intercept with one additional
+row per predictor.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - OLS estimate
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> t - t-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2009).
+“Meta-analytic interval estimation for standardized and unstandardized mean differences.”
+<em>Psychological Methods</em>, <b>14</b>(3), 225–238.
+ISSN 1939-1463, <a href="https://doi.org/10.1037/a0016619">doi:10.1037/a0016619</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+n &lt;- c(65, 30, 29, 45, 50)
+cor &lt;- c(.87, .92, .85, .90, .88)
+m1 &lt;- c(20.1, 20.5, 19.3, 21.5, 19.4)
+m2 &lt;- c(10.4, 10.2, 8.5, 10.3, 7.8)
+sd1 &lt;- c(9.3, 9.9, 10.1, 10.5, 9.8)
+sd2 &lt;- c(7.8, 8.0, 8.4, 8.1, 8.7)
+x1 &lt;- c(2, 3, 3, 4, 4)
+X &lt;- matrix(x1, 5, 1)
+meta.lm.stdmean.ps(.05, m1, m2, sd1, sd2, cor, n, X, 0)
+
+# Should return:
+#      Estimate         SE         z     p         LL        UL
+# b0 1.01740253 0.25361725 4.0115667 0.000  0.5203218 1.5144832
+# b1 0.04977943 0.07755455 0.6418635 0.521 -0.1022247 0.2017836
+
+
+</code></pre>
+
+
+</div>

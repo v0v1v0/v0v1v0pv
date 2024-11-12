@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rm0</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compress zeros.</h2>
+
+<h3>Description</h3>
+
+<p>Transforms <code>n</code> sets of <code>m&gt;n</code> zeros (alternated with sets of non zeros) into <code>n</code> sets of <code>n</code> zeros.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rm0(y)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>A vector or time series.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>Vector with n zeros.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(voice)
+
+(v0 &lt;- c(1:20,rep(0,10)))
+(r0 &lt;- rm0(v0))
+length(v0)
+length(r0)
+sum(v0 == 0)
+
+(v1 &lt;- c(rep(0,10),1:20))
+(r1 &lt;- rm0(v1))
+length(r1)
+
+(v2 &lt;- rep(0,10))
+(r2 &lt;- rm0(v2))
+length(r2)
+
+(v3 &lt;- c(0:10))
+(r3 &lt;- rm0(v3))
+length(r3)
+
+(v4 &lt;- c(rep(0,10), 1:10, rep(0,5), 10:20, rep(0,10)))
+(r4 &lt;- rm0(v4))
+length(r4)
+sum(v4 == 0)
+</code></pre>
+
+
+</div>

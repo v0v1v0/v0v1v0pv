@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>AutoBoot.test</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Wild Bootstrapping of Automatic Variance Ratio Test </h2>
+
+<h3>Description</h3>
+
+<p>This function returns wild bootstrap test results for the Automatic Variance Ratio Test of Choi (1999)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">AutoBoot.test(y, nboot, wild,prob=c(0.025,0.975))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p> a vector of time series, typically  financial return</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nboot</code></td>
+<td>
+<p> the number of bootstrap iterations </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wild</code></td>
+<td>
+<p> "Normal" for the wild bootstrap using the standard normal distribution, "Mammen" for the wild bootstrap using Mammen's two point distribution,
+"Rademacher" for the wild bootstrap using Rademacher's two point distribution</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prob</code></td>
+<td>
+<p>probability limits for confidence intervals</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>test.stat </code></td>
+<td>
+<p>Automatic variance ratio test statistic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VRsum </code></td>
+<td>
+<p>1+ weighted sum of autocorrelation up to the optimal order</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pval </code></td>
+<td>
+<p>Wild Bootstrap p-value for the test</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CI </code></td>
+<td>
+<p>Confidence Intervals for the test statistic from Bootstrap distribution</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CI.VRsum </code></td>
+<td>
+<p>Confidence Intervals for the VRsum from Bootstrap distribution</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p> Jae H. Kim </p>
+
+
+<h3>References</h3>
+
+<p>Kim, J. H., 2009, Automatic Variance Ratio Test under Conditional Heteroskedascity, Finance Research Letters, 6(3), 179-185. 
+</p>
+<p>Charles, A. Darne, O. Kim, J.H. 2011, Small Sample Proeprties of Alternative Tests for Martingale Difference Hypothesis, Economics Letters, 110(2), 151-154.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">                                
+r &lt;- rnorm(100)          
+AutoBoot.test(r,nboot=500,wild="Normal")
+</code></pre>
+
+
+</div>

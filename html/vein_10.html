@@ -1,0 +1,155 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>age_moto</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Returns amount of vehicles at each age</h2>
+
+<h3>Description</h3>
+
+<p><code>age_moto</code> returns amount of vehicles at each age
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">age_moto(
+  x,
+  name = "age",
+  a = 0.2,
+  b = 17,
+  agemin = 1,
+  agemax = 50,
+  k = 1,
+  bystreet = FALSE,
+  net,
+  verbose = FALSE,
+  namerows,
+  time
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Numeric; numerical vector of vehicles with length equal to lines features of road network</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>Character; of vehicle assigned to columns of dataframe</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a</code></td>
+<td>
+<p>Numeric; parameter of survival equation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b</code></td>
+<td>
+<p>Numeric; parameter of survival equation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>agemin</code></td>
+<td>
+<p>Integer; age of newest vehicles for that category</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>agemax</code></td>
+<td>
+<p>Integer; age of oldest vehicles for that category</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>Numeric; multiplication factor. If its length is &gt; 1, it must match the length of x</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bystreet</code></td>
+<td>
+<p>Logical; when TRUE it is expecting that 'a' and 'b' are numeric vectors with length equal to x</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>SpatialLinesDataFrame or Spatial Feature of "LINESTRING"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical;  message with average age and total numer of vehicles</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>namerows</code></td>
+<td>
+<p>Any vector to be change row.names. For instance, name of
+regions or streets.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time</code></td>
+<td>
+<p>Character to be the time units as denominator, eg "1/h"</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>dataframe of age distrubution of vehicles
+</p>
+
+
+<h3>Note</h3>
+
+<p>The functions age* produce distribution of the circulating fleet by age of use.
+The order of using these functions is:
+</p>
+<p>1. If you know the distribution of the vehicles by age of use , use:  <code>my_age</code>
+2. If you know the sales of vehicles, or the registry of new vehicles,
+use <code>age</code> to apply a survival function.
+3. If you know the theoretical shape of the circulating fleet and you can use
+<code>age_ldv</code>, <code>age_hdv</code> or <code>age_moto</code>. For instance,
+you dont know the sales or registry of vehicles, but somehow you know
+the shape of this curve.
+4. You can use/merge/transform/adapt any of these functions.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other age: 
+<code>age_hdv()</code>,
+<code>age_ldv()</code>,
+<code>age()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(net)
+MOTO_E25_500 &lt;- age_moto(x = net$ldv, name = "M_E25_500", k = 0.4)
+plot(MOTO_E25_500)
+MOTO_E25_500 &lt;- age_moto(x = net$ldv, name = "M_E25_500", k = 0.4, net = net)
+plot(MOTO_E25_500)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

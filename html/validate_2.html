@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>%vin%</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>A consistent set membership operator</h2>
+
+<h3>Description</h3>
+
+<p>A set membership operator like <code>%in%</code> that handles
+<code>NA</code> more consistently with R's other logical comparison operators.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">x %vin% table
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>vector or <code>NULL</code>: the values to be matched</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>table</code></td>
+<td>
+<p>vector or <code>NULL</code>: the values to be matched against.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>R's basic comparison operators (almost) always return <code>NA</code> when one 
+of the operands is <code>NA</code>. The <code>%in%</code> operator is an exception.
+Compare for example <code>NA %in% NA</code> with <code>NA == NA</code>: the first
+results in <code>TRUE</code>, while the latter results in <code>NA</code> as expected.
+The <code>%vin%</code> operator acts consistent with operators such as <code>==</code>.
+Specifically, <code>NA</code> results in the following cases.
+</p>
+
+<ul>
+<li>
+<p>For each position where <code>x</code> is <code>NA</code>, the result is <code>NA</code>.
+</p>
+</li>
+<li>
+<p>When <code>table</code> contains an <code>NA</code>, each non-matched value in 
+<code>x</code> results in <code>NA</code>.
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># we cannot be sure about the first element:
+c(NA, "a") %vin% c("a","b")
+
+# we cannot be sure about the 2nd and 3rd element (but note that they
+# cannot both be TRUE):
+c("a","b","c") %vin% c("a",NA)
+
+# we can be sure about all elements:
+c("a","b") %in% character(0)
+
+</code></pre>
+
+
+</div>

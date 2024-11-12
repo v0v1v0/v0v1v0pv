@@ -1,0 +1,128 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>syntax</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Syntax to define validation or indicator rules</h2>
+
+<h3>Description</h3>
+
+<p>A concise overview of the <code>validate</code> syntax.
+</p>
+
+
+<h3>Basic syntax</h3>
+
+<p>The basic rule is that an R-statement that evaluates to a <code>logical</code> is a
+validating statement. This is established by static code inspection when
+<code>validator</code> reads a (set of) user-defined validation rule(s).
+</p>
+
+
+<h3>Comparisons</h3>
+
+<p>All basic comparisons, including <code>&gt;, &gt;=, ==, !=, &lt;=, &lt;</code>, <code>%in%</code>
+are validating statements. When executing a validating statement, the
+<code>%in%</code> operator is replaced with <code>%vin%</code>.
+</p>
+
+
+<h3>Logical operations</h3>
+
+<p>Unary logical operators '<code>!</code>', <code>all()</code> and <code>any</code> define
+validating statements. Binary logical operations including <code>&amp;, &amp;&amp;, |,
+||</code>, are validating when <code>P</code> and <code>Q</code> in e.g. <code>P &amp; Q</code> are
+validating. (note that the short-circuits <code>&amp;&amp;</code> and <code>&amp;</code> onnly return
+the first logical value, in cases where for <code>P &amp;&amp; Q</code>, <code>P</code> and/or
+<code>Q</code> are vectors. Binary logical implication <code class="reqn">P\Rightarrow Q</code> (P
+implies Q) is implemented as <code>if ( P ) Q</code>. The latter is interpreted as
+<code>!(P) | Q</code>.
+</p>
+
+
+<h3>Type checking</h3>
+
+<p>Any function starting with <code>is.</code> (e.g. <code>is.numeric</code>) is a
+validating expression.
+</p>
+
+
+<h3>Text search</h3>
+
+<p><code>grepl</code> is a validating expression.
+</p>
+
+
+<h3>Functional dependencies</h3>
+
+<p>Armstrong's functional dependencies, of the form <code class="reqn">A + B \to C + D</code> are
+represented using the <code>~</code>, e.g. <code>A + B ~ C + D</code>. For example
+<code>postcode ~ city</code> means, that when two records have the same value for
+<code>postcode</code>, they must have the same value for <code>city</code>.
+</p>
+
+
+<h3>Reference the dataset as a whole</h3>
+
+<p>Metadata such as numer of rows, columns, column names and so on can be 
+tested by referencing the whole data set with the '<code>.</code>'. For example,
+the rule <code>nrow(.) == 15</code> checks whether there are 15 rows in the
+dataset at hand.
+</p>
+
+
+<h3>Uniqueness, completeness</h3>
+
+<p>These can be tested in principle with the 'dot' syntax. However, there are
+some convenience functions: <code>is_complete</code>, <code>all_complete</code>
+<code>is_unique</code>, <code>all_unique</code>.
+</p>
+
+
+<h3>Local, transient assignment</h3>
+
+<p>The operator '<code>:=</code>' can be used to set up local variables (during, for
+example, validation) to save time (the rhs of an assignment is computed only
+once) or to make your validation code more maintainable.  Assignments work more
+or less like common R assignments: they are only valid for statements coming
+after the assignment and they may be overwritten. The result of computing the
+rhs is not part of a <code>confront</code>ation with data.
+</p>
+
+
+<h3>Groups</h3>
+
+<p>Often the same constraints/rules are valid for groups of variables. 
+<code>validate</code> allows for compact notation. Variable groups can be used
+in-statement or by defining them with the <code>:=</code> operator.
+</p>
+<p><code>validator( var_group(a,b) &gt; 0 )</code>
+</p>
+<p>is equivalent to
+</p>
+<p><code>validator(G := var_group(a,b), G &gt; 0)</code>
+</p>
+<p>is equivalent to
+</p>
+<p><code>validator(a&gt;0,b&gt;0)</code>.
+</p>
+<p>Using two groups results in the cartesian product of checks. So the statement
+</p>
+<p><code>validator( f=var_group(c,d), g=var_group(a,b), g &gt; f)</code>
+</p>
+<p>is equivalent to
+</p>
+<p><code>validator(a &gt; c, b &gt; c, a &gt; d, b &gt; d)</code>
+</p>
+
+
+<h3>File parsing</h3>
+
+<p>Please see the cookbook on how to read rules from and write rules to file:
+</p>
+<p><code>vignette("cookbook",package="validate")</code>
+</p>
+
+
+</div>

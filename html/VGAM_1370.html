@@ -1,0 +1,135 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Rayleigh</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Rayleigh Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random
+generation for the Rayleigh distribution with parameter
+<code>a</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">drayleigh(x, scale = 1, log = FALSE)
+prayleigh(q, scale = 1, lower.tail = TRUE, log.p = FALSE)
+qrayleigh(p, scale = 1, lower.tail = TRUE, log.p = FALSE)
+rrayleigh(n, scale = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+<p>vector of quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>vector of probabilities.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Fed into <code>runif</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>the scale parameter <code class="reqn">b</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical.
+If <code>log = TRUE</code> then the logarithm of the density is
+returned.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail, log.p</code></td>
+<td>
+
+<p>Same meaning as in <code>pnorm</code>
+or <code>qnorm</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See <code>rayleigh</code>, the <span class="pkg">VGAM</span> family
+function for estimating the scale parameter <code class="reqn">b</code> by
+maximum likelihood estimation, for the formula of the
+probability density function and range restrictions on
+the parameter <code class="reqn">b</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>drayleigh</code> gives the density,
+<code>prayleigh</code> gives the distribution function,
+<code>qrayleigh</code> gives the quantile function, and
+<code>rrayleigh</code> generates random deviates.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The Rayleigh distribution is related to the
+Maxwell distribution.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee and Kai Huang </p>
+
+
+<h3>References</h3>
+
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rayleigh</code>,
+<code>maxwell</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  Scale &lt;- 2; x &lt;- seq(-1, 8, by = 0.1)
+plot(x, drayleigh(x, scale = Scale), type = "l", ylim = c(0,1),
+  las = 1, ylab = "",
+  main = "Rayleigh density divided into 10 equal areas; red = CDF")
+abline(h = 0, col = "blue", lty = 2)
+qq &lt;- qrayleigh(seq(0.1, 0.9, by = 0.1), scale = Scale)
+lines(qq, drayleigh(qq, scale = Scale), col = 2, lty = 3, type = "h")
+lines(x, prayleigh(x, scale = Scale), col = "red") 
+## End(Not run)
+</code></pre>
+
+
+</div>

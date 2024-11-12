@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vinePIT-methods</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vine Probability Integral Transform Methods</h2>
+
+<h3>Description</h3>
+
+<p>Probability integral transform (PIT) of (Rosenblatt, 1952) for vine models. 
+The PIT converts a set of dependent variables into a new set of variables 
+which are independent and uniformly distributed in <code class="reqn">(0,1)</code> under the 
+hypothesis that the data follows a given multivariate distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vinePIT(vine, u)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vine</code></td>
+<td>
+<p>A <code>Vine</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>u</code></td>
+<td>
+<p>Vector with one component for each variable of the vine or 
+a matrix with one column for each variable of the vine.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A matrix with one column for each variable of the vine and one row for 
+each observation.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt><code>signature(vine = "CVine")</code></dt>
+<dd>
+<p>PIT algorithm for
+<code>CVine</code> objects based on the Algorithm 5 of
+(Aas et al., 2009).</p>
+</dd>
+<dt><code>signature(vine = "DVine")</code></dt>
+<dd>
+<p>PIT algorithm for
+<code>DVine</code> objects based on the Algorithm 6 of
+(Aas et al., 2009).</p>
+</dd>
+</dl>
+<h3>References</h3>
+
+<p>Aas, K. and Czado, C. and Frigessi, A. and Bakken, H. (2009)
+Pair-copula constructions of multiple dependence.
+<em>Insurance: Mathematics and Economics</em> <b>44</b>, 182–198.
+</p>
+<p>Rosenblatt, M. (1952) Remarks on multivariate transformation.
+<em>Annals of Mathematical Statistics</em> <b>23</b>, 1052–1057.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vinePIT</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dimension &lt;- 3
+copulas &lt;- matrix(list(normalCopula(0.5), 
+                       claytonCopula(2.75),
+                       NULL, NULL),
+                  ncol = dimension - 1,
+                  nrow = dimension - 1,
+                  byrow = TRUE)
+vine &lt;- CVine(dimension = dimension, trees = 1,
+              copulas = copulas)
+
+data &lt;- matrix(runif(dimension * 100), 
+               ncol = dimension, nrow = 100)
+
+vinePIT(vine, data)
+</code></pre>
+
+
+</div>

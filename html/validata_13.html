@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>determine_distinct</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Automatically determine primary key</h2>
+
+<h3>Description</h3>
+
+<p>Uses <code>confirm_distinct</code> in an iterative fashion to determine the primary keys.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">determine_distinct(df, ..., listviewer = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>a data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>columns or a tidyselect specification. defaults to everything</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>listviewer</code></td>
+<td>
+<p>logical. defaults to TRUE to view output using the listviewer package</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The goal of this function is to automatically determine which columns uniquely identify the rows of a dataframe.
+The output is a printed description of the combination of columns that form unique identifiers at each level.
+At level 1, the function tests if individual columns are primary keys
+At level 2, the function tests n C 2 combinations of columns to see if they form primary keys.
+The final level is testing all columns at once.
+</p>
+
+<ul>
+<li>
+<p> For completely unique columns, they are recorded in level 1, but then dropped from the data frame to facilitate
+the determination of multi-column primary keys.
+</p>
+</li>
+<li>
+<p> If the dataset contains duplicated rows, they are eliminated before proceeding.
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>list
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+sample_data1 %&gt;%
+head
+
+
+## on level 1, each column is tested as a unique identifier. the VAL columns have no
+## duplicates and hence qualify, even though they normally would be considered as IDs
+## on level 3, combinations of 3 columns are tested. implying that ID_COL 1,2,3 form a unique key
+## level 2 does not appear, implying that combinations of any 2 ID_COLs do not form a unique key
+
+sample_data1 %&gt;%
+determine_distinct(listviewer = FALSE)
+</code></pre>
+
+
+</div>

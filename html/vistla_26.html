@@ -1,0 +1,98 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>write.dot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Export tree to a Graphviz DOT format</h2>
+
+<h3>Description</h3>
+
+<p>Exports the vistla tree in a DOT format, which can be later layouted and rendered by Graphviz programs like dot or neato.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">write.dot(
+  x,
+  con,
+  vstyle = list(shape = function(x) ifelse(x$depth &lt; 0, "egg", ifelse(x$leaf, "box",
+    "ellipse")), label = function(x) sprintf("\"%s\"", x$name)),
+  estyle = list(penwidth = function(x) sprintf("%0.3f", 0.5 + x$score/max(x$score) *
+    2.5)),
+  gstyle = list(overlap = "\"prism\"", splines = "true"),
+  direction = c("none", "fromY", "intoY")
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>vistla object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>con</code></td>
+<td>
+<p>connection; passed to <code>writeLines</code>.
+If missing, the DOT code is returned as a character vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vstyle</code></td>
+<td>
+<p>vertex attribute list — should be a named list of Graphviz attributes like <code>shape</code> or <code>penwidth</code>. 
+For elements which are strings or numbers, the value is copied as is as an attribute value.
+For elements which functions, though, the function is called on a <code>vistla_tree</code> object and should return a vector of values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estyle</code></td>
+<td>
+<p>edge attribute list, behaves exactly like <code>vstyle</code>. 
+When functions are called, the Y-vertex is not present.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gstyle</code></td>
+<td>
+<p>graph attribute list. Functions are not supported here.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>direction</code></td>
+<td>
+<p>when set to <code>"none"</code>, graph is undirected, otherwise directed, for <code>"fromY"</code>, root is a source, while for <code>"intoY"</code>, a sink.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>For a missing <code>con</code> argument, a character vector with the graph in the DOT format, invisible <code>NULL</code> otherwise.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Graphviz attribute values can be either strings, like <code>"some vertex"</code> in <code>label</code>, or atoms, like <code>box</code> for <code>shape</code>.
+When returning a string value, you must supply quotes, otherwise it will be included as an atom.
+</p>
+<p>The default value of <code>gstyle</code> may invoke long layout calculations in Graphviz.
+Change to <code>list()</code> for a fast but less aesthetic layout.
+</p>
+<p>The function does no validation whether provided attributes or values are correct.
+</p>
+
+
+<h3>References</h3>
+
+<p>"An open graph visualization system and its applications to software engineering" E.R. Gansner, S.C. North. Software: Practice and Experience 30:1203-1233 (2000).
+</p>
+
+
+</div>

@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>alpha2int</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>‘Single Character’ &lt;–&gt; Integer Conversion for Discrete Data</h2>
+
+<h3>Description</h3>
+
+<p>Simple conversion functions for discrete data (e.g., time series),
+between <code>0:k</code> integers and <em>single</em> letter characters.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">alpha2int(x, alpha)
+int2alpha(i, alpha)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>character vector of single letters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>the alphabet, as one character string.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>i</code></td>
+<td>
+<p>integer vector of numbers in <code>0:k</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>alpha2int(x,*)</code> returns an <code>integer</code> vector of the same
+length as <code>x</code>, consisting of values from <code>0:k</code> where
+<code>k + 1</code> is the length of the alphabet, <code>nchar(alpha)</code>.
+</p>
+<p><code>int2alpha(i,*)</code> returns a vector of <em>single letter</em>
+<code>character</code> of the same length as <code>i</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vlmc</code>, and
+<code>int2char()</code> and its inverse, <code>char2int()</code>,
+both working with multi-character strings instead of vectors of single
+characters; further, <code>alphabet</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">alphabet &lt;- "abcdefghijk"
+(ch &lt;- sample(letters[1:10], 30, replace = TRUE))
+(ic &lt;- alpha2int(ch, alphabet))
+stopifnot(int2alpha(ic, alphabet) == ch)
+</code></pre>
+
+
+</div>

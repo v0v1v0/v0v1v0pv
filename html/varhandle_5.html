@@ -1,0 +1,112 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rm.all.but</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Remove all variables except those that you mention
+</h2>
+
+<h3>Description</h3>
+
+<p>This function removes all existing variables (in the defined environment) except the variables given to it.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    rm.all.but(keep=NULL, envir=.GlobalEnv, keep_functions=TRUE, gc_limit=100,
+               regex="auto")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>keep</code></td>
+<td>
+
+<p>A vector containing the name of variables which you wish to keep and not remove or a regular expression to match variables you want to keep. Variable names and regular expressions can be used combined if the argument 'regex="auto"'. (Mandatory)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>envir</code></td>
+<td>
+
+<p>The environment that this function should be functional in, search in and act in. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keep_functions</code></td>
+<td>
+
+<p>A logical vector of length 1 indicating exclusion of function variables from removal. (optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gc_limit</code></td>
+<td>
+
+<p>A numeric vector of length 1 indicating the threshold for garbage collection in Megabyte (MB) scale. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>regex</code></td>
+<td>
+
+<p>A vector with length 1 to define whether the function use regular expression in keep (TRUE or FALSE) or auto detect ("auto")
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>While working with R it happens that users generates an accumulate many variables and at some point they just want to keep some of them and remove the rest to make the workspace clean and reduce memory usage. This is where this function comes in to keep those variables user wants and remove the rest.
+</p>
+<p>Two criteria can be used as filtering the variables you wish to keep:
+</p>
+<p>* variable names
+* regular expression
+</p>
+<p>These can be also used in combination in any order. You can also have multiple regular expressions to match different variable names.
+</p>
+<p>The garbage collection will run if the size of removed variables exceed the 'gc_limit' parameter and will tell R to give back the amount of occupied memory by removed variables to the system. This comes handy since usually removed variables are created temporarily and removing them should free up the memory.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Mehrad Mahmoudian
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>remove</code>
+<code>gc</code>
+<code>object.size</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    # create some variable
+    for(i in  names(iris)){
+    	assign(i, iris[,i])
+    }
+    # see the list of variables
+    ls()
+    # remove every variable except Petal.Length, Petal.Width and i
+    rm.all.but(c("Petal*", "i"))
+    # see which variable are left
+    ls()
+</code></pre>
+
+
+</div>

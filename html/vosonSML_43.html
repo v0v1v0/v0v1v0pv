@@ -1,0 +1,68 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Create.actor.youtube</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create YouTube actor network</h2>
+
+<h3>Description</h3>
+
+<p>Creates a YouTube actor network from comment threads on YouTube videos. Users who have made comments to
+a video (top-level comments) and users who have replied to those comments are actor nodes. The comments are
+represented as directed edges between the actors. The video id is also included as an actor node, representative of
+the videos publisher with top-level comments as directed edges towards them.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'actor.youtube'
+Create(datasource, type, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>datasource</code></td>
+<td>
+<p>Collected social media data with <code>"datasource"</code> and <code>"youtube"</code> class names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Character string. Type of network to be created, set to <code>"actor"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional parameters passed to function. Not used in this method.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Network as a named list of two dataframes containing <code>$nodes</code> and <code>$edges</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# create a YouTube actor network graph
+actorNetwork &lt;- youtubeData |&gt; Create("actor")
+
+# network
+# actorNetwork$nodes
+# actorNetwork$edges
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,153 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predict.visitation_model</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Predict Visitation Model</h2>
+
+<h3>Description</h3>
+
+<p>Methods for generating predictions from objects of the class "visitation_model".
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'visitation_model'
+predict(
+  object,
+  n_ahead,
+  only_new = TRUE,
+  past_observations = c("fitted", "reference"),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object of class "visitation_model".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_ahead</code></td>
+<td>
+<p>An integer indicating how many observations to forecast.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>only_new</code></td>
+<td>
+<p>A Boolean specifying whether to include only the forecasts (if TRUE) or the full reconstruction (if FALSE). The default option is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>past_observations</code></td>
+<td>
+<p>A character string; one of "fitted" or "reference". Here, "fitted" uses the fitted values of the visitation model, while "reference" uses values supplied in ‘ref_series’.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A predictions for the automatic decomposition.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>forecasts</code></td>
+<td>
+<p>A vector with forecast values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_ahead</code></td>
+<td>
+<p>A numeric that shows the number of steps ahead.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>proxy_forecasts</code></td>
+<td>
+<p>A vector for the proxy of trend forecasts.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>onsite_usage_forecasts</code></td>
+<td>
+<p>A vector for the visitation forecasts.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>A numeric for the seasonality adjustment factor.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constant</code></td>
+<td>
+<p>A numeric for the value of the constant in the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>slope</code></td>
+<td>
+<p>A numeric for the value of the slope term in the model when trend is set to "linear".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>criterion</code></td>
+<td>
+<p>A string which specifies the method used to select the appropriate lag. Only applicable if the trend component is part of the forecasts.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>past_observations</code></td>
+<td>
+<p>A vector which specifies the fitted values for the past observations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag_estimate</code></td>
+<td>
+<p>A numeric for the estimated lag. Only applicable if the trend component is part of the forecasts.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data("park_visitation")
+data("flickr_userdays")
+
+n_ahead &lt;- 36
+park &lt;- "ROMO"
+pud_ts &lt;- ts(park_visitation[park_visitation$park == park,]$pud, start = 2005, frequency = 12)
+pud_ts &lt;- log(pud_ts)
+
+nps_ts &lt;- ts(park_visitation[park_visitation$park == park,]$nps, start = 2005, frequency = 12)
+nps_ts &lt;- log(nps_ts)
+popularity_proxy &lt;- log(flickr_userdays)
+
+vm &lt;- visitation_model(pud_ts,popularity_proxy, ref_series = nps_ts, trend = "linear")
+predict_vm &lt;- predict(vm,n_ahead,
+                      only_new = FALSE, past_observations = "reference")
+plot(predict_vm, )
+predict_vm2 &lt;- predict(vm,n_ahead,
+                       only_new = FALSE, past_observations = "reference")
+plot(predict_vm2)
+</code></pre>
+
+
+</div>

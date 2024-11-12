@@ -1,0 +1,57 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>addID</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Populate the ID column of VCF data</h2>
+
+<h3>Description</h3>
+
+<p>Populate the ID column of VCF data by concatenating the chromosome, position and optionally an index.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">addID(x, sep = "_")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class vcfR or chromR.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sep</code></td>
+<td>
+<p>a character string to separate the terms.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Variant callers typically leave the ID column empty in VCF data.
+However, the VCF data may potentially include variants with IDs as well as variants without.
+This function populates the missing elements by concatenating the chromosome and position.
+When this concatenation results in non-unique names, an index is added to force uniqueness.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vcfR_test)
+head(vcfR_test)
+vcfR_test &lt;- addID(vcfR_test)
+head(vcfR_test)
+
+
+</code></pre>
+
+
+</div>

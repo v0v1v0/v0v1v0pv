@@ -1,0 +1,232 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ordiplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Alternative plot and identify Functions for Ordination </h2>
+
+<h3>Description</h3>
+
+<p>Function <code>ordiplot</code> is an alternative plotting function which
+can be worked with any <span class="pkg">vegan</span> ordination result and many
+non-<span class="pkg">vegan</span> results. In addition, <code>plot</code> functions for
+<span class="pkg">vegan</span> ordinations return invisibly an <code>"ordiplot"</code> result
+object, and this allows using <code>ordiplot</code> support functions with
+this result: <code>identify</code> can be used to add labels to selected
+site, species or constraint points, and <code>points</code> and
+<code>text</code> can add elements to the plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ordiplot(ord, choices = c(1, 2), type="points", display, xlim, ylim,
+     cex = 0.7, ...)
+## S3 method for class 'ordiplot'
+identify(x, what, labels,  ...)
+## S3 method for class 'ordiplot'
+points(x, what, select, arrows = FALSE, ...)
+## S3 method for class 'ordiplot'
+text(x, what, labels, select, arrows = FALSE,
+    length = 0.05, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ord</code></td>
+<td>
+<p>A result from an ordination.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>choices</code></td>
+<td>
+<p>Axes shown. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>The type of graph which may be <code>"points"</code>,
+<code>"text"</code> or <code>"none"</code> for any ordination method.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>display</code></td>
+<td>
+<p>Display only "sites" or "species". The default for most
+methods is to display both, but for <code>cca</code>,
+<code>rda</code>, <code>dbrda</code> and <code>capscale</code>
+it is the same as in <code>plot.cca</code>.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim, ylim</code></td>
+<td>
+<p>the x and y limits (min,max) of the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex</code></td>
+<td>
+<p>Character expansion factor for points and text.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other graphical parameters. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A result object from <code>ordiplot</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>what</code></td>
+<td>
+<p>Items identified in the ordination plot. The types depend
+on the kind of plot used. Most methods know <code>sites</code> and
+<code>species</code>, functions <code>cca</code> and <code>rda</code>
+know in addition 
+<code>constraints</code> (for LC scores), <code>centroids</code> and
+<code>biplot</code>, and <code>plot.procrustes</code> ordination plot has
+<code>heads</code> and <code>points</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p>Optional text used for labels. Row names will be used if
+this is missing.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>arrows</code></td>
+<td>
+<p>Draw arrows from the origin. This will always be
+<code>TRUE</code> for biplot scores and its value will be ignored. Setting
+this <code>TRUE</code> will draw arrows for any type of scores. This
+allows, e.g, using biplot arrows for species. The arrow head will be
+at the value of scores, and possible text is moved outwards.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>length</code></td>
+<td>
+<p>Length of arrow heads (see <code>arrows</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>select</code></td>
+<td>
+<p>Items to be displayed.  This can either be a logical
+vector which is <code>TRUE</code> for displayed items or a vector of indices
+of displayed items.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Function <code>ordiplot</code> draws an ordination diagram using black circles for
+sites and red crosses for species.  It returns invisibly an object of
+class <code>ordiplot</code> which can be used by <code>identify.ordiplot</code>
+to label selected sites or species, or constraints in
+<code>cca</code> and <code>rda</code>.
+</p>
+<p>The function can handle output from several alternative ordination
+methods. For <code>cca</code>, <code>rda</code> and
+<code>decorana</code> it uses their <code>plot</code> method with option
+<code>type = "points"</code>. In addition, the <code>plot</code> functions of
+these methods return invisibly an <code>ordiplot</code> object which can
+be used by <code>identify.ordiplot</code> to label points. For other
+ordinations it relies on <code>scores</code> to extract the scores.
+</p>
+<p>For full user control of plots, it is best to call <code>ordiplot</code>
+with <code>type = "none"</code> and save the result, and then add sites and
+species using <code>points.ordiplot</code> or <code>text.ordiplot</code> which
+both pass all their arguments to the corresponding default graphical
+functions. The functions can be chained with pipes which allows an
+alternative intuitive way of building up plots. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>Function <code>ordiplot</code> returns invisibly an object of class
+<code>ordiplot</code> with used scores. In general, <span class="pkg">vegan</span> <code>plot</code>
+functions for ordination results will also return an invisible
+<code>ordiplot</code> object. If the <code>plot(..., type = "n")</code> was used
+originally, the plot is empty, and items can be added with the
+invisible object. Functions <code>points</code> and <code>text</code> will return
+their input object without modification, which allows chaining these
+commands with pipes. Function <code>identify.ordiplot</code> uses this
+object to label the point.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The purpose of these functions is to provide similar functionality as
+the <code>plot</code>, <code>plotid</code> and <code>specid</code> methods in library
+<code>labdsv</code>. The functions are somewhat limited in parametrization,
+but you can call directly the standard <code>identify</code> and
+<code>plot</code> functions for a better user control.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jari Oksanen
+</p>
+
+
+<h3>See Also</h3>
+
+ <p><code>identify</code> for basic operations, <code>plot.cca</code>,
+<code>plot.decorana</code>, <code>plot.procrustes</code> which also
+produce objects for
+<code>identify.ordiplot</code> and <code>scores</code> for extracting
+scores from non-<code>vegan</code> ordinations. 
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Draw a plot for a non-vegan ordination (cmdscale).
+data(dune)
+dune.dis &lt;- vegdist(wisconsin(dune))
+dune.mds &lt;- cmdscale(dune.dis, eig = TRUE)
+dune.mds$species &lt;- wascores(dune.mds$points, dune, expand = TRUE)
+pl &lt;- ordiplot(dune.mds, type = "none")
+points(pl, "sites", pch=21, col="red", bg="yellow")
+text(pl, "species", col="blue", cex=0.9)
+## Not run: 
+## same plot using pipes (|&gt;)
+ordiplot(dune.mds, type="n") |&gt;
+  points("sites", pch=21, col="red", bg="yellow") |&gt;
+  text("species", col="blue", cex=0.9)
+## Some people think that species should be shown with arrows in PCA.
+## Other ordination methods also return an invisible ordiplot object and
+## we can use pipes to draw those arrows.
+mod &lt;- rda(dune)
+plot(mod, type="n") |&gt;
+  points("sites", pch=16, col="red") |&gt;
+  text("species", arrows = TRUE, length=0.05, col="blue")
+
+## End(Not run)
+## Default plot of the previous using identify to label selected points
+## Not run: 
+pl &lt;- ordiplot(dune.mds)
+identify(pl, "spec")
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,347 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>famdcontour</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Contour plots and FAMD function for classification modeling</h2>
+
+<h3>Description</h3>
+
+<p>This function presents visual graphics by means of FAMD.
+FAMD function is Factorial Analysis for Mixed Data (interval and categorical)
+Dependent classification variable is set as supplementary variable.
+Machine learning algorithm predictions are presented in a filled contour setting
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">famdcontour(dataf=dataf,listconti,listclass,vardep,proba="",
+title="",title2="",depcol="",listacol="",alpha1=0.7,alpha2=0.7,alpha3=0.7,
+classvar=1,intergrid=0,selec=0,modelo="glm",nodos=3,maxit=200,decay=0.01,
+sampsize=400,mtry=2,nodesize=10,ntree=400,ntreegbm=500,shrink=0.01,
+bag.fraction=1,n.minobsinnode=10,C=100,gamma=10,Dime1="Dim.1",Dime2="Dim.2")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dataf</code></td>
+<td>
+<p>data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>listconti</code></td>
+<td>
+<p>Interval variables to use, in format c("var1","var2",...).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>listclass</code></td>
+<td>
+<p>Class variables to use, in format c("var1","var2",...).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vardep</code></td>
+<td>
+<p>Dependent binary classification variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>proba</code></td>
+<td>
+<p>vector of probability predictions obtained externally (optional)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>plot main title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title2</code></td>
+<td>
+<p>plot subtitle</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>depcol</code></td>
+<td>
+<p>vector of two colors for points</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>listacol</code></td>
+<td>
+<p>vector of colors for labels</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha1</code></td>
+<td>
+<p>alpha transparency for majoritary class</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha2</code></td>
+<td>
+<p>alpha transparency for minoritary class</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha3</code></td>
+<td>
+<p>alpha transparency for fit probability plots</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>classvar</code></td>
+<td>
+<p>1 if dependent variable categories are plotted as supplementary</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>intergrid</code></td>
+<td>
+<p>scale of grid for contour:0 if automatic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selec</code></td>
+<td>
+<p>1 if stepwise logistic variable selection is required, 0 if not.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modelo</code></td>
+<td>
+<p>name of model: "glm","gbm","rf,","nnet","svm".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodos</code></td>
+<td>
+<p>nnet: nodes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxit</code></td>
+<td>
+<p>nnet: iterations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>decay</code></td>
+<td>
+<p>nnet: decay</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sampsize</code></td>
+<td>
+<p>rf: sampsize</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mtry</code></td>
+<td>
+<p>rf: mtry</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodesize</code></td>
+<td>
+<p>rf: nodesize</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ntree</code></td>
+<td>
+<p>rf: ntree</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ntreegbm</code></td>
+<td>
+<p>gbm: ntree</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shrink</code></td>
+<td>
+<p>gbm: shrink</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bag.fraction</code></td>
+<td>
+<p>gbm: bag.fraction</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.minobsinnode</code></td>
+<td>
+<p>gbm:n.minobsinnode</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>svm Radial: C</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>svm Radial: gamma</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dime1, Dime2</code></td>
+<td>
+<p>FAMD Dimensions to consider. Dim.1 and Dim.2 by default.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>FAMD algorithm from FactoMineR package is used to compute point coordinates on dimensions
+(Dim.1 and Dim.2 by default).
+Minority class on dependent variable category is represented as red, majority category as green.
+Color scheme can be altered using depcol and listacol, as well as alpha transparency values.
+</p>
+
+
+<h4>Predictive modeling</h4>
+
+<p>For predictive modeling, selec=1 selects variables with a simple stepwise logistic regression.
+By default select=0.
+Logistic regression is used by default. Basic parameter setting is supported for algorithms nnet, rf,gbm and svm-RBF.
+A vector of fitted probabilities obtained externally from other
+algorithms can be imported in parameter proba=nameofvector. Contour curves are then
+computed based on this vector.
+</p>
+
+
+
+<h4>Contour curves</h4>
+
+<p>Contour curves are build by the following process: i) the chosen algorithm model is trained and all
+observations are predicted-fitted. ii) A grid of points on the two chosen FAMD dimensions is built
+iii) package MBA is used to interpol probability estimates over the grid, based on
+previously fitted observations.
+</p>
+
+
+
+<h4>Variable representation</h4>
+
+<p>In order to represent interval variables, categories of class variables, and points in the same plot,
+a proportional projection of interval variables coordinates over the two dimensions range is applied.
+Since space of input variables is frequently larger than two dimensions, sometimes overlapping of
+points is produced; a frequency variable is used, and alpha values may be adjusted to avoid wrong interpretations
+of the presence of dependent variable category/color.
+</p>
+
+
+
+<h4>Troubleshooting</h4>
+
+
+<ul>
+<li>
+<p> Check missings. Missing values are not allowed.
+</p>
+</li>
+<li>
+<p> By default selec=0. Setting selec=1 may sometimes imply that no variables are selected; an error message is shown n this case.
+</p>
+</li>
+<li>
+<p> Models with only two input variables could lead to plot generation problems.
+</p>
+</li>
+<li>
+<p> Be sure that variables named in listconti are all numeric.
+</p>
+</li>
+<li>
+<p> If some numeric variable is constant at one single value, process is stopped since numeric  Min-max standarization is performed,
+and NaN values are generated.
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>A list with the following objects:</p>
+
+<dl>
+<dt>graph1</dt>
+<dd>
+<p>plot of points on FAMD first two dimensions</p>
+</dd>
+<dt>graph2</dt>
+<dd>
+<p>plot of points and contour curves</p>
+</dd>
+<dt>graph3</dt>
+<dd>
+<p>plot of points and variables</p>
+</dd>
+<dt>graph4</dt>
+<dd>
+<p>plot of points variable and contour curves</p>
+</dd>
+<dt>graph5</dt>
+<dd>
+<p>plot of points colored by fitted probability</p>
+</dd>
+<dt>graph6</dt>
+<dd>
+<p>plot of points colored by abs difference</p>
+</dd>
+<dt>df1</dt>
+<dd>
+<p> data frame used for graph1</p>
+</dd>
+<dt>df2</dt>
+<dd>
+<p> data frame used for contour curves</p>
+</dd>
+<dt>df3</dt>
+<dd>
+<p> data frame used for variable names</p>
+</dd>
+<dt>listconti</dt>
+<dd>
+<p>interval variables used-selected </p>
+</dd>
+<dt>listclass</dt>
+<dd>
+<p>class variables used-selected </p>
+</dd>
+</dl>
+<h3>References</h3>
+
+<p>Pages J. (2004). Analyse factorielle de donnees mixtes. Revue Statistique Appliquee.  LII (4). pp. 93-111.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(breastwisconsin1)
+dataf&lt;-breastwisconsin1
+listconti=c( "clump_thickness","uniformity_of_cell_shape","mitosis")
+listclass=c("")
+vardep="classes"
+result&lt;-famdcontour(dataf=dataf,listconti,listclass,vardep)
+</code></pre>
+
+
+</div>

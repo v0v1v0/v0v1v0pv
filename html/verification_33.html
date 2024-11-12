@@ -1,0 +1,63 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>performance.diagram</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Performance Diagram</h2>
+
+<h3>Description</h3>
+
+<p>Creates plot displaying multiple skill scores on a single plot</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R"> performance.diagram(...) </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Optional plotting parameters.</p>
+</td>
+</tr></table>
+<h3>Note</h3>
+
+<p>Currently this function just produces the base plot.  Points summarizing model performance can be added using the points function. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich</p>
+
+
+<h3>References</h3>
+
+<p>Roebber, P.J. (2009). Visualizing Multiple Measures of Forecast Quality, <em>Weather and Forecasting</em>. <b>24</b>, pp - 601 - 608.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">performance.diagram(main = "Sample Plot")
+RB1 &lt;- matrix(c(95, 55, 42, 141), ncol = 2)
+## at point
+pts     &lt;- table.stats(RB1)
+boot.pts &lt;- table.stats.boot(RB1, R = 100   )
+## add confidence intervals
+segments(x0=1-pts$FAR, y0=boot.pts["up","pod"],
+    x1=1-pts$FAR, y1=boot.pts["dw", "pod"], col=2, lwd=2)
+
+segments(x0=1-boot.pts["up","far"], y0=pts$POD,
+    x1=1-boot.pts["dw","far"], y1=pts$POD, col=2, lwd=2)
+points(1 - pts$FAR, pts$POD, col = 2, cex = 2)
+
+
+</code></pre>
+
+
+</div>

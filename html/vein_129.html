@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vkm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimation of VKM</h2>
+
+<h3>Description</h3>
+
+<p><code>vkm</code> consists in the product of the number of vehicles and
+the distance driven by these vehicles in km. This function reads hourly
+vehicles and then extrapolates the vehicles
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vkm(
+  veh,
+  lkm,
+  profile,
+  hour = nrow(profile),
+  day = ncol(profile),
+  array = TRUE,
+  as_df = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>veh</code></td>
+<td>
+<p>Numeric vector with number of vehicles per street</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lkm</code></td>
+<td>
+<p>Length of each link (km)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>profile</code></td>
+<td>
+<p>Numerical or dataframe with nrows equal to 24 and ncol 7 day of the week</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hour</code></td>
+<td>
+<p>Number of considered hours in estimation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>day</code></td>
+<td>
+<p>Number of considered days in estimation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>array</code></td>
+<td>
+<p>When FALSE produces a dataframe of the estimation. When TRUE expects a
+profile as a dataframe producing an array with dimensions (streets x hours x days)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>as_df</code></td>
+<td>
+<p>Logical; when TRUE transform returning array in data.frame (streets x hour*days)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>emission estimation  of vkm
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Do not run
+pc &lt;- lkm &lt;- abs(rnorm(10,1,1))*100
+pro &lt;- matrix(abs(rnorm(24*7,0.5,1)), ncol=7, nrow=24)
+vkms  &lt;- vkm(veh = pc, lkm = lkm, profile = pro)
+class(vkms)
+dim(vkms)
+vkms2  &lt;- vkm(veh = pc, lkm = lkm, profile = pro, as_df = FALSE)
+class(vkms2)
+dim(vkms2)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

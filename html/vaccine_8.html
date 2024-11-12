@@ -1,0 +1,130 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>load_data</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Load and format data object</h2>
+
+<h3>Description</h3>
+
+<p>This function takes in user-supplied data and returns a data
+object that can be read in by <code>summary_stats</code>,
+<code>est_ce</code>, <code>est_med</code>, and other estimation
+functions. Data is expected to come from a vaccine clinical trial,
+possibly involving two-phase sampling and possibly including a biomarker
+of interest.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">load_data(
+  time,
+  event,
+  vacc,
+  marker,
+  covariates,
+  weights,
+  ph2,
+  strata = NA,
+  data,
+  covariates_ph2 = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>time</code></td>
+<td>
+<p>A character string; the name of the numeric variable representing
+observed event or censoring times.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>event</code></td>
+<td>
+<p>A character string; the name of the binary variable
+corresponding to whether the observed time represents an event time (1)
+or a censoring time (0). Either integer (0/1) or Boolean (T/F) values are
+allowed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vacc</code></td>
+<td>
+<p>A character string; the name of the binary variable denoting
+whether the individual is in the vaccine group (1) or the placebo group
+(0). Accepts either integer (0/1) or Boolean (T/F) values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>marker</code></td>
+<td>
+<p>A character string; the name of the numeric variable of
+biomarker values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>covariates</code></td>
+<td>
+<p>A character vector; the names of the covariate columns.
+Columns values should be either numeric, binary, or factors. Character
+columns will be converted into factors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>A character string; the name of the numeric variable
+containing inverse-probability-of-sampling (IPS) weights.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ph2</code></td>
+<td>
+<p>A character string; the name of the binary variable representing
+whether the individual is in the phase-two cohort (1) or not (0). Accepts
+either integer (0/1) or Boolean (T/F) values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>strata</code></td>
+<td>
+<p>A character string; the name of the variable containing strata
+identifiers (for two-phase sampling strata).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A dataframe containing the vaccine trial data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>covariates_ph2</code></td>
+<td>
+<p>A boolean; if at least one of the covariates is
+measured only in the phase-two cohort, set this to TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class <code>vaccine_dat</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(hvtn505)
+dat &lt;- load_data(time="HIVwk28preunblfu", event="HIVwk28preunbl", vacc="trt",
+                 marker="IgG_V2", covariates=c("age","BMI","bhvrisk"),
+                 weights="wt", ph2="casecontrol", data=hvtn505)
+</code></pre>
+
+
+</div>

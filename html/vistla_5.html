@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ensemble</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Construct the value for the ensemble argument</h2>
+
+<h3>Description</h3>
+
+<p>Vistla can be run in the ensemble mode, in which tree is built multiple times, usually on a slightly modified input data.
+This mode can be triggered by passing a value to the ensemble argument of the vistla method.
+This function can be used to construct the proper value for this argument.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ensemble(n = 30, resample = TRUE, prune = 0)
+
+## S3 method for class 'vistla_ensemble_control'
+print(x, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of replicatons.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>resample</code></td>
+<td>
+<p>if <code>TRUE</code>, a modified bootstrap is used; that is, algorithm draws as many objects as are in the original data, but with replacement, hence only about 63.2
+If this argument is given a number, it is interpreted to randomly sample exactly this fraction of objects, without replacement.
+Fraction <code>f</code> of <code>n</code> objects is interpreted as <code>round(n*f)</code>, but not less than 3 and no more than <code>n-1</code>.
+If <code>FALSE</code>, no resampling is done (vistla trees are just built using different random seeds.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prune</code></td>
+<td>
+<p>Minimal number of iterations in which certain branch must appear not be prunned during ensemble consolidation.
+Zero (default) means no prunning.
+Note that <code>iomin</code> and <code>targets</code> arguments of the base algorithm can also be used to control the size of the resulting consensus tree.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ensemble control value to print.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>ignored.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>vistla_ensemble_control</code> object which can be passed to the <code>vistla</code> function.
+</p>
+
+
+</div>

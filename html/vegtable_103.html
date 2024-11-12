@@ -1,0 +1,144 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>subset</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Subset functions for vegtable objects</h2>
+
+<h3>Description</h3>
+
+<p>Produce subsets of vegtable objects.
+</p>
+<p>Logical operations can be applied either to the plots, or the
+relations, which are the main slots in that class.
+</p>
+<p>This method can be referred to the slot <code>species</code> the same way as
+<code>taxlist::subset()</code>, then the rest of the data will include only
+references to the subset of species list.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'vegtable'
+subset(
+  x,
+  subset,
+  slot = "header",
+  keep_children = FALSE,
+  keep_parents = FALSE,
+  relation,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A vegtable object for subset.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subset</code></td>
+<td>
+<p>Logical expression for the subset.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>slot</code></td>
+<td>
+<p>Character value indicating the slot used as reference for subset.
+At the moment only the values "taxonNames", "taxonRelations",
+"taxonTraits", "header", "samples", and "relations" are accepted.
+The three first values will be applied to the respective slots in the
+contained taxlist object (slot <strong>species</strong>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keep_children</code></td>
+<td>
+<p>Argument passed to <code>taxlist::get_children()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keep_parents</code></td>
+<td>
+<p>Argument passed to <code>taxlist::get_parents()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>relation</code></td>
+<td>
+<p>Character value indicating the relation (slot <strong>relations</strong>)
+to be used as reference for subset.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments passed from or to other methods.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A S4 object of class vegtable.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miguel Alvarez <a href="mailto:kamapu78@gmail.com">kamapu78@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Subset by taxon name
+Kenya_sub &lt;- subset(
+  x = Kenya_veg, subset = TaxonName == "Tagetes",
+  slot = "taxonNames", keep_children = TRUE, keep_parents = TRUE
+)
+summary(Kenya_sub)
+summary(Kenya_sub@species)
+
+## Subset by taxon relations
+Kenya_sub &lt;- subset(
+  x = Kenya_veg, subset = Level == "species",
+  slot = "taxonRelations"
+)
+summary(Kenya_sub)
+summary(Kenya_sub@species)
+
+## Subset by taxon traits
+Kenya_sub &lt;- subset(
+  x = Kenya_veg, subset = lf_behn_2018 == "obligate_annual",
+  slot = "taxonTraits"
+)
+summary(Kenya_sub)
+summary(Kenya_sub@species)
+
+## Subset by header
+Kenya_sub &lt;- subset(x = Kenya_veg, subset = ALTITUDE &lt;= 1000, slot = "header")
+summary(Kenya_sub)
+
+## Subset by samples (after converting coverage)
+Kenya_veg &lt;- cover_trans(x = Kenya_veg, to = "cover_percentage", rule = "middle")
+Kenya_sub &lt;- subset(x = Kenya_veg, subset = cover_percentage &gt;= 50, slot = "samples")
+summary(Kenya_sub)
+
+## Subset by relations
+Kenya_sub &lt;- subset(
+  x = Kenya_veg, subset = as.integer(YEAR) &gt;= 2000,
+  slot = "relations", relation = "REFERENCE"
+)
+summary(Kenya_sub)
+</code></pre>
+
+
+</div>

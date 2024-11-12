@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>fruchterman_reingold</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Perform Fruchterman-Reingold layout of a network in 2 or more dimensions.
+</h2>
+
+<h3>Description</h3>
+
+<p>This was written and incorporated into the VBLPCM package because the
+Fruchterman-Reingold routine in the network package only works in two dimensions. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">fruchterman_reingold(net, D=2, steps=1000, repulserad=N^D, m=N*(D-1), 
+                            volume=N*(D-1))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>network object on which to perform Fruchterman-Reingold layout.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>D</code></td>
+<td>
+<p>Desired dimension of the space in which to lay out the network.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>steps</code></td>
+<td>
+<p>Number of desired iterations. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>repulserad</code></td>
+<td>
+<p>The radius at which repulsion and attraction of linked nodes are equal. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>The maximum change in position per iteration. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>volume</code></td>
+<td>
+<p>The volume of space within which to position the nodes. 
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An N*D matrix of coordinates. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Salter-Townshend
+</p>
+
+
+<h3>See Also</h3>
+
+<p>log_like_forces
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">### 2D example
+### load the aids blogs dataset
+data(aids)
+### perform the Fruchterman-Reingold layout
+X&lt;-fruchterman_reingold(aids.net, D=2, steps=1e3)
+### plot the results
+plot(X)
+
+### 3D example
+### load the aids blogs dataset
+data(aids)
+### perform the Fruchterman-Reingold layout
+X&lt;-fruchterman_reingold(aids.net, D=3, steps=1e3)
+### Not run
+### plot the results in 3D
+# library(rgl)
+# plot3d(X)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,213 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cca.object</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Result Object from Constrained Ordination</h2>
+
+<h3>Description</h3>
+
+<p>Ordination methods <code>cca</code>, <code>rda</code>,
+<code>dbrda</code> and <code>capscale</code> return similar result
+objects. All these methods use the same internal function
+<code>ordConstrained</code>. They differ only in (1) initial
+transformation of the data and in defining inertia, (2) weighting,
+and (3) the use of rectangular rows <code class="reqn">\times</code> columns data or
+symmetric rows <code class="reqn">\times</code> rows dissimilarities:
+<code>rda</code> initializes data to give variance or correlations
+as inertia, <code>cca</code> is based on double-standardized data
+to give Chi-square inertia and uses row and column weights,
+<code>capscale</code> maps the real part of dissimilarities to
+rectangular data and performs RDA, and <code>dbrda</code> performs
+an RDA-like analysis directly on symmetric dissimilarities.
+</p>
+<p>Function <code>ordConstrained</code> returns the same result components
+for all these methods, and the calling function may add some more
+components to the final result. However, you should not access these
+result components directly (using <code>$</code>): the internal structure
+is not regarded as stable application interface (API), but it can
+change at any release. If you access the results components
+directly, you take a risk of breakage at any <span class="pkg">vegan</span> release.
+The <span class="pkg">vegan</span> provides a wide set of accessor functions to those
+components, and these functions are updated when the result object
+changes. This documentation gives an overview of accessor functions
+to the <code>cca</code> result object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">
+ordiYbar(x, model = c("CCA", "CA", "pCCA", "partial", "initial"))
+## S3 method for class 'cca'
+model.frame(formula, ...)
+## S3 method for class 'cca'
+model.matrix(object, ...)
+## S3 method for class 'cca'
+weights(object, display = "sites", ...)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object, x, formula</code></td>
+<td>
+<p>A result object from <code>cca</code>,
+<code>rda</code>, <code>dbrda</code>, or
+<code>capscale</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>Show constrained (<code>"CCA"</code>), unconstrained
+(<code>"CA"</code>) or conditioned “partial” (<code>"pCCA"</code>)
+results. In <code>ordiYbar</code> the value can also be <code>"initial"</code>
+for the internal working input data, and <code>"partial"</code> for the
+internal working input data after removing the partial effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>display</code></td>
+<td>
+<p>Display either <code>"sites"</code> or <code>"species"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments passed to the the function.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The internal (“working”) form of the dependent (community)
+data can be accessed with function <code>ordiYbar</code>. The form depends
+on the ordination method: for instance, in <code>cca</code> the
+data are weighted and Chi-square transformed, and in
+<code>dbrda</code> they are Gower-centred dissimilarities. The
+input data in the original (“response”) form can be accessed
+with <code>fitted.cca</code> and <code>residuals.cca</code>.
+Function <code>predict.cca</code> can return either working or
+response data, and also their lower-rank approximations.
+</p>
+<p>The model matrix of independent data (“Constraints” and
+“Conditions”) can be extracted with <code>model.matrix</code>. In
+partial analysis, the function returns a list of design matrices
+called <code>Conditions</code> and <code>Constraints</code>. If either component
+was missing, a single matrix is returned. The redundant (aliased)
+terms do not appear in the model matrix. These terms can be found
+with <code>alias.cca</code>. Function <code>model.frame</code> tries to
+reconstruct the data frame from which the model matrices were
+derived. This is only possible if the original model was fitted with
+<code>formula</code> and <code>data</code> arguments, and still fails if the
+<code>data</code> are unavailable.
+</p>
+<p>The number of observations can be accessed with
+<code>nobs.cca</code>, and the residual degrees of freedom with
+<code>df.residual.cca</code>. The information on observations with
+missing values can be accessed with <code>na.action</code>.  The
+terms and formula of the fitted model can be accessed with
+<code>formula</code> and <code>terms</code>.
+</p>
+<p>The weights used in <code>cca</code> can be accessed with
+<code>weights</code>. In unweighted methods (<code>rda</code>) all
+weights are equal.
+</p>
+<p>The ordination results are saved in separate components for partial
+terms, constraints and residual unconstrained ordination. There is
+no guarantee that these components will have the same internal names
+as currently, and you should be cautious when developing scripts and
+functions that directly access these components.
+</p>
+<p>The constrained ordination algorithm is based on QR decomposition of
+constraints and conditions (environmental data), and the QR
+component is saved separately for partial and constrained
+components.  The QR decomposition of constraints can be accessed
+with <code>qr.cca</code>. This will also include the residual
+effects of partial terms (Conditions), and it should be used
+together with <code>ordiYbar(x, "partial")</code>. The environmental data
+are first centred in <code>rda</code> or weighted and centred in
+<code>cca</code>.  The QR decomposition is used in many functions that
+access <code>cca</code> results, and it can be used to find many items
+that are not directly stored in the object.  For examples, see
+<code>coef.cca</code>, <code>coef.rda</code>,
+<code>vif.cca</code>, <code>permutest.cca</code>,
+<code>predict.cca</code>, <code>predict.rda</code>,
+<code>calibrate.cca</code>. See <code>qr</code> for other possible
+uses of this component. For instance, the rank of the constraints
+can be found from the QR decomposition.
+</p>
+<p>The eigenvalues of the solution can be accessed with
+<code>eigenvals.cca</code>. Eigenvalues are not evaluated for
+partial component, and they will only be available for constrained
+and residual components.
+</p>
+<p>The ordination scores are internally stored as (weighted)
+orthonormal scores matrices. These results can be accessed with
+<code>scores.cca</code> and <code>scores.rda</code> functions. The
+ordination scores are scaled when accessed with <code>scores</code>
+functions, but internal (weighted) orthonormal scores can be
+accessed by setting <code>scaling = FALSE</code>. Unconstrained residual
+component has species and site scores, and constrained component has
+also fitted site scores or linear combination scores for sites and
+biplot scores and centroids for constraint variables. The biplot
+scores correspond to the <code>model.matrix</code>, and centroids
+are calculated for factor variables when they were used. The scores
+can be selected by defining the axes, and there is no direct way of
+accessing all scores of a certain component. The number of dimensions
+can be assessed from <code>eigenvals</code>. In addition, some
+other types can be derived from the results although not saved in
+the results. For instance, regression scores and model coefficients
+can be accessed with <code>scores</code> and <code>coef</code>
+functions. Partial component will have no scores.
+</p>
+<p>Distance-based methods (<code>dbrda</code>, <code>capscale</code>)
+can have negative eigenvalues and associated imaginary axis scores. In
+addition, species scores are initially missing in <code>dbrda</code>
+and they are accessory and found after analysis in
+<code>capscale</code> (and may be misleading). Function
+<code>sppscores</code> can be used to add species scores or replace
+them with more meaningful ones.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The latest large change of result object was made in release 2.5-1 in
+2016. You can modernize ancient stray results with
+<code>modernobject &lt;- update(ancientobject)</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Jari Oksanen </p>
+
+
+<h3>References</h3>
+
+<p>Legendre, P. and Legendre, L. (2012) <em>Numerical Ecology</em>. 3rd English
+ed. Elsevier.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>The core function is <code>ordConstrained</code> which is called by
+<code>cca</code>, <code>rda</code>, <code>dbrda</code> and
+<code>capscale</code>. The basic class is <code>"cca"</code> for all
+methods, and the following functions are defined for this class:
+<code>RsquareAdj.cca</code>, <code>SSD.cca</code>, <code>add1.cca</code>, <code>alias.cca</code>, <code>anova.cca</code>, <code>as.mlm.cca</code>, <code>biplot.cca</code>, <code>bstick.cca</code>, <code>calibrate.cca</code>, <code>coef.cca</code>, <code>cooks.distance.cca</code>, <code>deviance.cca</code>, <code>df.residual.cca</code>, <code>drop1.cca</code>, <code>eigenvals.cca</code>, <code>extractAIC.cca</code>, <code>fitted.cca</code>, <code>goodness.cca</code>, <code>hatvalues.cca</code>, <code>labels.cca</code>, <code>model.frame.cca</code>, <code>model.matrix.cca</code>, <code>nobs.cca</code>, <code>permutest.cca</code>, <code>plot.cca</code>, <code>points.cca</code>, <code>predict.cca</code>, <code>print.cca</code>, <code>qr.cca</code>, <code>residuals.cca</code>, <code>rstandard.cca</code>, <code>rstudent.cca</code>, <code>scores.cca</code>, <code>screeplot.cca</code>, <code>sigma.cca</code>, <code>simulate.cca</code>, <code>stressplot.cca</code>, <code>summary.cca</code>, <code>text.cca</code>, <code>tolerance.cca</code>, <code>vcov.cca</code>, <code>weights.cca</code>.
+Other functions handling <code>"cca"</code> objects include <code>inertcomp</code>,
+<code>intersetcor</code>, <code>mso</code>, <code>ordiresids</code>,
+<code>ordistep</code> and <code>ordiR2step</code>.
+</p>
+
+
+</div>

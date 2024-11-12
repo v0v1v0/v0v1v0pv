@@ -1,0 +1,151 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hierarchy</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check aggregates defined by a hierarchical code list</h2>
+
+<h3>Description</h3>
+
+<p>Check all aggregates defined by a code hierarchy.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hierarchy(
+  values,
+  labels,
+  hierarchy,
+  by = NULL,
+  tol = 1e-08,
+  na_value = TRUE,
+  aggregator = sum,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>values</code></td>
+<td>
+<p>bare (unquoted) name of a variable that holds values that
+must aggregate according to the <code>hierarchy</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p>bare (unquoted) name of variable holding a grouping variable (a code
+from a hierarchical code list)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hierarchy</code></td>
+<td>
+<p><code>[data.frame]</code> defining a hierarchical code list. The
+first column must contain (child) codes, and the second column contains their
+corresponding parents.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>A bare (unquoted) variable or list of variable names that occur in
+the data under scrutiny. The data will be split into groups according 
+to these variables and the check is performed on each group.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p><code>[numeric]</code> tolerance for equality checking</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na_value</code></td>
+<td>
+<p><code>[logical]</code> or <code>NA</code>. Value assigned to values that
+do not occurr in checks.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aggregator</code></td>
+<td>
+<p><code>[function]</code> that aggregates children to their parents.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments passed to <code>aggregator</code> (e.g. <code>na.rm=TRUE</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>logical</code> vector with the size of <code>length(values)</code>. Every
+element involved in an aggregation error is labeled <code>FALSE</code> (aggregate
+plus aggregated elements). Elements that are involved in correct
+aggregations are set to <code>TRUE</code>, elements that are not involved in 
+any check get the value <code>na_value</code> (by default: <code>TRUE</code>).
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other cross-record-helpers: 
+<code>contains_exactly()</code>,
+<code>do_by()</code>,
+<code>exists_any()</code>,
+<code>hb()</code>,
+<code>is_complete()</code>,
+<code>is_linear_sequence()</code>,
+<code>is_unique()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># We check some data against the built-in NACE revision 2 classification.
+data(nace_rev2)
+head(nace_rev2[1:4]) # columns 3 and 4 contain the child-parent relations.
+
+d &lt;- data.frame(
+     nace   = c("01","01.1","01.11","01.12", "01.2")
+   , volume = c(100 ,70    , 30    ,40     , 25    )
+)
+# It is possible to perform checks interactively
+d$nacecheck &lt;- hierarchy(d$volume, labels = d$nace, hierarchy=nace_rev2[3:4])
+# we have that "01.1" == "01.11" + "01.12", but not "01" == "01.1" +  "01.2"
+print(d)
+
+# Usage as a valiation rule is as follows
+rules &lt;- validator(hierarchy(volume, labels = nace, hierarchy=validate::nace_rev_2[3:4]))
+confront(d, rules)
+
+# you can also pass a hierarchy as a reference, for example.
+
+rules &lt;- validator(hierarchy(volume, labels = nace, hierarchy=ref$nacecodes))
+out &lt;- confront(d, rules, ref=list(nacecodes=nace_rev2[3:4]))
+summary(out)
+
+# set a output to NA when a code does not occur in the code list.
+d &lt;- data.frame(
+     nace   = c("01","01.1","01.11","01.12", "01.2", "foo")
+   , volume = c(100 ,70    , 30    ,40     , 25     , 60)
+)
+
+d$nacecheck &lt;- hierarchy(d$volume, labels = d$nace, hierarchy=nace_rev2[3:4]
+                         , na_value = NA)
+# we have that "01.1" == "01.11" + "01.12", but not "01" == "01.1" +  "01.2"
+print(d)
+
+</code></pre>
+
+
+</div>

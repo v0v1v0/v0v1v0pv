@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>factor_intensities</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Infer a matrix of non-negative intensities in NMF with offset/nmf-offset.</h2>
+
+<h3>Description</h3>
+
+<p><code>factor_intensities</code> estimates a non-negative matrix <code>D</code> that optimizes the objective function <code class="reqn">F = ||X - C*D - offset||^2</code>,
+where offset is either column-specific offset or a "1-rank nmf term": product of row vector and column vector
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">factor_intensities(
+  C,
+  X,
+  fit.nmf = TRUE,
+  fit.factor = FALSE,
+  qp.exact = FALSE,
+  n.iter = 200,
+  qp.iter = 10,
+  rel.error.cutoff = 1e-05,
+  extrapolate = TRUE,
+  extrapolate.const = TRUE,
+  extrapolate.convex = FALSE,
+  q.factor = 1,
+  verbose = TRUE,
+  n.cores = 1
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>Numeric matrices.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Numeric matrices.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fit.nmf</code></td>
+<td>
+<p>A boolean. Fit both intensities and spectrum of the offset residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fit.factor</code></td>
+<td>
+<p>A boolean. Fit only spectrum of the offset residuals (keep intensities constant across samples).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qp.exact</code></td>
+<td>
+<p>A boolean. Estimate intensities using exact quadratic programming (qp.exact = TRUE) or inexact QP via gradient decent with extrapolation (qp.exact = FALSE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.iter</code></td>
+<td>
+<p>An integer. Number of iterations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qp.iter</code></td>
+<td>
+<p>= 1e+1 An integer. Number of iterations of inexact QP.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rel.error.cutoff</code></td>
+<td>
+<p>A numeric. Relative error cutoff between iterations to stop iterations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extrapolate</code></td>
+<td>
+<p>A boolean. Use Nesterov-like extrapolation at each iteration.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extrapolate.const</code></td>
+<td>
+<p>A boolean. Use extrapolation scheme that adds a constant extrapolation q.factor (described below) at each iteration.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extrapolate.convex</code></td>
+<td>
+<p>A boolean. Use Nesterov extrapolation scheme.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q.factor</code></td>
+<td>
+<p>A numeric. Specification of a a constant extrapolation factor used in case of extrapolate.const = T.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>A boolean.  Print per-iteration information (by default TRUE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.cores</code></td>
+<td>
+<p>An integer. Number of cores to use.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Fitted matrix <code>D</code>.
+</p>
+
+
+</div>

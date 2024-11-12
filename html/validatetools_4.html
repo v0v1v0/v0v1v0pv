@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>detect_boundary_num</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Detect the range for numerical variables</h2>
+
+<h3>Description</h3>
+
+<p>Detect for each numerical variable in a validation rule set, what its maximum and minimum values are.
+This allows for manual rule set checking: does rule set <code>x</code> overly constrain numerical values?
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">detect_boundary_num(x, eps = 1e-08, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>validator</code> object, rule set to be checked</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>detected fixed values will have this precission.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>currently not used</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This procedure only finds minimum and maximum values, but misses gaps.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>data.frame</code> with columns "variable", "lowerbound", "upperbound".
+</p>
+
+
+<h3>References</h3>
+
+<p>Statistical Data Cleaning with R (2017), Chapter 8, M. van der Loo, E. de Jonge
+</p>
+<p>Simplifying constraints in data editing (2015). Technical Report 2015|18, Statistics Netherlands, J. Daalmans
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>detect_fixed_variables</code>
+</p>
+<p>Other feasibility: 
+<code>detect_boundary_cat()</code>,
+<code>detect_infeasible_rules()</code>,
+<code>is_contradicted_by()</code>,
+<code>is_infeasible()</code>,
+<code>make_feasible()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rules &lt;- validator(
+  x &gt;= 1,
+  x + y &lt;= 10,
+  y &gt;= 6
+)
+
+detect_boundary_num(rules)
+
+rules &lt;- validator(
+  job %in% c("yes", "no"),
+  if (job == "no") income == 0,
+  income &gt; 0
+)
+
+detect_boundary_cat(rules)
+</code></pre>
+
+
+</div>

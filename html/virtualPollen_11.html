@@ -1,0 +1,114 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>parametersDataframe</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generates a template dataframe to contain simulation parameters.</h2>
+
+<h3>Description</h3>
+
+<p>Generates the dataframe structure needed to contain the parameters used as input for the <code>simulatePopulation</code> function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">parametersDataframe(rows=1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>rows</code></td>
+<td>
+<p>integer, number of rows in the output dataframe.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The resulting dataframe can either be filled manually through vectors, as shown in the example (but this requires to use the function <code>fixParametersTypes</code> once the dataframe is completed), or can be edited manually in Rstudio by installing the <a href="https://CRAN.R-project.org/package=editData">editData</a> package.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A dataframe filled with <code>NA</code> values and the columns:
+</p>
+
+<ul>
+<li> <p><em>label</em>: to store names (character string) of the virtual taxa.
+</p>
+</li>
+<li> <p><em>maximum.age</em>: integer, maximum possible age of the individuals in years.
+</p>
+</li>
+<li> <p><em>reproductive.age</em>: integer, age of sexual maturity in years.
+</p>
+</li>
+<li> <p><em>fecundity</em>: integer, number of maximum viable seeds produced by a mature individual under fully suitable conditions.
+</p>
+</li>
+<li> <p><em>growth.rate</em>: numeric, parameter of the logistic growth function.
+</p>
+</li>
+<li> <p><em>pollen.control</em>: numeric in the interval [0, 1]. If 0, pollen productivity depends on environmental suitability only. The larger the number, biomass takes over environmental suitability in determining pollen productivity.
+</p>
+</li>
+<li> <p><em>maximum.biomass</em>: integer, maximum biomass of the individuals.
+</p>
+</li>
+<li> <p><em>carrying.capacity</em>: integer, maximum sum of biomass of the individuals. Very large carrying capacities plus a low maximum.biomass generates too many individuals for the simulation to remain efficient. Try to set carrying.capacity and maximum.biomass to carrying.capacity divided by biomass returns a number lower than 1000 (and even better if it is closer to 100).
+</p>
+</li>
+<li> <p><em>driver.A.weight</em>: numeric in the interval [0, 1], represents the relative influence of the driver on environmental suitability.
+</p>
+</li>
+<li> <p><em>driver.B.weight</em>: numeric in the interval [0, 1], represents the relative influence of the driver on environmental suitability. The sum of weights of drivers A and B should be 1.
+</p>
+</li>
+<li> <p><em>niche.A.mean</em>: numeric, in the same units as driver A. It is the mean of the normal function defining the response of the virtual taxa to driver A.
+</p>
+</li>
+<li> <p><em>niche.A.sd</em>: numeric, in the same units as driver A. It is the standard deviation of the normal function defining the response of the virtual taxa to driver A.
+</p>
+</li>
+<li> <p><em>niche.B.mean</em>: as above, but for driver B.
+</p>
+</li>
+<li> <p><em>niche.B.sd</em>: as above, but for driver B.
+</p>
+</li>
+<li> <p><em>autocorrelation.length.A</em>: numeric, only useful if several drivers generated with different autocorrelation lengths are available (and identified by the column <code>autocorrelation.length</code>) in the <code>drivers</code> argument provided to the <code>simulatePopulation</code> function.
+</p>
+</li>
+<li> <p><em>autocorrelation.length.B</em>: same as above.
+</p>
+</li>
+</ul>
+<h3>Author(s)</h3>
+
+<p>Blas M. Benito  &lt;blasbenito@gmail.com&gt;
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>simulatePopulation</code>, <code>fixParametersTypes</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+#generating the template
+parameters &lt;- parametersDataframe(rows=1)
+
+#filling it with a vector
+parameters[1,] &lt;- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, 600, 600)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bmi.nz</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Body Mass Index of New Zealand Adults Data</h2>
+
+<h3>Description</h3>
+
+<p>The body mass indexes and ages from an approximate random
+sample of 700 New Zealand adults.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(bmi.nz)</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 700 observations on the following 2 variables.
+</p>
+
+<dl>
+<dt>age</dt>
+<dd>
+<p>a numeric vector; their age (years). </p>
+</dd>
+<dt>BMI</dt>
+<dd>
+<p>a numeric vector; their body mass indexes, which is
+their weight divided by the square of their height
+(kg / <code class="reqn">m^2</code>).</p>
+</dd>
+</dl>
+<h3>Details</h3>
+
+<p>They are a random sample from the Fletcher Challenge/Auckland
+Heart and Health survey conducted in the early 1990s.
+</p>
+<p>There are some outliers in the data set.
+</p>
+<p>A variable <code>gender</code> would be useful, and may be added later.
+</p>
+
+
+<h3>Source</h3>
+
+<p>Formerly the
+Clinical Trials Research Unit, University of Auckland, New
+Zealand.    
+</p>
+
+
+
+<h3>References</h3>
+
+<p>MacMahon, S., Norton, R., Jackson, R., Mackie, M. J.,
+Cheng, A., Vander Hoorn, S., Milne, A., McCulloch, A. (1995)
+Fletcher Challenge-University of Auckland Heart &amp;
+Health Study: design and baseline findings.
+<em>New Zealand Medical Journal</em>,
+<b>108</b>, 499–502.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  with(bmi.nz, plot(age, BMI, col = "blue"))
+fit &lt;- vgam(BMI ~ s(age, df = c(2, 4, 2)), lms.yjn,
+            data = bmi.nz, trace = TRUE)
+qtplot(fit, pcol = "blue", tcol = "brown", lcol = "brown") 
+## End(Not run)
+</code></pre>
+
+
+</div>

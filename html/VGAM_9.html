@@ -1,0 +1,218 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>acat</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Ordinal Regression with Adjacent Categories Probabilities </h2>
+
+<h3>Description</h3>
+
+<p>Fits an adjacent categories regression model to an ordered
+(preferably) factor response.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">acat(link = "loglink", parallel = FALSE, reverse = FALSE,
+     zero = NULL, ynames = FALSE, Thresh = NULL, Trev = reverse,
+     Tref = if (Trev) "M" else 1, whitespace = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to the ratios of the
+adjacent categories probabilities.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+
+<p>A logical, or formula specifying which terms have
+equal/unequal coefficients.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>reverse</code></td>
+<td>
+
+<p>Logical.
+By default, the linear/additive predictors used are
+<code class="reqn">\eta_j = \log(P[Y=j+1]/P[Y=j])</code>
+for <code class="reqn">j=1,\ldots,M</code>.
+If <code>reverse</code> is <code>TRUE</code> then
+<code class="reqn">\eta_j = \log(P[Y=j]/P[Y=j+1])</code>
+will be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ynames</code></td>
+<td>
+
+<p>See <code>multinomial</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>An integer-valued vector specifying which
+linear/additive predictors are modelled as intercepts only.
+The values must be from the set {1,2,...,<code class="reqn">M</code>}.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Thresh, Trev, Tref</code></td>
+<td>
+
+<p>See <code>cumulative</code> for information.
+These arguments apply to ordinal
+categorical regression models.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>whitespace</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In this help file the response <code class="reqn">Y</code> is assumed to be a
+factor with ordered values <code class="reqn">1,2,\ldots,M+1</code>, so that
+<code class="reqn">M</code> is the number of linear/additive predictors
+<code class="reqn">\eta_j</code>.
+By default, the log link is used because the ratio of
+two probabilities is positive.
+</p>
+<p>Internally, <code>deriv3</code> is called to
+perform symbolic differentiation and
+consequently this family function will struggle if
+<code class="reqn">M</code> becomes too large.
+If this occurs, try combining levels so that
+<code class="reqn">M</code> is effectively reduced.
+One idea is to aggregate levels with the fewest observations
+in them first.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>No check is made to verify that the response is ordinal if the
+response is a matrix;
+see <code>ordered</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response should be either a matrix of counts
+(with row sums that are
+all positive), or an ordered factor. In both cases,
+the <code>y</code> slot returned
+by <code>vglm</code>/<code>vgam</code>/<code>rrvglm</code> is the
+matrix of counts.
+</p>
+<p>For a nominal (unordered) factor response,
+the multinomial logit model
+(<code>multinomial</code>) is more appropriate.
+</p>
+<p>Here is an example of the usage of the <code>parallel</code> argument.
+If there are covariates <code>x1</code>, <code>x2</code> and <code>x3</code>, then
+<code>parallel = TRUE ~ x1 + x2 -1</code> and
+<code>parallel = FALSE ~ x3</code> are equivalent.
+This would constrain the regression coefficients
+for <code>x1</code> and <code>x2</code> to be equal; those of the
+intercepts and <code>x3</code> would be different.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Agresti, A. (2013).
+<em>Categorical Data Analysis</em>,
+3rd ed. Hoboken, NJ, USA: Wiley.
+<br>
+Tutz, G. (2012).
+<em>Regression for Categorical Data</em>,
+Cambridge: Cambridge University Press.
+<br>
+Yee, T. W. (2010).
+The <span class="pkg">VGAM</span> package for categorical data analysis.
+<em>Journal of Statistical Software</em>,
+<b>32</b>, 1–34.
+<a href="https://doi.org/10.18637/jss.v032.i10">doi:10.18637/jss.v032.i10</a>.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>cumulative</code>,
+<code>cratio</code>,
+<code>sratio</code>,
+<code>multinomial</code>,
+<code>CM.equid</code>,
+<code>CommonVGAMffArguments</code>,
+<code>margeff</code>,
+<code>pneumo</code>,
+<code>budworm</code>,
+<code>deriv3</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pneumo &lt;- transform(pneumo, let = log(exposure.time))
+(fit &lt;- vglm(cbind(normal, mild, severe) ~ let, acat, pneumo))
+coef(fit, matrix = TRUE)
+constraints(fit)
+model.matrix(fit)
+</code></pre>
+
+
+</div>

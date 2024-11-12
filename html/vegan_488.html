@@ -1,0 +1,239 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bioenv</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Best Subset of Environmental Variables with
+Maximum (Rank) Correlation with Community Dissimilarities </h2>
+
+<h3>Description</h3>
+
+<p>Function finds the best subset of environmental variables, so that
+the Euclidean distances of scaled environmental variables have the
+maximum (rank) correlation with community dissimilarities.  
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## Default S3 method:
+bioenv(comm, env, method = "spearman", index = "bray",
+       upto = ncol(env), trace = FALSE, partial = NULL, 
+       metric = c("euclidean", "mahalanobis", "manhattan", "gower"),
+       parallel = getOption("mc.cores"), ...)
+## S3 method for class 'formula'
+bioenv(formula, data, ...)
+bioenvdist(x, which = "best")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>comm</code></td>
+<td>
+<p>Community data frame or a dissimilarity object or a square
+matrix that can be interpreted as dissimilarities. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>env</code></td>
+<td>
+<p>Data frame of continuous environmental variables. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>The correlation method used in <code>cor</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>index</code></td>
+<td>
+<p>The dissimilarity index used for community data (<code>comm</code>) 
+in <code>vegdist</code>. This is ignored if <code>comm</code> are dissimilarities.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>upto</code></td>
+<td>
+<p>Maximum number of parameters in studied subsets.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula, data</code></td>
+<td>
+<p>Model <code>formula</code> and data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trace</code></td>
+<td>
+<p>Trace the calculations </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>partial</code></td>
+<td>
+<p>Dissimilarities partialled out when inspecting
+variables in <code>env</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metric</code></td>
+<td>
+<p>Metric used for distances of environmental distances. See 
+Details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+<p>Number of parallel processes or a predefined socket
+cluster.  With <code>parallel = 1</code> uses ordinary, non-parallel
+processing. The parallel processing is done with <span class="pkg">parallel</span>
+package.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>bioenv</code> result object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>which</code></td>
+<td>
+<p>The number of the model for which the environmental
+distances are evaluated, or the <code>"best"</code> model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments passed to <code>vegdist</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function calculates a community dissimilarity matrix using
+<code>vegdist</code>.  Then it selects all possible subsets of
+environmental variables, <code>scale</code>s the variables, and
+calculates Euclidean distances for this subset using
+<code>dist</code>.  The function finds the correlation between
+community dissimilarities and environmental distances, and for each
+size of subsets, saves the best result.  There are <code class="reqn">2^p-1</code>
+subsets of <code class="reqn">p</code> variables, and an exhaustive search may take a
+very, very, very long time (parameter <code>upto</code> offers a partial
+relief).
+</p>
+<p>The argument <code>metric</code> defines distances in the given set of
+environmental variables.  With <code>metric = "euclidean"</code>, the
+variables are scaled to unit variance and Euclidean distances are
+calculated. With <code>metric = "mahalanobis"</code>, the Mahalanobis
+distances are calculated: in addition to scaling to unit variance,
+the matrix of the current set of environmental variables is also
+made orthogonal (uncorrelated). With <code>metric = "manhattan"</code>,
+the variables are scaled to unit range and Manhattan distances are
+calculated, so that the distances are sums of differences of
+environmental variables.  With <code>metric = "gower"</code>, the Gower
+distances are calculated using function
+<code>daisy</code>. This allows also using factor
+variables, but with continuous variables the results are equal to
+<code>metric = "manhattan"</code>.
+</p>
+<p>The function can be called with a model <code>formula</code> where
+the LHS is the data matrix and RHS lists the environmental variables.
+The formula interface is practical in selecting or transforming
+environmental variables.
+</p>
+<p>With argument <code>partial</code> you can perform “partial”
+analysis. The partializing item must be a dissimilarity object of
+class <code>dist</code>. The
+<code>partial</code> item can be used with any correlation <code>method</code>,
+but it is strictly correct only for Pearson.
+</p>
+<p>Function <code>bioenvdist</code> recalculates the environmental distances
+used within the function. The default is to calculate distances for
+the best model, but the number of any model can be given.
+</p>
+<p>Clarke &amp; Ainsworth (1993) suggested this method to be used for
+selecting the best subset of environmental variables in interpreting
+results of nonmetric multidimensional scaling (NMDS). They recommended a
+parallel display of NMDS of community dissimilarities and NMDS of
+Euclidean distances from the best subset of scaled environmental
+variables.  They warned against the use of Procrustes analysis, but
+to me this looks like a good way of comparing these two ordinations.
+</p>
+<p>Clarke &amp; Ainsworth wrote a computer program BIO-ENV giving the name to
+the current function. Presumably BIO-ENV
+was later incorporated in Clarke's PRIMER software (available for
+Windows).  In addition, Clarke &amp; Ainsworth suggested a novel method of
+rank correlation which is not available in the current function.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The function returns an object of class <code>bioenv</code> with a
+<code>summary</code> method.
+</p>
+
+
+<h3>Note</h3>
+
+<p> If you want to study the ‘significance’ of <code>bioenv</code>
+results, you can use function <code>mantel</code> or
+<code>mantel.partial</code> which use the same definition of
+correlation.  However, <code>bioenv</code> standardizes environmental
+variables depending on the used metric, and you must do the same in
+<code>mantel</code> for comparable results (the standardized data are
+returned as item <code>x</code> in the result object). It is safest to use
+<code>bioenvdist</code> to extract the environmental distances that really
+were used within <code>bioenv</code>. NB., <code>bioenv</code> selects variables
+to maximize the Mantel correlation, and significance tests based on
+<em>a priori</em> selection of variables are biased.  </p>
+
+
+<h3>Author(s)</h3>
+
+<p> Jari Oksanen </p>
+
+
+<h3>References</h3>
+
+<p>Clarke, K. R &amp; Ainsworth, M. 1993. A method of linking multivariate
+community structure to environmental variables. <em>Marine Ecology
+Progress Series</em>, 92, 205–219.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vegdist</code>, <code>dist</code>, <code>cor</code>
+for underlying routines, <code>monoMDS</code> and
+<code>metaMDS</code> for ordination, <code>procrustes</code> for
+Procrustes analysis, <code>protest</code> for an alternative, and
+<code>rankindex</code> for studying alternatives to the default
+Bray-Curtis index.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># The method is very slow for large number of possible subsets.
+# Therefore only 6 variables in this example.
+data(varespec)
+data(varechem)
+sol &lt;- bioenv(wisconsin(varespec) ~ log(N) + P + K + Ca + pH + Al, varechem)
+sol
+## IGNORE_RDIFF_BEGIN
+summary(sol)
+## IGNORE_RDIFF_END
+</code></pre>
+
+
+</div>

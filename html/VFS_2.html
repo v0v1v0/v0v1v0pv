@@ -1,0 +1,194 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>APLE</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Agricultural Phosphorus Loss Estimator 
+</h2>
+
+<h3>Description</h3>
+
+<p>Agricultural loss of phosphorus based on soil phosphorus level, additions of fertilizer and manure, and erosion.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">APLE(soilP, clay, OM, precip, runoff, erosion, manureP = 25,
+    manureSolids = 25, manureWEP = 50, manureIn = 40,
+	fertP = 10, fertIn = 40)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>soilP</code></td>
+<td>
+
+<p>soil test Mehlich 3 phosphorus (mg/kg).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clay</code></td>
+<td>
+
+<p>soil clay (%).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>OM</code></td>
+<td>
+
+<p>soil organic matter (%).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>precip</code></td>
+<td>
+
+<p>annual precipitation (in).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>runoff</code></td>
+<td>
+
+<p>annual runoff (in)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>erosion</code></td>
+<td>
+
+<p>annual erosion (ton/ac).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>manureP</code></td>
+<td>
+
+<p>manure P applied (kg/ha).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>manureSolids</code></td>
+<td>
+
+<p>manure solids (%).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>manureWEP</code></td>
+<td>
+
+<p>manure water-extractable phosphorus/TP (%).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>manureIn</code></td>
+<td>
+
+<p>manure incorporated (%).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fertP</code></td>
+<td>
+
+<p>fertilizer phosphorus applied (kg/ha).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fertIn</code></td>
+<td>
+
+<p>fertilizer incorporated (%).
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function implements the basic version of the spreadsheet-based Agricultural Phosphorus Loss Estimator model (APLE) in R, and is vectorized. This model calculates annual phosphorus loss by compartment (due to erosion, dissolved soil phosphorus, dissolved manure, dissolved fertilizer) based rainfall, soil properties, and management.
+The units match those of the original spreadsheet.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lossErosion</code></td>
+<td>
+<p>soil erosion phosphorus loss (kg/ha).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lossDissolvedSoil</code></td>
+<td>
+<p>soil dissolved phosphorus loss (kg/ha).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lossDissolvedManure</code></td>
+<td>
+<p>manure dissolved phosphorus loss (kg/ha).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lossDissolvedFertilizer</code></td>
+<td>
+<p>fertilizer dissolved phosphorus loss (kg/ha).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lossTotal</code></td>
+<td>
+<p>total phosphorus loss (kg/ha).</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Sarah Goslee
+</p>
+
+
+<h3>References</h3>
+
+<p>Vadas, P. A., Good, L. W., Moore, P. A., Jr. and Widman, N. (2009) Estimating phosphorus loss in runoff from manure and fertilizer for a phosphorus loss quantification tool. <em>J Environ Qual</em> <b>38</b>, 1645–1653. doi: <a href="http://doi.org/10.2134/jeq2008.0337">10.2134/jeq2008.0337</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VFSAPLE</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+APLE(soilP = 127, clay = 17, OM = 6, precip = 35, runoff = 6,
+erosion = 7, manureP = 25, manureSolids = 25, manureWEP = 50,
+manureIn = 40, fertP = 10, fertIn = 40)
+
+</code></pre>
+
+
+</div>

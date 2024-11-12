@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>identifyVocalisations</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>identifyVocalisations: replace appropriate vocalisation
+types</h2>
+
+<h3>Description</h3>
+
+<p>Identify switching vocalisations
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">identifyVocalisations(vocvector, idswitchvoc = T)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vocvector</code></td>
+<td>
+<p>a character vector containing a sequence of
+vocalisation events</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>idswitchvoc</code></td>
+<td>
+<p>if TRUE distinguise between
+SwitchingVocalisation and Vocalisation.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>SwitchingVocalisation is a vocalisation that signals a immediate
+speaker transition; that is, a transition from speaker to
+speaker (as opposed to speaker to Grp or speaker to Pause).
+</p>
+<p>E.g (speakers A, B, C):
+</p>
+<pre>
+AAAAAAAABBBBBBBCCCCCBBBBBPauseBBBBSwitchingPauseAAAAAGrp
+       ^      ^    ^    ^        ^                  ^
+       |      |    |    |        |                  |
+       |      |    |    ----------- Non-SwitchingVocalisation
+       |      |    |
+       ---------------------&gt; SwitchingVocalisation
+</pre>
+
+
+<h3>Value</h3>
+
+<p>A vector with all events replaced by the appropriate type
+identifier.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vocdia)
+identifyVocalisations(atddia$speaker[1:60])
+</code></pre>
+
+
+</div>

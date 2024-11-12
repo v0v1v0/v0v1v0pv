@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>valuemap</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Making choropleth map with sf polygons</h2>
+
+<h3>Description</h3>
+
+<p>This function make a leaflet object.
+You can easily visualize your sf polygons based on "value" column.
+You have options :
+background map (= map)
+color legend boundary values (= legend.cut)
+color palette for color legend (= palette)
+showing "value" number on center of polygons (= show.text)
+color for "value" number text on center of polygons (= text.color)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">valuemap(
+  data,
+  map = providers$OpenStreetMap,
+  legend.cut = NULL,
+  palette = "Blues",
+  show.text = TRUE,
+  text.color = "black",
+  text.format = function(x) x
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A sf object with polygons who has "name" &amp; "value" columns ("value" column must be numeric type)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>map</code></td>
+<td>
+<p>A map name of leaflet::providers</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend.cut</code></td>
+<td>
+<p>A numeric vector which means color legend boundary values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>palette</code></td>
+<td>
+<p>A color name of RColorBrewer palettes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.text</code></td>
+<td>
+<p>A boolean who determines showing "value" number on center of polygons</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.color</code></td>
+<td>
+<p>A color name for "value" number text on center of polygons</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.format</code></td>
+<td>
+<p>A format function for "value" number text on center of polygons</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A leaflet object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Only run this example in interactive R sessions
+if (interactive()) valuemap(seoul)
+
+# Emphasize great of equal to 20 polygons
+if (interactive()) valuemap(seoul, legend.cut=c(20))
+
+# Visualize without center number on polygons
+if (interactive()) valuemap(seoul, legend.cut=c(15,17,20), show.text=FALSE)
+
+# Change color palette &amp; center number on polygons text color, format &amp; change background map
+if (interactive())
+  valuemap(
+    seoul, map=providers$Stamen.Toner, palette='YlOrRd',
+    text.color='blue', text.format=function(x) paste(x,'EA')
+  )
+</code></pre>
+
+
+</div>

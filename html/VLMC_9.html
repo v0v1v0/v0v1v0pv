@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>deviance.vlmc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute the Deviance of a Fitted VLMC Object</h2>
+
+<h3>Description</h3>
+
+<p>Compute the Deviance, i.e., - 2 log[likelihood(*)] of a fitted VLMC
+object.  The log-likelihood is also known as “entropy”.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vlmc'
+deviance(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>typically the result of <code>vlmc(..)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>possibly further arguments (none at the moment).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A number, the deviance, i.e., <code class="reqn">- 2 log.likelihood(*)</code>.
+where the  log.likelihood is really what we currently have
+as <code>entropy()</code>.
+</p>
+
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler</p>
+
+
+<h3>See Also</h3>
+
+<p><code>entropy</code>, <code>vlmc</code>,<code>residuals.vlmc</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">example(vlmc)
+deviance(vlmc.pres)
+
+devianceR &lt;- function(object)
+{
+    dn &lt;- dimnames(pr &lt;- predict(object))
+    -2 * sum(log(pr[cbind(2:nrow(pr), match(dn[[1]][-1], dn[[2]]))]))
+}
+all.equal(deviance(vlmc.pres), devianceR(vlmc.pres), tol = 1e-14)
+</code></pre>
+
+
+</div>

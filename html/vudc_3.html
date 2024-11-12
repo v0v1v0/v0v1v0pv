@@ -1,0 +1,370 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>projectdata</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Commit and Maintainability Data
+</h2>
+
+<h3>Description</h3>
+
+<p>This dataset contains commit and maintainability data about every available revision of four software projects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data("projectdata")</code></pre>
+
+
+<h3>Format</h3>
+
+<p>The outermost structure of the data is a list; each element of the list contains commit-related information about one Java project (number of commits in bracket): <code>Ant</code> (6102), <code>Gremon</code> (1158), <code>Struts2</code> (1749) and <code>Tomcat</code> (1292).
+</p>
+<p>Each element of the list is a data frame of same structure.
+One row of data frame contains information about one commit.
+There are the following columns for each commit:
+</p>
+
+<ul>
+<li> <p><code>Revision</code> (integer): revision number
+</p>
+</li>
+<li> <p><code>MaintainabilityDiff</code> (double): number indicating how the maintainability was changed on the effect of that commit
+</p>
+</li>
+<li> <p><code>A</code> (integer): number of Java files added
+</p>
+</li>
+<li> <p><code>U</code> (integer): number of Java files updated 
+</p>
+</li>
+<li> <p><code>D</code> (integer): number of Java files deleted
+</p>
+</li>
+<li> <p><code>Churn</code> (double): code churn value of the commit
+</p>
+</li>
+<li> <p><code>Ownership</code> (double): ownership value of the commit
+</p>
+</li>
+</ul>
+<h3>Details</h3>
+
+<p>The Java projects are the following:
+</p>
+
+<ul>
+<li>
+<p> Ant: a command line tool for building Java applications (<a href="http://ant.apache.org">http://ant.apache.org</a>)
+</p>
+</li>
+<li>
+<p> Gremon: a greenhouse work-flow monitoring system (<a href="http://www.gremonsystems.com">http://www.gremonsystems.com</a>)
+</p>
+</li>
+<li>
+<p> Struts2: a framework for creating enterprise-ready Java web applications (<a href="http://struts.apache.org/">http://struts.apache.org/</a>)
+</p>
+</li>
+<li>
+<p> Tomcat: an implementation of the Java Servlet and Java Server Pages technologies (<a href="http://tomcat.apache.org">http://tomcat.apache.org</a>)
+</p>
+</li>
+</ul>
+<p>The data frame contains information about all the available commits from the master branch, which affects at least one Java file.
+</p>
+<p>We determined the maintainability using the Columbus Quality Model.
+Positive value means that the actual commit increased the maintainability of the overall source code, and negative value indicates the opposite.
+The absolute value indicates the magnitude of the change.
+For details how we calculated these values are described in the referred papers.
+</p>
+<p>The source code and version control information for Ant, Struts 2 and Tomcat are publicly available.
+The Gremon is an industrial software; neither the source code nor the version control information are public.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Csaba Farago &lt;farago@inf.u-szeged.hu&gt;
+</p>
+
+
+<h3>References</h3>
+
+<p>Tibor Bakota, Peter Hegedus, Peter Kortvelyesi, Rudolf Ferenc, and Tibor Gyimothy. A probabilistic software quality model. In <em>Proceedings of the 27th International Conference on Software Maintenance (ICSM)</em>, pages 243-252. IEEE Computer Society, 2011.
+</p>
+<p>Csaba Farago, Peter Hegedus, Adam Zoltan Vegh, and Rudolf Ferenc. Connection Between Version Control Operations and Quality Change of the Source Code. <em>Acta Cybernetica</em>, volume 21(4), pages 585-607, 2014.
+</p>
+<p>Csaba Farago, Peter Hegedus, and Rudolf Ferenc. The Impact of Version Control Operations on the Quality Change of the Source Code. In <em>Proceedings of the 14th International Conference on Computational Science and Its Applications (ICCSA)</em>, volume 8583 Lecture Notes in Computer Science (LNCS), pages 353-369. Springer International Publishing, 2014.
+</p>
+<p>Csaba Farago. Variance of Source Code Quality Change Caused by Version Control Operations. <em>Acta Cybernetica</em>, volume 22(1), pages 35-56, 2015.
+</p>
+<p>Csaba Farago, Peter Hegedus, and Rudolf Ferenc. Code Ownership: Impact on Maintainability. In <em>Proceedings of the 15th International Conference on Computational Science and Its Applications (ICCSA)</em>, volume 9159 Lecture Notes in Computer Science (LNCS), pages 3-19. Springer International Publishing, 2015.
+</p>
+<p>Csaba Farago, Peter Hegedus, and Rudolf Ferenc. Cumulative Code Churn: Impact on Maintainability. In <em>Proceedings of the 15th International Working Conference on Source Code Analysis and Manipulation (SCAM)</em>, pages 141-150. IEEE Computer Society, 2015.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Initialization.
+library(vudc)
+data(projectdata)
+
+#
+# Helper functions.
+# These are necessary for the drawing and test execution functions.
+#
+
+# Frame for drawing four diagrams.
+drawFourDiagrams &lt;- function(diagram) {
+	op &lt;- par(mfrow = c(2,2))
+	performOperationAllProjects(diagram)
+	par(op)
+}
+
+# Frame for executing an operation on all the available project data.
+performOperationAllProjects &lt;- function(operation) {
+	for (projectName in c("Ant", "Gremon", "Struts2", "Tomcat")) {
+		operation(projectName)
+	}
+}
+
+# Helper functions for getFourDivisions and categorizeProjectData.
+
+commitCategoryD &lt;- function(actualProjectData) {
+	actualProjectData$D &gt; 0
+}
+
+commitCategoryA &lt;- function(actualProjectData) {
+	actualProjectData$D == 0 &amp; actualProjectData$A &gt; 0
+}
+
+commitCategoryUplus &lt;- function(actualProjectData) {
+	actualProjectData$D == 0 &amp; actualProjectData$A == 0 &amp; actualProjectData$U &gt;= 2
+}
+
+commitCategoryU1 &lt;- function(actualProjectData) {
+	actualProjectData$D == 0 &amp; actualProjectData$A == 0 &amp; actualProjectData$U == 1
+}
+
+
+# Divides the maintainability difference values into four, based on the related operations.
+getFourDivisions &lt;- function(actualProjectData) {
+	return (list(
+		actualProjectData$MaintainabilityDiff[commitCategoryD(actualProjectData)],
+		actualProjectData$MaintainabilityDiff[commitCategoryA(actualProjectData)], 
+		actualProjectData$MaintainabilityDiff[commitCategoryUplus(actualProjectData)], 
+		actualProjectData$MaintainabilityDiff[commitCategoryU1(actualProjectData)]
+	))
+}
+
+# Extend project data with  operation category (opcat) 
+# and maintainability change category (changecat).
+categorizeProjectData &lt;- function(projectName) {
+	actualProjectData &lt;- projectdata[[projectName]]
+	
+	actualProjectData$opcat[commitCategoryD(actualProjectData)] &lt;- 'D';
+	actualProjectData$opcat[commitCategoryA(actualProjectData)] &lt;- 'A';
+	actualProjectData$opcat[commitCategoryUplus(actualProjectData)] &lt;- 'U+';
+	actualProjectData$opcat[commitCategoryU1(actualProjectData)] &lt;- 'U1';
+	
+	actualProjectData$changecat[actualProjectData$MaintainabilityDiff &gt; 0] &lt;- '+';
+	actualProjectData$changecat[actualProjectData$MaintainabilityDiff == 0] &lt;- '0';
+	actualProjectData$changecat[actualProjectData$MaintainabilityDiff &lt; 0] &lt;- '-';
+	
+	actualProjectData
+}
+
+# Removed outliers from project data.
+projectDataWithoutOutliers &lt;- function(projectName) {
+	projectdata[[projectName]][abs(projectdata[[projectName]]$MaintainabilityDiff) &lt; 1000,]
+}
+
+# Maintainability change values of commits containing file addition.
+maintainabilityDiffsContainingAdd &lt;- function(actualProjectData) {
+	actualProjectData$MaintainabilityDiff[actualProjectData$A &gt; 0]
+}
+
+# Maintainability change values of commits not containing file addition.
+maintainabilityDiffsWithoutAdd &lt;- function(actualProjectData) {
+	actualProjectData$MaintainabilityDiff[actualProjectData$A == 0]
+}
+
+
+
+#
+# Diagram drawing and test execution functions.
+# These can be executed independent from each other.
+#
+
+# Box plots illustrating maintainability change values.
+# This is the motivating example for creating ccdplot.
+drawFourDiagrams(
+	function(projectName) {
+		boxplot(
+			getFourDivisions(projectdata[[projectName]]),
+			main = projectName,
+			names = c("D", "A", "U+", "U1")
+		)
+	}
+)
+
+# Box plots illustrating maintainability change values, without outliers.
+drawFourDiagrams(
+	function(projectName) {
+		boxplot(
+			getFourDivisions(projectDataWithoutOutliers(projectName)),
+			main = projectName,
+			names = c("D", "A", "U+", "U1")
+		)
+	}
+)
+
+# Composite cumulative characteristic diagrams illustrating maintainability change values,
+# including outliers.
+drawFourDiagrams(
+	function(projectName) {
+		ccdplot(
+			getFourDivisions(projectdata[[projectName]]), 
+			main = projectName,
+			sub = "D, A, U+, U1", 
+			xlab = "Revisions", 
+			ylab = "Accumulated maintainability change"
+		)
+	}
+)
+
+# Composite cumulative characteristic diagrams illustrating maintainability change values,
+# without outliers.
+drawFourDiagrams(
+	function(projectName) {
+		ccdplot(
+			getFourDivisions(projectDataWithoutOutliers(projectName)), 
+			main = projectName,
+			sub = "D, A, U+, U1", 
+			xlab = "Revisions", 
+			ylab = "Accumulated maintainability change"
+		)
+	}
+)
+
+# Perform Contingency Chi Squared Test on the input data.
+performOperationAllProjects (
+	function(projectName) {
+		projectDataCategorized &lt;- categorizeProjectData(projectName)
+		print(paste(projectName, "contingency test", sep = " - "))
+		chisq.test.result &lt;- chisq.test(table(
+			projectDataCategorized$opcat, 
+			projectDataCategorized$changecat)
+		)
+		print(chisq.test.result)
+		print(paste("Exact p-value:", chisq.test.result$p.value))
+	}
+)
+
+# Cumulative characteristic diagrams illustrating the maintainability change values 
+# between commits containing and not containing file additions.
+drawFourDiagrams(
+	function(projectName) {
+		actualProjectData &lt;- projectdata[[projectName]]
+		maintainabilityDiffs &lt;- list(
+			maintainabilityDiffsContainingAdd(actualProjectData),
+			maintainabilityDiffsWithoutAdd(actualProjectData)
+		)
+		ccdplot(
+			maintainabilityDiffs, 
+			remove.absolute = 1000.0, 
+			main = paste(projectName, "Add", sep = " - "), 
+			sub = "Containing vs. not containing Add", 
+			xlab = "Revisions", 
+			ylab = "Accumulated maintainability change"
+		)
+	}
+)
+
+# Quantile difference diagrams illustrating the difference of the maintainability change values 
+# between commits containing and not containing file additions.
+drawFourDiagrams(
+	function(projectName) {
+		actualProjectData &lt;- projectdata[[projectName]]
+		qddplot(
+			maintainabilityDiffsContainingAdd(actualProjectData),
+			maintainabilityDiffsWithoutAdd(actualProjectData),
+			main=paste(projectName, "Add", sep = " - "), 
+			sub="Containing vs. not containing Add"
+		)
+	}
+)
+
+# Testing the difference of the maintainability change values between commits containing 
+# and not containing file additions, using Wilcoxon-test.
+performOperationAllProjects (
+	function(projectName) {
+		actualProjectData &lt;- projectdata[[projectName]]
+		print(paste(projectName, "impact of file addition", sep = " - "))
+		print(wilcox.test(
+			maintainabilityDiffsContainingAdd(actualProjectData),
+			maintainabilityDiffsWithoutAdd(actualProjectData),
+			alternative = "greater"
+		))
+	}
+)
+
+# Testing the ratio of the maintainability change variance between commits containing 
+# and not containing file additions.
+performOperationAllProjects (
+	function(projectName) {
+		actualProjectData &lt;- projectDataWithoutOutliers(projectName)
+		print(paste(projectName, "variance of file addition", sep = " - "))
+		var.test.result &lt;- var.test(
+			maintainabilityDiffsContainingAdd(actualProjectData),
+			maintainabilityDiffsWithoutAdd(actualProjectData)
+		)
+		print(var.test.result)
+		print(paste("Exact p-value:", var.test.result$p.value))
+	}
+)
+
+# Quantile difference diagrams illustrating the difference of cumulative code churn values 
+# between commits of positive vs. negative maintainability change, along with related Wilcox-test.
+drawFourDiagrams(
+	function(projectName) {
+		actualProjectData &lt;- projectdata[[projectName]]
+		churnX &lt;- actualProjectData$Churn[actualProjectData$MaintainabilityDiff &gt; 0]
+		churnY &lt;- actualProjectData$Churn[actualProjectData$MaintainabilityDiff &lt; 0]
+		print(paste(projectName, "cumulative code churn", sep = " - "))
+		print(wilcox.test(churnX, churnY, alternative = "less"))
+		qddplot(
+			churnX, 
+			churnY,
+			main=paste(projectName, "Churn", sep = " - ")
+		)
+	}
+)
+
+# Quantile difference diagrams illustrating the difference of number of contributors 
+# between commits of positive vs. negative maintainability change, along with related Wilcox-test.
+drawFourDiagrams(
+	function(projectName) {
+		actualProjectData &lt;- projectdata[[projectName]]
+		ownershipX &lt;- actualProjectData$Ownership[actualProjectData$MaintainabilityDiff &gt; 0]
+		ownershipY &lt;- actualProjectData$Ownership[actualProjectData$MaintainabilityDiff &lt; 0]
+		print(paste(projectName, "code ownership", sep = " - "))
+		print(wilcox.test(ownershipX, ownershipY, alternative = "less"))
+		qddplot(
+			ownershipX, 
+			ownershipY,
+			differences.rangemin = 0,
+			main=paste(projectName, "Ownership", sep = " - ")
+		)
+	}
+)
+
+</code></pre>
+
+
+</div>

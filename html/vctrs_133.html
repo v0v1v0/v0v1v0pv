@@ -1,0 +1,103 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vec_default_cast</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Default cast and ptype2 methods</h2>
+
+<h3>Description</h3>
+
+<p>These functions are automatically called when no <code>vec_ptype2()</code> or
+<code>vec_cast()</code> method is implemented for a pair of types.
+</p>
+
+<ul>
+<li>
+<p> They apply special handling if one of the inputs is of type
+<code>AsIs</code> or <code>sfc</code>.
+</p>
+</li>
+<li>
+<p> They attempt a number of fallbacks in cases where it would be too
+inconvenient to be strict:
+</p>
+
+<ul>
+<li>
+<p> If the class and attributes are the same they are considered
+compatible. <code>vec_default_cast()</code> returns <code>x</code> in this case.
+</p>
+</li>
+<li>
+<p> In case of incompatible data frame classes, they fall back to
+<code>data.frame</code>. If an incompatible subclass of tibble is
+involved, they fall back to <code>tbl_df</code>.
+</p>
+</li>
+</ul>
+</li>
+<li>
+<p> Otherwise, an error is thrown with <code>stop_incompatible_type()</code> or
+<code>stop_incompatible_cast()</code>.
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">vec_default_cast(x, to, ..., x_arg = "", to_arg = "", call = caller_env())
+
+vec_default_ptype2(x, y, ..., x_arg = "", y_arg = "", call = caller_env())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Vectors to cast.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>to</code></td>
+<td>
+<p>Type to cast to. If <code>NULL</code>, <code>x</code> will be returned as is.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>For <code>vec_cast_common()</code>, vectors to cast. For
+<code>vec_cast()</code>, <code>vec_cast_default()</code>, and <code>vec_restore()</code>, these
+dots are only for future extensions and should be empty.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_arg</code></td>
+<td>
+<p>Argument name for <code>x</code>, used in error messages to
+inform the user about the locations of incompatible types
+(see <code>stop_incompatible_type()</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>to_arg</code></td>
+<td>
+<p>Argument name <code>to</code> used in error messages to
+inform the user about the locations of incompatible types
+(see <code>stop_incompatible_type()</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>The execution environment of a currently
+running function, e.g. <code>caller_env()</code>. The function will be
+mentioned in error messages as the source of the error. See the
+<code>call</code> argument of <code>abort()</code> for more information.</p>
+</td>
+</tr>
+</table>
+</div>

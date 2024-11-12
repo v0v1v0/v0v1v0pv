@@ -1,0 +1,169 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>shiny-getters</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get information from a Vega chart into Shiny</h2>
+
+<h3>Description</h3>
+
+<p>There are three types of information you can get from a Vega chart,
+a <em>signal</em>, <em>data</em> (i.e. a dataset), and information associated with
+an <em>event</em>.  A dataset or a signal must first be defined and <strong>named</strong>
+in the vegaspec.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vw_shiny_get_signal(outputId, name, body_value = "value")
+
+vw_shiny_get_data(outputId, name, body_value = "value")
+
+vw_shiny_get_event(outputId, event, body_value = "datum")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>outputId</code></td>
+<td>
+<p><code>character</code>, shiny <code>outputId</code> for the vegawidget</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p><code>character</code>, name of the signal (defined in Vega specification)
+being monitored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>body_value</code></td>
+<td>
+<p><code>character</code> or <code>JS_EVAL</code>, the <strong>body</strong> of a JavaScript
+function that Vega will use to handle the signal or event; this function
+must return a value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>event</code></td>
+<td>
+<p><code>character</code>, type of the event being monitored, e.g. <code>"click"</code>,
+for list of supported events, please see
+<a href="https://vega.github.io/vega/docs/event-streams/">Vega Event-Stream reference</a></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>These getter-functions are called from within
+a Shiny <code>server()</code> function, where they act like
+<code>shiny::reactive()</code>, returning a reactive expression.
+</p>
+<p>To see these functions in action, you can run a shiny-demo:
+</p>
+
+<ul>
+<li> <p><code>vw_shiny_get_signal()</code>: call <code>vw_shiny_demo("signal-set-get")</code>
+</p>
+</li>
+<li> <p><code>vw_shiny_get_data()</code>: call <code>vw_shiny_demo("data-set-get")</code>
+</p>
+</li>
+<li> <p><code>vw_shiny_get_event()</code>: call <code>vw_shiny_demo("event-get")</code>
+</p>
+</li>
+</ul>
+<p>In addition to the chart <code>outputId</code>, you will need to provide:
+</p>
+
+<ul>
+<li> <p><code>vw_shiny_get_signal()</code>: the <code>name</code> of the signal, as defined in the Vega
+specification
+</p>
+</li>
+<li> <p><code>vw_shiny_get_data()</code>: the <code>name</code> of the dataset, as defined in the Vega
+specification
+</p>
+</li>
+<li> <p><code>vw_shiny_get_event()</code>: the <code>event</code> type, as defined in the
+<a href="https://vega.github.io/vega/docs/event-streams/">Vega Event-Stream reference</a>
+</p>
+</li>
+</ul>
+<p>When the signal or data changes, or when the event fires, Vega needs to
+know which information you want returned to Shiny. To do this,
+you provide a JavaScript handler-function:
+</p>
+
+<ul>
+<li> <p><code>vw_shiny_get_signal()</code>: the default handler,
+<code>vw_handler_signal("value")</code>,
+specifies that the value of the signal be returned.
+</p>
+</li>
+<li> <p><code>vw_shiny_get_data()</code>: the default handler,
+<code>vw_handler_data("value")</code>,
+specifies that the entire dataset be returned.
+</p>
+</li>
+<li> <p><code>vw_shiny_get_event()</code>: the default handler,
+<code>vw_handler_event("datum")</code>,
+specifies that the single row of data associated with graphical mark
+be returned. For example, if you are monitoring a <code>"click"</code> event,
+Vega would return the row of data that backs any mark
+(like a point) that you click.
+</p>
+</li>
+</ul>
+<p>If you need to specify a different behavior for the handler, there are a
+couple of options. This package provides
+a library of handler-functions; call <code>vw_handler_signal()</code>,
+<code>vw_handler_data()</code>, or <code>vw_handler_event()</code> without arguments to
+list the available handlers.
+</p>
+<p>If the library does not contain the handler you need, the <code>body_value</code>
+argument will also accept a character string which will be used as
+the <strong>body</strong> of the handler function.
+</p>
+<p>For example, these calls are equivalent:
+</p>
+
+<ul>
+<li> <p><code>vw_shiny_get_signal(..., body_value = "value")</code>
+</p>
+</li>
+<li> <p><code>vw_shiny_get_signal(..., body_value = vw_handler_signal("value"))</code>
+</p>
+</li>
+<li> <p><code>vw_shiny_get_signal(..., body_value = "return value;")</code>
+</p>
+</li>
+</ul>
+<p>If you use a custom-handler that you think may be useful for the
+handler-function library, please
+<a href="https://github.com/vegawidget/vegawidget/issues">file an issue</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>shiny::reactive()</code> function that returns the value returned by
+<code>body_value</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vw_handler_signal()</code>, <code>vw_handler_event()</code>,
+vega-view:
+<a href="https://github.com/vega/vega/tree/master/packages/vega-view#view_addSignalListener">addSignalListener()</a>,
+<a href="https://github.com/vega/vega/tree/master/packages/vega-view#view_addEventListener">addEventListener()</a>
+</p>
+
+
+</div>

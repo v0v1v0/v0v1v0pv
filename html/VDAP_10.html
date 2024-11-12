@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>QCon</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Subsetting for VDAP function QCKd
+</h2>
+
+<h3>Description</h3>
+
+<p>A sub - function of QCKd, subsets data for replicate control
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">QCon(File1,ColSet)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>File1</code></td>
+<td>
+
+<p>Input File.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ColSet</code></td>
+<td>
+
+<p>ColSet (Same as QCKd)
+</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Cody Moore
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>QCKd</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## The function is currently defined as
+function(File1,ColSet){
+
+    Sig &lt;- File1[,min(ColSet)]                  ##Column Calls
+    Sig2 &lt;- File1[,max(ColSet)]
+    FVari1 &lt;- File1[Sig/Sig2 &gt; 0.5 &amp; Sig/Sig2 &lt; 2.0,]
+    FVari1 &lt;- na.omit(FVari1)
+    return(FVari1)
+    }
+</code></pre>
+
+
+</div>

@@ -1,0 +1,169 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>boxplot_trio</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Boxplot to compare groups</h2>
+
+<h3>Description</h3>
+
+<p>Plots the expression of a specific row in expression to compare the three
+groups in a boxplot using either ggplot or plotly.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">boxplot_trio(
+  polar,
+  value,
+  box_colours = c("green3", "blue", "red"),
+  test = "polar_pvalue",
+  levels_order = NULL,
+  my_comparisons = NULL,
+  text_size = 10,
+  stat_colour = "black",
+  stat_size = 3,
+  step_increase = 0.05,
+  plot_method = "ggplot",
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>polar</code></td>
+<td>
+<p>A 'volc3d' object including expression data from groups of
+interest. Created by <code>polar_coords</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>The column name or number in <code>polar@data</code> to be
+analysed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>box_colours</code></td>
+<td>
+<p>The fill colours for each box assigned in order of
+levels_order. Default = c('green3', 'blue', 'red') ).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>test</code></td>
+<td>
+<p>The statistical test used to compare expression.
+Allowed values include: </p>
+
+<ul>
+<li> <p><code>polar_pvalue</code> (default) and 'polar_padj' for the pvalues
+and adjusted pvalues in the polar object.
+</p>
+</li>
+<li> <p><code>polar_multi_pvalue</code> and <code>polar_multi_padj</code> for the pvalues
+and adjusted pvalues across all groups using the
+<code>polar@multi_group_test </code> columns.
+</p>
+</li>
+<li> <p><code>t.test</code> (parametric) and
+<code>wilcox.test</code> (non-parametric). Perform comparison
+between groups of samples.
+</p>
+</li>
+<li> <p><code>anova</code> (parametric) and
+<code>kruskal.test</code> (non-parametric). Perform one-way ANOVA
+test comparing multiple groups. </p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>levels_order</code></td>
+<td>
+<p>A character vector stating the contrast groups to be
+plotted, in order. If <code>NULL</code> this defaults to the levels in
+<code>polar@outcome</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>my_comparisons</code></td>
+<td>
+<p>A list of contrasts to pass to
+<code>stat_compare_means</code>. If <code>NULL</code> (default) all contrast
+pvalues are calculated and plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text_size</code></td>
+<td>
+<p>The font size of text (default = 10)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stat_colour</code></td>
+<td>
+<p>Colour to print statistics (default="black").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stat_size</code></td>
+<td>
+<p>The font size of statistical parameter (default = 3).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>step_increase</code></td>
+<td>
+<p>The distance between statistics on the y-axis
+(default = 0.05).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot_method</code></td>
+<td>
+<p>Whether to use 'plotly' or 'ggplot'. Default is 'ggplot'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other parameters for <code>stat_compare_means</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a boxplot featuring the differential expression
+between groups in comparison with annotated pvalues.
+</p>
+
+
+<h3>References</h3>
+
+<p>Lewis, Myles J., et al. (2019).
+<a href="https://pubmed.ncbi.nlm.nih.gov/31461658/">
+Molecular portraits of early rheumatoid arthritis identify clinical and
+treatment response phenotypes.</a>
+<em>Cell reports</em>, <strong>28</strong>:9
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(example_data)
+syn_polar &lt;- polar_coords(outcome = syn_example_meta$Pathotype,
+                          data = t(syn_example_rld))
+
+boxplot_trio(syn_polar, value = "COBL", plot_method="plotly")
+boxplot_trio(syn_polar, value = "COBL")
+</code></pre>
+
+
+</div>

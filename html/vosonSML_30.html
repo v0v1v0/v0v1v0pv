@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Collect.timeline.twitter</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Collect tweet data from twitter timelines</h2>
+
+<h3>Description</h3>
+
+<p>This function collects user timeline tweets and structures the data into a dataframe with the class
+names <code>"datasource"</code> and <code>"twitter"</code>. The Twitter API limits collection to a maximum of 3,200 of the most
+recent timeline tweets per user.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'timeline.twitter'
+Collect(
+  credential,
+  endpoint,
+  users = c(),
+  numTweets = 100,
+  retryOnRateLimit = TRUE,
+  writeToFile = FALSE,
+  verbose = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>credential</code></td>
+<td>
+<p>A <code>credential</code> object generated from <code>Authenticate</code> with class name <code>"twitter"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>endpoint</code></td>
+<td>
+<p>API endpoint.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>users</code></td>
+<td>
+<p>Character vector. Specifies one or more twitter users. Can be user names, user ids or a mixture.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numTweets</code></td>
+<td>
+<p>Numeric vector. Specifies how many tweets to be collected per user. Defaults to single value of
+<code>100</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>retryOnRateLimit</code></td>
+<td>
+<p>Logical. When the API rate-limit is reached should the collection wait and resume when it
+resets. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>writeToFile</code></td>
+<td>
+<p>Logical. Write collected data to file. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical. Output additional information about the data collection. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Arguments passed on to <code>rtweet::get_timeline</code>
+</p>
+
+<dl>
+<dt><code>since_id</code></dt>
+<dd>
+<p>Supply a vector of ids or a data frame of previous results to
+find tweets <strong>newer</strong> than <code>since_id</code>.</p>
+</dd>
+<dt><code>parse</code></dt>
+<dd>
+<p>If <code>TRUE</code>, the default, returns a tidy data frame. Use <code>FALSE</code>
+to return the "raw" list corresponding to the JSON returned from the
+Twitter API.</p>
+</dd>
+<dt><code>check</code></dt>
+<dd>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
+</dd>
+<dt><code>retryonratelimit</code></dt>
+<dd>
+<p>If <code>TRUE</code>, and a rate limit is exhausted, will wait
+until it refreshes. Most Twitter rate limits refresh every 15 minutes.
+If <code>FALSE</code>, and the rate limit is exceeded, the function will terminate
+early with a warning; you'll still get back all results received up to
+that point. The default value, <code>NULL</code>, consults the option
+<code>rtweet.retryonratelimit</code> so that you can globally set it to <code>TRUE</code>,
+if desired.
+</p>
+<p>If you expect a query to take hours or days to perform, you should not
+rely soley on <code>retryonratelimit</code> because it does not handle other common
+failure modes like temporarily losing your internet connection.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A tibble object with class names <code>"datasource"</code> and <code>"twitter"</code>.
+</p>
+
+
+</div>

@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ef_fun</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Experimental: Returns a function of Emission Factor by age of use</h2>
+
+<h3>Description</h3>
+
+<p><code>ef_fun</code> returns amount of vehicles at each age
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ef_fun(
+  ef,
+  type = "logistic",
+  x = 1:length(ef),
+  x0 = mean(ef),
+  k = 1/4,
+  L = max(ef),
+  verbose = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ef</code></td>
+<td>
+<p>Numeric; numeric vector of emission factors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Character; "logistic"  by default so far.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Numeric; vector for ages of use.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x0</code></td>
+<td>
+<p>Numeric;  the x-value of the sigmoid's midpoint,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>Numeric; the steepness of the curve.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>L</code></td>
+<td>
+<p>Integer; the curve's maximum value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical; to show the equation.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>numeric vector.
+</p>
+
+
+<h3>References</h3>
+
+<p>https://en.wikipedia.org/wiki/Logistic_function
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+CO &lt;- ef_cetesb(p = "CO", veh = "PC_G")
+ef_logit &lt;- ef_fun(ef = CO, x0 = 27, k = 0.4, L = max(CO))
+df &lt;- data.frame(CO, ef_logit)
+colplot(df)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

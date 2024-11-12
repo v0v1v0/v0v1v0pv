@@ -1,0 +1,73 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>keep_only_relevant_values</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Keep only relevant values</h2>
+
+<h3>Description</h3>
+
+<p>Filters out only relevant values based on the provided filters
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">keep_only_relevant_values(lFilters, sVariable, dfFilters)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lFilters</code></td>
+<td>
+<p>List of filters to be applied on the data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sVariable</code></td>
+<td>
+<p>The variable for which relevant values are to be retrieved.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dfFilters</code></td>
+<td>
+<p>Dataframe with the possible filters and values for this dataset</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function removes null elements from the filter list, transforms filter list into elements
+suitable for filtering, and retrieves relevant values from the data.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list of relevant values for the specified variable.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dfFilters &lt;- dplyr::tibble(
+  var1 = sample(c("A", "B", "C"), 100, replace = TRUE),
+  var2 = sample(c("D", "E", "F"), 100, replace = TRUE),
+  var3 = sample(c("G", "H", "I"), 100, replace = TRUE)
+)
+filters &lt;- list("D;var2")
+relevant_values &lt;- keep_only_relevant_values(filters, "var1", dfFilters)
+
+# Check if the relevant values are only from the rows where var2 is "D" or "E"
+expected_values &lt;- dfFilters$var1[dfFilters$var2 %in% c("D")] %&gt;%
+  purrr::set_names(.) %&gt;%
+  purrr::map(~paste0(.x, ";var1"))
+</code></pre>
+
+
+</div>

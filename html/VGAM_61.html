@@ -1,0 +1,121 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>aux.posbernoulli.t</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Auxiliary Function for the
+Positive Bernoulli Family Function with Time Effects </h2>
+
+<h3>Description</h3>
+
+<p>Returns behavioural effects indicator variables from a
+capture history matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">aux.posbernoulli.t(y, check.y = FALSE, rename = TRUE, name = "bei")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+
+<p>Capture history matrix.
+Rows are animals, columns are sampling occasions, and
+values should be 0s and 1s only.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.y</code></td>
+<td>
+
+<p>Logical, if <code>TRUE</code> then some basic checking is performed.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rename, name</code></td>
+<td>
+
+<p>If <code>rename = TRUE</code> then the behavioural effects indicator
+are named using the value of <code>name</code> as the prefix.
+If <code>FALSE</code> then use the same column names as <code>y</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function can help fit certain capture–recapture models
+(commonly known as <code class="reqn">M_{tb}</code> or <code class="reqn">M_{tbh}</code>
+(no prefix <code class="reqn">h</code> means it is an intercept-only model)
+in the literature).
+See <code>posbernoulli.t</code> for details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with the following components.
+</p>
+
+<dl>
+<dt>cap.hist1</dt>
+<dd>
+<p>A matrix the same dimension as <code>y</code>.
+In any particular row there are 0s up to
+the first capture. Then there are 1s thereafter.
+</p>
+</dd>
+<dt>cap1</dt>
+<dd>
+<p>A vector specifying which time occasion the animal
+was first captured.
+</p>
+</dd>
+<dt>y0i</dt>
+<dd>
+<p>Number of noncaptures before the first capture.
+</p>
+</dd>
+<dt>yr0i</dt>
+<dd>
+<p>Number of noncaptures after the first capture.
+</p>
+</dd>
+<dt>yr1i</dt>
+<dd>
+<p>Number of recaptures after the first capture.
+</p>
+</dd>
+</dl>
+<h3>See Also</h3>
+
+<p><code>posbernoulli.t</code>,
+<code>deermice</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Fit a M_tbh model to the deermice data:
+(pdata &lt;- aux.posbernoulli.t(with(deermice,
+                                  cbind(y1, y2, y3, y4, y5, y6))))
+
+deermice &lt;- data.frame(deermice,
+                    bei = 0,  # Add this
+                    pdata$cap.hist1)  # Incorporate these
+head(deermice)  # Augmented with behavioural effect indicator variables
+tail(deermice)
+</code></pre>
+
+
+</div>

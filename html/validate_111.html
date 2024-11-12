@@ -1,0 +1,141 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lbj_cells-class</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Logging object to use with the lumberjack package</h2>
+
+<h3>Description</h3>
+
+<p>Logging object to use with the lumberjack package
+</p>
+
+
+<h3>Format</h3>
+
+<p>A reference class object
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt><code>add(meta, input, output)</code></dt>
+<dd>
+<p>Add logging info based on in- and output</p>
+</dd>
+<dt><code>dump(file = NULL, verbose = TRUE, ...)</code></dt>
+<dd>
+<p>Dump logging info to csv file. 
+All arguments in '...' except row.names are passed to 'write.csv'</p>
+</dd>
+<dt><code>initialize(..., verbose = TRUE, label = "")</code></dt>
+<dd>
+<p>Create object. Optionally toggle verbosity.</p>
+</dd>
+<dt><code>log_data()</code></dt>
+<dd>
+<p>Return logged data as a data.frame</p>
+</dd>
+</dl>
+<h3>Details</h3>
+
+<p>This obeject can used with the function composition ('pipe') operator of the 
+<code>lumberjack</code> package. The logging is based on
+validate's <code>cells</code> function. The output is written to a
+<code>csv</code> file wich contains the following columns.
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+<code>step</code>           </td>
+<td style="text-align: left;">
+<code>integer</code>  </td>
+<td style="text-align: left;"> Step number  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>time</code>           </td>
+<td style="text-align: left;">
+<code>POSIXct</code>  </td>
+<td style="text-align: left;"> Timestamp    </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>expr</code>           </td>
+<td style="text-align: left;"><code>character</code></td>
+<td style="text-align: left;"> Expression used on data </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>cells</code>          </td>
+<td style="text-align: left;">
+<code>integer</code>  </td>
+<td style="text-align: left;"> Total nr of cells in dataset</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>available</code>      </td>
+<td style="text-align: left;">
+<code>integer</code>  </td>
+<td style="text-align: left;"> Nr of non-NA cells</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>missing</code>        </td>
+<td style="text-align: left;">
+<code>integer</code>  </td>
+<td style="text-align: left;"> Nr of empty (NA) cells</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>still_available</code>
+</td>
+<td style="text-align: left;">
+<code>integer</code>  </td>
+<td style="text-align: left;"> Nr of cells still available after expr</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>unadapted</code>      </td>
+<td style="text-align: left;">
+<code>integer</code>  </td>
+<td style="text-align: left;"> Nr of cells still available and unaltered</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>unadapted</code>      </td>
+<td style="text-align: left;">
+<code>integer</code>  </td>
+<td style="text-align: left;"> Nr of cells still available and altered</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>imputed</code>        </td>
+<td style="text-align: left;">
+<code>integer</code>  </td>
+<td style="text-align: left;"> Nr of cells not missing anymore</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>This logger is suited only for operations that do not change the dimensions 
+of the dataset.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other loggers: 
+<code>lbj_rules-class</code>
+</p>
+
+
+</div>

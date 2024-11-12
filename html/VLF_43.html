@@ -1,0 +1,85 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VLF.aminoAcids</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Amino Acid VLFs</h2>
+
+<h3>Description</h3>
+
+<p>Converts a matrix of amino acid frequencies into a matrix of amino acids.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">VLF.aminoAcids(convert.matrix, seq.matrix, seqlength)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>convert.matrix</code></td>
+<td>
+
+<p>A matrix consisting of only aaVLF frequencies for each specimen, and NAs in every other position of the sequence.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seq.matrix</code></td>
+<td>
+
+<p>A matrix of amino acid sequences.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seqlength</code></td>
+<td>
+
+<p>The length of the amino acid sequence.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The argument convert.matrix can be calculated using the function aa.VLF.convert.matrix</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix containing only aaVLFs and NAs in every other position of the sequence.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: data(birds_aminoAcids)
+birds_aminoAcid_speciesNames &lt;- birds_aminoAcids[,2]
+aminoAcids_specimenNumber &lt;- nrow(birds_aminoAcids)
+birds_aminoAcid_count &lt;- aa.count.function(birds_aminoAcids, 216)
+aminoAcid_frequency.Matrix &lt;- aa.frequency.matrix.function(birds_aminoAcid_count, 216)
+bird_aminoAcid_frequencies &lt;- aa.specimen.frequencies(aminoAcid_frequency.Matrix, birds_aminoAcids, 
+birds_aminoAcid_speciesNames, 216)
+aminoAcid_Modal &lt;- aa.MODE(aminoAcid_frequency.Matrix, 216)
+birds_aminoAcid_specimenVLFcount &lt;- aa.VLF.count.spec(bird_aminoAcid_frequencies, 0.001, 216)
+birds_aaVLFconvert &lt;- aa.VLF.convert.matrix(birds_aminoAcids, bird_aminoAcid_frequencies, 0.001, 
+    216)
+birds_aminoAcidVLFs &lt;- VLF.aminoAcids(birds_aaVLFconvert, birds_aminoAcids, 216)
+## End(Not run)
+</code></pre>
+
+
+</div>

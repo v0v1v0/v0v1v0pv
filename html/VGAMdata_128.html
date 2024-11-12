@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Otpospois</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> One-truncated Positive-Poisson Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function,
+quantile function,
+and random generation
+for the one-truncated positive-Poisson distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dotpospois(x, lambda, log = FALSE)
+potpospois(q, lambda, log.p = FALSE)
+qotpospois(p, lambda)
+rotpospois(n, lambda)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, p, n</code></td>
+<td>
+
+<p>Same as <code>Pospois</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda, log, log.p</code></td>
+<td>
+
+<p>Same as <code>Pospois</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The one-truncated positive-Poisson is a Poisson distribution
+but with the probability of a one and a zero being 0.
+That is, its support is 2, 3, ....
+The other probabilities are scaled to add to unity.
+Some more details are given in <code>pospoisson</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dotpospois</code> gives the density,
+<code>potpospois</code> gives the distribution function,
+<code>qotpospois</code> gives the quantile function, and
+<code>rotpospois</code> generates random deviates.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Given some response data, the <span class="pkg">VGAM</span> family function
+<code>otpospoisson</code> estimates the
+parameter <code>lambda</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>otpospoisson</code>,
+<code>Pospois</code>,
+<code>Oipospois</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dotpospois(1:20, 0.5)
+rotpospois(20, 0.5)
+
+## Not run:  lambda &lt;- 4; x &lt;- 1:10
+plot(x, dotpospois(x, lambda = lambda), type = "h", ylim = 0:1,
+     sub = "lambda=4", las = 1, col = "blue", ylab = "Probability",
+     main = "1-truncated positive-Poisson distn: blue=PMF; orange=CDF")
+lines(x+0.1, potpospois(x, lambda), col = "orange", lty=3, type = "h") 
+## End(Not run)
+</code></pre>
+
+
+</div>

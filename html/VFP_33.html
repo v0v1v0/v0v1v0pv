@@ -1,0 +1,143 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predictMean</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Finding X-Value for Given Y-Value Using a Bisection-Approach.</h2>
+
+<h3>Description</h3>
+
+<p>For given variability-values (Y-axis) on one of three scales (see 'type'), those values on
+the X-axis are determined which give fitted values equal to the specification.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">predictMean(
+  obj,
+  type = c("vc", "sd", "cv"),
+  model.no = NULL,
+  alpha = 0.05,
+  newdata = NULL,
+  tol = 1e-04,
+  ci = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(object) of class 'VFP'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>(character) "vc" = variance, "sd" = standard deviation = sqrt(variance), 
+"cv" = coefficient of variation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model.no</code></td>
+<td>
+<p>(integer) specifying which model to use in case 'obj' represents multiple
+fitted models</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>(numeric) value specifying the 100x(1-alpha)% confidence interval for the 
+predicted value(s)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>(numeric) values representing variability-values on a specific scale ('type')</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>(numeric) tolerance value relative to 'newdata' specifying the stopping criterion
+for the bisection algorithm, also used to evaluate equality of lower and upper bounds
+in a bisection step for checking whether a boundary can be determined or not</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ci</code></td>
+<td>
+<p>(logical) indicates whether confidence intervals for predicted concentrations are
+required (TRUE) or not (FALSE), if 'newdata' contains many values the overall computation
+time can be minimized to 1/3 leaving out runs of the bisection-algorithm for LCL and UCL</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameter passed forward or used internally</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is achieved using a bisection algorithm which converges according to the specified tolerance 'tol'.
+In case of 'type="cv"', i.e. if specified Y-values are coefficients of variation, these are interpreted
+as percentages (15 = 15%).
+</p>
+
+
+<h3>Value</h3>
+
+<p>(data.frame) with variables "Mean" (X-value), "VC", "SD" or "CV" depending on 'type',
+"Diff" the difference to the specified Y-value, "LCL" and "UCL" as limits of the 100x(1-alpha)% CI.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>fit.vfp</code>, <code>predict.VFP</code>, <code>plot.VFP</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+# perform variance component analyses first
+library(VCA)
+data(CA19_9)
+fits.CA19_9 &lt;- anovaVCA(result~site/day, CA19_9, by="sample")
+
+# extract repeatability
+mat.CA19_9 &lt;- getMat.VCA(fits.CA19_9, "error")
+res.CA19_9 &lt;- fit.vfp(mat.CA19_9, 1:10)
+summary(res.CA19_9)
+print(res.CA19_9)
+
+# predict CA19_9-concentration with 5\% CV
+predictMean(res.CA19_9, newdata=5) 
+
+# this is used in function plot.VFP as well
+plot(res.CA19_9, Prediction=list(y=5), type="cv")
+plot(res.CA19_9, Prediction=list(y=5), type="cv", 
+		xlim=c(0, 80), ylim=c(0, 10))
+
+</code></pre>
+
+
+</div>

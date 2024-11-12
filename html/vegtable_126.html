@@ -1,0 +1,136 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>used_synonyms</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Retrieve synonyms or taxon concepts used in a data set</h2>
+
+<h3>Description</h3>
+
+<p>Plots records are rather linked to plant names than plant taxon concepts and
+<code>used_synonyms()</code> lists all synonyms linked to records in a vegtable
+object, including their respective accepted names.
+</p>
+<p>On the other side, the function <code>used_concepts()</code> produces a subset of the
+taxonomic list embeded in the slot <strong>species</strong> including only taxonomic
+concepts linked to records in the slot <strong>samples</strong>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">used_synonyms(x, ...)
+
+## S3 method for class 'vegtable'
+used_synonyms(x, ...)
+
+used_concepts(x, ...)
+
+## S3 method for class 'vegtable'
+used_concepts(x, keep_children = FALSE, keep_parents = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A vegtable object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments to be passed from or to another methods.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keep_children</code></td>
+<td>
+<p>A logical argument indicating whether children of
+selected taxa should be included in the output or not.
+This argument passed to <code>get_children()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keep_parents</code></td>
+<td>
+<p>A logical argument indicating whether parents of
+selected taxa should be included in the output or not.
+This argument passed to <code>get_parents()</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The function <code>used_synonyms()</code> returns a data frame including following
+variables:
+</p>
+
+<dl>
+<dt>SynonymID</dt>
+<dd>
+<p>ID of the taxon usage name applied as synonym.</p>
+</dd>
+<dt>Synonym</dt>
+<dd>
+<p>The synonym itself.</p>
+</dd>
+<dt>SynonymAuthor</dt>
+<dd>
+<p>Author of synonym.</p>
+</dd>
+<dt>TaxonConceptID</dt>
+<dd>
+<p>ID of the respective taxon concept.</p>
+</dd>
+<dt>AcceptedNameID</dt>
+<dd>
+<p>ID of the taxon usage name set as accepted name of
+the taxon concept.</p>
+</dd>
+<dt>AcceptedName</dt>
+<dd>
+<p>The respective accepted name.</p>
+</dd>
+<dt>AcceptedNameAuthor</dt>
+<dd>
+<p>The author of the accepted name.</p>
+</dd>
+</dl>
+<p>The function <code>used_concepts()</code> returns a taxlist object including
+only taxa occurring in the plot observations of the input vegtable
+object.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miguel Alvarez <a href="mailto:kamapu78@gmail.com">kamapu78@gmail.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>accepted_name()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Synonyms used in the Kenya_veg
+Synonyms &lt;- used_synonyms(Kenya_veg)
+head(Synonyms)
+
+## Subset species list to used concepts
+species &lt;- used_concepts(Kenya_veg)
+Kenya_veg@species
+species
+
+</code></pre>
+
+
+</div>

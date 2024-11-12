@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pluralise</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Pluralise words if their accompanying number is not 1</h2>
+
+<h3>Description</h3>
+
+<p>Pluralise words if their accompanying number is not 1
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pluralise(
+  word,
+  count,
+  plural = "s",
+  add_or_swap = "add",
+  include_number = TRUE,
+  sentence_start = FALSE,
+  zero_or_no = "no",
+  uk_or_us = "UK",
+  big_mark = ","
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>word</code></td>
+<td>
+<p>A word which should be returned as plural if <code>count</code> is not equal to 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>count</code></td>
+<td>
+<p>A number to apply to <code>word</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plural</code></td>
+<td>
+<p>How to make the plural; defaults to an "s" which is added at the end of the word.
+Can be anything. See <code>add_or_swap</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add_or_swap</code></td>
+<td>
+<p>Choose between <code>add</code> (add the plural form (e.g. "s") onto the end; e.g. <code>house</code>
+becomes <code>houses</code>) and <code>swap</code> (swap for the plural form; e.g. <code>mouse</code> becomes <code>mice</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>include_number</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, the number will be turned into text, as per <code>num_to_text()</code> (if it is a whole number, )</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sentence_start</code></td>
+<td>
+<p>Logical. Defaults to <code>FALSE</code>, which results in only numbers 1-10 being written out in full.
+If <code>TRUE</code>, numbers 11-999 are written out in full if included. (If <code>include_number</code> is <code>FALSE</code>, the first letter of <code>word</code> is capitalised.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero_or_no</code></td>
+<td>
+<p>Prefered string to use where count == 0. Defaults to "no". Can be anything.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>uk_or_us</code></td>
+<td>
+<p>Only used if <code>include_number</code> == <code>TRUE</code>. Defaults to UK which adds an "and" between "hundred" and other numbers
+(e.g. "One hundred and five"). If "US" is chosen, the "and" is removed (e.g. "One hundred five").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>big_mark</code></td>
+<td>
+<p>Passed to <code>num_to_text</code>. Defaults to "," (e.g. "1,999")</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A word which is pluralised or not based on the value of <code>count</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pluralise("penguin", 3)
+pluralise("bateau", 1234, "x")
+pluralise("sheep", 333, "sheep", add_or_swap = TRUE, sentence_start =  TRUE)
+
+</code></pre>
+
+
+</div>

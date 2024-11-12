@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>calibrate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Model Calibrations </h2>
+
+<h3>Description</h3>
+
+<p><code>calibrate</code> is a generic function used to produce calibrations
+from various model fitting functions.  The function invokes
+particular ‘methods’ which depend on the ‘class’ of the first
+argument.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">calibrate(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p> An object for which a calibration is desired.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Additional arguments affecting the calibration produced.
+Usually the most important argument in <code>...</code> is
+<code>newdata</code> which, for <code>calibrate</code>, contains new
+<em>response</em> data, <b>Y</b>, say.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Given a regression model with explanatory variables <b>X</b> and
+response <b>Y</b>,
+calibration involves estimating <b>X</b> from <b>Y</b> using the
+regression model.
+It can be loosely thought of as the opposite of <code>predict</code>
+(which takes an <b>X</b> and returns a <b>Y</b> of some sort.)
+In general,
+the central algorithm is maximum likelihood calibration.
+</p>
+
+
+<h3>Value</h3>
+
+<p>In general, given a new response <b>Y</b>,
+some function of the explanatory variables <b>X</b> are returned.
+For example,
+for constrained ordination models such as CQO and CAO models,
+it is usually not possible to return <b>X</b>, so the latent
+variables are returned instead (they are
+linear combinations of the <b>X</b>).
+See the specific <code>calibrate</code> methods functions to see
+what they return.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function was not called <code>predictx</code> because of the
+inability of constrained ordination models to return <b>X</b>;
+they can only return the latent variable values
+(also known as site scores) instead.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>ter Braak, C. J. F. and van Dam, H. (1989).
+Inferring pH from diatoms: a comparison of old and new
+calibration methods.
+<em>Hydrobiologia</em>, <b>178</b>, 209–223.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>predict</code>,
+<code>calibrate.rrvglm</code>,
+<code>calibrate.qrrvglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+hspider[, 1:6] &lt;- scale(hspider[, 1:6])  # Stdzed environmental vars
+set.seed(123)
+pcao1 &lt;- cao(cbind(Pardlugu, Pardmont, Pardnigr, Pardpull, Zoraspin) ~
+         WaterCon + BareSand + FallTwig + CoveMoss + CoveHerb + ReflLux,
+         family = poissonff, data = hspider, Rank = 1, Bestof = 3,
+         df1.nl = c(Zoraspin = 2, 1.9), Crow1positive = TRUE)
+
+siteNos &lt;- 1:2  # Calibrate these sites
+cpcao1 &lt;- calibrate(pcao1, trace = TRUE,
+                    newdata = data.frame(depvar(pcao1)[siteNos, ],
+                                         model.matrix(pcao1)[siteNos, ]))
+
+# Graphically compare the actual site scores with their calibrated values
+persp(pcao1, main = "Site scores: solid=actual, dashed=calibrated",
+      label = TRUE, col = "blue", las = 1)
+abline(v = latvar(pcao1)[siteNos], col = seq(siteNos))  # Actual scores
+abline(v = cpcao1, lty = 2, col = seq(siteNos))  # Calibrated values
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,260 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>anovaMM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>ANOVA-Type Estimation of Mixed Models</h2>
+
+<h3>Description</h3>
+
+<p>Estimate/Predict random effects employing ANOVA-type estimation and obtain generalized least squares estimates
+of fixed effects for any linear mixed model including random models and linear models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">anovaMM(
+  form,
+  Data,
+  by = NULL,
+  VarVC.method = c("scm", "gb"),
+  NegVC = FALSE,
+  quiet = FALSE,
+  order.data = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>form</code></td>
+<td>
+<p>(formula) specifying the linear mixed model (fixed and random part of the model),
+all random terms need to be enclosed by round brackets. Any variable not being bracketed
+will be considered as fixed. Interaction terms containing at least one random factor
+will automatically be random (Piepho et al. 2003). All terms appearing in the model 
+(fixed or random) need to be compliant with the regular expression "^[^[\.]]?[[:alnum:]_\.]*$",
+i.e. they may not start with a dot and may then only consist of alpha-numeric characters, 
+dot and underscore. Otherwise, an error will be issued.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>(data.frame) containing all variables referenced in 'form', note that variables can only be
+of type "numeric", "factor" or "character". The latter will be automatically converted to "factor".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>(factor, character) variable specifying groups for which the analysis should be performed individually,
+i.e. by-processing</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VarVC.method</code></td>
+<td>
+<p>(character) string specifying whether to use the algorithm given in Searle et al. (1992) which corresponds to <code>VarVC.method="scm"</code> or in
+Giesbrecht and Burns (1985) which can be specified via "gb". Method "scm" (Searle, Casella, McCulloch)
+is the exact algorithm, "gb" (Giesbrecht, Burns) is termed "rough approximation"
+by the authors, but sufficiently exact compared to e.g. SAS PROC MIXED (method=type1) which
+uses the inverse of the Fisher-Information matrix as approximation. For balanced designs all
+methods give identical results, only in unbalanced designs differences occur.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NegVC</code></td>
+<td>
+<p>(logical) FALSE = negative variance component estimates (VC) will be set to 0 and they will not 
+contribute to the total variance (as done e.g. in SAS PROC NESTED, conservative estimate of total variance). 
+The original ANOVA estimates can be found in element 'VCoriginal'. 
+The degrees of freedom of the total variance are based on adapted mean squares (MS) (see details).
+TRUE = negative variance component estimates will not be set to 0 and they will contribute to the total 
+variance (original definition of the total variance).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = will suppress any warning, which will be issued otherwise</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order.data</code></td>
+<td>
+<p>(logical) TRUE = class-variables will be ordered increasingly, FALSE = ordering of class-variables
+will remain as is</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A Linear Mixed Model, noted in standard matrix notation, can be written as <code class="reqn">y = Xb + Zg + e</code>, where
+<code class="reqn">y</code> is the column vector of observations, <code class="reqn">X</code> and <code class="reqn">Z</code> are design matrices assigning fixed (<code class="reqn">b</code>),
+respectively, random (<code class="reqn">g</code>) effects to observations, and <code class="reqn">e</code> is the column vector of residual errors.
+Whenever there is an intercept in the model, i.e. the substring "-1" is not part of the model formula, the same
+restriction as in SAS PROC MIXED is introduced setting the last fixed effect equal to zero. Note, that the results
+of an linear contrasts are not affected by using an intercept or not, except that constrained fixed effects cannot
+be part of such contrasts (one could use the intercept estimated instead).
+</p>
+<p>Here, no further restrictions on the type of model are made. One can fit mixed models as well as random models, which
+constitute a sub-set of mixed models (intercept being the only fixed effect). Variables must be either of type "numeric"
+or "factor". "character" variables are automatically converted to factors and the response variable has to be numeric, of course.
+In case that 'class(Data[,i])' is neither one of these three options, an error is issued.
+Even simple linear models can be fitted, i.e. models without a random part (without <code class="reqn">Zg</code>) besides the
+residual errors. In this case, an Analysis of Variance (ANOVA) table is computed in the same way as done by function 'anova.lm'.
+</p>
+<p>One drawback of using ANOVA-type estimation of random effects is, that random effects are independent, i.e they have
+zero covariance by definition <code class="reqn">cov(g_i,g_j) = 0</code>. Another one is that estimated variance components may become negative
+under certain conditions. The latter situation is addressed by setting negative variance estimates equal to zero and adapting
+ANOVA mean squares (MS) as <code class="reqn">MS = C * VC</code>, where <code class="reqn">C</code> is a coefficient matrix and a function of the design matrix <code class="reqn">[X Z]</code>
+and <code class="reqn">VC</code> is the column-vector of adapted variance components. The Satterthwaite approximation of total degrees of freedom 
+(DF for total variance) will use adapted <code class="reqn">MS</code>-values.
+</p>
+<p>Note, that setting negative VCs equal to zero results in a conservative estimate of the total variance, i.e. it will be larger than
+the estimate including the negative VC(s). Use parameter 'NegVC=TRUE' to explicitly allow negative variance estimates. 
+</p>
+<p>For further details on ANOVA Type-I estimation methods see <code>anovaVCA</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(VCA) object
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Searle, S.R, Casella, G., McCulloch, C.E. (1992), Variance Components, Wiley New York	
+</p>
+<p>Goodnight, J.H. (1979), A Tutorial on the SWEEP Operator, The American Statistician, 33:3, 149-158
+</p>
+<p>Giesbrecht, F.G. and Burns, J.C. (1985), Two-Stage Analysis Based on a Mixed Model: Large-Sample
+Asymptotic Theory and Small-Sample Simulation Results, Biometrics 41, p. 477-486
+</p>
+<p>H.P.Piepho, A.Buechse and K.Emrich (2003), A Hitchhiker's Guide to Mixed Models for Randomized Experiments,
+J.Agronomy &amp; Crop Science 189, p. 310-322
+</p>
+<p>Gaylor,D.W., Lucas,H.L., Anderson,R.L. (1970), Calculation of Expected Mean Squares by the Abbreviated Doolittle and Square Root Methods., 
+Biometrics 26 (4): 641-655 
+</p>
+<p>SAS Help and Documentation PROC MIXED, SAS Institute Inc., Cary, NC, USA
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>anovaVCA</code>
+</p>
+<p><code>anovaVCA</code>, <code>VCAinference</code>, <code>remlVCA</code>, <code>remlMM</code>
+<code>ranef</code>, <code>fixef</code>, <code>vcov</code>, <code>vcovVC</code>, 
+<code>test.fixef</code>, <code>test.lsmeans</code>, <code>plotRandVar</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+
+data(dataEP05A2_2)
+
+# assuming 'day' as fixed, 'run' as random
+anovaMM(y~day/(run), dataEP05A2_2)
+
+# assuming both as random leads to same results as
+# calling anovaVCA
+anovaMM(y~(day)/(run), dataEP05A2_2)
+anovaVCA(y~day/run, dataEP05A2_2)
+
+# use different approaches to estimating the covariance of 
+# variance components (covariance parameters)
+dat.ub &lt;- dataEP05A2_2[-c(11,12,23,32,40,41,42),]			# get unbalanced data
+m1.ub &lt;- anovaMM(y~day/(run), dat.ub, VarVC.method="scm")
+m2.ub &lt;- anovaMM(y~day/(run), dat.ub, VarVC.method="gb")		
+V1.ub &lt;- round(vcovVC(m1.ub), 12)
+V2.ub &lt;- round(vcovVC(m2.ub), 12)
+all(V1.ub == V2.ub)
+
+# fit a larger random model
+data(VCAdata1)
+fitMM1 &lt;- anovaMM(y~((lot)+(device))/(day)/(run), VCAdata1[VCAdata1$sample==1,])
+fitMM1
+# now use function tailored for random models
+fitRM1 &lt;- anovaVCA(y~(lot+device)/day/run, VCAdata1[VCAdata1$sample==1,])
+fitRM1
+
+# there are only 3 lots, take 'lot' as fixed 
+fitMM2 &lt;- anovaMM(y~(lot+(device))/(day)/(run), VCAdata1[VCAdata1$sample==2,])
+
+# the following model definition is equivalent to the one above,
+# since a single random term in an interaction makes the interaction
+# random (see the 3rd reference for details on this topic)
+fitMM3 &lt;- anovaMM(y~(lot+(device))/day/run, VCAdata1[VCAdata1$sample==2,])
+
+# fit same model for each sample using by-processing
+lst &lt;- anovaMM(y~(lot+(device))/day/run, VCAdata1, by="sample")
+lst
+
+# fit mixed model originally from 'nlme' package
+
+library(nlme)
+data(Orthodont)
+fit.lme &lt;- lme(distance~Sex*I(age-11), random=~I(age-11)|Subject, Orthodont) 
+
+# re-organize data for using 'anovaMM'
+Ortho &lt;- Orthodont
+Ortho$age2 &lt;- Ortho$age - 11
+Ortho$Subject &lt;- factor(as.character(Ortho$Subject))
+fit.anovaMM1 &lt;- anovaMM(distance~Sex*age2+(Subject)*age2, Ortho)
+
+# use simplified formula avoiding unnecessary terms
+fit.anovaMM2 &lt;- anovaMM(distance~Sex+Sex:age2+(Subject)+(Subject):age2, Ortho)
+
+# and exclude intercept
+fit.anovaMM3 &lt;- anovaMM(distance~Sex+Sex:age2+(Subject)+(Subject):age2-1, Ortho)
+
+# compare results
+fit.lme
+fit.anovaMM1
+fit.anovaMM2
+fit.anovaMM3
+
+# are there a sex-specific differences?
+cmat &lt;- getL(fit.anovaMM3, c("SexMale-SexFemale", "SexMale:age2-SexFemale:age2")) 
+cmat
+
+test.fixef(fit.anovaMM3, L=cmat)
+
+# former versions of the package used R-function 'lm' and 'anova',
+# which is significantly slower for sufficiently large/complex models
+data(realData)
+datP1 &lt;- realData[realData$PID==1,]
+system.time(anova.lm.Tab &lt;- anova(lm(y~lot/calibration/day/run, datP1)))
+# Using the sweeping approach for estimating ANOVA Type-1 sums of squares
+# this is now the default setting. 
+system.time(anovaMM.Tab1  &lt;- anovaMM(y~lot/calibration/day/run, datP1))
+
+# compare results, note that the latter corresponds to a linear model,
+# i.e. without random effects. Various matrices have already been computed,
+# e.g. "R", "V" (which are identical in this case).
+anova.lm.Tab
+anovaMM.Tab1
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

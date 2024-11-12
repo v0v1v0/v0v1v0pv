@@ -1,0 +1,95 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>axis_facet_col</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>General axis setttings (column facet)</h2>
+
+<h3>Description</h3>
+
+<p>Axes provide axis lines, ticks and labels to convey how a spatial range represents
+a data range. Simply put, axes visualize scales. <br><br>
+By default, Vega-Lite automatically creates axes for x, y, row, and column channels
+when they are encoded. Axis can be customized via the axis property of a channel
+definition.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">axis_facet_col(vl, axisWidth = 0, layer = NULL, offset = NULL,
+  grid = FALSE, labels = TRUE, labelAngle = NULL, labelAlign = NULL,
+  labelBaseline = NULL, labelMaxLength = 25, shortTimeLabels = NULL,
+  subdivide = NULL, ticks = NULL, tickPadding = NULL, tickSize = 0,
+  tickSizeMajor = NULL, tickSizeMinor = NULL, tickSizeEnd = NULL,
+  title = "", titleOffset = NULL, titleMaxLength = NULL,
+  characterWidth = 6, orient = NULL, format = NULL, remove = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vl</code></td>
+<td>
+<p>Vega-Lite object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>axisWidth, layer, offset, grid, labels, labelAngle, labelAlign, labelBaseline</code></td>
+<td>
+<p>see <a href="http://vega.github.io/vega-lite/docs/axis.html">axis docs</a> &amp;
+<a href="https://github.com/vega/vega-lite/blob/master/src/axis.ts">axis base config</a></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labelMaxLength, shortTimeLabels, subdivide, ticks, tickPadding, tickSize</code></td>
+<td>
+<p>see <a href="http://vega.github.io/vega-lite/docs/axis.html">axis docs</a> &amp;
+<a href="https://github.com/vega/vega-lite/blob/master/src/axis.ts">axis base config</a></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tickSizeMajor, tickSizeMinor, tickSizeEnd, title, titleOffset, titleMaxLength</code></td>
+<td>
+<p>see <a href="http://vega.github.io/vega-lite/docs/axis.html">axis docs</a> &amp;
+<a href="https://github.com/vega/vega-lite/blob/master/src/axis.ts">axis base config</a></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>characterWidth, orient, format, remove</code></td>
+<td>
+<p>see <a href="http://vega.github.io/vega-lite/docs/axis.html">axis docs</a> &amp;
+<a href="https://github.com/vega/vega-lite/blob/master/src/axis.ts">axis base config</a></p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p><a href="http://vega.github.io/vega-lite/docs/axis.html">Vega-List Axis spec</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vegalite() %&gt;%
+  add_data("https://vega.github.io/vega-editor/app/data/population.json") %&gt;%
+  add_filter("datum.year == 2000") %&gt;%
+  calculate("gender", 'datum.sex == 2 ? "Female" : "Male"') %&gt;%
+  encode_x("gender", "nominal") %&gt;%
+  encode_y("people", "quantitative", aggregate="sum") %&gt;%
+  encode_color("gender", "nominal") %&gt;%
+  scale_x_ordinal(band_size=6) %&gt;%
+  scale_color_nominal(range=c("#EA98D2", "#659CCA")) %&gt;%
+  facet_col("age", "ordinal", padding=4) %&gt;%
+  axis_x(remove=TRUE) %&gt;%
+  axis_y(title="population", grid=FALSE) %&gt;%
+  axis_facet_col(orient="bottom", axisWidth=1, offset=-8) %&gt;%
+  facet_cell(stroke_width=0) %&gt;%
+  mark_bar()
+</code></pre>
+
+
+</div>

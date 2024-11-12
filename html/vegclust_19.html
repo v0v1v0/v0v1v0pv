@@ -1,0 +1,105 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>conformveg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Conform two community data tables
+</h2>
+
+<h3>Description</h3>
+
+<p>Conforms two community data tables to have the same set of columns (species)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">conformveg(x, y, fillvalue = 0, verbose=FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>Community data, a site-by-species matrix.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+
+<p>Community data, a site-by-species matrix.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fillvalue</code></td>
+<td>
+
+<p>The value to be used to fill new entries in inflated matrices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+
+<p>Displays information about the number of species shared between <code>x</code> and <code>y</code>, as well as the number of species that are in one of the data tables but not in the other.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function adds to <code>x</code> as many new columns as columns of <code>y</code> that are not in <code>x</code>. The same is done for <code>y</code>, so the two tables have the same set of columns when they are returned. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with the two inflated matrices <code>x</code> and <code>y</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, Centre Tecnologic Forestal de Catalunya.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vegclust</code>, <code>vegclass</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Loads data (38 columns and 33 species)
+data(wetland)
+dim(wetland)
+
+## Splits wetland data into two matrices of 30x27 and 11x22
+wetland.30 = wetland[1:30,]
+wetland.30 = wetland.30[,colSums(wetland.30)&gt;0]
+dim(wetland.30)
+wetland.11 = wetland[31:41,]
+wetland.11 = wetland.11[,colSums(wetland.11)&gt;0] 
+dim(wetland.11)
+
+## Conforms the two matrices so they can eventually be merged
+wetland.cf = conformveg(wetland.30, wetland.11)
+dim(wetland.cf$x)
+dim(wetland.cf$y)
+names(wetland.cf$x)==names(wetland.cf$y)
+</code></pre>
+
+
+</div>

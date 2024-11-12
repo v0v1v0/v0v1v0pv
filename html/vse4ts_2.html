@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>SLmemory.test</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Testing Long Memory in Time Series</h2>
+
+<h3>Description</h3>
+
+<p>The function SLmemory.test computes the test statistic for long memory in time series based on the variance scale exponent.
+The null hypothesis is that the time series is white noise or short memory, while the alternative hypothesis is that the time series has long memory.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">SLmemory.test(x, m = 0.5, n = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A time series vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>A parameter to control the number of scales. Default is 0.5.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>The number of scales. If <code>NULL</code>, it will be calculated as <code>floor(N^m)</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with class "SLmemory.test" containing the following components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>SLmemory</code></td>
+<td>
+<p>the test statistic </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>the degrees of freedom of the test.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value</code></td>
+<td>
+<p>the p-value of the test.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Fu, H., Chen, W., &amp; He, X.-J. (2018). On a class of estimation and test for long memory. In Physica A: Statistical Mechanics and its Applications (Vol. 509, pp. 906–920). Elsevier BV. https://doi.org/10.1016/j.physa.2018.06.092
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Test long memory in time series
+library(pracma)
+
+set.seed(123)
+data("brown72")
+x72 &lt;- brown72                          #  H = 0.72
+xgn &lt;- rnorm(1024)                      #  H = 0.50
+xlm &lt;- numeric(1024); xlm[1] &lt;- 0.1     #  H = 0.43
+for (i in 2:1024) xlm[i] &lt;- 4 * xlm[i-1] * (1 - xlm[i-1])
+
+SLmemory.test(x72)
+SLmemory.test(xgn)
+SLmemory.test(xlm)
+
+</code></pre>
+
+
+</div>

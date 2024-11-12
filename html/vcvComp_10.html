@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>relative.eigen</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Relative eigenanalysis</h2>
+
+<h3>Description</h3>
+
+<p>Computes the Riemanian distance between two variance-covariance matrices of same dimensions and the relative eigenvectors and eigenvalues of S1 with respect to S2
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">relative.eigen(S1, S2, method = 0, pa = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>S1</code></td>
+<td>
+<p>a variance-covariance matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>S2</code></td>
+<td>
+<p>a variance-covariance matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>an integer for the method of matrix inversion (see function 'minv')</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pa</code></td>
+<td>
+<p>an integer for the parameter of matrix inversion (see function 'minv')</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing the following named components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>relValues</code></td>
+<td>
+<p>the vector of relative eigenvalues</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>relVectors</code></td>
+<td>
+<p>the matrix of relative eigenvectors</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>distCov</code></td>
+<td>
+<p>the distance between the two covariance matrices</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>relGV</code></td>
+<td>
+<p>the product of the nonzero relative eigenvalues = the ratio of the generalized variances.
+The generalized variance corresponds to the determinant of the covariance matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logGV</code></td>
+<td>
+<p>the log ratio of the generalized variances</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>the number of nonzero eigenvalues</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Bookstein F, Mitteroecker P (2014)
+Comparing covariance matrices by relative eigenanalysis, with applications to organismal biology.
+<em>Evolutionary Biology 41</em>: 336-350.
+<a href="https://doi.org/10.1007/s11692-013-9260-5">https://doi.org/10.1007/s11692-013-9260-5</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>See <code>minv</code> for the method and the parameter used for the matrix inversion
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Data matrix of 2D landmark coordinates
+data("Tropheus.IK.coord")
+coords &lt;- which(names(Tropheus.IK.coord) == "X1"):which(names(Tropheus.IK.coord) == "Y19")
+proc.coord &lt;- as.matrix(Tropheus.IK.coord[coords])
+
+# Data reduction
+phen.pca &lt;- prcomp(proc.coord, rank. = 5, tol = sqrt(.Machine$double.eps))
+pc.scores &lt;- phen.pca$x
+
+# Covariance matrix of each population
+S.phen.pop &lt;- cov.group(pc.scores, groups = Tropheus.IK.coord$POP.ID)
+
+# Relative PCA = relative eigenanalysis between 2 covariance matrices
+# (population IKA1 relative to IKS5)
+relEigen.a1s5 &lt;- relative.eigen(S.phen.pop[, , "IKA1"], S.phen.pop[, , "IKS5"])
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,130 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>aStranglePnL</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculates per share Profit and Loss (PnL) at expiration for Strangle Option Strategy and draws its Bar Plot displaying PnL in the Plots tab.</h2>
+
+<h3>Description</h3>
+
+<p>This is a volatility strategy consisting of a long position in an OTM (out of the money) call option with a strike price K1, and a long position in an OTM (out of the money) put option with a strike price K2. This is a net debit trade. However, because both call and put options are OTM (out of the money), this strategy is less costly to establish than a long straddle position. The flip side is that the movement in the stock price required to reach one of the break-even points is also more significant. The outlook of trader or investor is neutral. This is a capital gain strategy (Kakushadze &amp; Serur, 2018).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">aStranglePnL(
+  ST,
+  X1LP,
+  X2HC,
+  C,
+  P,
+  hl = 0,
+  hu = 2.2,
+  spot = spot,
+  pl = pl,
+  myData = myData,
+  myTibble = myTibble,
+  PnL = PnL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ST</code></td>
+<td>
+<p>Spot Price at time T.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X1LP</code></td>
+<td>
+<p>Lower Strike Price or eXercise price bought Put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X2HC</code></td>
+<td>
+<p>Higher Strike Price or eXercise price bought Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>Call Premium or Call Price paid for the bought Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>P</code></td>
+<td>
+<p>Put Premium or Put Price paid for the bought put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hl</code></td>
+<td>
+<p>lower bound value for setting lower-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hu</code></td>
+<td>
+<p>upper bound value for setting upper-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spot</code></td>
+<td>
+<p>Spot Price</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pl</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myData</code></td>
+<td>
+<p>Data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myTibble</code></td>
+<td>
+<p>tibble</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PnL</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>According to conceptual details given by Cohen (2015), and a closed form solution provided by Kakushadze and Serur (2018), this method is developed, and the given examples are created, to compute per share Profit and Loss at expiration for Strangle Option Strategy and draw its graph in the Plots tab.
+</p>
+
+
+<h3>Value</h3>
+
+<p>graph of the strategy
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">aStranglePnL(25,22.50,27.50,0.85,1.40)
+aStranglePnL(46,44,52,2,4,hl=0.6,hu=1.6)
+aStranglePnL(1020,1015,1025,10,18,hl=0.95,hu=1.045)
+</code></pre>
+
+
+</div>

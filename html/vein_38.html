@@ -1,0 +1,292 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ef_ldv_speed</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Emissions factors for Light Duty Vehicles and Motorcycles</h2>
+
+<h3>Description</h3>
+
+<p><code>ef_ldv_speed</code> returns speed dependent emission factors, data.frames or
+list of emission factors. The emission factors
+comes from the guidelines  EMEP/EEA air pollutant emission inventory guidebook
+http://www.eea.europa.eu/themes/air/emep-eea-air-pollutant-emission-inventory-guidebook
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ef_ldv_speed(
+  v,
+  t = "4S",
+  cc,
+  f,
+  eu,
+  p,
+  x,
+  k = 1,
+  speed,
+  show.equation = FALSE,
+  fcorr = rep(1, 8)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>Character; category vehicle: "PC", "LCV", "Motorcycle" or "Moped</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t</code></td>
+<td>
+<p>Character; sub-category of of vehicle: PC:  "ECE_1501", "ECE_1502",
+"ECE_1503", "ECE_1504" , "IMPROVED_CONVENTIONAL", "OPEN_LOOP", "ALL",
+"2S"  or "4S". LCV: "4S", Motorcycle: "2S" or "4S". Moped: "2S" or "4S"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cc</code></td>
+<td>
+<p>Character; size of engine in cc:  PC: "&lt;=1400", "&gt;1400", "1400_2000", "&gt;2000",
+"&lt;=800", "&lt;=2000". Motorcycle:  "&gt;=50" (for "2S"), "&lt;=250", "250_750", "&gt;=750".
+Moped: "&lt;=50". LCV :  "&lt;3.5" for gross weight.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f</code></td>
+<td>
+<p>Character; type of fuel: "G", "D", "LPG" or "FH" (Gasoline Full Hybrid).
+Full hybrid vehicles cannot be charged from the grid and recharge; only its own engine
+may recharge tis batteries.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eu</code></td>
+<td>
+<p>Character or data.frame of characters; euro standard:
+"PRE", "I", "II", "III", "III+DPF", "IV", "V", "VI" or "VIc".
+When the pollutan is active surface or number of particles, eu can also be "III+DISI"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>Character; pollutant: "CO", "FC", "NOx", "NO", "NO2", "HC", "PM", "NMHC", "CH4",
+"CO2",  "SO2" or "Pb". Only when p is "SO2" pr "Pb" x is needed. Also
+polycyclic aromatic hydrocarbons (PAHs), persistent organi pollutants (POPs),
+and Number of particles and Active Surface.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Numeric; if pollutant is "SO2", it is sulphur in fuel in ppm, if is
+"Pb", Lead in fuel in ppm.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>Numeric; multiplication factor</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>speed</code></td>
+<td>
+<p>Numeric; Speed to return Number of emission factor and not a function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.equation</code></td>
+<td>
+<p>Logical; option to see or not the equation parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fcorr</code></td>
+<td>
+<p>Numeric; Correction by fuel properties by euro technology.
+See <code>fuel_corr</code>. The order from first to last is
+"PRE", "I", "II", "III", "IV", "V", VI, "VIc". Default is 1</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The argument of this functions have several options which results in
+different combinations that returns emission factors. If a combination of
+any option is wrong it will return an empty value. Therefore, it is
+important ti know the combinations.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An emission factor function which depends of the average speed V  g/km
+</p>
+
+
+<h3>Note</h3>
+
+<p>t = "ALL" and cc == "ALL" works for several pollutants because emission
+fators are the same. Some exceptions are with NOx and FC because size of engine.
+</p>
+<p><strong>Hybrid cars</strong>: the only cover "PC" and according to EMEP/EEA air pollutant emission inventory
+guidebook 2016 (Ntziachristos and Samaras, 2016) only for euro IV. When new literature
+is available, I will update these factors.
+</p>
+<p><strong>Pollutants (g/km)</strong>: "CO", "NOx", "HC", "PM", "CH4", "NMHC", "CO2", "SO2",
+"Pb", "FC".
+</p>
+<p><strong>Black Carbon and Organic Matter (g/km)</strong>: "BC", "OM"
+</p>
+<p><strong>PAH and POP (g/km)</strong>:  <code>speciate</code>
+<strong>Dioxins and furans(g equivalent toxicity / km)</strong>:  <code>speciate</code>
+<strong>Metals (g/km)</strong>:  <code>speciate</code>
+</p>
+<p><strong>NMHC (g/km)</strong>: <code>speciate</code>
+</p>
+<p><em>Active Surface (cm2/km)</em>:  <code>speciate</code>"AS_urban", "AS_rural", "AS_highway"
+</p>
+<p><em>Total Number of particles (N/km)</em>: <code>speciate</code> "N_urban", "N_rural", "N_highway",
+"N_50nm_urban", "N_50_100nm_rural", "N_100_1000nm_highway".
+</p>
+<p>The available standards for Active Surface or number of particles are Euro I,
+II, III, III+DPF dor diesle and III+DISI for gasoline. Pre euro vehicles
+has the value of Euro I and  euro IV, V, VI and VIc the value of euro III.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>fuel_corr</code> <code>emis</code> <code>ef_ldv_cold</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Passenger Cars PC
+# Emission factor function
+V &lt;- 0:150
+ef1 &lt;- ef_ldv_speed(v = "PC",t = "4S", cc = "&lt;=1400", f = "G", eu = "PRE",
+p = "CO")
+efs &lt;- EmissionFactors(ef1(1:150))
+plot(Speed(1:150), efs, xlab = "speed[km/h]", type = "b", pch = 16, col = "blue")
+
+# Quick view
+pol &lt;- c("CO", "NOx", "HC", "NMHC", "CH4", "FC", "PM", "CO2", "SO2",
+"1-butyne", "propyne")
+f &lt;- sapply(1:length(pol), function(i){
+ef_ldv_speed("PC", "4S", "&lt;=1400", "G", "PRE", pol[i], x = 10)(30)
+})
+f
+# PM Characteristics
+pol &lt;- c("AS_urban", "AS_rural", "AS_highway",
+"N_urban", "N_rural", "N_highway",
+"N_50nm_urban", "N_50_100nm_rural", "N_100_1000nm_highway")
+f &lt;- sapply(1:length(pol), function(i){
+ef_ldv_speed("PC", "4S", "&lt;=1400", "D", "PRE", pol[i], x = 10)(30)
+})
+f
+# PAH POP
+ef_ldv_speed(v = "PC",t = "4S", cc = "&lt;=1400", f = "G", eu = "PRE",
+p = "indeno(1,2,3-cd)pyrene")(10)
+ef_ldv_speed(v = "PC",t = "4S", cc = "&lt;=1400", f = "G", eu = "PRE",
+p = "napthalene")(10)
+
+# Dioxins and Furans
+ef_ldv_speed(v = "PC",t = "4S", cc = "&lt;=1400", f = "G", eu = "PRE",
+p = "PCB")(10)
+
+# NMHC
+ef_ldv_speed(v = "PC",t = "4S", cc = "&lt;=1400", f = "G", eu = "PRE",
+p = "hexane")(10)
+
+# List of Copert emission factors for 40 years fleet of Passenger Cars.
+# Assuming a euro distribution of euro V, IV, III, II, and I of
+# 5 years each and the rest 15 as PRE euro:
+euro &lt;- c(rep("V", 5), rep("IV", 5), rep("III", 5), rep("II", 5),
+          rep("I", 5), rep("PRE", 15))
+speed &lt;- 25
+lef &lt;- lapply(1:40, function(i) {
+ef_ldv_speed(v = "PC", t = "4S", cc = "&lt;=1400", f = "G",
+          eu = euro[i], p = "CO")
+ef_ldv_speed(v = "PC", t = "4S", cc = "&lt;=1400", f = "G",
+          eu = euro[i], p = "CO", show.equation = FALSE)(25) })
+# to check the emission factor with a plot
+efs &lt;- EmissionFactors(unlist(lef)) #returns 'units'
+plot(efs, xlab = "age")
+lines(efs, type = "l")
+euros &lt;- c("VI", "V", "IV", "III", "II")
+ef_ldv_speed(v = "PC", t = "4S", cc = "&lt;=1400", f = "G",
+          eu = euros, p = "CO")
+a &lt;- ef_ldv_speed(v = "PC", t = "4S", cc = "&lt;=1400", f = "G",
+          eu = euros, p = "CO", speed = Speed(0:120))
+head(a)
+filled.contour(as.matrix(a)[1:10, 1:length(euros)], col = cptcity::cpt(n = 18))
+filled.contour(as.matrix(a)[110:120, 1:length(euros)], col = cptcity::cpt(n = 16))
+filled.contour(as.matrix(a)[, 1:length(euros)], col = cptcity::cpt(n = 21))
+filled.contour(as.matrix(a)[, 1:length(euros)],
+col = cptcity::cpt("mpl_viridis", n = 21))
+filled.contour(as.matrix(a)[, 1:length(euros)],
+col = cptcity::cpt("mpl_magma", n = 21))
+persp(as.matrix(a)[, 1:length(euros)], phi = 0, theta = 0)
+persp(as.matrix(a)[, 1:length(euros)], phi = 25, theta = 45)
+persp(as.matrix(a)[, 1:length(euros)], phi = 0, theta = 90)
+persp(as.matrix(a)[, 1:length(euros)], phi = 25, theta = 90+45)
+persp(as.matrix(a)[, 1:length(euros)], phi = 0, theta = 180)
+new_euro &lt;- c("VI", "VI", "V", "V", "V")
+euro &lt;- c("V", "V", "IV", "III", "II")
+old_euro &lt;- c("III", "II", "I", "PRE", "PRE")
+meuros &lt;- rbind(new_euro, euro, old_euro)
+aa &lt;- ef_ldv_speed(v = "PC", t = "4S", cc = "&lt;=1400", f = "G",
+          eu = meuros, p = "CO", speed = Speed(10:11))
+# Light Commercial Vehicles
+V &lt;- 0:150
+ef1 &lt;- ef_ldv_speed(v = "LCV",t = "4S", cc = "&lt;3.5", f = "G", eu = "PRE",
+p = "CO")
+efs &lt;- EmissionFactors(ef1(1:150))
+plot(Speed(1:150), efs, xlab = "speed[km/h]")
+lef &lt;- lapply(1:5, function(i) {
+ef_ldv_speed(v = "LCV", t = "4S", cc = "&lt;3.5", f = "G",
+          eu = euro[i], p = "CO", show.equation = FALSE)(25) })
+# to check the emission factor with a plot
+efs &lt;- EmissionFactors(unlist(lef)) #returns 'units'
+plot(efs, xlab = "age")
+lines(efs, type = "l")
+
+# Motorcycles
+V &lt;- 0:150
+ef1 &lt;- ef_ldv_speed(v = "Motorcycle",t = "4S", cc = "&lt;=250", f = "G",
+eu = "PRE", p = "CO",show.equation = TRUE)
+efs &lt;- EmissionFactors(ef1(1:150))
+plot(Speed(1:150), efs, xlab = "speed[km/h]")
+# euro for motorcycles
+eurom &lt;- c(rep("III", 5), rep("II", 5), rep("I", 5), rep("PRE", 25))
+lef &lt;- lapply(1:30, function(i) {
+ef_ldv_speed(v = "Motorcycle", t = "4S", cc = "&lt;=250", f = "G",
+eu = eurom[i], p = "CO",
+show.equation = FALSE)(25) })
+efs &lt;- EmissionFactors(unlist(lef)) #returns 'units'
+plot(efs, xlab = "age")
+lines(efs, type = "l")
+a &lt;- ef_ldv_speed(v = "Motorcycle", t = "4S", cc = "&lt;=250", f = "G",
+eu = eurom, p = "CO", speed = Speed(0:125))
+a$speed &lt;- NULL
+filled.contour(as.matrix(a), col = cptcity::lucky(),
+xlab = "Speed", ylab = "Age")
+persp(x = as.matrix(a), theta = 35, xlab = "Speed", ylab = "Euros",
+zlab = "CO [g/km]", col = cptcity::lucky(), phi = 25)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

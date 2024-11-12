@@ -1,0 +1,105 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>PlotPSI.A5SS.TwoGroups</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Percent spliced-in (PSI) visualization for alternative 5' splice sites (A5SS)</h2>
+
+<h3>Description</h3>
+
+<p><code>PlotPSI.A5SS</code> visualizes percent spliced-in (PSI) for each genomic coordinate for alternative 5' splice site (A5SS) event across two groups of single cells.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">PlotPSI.A5SS.TwoGroups(object, SampleInfo, ExonInfo,
+  statistical.test = c("wilcox", "t.test"),
+  multiple.testing = c("holm", "hochberg", "hommel", "bonferroni", "BH",
+  "BY", "fdr", "none"), Plots, plot.width, plot.height)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Object of class rehab generated using <code>ComputePSI</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SampleInfo</code></td>
+<td>
+<p>Tab-delimited file describing the naming and grouping of the single cells. First column should contain the names of the binary alignment map (BAM) files. Second column indicates the grouping for each single cell, namely Group1 and Group2. Third column indicates the group names. Example file provided in extdata directory of the package.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ExonInfo</code></td>
+<td>
+<p>Tab-delimited file describing the alternative splicing events. First column contains the alternative splicing nomenclature as per BRIE (Huang et al, Genome Biology, 2019) or MISO (Katz et al, Nature Methods, 2010). Second column indicates the type of alternative splicing event, namely SE, MXE, RI, A5SS, A3SS. Third column contains the gene name or any personal notation. Example file provided in extdata directory of the package.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>statistical.test</code></td>
+<td>
+<p>Method for comparising PSI values at each genomic coordinates between two groups of single cells.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>multiple.testing</code></td>
+<td>
+<p>Method for adjusting p-values for multiple comparisons.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Plots</code></td>
+<td>
+<p>Folder to output PSI plots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.width</code></td>
+<td>
+<p>Width of outplot plots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.height</code></td>
+<td>
+<p>Height of outplot plots.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function visualizes the percent spliced-in (PSI) at each genomic coordinate encompassing the alternative exon and its flanking constitutive exons for each single cell in the form of a heatmap. The PSI mean for the respective groups are also display in the form of a line graph to summarize the PSI distributions of the respective groups. Pair-wise comparison of PSI at each genomic coordinate is performed using either the parametric student t-test or non-parameteric Wilcoxon rank-sum test. The p-values can be adjusted for multiple testing using the <code>p.adjust</code> function.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For each alternative splicing event, a single plot consisting of three subplots arranged from top to bottom is returned. Bottom subplot is a line graph of PSI means at each genomic coordinate for two groups of single cells. Middle subplot is a line graph of p-values corresponding to the comparison of PSI values at each genomic coordinate between two groups of single cells. Top subplot is a heatmap of PSI values at each genomic coordinate across all single cells. Location of plots as per specified in the <code>Plots</code> argument.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Sean Wen &lt;sean.wenwx@gmail.com&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">PSI &lt;- readRDS(system.file("extdata/PSI", "PSI_RED_Two_Groups_small.rds", package="VALERIE"))
+PlotPSI.A5SS.TwoGroups(PSI, SampleInfo=system.file("extdata/Sample_Info",
+  "Sample_Info_RED_Two_Groups.txt", package="VALERIE"),
+  ExonInfo=system.file("extdata/Exon_Info", "Exon_Info_RED_small.txt", package="VALERIE"),
+  statistical.test="wilcox",  multiple.testing="fdr",
+  Plots=tempdir(), plot.width=5, plot.height=8)
+</code></pre>
+
+
+</div>

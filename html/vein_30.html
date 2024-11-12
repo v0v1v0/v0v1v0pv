@@ -1,0 +1,178 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ef_evap</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Evaporative emission factor</h2>
+
+<h3>Description</h3>
+
+<p><code>ef_evap</code> is a lookup table with tier 2 evaporative emission factors
+from EMEP/EEA emisison guidelines
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ef_evap(
+  ef,
+  v,
+  cc,
+  dt,
+  ca,
+  pollutant = "NMHC",
+  k = 1,
+  ltrip,
+  kmday,
+  show = FALSE,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ef</code></td>
+<td>
+<p>Name of  evaporative emission factor as *eshotc*: mean hot-soak with
+carburator, *eswarmc*: mean cold and warm-soak with carburator, eshotfi: mean
+hot-soak with fuel injection, *erhotc*: mean hot running losses with
+carburator, *erwarmc* mean cold and warm running losses, *erhotfi* mean hot
+running losses with fuel injection. Length of ef 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>Type of vehicles, "PC", "Motorcycle", "Motorcycle_2S" and "Moped"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cc</code></td>
+<td>
+<p>Size of engine in cc. PC "&lt;=1400",  "1400_2000" and "&gt;2000"
+Motorcycle_2S:  "&lt;=50". Motorcyces: "&gt;50", "&lt;=250", "250_750" and "&gt;750".
+Only engines of &gt;750 has canister.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dt</code></td>
+<td>
+<p>Character or Numeric: Average monthly temperature variation: "-5_10", "0_15", "10_25"
+and "20_35". This argument can vector with several elements. dt can also be data.frame,
+but it is recommended that the number of columns are each month. So that dt
+varies in each row and each column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ca</code></td>
+<td>
+<p>Size of canister: "no" meaning no canister, "small", "medium" and
+"large".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pollutant</code></td>
+<td>
+<p>Character indicating any of the covered pollutants: "NMHC",
+"ethane", "propane", "i-butane", "n-butane", "i-pentane", "n-pentane",
+"2-methylpentane", "3-methylpentane", "n-hexane", "n-heptane", "propene",
+"trans-2-butene", "isobutene", "cis-2-butene", "1,3-butadiene",
+"trans-2-pentene", "cis-2-pentene", "isoprene", "propyne", "acetylene",
+"benzene", "toluene", "ethylbenzene", "m-xylene", "o-xylene",
+"1,2,4-trimethylbenzene" and "1,3,5-trimethylbenzene". Default is "NMHC"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>multiplication factor</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ltrip</code></td>
+<td>
+<p>Numeric; Length of trip. Experimental feature to conter g/trip
+and g/proced (assuming proced similar to trip) in g/km.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kmday</code></td>
+<td>
+<p>Numeric; average daily mileage. Experimental option
+to convert g/day in g/km.
+it is an information more solid than to know the average number of trips per day.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show</code></td>
+<td>
+<p>when TRUE shows row of table with respective emission factor.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical; To show more information</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>emission factors in g/trip or g/proced. The object has class (g)
+but it order to know it is g/trip or g/proceed the argument show must by T
+</p>
+
+
+<h3>Note</h3>
+
+<p>Diurnal loses occur with daily temperature variations. Running loses
+occur during vehicles use. Hot soak emission occur following vehicles use.
+</p>
+
+
+<h3>References</h3>
+
+<p>Mellios G and Ntziachristos 2016. Gasoline evaporation. In:
+EEA, EMEP. EEA air pollutant emission inventory guidebook-2009. European
+Environment Agency, Copenhagen, 2009
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Do not run
+a &lt;- ef_evap(ef = "eshotc", v = "PC", cc = "&lt;=1400", dt = "0_15", ca = "no",
+pollutant = "cis-2-pentene")
+a &lt;- ef_evap(ef = "ed", v = "PC", cc = "&lt;=1400", dt = "0_15", ca = "no",
+show = TRUE)
+a &lt;- ef_evap(ef = c("erhotc", "erhotc"), v = "PC", cc = "&lt;=1400",
+dt = "0_15", ca = "no",
+show = TRUE)
+a &lt;- ef_evap(ef = c("erhotc", "erhotc"), v = "PC", cc = "&lt;=1400",
+ dt = "0_15", ca = "no",
+show = FALSE)
+a &lt;- ef_evap(ef = "eshotc", v = "PC", cc = "&lt;=1400", dt = "0_15", ca = "no",
+show = TRUE)
+ef_evap(ef = "erhotc", v = "PC", cc = "&lt;=1400", dt = "0_15", ca = "no",
+show = TRUE)
+temps &lt;- 10:20
+a &lt;- ef_evap(ef = "erhotc", v = "PC", cc = "&lt;=1400", dt = temps, ca = "no",
+show = TRUE)
+dt &lt;- matrix(rep(1:24,5), ncol = 12) # 12 months
+dt &lt;- celsius(dt)
+a &lt;- ef_evap(ef ="erhotc", v = "PC", cc = "&lt;=1400",
+dt = dt, ca = "no")
+lkm &lt;- units::set_units(10, km)
+a &lt;- ef_evap(ef ="erhotc", v = "PC", cc = "&lt;=1400", ltrip = lkm,
+dt = dt, ca = "no")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

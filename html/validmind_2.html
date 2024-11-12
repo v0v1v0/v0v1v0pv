@@ -1,0 +1,57 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>display_report</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Produce RMarkdown-compatible output of all results</h2>
+
+<h3>Description</h3>
+
+<p>Produce RMarkdown-compatible output of all results
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">display_report(processed_results)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>processed_results</code></td>
+<td>
+<p>A list of processed result objects</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>A formatted list of RMarkdown widgets
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+vm_dataset = vm_r$init_dataset(
+  dataset=data,
+  target_column="Exited",
+  class_labels=list("0" = "Did not exit", "1" = "Exited")
+)
+
+tabular_suite_results &lt;- vm_r$run_test_suite("tabular_dataset", dataset=vm_dataset)
+
+processed_results &lt;- process_result(tabular_suite_results)
+all_widgets &lt;- display_report(processed_results)
+for (widget in all_widgets) {
+  print(widget)
+}
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

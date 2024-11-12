@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>MNSs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> The MNSs Blood Group System </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the three independent parameters of the
+the MNSs blood group system.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">MNSs(link = "logitlink", imS = NULL, ims = NULL, inS = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to the three parameters.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imS, ims, inS</code></td>
+<td>
+
+<p>Optional initial value for <code>mS</code>, <code>ms</code>
+and <code>nS</code> respectively.
+A <code>NULL</code> means they are computed internally.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>There are three independent
+parameters: <code>m_S</code>, <code>m_s</code>, <code>n_S</code>, say, so that
+<code>n_s = 1 - m_S - m_s - n_S</code>.
+We let the eta vector (transposed) be
+<code>(g(m_S), g(m_s), g(n_S))</code> where <code>g</code> is the
+link function.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The input can be a 6-column matrix of counts, where the columns are
+MS, Ms, MNS, MNs, NS, Ns (in order).
+Alternatively, the input can be a 6-column matrix of
+proportions (so each row adds to 1) and the <code>weights</code>
+argument is used to specify the total number of counts for each row.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Elandt-Johnson, R. C. (1971).
+<em>Probability Models and Statistical Methods in Genetics</em>,
+New York: Wiley.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>AA.Aa.aa</code>,
+<code>AB.Ab.aB.ab</code>,
+<code>ABO</code>,
+<code>A1A2A3</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Order matters only:
+y &lt;- cbind(MS = 295, Ms = 107, MNS = 379, MNs = 322, NS = 102, Ns = 214)
+fit &lt;- vglm(y ~ 1, MNSs("logitlink", .25, .28, .08), trace = TRUE)
+fit &lt;- vglm(y ~ 1, MNSs(link = logitlink), trace = TRUE, crit = "coef")
+Coef(fit)
+rbind(y, sum(y)*fitted(fit))
+sqrt(diag(vcov(fit)))
+</code></pre>
+
+
+</div>

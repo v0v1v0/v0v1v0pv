@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>validator</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Define validation rules for data</h2>
+
+<h3>Description</h3>
+
+<p>Define validation rules for data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">validator(..., .file, .data)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>A comma-separated list of validating expressions</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.file</code></td>
+<td>
+<p>(optional) A character vector of file locations (see also the
+section on file parsing in the <code>syntax</code> help file).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.data</code></td>
+<td>
+<p>(optional) A <code>data.frame</code> with columns <code>"rule"</code>,
+<code>"name"</code>, and <code>"description"</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class <code>validator</code> (see <code>validator-class</code>).
+</p>
+
+
+<h3>Validating expressions</h3>
+
+<p>Each validating expression should evaluate to a <code>logical</code>. Allowed syntax of
+the expression is described in <code>syntax</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other validator-methods: 
+<code>+,validator,validator-method</code>,
+<code>plot,validator-method</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+v &lt;- validator(
+  height&gt;0
+  ,weight&gt;0
+  ,height &lt; 1.5*mean(height)
+)
+cf &lt;- confront(women, v)
+summary(cf)
+
+</code></pre>
+
+
+</div>

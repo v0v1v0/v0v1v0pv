@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bootstrap_se</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute bootstrap-based standard error estimates for variable importance</h2>
+
+<h3>Description</h3>
+
+<p>Compute bootstrap-based standard error estimates for variable importance
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bootstrap_se(
+  Y = NULL,
+  f1 = NULL,
+  f2 = NULL,
+  cluster_id = NULL,
+  clustered = FALSE,
+  type = "r_squared",
+  b = 1000,
+  boot_interval_type = "perc",
+  alpha = 0.05
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>the outcome.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f1</code></td>
+<td>
+<p>the fitted values from a flexible estimation technique
+regressing Y on X. A vector of the same length as <code>Y</code>; if sample-splitting
+is desired, then the value of <code>f1</code> at each position should be the result
+of predicting from a model trained without that observation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f2</code></td>
+<td>
+<p>the fitted values from a flexible estimation technique
+regressing either (a) <code>f1</code> or (b) Y on X withholding the columns in
+<code>indx</code>. A vector of the same length as <code>Y</code>; if sample-splitting
+is desired, then the value of <code>f2</code> at each position should be the result
+of predicting from a model trained without that observation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cluster_id</code></td>
+<td>
+<p>vector of the same length as <code>Y</code> giving the cluster IDs
+used for the clustered bootstrap, if <code>clustered</code> is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clustered</code></td>
+<td>
+<p>should the bootstrap resamples be performed on clusters
+rather than individual observations? Defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>the type of importance to compute; defaults to
+<code>r_squared</code>, but other supported options are <code>auc</code>,
+<code>accuracy</code>, <code>deviance</code>, and <code>anova</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b</code></td>
+<td>
+<p>the number of bootstrap replicates (only used if <code>bootstrap = TRUE</code>
+and <code>sample_splitting = FALSE</code>); defaults to 1000.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>boot_interval_type</code></td>
+<td>
+<p>the type of bootstrap interval (one of <code>"norm"</code>,
+<code>"basic"</code>, <code>"stud"</code>, <code>"perc"</code>, or <code>"bca"</code>, as in
+<code>boot{boot.ci}</code>) if requested. Defaults to <code>"perc"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>the level to compute the confidence interval at.
+Defaults to 0.05, corresponding to a 95% confidence interval.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a bootstrap-based standard error estimate
+</p>
+
+
+</div>

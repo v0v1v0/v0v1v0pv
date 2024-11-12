@@ -1,0 +1,113 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>heat_map</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>heat_map</h2>
+
+<h3>Description</h3>
+
+<p>R wrapper for <a href="https://github.com/visa/visa-chart-components/tree/master/packages/heat-map">@visa/heat-map</a> via <a href="https://www.htmlwidgets.org/">htmlwidgets</a>.
+</p>
+<p>Here is an example of heat-map in action:
+</p>
+<p><img src="../help/figures/heat-map-1.png" width="400" alt="example heat map"></p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">heat_map(
+  data,
+  xAccessor,
+  yAccessor,
+  valueAccessor,
+  mainTitle = "",
+  subTitle = "",
+  accessibility = list(),
+  props = list(),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>required to be a valid, R data frame. Data used to create chart, an array of objects which includes keys that map to chart accessors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xAccessor</code></td>
+<td>
+<p>String. Key used to determine the x-axis categorical value. (similar to x in ggplot)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>yAccessor</code></td>
+<td>
+<p>String. Key used to determine the y-axis categorical value. (similar to y in ggplot)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>valueAccessor</code></td>
+<td>
+<p>String. Key used to determine heatmap's numeric property, for assigning color.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mainTitle</code></td>
+<td>
+<p>String. The dynamic tag of title for the map (or you can create your own separately). See <code>highestHeadingLevel</code> prop for how tags get assigned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subTitle</code></td>
+<td>
+<p>String. The dynamic tag for a sub title for the map (or you can create your own separately). See <code>highestHeadingLevel</code> prop for how tags get assigned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>accessibility</code></td>
+<td>
+<p>List(). Manages messages and settings for chart accessibility, see <a href="https://github.com/visa/visa-chart-components/tree/master/packages/heat-map#accessibility-props">object definition</a></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>props</code></td>
+<td>
+<p>List(). A valid R list with additional property configurations, see all props for <a href="https://github.com/visa/visa-chart-components/tree/master/packages/heat-map">@visa/heat-map</a></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>All other props passed into the function will be passed through to the chart, see all props for <a href="https://github.com/visa/visa-chart-components/tree/master/packages/heat-map">@visa/heat-map</a>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>To see all available options for the chart properties/API see <a href="https://github.com/visa/visa-chart-components/tree/master/packages/heat-map">@visa/heat-map</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a visaChart htmlwidget object for plotting a heat map
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(dplyr)
+data.frame(UCBAdmissions) %&gt;%
+  filter(Admit == "Rejected") %&gt;%
+  heat_map("Dept","Gender", "Freq")
+</code></pre>
+
+
+</div>

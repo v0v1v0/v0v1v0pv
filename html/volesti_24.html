@@ -1,0 +1,132 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sample_points</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Sample uniformly or normally distributed points from a convex Polytope (H-polytope, V-polytope, zonotope or intersection of two V-polytopes).</h2>
+
+<h3>Description</h3>
+
+<p>Sample n points with uniform or multidimensional spherical gaussian -with a mode at any point- as the target distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sample_points(P, n, random_walk = NULL, distribution = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>P</code></td>
+<td>
+<p>A convex polytope. It is an object from class (a) Hpolytope or (b) Vpolytope or (c) Zonotope or (d) VpolytopeIntersection.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>The number of points that the function is going to sample from the convex polytope.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>random_walk</code></td>
+<td>
+<p>Optional. A list that declares the random walk and some related parameters as follows:
+</p>
+
+<dl>
+<dt>
+<code>walk</code> </dt>
+<dd>
+<p> A string to declare the random walk: i) <code>'CDHR'</code> for Coordinate Directions Hit-and-Run, ii) <code>'RDHR'</code> for Random Directions Hit-and-Run, iii) <code>'BaW'</code> for Ball Walk, iv) <code>'BiW'</code> for Billiard walk, v) <code>'BCDHR'</code> boundary sampling by keeping the extreme points of CDHR or vi) <code>'BRDHR'</code> boundary sampling by keeping the extreme points of RDHR. The default walk is <code>'BiW'</code> for the uniform distribution or <code>'CDHR'</code> for the Gaussian distribution.</p>
+</dd>
+<dt>
+<code>walk_length</code> </dt>
+<dd>
+<p> The number of the steps per generated point for the random walk. The default value is 1.</p>
+</dd>
+<dt>
+<code>nburns</code> </dt>
+<dd>
+<p> The number of points to burn before start sampling.</p>
+</dd>
+<dt>
+<code>starting_point</code> </dt>
+<dd>
+<p> A <code class="reqn">d</code>-dimensional numerical vector that declares a starting point in the interior of the polytope for the random walk. The default choice is the center of the ball as that one computed by the function <code>inner_ball()</code>.</p>
+</dd>
+<dt>
+<code>BaW_rad</code> </dt>
+<dd>
+<p> The radius for the ball walk.</p>
+</dd>
+<dt>
+<code>L</code> </dt>
+<dd>
+<p> The maximum length of the billiard trajectory.</p>
+</dd>
+<dt>
+<code>seed</code> </dt>
+<dd>
+<p> A fixed seed for the number generator.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>distribution</code></td>
+<td>
+<p>Optional. A list that declares the target density and some related parameters as follows:
+</p>
+
+<dl>
+<dt>
+<code>density</code> </dt>
+<dd>
+<p> A string: (a) <code>'uniform'</code> for the uniform distribution or b) <code>'gaussian'</code> for the multidimensional spherical distribution. The default target distribution is uniform.</p>
+</dd>
+<dt>
+<code>variance</code> </dt>
+<dd>
+<p> The variance of the multidimensional spherical gaussian. The default value is 1.</p>
+</dd>
+<dt>
+<code>mode</code> </dt>
+<dd>
+<p> A <code class="reqn">d</code>-dimensional numerical vector that declares the mode of the Gaussian distribution. The default choice is the center of the as that one computed by the function <code>inner_ball()</code>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code class="reqn">d\times n</code> matrix that contains, column-wise, the sampled points from the convex polytope P.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># uniform distribution from the 3d unit cube in H-representation using ball walk
+P = gen_cube(3, 'H')
+points = sample_points(P, n = 100, random_walk = list("walk" = "BaW", "walk_length" = 5))
+
+# gaussian distribution from the 2d unit simplex in H-representation with variance = 2
+A = matrix(c(-1,0,0,-1,1,1), ncol=2, nrow=3, byrow=TRUE)
+b = c(0,0,1)
+P = Hpolytope(A = A, b = b)
+points = sample_points(P, n = 100, distribution = list("density" = "gaussian", "variance" = 2))
+
+# uniform points from the boundary of a 2-dimensional random H-polytope
+P = gen_rand_hpoly(2,20)
+points = sample_points(P, n = 100, random_walk = list("walk" = "BRDHR"))
+
+</code></pre>
+
+
+</div>

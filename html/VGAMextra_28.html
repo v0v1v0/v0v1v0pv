@@ -1,0 +1,277 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>checkTS.VGAMextra</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Polynomial roots based on <em>transfer operators</em> in Vector 
+Generalized Time Series Family Functions
+</h2>
+
+<h3>Description</h3>
+
+<p><code>checkTS.VGAMextra</code> computes the polynomial roots as per 
+<em>transfer operator</em> in Vector 
+Generalized Time Series Family Functions in <span class="pkg">VGAMextra</span>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">        checkTS.VGAMextra(thetaEst = NULL, 
+                          tsclass  = c("AR", "MA"), 
+                          chOrder  = 1,
+                          NofS     = 1,
+                          retmod   = TRUE,
+                          pRoots   = TRUE)
+                          
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>thetaEst</code></td>
+<td>
+
+<p>A vector of coefficients. Its lenght must be <code>NofS * chOrder</code>.
+If <code>vglm</code> is called,
+then <code>thetaEst</code> contains the estimated coefficients of the model
+specified in <code>formula</code> .
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tsclass</code></td>
+<td>
+
+<p>Character indicating the model class to be checked. Presently, 
+options <code>"AR"</code> and <code>"MA"</code> are handled.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>chOrder</code></td>
+<td>
+
+<p>Positive integer. The order of polynomial associated to the
+underlying procees involved:
+either $p$ or $q$, which apply for 
+<code>"AR"</code> or <code>"MA"</code> rspectively.
+
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NofS</code></td>
+<td>
+
+<p>A positive integer denoting the number of Time Series to verify.
+In the <code>vglm</code> environment, <code>NofS</code> is 
+the number of responses given in <code>formula</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>retmod</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> (default), the <em>Module</em> of all roots as per 
+transfer operator in the process established in <code>tsclass</code> 
+is returned. Else, essentially the roots are returned.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pRoots</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> (default), the roots computed from estimated 
+models are displayed along with the time series family function 
+execution.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Stationarity and/or Invertibility of time series (TS) are usually verified 
+via the roots of the polynomial derived from the <em>transfer
+operators</em>. 
+</p>
+<p>In particular, <code>checkTS.VGAMextra</code> computes such roots via
+the coefficients estimated by vector generalized TS family functions 
+available in <span class="pkg">VGAMextra</span> ( <code>ARXff</code>, and 
+<code>MAXff</code>).
+
+</p>
+<p>Specifically, <code>checkTS.VGAMextra</code> verifies whether the TS
+analyzed via <code>vglm</code> is <em>stationary</em> or 
+<em>invertible</em>, accordingly.
+</p>
+<p>Note that an autoregressive process of order-<code class="reqn">p</code> 
+[AR(<code class="reqn">p</code>)]  with coefficients
+<code class="reqn">\theta_{1}, \ldots, \theta_{p}</code> 
+can be written in the form
+</p>
+<p style="text-align: center;"><code class="reqn">  \theta(B) Y_{t} = \varepsilon_{t}, </code>
+</p>
+ 
+
+
+
+<p>where
+</p>
+<p style="text-align: center;"><code class="reqn"> \theta(B) = 1 - \sum_{k = 1}^{p} \theta_{k} B^{k} </code>
+</p>
+
+<p>Here, <code class="reqn"> \theta(B) </code> is referred to as 
+the <em>transfer operator</em> of the process, and 
+<code class="reqn">B^{k} Y_{t} = Y_{t - k},</code>,
+for <code class="reqn">k = 0, 1, \ldots,p</code>, is the lagged single-function.
+</p>
+<p>In general, an autoregressive process of order-<code class="reqn">p</code> is
+<em>stationary</em> if the roots of 
+</p>
+<p style="text-align: center;"><code class="reqn"> \theta(z) = 1 - \theta_{1} z - \ldots - \theta_{q} z^q  </code>
+</p>
+
+<p>lie <em>outside</em> the unit circle, i.e. <code class="reqn">|z| &gt; 1</code>.
+</p>
+<p>Similarly, a moving-average process of order-<code>q</code> can be formulated 
+(without loss of generality <code class="reqn">\mu = 0</code>) 
+</p>
+<p style="text-align: center;"><code class="reqn"> Y_{t} = \psi(B) \varepsilon_{t}, </code>
+</p>
+
+<p>where <code class="reqn"> \psi(B) </code> is the <em>transfer operator</em>, given by
+</p>
+<p style="text-align: center;"><code class="reqn"> \psi(B) = 1 + \sum_{k = 1}^{q} \psi_{k} B^{k}, </code>
+</p>
+
+<p>Note that <code class="reqn"> \psi_{0} = 1 </code>, and 
+<code class="reqn">B^{k} \varepsilon_{t} = \varepsilon{t - k} </code>.
+</p>
+<p>Hence, a moving-average process of order-<code class="reqn">q</code> [MA(<code class="reqn">q</code>)], 
+generally given by (note <code class="reqn">\mu = 0</code>)
+</p>
+<p style="text-align: center;"><code class="reqn">Y_{t} = \phi_1 \varepsilon_{t - 1} + \ldots + 
+              \phi_q \varepsilon_{t - q} + \varepsilon_{t},</code>
+</p>
+
+<p>is <em>invertible</em> if all the roots of
+</p>
+<p style="text-align: center;"><code class="reqn"> \phi(B) = 1 + \phi_{1} B + \ldots + \phi_{q} B^q  </code>
+</p>
+
+<p>lie <em>outside</em> the unit circle., i.e.m <code class="reqn">|z| &gt; 1</code>.
+</p>
+<p>Parallel arguments can be stated for autoregressive moving
+aberage processes (ARMA). See Box and Jenkins (1970) for 
+further details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector whose elements are the roots of polynomials <em>inherited</em>
+from <em>transfer operators</em> according to the process analyzed. 
+</p>
+<p>Alternatively, the modules of roots can by returned instead of merely roots
+via the <code>retmod</code> argument. 
+
+
+
+</p>
+
+
+<h3>Warning</h3>
+
+<p>The argument <code>thetaEst</code> manages the coefficients of the TS
+model(s) in turn. Then, it must be <code>NofS * chOrder</code> length, 
+where <code>NofS</code> is the number of responses established in the 
+<code>vglm</code> call.
+Here the coefficients for each response must be sequentially groped.
+</p>
+<p>A moving average process is always stationary (See Madsen (2007) for
+further details). Consequently, the <code>MAXff</code> 
+in <span class="pkg">VGAMextra</span> verifies (by default) only for invertibility.
+To enable this option set <code>nowarning = FALSE</code> in the 
+<code>MAXff</code> 
+call.
+</p>
+<p>Similarly, <code>ARXff</code> verifies whether the TS data 
+fitted is stationary, whereas <code>ARMAXff()</code> verifies both properties.
+</p>
+
+
+<h3>Note</h3>
+
+<p>For TS family functions in the VGLM/VGAM framework, 
+<code>checkTS.VGAMextra</code> is called at the final iteration of Fisher scoring.
+It means that the MLE estimates are actually evaluated to 
+verify whether the process is <em>stationary</em> or <em>invertible</em>.
+</p>
+<p>If any root has module less than <code class="reqn">1 + 1e-5</code>, a <code>warning</code> is displayed 
+for informative purposes.
+</p>
+<p>Argument <code>thetaEst</code> manages the parameters of the TS model 
+in turn.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda and T. W. Yee.
+
+</p>
+
+
+<h3>References</h3>
+
+<p>Box, G.E.P. and Jenkins, G.M. (1970) 
+<em>Time Series Analysis: Forecasting and Control</em>. 
+Holden-Day, San Francisco, USA.
+</p>
+<p>Madsen, H (2007)
+<em>Time Series Analysis</em>.
+Chapman and Hall/CRC, Boca Raton, Florida, USA.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+# A moving average process order-3 with coeffs --&gt; c(2.4, -5.6, 0.83)
+#-------------------------#
+# This is NOT invertible !
+#-------------------------#
+
+MAcoeffs &lt;- c(2.4, -5.6, 0.83)
+checkTS.VGAMextra(thetaEst = MAcoeffs, 
+                  tsclass = "MA", 
+                  chOrder = 3,
+                  retmod = FALSE)
+
+
+# AR process order-3 with coeffs --&gt; c( 0.45, 0.45^2, 0.45^3 )
+#-------------------------#
+# This is stationary !
+#-------------------------#
+
+ARcoeffs &lt;- c( 0.45 , 0.45^2 , 0.45^3 )
+checkTS.VGAMextra(thetaEst = ARcoeffs, 
+                  tsclass = "AR", 
+                  chOrder = 3,
+                  retmod = TRUE,
+                  pRoots = TRUE)  # DEFAULT for 'pRoots'
+
+</code></pre>
+
+
+</div>

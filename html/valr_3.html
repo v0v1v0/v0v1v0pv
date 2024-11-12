@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_absdist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute absolute distances between intervals.</h2>
+
+<h3>Description</h3>
+
+<p>Computes the absolute distance between the midpoint of each <code>x</code> interval and
+the midpoints of each closest <code>y</code> interval.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_absdist(x, y, genome)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>genome</code></td>
+<td>
+<p>genome_df</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Absolute distances are scaled by the inter-reference gap for the
+chromosome as follows. For <code>Q</code> query points and <code>R</code> reference
+points on a chromosome, scale the distance for each query point <code>i</code> to
+the closest reference point by the inter-reference gap for each chromosome.
+If an <code>x</code> interval has no matching <code>y</code> chromosome,
+<code>.absdist</code> is <code>NA</code>.
+</p>
+<p style="text-align: center;"><code class="reqn">d_i(x,y) = min_k(|q_i - r_k|)\frac{R}{Length\ of\ chromosome}</code>
+</p>
+
+<p>Both absolute and scaled distances are reported as <code>.absdist</code> and
+<code>.absdist_scaled</code>.
+</p>
+<p>Interval statistics can be used in combination with
+<code>dplyr::group_by()</code> and <code>dplyr::do()</code> to calculate
+statistics for subsets of data. See <code>vignette('interval-stats')</code> for
+examples.
+</p>
+
+
+<h3>Value</h3>
+
+<p>ivl_df with <code>.absdist</code> and <code>.absdist_scaled</code> columns.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002529">https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002529</a>
+</p>
+<p>Other interval statistics: 
+<code>bed_fisher()</code>,
+<code>bed_jaccard()</code>,
+<code>bed_projection()</code>,
+<code>bed_reldist()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">genome &lt;- read_genome(valr_example("hg19.chrom.sizes.gz"))
+
+x &lt;- bed_random(genome, seed = 1010486)
+y &lt;- bed_random(genome, seed = 9203911)
+
+bed_absdist(x, y, genome)
+
+</code></pre>
+
+
+</div>

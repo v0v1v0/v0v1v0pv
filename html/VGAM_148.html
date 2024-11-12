@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cardioid</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Cardioid Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the two parameters of the
+cardioid distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cardioid(lmu = extlogitlink(min = 0, max = 2*pi),
+         lrho = extlogitlink(min = -0.5, max = 0.5),
+         imu = NULL, irho = 0.3, nsimEIM = 100, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmu, lrho</code></td>
+<td>
+
+<p>Parameter link functions applied to the <code class="reqn">\mu</code>
+and <code class="reqn">\rho</code> parameters, respectively.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imu, irho</code></td>
+<td>
+
+<p>Initial values.
+A <code>NULL</code> means an initial value is chosen internally.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The two-parameter cardioid distribution
+has a density that can be written as
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\mu,\rho) = \frac{1}{2\pi}
+        \left(1 + 2\, \rho \cos(y - \mu) \right) </code>
+</p>
+
+<p>where <code class="reqn">0 &lt; y &lt; 2\pi</code>,
+<code class="reqn">0 &lt; \mu &lt; 2\pi</code>, and
+<code class="reqn">-0.5 &lt; \rho &lt; 0.5</code> is the concentration
+parameter.
+The default link functions enforce the range constraints of
+the parameters.
+</p>
+<p>For positive <code class="reqn">\rho</code> the distribution is unimodal and
+symmetric about <code class="reqn">\mu</code>.
+The mean of <code class="reqn">Y</code> (which make up the fitted values) is
+<code class="reqn">\pi + (\rho/\pi) ((2 \pi-\mu) \sin(2 \pi-\mu) +
+       \cos(2 \pi-\mu) - \mu \sin(\mu) - \cos(\mu))</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see
+<code>vglmff-class</code>).  The object is used by modelling
+functions such as <code>vglm</code>, <code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Numerically, this distribution can be difficult to fit because
+of a log-likelihood having multiple maximums.  The user is
+therefore encouraged to try different starting values, i.e.,
+make use of <code>imu</code> and <code>irho</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Fisher scoring using simulation is used.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Jammalamadaka, S. R. and SenGupta, A. (2001).
+<em>Topics in Circular Statistics</em>,
+Singapore: World Scientific.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rcard</code>,
+<code>extlogitlink</code>,
+<code>vonmises</code>.
+</p>
+<p><span class="pkg">CircStats</span> and <span class="pkg">circular</span> currently have a lot more
+R functions for circular data than the <span class="pkg">VGAM</span> package.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+cdata &lt;- data.frame(y = rcard(n = 1000, mu = 4, rho = 0.45))
+fit &lt;- vglm(y ~ 1, cardioid, data = cdata, trace = TRUE)
+coef(fit, matrix=TRUE)
+Coef(fit)
+c(with(cdata, mean(y)), head(fitted(fit), 1))
+summary(fit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

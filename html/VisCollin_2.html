@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cars</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Cars Data</h2>
+
+<h3>Description</h3>
+
+<p>Data from the 1983 ASA Data Exposition, held in conjunction with the Annual
+Meetings in Toronto, August 15-18, 1983,
+<a href="https://community.amstat.org/jointscsg-section/dataexpo/dataexpobefore1993">https://community.amstat.org/jointscsg-section/dataexpo/dataexpobefore1993</a>
+The data set was collected by Ernesto Ramos and David Donoho on characteristics of automobiles.
+</p>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 406 observations on the following 10 variables:
+</p>
+
+<dl>
+<dt><code>make</code></dt>
+<dd>
+<p>make of car, a factor with levels <code>amc</code> <code>audi</code> <code>bmw</code> <code>buick</code> <code>cadillac</code> <code>chev</code> <code>chrysler</code> <code>citroen</code> <code>datsun</code> <code>dodge</code> <code>fiat</code> <code>ford</code> <code>hi</code> <code>honda</code> <code>mazda</code> <code>mercedes</code> <code>mercury</code> <code>nissan</code> <code>oldsmobile</code> <code>opel</code> <code>peugeot</code> <code>plymouth</code> <code>pontiac</code> <code>renault</code> <code>saab</code> <code>subaru</code> <code>toyota</code> <code>triumph</code> <code>volvo</code> <code>vw</code></p>
+</dd>
+<dt><code>model</code></dt>
+<dd>
+<p>model of car, a character vector</p>
+</dd>
+<dt><code>mpg</code></dt>
+<dd>
+<p>miles per gallon, a numeric vector</p>
+</dd>
+<dt><code>cylinder</code></dt>
+<dd>
+<p>number of cylinders, a numeric vector</p>
+</dd>
+<dt><code>engine</code></dt>
+<dd>
+<p>engine displacement (cu. inches), a numeric vector</p>
+</dd>
+<dt><code>horse</code></dt>
+<dd>
+<p>horsepower, a numeric vector</p>
+</dd>
+<dt><code>weight</code></dt>
+<dd>
+<p>vehicle weight (lbs.), a numeric vector</p>
+</dd>
+<dt><code>accel</code></dt>
+<dd>
+<p>time to accelerate from O to 60 mph (sec.), a numeric vector</p>
+</dd>
+<dt><code>year</code></dt>
+<dd>
+<p>model year (modulo 100), a numeric vector ranging from 70 – 82</p>
+</dd>
+<dt><code>origin</code></dt>
+<dd>
+<p>region of origin, a factor with levels <code>Amer</code> <code>Eur</code> <code>Japan</code></p>
+</dd>
+</dl>
+<h3>Source</h3>
+
+<p>The data was provided for the ASA Data Exposition
+in a "shar" file, <a href="http://lib.stat.cmu.edu/datasets/cars.data">http://lib.stat.cmu.edu/datasets/cars.data</a>.
+It is a version of that used by Donoho and Ramos (1982) to illustrate PRIM-H.
+</p>
+
+
+<h3>References</h3>
+
+<p>Donoho, David and Ramos, Ernesto (1982), “PRIMDATA: Data Sets for Use With PRIM-H” (Draft).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(cars)
+cars.mod &lt;- lm (mpg ~ cylinder + engine + horse + weight + accel + year,
+                data=cars)
+car::vif(cars.mod)
+
+(cd &lt;- colldiag(cars.mod, center=TRUE))
+
+# simplified display
+print(cd, fuzz=.3)
+</code></pre>
+
+
+</div>

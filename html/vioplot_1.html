@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>add_labels</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Annotated Violin Plot</h2>
+
+<h3>Description</h3>
+
+<p>Annotate violin plots with custom labels
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">add_labels(variable, categories, cex = par()$cex, col = par()$fg, height = 0.5)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>variable</code></td>
+<td>
+<p>continuous variable to to plot on y-axis (numeric or integer)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>categories</code></td>
+<td>
+<p>discrete variable to break down groups (factor or string).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex</code></td>
+<td>
+<p>size of text.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>colour of text</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p>adjust placement of text.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# box- vs violin-plot
+par(mfrow=c(2,1))
+mu&lt;-2
+si&lt;-0.6
+bimodal&lt;-c(rnorm(1000,-mu,si),rnorm(1000,mu,si))
+uniform&lt;-runif(2000,-4,4)
+normal&lt;-rnorm(2000,0,3)
+
+# annotate a violin plot
+group &lt;- rep(c("bimodal", "uniform", "normal"),
+             sapply(list(bimodal, uniform, normal), length))
+table(group)
+vioplot(bimodal,uniform,normal)
+add_labels(unlist(bimodal,uniform,normal), group, height = 3, cex = 0.8)
+
+# boxplots are also supported
+boxplot(bimodal,uniform,normal)
+add_labels(unlist(bimodal,uniform,normal), group, height = 3, cex = 0.8)
+
+
+# formula input
+data("iris")
+vioplot(Sepal.Length~Species, data = iris, main = "Sepal Length",
+        col=c("lightgreen", "lightblue", "palevioletred"))
+legend("bottomright", legend=c("setosa", "versicolor", "virginica"),
+       fill=c("lightgreen", "lightblue", "palevioletred"), cex = 0.6)
+add_labels(unlist(iris$Sepal.Length), iris$Species, height = 0, cex = 0.8)
+
+# demo with outliers
+iris2 &lt;- iris
+iris2 &lt;- rbind(iris2, c(7, 0, 0, 0, "setosa"))
+iris2 &lt;- rbind(iris2, c(0, 0, 0, 0, "setosa"))
+iris2 &lt;- rbind(iris2, c(9, 0, 0, 0, "versicolor"))
+iris2 &lt;- rbind(iris2, c(2, 0, 0, 0, "versicolor"))
+iris2 &lt;- rbind(iris2, c(10, 0, 0, 0, "virginica"))
+iris2 &lt;- rbind(iris2, c(12, 0, 0, 0, "virginica"))
+iris2$Species &lt;- factor(iris2$Species)
+iris2$Sepal.Length &lt;- as.numeric(iris2$Sepal.Length)
+
+vioplot(Sepal.Length~Species, data = iris2, main = "Sepal Length",
+        col=c("lightgreen", "lightblue", "palevioletred"))
+add_outliers(unlist(iris2$Sepal.Length), iris2$Species,
+             col = "grey50", fill = "red", bars = "grey85")
+legend("bottomright", legend=c("setosa", "versicolor", "virginica"),
+       fill=c("lightgreen", "lightblue", "palevioletred"), cex = 0.6)
+add_labels(unlist(iris2$Sepal.Length), iris2$Species, height = 0, cex = 0.8)
+
+</code></pre>
+
+
+</div>

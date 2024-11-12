@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lambertW</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+The Lambert W Function
+</h2>
+
+<h3>Description</h3>
+
+<p>Computes the Lambert <em>W</em> function for real values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lambertW(x, tolerance = 1e-10, maxit = 50)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A vector of reals.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tolerance</code></td>
+<td>
+
+<p>Accuracy desired.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxit</code></td>
+<td>
+
+<p>Maximum number of iterations of third-order Halley's method.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Lambert <code class="reqn">W</code> function is the root of the equation
+<code class="reqn">W(z) \exp(W(z)) = z</code>
+for complex <code class="reqn">z</code>.
+If <code class="reqn">z</code> is real and <code class="reqn">-1/e &lt; z &lt; 0</code> then
+it has two possible real values,
+and currently only the upper branch
+(often called <code class="reqn">W_0</code>)
+is computed so that
+a value that is <code class="reqn">\geq -1</code> is returned.
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>This function returns the principal branch of the <code class="reqn">W</code> function
+for <em>real</em> <code class="reqn">z</code>.
+It returns <code class="reqn">W(z) \geq -1</code>,
+and <code>NA</code> for <code class="reqn">z &lt; -1/e</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>If convergence does not occur then increase the value of
+<code>maxit</code> and/or <code>tolerance</code>.
+</p>
+<p>Yet to do: add an argument <code>lbranch = TRUE</code> to return
+the lower branch
+(often called <code class="reqn">W_{-1}</code>)
+for real <code class="reqn">-1/e \leq z &lt; 0</code>;
+this would give <code class="reqn">W(z) \leq -1</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee
+</p>
+
+
+<h3>References</h3>
+
+<p>Corless, R. M. and Gonnet, G. H. and
+Hare, D. E. G. and Jeffrey, D. J. and Knuth, D. E. (1996).
+On the Lambert <code class="reqn">W</code> function.
+<em>Advances in Computational Mathematics</em>,
+<b>5</b>(4), 329–359.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>log</code>,
+<code>exp</code>,
+<code>bell</code>.
+There is also a package called <span class="pkg">LambertW</span>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> ## Not run: 
+curve(lambertW, -exp(-1), 3, xlim = c(-1, 3), ylim = c(-2, 1),
+      las = 1, col = "orange", n = 1001)
+abline(v = -exp(-1), h = -1, lwd = 2, lty = "dotted", col = "gray")
+abline(h = 0, v = 0, lty = "dashed", col = "blue") 
+## End(Not run)
+</code></pre>
+
+
+</div>

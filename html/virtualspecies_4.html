@@ -1,0 +1,100 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>custnorm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Normal function defined by extremes</h2>
+
+<h3>Description</h3>
+
+<p>A modified version of the normal function based on three parameters:
+</p>
+
+<ul>
+<li>
+<p>the mean
+</p>
+</li>
+<li>
+<p>the absolute difference between the mean and extreme values
+</p>
+</li>
+<li>
+<p>the percentage of area under the curve between the specified extreme values
+</p>
+</li>
+</ul>
+<p>See the example for an easier understanding.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">custnorm(x, mean, diff, prob)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a numeric value or vector. The input environmental variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean</code></td>
+<td>
+<p>a numeric value or vector. The optimum (mean) of the normal curve</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>diff</code></td>
+<td>
+<p>a numeric value or vector. The absolute difference between the mean and extremes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prob</code></td>
+<td>
+<p>a numeric value or vector. The percentage of the area under the curve between the 
+chosen extreme values</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a numeric value or vector resulting from the function
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>, Florian David
+</p>
+<p>Maintainer: Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Let's define the response of a species to temperature which
+#  - has an optimum at 20 degrees C
+#  - occurs 99% of the time between 13 and 27 degrees C.
+# In that case, mean = 20, diff = 7, and prob = 0.99
+
+# First, we generate an arbitrary temperature variable 
+# between 0 and 30 degrees C
+temp &lt;- seq(0, 30, length = 1000)
+
+
+# Then, we calculate the response to this variable with the chosen values
+response &lt;- custnorm(x = temp, mean = 20, diff = 7, prob = .99)
+
+plot(response ~ temp, type = "l")
+</code></pre>
+
+
+</div>

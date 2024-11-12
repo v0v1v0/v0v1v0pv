@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bellff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Bell Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimating the shape parameter of the Bell distribution by
+maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bellff(lshape = "loglink", zero = NULL, gshape = expm1(1.6 * ppoints(7)))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>lshape, zero, gshape</code></td>
+<td>
+
+<p>More information is at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The Bell distribution
+has a probability density function that can be written
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;s) = \frac{s^y \exp(1 - e^s) B_y}{y!}   </code>
+</p>
+
+<p>for <code class="reqn">y=0(1)\infty</code> and shape parameter <code class="reqn">0&lt;s</code>.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">\exp(s) s</code>
+(returned as the fitted values).
+Fisher-scoring is used.
+This <span class="pkg">VGAM</span> family function handles multiple responses.
+</p>
+<p>The function <code>bell</code> returns the first 218 Bell
+numbers as finite numbers, and
+returns <code>Inf</code> when its argument has a higher value.
+Hence this <span class="pkg">VGAM</span> family function can only handle low-value
+counts of less than 219.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Castellares, F. and Ferrari, S. L. P. and Lemonte, A. J. (2018).
+On the Bell distribution and its associated regression model
+for count data.
+<em>Applied Mathematical Modelling</em>,
+<b>56</b>, 172–185.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>bell</code>,
+<code>dbell</code>,
+<code>poissonff</code>.
+</p>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">bdata &lt;- data.frame(y = rbell(1000, loglink(0.5, inverse = TRUE)))
+bfit &lt;- vglm(y ~ 1, bellff, bdata, trace = TRUE, crit = "coef")
+coef(bfit, matrix = TRUE)
+Coef(bfit)
+</code></pre>
+
+
+</div>

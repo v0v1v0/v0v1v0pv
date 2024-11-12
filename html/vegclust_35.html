@@ -1,0 +1,187 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>stratifyvegdata</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Reshapes community data from individual into stratified form
+</h2>
+
+<h3>Description</h3>
+
+<p>Function <code>stratifyvegdata</code> reshapes individual abundance values into species abundance values per size class or combination of size classes. Function <code>as.stratifiedvegdata</code> checks if the input list has appropriate properties and turns it into an object of class '<code>stratifiedvegdata</code>'.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">stratifyvegdata(x, sizes1, sizes2 = NULL, treeSel=NULL, spcodes = NULL, 
+                plotColumn="plot", speciesColumn = "species", 
+                abundanceColumn="abundance", size1Column = "size", size2Column = NULL, 
+                cumulative=FALSE, counts=FALSE, mergeSpecies=FALSE, verbose=FALSE)
+as.stratifiedvegdata(X)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A data frame containing individual plant data. Individuals are in rows, while measurements are in columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sizes1</code></td>
+<td>
+<p>A numerical vector containing the breaks for primary size classes in ascending order.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sizes2</code></td>
+<td>
+<p>A numerical vector containing the breaks for secondary size classes in ascending order.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>treeSel</code></td>
+<td>
+<p>A logical vector specifying which rows in <code>x</code> to be used. By default (<code>treeSel = NULL</code>) all rows are taken.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spcodes</code></td>
+<td>
+<p>A character vector indicating the codes of species to be used for stratification (species codes beyond those appearing in <code>x</code> are possible). If <code>spcodes = NULL</code> then all species in <code>x</code> are used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plotColumn</code></td>
+<td>
+<p>The name of the column in <code>x</code> that contains plot identifiers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>speciesColumn</code></td>
+<td>
+<p>The name of the column in <code>x</code> that contains species names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>abundanceColumn</code></td>
+<td>
+<p>The name of the column in <code>x</code> that contains abundance values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size1Column</code></td>
+<td>
+<p>The name of the column in <code>x</code> that contains values for primary size classes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size2Column</code></td>
+<td>
+<p>The name of the column in <code>x</code> that contains values for secondary size classes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cumulative</code></td>
+<td>
+<p>A flag to indicate that cumulative abundance profiles or surfaces are desired.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>counts</code></td>
+<td>
+<p>A flag to indicate that the output should be individual counts instead of added abundance values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mergeSpecies</code></td>
+<td>
+<p>A flag to indicate that species identity should be ignored. This leads to analyzing the structure of biomass disregarding species identity.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>A logical flag to indicate extra output.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>A list with as many elements as plot records. Each element should be of class 'matrix' or 'data.frame' with species in rows and strata in columns. Furthermore, the number of rows (species) and columns (strata) should be the same for all elements.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For each individual (row) in <code>x</code>, <code>stratifyvegdata</code> assigns it to the size class (stratum) containing its size. The corresponding abundance value (e.g. crown cover) of the individual is added to the abundance of the corresponding species at the size class (stratum). If <code>sizes2</code> and <code>size2Column</code> are supplied, the function assigns each individual (row) in <code>x</code> to the combination of size classes (e.g. tree height and diameter). 
+</p>
+
+
+<h3>Value</h3>
+
+<p>Both functions return an object of class '<code>stratifiedvegdata</code>', which is a list of matrices, one for each plot record. Each element (matrix) has as many rows as species and as many columns as size classes (i.e., as many as elements in vector <code>sizes1</code>). Columns are named starting with 'S' and continuing with the size class (stratum) number. If <code>mergeSpecies=TRUE</code> then all matrices have a single row (whose name is <code>"all"</code>). If <code>sizes2</code> and <code>size2Column</code> are supplied to <code>stratifyvegdata</code>, the function returns an object of class '<code>doublestratifiedvegdata</code>', which is a list of arrays, one for each plot record. Each element (array) has three dimensions corresponding to species, primary sizes (number of elements in in vector <code>sizes1</code>) and secondary sizes (number of elements in in vector <code>sizes2</code>). If <code>cumulative=TRUE</code> then the function returns cumulative abundances (see <code>CAP</code> and <code>CAS</code>).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, CREAF.
+</p>
+
+
+<h3>References</h3>
+
+<p>De Cáceres, M., Legendre, P. &amp; He, F. (2013) Dissimilarity measurements and the size structure of ecological communities. Methods in Ecology and Evolution 4: 1167-1177.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>reshape</code>, <code>CAP</code>, <code>CAS</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Load tree data
+data(treedata)
+
+## Inspect tree data
+head(treedata)
+
+## Define stratum thresholds (4 strata)
+heights = seq(0,4, by=0.5)
+diameters = seq(0,2, by=0.5)
+
+## Stratify tree data using heights as structural variable
+X = stratifyvegdata(treedata, sizes1=heights, plotColumn="plotID",
+                    speciesColumn="species", size1Column="height", counts=TRUE)
+
+## Inspect the second plot record
+X[[2]]
+
+## Stratify tree data using heights as structural variable and cover as abundance
+Y = stratifyvegdata(treedata, sizes1=heights, plotColumn="plotID",
+                    speciesColumn="species", size1Column="height", 
+                    abundanceColumn="cover")
+Y[[2]]
+
+## Stratify tree data using heights and diameters as structural variables
+Z = stratifyvegdata(treedata, sizes1=heights, sizes2=diameters, plotColumn="plotID",
+                    speciesColumn="species", size1Column="height", size2Column="diam",
+                    counts=TRUE)
+Z[[2]]
+
+
+
+</code></pre>
+
+
+</div>

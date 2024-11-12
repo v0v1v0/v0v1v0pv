@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>formatEstimateValue</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Formats the estimate_value column</h2>
+
+<h3>Description</h3>
+
+<p>Formats the estimate_value column of <code style="white-space: pre;">⁠&lt;summarised_result&gt;⁠</code> object by editing
+number of decimals, decimal and thousand/millions separator marks.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">formatEstimateValue(
+  result,
+  decimals = c(integer = 0, numeric = 2, percentage = 1, proportion = 3),
+  decimalMark = ".",
+  bigMark = ","
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>result</code></td>
+<td>
+<p>A <code style="white-space: pre;">⁠&lt;summarised_result&gt;⁠</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>decimals</code></td>
+<td>
+<p>Number of decimals per estimate type (integer, numeric,
+percentage, proportion), estimate name, or all estimate values (introduce the
+number of decimals).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>decimalMark</code></td>
+<td>
+<p>Decimal separator mark.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bigMark</code></td>
+<td>
+<p>Thousand and millions separator mark.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code style="white-space: pre;">⁠&lt;summarised_result&gt;⁠</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">result &lt;- mockSummarisedResult()
+
+result |&gt; formatEstimateValue(decimals = 1)
+
+result |&gt; formatEstimateValue(decimals = c(integer = 0, numeric = 1))
+
+result |&gt;
+  formatEstimateValue(decimals = c(numeric = 1, count = 0))
+</code></pre>
+
+
+</div>

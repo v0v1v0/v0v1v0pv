@@ -1,0 +1,118 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Betageom</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Beta-Geometric Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, and random
+generation for the beta-geometric distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dbetageom(x, shape1, shape2, log = FALSE)
+pbetageom(q, shape1, shape2, log.p = FALSE)
+rbetageom(n, shape1, shape2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+<p>vector of quantiles.
+</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Same as <code>runif</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape1, shape2</code></td>
+<td>
+
+<p>the two (positive) shape parameters of the standard
+beta distribution. They are called <code>a</code> and <code>b</code> in
+<code>beta</code> respectively.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log, log.p</code></td>
+<td>
+
+<p>Logical.
+If <code>TRUE</code> then all probabilities <code>p</code> are given as
+<code>log(p)</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The beta-geometric distribution is a geometric distribution whose
+probability of success is not a constant but it is generated
+from a beta distribution with parameters <code>shape1</code> and
+<code>shape2</code>.  Note that the mean of this beta distribution
+is <code>shape1/(shape1+shape2)</code>, which therefore is the mean
+of the probability of success.
+</p>
+
+
+
+
+
+<h3>Value</h3>
+
+<p><code>dbetageom</code> gives the density,
+<code>pbetageom</code> gives the distribution function, and
+<code>rbetageom</code> generates random deviates.
+</p>
+
+
+
+<h3>Note</h3>
+
+<p><code>pbetageom</code> can be particularly slow.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>geometric</code>,
+<code>betaff</code>,
+<code>Beta</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+shape1 &lt;- 1; shape2 &lt;- 2; y &lt;- 0:30
+proby &lt;- dbetageom(y, shape1, shape2, log = FALSE)
+plot(y, proby, type = "h", col = "blue", ylab = "P[Y=y]", main = paste0(
+     "Y ~ Beta-geometric(shape1=", shape1,", shape2=", shape2, ")"))
+sum(proby)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

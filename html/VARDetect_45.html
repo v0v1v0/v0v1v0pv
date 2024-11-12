@@ -1,0 +1,65 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary.VARDetect.result</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function to summarize the change points estimated by VARDetect</h2>
+
+<h3>Description</h3>
+
+<p>Summary method for objects of class <code>VARDetect.result</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VARDetect.result'
+summary(object, threshold = 0.1, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a <code>VARDetect.result</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threshold</code></td>
+<td>
+<p>A numeric positive value, used to determine the threshold of nonzero entries</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>not in use</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A series of summary, including the estimated change points, running time
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nob &lt;- 1000
+p &lt;- 15
+brk &lt;- c(floor(nob / 3), floor(2 * nob / 3), nob + 1)
+m &lt;- length(brk)
+q.t &lt;- 1
+try &lt;- simu_var('sparse',nob=nob,k=p,lags=q.t,brk=brk,sp_pattern="off-diagonal",seed=1)
+data &lt;- try$series
+data &lt;- as.matrix(data)
+fit &lt;- tbss(data, method = "sparse", q = q.t)
+summary(fit)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,65 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>synchroniseNA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Synchronise NA values among layers of a stack</h2>
+
+<h3>Description</h3>
+
+<p>This function ensures that cells containing NAs are the same among all the
+layers of a raster stack, i.e.that for any given pixel of the stack, if one layer has a NA, then 
+all layers should be set to NA for that pixel.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">synchroniseNA(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a raster stack object which needs to be synchronised.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>This function can do that in two different ways; if your computer has enough RAM a fast way will be
+used; otherwise a slower but memory-safe way will be used.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+</p>
+<p>with help from C. N. Meynard, C. Bellard &amp; F. Courchamp
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Creation of a stack with different NAs across layers
+m &lt;- matrix(nr = 10, nc = 10, 1:100)
+r1 &lt;- rast(m)
+r2 &lt;- rast(m)
+r1[sample(1:ncell(r1), 20)] &lt;- NA
+r2[sample(1:ncell(r2), 20)] &lt;- NA
+s &lt;- c(r1, r2)
+
+
+# Effect of the synchroniseNA() function
+plot(s) # Not yet synchronised
+s &lt;- synchroniseNA(s)
+plot(s) # Synchronised
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>concat_conserved_kmer</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>k-mer sequences concatenation</h2>
+
+<h3>Description</h3>
+
+<p>This function concatenates completely (index incidence = 100
+index incidence &lt; 100
+k-mer position or are adjacent to each other and generate the CCS/HCS sequence
+in either CSv or FASTA format
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">concat_conserved_kmer(
+  data,
+  conservation_level = "HCS",
+  kmer = 9,
+  threshold_pct = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>DiMA JSON converted csv file data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>conservation_level</code></td>
+<td>
+<p>CCS (completely conserved) / HCS (highly conserved)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kmer</code></td>
+<td>
+<p>size of the k-mer window</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threshold_pct</code></td>
+<td>
+<p>manually set threshold of index.incidence for HCS</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list wit csv and fasta dataframes
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">csv&lt;-concat_conserved_kmer(proteins_1host)$csv
+csv_2hosts&lt;-concat_conserved_kmer(protein_2hosts, conservation_level = "CCS")$csv
+fasta &lt;- concat_conserved_kmer(protein_2hosts, conservation_level = "HCS")$fasta
+</code></pre>
+
+
+</div>

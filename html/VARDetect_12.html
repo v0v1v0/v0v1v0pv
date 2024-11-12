@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>eval_func</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Evaluation function, return the performance of simulation results</h2>
+
+<h3>Description</h3>
+
+<p>Evaluation function, return the performance of simulation results
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">eval_func(true_mats, est_mats)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>true_mats</code></td>
+<td>
+<p>a list of true matrices for all segments, the length of list equals to the true number of segments</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>est_mats</code></td>
+<td>
+<p>a list of estimated matrices for all simulation replications, for each element, it is a list of numeric matrices,
+representing the estimated matrices for segments</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list, containing the results for all measurements
+</p>
+
+<dl>
+<dt>sensitivity</dt>
+<dd>
+<p>A numeric vector, containing all the results for sensitivity over all replications</p>
+</dd>
+<dt>specificity</dt>
+<dd>
+<p>A numeric vector, including all the results for specificity over all replications</p>
+</dd>
+<dt>accuracy</dt>
+<dd>
+<p>A numeric vector, the results for accuracy over all replications</p>
+</dd>
+<dt>mcc</dt>
+<dd>
+<p>A numeric vector, the results for Matthew's correlation coefficients over all replications</p>
+</dd>
+<dt>false_reps</dt>
+<dd>
+<p>An integer vector, recording all the replications which falsely detects the change points, over-detect or under-detect</p>
+</dd>
+</dl>
+<h3>Examples</h3>
+
+<pre><code class="language-R">true_mats &lt;- vector('list', 2)
+true_mats[[1]] &lt;- matrix(c(1, 0, 0.5, 0.8), 2, 2, byrow = TRUE)
+true_mats[[2]] &lt;- matrix(c(0, 0, 0, 0.75), 2, 2, byrow = TRUE)
+est_mats &lt;- vector('list', 5)
+for(i in 1:5){
+    est_mats[[i]] &lt;- vector('list', 2)
+    est_mats[[i]][[1]] &lt;- matrix(sample(c(0, 1, 2), size = 4, replace = TRUE), 2, 2, byrow = TRUE)
+    est_mats[[i]][[2]] &lt;- matrix(sample(c(0, 1), size = 4, replace = TRUE), 2, 2, byrow = TRUE)
+}
+perf_eval &lt;- eval_func(true_mats, est_mats)
+</code></pre>
+
+
+</div>

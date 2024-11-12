@@ -1,0 +1,187 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>PIMP</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+PIMP-algorithm for the permutation variable importance measure
+</h2>
+
+<h3>Description</h3>
+
+<p><code>PIMP</code> implements the test approach of Altmann et al. (2010) for the permutation variable importance measure <code>VarImp</code>
+in a random forest for classification and regression.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## Default S3 method:
+PIMP(X, y, rForest, S = 100, parallel = FALSE, ncores=0, seed = 123, ...)
+## S3 method for class 'PIMP'
+print(x, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>a data frame or a matrix of predictors</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>a response vector. If a factor, classification is assumed,
+otherwise regression is assumed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rForest</code></td>
+<td>
+<p>an object of class <code>randomForest</code>, <code>importance</code> must
+be set to True.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>S</code></td>
+<td>
+<p>The number of permutations for the response vector <code>y</code>. Default is <code>S=100</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+<p>Should the PIMP-algorithm run parallel?  Default is <code>parallel=FALSE</code> and the number of cores is
+set to one. The parallelized version of the PIMP-algorithm are based on
+<code>mclapply</code> and so is not available on Windows.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncores</code></td>
+<td>
+<p>The number of cores to use, i.e. at most how many child processes will be run
+simultaneously. Must be at least one, and parallelization requires at least two cores.
+If <code>ncores=0</code>, then the half of CPU cores on the current host are used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>a single integer value to specify seeds. The "combined multiple-recursive generator"
+from L'Ecuyer (1999) is set as random number generator for the parallelized version of
+the PIMP-algorithm.  Default is <code> seed = 123</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>optional parameters for <code>randomForest </code> </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>for the print method, an <code>PIMP</code> object </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The PIMP-algorithm by Altmann et al. (2010) permutes <code class="reqn">S</code> times the response variable <code class="reqn">y</code>.
+For each permutation of the response vector <code class="reqn">y^{*s}</code>, a new forest is grown and the permutation
+variable importance measure (<code class="reqn">VarImp^{*s}</code>) for all predictor variables <code class="reqn">X</code> is computed.
+The vector <code>perVarImp</code> of <code class="reqn">S</code> <code class="reqn">VarImp</code> measures for every predictor variables are used
+to approximate the null importance distributions (<code>PimpTest</code>).
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>VarImp </code></td>
+<td>
+<p> the <em>original permutation variable importance</em> measures of the random forest. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PerVarImp </code></td>
+<td>
+<p>a matrix, where each row is a vector containing the <code>S</code> permuted VarImp
+measures for each predictor variables. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>one of regression, classification</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Breiman L. (2001), <em>Random Forests</em>, Machine Learning 45(1),5-32, &lt;doi:10.1023/A:1010933404324&gt;
+</p>
+<p>Altmann A.,Tolosi L., Sander O. and  Lengauer T. (2010),<em>Permutation importance: a corrected feature importance measure</em>, Bioinformatics Volume 26 (10), 1340-1347, &lt;doi:10.1093/bioinformatics/btq134&gt;
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>PimpTest</code>, <code>importance</code>, <code>randomForest</code>, <code>mclapply</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+###############################
+#      Regression            #
+##############################
+##############################
+## Simulating data
+X = replicate(12,rnorm(100))
+X = data.frame(X) #"X" can also be a matrix
+y = with(X,2*X1 + 1*X2 + 2*X3 + 1*X4 - 2*X5 - 1*X6 - 1*X7 + 2*X8 )
+
+##############################
+## Regression with Random Forest:
+library("randomForest")
+reg.rf = randomForest(X,y,mtry = 3,ntree=500,importance=TRUE)
+##############################
+## PIMP-Permutation variable importance measure
+# the parallelized version of the PIMP-algorithm
+system.time(pimp.varImp.reg&lt;-PIMP(X,y,reg.rf,S=10, parallel=TRUE, ncores=2))
+# the non parallelized version of the PIMP-algorithm
+system.time(pimp.varImp.reg&lt;-PIMP(X,y,reg.rf,S=10, parallel=FALSE))
+
+##############################
+#      Classification        #
+##############################
+## Simulating data
+X = replicate(12,rnorm(100))
+X= data.frame( X) #"X" can also be a matrix
+z  = with(X,2*X1 + 3*X2 + 2*X3 + 1*X4 -
+            2*X5 - 2*X6 - 2*X7 + 1*X8 )
+pr = 1/(1+exp(-z))         # pass through an inv-logit function
+y = as.factor(rbinom(100,1,pr))
+
+##############################
+## Classification with Random Forest:
+cl.rf = randomForest(X,y,mtry = 3,ntree = 500, importance = TRUE)
+##############################
+## PIMP-Permutation variable importance measure
+# the parallelized version of the PIMP-algorithm
+system.time(pimp.varImp.cl&lt;-PIMP(X,y,cl.rf,S=10, parallel=TRUE, ncores=2))
+# the non parallelized version of the PIMP-algorithm
+system.time(pimp.varImp.cl&lt;-PIMP(X,y,cl.rf,S=10, parallel=FALSE))
+
+</code></pre>
+
+
+</div>

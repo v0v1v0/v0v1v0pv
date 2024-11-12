@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vunion</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Returns the union of its inputs including repeated elements.
+</h2>
+
+<h3>Description</h3>
+
+<p>The <code>base::union</code> function removes duplicates per algebraic set theory. <code>vunion</code> does not, and so returns as many duplicate elements as are in either input vector (not the sum of their inputs.)  In short, <code>vunion</code> is the same as <code>vintersect(x,y) + vsetdiff(x,y) + vsetdiff(y,x)</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vunion(x, y, multiple = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A vector or an object which can be coerced to a vector
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+
+<p>A vector or an object which can be coerced to a vector
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>multiple</code></td>
+<td>
+
+<p>Should repeated "multiple" items be returned? Default is <code>TRUE</code>; if set to <code>FALSE</code>, <code>vunion</code> acts like the <code>base::vunion</code> function.
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A vector of the union of the two input vectors. If <code>multiple</code> is set to <code>FALSE</code> then the value returned is the same as <code>base::union</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Carl Witthoft
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>union</code>, the CRAN package <code>sets</code> 
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- c(1:5,3,3,3,2,NA,NA)
+y&lt;- c(2:5,4,3,NA)
+vunion(x,y)
+vunion(x,y,multiple=FALSE) 
+union(x,y) #same as previous line
+</code></pre>
+
+
+</div>

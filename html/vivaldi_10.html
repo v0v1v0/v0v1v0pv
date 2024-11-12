@@ -1,0 +1,54 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>prepare_annotations</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>prepare_annotations</h2>
+
+<h3>Description</h3>
+
+<p>Separates the SNPeff annotations found in an annotated and rearranged VCF dataframe (arranged using arrange_data)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">prepare_annotations(df)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>A rearranged and annotated VCF dataframe</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>A dataframe containing each annotation on a separate column
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Example: Shows the separation of the ANN column based on | delimiter.
+test &lt;- data.frame( ANN = c("A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P"))
+
+# The ANN column will be split based on the strings in `snpeff_info()` and
+# an additional "error" column.
+snpeff_info()
+
+# Split the SNPeff annotations in "ANN" column and save to dataframe `df`
+df &lt;- prepare_annotations(df)
+
+# The one "ANN" column is split into 16 columns
+dim(test)
+dim(df)
+
+</code></pre>
+
+
+</div>

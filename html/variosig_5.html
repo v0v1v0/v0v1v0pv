@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>envplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot Empirical Variogram and its Pointwise Envelope</h2>
+
+<h3>Description</h3>
+
+<p>Plot empirical variogram and its pointwise variogram envelope.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">envplot(envlist, shade = TRUE, shade.color = "lightgrey",
+        show.variance = FALSE, xlim = NULL, ylim = NULL,
+        main = NULL, xlab = "Distance", ylab = "Semivariance")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>envlist</code></td>
+<td>
+<p>output from <code>envelope</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shade</code></td>
+<td>
+<p>logical. If <code>TRUE</code>, the envelope is shaded.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shade.color</code></td>
+<td>
+<p>string. Color of the envelope if it is shaded.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.variance</code></td>
+<td>
+<p>logical. Plot horizontal lines showing the sample variance and its confidence interval of residuals ignoring spatial information.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim, ylim</code></td>
+<td>
+<p>x-axis and y-axis range. If <code>NULL</code>, default values are chosen.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>string. Title of the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab, ylab</code></td>
+<td>
+<p>string. Labels for x- and y-axis.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p> Nothing is returned, generates a plot.</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Craig Wang </p>
+
+
+<h3>See Also</h3>
+
+<p><code>envelope</code> to use Monte Carlo permutations for generating variogram envelope.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(sp)
+data(meuse)
+coordinates(meuse) = ~x+y
+vario0 &lt;- gstat::variogram(log(zinc)~1, meuse)
+varioEnv &lt;- envelope(vario0, data = meuse, formula = log(zinc)~1, nsim = 499)
+envplot(varioEnv)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

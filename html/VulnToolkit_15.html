@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>psmsl</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Download sea level data from Permanent Service for Mean Sea Level</h2>
+
+<h3>Description</h3>
+
+<p><code>psmsl</code> imports monthly/annual tide data from stations around the world. Dataset compiled and stewarded by the Permanent Service for Mean Sea Level (<a href="http://www.psmsl.org">http://www.psmsl.org</a>).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">psmsl(station = 12, type = "RLR", interval = "annual")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>station</code></td>
+<td>
+<p>name or ID, or a vector of station names/IDs. Elements can be 
+a character string (must match actual station name identically), or numeric 
+station ID (no quotes: i.e., 12 rather than "12"). Use <code>psmsl.stations</code> 
+to find stations, or check <a href="http://www.psmsl.org">http://www.psmsl.org</a>. If multiple stations are included, their 
+data is combined using rbind, making a long (rather than wide) dataset. Default 
+station is the Battery, in New York City.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>data quality class; can be 'metric' (default; data has been rigorously 
+standardized) or 'RLR'. See <a href="http://www.psmsl.org">http://www.psmsl.org</a> for documentation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>interval</code></td>
+<td>
+<p>time interval over which mean sea level is calculated. Can be 
+'monthly' or 'annual'.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame <code>data.frame</code> containing the requested Permanent Service for Mean Sea Level data.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>psmsl.stations</code> can be used to find stations
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+battery  &lt;- psmsl()
+stations &lt;- psmsl(station = c(1372, 12), interval = "monthly")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

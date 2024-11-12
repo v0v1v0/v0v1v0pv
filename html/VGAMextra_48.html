@@ -1,0 +1,155 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>expMlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Link functions for the mean of 1–parameter 
+continuous distributions: The exponential distribution.
+</h2>
+
+<h3>Description</h3>
+
+
+<p>Computes the <code>expMlink</code> transformation, its inverse and
+the first two derivatives.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">         expMlink(theta, location = 0, bvalue = NULL, inverse = FALSE,
+                  deriv = 0, short = TRUE, tag = FALSE) 
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character. This is <code class="reqn">\theta</code> although may 
+be <code class="reqn">\eta</code> depending on the other parameters.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>location</code></td>
+<td>
+
+<p>This is a known location parameter.
+Same as <code>location</code> in <code>exponential</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue, inverse, deriv, short, tag</code></td>
+<td>
+
+<p>See <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a link function to model the mean of the exponential 
+distribution, <code>exponential</code>. 
+It is defined as
+
+</p>
+<p style="text-align: center;"><code class="reqn">\eta = \log (A + \lambda^{-1}), </code>
+</p>
+
+
+<p>where <code class="reqn">\lambda &gt; 0</code> is a rate parameter and <code class="reqn">A</code> is a 
+known location parameter, 
+same as <code>exponential</code>.
+</p>
+<p>Numerical values of <code class="reqn">\lambda</code> out of range may 
+result in <code>Inf</code>, <code>-Inf</code>, <code>NA</code> or <code>NaN</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the <code>expMlink</code> transformation of
+<code>theta</code> when <code>inverse = FALSE</code>.
+If <code>inverse = TRUE</code>, then the inverse <code>exp(theta - A)^(-1)</code>.
+</p>
+<p>For <code>deriv = 1</code>,
+<code class="reqn">d</code> <code>eta</code> / <code class="reqn">d</code> <code>theta</code> when <code>inverse = FALSE</code>.
+If <code>inverse = TRUE</code>, then 
+<code class="reqn">d</code> <code>theta</code> / <code class="reqn">d</code> <code>eta</code> as a function of 
+<code>theta</code>.
+</p>
+<p>Similarly, when <code>deriv = 2</code>, the second derivatives in
+terms of <code>theta</code> are returned.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Numerical instability may occur for values <code>theta</code> too close
+to zero. Use argument <code>bvalue</code> to replace them before
+computing the link.
+</p>
+<p>If <code>theta</code> is character, then arguments <code>inverse</code> and
+<code>deriv</code> are ignored. See <code>Links</code>
+for further details.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>exponential</code>, 
+<code>Links</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> ##  E1. Modelling the mean of the exponential distribution  ##
+    set.seed(17010402)
+    nn &lt;- 100
+    edata &lt;- data.frame(x2 = runif(nn) - 0.5, x3 = runif(nn) - 0.5)
+    edata &lt;- transform(edata, eta = 0.2 - 0.7 * x2 + 1.9 * x3)
+    
+            #----- The mean is a function of 'x2' and 'x3' ------#
+    edata &lt;- transform(edata, rate = expMlink(eta, inverse = TRUE))
+    
+    edata &lt;- transform(edata, y = rexp(nn, rate = rate))
+    with(edata, stem(y))
+    with(edata, hist(y))
+
+    exp.fit &lt;- vglm(y ~ x2 + x3, exponential(link = "expMlink"), 
+                    data = edata, zero = NULL, trace = TRUE, crit = "log")
+   coef(exp.fit, matrix = TRUE)
+   summary(exp.fit)
+ 
+ ## E2. expMlink() and its inverse ##
+    theta &lt;- 0.1 + 1:5
+    location &lt;- 1.5
+    my.diff &lt;- theta - expMlink(expMlink(theta = theta, 
+                  location = location), location = location, inverse  =TRUE)
+    summary(my.diff)     # Zero
+
+
+  ## E3. Special values in a matrix ##
+    theta &lt;- matrix(c(Inf, -Inf, NA, NaN, 1 , 2), ncol = 3, nrow = 2)
+    expMlink(theta = theta, location = location)
+</code></pre>
+
+
+</div>

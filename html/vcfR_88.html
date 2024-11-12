@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pairwise_genetic_diff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Pairwise genetic differentiation across populations</h2>
+
+<h3>Description</h3>
+
+<p><code>pairwise_genetic_diff</code> Calculate measures of genetic differentiation across all population pairs.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pairwise_genetic_diff(vcf, pops, method = "nei")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vcf</code></td>
+<td>
+<p>a vcfR object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pops</code></td>
+<td>
+<p>factor indicating populations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>the method to measure differentiation</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a data frame containing the pairwise population differentiation indices of interest across all pairs of populations in the population factor.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Javier F. Tabima
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>genetic_diff</code> in  <code>vcfR</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vcfR_example)
+pops &lt;- as.factor(rep(c('a','b'), each = 9))
+myDiff &lt;- pairwise_genetic_diff(vcf, pops, method = "nei")
+colMeans(myDiff[,c(4:ncol(myDiff))], na.rm = TRUE)
+pops &lt;- as.factor(rep(c('a','b','c'), each = 6))
+myDiff &lt;- pairwise_genetic_diff(vcf, pops, method = "nei")
+colMeans(myDiff[,c(4:ncol(myDiff))], na.rm = TRUE)
+
+</code></pre>
+
+
+</div>

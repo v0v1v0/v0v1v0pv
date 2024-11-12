@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mvn.sim.2.cps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulate multivariate normal data with 2 change points</h2>
+
+<h3>Description</h3>
+
+<p>This function simulates a multivariate normal data set with 2
+change points in the network structure.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mvn.sim.2.cps(nobs, n_ser, seed = 101)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>nobs</code></td>
+<td>
+<p>A positive integer, which defines the length of the time series.
+It must be a multiple of 3 since change points occur at time points T/3
+and 2T/3.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_ser</code></td>
+<td>
+<p>A positive integer number indicating the dimensionality of the
+time series. <code>n_ser</code> must be equal to or larger than 8 as <code>mvn.sim.2.cps</code>
+generates 3 different network structures among 8 connected nodes. The remaining
+variables are generated as independent data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>A positive integer with default value equal to 101.
+It is used to ensure reproducibility.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>nobs</code> * <code>n_ser</code> matrix with 2 change points
+at time points <code>nobs/3+1</code> and <code>nobs*2/3+1</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Simulate MVN data with 2 change points
+data &lt;- mvn.sim.2.cps(180, 8, seed = 101)
+</code></pre>
+
+
+</div>

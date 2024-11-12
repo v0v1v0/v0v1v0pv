@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>[,VirtualArray,ANY,ANY-method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Indexing to extract subsets of a 'codeVirtualArray'-class object</h2>
+
+<h3>Description</h3>
+
+<p>Single bracket <code>'['</code> refers to indices and names within the '<code>VirtualArray</code>'-class object. Use double brackets to extract layers based on their names (in the <code>@stack</code>).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'VirtualArray,ANY,ANY'
+x[i, j, ..., drop = TRUE]
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object from a <code>VirtualArray</code>-derived class.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>i</code></td>
+<td>
+<p>subscript of the first dimension(rows) or vector-like subsetting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>j</code></td>
+<td>
+<p>subscript of the second dimension (columns).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>subscript of additional dimensions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drop</code></td>
+<td>
+<p><code>logical</code> in case the result of subsetting is a single element, should the <code>VirtualArray</code>-derived wrapper be dropped?</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object from either the same class as <code>x</code> or the class of its elements.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ex &lt;- rastex()
+# numeric subsetting
+firstThree &lt;- ex[1:3]
+# character subsetting
+second &lt;- ex["d"]
+# logical subsetting
+subscript &lt;- rep(FALSE, length(ex))
+subscript[2] &lt;- TRUE
+second2 &lt;- ex[subscript]
+data(paleocoastlines)
+present&lt;- paleocoastlines["0", ]
+allMargin &lt;- paleocoastlines[, "margin"]
+
+</code></pre>
+
+
+</div>

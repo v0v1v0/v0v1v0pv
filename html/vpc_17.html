@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pk_iv_1cmt</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulate PK data from a 1-compartment iv model</h2>
+
+<h3>Description</h3>
+
+<p>Simulate PK data from a 1-compartment iv model
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pk_iv_1cmt(
+  t,
+  t_inf = 1,
+  tau = 24,
+  dose = 120,
+  CL = 0.345,
+  Vc = 1.75,
+  ruv = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>t</code></td>
+<td>
+<p>Time after dose</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t_inf</code></td>
+<td>
+<p>Infusion length</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tau</code></td>
+<td>
+<p>Dosing interval</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dose</code></td>
+<td>
+<p>Dose</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CL</code></td>
+<td>
+<p>Clearance</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Vc</code></td>
+<td>
+<p>Volume of distribution</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ruv</code></td>
+<td>
+<p>Residual variability</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A vector of predicted values, with or without added residual variability
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dat1 &lt;- vpc:::pk_iv_1cmt(t = c(0:72), tau = 24, dose = 120, 
+                   CL = 5, Vc = 50)
+dat2 &lt;- vpc:::pk_iv_1cmt(t = c(0:72), tau = 24, dose = 120, 
+                   CL = 5, Vc = 50, 
+                   ruv = list(proportional = 0.1, additive = 0.1))
+</code></pre>
+
+
+</div>

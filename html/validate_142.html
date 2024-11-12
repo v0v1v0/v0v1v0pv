@@ -1,0 +1,135 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot,validation-method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot validation results</h2>
+
+<h3>Description</h3>
+
+<p>Creates a barplot of validation result. For each validation rule, a stacked bar
+is plotted with percentages of failing, passing, and missing results.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'validation'
+plot(
+  x,
+  y,
+  fill = c("#FE2712", "#66B032", "#dddddd"),
+  col = fill,
+  rulenames = names(x),
+  labels = c("Fails", "Passing", "Missing", "Total"),
+  title = NULL,
+  xlab = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a confrontation object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>not used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fill</code></td>
+<td>
+<p><code>[character]</code> vector of length 3. Colors representing fails, passes, and missings</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>Edge colors for the bars.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rulenames</code></td>
+<td>
+<p><code>[character]</code> vector of size <code>length(x)</code>. If not specified, names
+are taken from <code>x</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p><code>[character]</code> vector of length 4. Replace legend annotation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p><code>[character]</code> Change the default title.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p><code>[character]</code> Change the title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>not used</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The plot function tries to be smart about placing labels on the y axis. When 
+the number of bars becomes too large, no y axis annotation will be shown and the 
+bars will become space-filling.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other validation-methods: 
+<code>aggregate,validation-method</code>,
+<code>all,validation-method</code>,
+<code>any,validation-method</code>,
+<code>barplot,validation-method</code>,
+<code>check_that()</code>,
+<code>compare()</code>,
+<code>confront()</code>,
+<code>event()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>sort,validation-method</code>,
+<code>summary()</code>,
+<code>validation-class</code>,
+<code>values()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rules &lt;- validator( r1 = staff.costs &lt; total.costs
+                  , r2 = turnover + other.rev == total.rev
+                  , r3 = other.rev &gt; 0
+                  , r4 = total.rev &gt; 0
+                  , r5 = nace %in% c("A", "B")
+                  )
+plot(rules, cex=0.8, show_legend=TRUE)
+
+data(retailers)
+cf &lt;- confront(retailers, rules)
+plot(cf, main="Retailers check")
+</code></pre>
+
+
+</div>

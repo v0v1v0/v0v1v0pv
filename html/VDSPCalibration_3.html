@@ -1,0 +1,147 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>chngpt</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Piecewise Regression Estimation</h2>
+
+<h3>Description</h3>
+
+<p>Estimate a piecewise linear regression equation</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">chngpt(x, y, start = quantile(x, probs = 0.1,
+
+na.rm = "TRUE"),finish = quantile(x, probs = 0.9, na.rm = "TRUE"),
+
+NbrSteps = 500)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>old VD measurements
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+
+<p>reference (new) VD measurements
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start</code></td>
+<td>
+
+<p>lower bound of the changing point
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>finish</code></td>
+<td>
+
+<p>upper bound of the changing point
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NbrSteps</code></td>
+<td>
+
+<p>number of points used in grid search
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function uses grid search method to fit a piecewise linear regression model with one changing point
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>old VD levels</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>new VD levels</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>yfitted</code></td>
+<td>
+<p>calibrated VD levels based on the fitted piecewise linear regression</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>chngpt</code></td>
+<td>
+<p>the estimated chang point</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coefficients</code></td>
+<td>
+<p>the estimated regression coefficients for the piecewise linear regression</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Durazo-Arvizu, Ramon and   Sempos, Chris </p>
+
+
+<h3>References</h3>
+
+<p>Tian L., Durazo-Arvizu R. A., Myers G., Brooks S., Sarafin K., and Sempos C. T. (2014), The estimation of calibration equations for variables with heteroscedastic measurement errors, Statist. Med., 33, pages 4420-4436
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">### Generate equally spaced TEST VALUES in the interval [20,200]
+set.seed(123456789)
+x= 20 + 180*1:100/100
+x2= (x - 95)*(x&gt;=95)
+
+# Generate REFERENCE VALUES
+y = -8 + 1.5*x - 0.85*x2 + 15*rnorm(100)
+
+#Plot test values versus reference values along with fitted piecewise model
+plot(x,y)
+fit.chngpt = chngpt(x,y)
+plot(fit.chngpt$x[order(fit.chngpt$yfitted)],
+     fit.chngpt$y[order(fit.chngpt$yfitted)],
+     xlim=c(0,200), ylim=c(0,200), xlab="25-Hydroxyvitamin D (nmol/mL), IDS",
+     ylab="25-Hydroxyvitamin D (nmol/mL), LC/MS", bty="n", las=1)
+lines(fit.chngpt$x[order(fit.chngpt$yfitted)],
+      fit.chngpt$yfitted[order(fit.chngpt$yfitted)], lty=2,col=2, lwd=2)
+abline(v=fit.chngpt$chngpt, lty=2,col=3, lwd=2)
+arrows(fit.chngpt$chngpt+20 ,15, fit.chngpt$chngpt,-8, length=0.1, lwd=2, col=4)
+legend(fit.chngpt$chngpt + 5,30, legend=round(fit.chngpt$chngpt, digits=1),
+       bty="n", col=4)
+
+
+</code></pre>
+
+
+</div>

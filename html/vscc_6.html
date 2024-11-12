@@ -1,0 +1,192 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vsccmanly</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Variable Selection for Skewed Clustering and Classification
+</h2>
+
+<h3>Description</h3>
+
+<p>Performs variable selection under a clustering framework. Accounts 
+for mixtures of non-Gaussian distributions via the ManlyTransform (via 'ManlyMix'). 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vsccmanly(x, G=2:9, numstart=100, selection="backward",forcereduction=FALSE,
+                     initstart="k-means", seedval=2354)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>Data frame or matrix to perform variable selection on
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>G</code></td>
+<td>
+
+<p>Vector for the number of groups to consider during initialization and/or post-selection analysis. Default is 2-9. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numstart</code></td>
+<td>
+
+<p>Number of random starts.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selection</code></td>
+<td>
+
+<p>Forward or backward transformation parameter selection. User may also choose to fit a full Manly mixture (options are 'forward', 'backward', or 'none').
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>forcereduction</code></td>
+<td>
+
+<p>Logical indicating if the full data set should be considered (FALSE) when selecting the ‘best’ variable subset via total model uncertainty.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>initstart</code></td>
+<td>
+
+<p>Method for initial starting values (options are 'k-means' or 'hierarchical').
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seedval</code></td>
+<td>
+
+<p>Value of seed, used for k-means initialization.
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>selected</code></td>
+<td>
+
+<p>A list containing the subsets of variables selected for each relation. Each set is numbered according to the number in the exponential of the relationship. For instance, <code>vscc_object$selected[[3]]</code> corresponds to the variable subset selected by the cubic relationship.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wss</code></td>
+<td>
+
+<p>The within-group variance associated with each variable from the full data set.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>topselected</code></td>
+<td>
+
+<p>The best variable subset according to the total model uncertainty.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>initialrun</code></td>
+<td>
+
+<p>Results from the initial model, prior to variable selection; an object of class <code>ManlyMix</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bestmodel</code></td>
+<td>
+
+<p>Results from the best model on the selected variable subset; an object of class <code>ManlyMix</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>variables</code></td>
+<td>
+
+<p>Variables used to fit the final model.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>chosenrelation</code></td>
+<td>
+
+<p>Numeric indication of the relationship chosen according to total model uncertainty. The number corresponds to exponent in the relationship: for instance, a value of '4' suggests the quartic relationship. If the value <code>"Full dataset"</code> is given, then the unreduced data provides the best model uncertainty; can be avoided by specifying <code>forcereduction=TRUE</code> in the function call.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>uncertainty</code></td>
+<td>
+
+<p>Total model uncertainty associated with the best relationship.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allmodelfit</code></td>
+<td>
+
+<p>List containing the results (<code>ManlyMix</code> objects) from the post-selection analysis on each variable subset. Number corresponds to the exponent in the relationship. For instance, <code>vscc_object$allmodelfit[[1]]</code> gives the results from the analysis on the variables selected by the linear relationship.
+</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Jeffrey L. Andrews, Mackenzie R. Neal, Paul D. McNicholas
+</p>
+
+
+<h3>References</h3>
+
+<p>See <code>citation("vscc")</code> for the variable selection references.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vscc</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(ais)
+X=ais[,3:13]
+aisfor=vsccmanly(as.data.frame(scale(X)),G=2:9,selection = "forward", forcereduction = TRUE,
+                        initstart = "k-means",seedval=2354) 
+aisfor$variables #Show selected variables
+table(ais[,1], aisfor$bestmodel$id) #Clustering results on reduced data set
+
+## End(Not run)</code></pre>
+
+
+</div>

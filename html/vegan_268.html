@@ -1,0 +1,165 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>orditorp</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Add Text or Points to Ordination Plots </h2>
+
+<h3>Description</h3>
+
+<p>The function adds <code>text</code> or <code>points</code> to
+ordination plots.  Text will be used if this can be done without
+overwriting other text labels, and points will be used otherwise. The
+function can help in reducing clutter in ordination graphics, but
+manual editing may still be necessary.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">orditorp(x, display, labels, choices = c(1, 2), priority,
+    select, cex = 0.7, pcex, col = par("col"), pcol,
+    pch = par("pch"), air = 1, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A result object from ordination or an <code>ordiplot</code>
+result. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>display</code></td>
+<td>
+<p>Items to be displayed in the plot.  Only one
+alternative is allowed. Typically this is <code>"sites"</code> or
+<code>"species"</code>.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p> Optional text used for labels. Row names will be used if
+this is missing. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>choices</code></td>
+<td>
+<p> Axes shown.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>priority</code></td>
+<td>
+<p> Text will be used for items with higher priority
+if labels overlap.  This should be vector of the same
+length as the number of items plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>select</code></td>
+<td>
+<p>Items to be displayed.  This can either be a logical
+vector which is <code>TRUE</code> for displayed items or a vector of indices
+of displayed items. If a logical vector is used, it must have the
+same length as the scores plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex, pcex</code></td>
+<td>
+<p>Text and point sizes, see <code>plot.default</code>..</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col, pcol</code></td>
+<td>
+<p>Text and point colours, see <code>plot.default</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pch</code></td>
+<td>
+<p>Plotting character, see <code>points</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>air</code></td>
+<td>
+<p>Amount of empty space between text labels. Values &lt;1 allow
+overlapping text.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Other arguments to <code>scores</code> (and its various
+methods), <code>text</code> and <code>points</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Function <code>orditorp</code> will add either text or points to an existing
+plot. The items with high <code>priority</code> will be added first
+and <code>text</code> will be used if this can be done without
+overwriting previous labels,and <code>points</code> will be used
+otherwise. If <code>priority</code> is missing, labels will be added from the
+outskirts to the centre. Function <code>orditorp</code> can be used
+with most ordination results, or plotting results from
+<code>ordiplot</code> or ordination plot functions
+(<code>plot.cca</code>, <code>plot.decorana</code>,
+<code>plot.metaMDS</code>).
+</p>
+<p>Arguments can be passed to the relevant <code>scores</code> method
+for the ordination object (<code>x</code>) being drawn. See the relevant
+<code>scores</code> help page for arguments that can be used.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The function returns invisibly a logical vector where <code>TRUE</code>
+means that item was labelled with text and <code>FALSE</code> means that it
+was marked with a point. The returned vector can be used as the
+<code>select</code> argument in ordination <code>text</code> and <code>points</code>
+functions.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Jari Oksanen </p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## A cluttered ordination plot :
+data(BCI)
+mod &lt;- cca(BCI)
+plot(mod, dis="sp", type="t")
+# Now with orditorp and abbreviated species names
+cnam &lt;- make.cepnames(names(BCI))
+plot(mod, dis="sp", type="n")
+stems &lt;- colSums(BCI)
+orditorp(mod, "sp", label = cnam, priority=stems, pch="+", pcol="grey")
+
+## show select in action
+set.seed(1)
+take &lt;- sample(ncol(BCI), 50)
+plot(mod, dis="sp", type="n")
+stems &lt;- colSums(BCI)
+orditorp(mod, "sp", label = cnam, priority=stems, select = take,
+         pch="+", pcol="grey")
+
+</code></pre>
+
+
+</div>

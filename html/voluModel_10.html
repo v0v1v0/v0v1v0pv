@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>MESS3D</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate MESS</h2>
+
+<h3>Description</h3>
+
+<p>Calculates multivariate environmental similarity
+surface based on model calibration and projection data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">MESS3D(calibration, projection)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>calibration</code></td>
+<td>
+<p>A <code>data.frame</code> of environmental variables
+used to calibrate an ecological niche model, one row for
+measurements from each voxel included in the data used to
+calibrate the model. Columns with names not corresponding to
+<code>projection</code> <code>list</code> items are ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>projection</code></td>
+<td>
+<p>A named <code>list</code> of <code>SpatRaster</code> objects for
+projection; names correspond to <code>calibration</code> column names.
+Each <code>SpatRaster</code> should have the same number of layers,
+corresponding to vertical depth slices.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>MESS3D</code> is a wrapper around <code>MESS</code> from the <code>modEvA</code>
+package. It calculates MESS for each depth layer. Negative values
+indicate areas of extrapolation which should be interpreted with
+caution (see Elith <em>et al</em>, 2010 in <em>MEE</em>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>SpatRaster</code> vector with MESS scores for each
+voxel; layer names correspond to layer names of first
+<code>SpatRaster</code> vector in <code>projection</code> <code>list</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The calibration dataset should include both presences
+and background/pseudoabsence points used to calibrate an
+ecological niche model.
+</p>
+
+
+<h3>References</h3>
+
+<p>Elith J, Kearney M, and Phillips S. 2010.
+The art of modelling range-shifting species.
+<em>Methods in Ecology and Evolution</em>, 1, 330-342.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>MESS</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(terra)
+library(dplyr)
+
+# Create sample rasterBricks
+r1 &lt;- rast(ncol=10, nrow=10)
+values(r1) &lt;- 1:100
+r2 &lt;- rast(ncol=10, nrow=10)
+values(r2) &lt;- c(rep(20, times = 50), rep(60, times = 50))
+r3 &lt;- rast(ncol=10, nrow=10)
+values(r3) &lt;- 8
+envBrick1 &lt;- c(r1, r2, r3)
+names(envBrick1) &lt;- c(0, 10, 30)
+
+r1 &lt;- rast(ncol=10, nrow=10)
+values(r1) &lt;- 100:1
+r2 &lt;- rast(ncol=10, nrow=10)
+values(r2) &lt;- c(rep(10, times = 50), rep(20, times = 50))
+r3 &lt;- rast(ncol=10, nrow=10)
+values(r3) &lt;- c(rep(c(10,20,30,25), times = 25))
+envBrick2 &lt;- c(r1, r2, r3)
+names(envBrick2) &lt;- c(0, 10, 30)
+
+rastList &lt;- list("temperature" = envBrick1, "salinity" = envBrick2)
+
+# Create test reference set
+set.seed(0)
+longitude &lt;- sample(ext(envBrick1)[1]:ext(envBrick1)[2],
+                    size = 10, replace = FALSE)
+set.seed(0)
+latitude &lt;- sample(ext(envBrick1)[3]:ext(envBrick1)[4],
+                   size = 10, replace = FALSE)
+set.seed(0)
+depth &lt;- sample(0:35, size = 10, replace = TRUE)
+occurrences &lt;- as.data.frame(cbind(longitude,latitude,depth))
+
+# Calibration
+calibration &lt;- lapply(rastList, FUN = function(x) xyzSample(occurrences, x)) %&gt;% bind_rows
+
+# Run the function
+messStack &lt;- MESS3D(calibration = calibration, projection = rastList)
+plot(messStack)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,149 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mccullagh89</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>McCullagh (1989) Distribution Family Function</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the two parameters of the McCullagh (1989)
+distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mccullagh89(ltheta = "rhobitlink", lnu = logofflink(offset = 0.5),
+            itheta = NULL, inu = NULL, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ltheta, lnu</code></td>
+<td>
+
+<p>Link functions
+for the <code class="reqn">\theta</code> and <code class="reqn">\nu</code> parameters.
+See <code>Links</code> for general information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>itheta, inu</code></td>
+<td>
+
+<p>Numeric.
+Optional initial values for <code class="reqn">\theta</code> and <code class="reqn">\nu</code>.
+The default is to internally compute them.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The McCullagh (1989) distribution has density function
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\theta,\nu) =
+\frac{ \{ 1-y^2 \}^{\nu-\frac12}}
+{ (1-2\theta y + \theta^2)^{\nu} \mbox{Beta}(\nu+\frac12, \frac12)}</code>
+</p>
+
+<p>where <code class="reqn">-1 &lt; y &lt; 1</code> and <code class="reqn">-1 &lt; \theta &lt; 1</code>.
+This distribution is equation (1) in that paper.
+The parameter <code class="reqn">\nu</code> satisfies <code class="reqn">\nu &gt; -1/2</code>,
+therefore the default is to use an log-offset link
+with offset equal to 0.5, i.e.,
+<code class="reqn">\eta_2=\log(\nu+0.5)</code>.
+The mean is of <code class="reqn">Y</code> is <code class="reqn">\nu \theta / (1+\nu)</code>,
+and these are returned as the fitted values.
+</p>
+<p>This distribution is related to the Leipnik distribution (see Johnson
+et al. (1995)), is related to ultraspherical functions, and under
+certain conditions, arises as exit distributions for Brownian motion.
+Fisher scoring is implemented here and it uses a diagonal matrix so
+the parameters are globally orthogonal in the Fisher information sense.
+McCullagh (1989) also states that, to some extent, <code class="reqn">\theta</code>
+and <code class="reqn">\nu</code> have the properties of a location parameter and a
+precision parameter, respectively.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Convergence may be slow or fail unless the initial values are
+reasonably close. If a failure occurs, try assigning the argument
+<code>inu</code> and/or <code>itheta</code>.  Figure 1 of McCullagh (1989) gives a
+broad range of densities for different values of <code class="reqn">\theta</code> and
+<code class="reqn">\nu</code>, and this could be consulted for obtaining reasonable
+initial values if all else fails.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>McCullagh, P. (1989).
+Some statistical properties of a family of continuous
+univariate distributions.
+<em>Journal of the American Statistical Association</em>,
+<b>84</b>, 125–129.
+</p>
+<p>Johnson, N. L. and Kotz, S. and Balakrishnan, N. (1995).
+<em>Continuous Univariate Distributions</em>,
+2nd edition,
+Volume 2,
+New York: Wiley.
+(pages 612–617).
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>leipnik</code>,
+<code>rhobitlink</code>,
+<code>logofflink</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Limit as theta = 0, nu = Inf:
+mdata &lt;- data.frame(y = rnorm(1000, sd = 0.2))
+fit &lt;- vglm(y ~ 1, mccullagh89, data = mdata, trace = TRUE)
+head(fitted(fit))
+with(mdata, mean(y))
+summary(fit)
+coef(fit, matrix = TRUE)
+Coef(fit)
+</code></pre>
+
+
+</div>

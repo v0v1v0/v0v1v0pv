@@ -1,0 +1,118 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mark_bar</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Bar mark</h2>
+
+<h3>Description</h3>
+
+<p>A bar mark represents each data point as a rectangle, where the length is
+mapped to a quantitative scale.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mark_bar(vl, orient = NULL, stack = NULL, size = NULL, opacity = NULL,
+  filled = NULL, color = NULL, fill = NULL, stroke = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vl</code></td>
+<td>
+<p>Vega-Lite object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>orient</code></td>
+<td>
+<p>the orientation of a non-stacked bar, area, and line charts.
+The value is either "horizontal", or "vertical" (default). For bar and
+tick, this determines whether the size of the bar and tick should be
+applied to x or y dimension. For area, this property determines the
+orient property of the Vega output. For line, this property determines
+the path order of the points in the line if path channel is not specified.
+For stacked charts, this is always determined by the orientation of the stack;
+therefore explicitly specified value will be ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stack</code></td>
+<td>
+<p>stacking modes for bar and area marks. <code>zero</code> - stacking
+with baseline offset at zero value of the scale (for creating typical stacked
+bar and area chart). <code>normalize</code> - stacking with normalized domain (for
+creating normalized stacked bar and area chart). <code>center</code> - stacking
+with center baseline (for streamgraph). <code>none</code> - No-stacking. This will
+produces layered bar and area chart.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size</code></td>
+<td>
+<p>The pixel area each the point. For example: in the case of circles,
+the radius is determined in part by the square root of the size value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>opacity</code></td>
+<td>
+<p><code>0.0</code>-<code>1.0</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filled</code></td>
+<td>
+<p>whether the shape's color should be used as fill color instead of stroke color.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color</code></td>
+<td>
+<p>color of the mark – either fill or stroke color based on the filled mark config.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fill</code></td>
+<td>
+<p>fill color. This config will be overridden by color channel’s
+specified or mapped values if filled is true.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stroke</code></td>
+<td>
+<p>stroke color. This config will be overridden by color channel’s
+specified or mapped values if filled is false.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p><a href="http://vega.github.io/vega-lite/docs/mark.html">Vega-Lite Mark spec</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dat &lt;- jsonlite::fromJSON('[
+    {"a": "A","b": 28}, {"a": "B","b": 55}, {"a": "C","b": 43},
+    {"a": "D","b": 91}, {"a": "E","b": 81}, {"a": "F","b": 53},
+    {"a": "G","b": 19}, {"a": "H","b": 87}, {"a": "I","b": 52}
+  ]')
+
+vegalite() %&gt;%
+  add_data(dat) %&gt;%
+  encode_x("a", "ordinal") %&gt;%
+  encode_y("b", "quantitative") %&gt;%
+  mark_bar()
+</code></pre>
+
+
+</div>

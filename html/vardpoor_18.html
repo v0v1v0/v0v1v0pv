@@ -1,0 +1,144 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vardchangstrs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variance estimation for measures of annual net change or annual for single stratified sampling designs</h2>
+
+<h3>Description</h3>
+
+<p>Computes the variance estimation for measures of annual net change or annual for single stratified sampling designs.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vardchangstrs(
+  Y,
+  H,
+  PSU,
+  w_final,
+  Dom = NULL,
+  periods = NULL,
+  dataset,
+  periods1,
+  periods2,
+  in_sample,
+  in_frame,
+  confidence = 0.95,
+  percentratio = 1
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Variables of interest. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H</code></td>
+<td>
+<p>The unit stratum variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PSU</code></td>
+<td>
+<p>Primary sampling unit variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_final</code></td>
+<td>
+<p>Weight variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dom</code></td>
+<td>
+<p>Optional variables used to define population domains. If supplied, variables are calculated for each domain. An object convertible to <code>data.table</code> or variable names as character vector, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>periods</code></td>
+<td>
+<p>Variable for the all survey periods. The values for each period are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>Optional survey data object convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>periods1</code></td>
+<td>
+<p>The vector of periods from variable <code>periods</code> describes the first period for measures of change.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>periods2</code></td>
+<td>
+<p>The vector of periods from variable <code>periods</code> describes the second period for measures of change.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>in_sample</code></td>
+<td>
+<p>Sample variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>in_frame</code></td>
+<td>
+<p>Frame variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>confidence</code></td>
+<td>
+<p>optional; either a positive value for confidence interval. This variable by default is 0.95.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentratio</code></td>
+<td>
+<p>Positive numeric value. All linearized variables are multiplied with <code>percentratio</code> value, by default - 1.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with objects are returned by the function:
+</p>
+
+<ul>
+<li> <p><code>crossectional_results</code> - a <code>data.table</code> containing: <br><code>year</code> -  survey years, <br><code>subperiods</code> -  survey sub-periods, <br><code>variable</code> - names of variables of interest, <br><code>Dom</code> - optional variable of the population domains, <br><code>estim</code> - the estimated value, <br><code>var</code> - the estimated variance of cross-sectional and longitudinal measures, <br><code>sd_w</code> - the estimated weighted variance of simple random sample, <br><code>se</code> - the estimated standard error of cross-sectional or longitudinal, <br><code>rse</code> - the estimated relative standard error (coefficient of variation), <br><code>cv</code> - the estimated relative standard error (coefficient of variation) in percentage, <br><code>absolute_margin_of_error</code> - the estimated absolute margin of error, <br><code>relative_margin_of_error</code> - the estimated relative margin of error, <br><code>CI_lower</code> - the estimated confidence interval lower bound, <br><code>CI_upper</code> - the estimated confidence interval upper bound, <br><code>confidence_level</code> - the positive value for confidence interval.
+</p>
+</li>
+<li> <p><code>annual_results</code> - a <code>data.table</code> containing:
+<code>year_1</code> -  survey years of <code>years1</code> for measures of annual net change, <br><code>year_2</code> -  survey years of <code>years2</code> for measures of annual net change, <br><code>Dom</code> - optional variable of the population domains, <br><code>variable</code> - names of variables of interest, <br><code>estim_2</code> - the estimated value for period2 for measures of annual net change, <br><code>estim_1</code> - the estimated value for period1 for measures of annual net change, <br><code>estim</code> - the estimated value, <br><code>var</code> - the estimated variance, <br><code>se</code> - the estimated standard error, <br><code>rse</code> - the estimated relative standard error (coefficient of variation), <br><code>cv</code> - the estimated relative standard error (coefficient of variation) in percentage, <br><code>absolute_margin_of_error</code> - the estimated absolute margin of error for period1 for measures of annual, <br><code>relative_margin_of_error</code> - the estimated relative margin of error in percentage for measures of annual, <br><code>CI_lower</code> - the estimated confidence interval lower bound, <br><code>CI_upper</code> - the estimated confidence interval upper bound, <br><code>confidence_level</code> - the positive value for confidence interval, <br><code>significant</code> - is the the difference significant
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Guillaume OSIER, Virginie RAYMOND, (2015), Development of methodology for the estimate of variance of annual net changes for LFS-based indicators. Deliverable 1 - Short document with derivation of the methodology.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vardchanges</code>,
+<code>vardannual</code>
+</p>
+
+
+</div>

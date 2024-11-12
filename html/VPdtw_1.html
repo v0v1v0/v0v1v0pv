@@ -1,0 +1,98 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dilation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute a morphological dilation of a signal</h2>
+
+<h3>Description</h3>
+
+<p>A dilation is a moving local maximum over a window of specific fixed width
+specified by <code>span</code>. This dilation is computed first in one direction and then
+in the other.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dilation(y, span)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Signal (as a numeric vector).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>span</code></td>
+<td>
+<p>An integer specifying the width of the moving window.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A dilation is a method often used in mathematical morphology and image
+analysis (Soille 1999). This function is for vectors not matrices or images
+though applying it to rows and columns of a matrix will give the
+corresponding results.
+</p>
+<p>An erosion of a vector or image can also be computed easily from this by
+computing the dilation of -1 times the vector and transforming back.
+</p>
+<p>We recommend using a dilation to form a <code>penalty</code> for use in
+<code>VPdtw</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>res</code></td>
+<td>
+<p>Dilation of y with width specified by <code>span</code></p>
+</td>
+</tr></table>
+<h3>Author(s)</h3>
+
+<p>David Clifford
+</p>
+
+
+<h3>References</h3>
+
+<p>Soille, P. Morphological Image Analysis: Principles and
+Applications; Springer: New York, 1999.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Example 1 - dilation of a signal
+data(reference)
+dref &lt;- dilation(reference, 150)
+plot(reference, log = "y", type = "l")
+lines(dref, col = 2)
+
+## Example 2 - dilation of an image
+BIN &lt;- (volcano &gt; 177)
+dBIN &lt;- t(apply(BIN, 1, dilation, span = 5))
+dBIN &lt;- apply(dBIN, 2, dilation, span = 5)
+oldpar &lt;- par(no.readonly = TRUE)
+par(mfrow=c(2, 2))
+image(volcano)
+image(BIN)
+image(dBIN)
+par(oldpar)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,211 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hyperpara</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Calculation of hyperparameter values
+</h2>
+
+<h3>Description</h3>
+
+<p>This function determines the hyperparameter values of regression methods,
+based on two assumptions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hyperpara(X, Mvar, Model = c("BL", "EBL", "BayesA", "BayesB", "BayesC", "BRR"),
+          Kappa = 0.01, Xtype = c("Geno", "Var"), f = 0, BL.Phi = 1, EBL.Phi = 0.1,
+          EBL.Omega = 0.1, EBL.Psi = 1, Nu = 5, Verbose=FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+
+<p>An (N x P) matrix, where N and P denote the number of samples and variables, respectively. When X is SNP genotypes as specified by Xtype = "Geno", SNP genotypes should be coded with values between 0 and 2. SNP genotypes are used to calculate sum (2*Q*(1-Q)*(1+f)) where Q is a vector of allele frequencies and f is the inbreeding coefficient. Missing values in X are not allowed. When X is "Var"(variables other than SNPs), variances of variables are used instead of sum (2*Q*(1-Q)*(1+f)).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Mvar</code></td>
+<td>
+
+<p>A scalar or vector denoting the assumed proportion of variance of Y that can be explained by X. Mvar is &lt; 1.0 in BL and EBL, and &lt;= 1.0 in the other methods.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Model</code></td>
+<td>
+
+<p>One of the six regression methods (BL, EBL, BayesA, BayesB, BayesC, BRR).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Kappa</code></td>
+<td>
+
+<p>A scalar or vector containing the assumed proportion of variables with NON-ZERO EFFECTS. Used when BL, EBL, BayesB, and BayesC. Kappa is set to 1 when BayesA and BRR are used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Xtype</code></td>
+<td>
+
+<p>Allowed Xtypes are "Geno" and "Var". Enter "Geno" when X contains the SNP genotypes and "Var" when X contains variables other than SNP genotypes.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f</code></td>
+<td>
+
+<p>A scalar representing the inbreeding coefficient. Enter 1 for inbred species.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BL.Phi</code></td>
+<td>
+
+<p>A scalar or vector containing Phi values of BL.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>EBL.Phi</code></td>
+<td>
+
+<p>A scalar or vector containing Phi values of EBL.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>EBL.Omega</code></td>
+<td>
+
+<p>A scalar or vector containing Omega values of EBL.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>EBL.Psi</code></td>
+<td>
+
+<p>A scalar or vector containing Psi values of EBL.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Nu</code></td>
+<td>
+
+<p>A scalar or vector containing Nu values of BayesA, BayesB, BayesC, and BRR.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Verbose</code></td>
+<td>
+
+<p>Specifies whether to print information (TRUE) or not (FALSE).
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>To run vigor, users must specify the following hyperparameter values.<br></p>
+
+<ul>
+<li>
+<p> BL: Phi, Omega
+</p>
+</li>
+<li>
+<p> EBL: Phi, Omega, Psi, Theta
+</p>
+</li>
+<li>
+<p> BayesA: Nu, S2
+</p>
+</li>
+<li>
+<p> BayesB: Nu, S2, Kappa
+</p>
+</li>
+<li>
+<p> BayesC: Nu, S2, Kappa
+</p>
+</li>
+<li>
+<p> BRR: Nu, S2
+</p>
+</li>
+</ul>
+<p>This function calculates the Omega of BL; Theta of EBL; S2 of BayesA, BayesB, BayesC, and BRR. Mvar, Kappa, and the other hyperparameters required by each method are specified by the user. The definitions of Mvar and Kappa are intuitively understandable and relatively easy to specify (see Arguments). For the other hyperparameters, the default values are recommended. When the arguments of hyperpara are vectors, all value-combinations are returned as a matrix. The hyperparameters are explained in the details of vigor and in the pdf manual of VIGoR (Onogi 2021).
+</p>
+
+
+<h3>Value</h3>
+
+<p>This function returns a vector when yielding a single hyperparameter set, and a matrix when yielding multiple hyperparameter sets. The rows and columns of the matrix correspond to the sets (value combinations) and the hyperparameters, respectively. See examples below.<br></p>
+
+
+<h3>References</h3>
+
+<p>Onogi A., Variational Bayesian inference for genome-wide regression: joint estimation of multiple learners (Bioinformatics 2022).<br>
+Onogi A. &amp; Iwata H., 2016 VIGoR: Variational Bayesian Inference for Genome-Wide Regression.
+Journal of Open Research Software, 4: e11<br>
+Onogi A., 2021, Documents for VIGoR ver. 1.1.0, https://github.com/Onogi/VIGoR<br></p>
+
+
+<h3>See Also</h3>
+
+<p>vigor
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+#data
+data(sampledata)
+dim(X) #500 samples and 1000 variables
+unique(X[1:(100*1000)]) #coded as 0, 1, 2
+
+#A single Mvar (0.5) and Kappa (0.01) value is assumed for BL.
+#A vector is returned.
+hyperpara(X, 0.5, "BL", 0.01, Verbose = TRUE)
+
+#Phi is set to 1 as default. To change Phi, use BL.Phi.
+hyperpara(X, 0.5, "BL", 0.01, BL.Phi = 5)
+
+#Calculate multiple hyperparameter value sets of BayesC assuming that Kappa is 0.1 and 0.01.
+#A matrix is returned.
+hyperpara(X, 0.5, "BayesC", c(0.1, 0.01))
+
+#The output vector can be used as the argument of vigor
+ETA &lt;- list(list(model = "BayesB",X = X,
+                 H = hyperpara(X, 0.5, "BayesC", c(0.1, 0.01))))
+Result &lt;- vigor(Y, ETA, Function = "tuning")
+Result$Metrics
+
+#Calculate hyperparameter values of EBL
+hyperpara(X, c(0.2, 0.5), "EBL", c(0.1, 0.01), EBL.Omega = c(0.5, 1))
+#Total 2 (Mvar) x 2 (Kappa) x 2 (EBL.Omega) = 8 sets are returned.
+
+</code></pre>
+
+
+</div>

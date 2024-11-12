@@ -1,0 +1,55 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>errorMessage</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Convert Objects to Detailed Error Message.</h2>
+
+<h3>Description</h3>
+
+<p>Function takes one or multiple objects and converts them to a single
+error-message. Objects can be output of functions <code>try</code> or
+<code>checkData</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">errorMessage(...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>one or multiple objects separated by comma</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>(characer) string combining information from input-objects
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+dat2 &lt;- dataEP05A2_1[1:16,]
+dat2$y &lt;- dat2$y[rep(seq(1,7,2), rep(2,4))] 
+errorMessage(try(1/"a"), checkData(y~day/run, dat2))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

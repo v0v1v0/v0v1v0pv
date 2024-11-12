@@ -1,0 +1,207 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tableplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Tableplot: A Semi-graphic Display of a Table</h2>
+
+<h3>Description</h3>
+
+<p>A tableplot (Kwan, 2008) is
+designed as a semi-graphic display in the form of a table with numeric values, but supplemented
+by symbols with size proportional to cell value(s), and with other visual attributes
+(shape, color fill, background fill, etc.) that can be used to encode other information
+essential to direct visual understanding.  Three-way arrays, where the last dimension
+corresponds to levels of a factor for which the first two dimensions are to be compared
+are handled by superimposing symbols.
+</p>
+<p>The specifications for each cell are given by the <code>types</code> argument, whose elements refer
+to the attributes specified in <code>patterns.</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tableplot(values, ...)
+
+## Default S3 method:
+tableplot(
+  values,
+  types,
+  patterns = list(list(0, "black", 1, "white", "white", 0, 0.5, "grey80", FALSE, 1)),
+  title = "Tableplot",
+  side.label = "row",
+  top.label = "col",
+  table.label = TRUE,
+  label.size = 1,
+  side.rot = 0,
+  gap = 2,
+  v.parts = 0,
+  h.parts = 0,
+  cor.matrix = FALSE,
+  var.names = "var",
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>values</code></td>
+<td>
+<p>A matrix or 3-dimensional array of values to be displayed in a tableplot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Arguments passed down to <code>tableplot.default</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>types</code></td>
+<td>
+<p>Matrix of specification assignments, of the same size as the first two dimensions
+of <code>values</code>. Entries refer to the sub-lists of <code>patterns</code>.
+Defaults to a matrix of all 1s, <code>matrix(1, dim(values)[1], dim(values[2]))</code>,
+indicating that all cells use the same pattern specification.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>patterns</code></td>
+<td>
+<p>List of lists; each list is one specification for the arguments to <code>cellgram</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>Main title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>side.label</code></td>
+<td>
+<p>a character vector providing labels for the rows of the tableplot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>top.label</code></td>
+<td>
+<p>a character vector providing labels for the columns of the tableplot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>table.label</code></td>
+<td>
+<p>Whether to print row/column labels</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label.size</code></td>
+<td>
+<p>Character size for labels</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>side.rot</code></td>
+<td>
+<p>Degree of rotation (positive for counter-clockwise)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gap</code></td>
+<td>
+<p>Width of the gap in each partition, if partitions are requested by <code>v.parts</code>
+and/or <code>h.parts</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v.parts</code></td>
+<td>
+<p>An integer vector giving the number of columns in two or more partitions of
+the table. If provided, sum must equal number of columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>h.parts</code></td>
+<td>
+<p>An integer vector giving the number of rows in two or more partitions of
+the table. If provided, sum must equal number of rows.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor.matrix</code></td>
+<td>
+<p>Logical. <code>TRUE</code> for a correlation matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.names</code></td>
+<td>
+<p>a list of variable names</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>None. Used for its graphic side effect
+</p>
+
+
+<h3>Note</h3>
+
+<p>The original version of tableplots was in the now-defunct tableplot package
+<a href="https://cran.r-project.org/package=tableplot">https://cran.r-project.org/package=tableplot</a>. The current implementation
+is a modest re-design focused on its use for collinearity diagnostics, but usable in
+more general contexts.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ernest Kwan and Michael Friendly
+</p>
+
+
+<h3>References</h3>
+
+<p>Kwan, E. (2008).
+Improving Factor Analysis in Psychology: Innovations Based on the Null Hypothesis Significance
+Testing Controversy. Ph. D. thesis,  York University.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>cellgram</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(cars)
+cars.mod &lt;- lm (mpg ~ cylinder + engine + horse + weight + accel + year,
+                data=cars)
+car::vif(cars.mod)
+
+(cd &lt;- colldiag(cars.mod, center=TRUE))
+tableplot(cd, title = "Tableplot of cars data", cond.max = 30 )
+
+data(baseball, package = "corrgram")
+
+baseball$Years7 &lt;- pmin(baseball$Years,7)
+
+base.mod &lt;- lm(logSal ~ Years7 + Atbatc + Hitsc + Homerc + Runsc + RBIc + Walksc,
+               data=baseball)
+car::vif(base.mod)
+
+cd &lt;- colldiag(base.mod, center=TRUE)
+tableplot(cd)
+</code></pre>
+
+
+</div>

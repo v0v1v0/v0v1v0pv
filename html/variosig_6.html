@@ -1,0 +1,105 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>envsig</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Determine Significance of Spatial Dependence Using Pointwise Variogram Envelope</h2>
+
+<h3>Description</h3>
+
+<p>Determine the significance of spatial dependence at different scales using pointwise variogram envelope based on permutation test.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">envsig(envlist, index = NULL, method = c("eb", "fisher", "min"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>envlist</code></td>
+<td>
+<p>output from <code>envelope</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>index</code></td>
+<td>
+<p>integer. Indicating the index which the permutation test for spatial dependence is performed up to. For example, <code>index = 2</code> indicates only the first two variogram estimates are considered in the hypothesis test, i.e. null hypothesis is there is no spatial dependence at small scales. If <code>NULL</code>, all variogram estimates are considered, which corresponds to the null hypothesis of no overall spatial dependence.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>string. One of p-value combination methods.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The default and preferred method for computing overall p-value is "eb" (empirical Brown's method), which has good power and close to nominal type I error rate. "fisher" (Fisher's method assumes independent pointwise p-values and requires higher sample size to achieve good power. "min" has the highest power but also much higher type I error rate.
+</p>
+
+
+<h3>Value</h3>
+
+<p> A list contains:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>p.pointwise</code></td>
+<td>
+<p> Adjusted pointwise p-values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.overall</code></td>
+<td>
+<p> Overall p-value of the permutation test.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Craig Wang</p>
+
+
+<h3>References</h3>
+
+<p>Walker, D. D., J. C. Loftis, and J. P. W. Mielke (1997). Permutation methods for determining the significance of spatial dependence. Mathematical Geology 29(8), 1011–1024.
+</p>
+<p>Fisher R. A. (1932). Statistical methods for research workers, 4th ed. Oliver &amp; Boyd.
+</p>
+<p>Poole, W., D. L. Gibbs, I. Shmulevich, B. Bernard, and T. A. Knijnenburg (2016). Combining dependent P-values with an empirical adaptation of Brown’s method. Bioinformatics 32(17), 430–436.
+</p>
+<p>Wang, C., Furrer, R. (2018) Monte Carlo Permutation Tests for Assessing Spatial Dependence at Difference Scales. Nonparametric Statistics. (Submitted)</p>
+
+
+<h3>See Also</h3>
+
+<p><code>envelope</code> to use Monte Carlo permutations for generating variogram envelope.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(sp)
+data(meuse)
+coordinates(meuse) = ~x+y
+vario0 &lt;- gstat::variogram(log(zinc)~1, meuse)
+varioEnv &lt;- envelope(vario0, data = meuse, formula = log(zinc)~1,
+  nsim = 500, cluster = TRUE, n.cluster = 10)
+envplot(varioEnv)
+envsig(varioEnv, index = 2, method = "eb")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

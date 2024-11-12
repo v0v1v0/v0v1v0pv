@@ -1,0 +1,526 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vigor</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variational Bayesian inference for genome-wide regression</h2>
+
+<h3>Description</h3>
+
+<p>This function performs Bayesian genome-wide regression using variational Bayesian algorithms. The available regression methods include Bayesian Lasso (BL), Extended Bayesian Lasso (EBL), BayesA, BayesB, BayesC, Bayesian Ridge Regression (BRR), BLUP, and Fixed Effects (FIXED) (fixed effects refer to regression using noninformative priors). This function also allows multiple regression methods (learners) to be used within a single model. For instance, additive and interaction effects can be incorporated into one model using BL and BayesB, which apply different levels of shrinkage.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vigor(Y, ETA, Function = c("fitting", "tuning", "cv"), Nfold = 5, CVFoldTuning = 5,
+      Partition = NULL, Thresholdvalue = 1e-5,
+      Maxiteration = 1000, RandomIni = TRUE, Metrics = c("rmse", "cor"), Verbose = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+
+<p>An N-length vector of response variables, where N is the number of samples. Missing data (coded as NA) are allowed.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ETA</code></td>
+<td>
+
+<p>A nested list to specify regression methods, explanatory variables, and hyperparameters. The length of ETA is the number of methods (learners) incorporated in a single model. See details below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Function</code></td>
+<td>
+
+<p>One of the strings "fitting", "tuning", and "cv". See details below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Nfold</code></td>
+<td>
+
+<p>An integer value. When n &gt; 1, n-fold cross-validation (CV) is performed on randomly partitioned individuals. When the integer is -1, leave-one-out CV is conducted. Used when Function = "cv" and Partition == NULL.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CVFoldTuning</code></td>
+<td>
+
+<p>An integer specifying the fold number of the CV in hyperparameter tuning. Used when Function = "cv" or "tuning" and multiple hyperparameter sets are given.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Partition</code></td>
+<td>
+
+<p>A matrix defining the partitions of CV. See details and examples below. Used when Function = "cv".
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Thresholdvalue</code></td>
+<td>
+
+<p>Specifies the convergence threshold. Smaller values indicate stricter thresholds.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Maxiteration</code></td>
+<td>
+
+<p>Maximum number of iterations.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RandomIni</code></td>
+<td>
+
+<p>If TRUE, the initial values of the SNP effects are randomly determined. Otherwise, they are set to 0.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Metrics</code></td>
+<td>
+
+<p>One of the strings "rmse" and "cor" to specify the metrics used in CV. rmse and cor use RMSE and Pearson correlation, respectively.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Verbose</code></td>
+<td>
+
+<p>If TRUE, print the run information to the console.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><b>Regression methods</b><br>
+Vigor supports the following regression methods;
+</p>
+
+<ul>
+<li>
+<p> BL (Bayesian lasso)
+</p>
+</li>
+<li>
+<p> EBL (extended Bayesian lasso)
+</p>
+</li>
+<li>
+<p> BayesA
+</p>
+</li>
+<li>
+<p> BayesB
+</p>
+</li>
+<li>
+<p> BayesC
+</p>
+</li>
+<li>
+<p> BRR (Bayesian ridge regression)
+</p>
+</li>
+<li>
+<p> BLUP
+</p>
+</li>
+<li>
+<p> FIXED (fixed effects)
+</p>
+</li>
+</ul>
+<p>These methods can be included in a single model simultaneously with different explanatory variables. For the details of these methods and the theoretical backgrounds of vigor, see the pdf document (Onogi 2021). <br></p>
+<p><b>ETA</b><br>
+Each element (list) of ETA consists of the following objects.<br></p>
+
+<ul>
+<li>
+<p> model : One of strings representing regression methods, "BL", "EBL", "BayesA", "BayesB", "BayesC", "BRR", "BLUP", or "FIXED"
+</p>
+</li>
+<li>
+<p> X     : An explanatory variables (e.g., SNP genotypes) of (N x P) matrix, where N and P denote the number of samples and variables, respectively
+</p>
+</li>
+<li>
+<p> K     : An N x N kernel matrix (e.g., genomic relationship matrix) used when BLUP is specified as model. When BLUP is specified but K is lacked, the linear kernel is created from X as scale(X)*t(scale(X))/ncol(X).
+</p>
+</li>
+<li>
+<p> H     : A vector or matrix including hyperparameters
+</p>
+</li>
+<li>
+<p> data  : A data frame containing fixed effects. Used to model FIXED using formula.
+</p>
+</li>
+</ul>
+<p>Specification of model is essential for all methods. For regression methods except for BLUP and FIXED, X is essential. For BLUP, either X or K is essential. For FIXED, either X or formula with data is essential.
+</p>
+<p><b>Hyperparameters</b><br>
+The regression methods require hyperparameters as H in ETA. H can be a vector or matrix. Below is the order of hyperparameters in H (order of columns in the case of matrix). Default values are shown in parenthesis.<br></p>
+
+<ul>
+<li>
+<p> BL     : Phi(1), Omega(1)
+</p>
+</li>
+<li>
+<p> EBL    : Phi(0.1), Omega(0.1), Psi(1), Theta(0.1)
+</p>
+</li>
+<li>
+<p> BayesA : Nu(5), S2(0.01)
+</p>
+</li>
+<li>
+<p> BayesB : Nu(5), S2(0.1), Kappa(0.01)
+</p>
+</li>
+<li>
+<p> BayesC : Nu(5), S2(0.1), Kappa(0.01)
+</p>
+</li>
+<li>
+<p> BRR    : Nu(5), S2(0.01)
+</p>
+</li>
+<li>
+<p> BLUP   : Nu(5), S2(0.3)
+</p>
+</li>
+</ul>
+<p><b>Note that Kappa is the proportion of explanatory variables with NON-ZERO EFFECTS</b>. Also note that Y is standardized automatically. To specify multiple hyperparameter sets, give an S x Nh matrix where S is the number of sets and Nh is the number of hyperparameters of the method to ETA. See the pdf document (Onogi 2021) for the details of hyperparameters.<br></p>
+<p><b>Functions</b><br>
+The functions of vigor are "fitting", "tuning", and "cv".
+</p>
+
+<ul>
+<li>
+<p> "fitting" : Fits the specified regression model to the data. When H (hyperparameters) includes multiple hyperparameter sets (i.e., H is a matrix), only the first set is used.
+</p>
+</li>
+<li>
+<p> "tuning"  : Selects the best hyperparameter set using CV for tuning. This set is then used for model fitting. The CV is performed on randomly partitioned data. The number of folds is determined by CVFoldTuning. When multiple hyperparameter sets are given to multiple methods, all combinations of hyperparameters are attempted.
+</p>
+</li>
+<li>
+<p> "cv"      : Conducts CV and returns the predicted values. When multiple hyperparameter sets are given, tuning is performed at each fold of the CV. As in Tuning, when multiple hyperparameter sets are given to multiple methods, all combinations of hyperparameters are attempted.
+</p>
+</li>
+</ul>
+<p><b>Partition matrix</b><br>
+The following is a possible Partition of 20 individuals evaluated in a five-fold CV:<br><br>
+14 11  3  2  7<br>
+5  4 20 10  9<br>
+6  8 16 15 12<br>
+18 13 17  1 19<br><br>
+Sample (row numbers in Y/X/K) 14, 5, 6, and 18 are removed from the training set at the first fold of the five-fold CV. Samples 11, 4, 8, and 13 are removed at the next fold. This process is repeated up to the fold number of the CV. If the number of samples N is 19, the gap is filled with -9. For example,<br><br>
+8  6  3 14 18<br>
+12  4  1 15  5<br>
+17  9 13 11 10<br>
+19 16  7  2 -9<br><br>
+An example of random sampling validation in which samples can be sampled more than once is shown below.<br><br>
+18  3 11 16 13<br>
+17  8 13 13 18<br>
+7 15 14 19  7<br>
+1 13 12  7  2<br><br>
+Samples 18, 13, and 7 are repeatedly used as testing samples.<br><br>
+Random partitioning outputs a Partition matrix, which can be input as the Partition matrix in subsequent analysis.<br></p>
+<p><b>Intercept</b><br>
+If No FIXED is given in ETA, vigor automatically adds the intercept to the regression model as a fixed effect (FIXED). If FIXED is given by the user, vigor regards the first column as the intercept<br></p>
+<p><b>Standardization</b><br>
+Vigor standardizes Y (response variables). Although most returned values are scaled back to the original scale, the lower bound of the marginal log likelihood is returned as the standardized scale.
+</p>
+
+
+<h3>Value</h3>
+
+<p>When Function = "fitting" or "tuning", a list containing the following elements is returned.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>$LB</code></td>
+<td>
+<p>Lower bound of the marginal log likelihood of Y.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>$ResidualVar</code></td>
+<td>
+<p>Residual variances (1/Tau02) at each iteration (from start to end).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>$H</code></td>
+<td>
+<p>Used hyperparameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>$Fittedvalue</code></td>
+<td>
+<p>Fitted values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>$Metrics</code></td>
+<td>
+<p>Metrics for hyperparameter tuning. Returned when Function = "tuning"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>$ETA</code></td>
+<td>
+<p>A list containing results for each method.
+</p>
+
+<ul>
+<li>
+<p> Beta: Posterior means of regression coefficients of X
+</p>
+</li>
+<li>
+<p> Sd.beta: Posterior standard deviations of Beta (uncertainty of Beta)
+</p>
+</li>
+<li>
+<p> Sigma2: Posterior means of variance of Beta or U
+</p>
+</li>
+<li>
+<p> Rho: Posterior means of model-inclusion probabilities
+</p>
+</li>
+<li>
+<p> U: Posterior means of random effects of BLUP
+</p>
+</li>
+<li>
+<p> Sd.u: Posterior standard deviations of U (uncertainty of U)
+</p>
+</li>
+<li>
+<p> iK: Inverse of K
+</p>
+</li>
+</ul>
+<p>Beta and Sd.beta are returned for BL, EBL, BayesA, BayesB, BayesC, and FIXED, and U, Sd.u, and iK are returned for BLUP. Rho is returned for BayesB and BayesC. Sigma2 is returned for methods except for BL and EBL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>$AddIntercept</code></td>
+<td>
+<p>True when the intercept was added automatically.</p>
+</td>
+</tr>
+</table>
+<p>When Function = "cv", a list containing the following elements is returned.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>$Prediction</code></td>
+<td>
+<p>A vector of predicted values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>$Metrics</code></td>
+<td>
+<p>Metrics of hyperparameter tuning. Chosen sets and corresponding metrics at each fold are returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>$Partition</code></td>
+<td>
+<p>A matrix representing the partition used in random partitioning. This matrix can be used as the argument Partition in subsequent analyses.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>$AddIntercept</code></td>
+<td>
+<p>True when the intercept was added automatically.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Akio Onogi
+</p>
+
+
+<h3>References</h3>
+
+<p>Onogi A., Variational Bayesian inference for genome-wide regression: joint estimation of multiple learners (Bioinformatics 2022).<br>
+Onogi A. &amp; Iwata H., 2016 VIGoR: Variational Bayesian Inference for Genome-Wide Regression.
+Journal of Open Research Software, 4: e11<br>
+Onogi A., 2021, Documents for VIGoR ver. 1.1.0, https://github.com/Onogi/VIGoR<br></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+#DATA###########################################################################
+data(sampledata)
+dim(X) #Matrix of SNP genotypes (explanatory variables)
+dim(Z) #Matrix of a fixed effect (explanatory variables)
+length(Y) #Vector of response variables
+
+
+#Fitting########################################################################
+#Example 1: Fit SNP genotypes with BayesC
+ETA &lt;- list(list(model = "BayesC", X = X))
+Result &lt;- vigor(Y, ETA)
+##see estimated SNP effects
+plot(abs(Result$ETA[[1]]$Beta), pch = 20)
+##10 SNPs at 1, 101, ..., 901 have non-zero effects
+abline(v = seq(1, 1000, 100), col = 2, lty = 2)
+##see inclusion probability
+plot(Result$ETA[[1]]$Rho, pch = 20)
+abline(v = seq(1, 1000, 100), col = 2, lty = 2)
+##Intercept is added automatically as the last learner
+Result$ETA[[2]]$Beta
+
+
+#Example 2: Fit fixed effects and SNP genotypes
+##There are two approaches to fit fixed effects
+##(1) Create model matrix
+Z #Z consists of three categories (A, B, and C)
+Z.matrix &lt;- model.matrix(~ Z)
+head(Z.matrix) #The first column is the intercept
+##Fit with EBL
+ETA &lt;- list(list(model = "FIXED", X = Z.matrix),
+            list(model = "EBL", X = X))
+Result &lt;- vigor(Y, ETA)
+##Estimated fixed effects (intercept, B, and C)
+Result$ETA[[1]]$Beta
+##Estimated SNP effects
+plot(abs(Result$ETA[[2]]$Beta), pch = 20)
+abline(v = seq(1, 1000, 100), col = 2, lty = 2)
+##NOTE: when FIXED is added by user, the intercept is not automatically added.
+##Thus, variables in FIXED should contain the intercept.
+
+##(2) Use formula
+Data &lt;- data.frame(Z = factor(Z))
+ETA &lt;- list(list(~ Z, model = "FIXED", data = Data),
+            list(model = "BayesA", X = X))
+Result &lt;- vigor(Y, ETA)
+##Estimated fixed effects (intercept, B, and C)
+Result$ETA[[1]]$Beta
+plot(abs(Result$ETA[[2]]$Beta), pch = 20)
+abline(v=seq(1,1000,100),col=2,lty=2)
+##NOTE: formula automatically adds the intercept
+
+
+#Example 3: Multiple regression methods in a single model
+##Some SNPs in X have dominance (non-additive) effects
+##Fit SNP genotypes coded as additive and dominance with different shrinkage levels
+X.d &lt;- X
+X.d[X == 2] &lt;- 0 #heterozygotes are 1 and homozygotes are 0
+ETA &lt;- list(list(~ Z, model = "FIXED", data = Data),
+            list(model = "BayesC", X = X, H = c(5, 0.1, 0.01)),
+            list(model = "BayesC", X = X.d, H = c(5, 0.1, 0.001)))
+Result &lt;- vigor(Y, ETA)
+##Inclusion probability for additive effects
+plot(Result$ETA[[2]]$Rho, pch = 20)
+abline(v = seq(1, 1000, 100), col = 2, lty = 2)
+##Inclusion probability for dominance effects
+plot(Result$ETA[[3]]$Rho, pch = 20)
+##SNPs at 1, 201, ..., 801 have non-zero effects
+abline(v = seq(1, 1000, 200), col = 2, lty = 2)
+
+##Fit additive and dominance effects with different learners
+ETA &lt;- list(list(~ Z, model = "FIXED", data = Data),
+            list(model = "BL", X = X, H = c(1, 0.01)),
+            list(model = "BayesC", X = X.d, H = c(5, 0.1, 0.001)))
+Result &lt;- vigor(Y, ETA)
+plot(abs(Result$ETA[[2]]$Beta), pch = 20)
+abline(v = seq(1, 1000, 100), col = 2, lty = 2)
+plot(Result$ETA[[3]]$Rho, pch = 20)
+abline(v = seq(1, 1000, 200), col = 2, lty = 2)
+
+
+#Tuning hyperparameters#########################################################
+#Example 4: Model fitting after hyperparameter tuning with cross-validation
+##Candidate hyperparameter values are determined with hyperpara
+##Use BayesB
+ETA &lt;- list(list(~ Z, model = "FIXED", data = Data),
+            list(model = "BayesB", X = X,
+                 H = hyperpara(X, 0.5, "BayesB", c(0.1,0.01))))
+Result &lt;- vigor(Y, ETA, Function = "tuning")
+##See the tuned result
+Result$Metrics
+##The model was fitted to the full data with the best set
+Result$H
+plot(Result$ETA[[2]]$Rho, pch = 20)
+abline(v = seq(1, 1000, 100), col = 2, lty = 2)
+##See how much the model was fitted
+plot(Y, Result$Fittedvalue); abline(0, 1)
+
+##When multiple learners used, all combinations of hyperparameter sets are compared
+ETA &lt;- list(list(~ Z, model = "FIXED", data = Data),
+            list(model = "BayesB", X = X,
+                 H = hyperpara(X, 0.5, "BayesB", c(0.1,0.01))),
+            list(model = "BayesC", X = X.d,
+                 H = hyperpara(X, 0.5, "BayesC", c(0.1,0.01))))
+Result &lt;- vigor(Y, ETA, Function = "tuning")
+##BayesB and BayesC have two candidate sets, respectively.
+##Thus, total 2 x 2 = 4 combinations are compared.
+Result$Metrics
+##The model was fitted to the full data with the best combination.
+Result$H
+plot(Result$ETA[[2]]$Rho, pch = 20)
+abline(v = seq(1, 1000, 100), col = 2, lty = 2)
+plot(Result$ETA[[3]]$Rho, pch = 20)
+abline(v = seq(1, 1000, 200), col = 2, lty = 2)
+
+
+#Cross-validation###############################################################
+#Example 5: Cross-validation with random splitting
+ETA &lt;- list(list(~ Z, model = "FIXED", data = Data),
+            list(model = "BayesC", X = X,
+                 H = hyperpara(X, 0.5, "BayesC", c(0.1,0.01))))
+Result &lt;- vigor(Y, ETA, Function="cv")
+##Because two hyperparameter sets are provided,
+##nested CV is conducted at each fold to tune hyperparameters
+##See which set was selected at each fold
+Result$Metrics
+##See predicted values
+plot(Y, Result$Prediction)
+cor(Y, Result$Prediction)
+
+#Example 6: Cross-validation with the specified splitting
+##Perform CV using the same partition as Example 5. Use EBL
+ETA &lt;- list(list(~ Z, model = "FIXED", data = Data),
+            list(model = "EBL", X = X))
+Result2 &lt;- vigor(Y, ETA, Function="cv", Partition = Result$Partition)
+plot(Y, Result2$Prediction)
+cor(Y, Result2$Prediction)
+
+</code></pre>
+
+
+</div>

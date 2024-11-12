@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vsp.svd_like</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Perform varimax rotation on a low rank matrix factorization</h2>
+
+<h3>Description</h3>
+
+<p>Perform varimax rotation on a low rank matrix factorization
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'svd_like'
+vsp(
+  x,
+  rank,
+  ...,
+  centerer = NULL,
+  scaler = NULL,
+  recenter = FALSE,
+  renormalize = FALSE,
+  kaiser_normalize_u = FALSE,
+  kaiser_normalize_v = FALSE,
+  rownames = NULL,
+  colnames = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Either a graph adjacency matrix, igraph::igraph or
+tidygraph::tbl_graph. If <code>x</code> is a matrix or Matrix::Matrix
+then <code>x[i, j]</code> should correspond to the edge going from node <code>i</code>
+to node <code>j</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rank</code></td>
+<td>
+<p>The number of factors to calculate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>These dots are for future extensions and must be empty.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>centerer</code></td>
+<td>
+<p>TODO</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scaler</code></td>
+<td>
+<p>TODO</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>recenter</code></td>
+<td>
+<p>Should the varimax factors be re-centered around the
+original factor means? Only used when <code>center = TRUE</code>, defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>renormalize</code></td>
+<td>
+<p>Should the regularized graph laplacian be used instead of the
+raw adjacency matrix? Defaults to <code>TRUE</code>. If <code>center = TRUE</code>, <code>A</code> will
+first be centered and then normalized.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kaiser_normalize_u</code></td>
+<td>
+<p>Whether or not to use Kaiser normalization
+when rotating the left singular vectors <code>U</code>. Defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kaiser_normalize_v</code></td>
+<td>
+<p>Whether or not to use Kaiser normalization
+when rotating the right singular vectors <code>V</code>. Defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rownames</code></td>
+<td>
+<p>Character vector of row names of <code>x</code>. These row names
+are propagated into the row names of the <code>U</code> and <code>Z</code>. Defaults
+to <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colnames</code></td>
+<td>
+<p>Character vector of column names of <code>x</code>. These column names
+are propagated into the row names of the <code>V</code> and <code>Y</code>. Defaults
+to <code>NULL</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(LRMF3)
+library(RSpectra)
+
+s &lt;- svds(ml100k, k = 2)
+mf &lt;- as_svd_like(s)
+fa &lt;- vsp(mf, rank = 2)
+
+</code></pre>
+
+
+</div>

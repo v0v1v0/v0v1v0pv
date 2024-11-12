@@ -1,0 +1,52 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dublin_west</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Election Dataset to Dublin West Constituency
+</h2>
+
+<h3>Description</h3>
+
+<p>Dataset containing ranked votes for the Dublin West constituency in 2002, Ireland. Results of that STV elections can be viewed at <a href="https://en.wikipedia.org/wiki/Dublin_West#2002_general_election">https://en.wikipedia.org/wiki/Dublin_West#2002_general_election</a>. They can be reproduced via the <code>stv</code> function, see Example below.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data("dublin_west")
+</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 29988 observations and 9 candidates. Each record corresponds to one ballot with candidates being ranked between 1 and 9 with zeros allowed. 
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/Dublin_West#2002_general_election">https://en.wikipedia.org/wiki/Dublin_West#2002_general_election</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(dublin_west)
+head(dublin_west)
+
+## Not run: 
+# produce similar results as in the Wikipedia link above
+dwstv &lt;- stv(dublin_west, nseats = 3, eps = 1, constant.quota = TRUE)
+
+# plot results
+plot(dwstv)
+image(dwstv)
+image(dwstv, all.pref = TRUE)
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,194 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>foldnormal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Folded Normal Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Fits a (generalized) folded (univariate) normal distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">foldnormal(lmean = "identitylink", lsd = "loglink", imean = NULL,
+   isd = NULL, a1 = 1, a2 = 1, nsimEIM = 500, imethod = 1,
+   zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>lmean, lsd</code></td>
+<td>
+
+<p>Link functions for the mean and standard
+deviation parameters of the usual univariate normal distribution.
+They are <code class="reqn">\mu</code> and <code class="reqn">\sigma</code> respectively.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>imean, isd</code></td>
+<td>
+
+<p>Optional initial values for <code class="reqn">\mu</code>
+and <code class="reqn">\sigma</code>.
+A <code>NULL</code> means a value is computed internally.
+See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a1, a2</code></td>
+<td>
+
+<p>Positive weights, called <code class="reqn">a_1</code> and <code class="reqn">a_2</code> below.
+Each must be of length 1.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM, imethod, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If a random variable has an ordinary univariate normal
+distribution then the absolute value of that random
+variable has an ordinary <em>folded normal distribution</em>.
+That is, the sign has not been
+recorded; only the magnitude has been measured.
+</p>
+<p>More generally, suppose <code class="reqn">X</code> is normal with
+mean <code>mean</code> and
+standard deviation <code>sd</code>.
+Let <code class="reqn">Y=\max(a_1 X, -a_2 X)</code>
+where <code class="reqn">a_1</code> and <code class="reqn">a_2</code> are positive weights.
+This means that <code class="reqn">Y = a_1 X</code> for <code class="reqn">X &gt; 0</code>,
+and <code class="reqn">Y = a_2 X</code> for <code class="reqn">X &lt; 0</code>.
+Then <code class="reqn">Y</code> is said to have a
+<em>generalized folded normal distribution</em>.
+The ordinary folded normal distribution corresponds to the
+special case <code class="reqn">a_1 = a_2 = 1</code>.
+</p>
+<p>The probability density function of the ordinary
+folded normal distribution
+can be written
+<code>dnorm(y, mean, sd) + dnorm(y, -mean, sd)</code> for
+<code class="reqn">y \ge 0</code>.
+By default, <code>mean</code> and <code>log(sd)</code> are the
+linear/additive
+predictors.
+Having <code>mean=0</code> and <code>sd=1</code> results in the
+<em>half-normal</em> distribution.
+The mean of an ordinary folded normal distribution is
+</p>
+<p style="text-align: center;"><code class="reqn">E(Y) = \sigma \sqrt{2/\pi} \exp(-\mu^2/(2\sigma^2)) +
+               \mu [1-2\Phi(-\mu/\sigma)] </code>
+</p>
+
+<p>and these are returned as the fitted values.
+Here, <code class="reqn">\Phi()</code> is the cumulative distribution
+function of a
+standard normal (<code>pnorm</code>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions such
+as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Under- or over-flow may occur if the data is ill-conditioned.
+It is recommended that several different initial values be used
+to help avoid local solutions.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response variable for this family function is the same as
+<code>uninormal</code> except positive values are required.
+Reasonably good initial values are needed.
+Fisher scoring using simulation is implemented.
+</p>
+<p>See <code>CommonVGAMffArguments</code> for
+general information about
+many of these arguments.
+</p>
+<p>Yet to do: implement the results of Johnson (1962) which gives
+expressions for the EIM, albeit, under a different
+parameterization.
+Also, one element of the EIM appears to require
+numerical integration.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Lin, P. C. (2005).
+Application of the generalized folded-normal
+distribution to the process
+capability measures.
+<em>International Journal of Advanced Manufacturing Technology</em>,
+<b>26</b>, 825–830.
+</p>
+<p>Johnson, N. L. (1962).
+The folded normal distribution:
+accuracy of estimation by maximum likelihood.
+<em>Technometrics</em>,
+<b>4</b>, 249–256.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rfoldnorm</code>,
+<code>uninormal</code>,
+<code>dnorm</code>,
+<code>skewnormal</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  m &lt;-  2; SD &lt;- exp(1)
+fdata &lt;- data.frame(y = rfoldnorm(n &lt;- 1000, m = m, sd = SD))
+hist(with(fdata, y), prob = TRUE, main = paste("foldnormal(m = ",
+     m, ", sd = ", round(SD, 2), ")"))
+fit &lt;- vglm(y ~ 1, foldnormal, data = fdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+(Cfit &lt;- Coef(fit))
+# Add the fit to the histogram:
+mygrid &lt;- with(fdata, seq(min(y), max(y), len = 200))
+lines(mygrid, dfoldnorm(mygrid, Cfit[1], Cfit[2]), col = "orange")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

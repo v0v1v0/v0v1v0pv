@@ -1,0 +1,106 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>olympics</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> 2008 and 2012 Summer Olympic Final Medal Count Data</h2>
+
+<h3>Description</h3>
+
+<p>Final medal count, by country, for the Summer
+2008 and 2012 Olympic Games.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(olym08)
+data(olym12)
+</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 87 or 85 observations on the following
+6 variables.
+</p>
+
+<dl>
+<dt><code>rank</code></dt>
+<dd>
+<p>a numeric vector, overall ranking
+of the countries. </p>
+</dd> <dt><code>country</code></dt>
+<dd>
+<p>a factor. </p>
+</dd>
+<dt><code>gold</code></dt>
+<dd>
+<p>a numeric vector, number of gold medals. </p>
+</dd>
+<dt><code>silver</code></dt>
+<dd>
+<p>a numeric vector, number of silver
+medals. </p>
+</dd> <dt><code>bronze</code></dt>
+<dd>
+<p>a numeric vector, number of
+bronze medals. </p>
+</dd> <dt><code>totalmedal</code></dt>
+<dd>
+<p>a numeric vector,
+total number of medals. </p>
+</dd>
+</dl>
+<h3>Details</h3>
+
+<p>The events were held during
+(i) August 8–24, 2008, in Beijing; and
+(ii) 27 July–12 August, 2012, in London.
+</p>
+
+
+
+<h3>References</h3>
+
+<p>The official English website
+was/is <code>http://en.beijing2008.cn</code>
+and <code>http://www.london2012.com</code>.
+Help from Viet Hoang Quoc is gratefully acknowledged.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>grc</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">summary(olym08)
+summary(olym12)
+## maybe str(olym08) ; plot(olym08) ...
+## Not run:  par(mfrow = c(1, 2))
+myylim &lt;- c(0, 55)
+with(head(olym08, n = 8),
+barplot(rbind(gold, silver, bronze),
+   col = c("gold", "grey", "brown"),  # No "silver" or "bronze"!
+#          "gold", "grey71", "chocolate4",
+   names.arg = country, cex.names = 0.5, ylim = myylim,
+   beside = TRUE, main = "2008 Summer Olympic Final Medal Count",
+   ylab = "Medal count", las = 1,
+   sub = "Top 8 countries; 'gold'=gold, 'grey'=silver, 'brown'=bronze"))
+with(head(olym12, n = 8),
+barplot(rbind(gold, silver, bronze),
+   col = c("gold", "grey", "brown"),  # No "silver" or "bronze"!
+   names.arg = country, cex.names = 0.5, ylim = myylim,
+   beside = TRUE, main = "2012 Summer Olympic Final Medal Count",
+   ylab = "Medal count", las = 1,
+   sub = "Top 8 countries; 'gold'=gold, 'grey'=silver, 'brown'=bronze")) 
+## End(Not run)
+</code></pre>
+
+
+</div>

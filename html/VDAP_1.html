@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>aaDist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Position Independent Amino Acid Distributions
+</h2>
+
+<h3>Description</h3>
+
+<p>Generates Position Independent Amino Acid Ditributions within
+VDAP data sets
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">aaDist(x, plotName = NULL, linker = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>An R object, usually a <code>data.frame</code> generally created by the function <code>FLoad()</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plotName</code></td>
+<td>
+
+<p>A plot title may be entered here surrounded by "quotations" or a <code>class(character)</code> object
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>linker</code></td>
+<td>
+
+<p><code>Logical</code> determining if a 3 residue linker "GSG" is present or not. If <code>linker = TRUE</code>,
+the "GSG" linker portion of each peptide will be excluded from distribution calculations. Default is
+FALSE.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Uses both <span class="pkg">stringr</span> and <span class="pkg">ggplot2</span> for peptide calculations and plotting
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>aaDist</code> will return a <code>data.frame</code> that contains a table with the amino acid
+distribution over the entire array object. A <code>ggplot2</code> object will also be displayed
+with the same information as the histogram.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Cody Moore
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">protEx &lt;- data.frame(Peptides = c("PWRGPWARVGSG","GYNRVGQGSG","PWRGPWARVGSG","GYNRVGQGSG","GSG"))
+
+## Plot example with GSG linker ##
+
+aaDistEx &lt;- aaDist(protEx,"aaDistEx Plot",linker = TRUE)
+</code></pre>
+
+
+</div>

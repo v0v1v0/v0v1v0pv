@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bifgmcop</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Farlie-Gumbel-Morgenstern's Bivariate Distribution
+Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimate the association parameter of
+Farlie-Gumbel-Morgenstern's bivariate
+distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bifgmcop(lapar = "rhobitlink", iapar = NULL, imethod = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>lapar, iapar, imethod</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+See <code>Links</code> for more link function choices.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The cumulative distribution function is
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y_1 \leq y_1, Y_2 \leq y_2) = y_1 y_2
+             ( 1 + \alpha (1 - y_1) (1 - y_2) ) </code>
+</p>
+
+<p>for <code class="reqn">-1 &lt; \alpha &lt; 1</code>.
+The support of the function is the unit square.
+The marginal distributions are the standard uniform
+distributions.  When <code class="reqn">\alpha = 0</code> the random
+variables are independent.
+</p>
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be a two-column matrix.  Currently, the fitted
+value is a matrix with two columns and values equal to 0.5.
+This is because each marginal distribution corresponds to a
+standard uniform distribution.
+</p>
+
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Castillo, E., Hadi, A. S.,
+Balakrishnan, N. and Sarabia, J. S. (2005).
+<em>Extreme Value and Related Models with
+Applications in Engineering and Science</em>,
+Hoboken, NJ, USA: Wiley-Interscience.
+</p>
+<p>Smith, M. D. (2007).
+Invariance theorems for Fisher information.
+<em>Communications in Statistics—Theory and Methods</em>,
+<b>36</b>(12), 2213–2222.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rbifgmcop</code>,
+<code>bifrankcop</code>,
+<code>bifgmexp</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ymat &lt;- rbifgmcop(1000, apar = rhobitlink(3, inverse = TRUE))
+## Not run: plot(ymat, col = "blue")
+fit &lt;- vglm(ymat ~ 1, fam = bifgmcop, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+head(fitted(fit))
+</code></pre>
+
+
+</div>

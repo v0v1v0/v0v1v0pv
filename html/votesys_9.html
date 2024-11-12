@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cdc_rankedpairs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Ranked Pairs Method</h2>
+
+<h3>Description</h3>
+
+<p>It is also called Tideman method. See details.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cdc_rankedpairs(x, allow_dup = TRUE, min_valid = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>it accepts the following types of input:
+1st, it can be an object of class <code>vote</code>. 
+2nd, it can be a user-given Condorcet matrix, 
+3rd, it can be a result of another Condorcet method, 
+which is of class <code>condorcet</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allow_dup</code></td>
+<td>
+<p>whether ballots with duplicated score values 
+are taken into account. Default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min_valid</code></td>
+<td>
+<p>default is 1. If the number of valid entries of 
+a ballot is less than this value, it will not be used.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The method first summarizes the result of pairwise comparison, 
+the order used is the order of winning votes from large to small. 
+So if pairwise comparison has ties (that is, the number of voters 
+who prefer a than b is equal to the number of voters who prefer 
+b than a, the method will fail, and the winner will be NULL).
+</p>
+<p>The second step is called tally. 
+If a wins b with 100 votes, b wins c with 80 votes, then 
+we put a-b-100 ahead of b-c-80. Suppose a wins b with 100 votes, 
+a wins c with 100 votes, then we have a tie; so we have to check 
+the relation between b and c. If b wins c, then we put a-c-100 
+ahead of a-b-100. Suppose a wins b with 100 votes, d wins b with 
+100 votes, then again we have a tie and have to check the a-d 
+relation. If d wins a, then we put d-b-100 ahead of a-b-100. Suppose 
+a wins b with 100 votes, e wins f with 100 votes, then the ties cannot 
+be solved, so the winner will be NULL.
+</p>
+<p>The third step, after the above mentioned tally, is called lock-in.
+As the relations have been sorted according to their strength 
+from large to small in the tally step, we now add them one 
+by one. The rule is: if a relation is contradictory with those 
+already locked in relations, this relation will be discarded.
+</p>
+<p>For example, suppose we have already add relation a &gt; b and 
+b &gt; c, then the two relations are locked in. As a result, we should 
+not add b &gt; a. Also, as a &gt; b and b &gt; c indicate a &gt; c, so we should 
+not add c &gt; a. After this process, we will finally find the winner who 
+defeats all others.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a <code>condorcet</code> object, which is essentially 
+a list.
+</p>
+
+<ul>
+<li>
+<p> (1) <code>call</code> the function call.
+</p>
+</li>
+<li>
+<p> (2) <code>method</code> the counting method.
+</p>
+</li>
+<li>
+<p> (3) <code>candidate</code> candidate names.
+</p>
+</li>
+<li>
+<p> (4) <code>candidate_num</code> number of candidate.
+</p>
+</li>
+<li>
+<p> (5) <code>ballot_num</code> number of ballots in x. When 
+x is not a <code>vote</code> object, it may be NULL.
+</p>
+</li>
+<li>
+<p> (6) <code>valid_ballot_num</code> the number of ballots that are 
+actually used to compute the result. When 
+x is not a <code>vote</code> object, it may be NULL.
+</p>
+</li>
+<li>
+<p> (7) <code>winner</code> the winner, may be NULL.
+</p>
+</li>
+<li>
+<p> (8) <code>input_object</code> the class of x. 
+</p>
+</li>
+<li>
+<p> (9) <code>cdc</code> the Condorcet matrix which is actually used.
+</p>
+</li>
+<li>
+<p> (10) <code>dif</code> the score difference matrix. When 
+x is not a <code>vote</code> object, it may be NULL.
+</p>
+</li>
+<li>
+<p> (11) <code>binary</code> win and loss recorded with 1 (win), 
+0 (equal) and -1 (loss).
+</p>
+</li>
+<li>
+<p> (12) <code>summary_m</code> times of win (1), equal (0) 
+and loss (-1).
+</p>
+</li>
+<li>
+<p> (13) <code>other_info</code> a list of 3 elements. The 1st 
+is the reason of failure. If winner exists, it will be blank. The 2nd 
+is the tally result (it may contain unsolved ties). 
+The 3rd is the lock-in result; if the method fails, 
+it will be NULL.
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+
+<ul><li>
+<p> Tideman, T. 1987. Independence of clones as a 
+criterion for voting rules. Social Choice and Welfare, 4(3), 185-206.
+</p>
+</li></ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">raw &lt;- rbind(c('m', 'n', 'c', 'k'), c('n', 'c', 'k', 'm'), 
+    c('c', 'k', 'n', 'm'), c('k', 'c', 'n', 'm')) 
+raw &lt;- list2ballot(m = raw, n = c(42, 26, 15, 17))
+vote &lt;- create_vote(raw, xtype = 2, candidate = c('m', 'n', 'c', 'k'))
+y &lt;- cdc_rankedpairs(vote)
+</code></pre>
+
+
+</div>

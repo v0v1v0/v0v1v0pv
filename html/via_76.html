@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>subset,VirtualArray-method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Subset a '<code>VirtualArray</code>'-class object</h2>
+
+<h3>Description</h3>
+
+<p>Extract subsets of an object from a class derived from '<code>VirtualArray</code>' similarly to a regular array.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'VirtualArray'
+subset(x, i, j, ..., oneDim = FALSE, drop = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>VirtualArray</code>-class object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>i</code></td>
+<td>
+<p>subscript of the first dimension(rows) or vector-like subsetting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>j</code></td>
+<td>
+<p>subscript of the second dimension (columns).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>subscript of additional dimensions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>oneDim</code></td>
+<td>
+<p><code>logical</code> In case of multidimensional <code>VirtualArray</code>s, setting <code>oneDim</code> to <code>TRUE</code> allows the application of one dimensional subscripts.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drop</code></td>
+<td>
+<p><code>logical</code> in case the result of subsetting is a single element, should the \codeVirtualArray wrapper be dropped?</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Either the same class as <code>x</code>, or the class that forms the element of the <code>VirtualArray</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ex &lt;- rastex()
+# first 4
+subset(ex, i=1:4)
+# missing at the end
+subset(ex, i=1:12)
+# character subscript
+subset(ex, i=c("a", "b"))
+# logical subscript
+subs &lt;- rep(TRUE, length(ex))
+subs[1] &lt;- FALSE # remove first
+subset(ex, i= subs)
+# no drop
+subset(ex, i=1, drop=FALSE)
+</code></pre>
+
+
+</div>

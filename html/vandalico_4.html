@@ -1,0 +1,81 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>HSgraph</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Suitability values distribution graph</h2>
+
+<h3>Description</h3>
+
+<p>A function to visualize the distribution of the suitability
+values associated to presences, absences, and all cases together.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">HSgraph(mat, breaks = 10, hist.total = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mat</code></td>
+<td>
+<p>A matrix with two columns. The first column must contain the
+suitability values (i.e., the classification rule); the second column must
+contain the presences and absences.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>breaks</code></td>
+<td>
+<p>Number of cells for the total histogram. By default,
+<code>breaks</code> = 10.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hist.total</code></td>
+<td>
+<p>Logical. Indicates whether or not the distribution of
+suitability values for all the cases together is graphed.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In blue, the distribution of the suitability values associated to
+presences. In red, the distribution of the suitability values associated to
+absences. This graph helps to understand why the <em>AUC</em> (or <em>Se*</em>)
+is greater, equal to, or less than the <em>uAUC</em> (or <em>uSe*</em>) (see
+Jiménez-Valverde 2022).
+</p>
+
+
+<h3>Value</h3>
+
+<p>This function returns a multiple histogram.
+</p>
+
+
+<h3>References</h3>
+
+<p>Jiménez-Valverde, A. (2022). The uniform AUC: dealing with the
+representativeness effect in presence-absence models. <em>Methods Ecol.
+Evol.</em>, 13, 1224-1236.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">suit&lt;-rbeta(100, 2, 2) #Generate suitability values
+random&lt;-runif(100)
+sp&lt;-ifelse(random &lt; suit, 1 , 0) #Generate presence-absence data
+HSgraph(cbind(suit, sp), breaks = 20, hist.total = TRUE)
+</code></pre>
+
+
+</div>

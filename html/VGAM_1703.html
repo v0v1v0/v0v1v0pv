@@ -1,0 +1,201 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>spikeplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Spike Plot
+</h2>
+
+<h3>Description</h3>
+
+<p>Produces a spike plot of a numeric vector.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">spikeplot(x, freq = FALSE, as.table = FALSE, col = par("col"),
+    lty = par("lty"), lwd = par("lwd"), lend = par("lend"),
+    type = "h", xlab = deparse1(substitute(x)), ylab = NULL,
+    capped = FALSE, cex = sqrt(lwd) / 2, pch = 19, pcol = col, scol = NULL,
+    slty = NULL, slwd = NULL, new.plot = TRUE, offset.x = 0, ymux = 1, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>Numeric, passed into <code>table</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>freq</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> then the y-axis measures
+the frequencies, else the sample proportions.
+Intended to be as <code>hist</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>as.table</code></td>
+<td>
+
+<p>Logical.
+If <code>TRUE</code> then the call to <code>plot</code> is
+closer to <code>plot(table(x), ...)</code>, meaning the labelling
+differs from <code>as.table = FALSE</code>.
+The default is to convert <code>table(x)</code> into a numeric
+vector which is then passed into <code>plot</code>
+so that the labelling is more uniform along the x-axis.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col, type, lty, lwd</code></td>
+<td>
+
+<p>See <code>par</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lend, xlab, ylab</code></td>
+<td>
+
+<p>See <code>par</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>capped, cex, pch, pcol</code></td>
+<td>
+
+<p>First argument is logical.
+If <code>TRUE</code> then the others argument are used to place
+points at the top using <code>points</code>
+with <code>pcol</code> being its colour.  
+See <code>par</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scol, slty, slwd</code></td>
+<td>
+
+<p>Similar to <code>col</code>, <code>lty</code> and <code>lwd</code> but
+apply to some selected values.
+The input may be a named list such as
+<code>scol = list("green" = c(2, 4, 6), "blue" = 5)</code>,
+<code>slty = list("dashed" = c(2, 4, 6), "dotted" = 5)</code>,
+<code>slwd = list("2" = c(2, 4, 6), "3" = 5)</code>,
+else a named vector such as
+<code>scol = c("green" = 2, "green" = 4, "green" = 6, "blue" = 5)</code>,
+<code>slty = c("dashed" = 2, "dashed" = 4, "dashed" = 6, "dotted" = 5)</code>,
+<code>slwd = c("2" = 2, "2" = 4, "2" = 6, "3" = 5)</code>.
+The three arguments are ignored if <code>as.table = TRUE</code>.
+</p>
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>new.plot, offset.x</code></td>
+<td>
+
+<p>Logical and numeric.
+Add to an existing plot? If so, set <code>new.plot = FALSE</code>
+and it is useful for
+the spikes to be shifted by some amount <code>offset.x</code>. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ymux</code></td>
+<td>
+
+<p>Numeric, y-multiplier. The response is multiplied by <code>ymux</code>.
+This can be useful when plotting subsets side-by-side so that
+the constituent proportions add up to the overall proportion.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Additional graphical arguments passed into an ordinary
+<code>plot</code>, for example,
+<code>xlim</code>, <code>las</code>, <code>main</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><em>Heaping</em> is a very commonly occurring phenomenon in
+retrospective self-reported survey data.
+Also known as <em>digit preference</em> data,
+it is often characterized by an excess of multiples of 10 or 5
+upon rounding.
+For this type of data
+this simple function is meant to be convenient for
+plotting the frequencies or sample proportions of
+a vector <code>x</code> representing a discrete random variable.
+This type of plot
+is known as a <em>spike plot</em> in STATA circles.
+If <code>table(x)</code> works then this function should hopefully
+work.
+The default for <code>type</code> means that any heaping and
+<em>seeping</em> should easily be seen. 
+If such features exist then <em>GAITD regression</em> is
+potentially useful—see <code>gaitdpoisson</code> etc.
+Currently missing values are ignored totally because
+<code>table(x)</code> is used without further arguments;
+this might change in the future.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns invisibly <code>table(x)</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>table</code>,
+<code>plot</code>,
+<code>par</code>,
+<code>deparse1</code>,
+<code>dgaitdplot</code>,
+<code>plotdgaitd</code>,
+<code>gaitdpoisson</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+spikeplot(with(marital.nz, age), col = "pink2", lwd = 2)
+
+## End(Not run)</code></pre>
+
+
+</div>

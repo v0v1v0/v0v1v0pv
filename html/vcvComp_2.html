@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cov.group</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Group covariance matrices</h2>
+
+<h3>Description</h3>
+
+<p>Computes the covariance matrix of each group.
+The effect of sexual dimorphism can be removed by using, for each group,
+the average of the covariance matrix of males and the covariance matrix of females.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cov.group(X, groups, sex = NULL, use = "everything")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>a data matrix with variables in columns and group names as row names</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groups</code></td>
+<td>
+<p>a character / factor vector containing grouping variable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sex</code></td>
+<td>
+<p>NULL (default). A character / factor vector containing sex variable,
+to remove sexual dimorphism by averaging males and females in each group</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use</code></td>
+<td>
+<p>an optional character string giving a method for computing covariances in the presence of missing values.
+This must be (an abbreviation of) one of the strings "everything", "all.obs", "complete.obs", "na.or.complete", or "pairwise.complete.obs".</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A (p x p x m) array of covariance matrices,
+where p is the number of variables and m the number of groups.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>cov</code> and <code>scale</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Data matrix of 2D landmark coordinates
+data("Tropheus.IK.coord")
+coords &lt;- which(names(Tropheus.IK.coord) == "X1"):which(names(Tropheus.IK.coord) == "Y19")
+proc.coord &lt;- as.matrix(Tropheus.IK.coord[coords])
+
+# Covariance matrix of each population
+S.phen.pop &lt;- cov.group(proc.coord, groups = Tropheus.IK.coord$POP.ID)
+
+# Covariance matrix of each population, pooled by sex
+S.phen.pooled &lt;- cov.group(proc.coord,
+groups = Tropheus.IK.coord$POP.ID, sex = Tropheus.IK.coord$Sex)
+
+</code></pre>
+
+
+</div>

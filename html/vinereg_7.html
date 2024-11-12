@@ -1,0 +1,202 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vinereg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>D-vine regression models</h2>
+
+<h3>Description</h3>
+
+<p>Sequential estimation of a regression D-vine for the purpose of quantile
+prediction as described in Kraus and Czado (2017).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vinereg(
+  formula,
+  data,
+  family_set = "parametric",
+  selcrit = "aic",
+  order = NA,
+  par_1d = list(),
+  weights = numeric(),
+  cores = 1,
+  ...,
+  uscale = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>an object of class "formula"; same as <code>lm()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>data frame (or object coercible by <code>as.data.frame()</code>) containing
+the variables in the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family_set</code></td>
+<td>
+<p>see <code>family_set</code> argument of <code>rvinecopulib::bicop()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selcrit</code></td>
+<td>
+<p>selection criterion based on conditional log-likelihood.
+<code>"loglik"</code> (default) imposes no correction; other choices are
+<code>"aic"</code> and <code>"bic"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order</code></td>
+<td>
+<p>the order of covariates in the D-vine, provided as vector of
+variable names (after calling
+<code>vinereg:::expand_factors(model.frame(formula, data))</code>); selected
+automatically if <code>order = NA</code> (default).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par_1d</code></td>
+<td>
+<p>list of options passed to <code>kde1d::kde1d()</code>, must be one value
+for each margin, e.g. <code>list(xmin = c(0, 0, NaN))</code> if the response and first
+covariate have non-negative support.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>optional vector of weights for each observation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cores</code></td>
+<td>
+<p>integer; the number of cores to use for computations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further arguments passed to <code>rvinecopulib::bicop()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>uscale</code></td>
+<td>
+<p>if TRUE, vinereg assumes that marginal distributions have been
+taken care of in a preliminary step.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If discrete variables are declared as <code>ordered()</code> or <code>factor()</code>, they are
+handled as described in Panagiotelis et al. (2012). This is different from
+previous version where the data was jittered before fitting.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class vinereg. It is a list containing the elements
+</p>
+ <dl>
+<dt>formula</dt>
+<dd>
+<p>the formula used for the fit.</p>
+</dd>
+<dt>selcrit</dt>
+<dd>
+<p>criterion used for variable selection.</p>
+</dd>
+<dt>model_frame</dt>
+<dd>
+<p>the data used to fit the regression model.</p>
+</dd>
+<dt>margins</dt>
+<dd>
+<p>list of marginal models fitted by <code>kde1d::kde1d()</code>.</p>
+</dd>
+<dt>vine</dt>
+<dd>
+<p>an <code>rvinecopulib::vinecop_dist()</code> object containing the fitted
+D-vine.</p>
+</dd> <dt>stats</dt>
+<dd>
+<p>fit statistics such as conditional
+log-likelihood/AIC/BIC and p-values for each variable's contribution.</p>
+</dd>
+<dt>order</dt>
+<dd>
+<p>order of the covariates chosen by the variable selection
+algorithm.</p>
+</dd> <dt>selected_vars</dt>
+<dd>
+<p>indices of selected variables.</p>
+</dd> </dl>
+<p> Use
+<code>predict.vinereg()</code> to predict conditional quantiles. <code>summary.vinereg()</code>
+shows the contribution of each selected variable with the associated
+p-value derived from a likelihood ratio test.
+</p>
+
+
+<h3>References</h3>
+
+<p>Kraus and Czado (2017), D-vine copula based quantile regression,
+Computational Statistics and Data Analysis, 110, 1-18
+</p>
+<p>Panagiotelis, A., Czado, C., &amp; Joe, H. (2012). Pair copula constructions for
+multivariate discrete data. Journal of the American Statistical Association,
+107(499), 1063-1072.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>predict.vinereg</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># simulate data
+x &lt;- matrix(rnorm(200), 100, 2)
+y &lt;- x %*% c(1, -2)
+dat &lt;- data.frame(y = y, x = x, z = as.factor(rbinom(100, 2, 0.5)))
+
+# fit vine regression model
+(fit &lt;- vinereg(y ~ ., dat))
+
+# inspect model
+summary(fit)
+plot_effects(fit)
+
+# model predictions
+mu_hat &lt;- predict(fit, newdata = dat, alpha = NA) # mean
+med_hat &lt;- predict(fit, newdata = dat, alpha = 0.5) # median
+
+# observed vs predicted
+plot(cbind(y, mu_hat))
+
+## fixed variable order (no selection)
+(fit &lt;- vinereg(y ~ ., dat, order = c("x.2", "x.1", "z.1")))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,284 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predcomp.test</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Time Series Prediction Comparison Test
+</h2>
+
+<h3>Description</h3>
+
+<p>Forecast prediction comparison test for two competing forecasts against an observation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">predcomp.test(x, xhat1, xhat2, alternative = c("two.sided", "less", "greater"),
+    lossfun = "losserr", lossfun.args = NULL, test = c("DM", "HG"), ...)
+
+losserr(x, xhat, method = c("abserr", "sqerr", "simple", "power", 
+    "corrskill", "dtw"), scale = 1, p = 1, dtw.interr = c("abserr", 
+    "sqerr", "simple", "power"), ...)
+
+exponentialACV(x, y, ...)
+
+## S3 method for class 'predcomp.test'
+summary(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x,xhat1,xhat2,xhat</code></td>
+<td>
+<p>numeric vectors giving the verification data and each competing forecast model output (1 and 2).  For <code>losserr</code>, <code>xhat</code> is a numeric giving a single forecast model output (i.e., by default the function is called internally by <code>predcomp.test</code> once for <code>xhat1</code> and once for <code>xhat2</code>). For <code>exponentialACV</code>, see argument <code>y</code> below.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+
+<p><code>x</code> for <code>exponentialACV</code> is a numeric giving the separation distance, and <code>y</code> a numeric giving the autocovariance values.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>list object of class “predcomp.test” as returned by <code>predcomp.test</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alternative</code></td>
+<td>
+<p>character string stating which type of hypothesis test to conduct.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lossfun</code></td>
+<td>
+<p>character string naming the loss function to call.  The default, <code>losserr</code>, calls one of several methods depending on its <code>method</code> argument.  Any function that takes <code>x</code> and <code>xhat</code> numeric vectors as arguments and returns a numeric vector of the same length can be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lossfun.args</code></td>
+<td>
+<p>List providing additional arguments to <code>lossfun</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>test</code></td>
+<td>
+<p>character string stating whether to run the Diebold-Mariano type of test or the Hering-Genton modification of it (i.e., use a parametric autocovariance function).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method,dtw.interr</code></td>
+<td>
+<p>character string stating which type of loss (or skill) function to use.  In the case of <code>dtw.interr</code>, this is the loss function for the intensity part of the error only.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>numeric giving a value by which to scale the loss function.  In the case of “<code>dtw</code>”, this is only applied to the intensity part of the loss function, and can be used to scale the influence of the intensity vs. temporal lag errors.  See Details section for more.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>numeric only used by the “power” loss function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>For <code>predcomp.test</code>, these are any additional arguments to the <code>acf</code> function besides <code>x</code>, <code>type</code> and <code>plot</code>, which may not be passed.
+</p>
+<p>For <code>losserr</code>, these are any additional arguments to <code>dtw</code> except for <code>x</code>, <code>y</code>, and <code>step.pattern</code>, which may not be passed.
+</p>
+<p>For <code>exponentialACV</code> these are any optional arguments to <code>nls</code> except for <code>formula</code> and <code>data</code>.  If <code>start</code> is not passed, then reasonable starting values are calculated and passed in for this argument.
+</p>
+<p>For the <code>summary</code> method function, these are not used.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function performs the analyses described in Gilleland and Roux (2014); although note that while working on another manuscript (Gilleland and Hering, in preparation), a better optimization routine has replaced the one used in said paper, which has been thoroughly tested to yield good size and power under a variety of temporal dependence structures, as well as having far fewer situations where a fit cannot be found.  Namely, the Diebold Mariano test for competing forecast performance, the Hering and Genton (2011) modification of this test, as well as the dynamic time warping extension.
+</p>
+<p>The Diebold-Mariano test was proposed in Diebold and Mariano (1995) for obtaining hypothesis tests to compare the forecast accuracy of two competing forecasts against a common verification series.  The null hypothesis is that they have the same accuracy.  The test statistic is of the form
+</p>
+<p>S = dbar/sqrt(2*pi*se_d(0)/N),
+</p>
+<p>where d is the loss differential, d = e1 - e2 (e1 = loss(x, xhat1) and e2 = loss(x, xhat2)), dbar is its sample mean, and se_d(0) is the standard error for d, which must be estimated, and N is the length of the series investigated.  Let V = 2*pi*se_d(0), then V is estimated by
+</p>
+<p>V = sum(gamma(tau)),
+</p>
+<p>where the summation is over tau = -(k - 1) to (k - 1) for temporal lags k, and gamma are the empirical autocovariances.  
+</p>
+<p>Hering and Genton (2011) propose a modification that employs fitting a parameteric covariance model in determining the standard error for the test statistic (they also propose a spatial extension, see, e.g., <code>spatMLD</code> from <span class="pkg">SpatialVx</span>).
+</p>
+<p>In either case, asymptotic results suggest that S ~ N(0,1), and the hypothesis test is conducted subsequently.
+</p>
+<p>Discrete time warping can be applied (see examples below) in order to obtain a loss function based on location (in time) and intensity errors similar to the spatial version in Gilleland (2013).
+</p>
+<p>The loss functions supplied by <code>losserr</code> include:
+</p>
+<p><code>abserr</code>: Absolute error loss, defined by abs((xhat - x)/scale),
+</p>
+<p><code>sqerr</code>: Square error loss, defined by ((xhat - x)/scale)^2,
+</p>
+<p><code>simple</code>: Simple loss, defined by (xhat - x)/scale,
+</p>
+<p><code>power</code>: Power loss, defined by ((xhat - x)/scale)^p (same as <code>sqerr</code> if <code>p</code>=2),
+</p>
+<p><code>corrskill</code>: Correlation skill defined by scale * (x - mean(x)) * (xhat - mean(xhat)),
+</p>
+<p><code>dtw</code>: Discrete time warp loss defined by: d1 + d2, where d1 is the absolute distance (ignoring direction) of warp movement, and d2 is one of the above loss functions (except for <code>corrskill</code>) applied to the resulting intensity errors after warping the series.
+</p>
+<p>The <code>exponential</code> function takes numeric vector arguments <code>x</code> and <code>y</code> and estimates the parameters, <code>c(sigma, theta)</code>, that optimize
+</p>
+<p>y = sigma^2*exp(-3*x/theta)
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>predcomp.test</code> returns a list object of class c(“predcomp.test”, “htest”) with components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>call </code></td>
+<td>
+<p>the calling string</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method </code></td>
+<td>
+<p>character string giving the full name of the method (Diebold-Mariano or Hering-Genton) used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fitmodel</code></td>
+<td>
+<p>character naming the function used to fit the parametric model to the autocovariances or “none”.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fitmodel.args</code></td>
+<td>
+<p>If fitmodel is used, then this will be a list of any arguments passed in for it.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>loss.function</code></td>
+<td>
+<p>character string naming the loss function called.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>statistic</code></td>
+<td>
+<p>numeric giving the value of the statistic.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alternative</code></td>
+<td>
+<p>character string naming which type of hypothesis test was used (i.e., two-sided or one of the one-sided possibilities).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value</code></td>
+<td>
+<p>numeric giving the p-value for the test.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data.name</code></td>
+<td>
+<p>character vector naming the verification and competing forecast series applied to the test.</p>
+</td>
+</tr>
+</table>
+<p><code>losserr</code> returns a numeric vector of loss values.
+</p>
+<p><code>exponentialACV</code> returns a list object of class “nls” as returned by <code>nls</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Eric Gilleland
+</p>
+
+
+<h3>References</h3>
+
+<p>Diebold, F. X. and Mariano, R. S. (1995) Comparing predictive accuracy. <em>Journal of Business and Economic Statistics</em>, <b>13</b>, 253–263.
+</p>
+<p>Gilleland, E. (2013) Testing competing precipitation forecasts accurately and efficiently: The spatial prediction comparison test. <em>Mon. Wea. Rev.</em>, <b>141</b> (1), 340–355, <a href="http://dx.doi.org/10.1175/MWR-D-12-00155.1">http://dx.doi.org/10.1175/MWR-D-12-00155.1</a>.
+</p>
+<p>Gilleland, E. and Roux, G. (2014) A New Approach to Testing Forecast Predictive Accuracy. Accepted to <em>Meteorol. Appl.</em> Available at: <a href="http://onlinelibrary.wiley.com/doi/10.1002/met.1485/abstract">http://onlinelibrary.wiley.com/doi/10.1002/met.1485/abstract</a>
+</p>
+<p>Hering, A. S. and Genton, M. G. (2011) Comparing spatial predictions.  <em>Technometrics</em>, <b>53</b>, (4), 414–425, doi:10.1198/TECH.2011.10136.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>print.htest</code>, <code>nls</code>, <code>dtw</code>, <code>acf</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">z0 &lt;- arima.sim(list(order=c(2,0,0), ar=c(0.8,-0.2)), n=1000)
+z1 &lt;- c(z0[10:1000], z0[1:9]) + rnorm(1000, sd=0.5)
+z2 &lt;- arima.sim(list(order=c(3,0,1), ar=c(0.7,0,-0.1), ma=0.1), n=1000) + 
+    abs(rnorm(1000, mean=1.25))
+
+test &lt;- predcomp.test(z0, z1, z2)
+summary(test)
+
+test2 &lt;- predcomp.test(z0, z1, z2, test = "HG" )
+summary(test2)
+
+## Not run: 
+test2 &lt;- predcomp.test(z0, z1, z2, test = "HG" )
+summary(test2)
+
+test2.2 &lt;- predcomp.test(z0, z1, z2, alternative="less")
+summary(test2.2)
+
+test3 &lt;- predcomp.test(z0, z1, z2, lossfun.args=list(method="dtw") )
+summary(test3)
+
+test3.2 &lt;- predcomp.test(z0, z1, z2, alternative="less",
+    lossfun.args=list(method="dtw"), test = "HG" )
+summary(test3.2)
+
+test4 &lt;- predcomp.test(z0, z1, z2, lossfun.args = list(method="corrskill"), test = "HG" )
+summary(test4)
+
+test5 &lt;- predcomp.test(z0, z1, z2, lossfun.args = list(method="dtw", dtw.interr="sqerr"),
+    test = "HG" )
+summary(test5)
+
+test5.2 &lt;- predcomp.test(z0, z1, z2, alternative="less",
+    lossfun.args=list(method="dtw", dtw.interr="sqerr"), test = "HG" )
+summary(test5.2) 
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

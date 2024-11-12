@@ -1,0 +1,154 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predict.VFP</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Predict Method for Objects of Class 'VFP'.</h2>
+
+<h3>Description</h3>
+
+<p>Predictions are made for the variance (type="vc"), standard deviation ("sd") or 
+coefficient of variation ("cv") and their corresponding confidence intervals.
+The latter are calculated primarily on the variance scale and then transformed to the
+other scales, if required.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VFP'
+predict(
+  object,
+  model.no = NULL,
+  newdata = NULL,
+  alpha = 0.05,
+  dispersion = NULL,
+  type = c("vc", "sd", "cv"),
+  CI.method = c("chisq", "t", "normal"),
+  use.log = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>(object) of class "VFP"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model.no</code></td>
+<td>
+<p>(integer) specifying a fitted model stored in 'object'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>(numeric) optionally, a vector specifying mean-values for which predictions
+on the user-defined scale ('type') are requested. If omitted, fitted values 
+will be returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>(numeric) value specifying the 100 x (1-alpha)% confidence interval of predicted
+values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dispersion</code></td>
+<td>
+<p>(numeric) NULL = the dispersion will be set =1 (should usually not be changed; 
+For the Saddler model, the dispersion is 1.),
+numeric value = the dispersion parameter will be used as specified</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>(character) specifying on which scale the predicted values shall be returned, 
+possible are "vc" = variance, "sd"=standard deviation, "cv"=coefficient of variation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CI.method</code></td>
+<td>
+<p>(character) one of "t", "normal", "chisq" specifying which CI-method to use</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use.log</code></td>
+<td>
+<p>(logical) TRUE = X- and Y-axis will be log-transformed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters passed forward to function <code>predict.gnm</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>(data.frame) with numeric variables:<br></p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>Mean</code></td>
+<td>
+<p>value at which predictions were requested</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Fitted</code></td>
+<td>
+<p>prediction at 'Mean'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SE</code></td>
+<td>
+<p>standard error of prediction</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Scale</code></td>
+<td>
+<p>residual scale</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LCL</code></td>
+<td>
+<p>lower confidence limit of the 100x(1-'alpha')% CI</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>UCL</code></td>
+<td>
+<p>upper confidence limit of the 100x(1-'alpha')% CI</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(VCA)
+data(VCAdata1)
+lst &lt;- anovaVCA(y~(device+lot)/day/run, VCAdata1, by="sample")
+mat &lt;- getMat.VCA(lst)		# automatically selects "total"
+res &lt;- fit.vfp(model.no=1:10, Data=mat)
+predict(res)
+predict(res, dispersion=0.95)
+
+</code></pre>
+
+
+</div>

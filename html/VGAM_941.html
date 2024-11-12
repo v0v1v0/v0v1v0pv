@@ -1,0 +1,125 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>maxwell</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Maxwell Regression Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimating the parameter of the Maxwell  distribution by
+maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">maxwell(link = "loglink", zero = NULL, parallel = FALSE,
+        type.fitted = c("mean", "percentiles", "Qlink"),
+        percentiles = 50)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Parameter link function applied to <code class="reqn">a</code>,
+which is called the parameter <code>rate</code>.
+See <code>Links</code> for more choices and information;
+a log link is the default because the parameter is positive.
+More information is at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero, parallel</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.fitted, percentiles</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+Using <code>"Qlink"</code> is for quantile-links in <span class="pkg">VGAMextra</span>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Maxwell distribution, which is used in the area of
+thermodynamics,
+has a probability density function that can be written
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;a) = \sqrt{2/\pi} a^{3/2} y^2 \exp(-0.5 a y^2)</code>
+</p>
+
+<p>for <code class="reqn">y&gt;0</code> and <code class="reqn">a&gt;0</code>.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">\sqrt{8 / (a \pi)}</code>
+(returned as the fitted values), and its variance is
+<code class="reqn">(3\pi - 8)/(\pi a)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Fisher-scoring and Newton-Raphson are the same here.
+A related distribution is the Rayleigh distribution.
+This <span class="pkg">VGAM</span> family function handles multiple responses.
+This <span class="pkg">VGAM</span> family function can be mimicked by
+<code>poisson.points(ostatistic = 1.5, dimension = 2)</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>von Seggern, D. H. (1993).
+<em>CRC Standard Curves and Surfaces</em>,
+Boca Raton, FL, USA: CRC Press.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Maxwell</code>,
+<code>rayleigh</code>,
+<code>poisson.points</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">mdata &lt;- data.frame(y = rmaxwell(1000, rate = exp(2)))
+fit &lt;- vglm(y ~ 1, maxwell, mdata, trace = TRUE, crit = "coef")
+coef(fit, matrix = TRUE)
+Coef(fit)
+</code></pre>
+
+
+</div>

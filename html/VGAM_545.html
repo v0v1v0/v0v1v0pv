@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>felix</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Felix Distribution Family Function</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the parameter of a Felix distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">felix(lrate = extlogitlink(min = 0, max = 0.5), imethod = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lrate</code></td>
+<td>
+
+<p>Link function for the parameter,
+called <code class="reqn">a</code> below;
+see <code>Links</code> for more choices and for general information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+Valid values are 1, 2, 3 or 4.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Felix distribution is an important basic Lagrangian distribution.
+The density function is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;a) =
+  \frac{ 1 }{((y-1)/2)!} y^{(y-3)/2} a^{(y-1)/2}  \exp(-ay)
+  </code>
+</p>
+
+<p>where <code class="reqn">y=1,3,5,\ldots</code> and
+<code class="reqn">0 &lt; a &lt; 0.5</code>.
+The mean is <code class="reqn">1/(1-2a)</code> (returned as the fitted values).
+Fisher scoring is implemented.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Consul, P. C. and Famoye, F. (2006).
+<em>Lagrangian Probability Distributions</em>,
+Boston, USA: Birkhauser.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>dfelix</code>,
+<code>borel.tanner</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fdata &lt;- data.frame(y = 2 * rpois(n = 200, 1) + 1)  # Not real data!
+fit &lt;- vglm(y ~ 1, felix, data = fdata, trace = TRUE, crit = "coef")
+coef(fit, matrix = TRUE)
+Coef(fit)
+summary(fit)
+</code></pre>
+
+
+</div>

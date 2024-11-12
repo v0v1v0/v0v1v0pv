@@ -1,0 +1,208 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gammaRMlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Link functions for the mean of 2–parameter 
+continuous distributions: The gamma distribution.
+</h2>
+
+<h3>Description</h3>
+
+
+<p>Computes the <code>gammaRMlink</code> transformation, its inverse and
+the first two derivatives.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">        gammaRMlink(theta, shape = NULL, wrt.param = NULL,
+                    bvalue = NULL, inverse = FALSE,
+                    deriv = 0, short = TRUE, tag = FALSE)
+                       
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character. This is <code class="reqn">\theta</code>
+('rate' parameter) but iy may 
+be <code class="reqn">\eta</code> depending on the other parameters.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+
+<p>The shape parameter. Same as
+<code>gammaRff</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wrt.param</code></td>
+<td>
+
+<p>Positive integer, either <code class="reqn">1</code> or <code class="reqn">2</code>. The partial derivatives
+are computed with respect to one of the two linear predictors 
+involved with this link. Further details listed below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue, inverse, deriv, short, tag</code></td>
+<td>
+
+<p>See <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The link to model the mean of the 2–parameter
+gamma distribution.
+</p>
+<p>The <code>gammaRMlink</code> transformation, <em>for given</em>
+<code class="reqn">\alpha</code> ('shape' parameter),
+is defined as
+
+</p>
+<p style="text-align: center;"><code class="reqn"> \eta = \eta(\alpha; \beta) = \log \frac{\alpha}{\beta},</code>
+</p>
+
+
+<p>where <code class="reqn">\beta &gt; 0</code> is a <em>rate</em> parameter. 
+
+
+
+
+
+
+
+This link is expressly a function of <code class="reqn">\beta</code>, i.e.
+<code class="reqn">\theta</code>, therefore <code class="reqn">\alpha</code> (<em>shape</em>)
+must be entered at every call.
+</p>
+<p>Numerical values of <code class="reqn">\alpha</code> or <code class="reqn">\beta</code> out of range may 
+result in <code>Inf</code>, <code>-Inf</code>, <code>NA</code> or <code>NaN</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the <code>gammaRMlink</code> transformation of
+<code>theta</code>, i.e. <code class="reqn">\beta</code>, when <code>inverse = FALSE</code>.
+If <code>inverse = TRUE</code>, then <code class="reqn">\theta</code> becomes <code class="reqn">\eta</code>,
+and the inverse,
+<code class="reqn">\alpha</code> * <code>exp(-theta)</code>, <em>for given</em> <code class="reqn">\alpha</code>, is
+returned.
+</p>
+<p>For <code>deriv = 1</code>, <code>theta</code> becomes 
+<code class="reqn">\theta = (\beta, \alpha)=</code><code class="reqn">(\theta1, \theta2)</code>, and
+<code class="reqn">\eta = (\eta1, \eta2)</code>,
+and then, the argument <code>wrt.param</code> must be
+considered:
+</p>
+<p>A) If <code>inverse = FALSE</code>, then 
+<code class="reqn">d</code> <code>eta1</code> / <code class="reqn">d</code> <code>theta1</code> when 
+<code>wrt.param = 1</code>, and
+<code class="reqn">d</code> <code>eta1</code> / <code class="reqn">d</code> <code>theta2</code> if
+<code>wrt.param = 2</code>.
+</p>
+<p>B) For <code>inverse = TRUE</code>, this function returns
+<code class="reqn">d</code> <code>theta1</code> / <code class="reqn">d</code> <code>eta1</code> and
+<code class="reqn">d</code> <code>theta2</code> / <code class="reqn">d</code> <code>eta1</code> conformably arranged
+in a matrix, if <code>wrt.param = 1</code>,
+as a function of <code class="reqn">\theta_i</code>, <code class="reqn">i = 1, 2</code>.
+Also, when <code>wrt.param = 2</code>, a matrix with columns
+<code class="reqn">d</code><code>theta1</code> / <code class="reqn">d</code> <code>eta2</code> and 
+<code class="reqn">d</code><code>theta2</code> / <code class="reqn">d</code> <code>eta2</code>
+is returned.
+
+
+
+
+
+
+
+</p>
+<p>Similarly, when <code>deriv = 2</code>, the second derivatives in
+terms of <code>theta</code> are returned.
+</p>
+
+
+
+
+
+
+<h3>Note</h3>
+
+<p>Numerical instability may occur for values <code>theta</code> too close
+to zero. Use argument <code>bvalue</code> to replace them before
+computing the link.
+</p>
+<p>If <code>theta</code> is character, then arguments <code>inverse</code> and
+<code>deriv</code> are ignored. See <code>Links</code>
+for further details.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gammaRff</code>,
+<code>gammaR</code>,
+<code>Links</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> 
+    eta &lt;- seq(-3, 3, by = 0.1) # this is eta = log(mu(b, a)).
+    shape  &lt;- rep(exp(0.8), length(eta))    # 'shape' argument.
+ 
+ ## E1. Get 'rate' values.
+   theta &lt;- gammaRMlink(theta = eta, shape = shape, inverse = TRUE)  # rate
+   
+ ## Not run: 
+ ## E2. Plot theta vs. eta, 'shape' fixed.
+   plot(theta, eta, type = "l", las = 1, ylab = "", 
+   main = "gammaRMlink(theta; shape)")
+ 
+## End(Not run)
+ 
+ ## E3. gammaRMlink() and its inverse ##
+    etabis  &lt;- gammaRMlink(theta = theta, shape = shape, inverse = FALSE)
+    my.diff &lt;- eta - etabis
+    summary(my.diff)     # Zero
+    
+  ## E4. Special values arranged in a matrix ##
+    bbeta &lt;- matrix(eta[1:9], ncol = 3, nrow = 3)  #Ensure equal dimensions. 
+    alpha &lt;- matrix(c(Inf, -Inf, NA, NaN, -1 , 1, 0, -2, 2), ncol = 3, nrow = 3)
+    # The gammaRMlink transformation (log(a/b))
+    gammaRMlink(theta = bbeta, shape = alpha, inv = FALSE)   # NaNs produced.
+    # Same as
+    log(alpha/bbeta)
+    
+</code></pre>
+
+
+</div>

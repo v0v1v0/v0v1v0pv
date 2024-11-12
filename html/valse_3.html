@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>constructionModelesLassoMLE</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>constructionModelesLassoMLE</h2>
+
+<h3>Description</h3>
+
+<p>Construct a collection of models with the Lasso-MLE procedure.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">constructionModelesLassoMLE(
+  phiInit,
+  rhoInit,
+  piInit,
+  gamInit,
+  mini,
+  maxi,
+  gamma,
+  X,
+  Y,
+  eps,
+  S,
+  ncores,
+  fast,
+  verbose
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>phiInit</code></td>
+<td>
+<p>an initialization for phi, get by initSmallEM.R</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rhoInit</code></td>
+<td>
+<p>an initialization for rho, get by initSmallEM.R</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>piInit</code></td>
+<td>
+<p>an initialization for pi, get by initSmallEM.R</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamInit</code></td>
+<td>
+<p>an initialization for gam, get by initSmallEM.R</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mini</code></td>
+<td>
+<p>integer, minimum number of iterations in the EM algorithm, by default = 10</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxi</code></td>
+<td>
+<p>integer, maximum number of iterations in the EM algorithm, by default = 100</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>integer for the power in the penaly, by default = 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>matrix of covariates (of size n*p)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>matrix of responses (of size n*m)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>real, threshold to say the EM algorithm converges, by default = 1e-4</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>S</code></td>
+<td>
+<p>output of selectVariables.R</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncores</code></td>
+<td>
+<p>Number of cores, by default = 3</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fast</code></td>
+<td>
+<p>TRUE to use compiled C code, FALSE for R code only</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>TRUE to show some execution traces</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list with several models, defined by phi (the regression parameter reparametrized),
+rho (the covariance parameter reparametrized), pi (the proportion parameter is the mixture model), llh
+(the value of the loglikelihood function for this estimator on the training dataset). The list is given
+for several levels of sparsity, given by several regularization parameters computed automatically.
+</p>
+
+
+</div>

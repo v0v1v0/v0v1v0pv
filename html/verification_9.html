@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>conditional.quantile</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Conditional Quantile Plot</h2>
+
+<h3>Description</h3>
+
+<p>This function creates a conditional quantile plot as shown in
+Murphy, et al (1989) and Wilks (1995).</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    conditional.quantile(pred, obs, bins = NULL, thrs = c(10, 20), main, ... ) </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>pred</code></td>
+<td>
+<p>Forecasted value. <em>([n,1] vector, n = No. of forecasts)</em></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>Observed value.<em>([n,1] vector, n = No. of observations)</em></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bins</code></td>
+<td>
+<p>Bins for forecast and observed values.  A minimum number of
+values are required to calculate meaningful statistics.  So for
+variables that are continuous, such as temperature, it is frequently
+convenient to bin these values. <em>([m,1] vector, m = No. of bins)</em></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thrs</code></td>
+<td>
+<p>The minimum number of values in a bin required to calculate
+the 25th and 75th quantiles and the 10th and 90th percentiles
+respectively.  The median values will always be displayed. <em>( [2,1]
+vector)</em> </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>Plot title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Plotting options. </p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function produces a conditional.quantile plot.
+The <code>y</code> axis represents the observed values, while the <code>x</code> axis
+represents the forecasted values.  The histogram along the bottom axis
+illustrates the frequency of each forecast.</p>
+
+
+<h3>Note</h3>
+
+<p>In the example below, the median line extends beyond the range of
+the quartile or 10th and 90th percentile lines.  This is because there
+are not enough points in each bin to calculate these quartile values.
+That is, there are fewer than the limits set in the <code>thrs</code> input.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich</p>
+
+
+<h3>References</h3>
+
+<p>Murphy, A. H., B. G. Brown and Y. Chen. (1989) Diagnostic Verification of Temperature Forecasts. <em>Weather and Forecasting</em>, <b>4</b>, 485–501.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+set.seed(10)
+m&lt;- seq(10, 25, length = 1000)  
+frcst &lt;- round(rnorm(1000, mean = m, sd = 2) )
+obs&lt;- round(rnorm(1000, mean = m, sd = 2 ))
+bins &lt;- seq(0, 30,1)
+thrs&lt;- c( 10, 20) # number of obs needed for a statistic to be printed #1,4 quartile, 2,3 quartiles
+
+conditional.quantile(frcst, obs, bins, thrs, main = "Sample Conditional Quantile Plot")
+#### Or plots a ``cont.cont'' class object.
+
+obs&lt;- rnorm(100)
+pred&lt;- rnorm(100)
+baseline &lt;- rnorm(100, sd = 0.5) 
+
+A&lt;- verify(obs, pred, baseline = baseline,  frcst.type = "cont", obs.type = "cont")
+ plot(A)
+</code></pre>
+
+
+</div>

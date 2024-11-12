@@ -1,0 +1,461 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sampleOccurrences</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Sample occurrences in a virtual species distribution</h2>
+
+<h3>Description</h3>
+
+<p>This function samples occurrences/records (presence only or presence-absence) 
+within a species distribution, either randomly or with a sampling bias. 
+The sampling bias can be defined manually or with a set of predefined 
+biases.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sampleOccurrences(
+  x,
+  n,
+  type = "presence only",
+  extract.probability = FALSE,
+  sampling.area = NULL,
+  detection.probability = 1,
+  correct.by.suitability = FALSE,
+  error.probability = 0,
+  bias = "no.bias",
+  bias.strength = 50,
+  bias.area = NULL,
+  weights = NULL,
+  sample.prevalence = NULL,
+  replacement = FALSE,
+  plot = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a <code>SpatRaster</code> object or the output list from 
+<code>generateSpFromFun</code>, <code>generateSpFromPCA</code>, <code>generateRandomSp</code>,
+<code>convertToPA</code>
+or  <code>limitDistribution</code>
+The raster must contain values of 0 or 1 (or NA).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>an integer. The number of occurrence points / records to sample.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p><code>"presence only"</code> or <code>"presence-absence"</code>. The type of 
+occurrence points to sample.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extract.probability</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, then
+true probability at sampled locations will also be extracted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sampling.area</code></td>
+<td>
+<p>a character string, a <code>polygon</code> or an <code>extent</code>
+object.
+The area in which the sampling will take place. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>detection.probability</code></td>
+<td>
+<p>a numeric value between 0 and 1, corresponding 
+to the probability of detection of the species. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>correct.by.suitability</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, 
+then the probability of detection will be weighted by the suitability, such 
+that cells with lower suitabilities will further decrease the chance that 
+the species is detected when sampled. NOTE: this will NOT increase 
+likelihood of samplings in areas of high suitability. In this case look for 
+argument weights.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>error.probability</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. Probability to 
+attribute an erroneous presence (False Positive) in cells where the species 
+is actually absent.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bias</code></td>
+<td>
+<p><code>"no.bias"</code>,  <code>"country"</code>,  <code>"region"</code>,
+<code>"extent"</code>,  <code>"polygon"</code> or <code>"manual"</code>. The method used to 
+generate a sampling bias: see details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bias.strength</code></td>
+<td>
+<p>a positive numeric value. The strength of the bias to be
+applied in <code>area</code> (as a multiplier). Above 1, <code>area</code> will be 
+oversampled. Below 1, <code>area</code> will be undersampled.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bias.area</code></td>
+<td>
+<p><code>NULL</code>, a character string, a <code>polygon</code> or an 
+<code>extent</code> object. The area in which the sampling will be biased: see
+details. If <code>NULL</code> and <code>bias = "extent"</code>, then you will be asked to
+draw an extent on the map.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p><code>NULL</code> or a raster layer. Only used if 
+<code>bias = "manual"</code>. The raster of bias weights to be applied to the 
+sampling of occurrences. Higher weights mean a higher probability of 
+sampling. For example, species suitability raster can be entered here to
+increase likelihood of sampling occurrences in areas with high suitability.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample.prevalence</code></td>
+<td>
+<p><code>NULL</code> or a numeric value between 0 and 1. 
+Only useful if <code>type = "presence-absence"</code>. Defines the sample
+prevalence, i.e. the proportion of presences sampled. Note that the
+probabilities of detection and error are applied AFTER this parameter,
+so the final sample prevalence may not different if you apply probabilities
+of detection and/or error</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>replacement</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, multiple
+samples can occur in the same cell. Can be useful to mimic real datasets 
+where samplings can be duplicated or repeated in time.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, the sampled 
+occurrence points will be plotted.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><a href="http://borisleroy.com/virtualspecies_tutorial/07-sampleoccurrences.html">
+Online tutorial for this function</a>
+</p>
+<p><b>How the function works:</b>
+</p>
+<p>The function randomly selects <code>n</code> cells in which samples occur. If a 
+<code>bias</code> is chosen, then the selection of these cells will be biased 
+according to the type and strength of bias chosen. If the sampling is of 
+<code>type "presence only"</code>, then only cells where the species is present 
+will be chosen. If the sampling is of <code>type "presence-absence"</code>, then 
+all non-NA cells can be chosen.
+</p>
+<p>The function then samples the species inside the chosen cells. In cells 
+where the species is present the species will always be sampled unless 
+the parameter <code>detection.probability</code> is lower than 1. In that case the
+species will be sampled with the associated probability of detection.
+</p>
+<p>In cells where the species is absent (in case of a <code>"presence-absence"</code>
+sampling), the function will always assign absence unless 
+<code>error.probability</code> is greater than 1. In that case, the species can be
+found present with the associated probability of error. Note that this step 
+happens AFTER the detection step. Hence, in cells where the species is
+present but not detected, it can still be sampled due to a sampling error.
+</p>
+<p><b>How to restrict the sampling area:</b>
+</p>
+<p>Use the argument <code>sampling.area</code>:
+</p>
+
+<ul>
+<li>
+<p>Provide the name (s) (or a combination of names) of country(ies), 
+region(s) or continent(s).
+Examples:
+</p>
+
+<ul>
+<li>
+<p><code>sampling.area = "Africa"</code>
+</p>
+</li>
+<li>
+<p><code>sampling.area = c("Africa", "North America", "France")</code>
+</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Provide a polygon (<code>SpatialPolygons</code> or 
+<code>SpatialPolygonsDataFrame</code> of package <code>sp</code>)
+</p>
+</li>
+<li>
+<p>Provide an <code>extent</code> object
+</p>
+</li>
+</ul>
+<p><b>How the sampling bias works:</b>
+</p>
+<p>The argument <code>bias.strength</code> indicates the strength of the bias.
+For example, a value of 50 will result in 50 times more samples within the
+<code>bias.area</code> than outside.
+Conversely, a value of 0.5 will result in half less samples within the
+<code>bias.area</code> than outside.
+</p>
+<p><b>How to choose where the sampling is biased:</b>
+</p>
+<p>You can choose to bias the sampling in:
+</p>
+
+<ol>
+<li>
+<p>a particular country, region or continent (assuming your raster has
+the WGS84 projection): 
+</p>
+<p>Set the argument
+<code>bias</code> to <code>"country"</code>, <code>"region"</code> or
+<code>"continent"</code>, and provide the name(s) of the associated countries,
+regions or continents to <code>bias.area</code> (see examples). 
+</p>
+<p>List of possible <code>bias.area</code> names:
+</p>
+
+<ul>
+<li>
+<p>Countries: type 
+<code>unique(rnaturalearth::ne_countries(returnclass ='sf')$sovereignt)</code> 
+in the console
+</p>
+</li>
+<li>
+<p>Regions: "Africa", "Antarctica", "Asia", "Oceania", "Europe", 
+"Americas"
+</p>
+</li>
+<li>
+<p>Continents: "Africa", "Antarctica", "Asia", "Europe", 
+"North America", "Oceania", "South America"</p>
+</li>
+</ul>
+</li>
+<li>
+<p>a polygon:
+</p>
+<p>Set <code>bias</code> to <code>"polygon"</code>, and provide your
+polygon to <code>area</code>.
+
+</p>
+</li>
+<li>
+<p>an extent object:
+</p>
+<p>Set <code>bias</code> to <code>"extent"</code>, and either provide your
+extent object to <code>bias.area</code>, or leave it <code>NULL</code> to draw an extent 
+on the map.
+</p>
+</li>
+</ol>
+<p>Otherwise you can enter a raster of sampling probability. It can be useful 
+if you want to increase likelihood of samplings in areas of high 
+suitability (simply enter the suitability raster in weights; see examples
+below),
+or if you want to define sampling biases manually, <em>e.g.</em> to to create
+biases along roads. In that case you have to provide to <code>weights</code> a 
+raster layer in which each cell contains the probability to be sampled.
+</p>
+<p>The <code>.Random.seed</code> and <code>RNGkind</code> are stored as 
+<code>attributes</code> when the function is called, and can be used to 
+reproduce the results as shown in the examples (though
+it is preferable to set the seed with <code>set.seed</code> before calling
+<code>sampleOccurrences()</code> and to then use the same value in 
+<code>set.seed</code> to reproduce results later. Note that 
+reproducing the sampling will only work if the same original distribution map 
+is used.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a <code>list</code> with 8 elements:
+</p>
+
+<ul>
+<li>
+<p><code>type</code>: type of occurrence sampled (presence-absences or 
+presence-only)
+</p>
+</li>
+<li>
+<p><code>sample.points</code>: data.frame containing the coordinates of 
+samples, true and sampled observations (i.e, 1, 0 or NA), and, if asked, the true
+environmental suitability in sampled locations
+</p>
+</li>
+<li>
+<p><code>detection.probability</code>: the chosen probability of detection of
+the virtual species
+</p>
+</li>
+<li>
+<p><code>error.probability</code>: the chosen probability to assign presence
+in cells where the species is absent
+</p>
+</li>
+<li>
+<p><code>bias</code>: if a bias was chosen, then the type of bias and the
+associated <code>area</code> will be included.
+</p>
+</li>
+<li>
+<p><code>replacement</code>: indicates whether multiple samples could occur
+in the same cells
+</p>
+</li>
+<li>
+<p><code>original.distribution.raster</code>: the distribution raster from
+which samples were drawn
+</p>
+</li>
+<li>
+<p><code>sample.plot</code>: a recorded plot showing the sampled points 
+overlaying the original distribution.
+</p>
+</li>
+</ul>
+<h3>Note</h3>
+
+<p>Setting <code>sample.prevalence</code> may at least partly
+override <code>bias</code>, e.g. if <code>bias</code> is specified with <code>extent</code> to 
+an area that contains no presences, but sample prevalence is set to &gt; 0, 
+then cells outside of the biased sampling extent will be sampled until 
+the number of presences required by <code>sample.prevalence</code> are obtained, 
+after which the sampling of absences will proceed according to the specified
+bias.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+Willson Gaul <a href="mailto:wgaul@hotmail.com">wgaul@hotmail.com</a>
+</p>
+<p>with help from C. N. Meynard, C. Bellard &amp; F. Courchamp
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Create an example stack with six environmental variables
+a &lt;- matrix(rep(dnorm(1:100, 50, sd = 25)), 
+            nrow = 100, ncol = 100, byrow = TRUE)
+env &lt;- c(rast(a * dnorm(1:100, 50, sd = 25)),
+         rast(a * 1:100),
+         rast(a * logisticFun(1:100, alpha = 10, beta = 70)),
+         rast(t(a)),
+         rast(exp(a)),
+         rast(log(a)))
+names(env) &lt;- paste("Var", 1:6, sep = "")   
+
+# More than 6 variables: by default a PCA approach will be used
+sp &lt;- generateRandomSp(env, niche.breadth = "wide")
+
+# Sampling of 25 presences
+sampleOccurrences(sp, n = 25)
+
+# Sampling of 30 presences and absences
+sampleOccurrences(sp, n = 30, type = "presence-absence")
+
+
+# Reducing of the probability of detection
+sampleOccurrences(sp, n = 30, type = "presence-absence", 
+                  detection.probability = 0.5)
+                  
+# Further reducing in relation to environmental suitability
+sampleOccurrences(sp, n = 30, type = "presence-absence", 
+                  detection.probability = 0.5,
+                  correct.by.suitability = TRUE)
+                  
+                  
+# Creating sampling errors (far too much)
+sampleOccurrences(sp, n = 30, type = "presence-absence", 
+                  error.probability = 0.5)
+                  
+# Introducing a sampling bias (oversampling)
+biased.area &lt;- ext(1, 50, 1, 50)
+sampleOccurrences(sp, n = 50, type = "presence-absence", 
+                  bias = "extent",
+                  bias.area = biased.area)
+# Showing the area in which the sampling is biased
+plot(biased.area, add = TRUE)     
+
+# Introducing a sampling bias (no sampling at all in the chosen area)
+biased.area &lt;- ext(1, 50, 1, 50)
+sampleOccurrences(sp, n = 50, type = "presence-absence", 
+                  bias = "extent",
+                  bias.strength = 0,
+                  bias.area = biased.area)
+# Showing the area in which the sampling is biased
+plot(biased.area, add = TRUE)    
+samps &lt;- sampleOccurrences(sp, n = 50, 
+                           bias = "manual",
+                           weights = sp$suitab.raster)
+plot(sp$suitab.raster)
+points(samps$sample.points[, c("x", "y")])
+
+# Create a sampling bias so that more presences are sampled in areas with 
+# higher suitability
+
+  
+    
+
+# Reproduce sampling based on the saved .Random.seed from a previous result
+samps &lt;- sampleOccurrences(sp, n = 100, 
+                           type = "presence-absence", 
+                           detection.probability = 0.7, 
+                           bias = "extent", 
+                           bias.strength = 50, 
+                           bias.area = biased.area)
+# Reset the random seed using the value saved in the attributes               
+.Random.seed &lt;- attr(samps, "seed") 
+reproduced_samps &lt;- sampleOccurrences(sp, n = 100, 
+                                      type = "presence-absence",
+                                      detection.probability = 0.7,
+                                      bias = "extent",
+                                      bias.strength = 50,
+                                      bias.area = biased.area)
+identical(samps$sample.points, reproduced_samps$sample.points)          
+</code></pre>
+
+
+</div>

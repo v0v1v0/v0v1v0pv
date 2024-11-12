@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>domain</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extra variables for domain estimation</h2>
+
+<h3>Description</h3>
+
+<p>The function computes extra variables for domain estimation. Each unique <code>D</code> row defines a domain. Extra variables are computed for each <code>Y</code> variable.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">domain(Y, D, dataset = NULL, checking = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Matrix of study variables. Any object convertible to <code>data.table</code> with numeric values, <code>NA</code> values are not allowed. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>D</code></td>
+<td>
+<p>Matrix of domain variables. Any object convertible to <code>data.table</code>. The number of rows of <code>D</code> must match the number of rows of <code>Y</code>. Duplicated names are not allowed. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>Optional survey data object convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>checking</code></td>
+<td>
+<p>Optional variable if this variable is TRUE, then function checks data preparation errors, otherwise not checked. This variable by default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Numeric <code>data.table</code> containing extra variables for domain estimation.
+</p>
+
+
+<h3>References</h3>
+
+<p>Carl-Erik Sarndal, Bengt Swensson, Jan Wretman. Model Assisted Survey Sampling. Springer-Verlag, 1992, p.70.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vardom</code>, <code>vardomh</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+### Example 0
+ 
+domain(Y = 1, D = "A")
+ 
+  
+### Example 1
+
+Y1 &lt;- as.matrix(1 : 10)
+colnames(Y1) &lt;- "Y1"
+D1 &lt;- as.matrix(rep(1, 10))
+colnames(D1) &lt;- "D1"
+domain(Y = Y1, D = D1)
+  
+### Example 2
+Y &lt;- matrix(1 : 20, 10, 2)
+colnames(Y) &lt;- paste0("Y", 1 : 2)
+D &lt;- matrix(rep(1 : 2, each = 5), 10, 1)
+colnames(D) &lt;- "D"
+domain(Y, D)
+
+### Example 3
+Y &lt;- matrix(1 : 20, 10, 2)
+colnames(Y) &lt;- paste0("Y", 1 : 2)
+D &lt;- matrix(rep(1 : 4, each = 5), 10, 2)
+colnames(D) &lt;- paste0("D", 1 : 2)
+domain(Y, D)
+  
+### Example 4
+Y &lt;- matrix(1 : 20, 10, 2)
+colnames(Y) &lt;- paste0("Y", 1 : 2)
+D &lt;- matrix(c(rep(1 : 2, each = 5), rep(3, 10)), 10, 2)
+colnames(D) &lt;- paste0("D", 1 : 2)
+domain(Y, D)
+
+ 
+</code></pre>
+
+
+</div>

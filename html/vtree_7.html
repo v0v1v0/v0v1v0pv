@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>grVizToPNG</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Export an htmlwidget object into a PNG file</h2>
+
+<h3>Description</h3>
+
+<p>Export an <code>htmlwidget</code> object (produced by <code>DiagrammerR::grViz</code>) into a PNG file
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">grVizToPNG(g, width = NULL, height = NULL, folder = ".", filename)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>an object produced by the <code>grViz</code> function from the DiagrammmeR package</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p>the width in pixels of the bitmap</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p>the height in pixels of the bitmap</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>folder</code></td>
+<td>
+<p>path to folder where the PNG file should stored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filename</code></td>
+<td>
+<p>an optional filename.
+If not provided, the filename will be derived from the name 
+of the argument of <code>g</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>First the <code>grViz</code> object is exported to an SVG file (using <code>DiagrammeRsvg::export_svg</code>).
+Then the SVG file is converted to a bitmap (using <code>rsvg::rsvg</code>).
+Then the bitmap is exported as a PNG file (using <code>png::writePNG</code>).
+Note that the SVG file and the PNG file will be named using the name of the <code>g</code> parameter
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns the full path of the PNG file.
+</p>
+
+
+<h3>Note</h3>
+
+<p>In addition to the DiagrammmeR package, the following packages are used: <code>DiagrammeRsvg</code>, <code>rsvg</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Nick Barrowman
+</p>
+
+
+</div>

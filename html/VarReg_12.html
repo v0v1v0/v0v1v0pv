@@ -1,0 +1,126 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotlssVarReg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plots graphics for a location, scale and shape regression model</h2>
+
+<h3>Description</h3>
+
+<p><code>plotlssVarReg</code> is used to produce graphics for models fit in the <code>VarReg</code> package with the
+<code>lssVarReg</code> function. As the skew-normal distribution is used to fit this type of model, the data needs
+to be transformed from the SN parameters (location, scale and shape) to the typical mean,
+variance and skew parameters.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotlssVarReg(x, knot.lines = FALSE, xlab = "x", ylab = "y")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object of class lssVarReg (output from <code>lssVarReg</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knot.lines</code></td>
+<td>
+<p>Logical to show the knot lines on the graphics (if model is type "semi").
+Default is <code>TRUE</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>Label to be placed on the x axis of graphics (covariate)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>Label to be placed on the y axis of graphics (outcome)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A graphic is returned, as well as a dataframe. The graphic returned is a 2 by 2 plot of:
+</p>
+
+<ul>
+<li>
+<p> the mean function over the x-variable, with or without the knot lines indicated
+</p>
+</li>
+<li>
+<p> the variance function over the x-variable, with or without the knot lines indicated
+</p>
+</li>
+<li>
+<p> the skew function over the x-variable, with or without the knot lines indicated
+</p>
+</li>
+<li>
+<p> a Q-Q plot of the squared residuals from the model, plotted against the Chi-squared (df=1)
+distribution. For data from a skew-normal distribution, these residuals should follow a
+Chi-squared (df=1) distribution, regardless of skew.
+</p>
+</li>
+</ul>
+<p>The dataframe returned contains the following columns:
+</p>
+
+<ul>
+<li> <p><code>x</code>: x variable
+</p>
+</li>
+<li> <p><code>y</code>: y variable
+</p>
+</li>
+<li> <p><code>eta</code>:  (<code class="reqn">\eta</code>), the location parameter
+</p>
+</li>
+<li> <p><code>omega</code>: (<code class="reqn">\omega</code>), the scale parameter
+</p>
+</li>
+<li> <p><code>shape</code>: (<code class="reqn">\nu</code>),  the shape parameter
+</p>
+</li>
+<li> <p><code>predicted~mean</code>: (<code class="reqn">\mu</code>), the mean
+</p>
+</li>
+<li> <p><code>predicted~variance</code>: (<code class="reqn">\sigma^2</code>),  the variance
+</p>
+</li>
+<li> <p><code>predicted~skewness</code>: (<code class="reqn">\gamma</code>),  the skew
+</p>
+</li>
+<li> <p><code>stand.res2</code>: the standardised residuals squared.
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><code>lssVarReg</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(mcycle)
+## not run. LSS model followed by the basic plot command
+##lssmodel&lt;-lssVarReg(mcycle$accel, mcycle$times,  locationmodel="linear", scale2model="linear",
+##shapemodel="constant", maxit=10000)
+##lssplot_out&lt;-plotlssVarReg(lssmodel, xlab="Time in seconds", ylab="Acceleration")
+</code></pre>
+
+
+</div>

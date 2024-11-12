@@ -1,0 +1,201 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>invgammaDist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Inverse Gamma Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random numbers 
+generator for the Inverse Gamma Distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dinvgamma(x, scale = 1/rate, shape, rate = 1, log = FALSE)
+pinvgamma(q, scale = 1/rate, shape, rate = 1, lower.tail = TRUE, log.p = FALSE)
+qinvgamma(p, scale = 1/rate, shape, rate = 1, lower.tail = TRUE, log.p = FALSE)
+rinvgamma(n, scale = 1/rate, shape, rate = 1)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, p, n</code></td>
+<td>
+
+<p>Same as <code>GammaDist</code>. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale, shape</code></td>
+<td>
+ 
+<p>Scale and shape parameters, same as 
+<code>GammaDist</code>.
+Both must be positive.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rate</code></td>
+<td>
+ 
+<p>Same as <code>GammaDist</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log, log.p, lower.tail</code></td>
+<td>
+
+<p>Same as <code>GammaDist</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Inverse Gamma density with parameters scale = <code class="reqn">b</code> and 
+shape = <code class="reqn">s</code> is given by
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \frac{b^{s}}{\Gamma(s)} y^{-s-1} e^{-b/y},</code>
+</p>
+
+<p>for <code class="reqn">y &gt; 0</code>, <code class="reqn">b &gt; 0</code>, and <code class="reqn">s &gt; 0</code>. 
+Here, <code class="reqn">\Gamma(\cdot)</code> is the gamma function as in 
+<code>gamma</code> 
+</p>
+<p>The relation between the Gamma Distribution and the Inverse Gamma 
+Distribution is as follows:
+</p>
+<p>Let <code class="reqn">X</code> be a random variable distributed as Gamma 
+(<code class="reqn">b, s</code>), then <code class="reqn">Y = 1 / X</code> is distributed as 
+Inverse Gamma (<code class="reqn">1/b, s</code>). 
+It is worth noting that the math relation between the <em>scale</em> paramaters
+of both, the Inverse Gamma and Gamma distributions, is inverse.
+</p>
+<p>Thus, algorithms of <em>dinvgamma(), pinvgamma(), qinvgamma()</em> and 
+<em>rinvgamma()</em> underlie on the algorithms 
+<code>GammaDist</code>.
+
+
+
+
+</p>
+<p>Let <code class="reqn">Y</code> distributed as Inverse Gamma (<code class="reqn">b, s</code>). Then the 
+<code class="reqn">k^{th}</code> moment of <code class="reqn">Y</code> exists for <code class="reqn">-\infty &lt; k &lt; s</code> and is 
+given by
+</p>
+<p style="text-align: center;"><code class="reqn">E[Y^k] = \frac{\Gamma(s - k)}{\Gamma(s)} b^k.</code>
+</p>
+
+<p>The mean (if <code class="reqn">s &gt; 1</code>) and variance (if <code class="reqn">s &gt; 2</code>) are
+</p>
+<p style="text-align: center;"><code class="reqn">E[Y] = \frac{b}{(s - 1)}; \ \ \ Var[Y] = \frac{b^2}{(s - 1)^2 
+    \times (s - 2)}.</code>
+</p>
+    
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p><code>dinvgamma()</code> returns the density, <code>pinvgamma()</code> gives the 
+distribution function, <code>qinvgamma()</code> gives the quantiles, and 
+<code>rinvgamma()</code> generates random deviates.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>The order of the arguments <em>scale</em> and <em>shape</em> does not match 
+<code>GammaDist</code>.
+</p>
+
+
+<h3>Note</h3>
+
+
+
+
+<p>Unlike the <code>GammaDist</code>, small values
+of <code class="reqn">a</code> (plus modest <code class="reqn">\mu</code>) or very large values of 
+<code class="reqn">\mu</code> (plus moderate <code class="reqn">a &gt; 2</code>), generate Inverse Gamma 
+values so near to zero. Thus, <code>rinvgamma</code> in 
+<code>invgammaDist</code> may return either values 
+too close to zero or values represented as zero in computer arithmetic.
+</p>
+<p>In addition, function <code>dinvgamma</code> will return zero for 
+<code class="reqn">x = 0</code>, which is the limit of the Inverse Gamma density when 
+<code class="reqn">'x'</code> tends to zero.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and T. W. Yee.</p>
+
+
+<h3>References</h3>
+
+<p>Kleiber, C. and Kotz, S. (2003) 
+<em>Statistical Size Distributions in Economics and Actuarial Sciences</em>.
+Wiley Series in Probability and Statistics. Hoboken, New Jersey, USA.  
+
+
+
+
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>GammaDist</code>,
+<code>gamma</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+  # Example 1.______________________
+  n        &lt;- 20
+  scale    &lt;- exp(2)
+  shape    &lt;- exp(1)
+  data.1   &lt;- runif(n, 0, 1)
+  data.q   &lt;- qinvgamma(-data.1, scale = scale, shape = shape, log.p = TRUE)  
+  data.p   &lt;- -log(pinvgamma(data.q, scale = scale, shape = shape)) 
+  arg.max  &lt;- max(abs(data.p - data.1))     # Should be zero
+  
+  
+  # Example 2.______________________
+  scale &lt;- exp(1.0)
+  shape &lt;- exp(1.2)
+  xx    &lt;- seq(0, 3.0, len = 201)
+  yy    &lt;- dinvgamma(xx, scale = scale, shape = shape)
+  qtl   &lt;- seq(0.1, 0.9, by = 0.1)
+  d.qtl &lt;- qinvgamma(qtl, scale = scale, shape = shape)
+  plot(xx, yy, type = "l", col = "orange", 
+       main = "Orange is density, blue is cumulative distribution function",
+       sub  = "Brown dashed lines represent the 10th, ... 90th percentiles",
+       las = 1, xlab = "x", ylab = "", ylim = c(0, 1))
+  abline(h = 0, col= "navy", lty = 2)
+  lines(xx, pinvgamma(xx, scale = scale, shape = shape), col = "blue")
+  lines(d.qtl, dinvgamma(d.qtl, scale = scale, shape = shape), 
+        type ="h", col = "brown", lty = 3)
+        
+</code></pre>
+
+
+</div>

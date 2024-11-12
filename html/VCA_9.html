@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>checkData</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check Random Model for Given Dataset.</h2>
+
+<h3>Description</h3>
+
+<p>This function is intended to check a variance component analysis
+either before or after performing it. This is particularily important
+for less experienced users who my not exactly know where error messages 
+come from. External software using functions <code>anovaVCA</code>
+or <code>remlVCA</code> also via function <code>fitVCA</code> may
+also benefit from more user-friendly error messages.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">checkData(form, Data)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>form</code></td>
+<td>
+<p>(formula) describing the model to be analyzed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>(data.frame) with all variables used in 'form'</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>(list) of length equal to the number of terms in 'form' 
+each element being a list of messages with identified, 
+potential problems.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+dat0 &lt;- dataEP05A2_1[1:16,]
+# everything should be ok
+checkData(y~day/run, dat0)
+# data identical response for all obs 
+dat1 &lt;- dat0
+dat1$y &lt;- dat1[1,"y"]
+remlVCA(y~day/run, dat1)
+checkData(y~day/run, dat1)
+# now factor-levels have identical values
+dat2 &lt;- dat0
+dat2$y &lt;- dat2$y[rep(seq(1,7,2), rep(2,4))] 
+checkData(y~day/run, dat2)
+remlVCA(y~day/run, dat2, quiet=TRUE)
+# indistinguishable terms are also problematic
+dat3 &lt;- data.frame(	y=rnorm(8,10),
+						day=paste("day",rep(c(1,2),c(4,4))), 
+						run=rep(c(2,1), c(4,4)))
+checkData(y~day/run, dat3)
+anovaVCA(y~day/run, dat3)
+# no replicates, thus, no error variability
+dat4 &lt;- dat0[seq(1,15,2),]
+dat4$day &lt;- factor(dat4$day)
+dat4$run &lt;- factor(dat4$run)
+checkData(y~day/run, dat4)
+remlVCA(y~day/run, dat4)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

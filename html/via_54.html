@@ -1,0 +1,65 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RasterArray-class</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Array of '<code>SpatRaster</code>'-class objects</h2>
+
+<h3>Description</h3>
+
+<p>Array class for easier navigation of multilayer rasters
+</p>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>stack</code></td>
+<td>
+<p>A <code>SpatRaster</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>index</code></td>
+<td>
+<p>A <code>vector</code>, <code>matrix</code> or <code>array</code> type object. Includes either the indices of layers in the stack, or their names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dim</code></td>
+<td>
+<p>A <code>numeric</code> vector. Same as for <code>array</code>, creates <code>proxy</code> procedurally.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The class implements structures to organize single-layer '<code>SpatRaster</code>'-class objects that have the same dimensions and coordinate reference system. Subsetting rules were defined using the proxy object in the <code>@index</code> slot. See examples for implementations.
+</p>
+<p>The class has two slots:
+<code>@stack</code>: A '<code>SpatRaster</code>'-class object with multiple layers, the actual data.
+<code>index</code>: A proxy object that represents the organization of the layer in the array.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A '<code>RasterArray</code>'-class object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># example data
+  ex &lt;- rastex()
+  st &lt;-ex@stack
+  ind &lt;- 1:6
+  names(ind) &lt;- letters[1:length(ind)]
+  ra&lt;- RasterArray(stack=st, index=ind)
+  
+</code></pre>
+
+
+</div>

@@ -1,0 +1,252 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mix2normal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Mixture of Two Univariate Normal Distributions </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the five parameters of a mixture of two univariate
+normal distributions by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mix2normal(lphi = "logitlink", lmu = "identitylink", lsd =
+   "loglink", iphi = 0.5, imu1 = NULL, imu2 = NULL, isd1 =
+   NULL, isd2 = NULL, qmu = c(0.2, 0.8), eq.sd = TRUE,
+   nsimEIM = 100, zero = "phi")
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>lphi,lmu,lsd</code></td>
+<td>
+
+<p>Link functions for the parameters <code class="reqn">\phi</code>,
+<code class="reqn">\mu</code>, and
+<code class="reqn">\sigma</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>iphi</code></td>
+<td>
+
+<p>Initial value for <code class="reqn">\phi</code>, whose value must lie
+between 0 and 1.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imu1, imu2</code></td>
+<td>
+
+<p>Optional initial value for <code class="reqn">\mu_1</code> and
+<code class="reqn">\mu_2</code>.  The default is to compute initial values
+internally using the argument <code>qmu</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>isd1, isd2</code></td>
+<td>
+
+<p>Optional initial value for <code class="reqn">\sigma_1</code> and
+<code class="reqn">\sigma_2</code>.  The default is to compute initial values
+internally based on the argument <code>qmu</code>.  Currently these
+are not great, therefore using these arguments where practical
+is a good idea.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qmu</code></td>
+<td>
+
+<p>Vector with two values giving the probabilities relating
+to the sample quantiles for obtaining initial values for
+<code class="reqn">\mu_1</code> and <code class="reqn">\mu_2</code>.  The two values are fed in
+as the <code>probs</code> argument into <code>quantile</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eq.sd</code></td>
+<td>
+
+<p>Logical indicating whether the two standard deviations should
+be constrained to be equal. If <code>TRUE</code> then the appropriate
+constraint matrices will be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>May be an integer vector
+specifying which linear/additive predictors are modelled as
+intercept-only.  If given, the value or values can be from the
+set <code class="reqn">\{1,2,\ldots,5\}</code>.
+The default is the first one only, meaning <code class="reqn">\phi</code>
+is a single parameter even when there are explanatory variables.
+Set <code>zero = NULL</code> to model all linear/additive
+predictors as functions of the explanatory variables.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability density function can be loosely written as
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \phi \, N(\mu_1,\sigma_1) +
+        (1-\phi) \, N(\mu_2, \sigma_2)</code>
+</p>
+
+<p>where <code class="reqn">\phi</code> is the probability an observation belongs
+to the first group.
+The parameters <code class="reqn">\mu_1</code> and <code class="reqn">\mu_2</code> are the
+means, and <code class="reqn">\sigma_1</code> and <code class="reqn">\sigma_2</code> are the
+standard deviations.  The parameter <code class="reqn">\phi</code> satisfies
+<code class="reqn">0 &lt; \phi &lt; 1</code>.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">\phi \mu_1 + (1-\phi) \mu_2</code>
+and this is returned as the fitted values.
+By default, the five linear/additive predictors are
+<code class="reqn">(logit(\phi),\mu_1,\log(\sigma_1),\mu_2,\log(\sigma_2))^T</code>.
+If <code>eq.sd = TRUE</code> then <code class="reqn">\sigma_1 = \sigma_2</code>
+is enforced.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Numerical problems can occur and
+half-stepping is not uncommon.
+If failure to converge occurs, try inputting better initial
+values,
+e.g., by using <code>iphi</code>,
+<code>qmu</code>,
+<code>imu1</code>,
+<code>imu2</code>,
+<code>isd1</code>,
+<code>isd2</code>,
+etc.
+</p>
+
+
+
+
+
+
+<p>This <span class="pkg">VGAM</span> family function is experimental and
+should be used with care.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Fitting this model successfully to data can be difficult due
+to numerical problems and ill-conditioned data.  It pays to
+fit the model several times with different initial values and
+check that the best fit looks reasonable. Plotting the results
+is recommended.  This function works better as <code class="reqn">\mu_1</code>
+and <code class="reqn">\mu_2</code> become more different.
+</p>
+<p>Convergence can be slow, especially when the two component
+distributions are not well separated.
+The default control argument <code>trace = TRUE</code> is to encourage
+monitoring convergence.
+Having <code>eq.sd = TRUE</code> often makes the overall optimization
+problem easier.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>McLachlan, G. J. and Peel, D. (2000).
+<em>Finite Mixture Models</em>.
+New York: Wiley.
+</p>
+<p>Everitt, B. S. and Hand, D. J. (1981).
+<em>Finite Mixture Distributions</em>.
+London: Chapman &amp; Hall.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>uninormal</code>,
+<code>Normal</code>,
+<code>mix2poisson</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  mu1 &lt;-  99; mu2 &lt;- 150; nn &lt;- 1000
+sd1 &lt;- sd2 &lt;- exp(3)
+(phi &lt;- logitlink(-1, inverse = TRUE))
+rrn &lt;- runif(nn)
+mdata &lt;- data.frame(y = ifelse(rrn &lt; phi, rnorm(nn, mu1, sd1),
+                                          rnorm(nn, mu2, sd2)))
+fit &lt;- vglm(y ~ 1, mix2normal(eq.sd = TRUE), data = mdata)
+
+# Compare the results
+cfit &lt;- coef(fit)
+round(rbind('Estimated' = c(logitlink(cfit[1], inverse = TRUE),
+            cfit[2], exp(cfit[3]), cfit[4]),
+            'Truth' = c(phi, mu1, sd1, mu2)), digits = 2)
+
+# Plot the results
+xx &lt;- with(mdata, seq(min(y), max(y), len = 200))
+plot(xx, (1-phi) * dnorm(xx, mu2, sd2), type = "l", xlab = "y",
+     main = "red = estimate, blue = truth",
+     col = "blue", ylab = "Density")
+phi.est &lt;- logitlink(coef(fit)[1], inverse = TRUE)
+sd.est &lt;- exp(coef(fit)[3])
+lines(xx, phi*dnorm(xx, mu1, sd1), col = "blue")
+lines(xx, phi.est * dnorm(xx, Coef(fit)[2], sd.est), col = "red")
+lines(xx, (1-phi.est)*dnorm(xx, Coef(fit)[4], sd.est), col="red")
+abline(v = Coef(fit)[c(2,4)], lty = 2, col = "red")
+abline(v = c(mu1, mu2), lty = 2, col = "blue")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

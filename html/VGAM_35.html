@@ -1,0 +1,300 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>alogitlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Arcsine–Logit Link Mixtures</h2>
+
+<h3>Description</h3>
+
+<p>Computes some arcsine–logit mixture link
+transformations, including their inverse and
+the first few derivatives.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  alogitlink(theta, bvalue = NULL, taumix.logit = 1,
+     tol = 1e-13, nmax = 99, inverse = FALSE, deriv = 0,
+     short = TRUE, tag = FALSE, c10 = c(4, -pi))
+lcalogitlink(theta, bvalue = NULL, pmix.logit = 0.01,
+     tol = 1e-13, nmax = 99, inverse = FALSE, deriv = 0,
+     short = TRUE, tag = FALSE, c10 = c(4, -pi))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue</code></td>
+<td>
+
+<p>See <code>Links</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>taumix.logit</code></td>
+<td>
+
+<p>Numeric, of length 1.
+Mixing parameter assigned
+to <code>logitlink</code>.  Then
+<code>1 - exp(-taumix.log * theta)</code> is used
+to weight
+<code>asinlink</code>.
+Thus a 0 value will result in
+<code>logitlink</code>
+and a very large numeric such as <code>1e4</code>
+should be roughly equivalent to
+<code>asinlink</code> over almost all
+of the parameter space.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pmix.logit</code></td>
+<td>
+
+<p>Numeric, of length 1.
+Mixing probability assigned
+to <code>logitlink</code>.  Then
+<code>1 - pmix.logit</code> is used to weight
+<code>asinlink</code>.
+Thus a 0 value will result in
+<code>asinlink</code>.
+and 1 is equivalent to <code>logitlink</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol, nmax</code></td>
+<td>
+
+<p>Arguments fed into a function implementing a
+vectorized bisection method.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inverse, deriv, short, tag</code></td>
+<td>
+
+<p>Details at <code>Links</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>c10</code></td>
+<td>
+
+<p>See <code>asinlink</code>
+and
+<code>logitlink</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p><code>lcalogitlink</code> is a
+<em>linear combination</em> (LC) of
+<code>asinlink</code> and
+<code>logitlink</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The following holds for the LC variant.
+For <code>deriv &gt;= 0</code>,
+<code>(1 - pmix.logit) * asinlink(p, deriv = deriv)
+    + pmix.logit * logitlink(p, deriv = deriv)</code>
+when <code>inverse = FALSE</code>,
+and if <code>inverse = TRUE</code> then a nonlinear
+equation is solved for the probability,
+given
+<code>eta</code>.
+For <code>deriv = 1</code>, then the function
+returns <em>d</em> <code>eta</code> / <em>d</em>
+<code>theta</code> as a function of <code>theta</code> if
+<code>inverse = FALSE</code>, else if <code>inverse
+  = TRUE</code> then it returns the reciprocal.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>The default values for <code>taumix.logit</code>
+and <code>pmix.logit</code>
+may change in the future.
+The name and order of the arguments
+may change too.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Hauck, J. W. W. and A. Donner (1977).
+Wald's test as applied to hypotheses in
+logit analysis.
+<em>Journal of the American Statistical
+Association</em>,
+<b>72</b>, 851–853.
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>asinlink</code>,
+<code>logitlink</code>,
+<code>Links</code>,
+<code>probitlink</code>,
+<code>clogloglink</code>,
+<code>cauchitlink</code>,
+<code>binomialff</code>,
+<code>sloglink</code>,
+<code>hdeff</code>,
+<a href="https://www.cia.gov/index.html">https://www.cia.gov/index.html</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">p &lt;- seq(0.01, 0.99, length= 10)
+alogitlink(p)
+max(abs(alogitlink(alogitlink(p), inv = TRUE) - p))  # 0?
+
+## Not run: 
+par(mfrow = c(2, 2), lwd = (mylwd &lt;- 2))
+y &lt;- seq(-4, 4, length = 100)
+p &lt;- seq(0.01, 0.99, by = 0.01)
+
+for (d in 0:1) {
+  matplot(p, cbind(logitlink(p, deriv = d), probitlink(p, deriv = d)),
+          type = "n", col = "blue", ylab = "transformation",
+          las = 1, main = if (d == 0) "Some probability link functions"
+          else "First derivative")
+  lines(p,   logitlink(p, deriv = d), col = "green")
+  lines(p,  probitlink(p, deriv = d), col = "blue")
+  lines(p, clogloglink(p, deriv = d), col = "tan")
+  lines(p,  alogitlink(p, deriv = d), col = "red3")
+  if (d == 0) {
+    abline(v = 0.5, h = 0, lty = "dashed")
+    legend(0, 4.5, c("logitlink", "probitlink", "clogloglink",
+           "alogitlink"), lwd = mylwd,
+           col = c("green", "blue", "tan", "red3"))
+  } else
+    abline(v = 0.5, lwd = 0.5, col = "gray")
+}
+
+for (d in 0) {
+  matplot(y, cbind( logitlink(y, deriv = d, inverse = TRUE),
+                   probitlink(y, deriv = d, inverse = TRUE)),
+          type  = "n", col = "blue", xlab = "transformation", ylab = "p",
+          main = if (d == 0) "Some inverse probability link functions"
+          else "First derivative", las=1)
+  lines(y,   logitlink(y, deriv = d, inverse = TRUE), col = "green")
+  lines(y,  probitlink(y, deriv = d, inverse = TRUE), col = "blue")
+  lines(y, clogloglink(y, deriv = d, inverse = TRUE), col = "tan")
+  lines(y,  alogitlink(y, deriv = d, inverse = TRUE), col = "red3")
+  if (d == 0) {
+      abline(h = 0.5, v = 0, lwd = 0.5, col = "gray")
+      legend(-4, 1, c("logitlink", "probitlink", "clogloglink",
+             "alogitlink"), lwd = mylwd,
+             col = c("green", "blue", "tan", "red3"))
+  }
+}
+par(lwd = 1)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

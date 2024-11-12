@@ -1,0 +1,54 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sort_def</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a sort definition object</h2>
+
+<h3>Description</h3>
+
+<p>You can sort by aggregated value of another “sort” field by creating a
+sort field definition object. All three properties must be non-<code>NULL</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sort_def(field, op = NULL, order = c("ascending", "descending"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>field</code></td>
+<td>
+<p>the field name to aggregate over.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>op</code></td>
+<td>
+<p>a valid <a href="http://vega.github.io/vega-lite/docs/sort.html#aggregate">aggregation operator</a>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order</code></td>
+<td>
+<p>either <code>ascending</code> or <code>descending</code></p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">vegalite() %&gt;%
+  add_data("https://vega.github.io/vega-editor/app/data/cars.json") %&gt;%
+  encode_x("Horsepower", type="quantitative", aggregate="mean") %&gt;%
+  encode_y("Origin", "ordinal", sort=sort_def("Horsepower", "mean")) %&gt;%
+  mark_bar()
+</code></pre>
+
+
+</div>

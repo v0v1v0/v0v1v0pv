@@ -1,0 +1,116 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.lc.propratio2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for a log-linear contrast of proportion ratios from 2-group studies</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and confidence interval for an
+exponentiated log-linear contrast of 2-group proportion ratios from
+two or more studies.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.lc.propratio2(alpha, f1, f2, n1, n2, v)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f1</code></td>
+<td>
+<p>vector of group 1 frequency counts</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f2</code></td>
+<td>
+<p>vector of group 2 frequency counts</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>vector of group 1 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>vector of group 2 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>vector of contrast coefficients</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns 1-row matrix with the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated log-linear contrast
+</p>
+</li>
+<li>
+<p> SE - standard error of log-linear contrast
+</p>
+</li>
+<li>
+<p> exp(Estimate) - exponentiated log-linear contrast
+</p>
+</li>
+<li>
+<p> exp(LL) - lower limit of the exponentiated confidence interval
+</p>
+</li>
+<li>
+<p> exp(UL) - upper limit of the exponentiated confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Price RM, Bonett DG (2008).
+“Confidence intervals for a ratio of two independent binomial proportions.”
+<em>Statistics in Medicine</em>, <b>27</b>(26), 5497–5508.
+ISSN 02776715, <a href="https://doi.org/10.1002/sim.3376">doi:10.1002/sim.3376</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">n1 &lt;- c(50, 150, 150)
+f1 &lt;- c(16, 50, 25)
+n2 &lt;- c(50, 150, 150)
+f2 &lt;- c(7, 15, 20)
+v &lt;- c(1, -1, 0)
+meta.lc.propratio2(.05, f1, f2, n1, n2, v)
+
+# Should return:
+#            Estimate        SE  exp(Estimate)   exp(LL)  exp(UL)
+# Contrast -0.3853396 0.4828218      0.6802196 0.2640405 1.752378
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,77 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>attach_pkgs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fully attach or load packages for making model predictions</h2>
+
+<h3>Description</h3>
+
+<p>These are developer-facing functions, useful for supporting new model types.
+Some models require one or more R packages to be fully attached to make
+predictions, and some require only that the namespace of one or more R
+packages is loaded.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">attach_pkgs(pkgs)
+
+load_pkgs(pkgs)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>pkgs</code></td>
+<td>
+<p>A character vector of package names to load or fully attach.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>These two functions will attempt either to:
+</p>
+
+<ul>
+<li>
+<p> fully attach or
+</p>
+</li>
+<li>
+<p> load
+</p>
+</li>
+</ul>
+<p>the namespace of the <code>pkgs</code> vector of package names, preserving the current
+random seed.
+</p>
+<p>To learn more about load vs. attach, read the <a href="https://r-pkgs.org/dependencies-mindset-background.html#sec-dependencies-attach-vs-load">"Dependencies" chapter of <em>R Packages</em></a>.
+For deploying a model, it is likely safer to fully attach needed packages
+but that comes with the risk of naming conflicts between packages.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An invisible <code>TRUE</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## succeed
+load_pkgs(c("knitr", "readr"))
+attach_pkgs(c("knitr", "readr"))
+
+## fail
+try(load_pkgs(c("bloopy", "readr")))
+try(attach_pkgs(c("bloopy", "readr")))
+
+</code></pre>
+
+
+</div>

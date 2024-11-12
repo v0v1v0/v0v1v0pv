@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>glue_js</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Interpolate into a JavaScript string</h2>
+
+<h3>Description</h3>
+
+<p>Uses JavaScript notation to interpolate R variables into a string
+intended to be interpreted as JS.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">glue_js(..., .open = "${", .envir = parent.frame())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>character vectors as the JavaScript source code (all arguments
+will be pasted into one character string)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.open</code></td>
+<td>
+<p><code>character</code>, opening delimiter used by <code>glue::glue()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.envir</code></td>
+<td>
+<p><code>environment</code>, tells <code>glue::glue()</code> where to find
+the variables to be interpolated</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a wrapper to <code>glue::glue()</code>, but it uses the notation used by
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">JavaScript's template-literals</a>,
+<code style="white-space: pre;">⁠${}⁠</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>glue::glue()</code> object
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  x &lt;- 123
+  glue_js("function(){return(${x});}") %&gt;% print()
+</code></pre>
+
+
+</div>

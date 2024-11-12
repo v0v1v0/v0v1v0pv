@@ -1,0 +1,196 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>variance_othstr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variance estimation for sample surveys by the new stratification</h2>
+
+<h3>Description</h3>
+
+<p>Computes s2g and the variance estimation by the new stratification.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">variance_othstr(
+  Y,
+  H,
+  H2,
+  w_final,
+  N_h = NULL,
+  N_h2,
+  period = NULL,
+  dataset = NULL,
+  checking = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Variables of interest. Object convertible to <code>data.table</code> or variable names as character, column numbers or logical vector with only one <code>TRUE</code> value (length of the vector has to be the same as the column count of <code>dataset</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H</code></td>
+<td>
+<p>The unit stratum variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number or logical vector with only one <code>TRUE</code> value (length of the vector has to be the same as the column count of <code>dataset</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H2</code></td>
+<td>
+<p>The unit new stratum variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number or logical vector with only one <code>TRUE</code> value (length of the vector has to be the same as the column count of <code>dataset</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_final</code></td>
+<td>
+<p>Weight variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number or logical vector with only one <code>TRUE</code> value (length of the vector has to be the same as the column count of <code>dataset</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>N_h</code></td>
+<td>
+<p>optional; either a <code>data.frame</code> giving the first column - stratum, but the second column - the total of the population in each stratum.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>N_h2</code></td>
+<td>
+<p>optional; either a <code>data.frame</code> giving the first column - new stratum, but the second column - the total of the population in each new stratum.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>Optional variable for the survey periods. If supplied, the values for each period are computed independently. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number or logical vector with only one <code>TRUE</code> value (length of the vector has to be the same as the column count of <code>dataset</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>Optional survey data object convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>checking</code></td>
+<td>
+<p>Optional variable if this variable is TRUE, then function checks data preparation errors, otherwise not checked. This variable by default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>It is possible to compute population size <code class="reqn">M_g</code> from sampling frame. The standard deviation of <code class="reqn">g</code>-th stratum is
+</p>
+<p style="text-align: center;"><code class="reqn">S_g^2 =\frac{1}{M_g-1} \sum\limits_{k=1}^{M_g} \left(y_{gk}-\bar{Y}_g \right)^2= \frac{1}{M_g-1} \sum\limits_{k=1}^{M_g} y_{gk}^2 - \frac{M_g}{M_g-1}\bar{Y}_g^2</code>
+</p>
+
+<p><code class="reqn">\sum\limits_{k=1}^{M_g} y_{gk} ^2</code> and <code class="reqn">\bar{Y}_g^2</code> have to be estimated to estimate <code class="reqn">S_g^2</code>. Estimate of <code class="reqn">\sum\limits_{k=1}^{M_g} y_{gk}^2</code> is <code class="reqn">\sum\limits_{h=1}^{H} \frac{N_h}{n_h} \sum\limits_{i=1}^{n_h} y_{gi}^2 z_{hi}</code>, where
+</p>
+<p><code class="reqn"> z_{hi} = \left\{
+ \begin{array}{ll}
+ 0, &amp; h_i \notin \theta_g \\
+ 1, &amp; h_i \in \theta_g
+ \end{array}
+ \right. </code>
+, <code class="reqn">\theta_g</code>  is the index group of successfully surveyed units belonging to <code class="reqn">g</code>-th stratum. #'Estimate of <code class="reqn">\bar{Y}_g^2</code>
+is 
+</p>
+<p style="text-align: center;"><code class="reqn">\hat{\bar{Y}}_g^2=\left( \hat{\bar{Y}}_g \right)^2-\hat{Var} \left(\hat{\bar{Y}} \right)</code>
+</p>
+
+<p style="text-align: center;"><code class="reqn">\hat{\bar{Y}}_g =\frac{\hat{Y}_g}{M_g}= \frac{1}{M_g} \sum\limits_{h=1}^{H} \frac{N_h}{n_h} \sum\limits_{i=1}^{n_h} y_{hi} z_{hi}</code>
+</p>
+
+<p>So the estimate of <code class="reqn">S_g^2</code> is
+</p>
+<p><code class="reqn">s_g^2=\frac{1}{M_g-1} \sum\limits_{h=1}^{H} \frac{N_h}{n_h} \sum\limits_{i=1}^{n_h} y_{hi}^2 z_{hi} -</code>
+</p>
+<p><code class="reqn">-\frac{M_g}{M_g-1} \left( \left( \frac{1}{M_g} \sum\limits_{h=1}^{H} \frac{N_h}{n_h} \sum\limits_{i=1}^{n_h} y_{hi} z_{hi} \right)^2 - \frac{1}{M_g^2} \sum\limits_{h=1}^{H} N_h^2 \left(\frac{1}{n_h} - \frac{1}{N_h}\right) \frac{1}{n_h-1} \sum\limits_{i=1}^{n_h} \left(y_{hi} z_{hi} - \frac{1}{n_h} \sum\limits_{t=1}^{n_h} y_{ht} z_{ht} \right)^2 \right)</code>
+</p>
+<p>Two conditions have to realize to estimate <code class="reqn">S_g^2: n_h&gt;1, \forall g</code> and <code class="reqn">\theta_g \ne 0, \forall g.</code>
+</p>
+<p>Variance of <code class="reqn">\hat{Y}</code> is
+</p>
+<p style="text-align: center;"><code class="reqn"> Var\left( \hat{Y} \right) = \sum\limits_{g=1}^{G} M_g^2 \left( \frac{1}{m_g} - \frac{1}{M_g} \right) S_g^2 </code>
+</p>
+
+<p>Estimate of <code class="reqn">\hat{Var}\left( \hat{Y} \right)</code> is
+</p>
+<p style="text-align: center;"><code class="reqn">\hat{Var}\left( \hat{Y} \right) = \sum\limits_{g=1}^{G} M_g^2 \left( \frac{1}{m_g} - \frac{1}{M_g} \right)s_g^2</code>
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>A list with objects are returned by the function:
+</p>
+
+<ul>
+<li>
+<p> betas A numeric <code>data.table</code> containing the estimated coefficients of calibration.
+</p>
+</li>
+<li>
+<p> s2g A <code>data.table</code> containing the s^2g value.        
+</p>
+</li>
+<li>
+<p> var_est A <code>data.table</code> containing the values of the variance estimation.
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>M. Liberts. (2004) Non-response Analysis and Bias Estimation in a Survey on Transportation of Goods by Road.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>domain</code>,         <code>lin.ratio</code>,    <code>linarpr</code>,
+<code>linarpt</code>,        <code>lingini</code>,      <code>lingini2</code>,
+<code>lingpg</code>,         <code>linpoormed</code>,   <code>linqsr</code>,
+<code>linrmpg</code>,        <code>residual_est</code>, <code>vardom</code>,
+<code>vardom_othstr</code>,  <code>vardomh</code>,      <code>varpoord</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library("data.table")
+Y &lt;- data.table(matrix(runif(50) * 5, ncol = 5))
+   
+H &lt;- data.table(H = as.integer(trunc(5 * runif(10))))
+H2 &lt;- data.table(H2 = as.integer(trunc(3 * runif(10))))
+   
+N_h &lt;- data.table(matrix(0 : 4, 5, 1))
+setnames(N_h, names(N_h), "H")
+N_h[, sk:= 10]
+   
+N_h2 &lt;- data.table(matrix(0 : 2, 3, 1))
+setnames(N_h2, names(N_h2), "H2")
+N_h2[, sk2:= 4]
+   
+w_final &lt;- rep(2, 10)
+   
+vo &lt;- variance_othstr(Y = Y, H = H, H2 = H2,
+                      w_final = w_final,
+                      N_h = N_h, N_h2 = N_h2,
+                      period = NULL,
+                      dataset = NULL)
+vo
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,200 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>remlMM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fit Linear Mixed Models via REML</h2>
+
+<h3>Description</h3>
+
+<p>Function fits Linear Mixed Models (LMM) using Restricted Maximum Likelihood (REML).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">remlMM(
+  form,
+  Data,
+  by = NULL,
+  VarVC = TRUE,
+  cov = TRUE,
+  quiet = FALSE,
+  order.data = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>form</code></td>
+<td>
+<p>(formula) specifying the model to be fit, a response variable left of the '~' is mandatory, random terms
+have to be enclosed in brackets (see details for definition of valid model terms)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>(data.frame) containing all variables referenced in 'form'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>(factor, character) variable specifying groups for which the analysis should be performed individually,
+i.e. by-processing</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VarVC</code></td>
+<td>
+<p>(logical) TRUE = the variance-covariance matrix of variance components will be approximated using 
+the method found in Giesbrecht &amp; Burns (1985), which also serves as basis for applying a Satterthwaite
+approximation of the degrees of freedom for each variance component, FALSE = leaves out this step, 
+no confidence intervals for VC will be available</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cov</code></td>
+<td>
+<p>(logical) TRUE = in case of non-zero covariances a block diagonal matrix will be constructed,
+FALSE = a diagonal matrix with all off-diagonal element being equal to zero will be contructed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = will suppress any messages or warning, which will be issued otherwise</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order.data</code></td>
+<td>
+<p>(logical) TRUE = class-variables will be ordered increasingly, FALSE = ordering of class-variables
+will remain as is</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The model is formulated exactly as in function <code>anovaMM</code>, i.e. random terms need be enclosed by round brackets.
+All terms appearing in the model (fixed or random) need to be compliant with the regular expression "^[^[\.]]?[[:alnum:]_\.]*$",
+i.e. they may not start with a dot and may then only consist of alpha-numeric characters, 
+dot and underscore. Otherwise, an error will be issued.
+</p>
+<p>Here, a LMM is fitted by REML using the <code>lmer</code> function of the <code>lme4</code>-package. 
+For all models the Giesbrechnt &amp; Burns (1985) approximation of the variance-covariance
+matrix of variance components (VC) can be applied ('VarVC=TRUE'). A Satterthwaite approximation of the degrees of freedom
+for all VC and total variance is based on this approximated matrix using <code class="reqn">df=2Z^2</code>, where
+<code class="reqn">Z</code> is the Wald statistic <code class="reqn">Z=\sigma^2/se(\sigma^2)</code>, and <code class="reqn">\sigma^2</code> is here used for an
+estimated variance. The variance of total variability, i.e. the sum of all VC is computed via summing
+up all elements of the variance-covariance matrix of the VC.
+One can constrain the variance-covariance matrix of random effects <code class="reqn">G</code> to be either diagonal ('cov=FALSE'), i.e.
+all random effects are indpendent of each other (covariance is 0). If 'cov=TRUE' (the default) matrix <code class="reqn">G</code> will be
+constructed as implied by the model returned by function <code>lmer</code>. 
+</p>
+<p>As for objects returned by function <code>anovaMM</code> linear hypotheses of fixed effects or LS Means can be
+tested with functions <code>test.fixef</code> and <code>test.lsmeans</code>. Note, that option "contain" does
+not work for LMM fitted via REML.
+</p>
+<p>Note, that for large datasets approximating the variance-covariance matrix of VC is computationally expensive
+and may take very long. There is no Fisher-information matrix available for 'merMod' objects, which can
+serve as approximation. To avoid this time-consuming step, use argument 'VarVC=FALSE' but remember,
+that no confidence intervals for any VC will be available. If you use Microsoft's R Open, formerly known
+as Revolution-R, which comes with Intel's Math Kernel Library (MKL), this will be automatically detected
+and an environment-optimized version will be used, reducing the computational time considerably (see examples).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>remlVCA</code>, <code>VCAinference</code>, <code>ranef.VCA</code>, <code>residuals.VCA</code>,
+<code>anovaVCA</code>, <code>anovaMM</code>, <code>plotRandVar</code>,  <code>test.fixef</code>,  
+<code>test.lsmeans</code>, <code>lmer</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_2)
+
+# assuming 'day' as fixed, 'run' as random
+remlMM(y~day/(run), dataEP05A2_2)
+
+# assuming both as random leads to same results as
+# calling anovaVCA
+remlMM(y~(day)/(run), dataEP05A2_2)
+anovaVCA(y~day/run, dataEP05A2_2)
+remlVCA(y~day/run, dataEP05A2_2)
+
+# fit a larger random model
+data(VCAdata1)
+fitMM1 &lt;- remlMM(y~((lot)+(device))/(day)/(run), VCAdata1[VCAdata1$sample==1,])
+fitMM1
+# now use function tailored for random models
+fitRM1 &lt;- anovaVCA(y~(lot+device)/day/run, VCAdata1[VCAdata1$sample==1,])
+fitRM1
+
+# there are only 3 lots, take 'lot' as fixed 
+fitMM2 &lt;- remlMM(y~(lot+(device))/(day)/(run), VCAdata1[VCAdata1$sample==2,])
+
+# the following model definition is equivalent to the one above,
+# since a single random term in an interaction makes the interaction
+# random (see the 3rd reference for details on this topic)
+fitMM3 &lt;- remlMM(y~(lot+(device))/day/run, VCAdata1[VCAdata1$sample==2,])
+
+# fit same model for each sample using by-processing
+lst &lt;- remlMM(y~(lot+(device))/day/run, VCAdata1, by="sample")
+lst
+
+# fit mixed model originally from 'nlme' package
+
+library(nlme)
+data(Orthodont)
+fit.lme &lt;- lme(distance~Sex*I(age-11), random=~I(age-11)|Subject, Orthodont) 
+
+# re-organize data for using 'remlMM'
+Ortho &lt;- Orthodont
+Ortho$age2 &lt;- Ortho$age - 11
+Ortho$Subject &lt;- factor(as.character(Ortho$Subject))
+fit.remlMM1 &lt;- remlMM(distance~Sex*age2+(Subject)*age2, Ortho)
+
+# use simplified formula avoiding unnecessary terms
+fit.remlMM2 &lt;- remlMM(distance~Sex+age2+Sex:age2+(Subject)+age2:(Subject), Ortho)
+
+# and exclude intercept
+fit.remlMM3 &lt;- remlMM(distance~Sex+Sex:age2+(Subject)+(Subject):age2-1, Ortho)
+
+# now use exclude covariance of per-subject intercept and slope
+# as for models fitted by function 'anovaMM'
+fit.remlMM4 &lt;- remlMM(distance~Sex+Sex:age2+(Subject)+(Subject):age2-1, Ortho, cov=FALSE)
+
+# compare results
+fit.lme
+fit.remlMM1
+fit.remlMM2
+fit.remlMM3
+fit.remlMM4
+
+# are there a sex-specific differences?
+cmat &lt;- getL(fit.remlMM3, c("SexMale-SexFemale", "SexMale:age2-SexFemale:age2")) 
+cmat
+
+test.fixef(fit.remlMM3, L=cmat)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

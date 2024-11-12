@@ -1,0 +1,220 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineLogLik</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Log-Likelihood of an R-Vine Copula Model</h2>
+
+<h3>Description</h3>
+
+<p>This function calculates the log-likelihood of a d-dimensional R-vine copula
+model for a given copula data set.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineLogLik(
+  data,
+  RVM,
+  par = RVM$par,
+  par2 = RVM$par2,
+  separate = FALSE,
+  verbose = TRUE,
+  check.pars = TRUE,
+  calculate.V = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>An N x d data matrix (with uniform margins).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p>An <code>RVineMatrix()</code> object including the structure and
+the pair-copula families and parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>A d x d matrix with the pair-copula parameters (optional;
+default: <code>par = RVM$par</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>A d x d matrix with the second parameters of pair-copula
+families with two parameters (optional; default: <code>par2 = RVM$par2</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>separate</code></td>
+<td>
+<p>Logical; whether log-likelihoods are returned point wisely
+(default: <code>separate = FALSE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>In case something goes wrong, additional output will be
+plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.pars</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>; if <code>FALSE</code>, checks
+for family/parameter-consistency are omitted (should only be used with
+care).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>calculate.V</code></td>
+<td>
+<p>logical; whether V matrices should be calculated. Default
+is <code>TRUE</code>, but requires a lot of memory when dimension is large.
+Use <code>FALSE</code> for a memory efficient version.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For observations
+<code class="reqn">\boldsymbol{u}=(\boldsymbol{u}_1^\prime,...,\boldsymbol{u}_N^\prime)^\prime</code>
+the log-likelihood of a <code class="reqn">d</code>-dimensional R-vine copula with <code class="reqn">d-1</code>
+trees and corresponding edge sets <code class="reqn">E_1,...,E_{d-1}</code> is given by
+</p>
+<p style="text-align: center;"><code class="reqn">\texttt{loglik}:=l_{RVine}\left(\boldsymbol{\theta}|\boldsymbol{u}\right)
+</code>
+</p>
+
+<p style="text-align: center;"><code class="reqn">=\sum_{i=1}^N \sum_{\ell=1}^{d-1} \sum_{e\in E_\ell}
+ \ln[c_{j(e),k(e)|D(e)}(F(u_{i,j(e)}|u_{i,D(e)}),F(u_{i,k(e)}|u_{i,D(e)})|\theta_{j(e),k(e)|D(e)})] </code>
+</p>
+
+<p>where <code class="reqn">\boldsymbol{u}_i=(u_{i,1},...,u_{i,d})^\prime\in[0,1]^d,\
+i=1,...,N</code>. Further
+<code class="reqn">c_{j(e),k(e)|D(e)}</code> denotes a bivariate copula density associated to an
+edge <code class="reqn">e</code> and with parameter(s)
+<code class="reqn">\boldsymbol{\theta}_{j(e),k(e)|D(e)}</code>.
+Conditional distribution functions such as
+<code class="reqn">F(u_{i,j(e)}|\boldsymbol{u}_{i,D(e)})</code> are
+obtained recursively using the relationship
+</p>
+<p style="text-align: center;"><code class="reqn">h(u|\boldsymbol{v},\boldsymbol{\theta}) := F(u|\boldsymbol{v}) =
+d C_{uv_j|v_{-j}}(F(u|v_{-j}),F(v_j|v_{-j}))/d
+F(v_j|v_{-j}), </code>
+</p>
+
+<p>where
+<code class="reqn">C_{uv_j|\boldsymbol{v}_{-j}}</code> is a bivariate copula
+distribution function with parameter(s) <code class="reqn">\boldsymbol{\theta}</code>
+and <code class="reqn">\boldsymbol{v}_{-j}</code> denotes a vector with the <code class="reqn">j</code>-th
+component <code class="reqn">v_j</code> removed. The notation of h-functions is introduced for
+convenience. For more details see Dissmann et al. (2013).
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>loglik</code></td>
+<td>
+<p>The calculated log-likelihood value of the R-vine
+copula model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>V</code></td>
+<td>
+<p>The stored transformations (h-functions and
+log-likelihoods of each pair-copula) which may be used for posterior updates
+(three matrices: <code>direct</code>, <code>indirect</code> and <code>value</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier, Jeffrey Dissmann, Jakob Stoeber
+</p>
+
+
+<h3>References</h3>
+
+<p>Dissmann, J. F., E. C. Brechmann, C. Czado, and D. Kurowicka
+(2013). Selecting and estimating regular vine copulae and application to
+financial returns. Computational Statistics &amp; Data Analysis, 59 (1), 52-69.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopHfunc()</code>, <code>RVineMatrix()</code>,
+<code>RVineMLE()</code>, <code>RVineAIC()</code>, <code>RVineBIC()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# define 5-dimensional R-vine tree structure matrix
+Matrix &lt;- c(5, 2, 3, 1, 4,
+            0, 2, 3, 4, 1,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 1)
+Matrix &lt;- matrix(Matrix, 5, 5)
+
+# define R-vine pair-copula family matrix
+family &lt;- c(0, 1, 3, 4, 4,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 3,
+            0, 0, 0, 0, 0)
+family &lt;- matrix(family, 5, 5)
+
+# define R-vine pair-copula parameter matrix
+par &lt;- c(0, 0.2, 0.9, 1.5, 3.9,
+         0, 0, 1.1, 1.6, 0.9,
+         0, 0, 0, 1.9, 0.5,
+         0, 0, 0, 0, 4.8,
+         0, 0, 0, 0, 0)
+par &lt;- matrix(par, 5, 5)
+
+# define second R-vine pair-copula parameter matrix
+par2 &lt;- matrix(0, 5, 5)
+
+# define RVineMatrix object
+RVM &lt;- RVineMatrix(Matrix = Matrix, family = family,
+                   par = par, par2 = par2,
+                   names = c("V1", "V2", "V3", "V4", "V5"))
+
+# simulate a sample of size 300 from the R-vine copula model
+set.seed(123)
+simdata &lt;- RVineSim(300, RVM)
+
+# compute the log-likelihood
+ll &lt;- RVineLogLik(simdata, RVM, separate = FALSE)
+ll$loglik
+
+# compute the pointwise log-likelihoods
+ll &lt;- RVineLogLik(simdata, RVM, separate = TRUE)
+ll$loglik
+
+</code></pre>
+
+
+</div>

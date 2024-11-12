@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ap.mx</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Air pollution Data, Mexico City.</h2>
+
+<h3>Description</h3>
+
+<p>Daily air pollution levels in Mexico City, January 2004 – June 2005.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(ap.mx)</code></pre>
+
+
+<h3>Format</h3>
+
+<p>This data frame stores time series vectors with the
+following information:
+</p>
+
+<dl>
+<dt>time</dt>
+<dd>
+<p>Time vector.
+</p>
+</dd>
+<dt>PM10</dt>
+<dd>
+<p>24–hr average concentration of
+<code class="reqn">PM_{10}</code>, in micrograms per milliliter.
+</p>
+</dd>
+<dt>O3</dt>
+<dd>
+<p>Daily maximum 8–hour moving average
+of ozone, in micrograms per milliliter.
+</p>
+</dd>
+<dt>temp</dt>
+<dd>
+<p>Daily mean average of temperature, in celsius degrees.
+</p>
+</dd>
+<dt>HR</dt>
+<dd>
+<p>Daily mean average (%) of relative humidity.
+</p>
+</dd>
+</dl>
+<h3>Details</h3>
+
+<p>These are readings of <code class="reqn">PM_{10}</code>,
+<code class="reqn">O_{3}</code>, temperature and humidity between
+1 January 2004 and 30 June 2005 in 
+Mexico City Metropolitan Area.
+Each observation is the 24–hr mean average (between
+00:00 and 23:59 hrs), except for
+ozone, where the
+maximum over all the sliding 8–hour–windows,
+between 00:00 and 23:59 hrs is reported, viz.
+the daily maximum 8–hour moving average.
+</p>
+
+
+<h3>Source</h3>
+
+<p>National Institute of Ecology.
+Gathers and disseminates the data generated 
+by the central air quality monitoring network
+in Mexico City. Website:
+https://www.gob.mx/inecc/
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(ap.mx)
+summary(ap.mx[, -1])
+class(ap.mx[, "PM10"])
+
+layout(matrix(c(1, 1, 2,3), 2, 2, byrow = TRUE))
+plot.ts(ts(ap.mx$PM10), ylab = expression(PM[10]~"Series"), 
+        col = "brown", xaxt = "n", las = 1)
+xtick &lt;- c(1, 92, 183, 275, 367, 457, 518)
+xtext &lt;- c("Jan/04", "April/04", "July/04", "Oct/04", "Jan/05",
+           "April/05", "June/05")
+axis(side = 1, at = xtick, labels = FALSE)
+text(x = xtick, par("usr")[3], labels = xtext,
+     pos = 1, xpd = TRUE, col = "black")
+pacf(ap.mx$PM10, main = "", ylim= c(-0.5, 1), lag.max = 60, las = 1)
+acf(ap.mx$PM10, main = "", ylim= c(-0.5, 1), lag.max = 60, las = 1)
+
+</code></pre>
+
+
+</div>

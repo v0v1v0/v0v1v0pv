@@ -1,0 +1,140 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotSimulation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plots results of <code>simulatePopulation</code>.</h2>
+
+<h3>Description</h3>
+
+<p>This function takes as input the output of <code>simulatePopulation</code>, and plots the pollen abundance, number of individuals, biomass, driver, and environmnetal suitability of each simulation outcome.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotSimulation(
+  simulation.output = NULL,
+  species = "all",
+  burnin = FALSE,
+  filename = NULL,
+  time.zoom = NULL,
+  panels = c("Driver A",
+           "Driver B",
+           "Suitability",
+           "Population",
+           "Mortality",
+           "Biomass",
+           "Pollen"
+           ),
+ plot.title = NULL,
+ width = 12,
+ text.size = 20,
+ title.size = 25,
+ line.size = 1
+ )
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>simulation.output</code></td>
+<td>
+<p>output of <code>simulatePopulation</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species</code></td>
+<td>
+<p>a number or vector of numbers representing rows in the parameters dataframe, or a string or vector of strings referencing to the "label" column of the parameters dataframe.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>burnin</code></td>
+<td>
+<p>if <code>FALSE</code>, burn-in period is not considered in the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filename</code></td>
+<td>
+<p>character string, name of output pdf file. If NULL or empty, no pdf is produced. It shouldn't include the extension of the output file.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time.zoom</code></td>
+<td>
+<p>vector of two numbers indicating the beginnign and end of the time interval to be plotted (i.e. "c(5000, 10000)")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>panels</code></td>
+<td>
+<p>character string or vector of character strings with these possible values: "Driver A", "Driver B","Suitability", "Population", "Mortality", "Biomass", "Pollen".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.title</code></td>
+<td>
+<p>character string to use as plot title.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p>plot width in inches.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.size</code></td>
+<td>
+<p>text size of the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title.size</code></td>
+<td>
+<p>plot title size.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>line.size</code></td>
+<td>
+<p>size of lines in plots.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The user can decide what virtual taxa to plot (argument <code>species</code>), and what information to show throught the <code>panels</code> argument. Output is plotted on screen by default, and printed to pdf if the <code>filename</code> argument is filled.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Blas M. Benito  &lt;blasbenito@gmail.com&gt;
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>simulatePopulation</code>, <code>compareSimulations</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+#getting example data
+data(simulation)
+
+#plot first simulation
+plotSimulation(simulation.output = simulation[[1]])
+
+</code></pre>
+
+
+</div>

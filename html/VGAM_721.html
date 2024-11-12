@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hzeta</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Haight's Zeta Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimating the parameter of Haight's zeta distribution
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hzeta(lshape = "logloglink", ishape = NULL, nsimEIM = 100)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape</code></td>
+<td>
+
+<p>Parameter link function for the parameter,
+called <code class="reqn">\alpha</code> below.
+See <code>Links</code> for more choices.
+Here, a log-log link keeps the parameter greater than one, meaning
+the mean is finite.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape,nsimEIM</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability function is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = (2y-1)^{(-\alpha)} - (2y+1)^{(-\alpha)},</code>
+</p>
+
+<p>where the parameter <code class="reqn">\alpha&gt;0</code>
+and <code class="reqn">y=1,2,\ldots</code>.
+The function <code>dhzeta</code> computes this probability function.
+The mean of <code class="reqn">Y</code>, which is returned as fitted values, is
+<code class="reqn">(1-2^{-\alpha}) \zeta(\alpha)</code>
+provided <code class="reqn">\alpha &gt; 1</code>, where <code class="reqn">\zeta</code> is
+Riemann's zeta function.
+The mean is a decreasing function of <code class="reqn">\alpha</code>.
+The mean is infinite if <code class="reqn">\alpha \leq 1</code>, and
+the variance is infinite if <code class="reqn">\alpha \leq 2</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Johnson N. L., Kemp, A. W. and Kotz S. (2005).
+<em>Univariate Discrete Distributions</em>,
+3rd edition,
+pp.533–4.
+Hoboken, New Jersey: Wiley.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Hzeta</code>,
+<code>zeta</code>,
+<code>zetaff</code>,
+<code>loglog</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">shape &lt;- exp(exp(-0.1))  # The parameter
+hdata &lt;- data.frame(y = rhzeta(n = 1000, shape))
+fit &lt;- vglm(y ~ 1, hzeta, data = hdata, trace = TRUE, crit = "coef")
+coef(fit, matrix = TRUE)
+Coef(fit)  # Useful for intercept-only models; should be same as shape
+c(with(hdata, mean(y)), head(fitted(fit), 1))
+summary(fit)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vineCopula</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Constructor of the Class <code>vineCopula</code>.</h2>
+
+<h3>Description</h3>
+
+<p>Constructs an instance of the <code>vineCopula</code> class.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vineCopula(RVM, type = "CVine")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p>An object of class <code>RVineMatrix</code> generated from
+<code>RVineMatrix</code> in the package <code>VineCopula-package</code> or
+an integer (e.g. <code>4L</code>) defining the dimension (an independent Gaussian
+C-vine of this dimension will be constructed).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>A predefined type if only the dimension is provided and ignored
+otherwise, the default is a canonical vine</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An instance of the <code>vineCopula</code> class.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Benedikt Graeler
+</p>
+
+
+<h3>References</h3>
+
+<p>Aas, K., C. Czado, A. Frigessi, and H. Bakken (2009).
+Pair-copula constructions of multiple dependence Insurance: Mathematics and
+Economics 44 (2), 182-198.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# a C-vine of independent copulas
+vine &lt;- vineCopula(4L, "CVine")
+
+library(copula)
+library(lattice)
+
+cloud(V1 ~ V2 + V3, as.data.frame(rCopula(500, vine)))
+</code></pre>
+
+
+</div>

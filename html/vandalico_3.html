@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>CALplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calibration graph</h2>
+
+<h3>Description</h3>
+
+<p>A function to plot a calibration graph.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">CALplot(mat, by = 0.1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mat</code></td>
+<td>
+<p>A matrix with two columns. The first column must contain the
+suitability values (i.e., the classification rule); the second column must
+contain the presences and absences.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>Size of the suitability intervals (bins). By default,
+<code>by</code> = 0.1.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Dots for bins with 15 or more cases are shown in solid black; dots
+for bins with less than 15 cases are shown empty (see Jiménez-Valverde et
+al. 2013). This way, by plotting the calibration graph before running
+<code>AUCuniform</code>, one can get a glimpse of how reliable <em>uAUC</em>
+or <em>uSe*</em> can be expected to be.
+</p>
+
+
+<h3>Value</h3>
+
+<p>This function returns a calibration plot
+</p>
+
+
+<h3>References</h3>
+
+<p>Jiménez-Valverde, A., Acevedo, P., Barbosa, A. M., Lobo, J. M. &amp;
+Real, R. (2013).  Discrimination capacity in species distribution models
+depends on the representativeness of the environmental domain.
+<em>Global Ecol. Biogeogr.</em>, 22, 508-516.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">suit&lt;-rbeta(100, 2, 2) #Generate suitability values
+random&lt;-runif(100)
+sp&lt;-ifelse(random &lt; suit,1 , 0) #Generate presence-absence data
+CALplot(cbind(suit, sp))
+</code></pre>
+
+
+</div>

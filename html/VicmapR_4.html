@@ -1,0 +1,52 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vicmap_options</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>options</h2>
+
+<h3>Description</h3>
+
+<p>This function retrieves bcdata specific options that can be set. These options can be set
+using <code style="white-space: pre;">⁠option({name of the option} = {value of the option})⁠</code>. The default options are purposefully
+set conservatively to hopefully ensure successful requests. Resetting these options may result in
+failed calls to the data catalogue. Options in R are reset every time R is re-started.
+</p>
+<p><code>vicmap.max_geom_pred_size</code> is the maximum size of an object used for a geometric operation. Objects
+that are bigger than this value will be simplified in the request call using sf::st_simplify().
+This is done to reduce the size of the query being sent to the WFS geoserver.
+</p>
+<p><code>vicmap.chunk_limit</code> is an option useful when dealing with very large data sets. When requesting large objects
+from the catalogue, the request is broken up into smaller chunks which are then recombined after they've
+been downloaded. VicmapR does this all for you but using this option you can set the size of the chunk
+requested. On faster internet connections, a bigger chunk limit could be useful while on slower connections,
+it is advisable to lower the chunk limit. Chunks must be less than 70000.
+</p>
+<p><code>vicmap.base_url</code> is the base wfs url used to query the geoserver.
+</p>
+<p><code>vicmap.backend</code> is the backend software running the geoserver. The data migration in 2022/2023 will change the backend from 'Oracle' to 'AWS'
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vicmap_options()
+
+check_chunk_limit()
+</code></pre>
+
+
+<h3>Value</h3>
+
+<p>vicmap_options() returns a <code>data.frame</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vicmap_options()
+</code></pre>
+
+
+</div>

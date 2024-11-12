@@ -1,0 +1,173 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rankindex</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares Dissimilarity Indices for Gradient Detection </h2>
+
+<h3>Description</h3>
+
+<p>Rank correlations between dissimilarity indices
+and gradient separation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rankindex(grad, veg, indices = c("euc", "man", "gow", "bra", "kul"),
+          stepacross = FALSE, method = "spearman", 
+	  metric = c("euclidean", "mahalanobis", "manhattan", "gower"),
+	  ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>grad</code></td>
+<td>
+<p>The gradient variable or matrix. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>veg</code></td>
+<td>
+<p>The community data matrix. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>indices</code></td>
+<td>
+<p>Dissimilarity indices compared, partial matches to
+alternatives in <code>vegdist</code>.
+Alternatively, it can be a (named) list of functions returning
+objects of class 'dist'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stepacross</code></td>
+<td>
+<p>Use <code>stepacross</code> to find
+a shorter path dissimilarity. The dissimilarities for site pairs
+with no shared species are set <code>NA</code> using
+<code>no.shared</code> so that indices with no fixed
+upper limit can also be analysed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>Correlation method used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metric</code></td>
+<td>
+<p>Metric to evaluate the gradient separation. See Details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other parameters to <code>stepacross</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A good dissimilarity index for multidimensional scaling should have
+a high rank-order similarity with gradient separation.  The function
+compares most indices in <code>vegdist</code> against gradient
+separation using rank correlation coefficients in
+<code>cor</code>. The gradient separation between each point is
+assessed using given <code>metric</code>. The default is to use Euclidean
+distance of continuous variables scaled to unit variance, or to use
+Gower metric for mixed data using function
+<code>daisy</code> when <code>grad</code> has factors. The other
+alternatives are Mahalanabis distances which are based on
+<code>grad</code> matrix scaled so that columns are orthogonal
+(uncorrelated) and have unit variance, or Manhattan distances of
+<code>grad</code> variables scaled to unit range.
+</p>
+<p>The <code>indices</code> argument can accept any dissimilarity 
+indices besides the ones calculated by the 
+<code>vegdist</code> function. For this, the argument value
+should be a (possibly named) list of functions.
+Each function must return a valid 'dist' object with dissimilarities,
+similarities are not accepted and should be converted into dissimilarities
+beforehand.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns a named vector of rank correlations.
+</p>
+
+
+<h3>Note</h3>
+
+<p>There are several problems in using rank correlation coefficients.
+Typically there are very many ties when <code class="reqn">n(n-1)/2</code> gradient
+separation values are derived from just <code class="reqn">n</code> observations.
+Due to floating point arithmetics, many tied values differ by
+machine epsilon and are arbitrarily ranked differently by
+<code>rank</code> used in <code>cor.test</code>.  Two indices
+which are identical with certain
+transformation or standardization may differ slightly
+(magnitude <code class="reqn">10^{-15}</code>) and this may lead into third or fourth decimal
+instability in rank correlations.  Small differences in rank
+correlations should not be taken too seriously.  Probably this method
+should be replaced with a sounder method, but I do not yet know
+which...  You may experiment with <code>mantel</code>,
+<code>anosim</code> or even <code>protest</code>.
+</p>
+<p>Earlier version of this function used <code>method = "kendall"</code>, but
+that is far too slow in large data sets.
+</p>
+<p>The functions returning dissimilarity objects should be self contained,
+because the <code>...</code> argument passes additional parameters
+to <code>stepacross</code> and not to the functions supplied
+via the <code>indices</code> argument.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jari Oksanen, with additions from Peter Solymos</p>
+
+
+<h3>References</h3>
+
+<p> Faith, F.P., Minchin, P.R. and Belbin,
+L. (1987).  Compositional dissimilarity as a robust measure of
+ecological distance. <em>Vegetatio</em> 69, 57-68. </p>
+
+
+<h3>See Also</h3>
+
+<p><code>vegdist</code>, <code>stepacross</code>,
+<code>no.shared</code>, <code>monoMDS</code>,
+<code>cor</code>, <code>Machine</code>, and for
+alternatives <code>anosim</code>, <code>mantel</code> and
+<code>protest</code>. </p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(varespec)
+data(varechem)
+## The variables are automatically scaled
+rankindex(varechem, varespec)
+rankindex(varechem, wisconsin(varespec))
+## Using non vegdist indices as functions
+funs &lt;- list(Manhattan=function(x) dist(x, "manhattan"),
+    Gower=function(x) cluster:::daisy(x, "gower"),
+    Ochiai=function(x) designdist(x, "1-J/sqrt(A*B)"))
+rankindex(scale(varechem), varespec, funs)
+</code></pre>
+
+
+</div>

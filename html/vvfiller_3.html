@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>fill_df_with_agg_by_group</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fill with aggregate by group</h2>
+
+<h3>Description</h3>
+
+<p>Function to calculate a summary statistic (mean, median, vvconverter::mode, min, max etc.) by group
+and use it to fill missing values. Note: this takes and produces a tibble rather than a vector.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">fill_df_with_agg_by_group(
+  df,
+  group,
+  columns,
+  overwrite_col = FALSE,
+  statistic = mean,
+  fill_empty_group = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>tibble to use</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>string or vector of strings: columns to group by</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>columns</code></td>
+<td>
+<p>string or vector of strings: columns to impute</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overwrite_col</code></td>
+<td>
+<p>boolean: whether to overwrite column. If FALSE, a new column with suffix _imputed will be created</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>statistic</code></td>
+<td>
+<p>function: summary statistic to use (mean, median, min etc.). For now requires a function with na.rm argument</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fill_empty_group</code></td>
+<td>
+<p>boolean: If TRUE, fills groups that only contain NA with summary statistic of entire column</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a tibble with filled column(s)
+</p>
+
+
+</div>

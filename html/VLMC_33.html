@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vlmctree</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute the tree structure of a "vlmc" object</h2>
+
+<h3>Description</h3>
+
+<p>Compute the tree representation of a <code>"vlmc"</code> object as <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>
+<code>list</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vlmctree(x)
+
+## S3 method for class 'vtree'
+str(object, ...)
+.vvec2tree(vv, k, chk.lev)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x,object</code></td>
+<td>
+<p>typically the result of <code>vlmc(..)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vv</code></td>
+<td>
+<p>integer vector encoding the fitted vlmc, typically
+<code>x$vlmc.vec[-1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>integer, the alphabet size.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>chk.lev</code></td>
+<td>
+<p>integer internally used for consistency checking.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further arguments passed to or from methods.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>.vvec2tree</code> is the internal (recursive) function building up the
+tree.
+</p>
+<p><code>str.vtree</code> is a method for the generic <code>str</code>
+function and typically for the output of <code>vlmctree()</code>. For each
+node, it gives the “parenting level” in braces and the counts.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>list</code> of <code>class</code> <code>"vtree"</code>
+representing the tree structure recursively.
+</p>
+<p>Each “node” of the tree is itself a list with
+components
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>length-2 integer giving the level in {0,1,...},
+counted from the root (which is <code>0</code>) and the parenting level,
+i.e the longest branch.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>count</code></td>
+<td>
+<p>integer vector of length <code>k</code> where <code>k</code> is the
+number of “letters” in the alphabet.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>total</code></td>
+<td>
+<p>equals to <code>sum(* $ count)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>child</code></td>
+<td>
+<p>a list (of length <code>k</code>) of child nodes or
+<code>NULL</code> (i.e. not there).</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Martin Maechler</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vlmc</code>.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(presidents)
+dpres &lt;- cut(presidents, c(0,45,70, 100)) # three values + NA
+table(dpres &lt;- factor(dpres, exclude = NULL)) # NA as 4th level
+
+(vlmc.prc1 &lt;- vlmc(dpres, cut = 1, debug = TRUE))
+str(vv.prc1 &lt;- vlmctree(vlmc.prc1))
+</code></pre>
+
+
+</div>

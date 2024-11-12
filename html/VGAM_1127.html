@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pgamma.deriv.unscaled</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Derivatives of the Incomplete Gamma Integral (Unscaled Version)
+</h2>
+
+<h3>Description</h3>
+
+<p>The first two derivatives of the incomplete gamma integral
+with scaling.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pgamma.deriv.unscaled(q, shape)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>q, shape</code></td>
+<td>
+
+<p>As in <code>pgamma</code>
+and <code>pgamma.deriv</code> but
+these must be vectors of positive values only and finite.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>Define
+</p>
+<p style="text-align: center;"><code class="reqn">G(x, a) = \int_0^x t^{a-1} e^{-t} dt</code>
+</p>
+
+<p>so that
+<code class="reqn">G(x, a)</code> is <code>pgamma(x, a) * gamma(a)</code>.
+Write <code class="reqn">x = q</code> and <code>shape =</code> <code class="reqn">a</code>.
+The 0th and first and second derivatives with respect to <code class="reqn">a</code>
+of <code class="reqn">G</code> are returned. This function is similar in spirit to
+<code>pgamma.deriv</code>
+but here there is no gamma function to scale things.
+Currently a 3-column matrix is returned (in the future this
+may change and an argument may be supplied so that only what
+is required by the user is computed.)
+This function is based on Wingo (1989).
+</p>
+
+
+<h3>Value</h3>
+
+<p>The 3 columns, running from left to right, are the <code>0:2</code>th derivatives
+with respect to <code class="reqn">a</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>These function seems inaccurate for <code>q = 1</code> and <code>q = 2</code>;
+see the plot below.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>See <code>truncweibull</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>pgamma.deriv</code>,
+<code>pgamma</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- 3; aa &lt;- seq(0.3, 04, by = 0.01)
+ans.u &lt;- pgamma.deriv.unscaled(x, aa)
+head(ans.u)
+
+## Not run:  par(mfrow = c(1, 3))
+for (jay in 1:3) {
+  plot(aa, ans.u[, jay], type = "l", col = "blue", cex.lab = 1.5,
+       cex.axis = 1.5, las = 1, main = colnames(ans.u)[jay],
+       log = "", xlab = "shape", ylab = "")
+  abline(h = 0, v = 1:2, lty = "dashed", col = "gray")  # Inaccurate at 1 and 2
+}
+
+## End(Not run)
+</code></pre>
+
+
+</div>

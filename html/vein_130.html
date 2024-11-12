@@ -1,0 +1,175 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>emis_order</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Re-order the emission to match specific hours and days</h2>
+
+<h3>Description</h3>
+
+<p>Emissions are usually estimated for a year, 24 hours, or one week from monday to sunday (with 168 hours). This depends on the availability of traffic data.
+When an air quality simulation is going to be done, they cover
+specific periods of time. For instance, WRF Chem emissions files support periods of time,
+or two emissions sets for a representative day (0-12z 12-0z). Also a WRF Chem simulation
+scan starts a Thursday at 00:00 UTC, cover 271 hours of simulations, but hour emissions are in local
+time and cover only 168 hours starting on Monday. This function tries to transform our emissions
+in local time to the desired UTC time, by recycling the local emissions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">emis_order(
+  x,
+  lt_emissions,
+  start_utc_time,
+  desired_length,
+  tz_lt = Sys.timezone(),
+  seconds = 0,
+  k = 1,
+  net,
+  verbose = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>one of the following:
+</p>
+
+<ul>
+<li>
+<p> Spatial object of class "Spatial". Columns are hourly emissions.
+</p>
+</li>
+<li>
+<p> Spatial Object of class "sf". Columns are hourly emissions.
+</p>
+</li>
+<li>
+<p> "data.frame", "matrix" or "Emissions".
+</p>
+</li>
+</ul>
+<p>In all cases, columns are hourly emissions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lt_emissions</code></td>
+<td>
+<p>Local time of the emissions at the first hour. It must be
+the <strong>before</strong>  time of start_utc_time. For instance, if
+start_utc_time is 2020-02-02 00:00, and your emissions starts monday at 00:00,
+your lt_emissions must be 2020-01-27 00:00. The argument tz_lt will detect your
+current local time zone and do the rest for you.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start_utc_time</code></td>
+<td>
+<p>UTC time for the desired first hour. For instance,
+the first hour of the namelist.input for WRF.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>desired_length</code></td>
+<td>
+<p>Integer; length to recycle or subset local emissions. For instance, the length
+of the WRF Chem simulations, states at namelist.input.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tz_lt</code></td>
+<td>
+<p>Character, Time zone of the local emissions. Default value is derived from
+Sys.timezone(), however, it accepts any other. If you enter a wrong tz, this function will show
+you a menu to choose one of the 697 time zones available.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seconds</code></td>
+<td>
+<p>Number of seconds to add</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>Numeric, factor.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>SpatialLinesDataFrame or Spatial Feature of "LINESTRING".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical, to show more information, default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>sf or data.frame
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>GriddedEmissionsArray</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+#do not run
+data(net)
+data(pc_profile)
+data(fe2015)
+data(fkm)
+PC_G &lt;- c(33491,22340,24818,31808,46458,28574,24856,28972,37818,49050,87923,
+          133833,138441,142682,171029,151048,115228,98664,126444,101027,
+          84771,55864,36306,21079,20138,17439, 7854,2215,656,1262,476,512,
+          1181, 4991, 3711, 5653, 7039, 5839, 4257,3824, 3068)
+veh &lt;- data.frame(PC_G = PC_G)
+pc1 &lt;- my_age(x = net$ldv, y = PC_G, name = "PC")
+pcw &lt;- temp_fact(net$ldv+net$hdv, pc_profile)
+speed &lt;- netspeed(pcw, net$ps, net$ffs, net$capacity, net$lkm, alpha = 1)
+pckm &lt;- units::set_units(fkm[[1]](1:24), "km")
+pckma &lt;- cumsum(pckm)
+cod1 &lt;- emis_det(po = "CO", cc = 1000, eu = "III", km = pckma[1:11])
+cod2 &lt;- emis_det(po = "CO", cc = 1000, eu = "I", km = pckma[12:24])
+#vehicles newer than pre-euro
+co1 &lt;- fe2015[fe2015$Pollutant=="CO", ] #24 obs!!!
+cod &lt;- c(co1$PC_G[1:24]*c(cod1,cod2),co1$PC_G[25:nrow(co1)])
+lef &lt;- ef_ldv_scaled(co1, cod, v = "PC", t = "4S", cc = "&lt;=1400",
+                     f = "G",p = "CO", eu=co1$Euro_LDV)
+E_CO &lt;- emis(veh = pc1,lkm = net$lkm, ef = lef, speed = speed, agemax = 41,
+              profile = pc_profile, simplify = TRUE)
+class(E_CO)
+E_CO_STREETS &lt;- emis_post(arra = E_CO, pollutant = "CO", by = "streets", net = net)
+g &lt;- make_grid(net, 1/102.47/2, 1/102.47/2) #500m in degrees
+E_CO_g &lt;- emis_grid(spobj = E_CO_STREETS, g = g, sr= 31983)
+head(E_CO_g) #class sf
+gr &lt;- GriddedEmissionsArray(E_CO_g, rows = 19, cols = 23, times = 168, T)
+wCO &lt;- emis_order(x = E_CO_g,
+                   lt_emissions = "2020-02-19 00:00",
+                   start_utc_time = "2020-02-20 00:00",
+                   desired_length = 241)
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

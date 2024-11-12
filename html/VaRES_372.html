@@ -1,0 +1,151 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>exppower</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Exponential power distribution</h2>
+
+<h3>Description</h3>
+
+<p>Computes the pdf, cdf, value at risk and expected shortfall for the exponential power distribution due to Subbotin (1923) given by
+</p>
+<p style="text-align: center;"><code class="reqn">\begin{array}{ll}
+&amp;\displaystyle
+f (x) = \frac {1}{\displaystyle 2 a^{1/a} \sigma \Gamma \left( 1 + 1/a \right)}
+\exp \left\{ -\frac {\mid x - \mu \mid^a}{a \sigma^a} \right\},
+\\
+&amp;\displaystyle
+F (x) =
+\left\{
+\begin{array}{ll}
+\displaystyle
+\frac {1}{2} Q \left( \frac {1}{a}, \frac {(\mu - x)^a}{a \sigma^a} \right), &amp; \mbox{if $x \leq \mu$,}
+\\
+\\
+\displaystyle
+1 - \frac {1}{2} Q \left( \frac {1}{a}, \frac {(x - \mu)^a}{a \sigma^a} \right), &amp; \mbox{if $x &gt; \mu$,}
+\end{array}
+\right.
+\\
+&amp;\displaystyle
+{\rm VaR}_p (X) =
+\left\{
+\begin{array}{ll}
+\displaystyle
+\mu - a^{1/a} \sigma \left[ Q^{-1} \left( \frac {1}{a}, 2 p \right) \right]^{1/a}, &amp; \mbox{if $p \leq 1/2$,}
+\\
+\\
+\mu + a^{1/a} \sigma \left[ Q^{-1} \left( \frac {1}{a}, 2 (1 - p) \right) \right]^{1/a}, &amp; \mbox{if $p &gt; 1/2$,}
+\end{array}
+\right.
+\\
+&amp;\displaystyle
+{\rm ES}_p (X) =
+\left\{
+\begin{array}{ll}
+\displaystyle
+\mu - \frac {a^{1/a} \sigma}{p} \int_0^p \left[ Q^{-1} \left( \frac {1}{a}, 2 v \right) \right]^{1/a} dv, &amp; \mbox{if $p \leq 1/2$,}
+\\
+\\
+\displaystyle
+\mu - \frac {a^{1/a} \sigma}{p} \int_0^{1/2} \left[ Q^{-1} \left( \frac {1}{a}, 2 v \right) \right]^{1/a} dv
+\\
+\displaystyle
+\quad
++\frac {a^{1/a} \sigma}{p} \int_{1/2}^p \left[ Q^{-1} \left( \frac {1}{a}, 2 (1 - v) \right) \right]^{1/a} dv, &amp; \mbox{if $p &gt; 1/2$}
+\end{array}
+\right.
+\end{array}</code>
+</p>
+
+<p>for <code class="reqn">-\infty &lt; x &lt; \infty</code>, <code class="reqn">0 &lt; p &lt; 1</code>, <code class="reqn">-\infty &lt; \mu &lt; \infty</code>, the location parameter, <code class="reqn">\sigma &gt; 0</code>, the scale parameter, and
+<code class="reqn">a &gt; 0</code>, the shape parameter.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dexppower(x, mu=0, sigma=1, a=1, log=FALSE)
+pexppower(x, mu=0, sigma=1, a=1, log.p=FALSE, lower.tail=TRUE)
+varexppower(p, mu=0, sigma=1, a=1, log.p=FALSE, lower.tail=TRUE)
+esexppower(p, mu=0, sigma=1, a=1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>scaler or vector of values at which the pdf or cdf needs to be computed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>scaler or vector of values at which the value at risk or expected shortfall needs to be computed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu</code></td>
+<td>
+<p>the value of the location parameter, can take any real value, the default is zero</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma</code></td>
+<td>
+<p>the value of the scale parameter, must be positive, the default is 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a</code></td>
+<td>
+<p>the value of the shape parameter, must be positive, the default is 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+<p>if TRUE then log(pdf) are returned</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log.p</code></td>
+<td>
+<p>if TRUE then log(cdf) are returned and quantiles are computed for exp(p)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail</code></td>
+<td>
+<p>if FALSE then 1-cdf are returned and quantiles are computed for 1-p</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of the same length as <code>x</code>, giving the pdf or cdf values computed at <code>x</code> or an object of the same length as <code>p</code>, giving the values at risk or expected shortfall computed at <code>p</code>.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Saralees Nadarajah</p>
+
+
+<h3>References</h3>
+
+<p>Stephen Chan, Saralees Nadarajah &amp; Emmanuel Afuecheta (2016). An R Package for Value at Risk and Expected Shortfall, Communications in Statistics - Simulation and Computation, 45:9, 3416-3434, <a href="https://doi.org/10.1080/03610918.2014.944658">doi:10.1080/03610918.2014.944658</a></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x=runif(10,min=0,max=1)
+dexppower(x)
+pexppower(x)
+varexppower(x)
+esexppower(x)</code></pre>
+
+
+</div>

@@ -1,0 +1,243 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predict.vlmc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Prediction of VLMC for (new) Series</h2>
+
+<h3>Description</h3>
+
+<p>Compute predictions on a fitted VLMC object
+for each (but the first) element of another discrete time series.
+Computes by default a matrix of prediction probabilities.  The argument
+<code>type</code> allows other predictions such as the most probable
+<code>"class"</code> or <code>"response"</code>, the context length (tree
+<code>"depth"</code>), or an <code>"ID"</code> of the corresponding context.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vlmc'
+predict(object, newdata,
+         type = c("probs", "class","response", "id.node", "depth", "ALL"),
+         se.fit = FALSE,
+         allow.subset = TRUE, check.alphabet=TRUE,
+         ...)
+## S3 method for class 'vlmc'
+fitted(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>typically the result of <code>vlmc(..)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>a discrete “time series”, a numeric, character or
+factor, as the <code>dts</code> argument of <code>vlmc(.)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>character indicating the type of prediction required,
+options given in the <em>Usage</em> secion above, see also the
+<em>Value</em> section below.  The default <code>"probs"</code>
+returns a matrix of prediction probabilties, whereas <code>"class"</code>
+or <code>"response"</code> give the corresponding most
+probable class.  The value of this argument can be abbreviated.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se.fit</code></td>
+<td>
+<p>a switch indicating if standard errors are required.
+<br> — NOT YET supported — .</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>allow.subset</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, <code>newdata</code> may not
+have all different “alphabet letters” used in <code>x</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.alphabet</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, consistency of
+<code>newdata</code>'s alphabet with those of <code>x</code> is checked.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>(potentially further arguments) required by generic.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Depending on the <code>type</code> argument,
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>"probs"</code></td>
+<td>
+<p>an <code class="reqn">n \times m</code> matrix <code>pm</code> of (prediction)
+probabilities, i.e., all the rows of <code>pm</code> sum to 1.
+</p>
+<p><code>pm[i,k]</code> is
+
+<code class="reqn">\hat P[Y_i = k | Y_{i-1},\dots]</code> (and
+is therefore <code>NA</code> for <code>i=1</code>).
+The <code>dimnames</code> of <code>pm</code> are the values of
+<code>newdata[]</code> and the alphabet letters <code>k</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>"class", "response"</code></td>
+<td>
+<p>the corresponding most probable value of Y[];
+as <code>factor</code> for <code>"class"</code> and as integer in
+<code>0:(m-1)</code> for <code>type = "response"</code>. If there is more than
+one most probable value, the first one is chosen.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>"id.node"</code></td>
+<td>
+<p>an (integer) “ID” of the current context (= node
+of the tree represented VLMC).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>"depth"</code></td>
+<td>
+<p>the context length, i.e., the depth of the
+Markov chain, at the current observation (of <code>newdata</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>"ALL"</code></td>
+<td>
+<p>an object of class <code>"predict.vlmc"</code>, a list with the
+following components,
+</p>
+
+<dl>
+<dt>ID</dt>
+<dd>
+<p>integer vector as for <code>type = "id.node"</code>,</p>
+</dd>
+<dt>probs</dt>
+<dd>
+<p>prediction probability matrix, as above,</p>
+</dd>
+<dt>flags</dt>
+<dd>
+<p>integer vector, non-zero for particular states only,
+rather for debugging.</p>
+</dd>
+<dt>ctxt</dt>
+<dd>
+<p>character, <code>ctxt[i]</code> a string giving the
+context (backwards) for <code>newdata[i]</code>, using alphabet
+letters.</p>
+</dd>
+<dt>fitted</dt>
+<dd>
+<p>character with fitted values, i.e., the alphabet letter
+with the highest probability, using <code>max.col</code> where
+ties are broken at random.</p>
+</dd>
+<dt>alpha, alpha.len</dt>
+<dd>
+<p>the alphabet (single string) and its
+length.</p>
+</dd>
+</dl>
+<p>which has its own print method (<code>print.predict.vlmc</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>The <code>predict</code> method and its possible arguments may still be
+developed, and we are considering to return the marginal
+probabilities instead of <code>NA</code> for the first value(s).
+</p>
+<p>The <code>print</code> method <code>print.predict.vlmc</code> uses
+<code>fractions</code> from package <span class="pkg">MASS</span> to display
+the probabilities <code class="reqn">Pr[X = j]</code>, for
+<code class="reqn">j \in \{0,1,\dots\}</code>, as these are rational
+numbers, shown as fractions of integers.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vlmc</code> and <code>residuals.vlmc</code>.  For
+simulation, <code>simulate.vlmc</code>.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">f1 &lt;- c(1,0,0,0)
+f2 &lt;- rep(1:0,2)
+(dt2 &lt;- rep(c(f1,f1,f2,f1,f2,f2,f1),2))
+
+(vlmc.dt2c15  &lt;- vlmc(dt2, cutoff = 1.5))
+draw(vlmc.dt2c15)
+
+## Fitted Values:
+all.equal(predict(vlmc.dt2c15, dt2), predict(vlmc.dt2c15))
+(pa2c15 &lt;- predict(vlmc.dt2c15, type = "ALL"))
+
+## Depth = context length  ([1] : NA) :
+stopifnot(nchar(pa2c15 $ ctxt)[-1] ==
+          predict(vlmc.dt2c15, type = "depth")[-1])
+
+same &lt;- (ff1 &lt;- pa2c15 $ fitted) ==
+        (ff2 &lt;- int2alpha(predict(vlmc.dt2c15, type ="response"), alpha="01"))
+which(!same) #-&gt; some are different, since max.col() breaks ties at random!
+
+ndt2 &lt;- c(rep(0,6),f1,f1,f2)
+predict(vlmc.dt2c15, ndt2, "ALL")
+
+(newdt2 &lt;- sample(dt2, 17))
+pm &lt;- predict(vlmc.dt2c15, newdt2, allow.subset = TRUE)
+summary(apply(pm, 1, sum))# all 1
+
+predict(vlmc.dt2c15, newdt2, type = "ALL")
+
+data(bnrf1)
+(vbnrf &lt;- vlmc(bnrf1EB))
+(pA &lt;- predict(vbnrf, bnrf1EB[1:24], type = "ALL"))
+ pc &lt;- predict(vbnrf, bnrf1EB[1:24], type = "class")
+ pr &lt;- predict(vbnrf, bnrf1EB[1:24], type = "resp")
+stopifnot(as.integer  (pc[-1])   == 1 + pr[-1],
+          as.character(pc[-1]) == strsplit(vbnrf$alpha,NULL)[[1]][1 + pr[-1]])
+
+##-- Example of a "perfect" fit -- just for illustration:
+##			    the default, thresh = 2 doesn't fit perfectly(i=38)
+(vlmc.dt2c0th1 &lt;- vlmc(dt2, cutoff = 0, thresh = 1))
+
+## "Fitted" = "Data" (but the first which can't be predicted):
+stopifnot(dt2[-1] == predict(vlmc.dt2c0th1,type = "response")[-1])
+</code></pre>
+
+
+</div>

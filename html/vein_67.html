@@ -1,0 +1,124 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>emis_wear</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Emission estimation from tyre, brake and road surface wear</h2>
+
+<h3>Description</h3>
+
+<p><code>emis_wear</code> estimates wear emissions. The sources are tyres,
+breaks and road surface.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">emis_wear(
+  veh,
+  lkm,
+  ef,
+  what = "tyre",
+  speed,
+  agemax = ncol(veh),
+  profile,
+  hour = nrow(profile),
+  day = ncol(profile)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>veh</code></td>
+<td>
+<p>Object of class "Vehicles"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lkm</code></td>
+<td>
+<p>Length of the road in km.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ef</code></td>
+<td>
+<p>list of emission factor functions class "EmissionFactorsList",
+length equals to hours.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>what</code></td>
+<td>
+<p>Character for indicating "tyre", "break" or "road"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>speed</code></td>
+<td>
+<p>Speed data-frame with number of columns as hours</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>agemax</code></td>
+<td>
+<p>Age of oldest vehicles for that category</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>profile</code></td>
+<td>
+<p>Numerical or dataframe with nrows equal to 24 and ncol
+7 day of the week</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hour</code></td>
+<td>
+<p>Number of considered hours in estimation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>day</code></td>
+<td>
+<p>Number of considered days in estimation</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>emission estimation  g/h
+</p>
+
+
+<h3>References</h3>
+
+<p>Ntziachristos and Boulter 2016. Automobile tyre and break wear
+and road abrasion. In: EEA, EMEP. EEA air pollutant emission inventory
+guidebook-2009. European Environment Agency, Copenhagen, 2016
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(net)
+data(pc_profile)
+pc_week &lt;- temp_fact(net$ldv[1:10] + net$hdv[1:10], pc_profile[, 1])
+df &lt;- netspeed(pc_week, net$ps[1:10], net$ffs[1:10],
+              net$capacity[1:10], net$lkm[1:10], alpha = 1)
+ef &lt;- ef_wear(wear = "tyre", type = "PC", pol = "PM10", speed = df)
+emi &lt;- emis_wear(veh = age_ldv(net$ldv[1:10], name = "VEH"),
+                 lkm = net$lkm[1:10], ef = ef, speed = df,
+                 profile = pc_profile[, 1])
+emi
+
+## End(Not run)
+</code></pre>
+
+
+</div>

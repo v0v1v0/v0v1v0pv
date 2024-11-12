@@ -1,0 +1,234 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>paretoff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Pareto and Truncated Pareto Distribution Family Functions </h2>
+
+<h3>Description</h3>
+
+<p>Estimates one of the parameters of the Pareto(I) distribution
+by maximum likelihood estimation.
+Also includes the upper truncated Pareto(I) distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">paretoff(scale = NULL, lshape = "loglink")
+truncpareto(lower, upper, lshape = "loglink", ishape = NULL, imethod = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape</code></td>
+<td>
+
+<p>Parameter link function applied to the parameter <code class="reqn">k</code>.
+See <code>Links</code> for more choices.
+A log link is the default because <code class="reqn">k</code> is positive.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+
+<p>Numeric.
+The parameter <code class="reqn">\alpha</code> below.
+If the user inputs a number then it is assumed known with this value.
+The default means it is estimated by maximum likelihood
+estimation, which means <code>min(y)</code> is used,
+where <code>y</code> is the response vector.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower, upper</code></td>
+<td>
+
+<p>Numeric.
+Lower and upper limits for the truncated Pareto distribution.
+Each must be positive and of length 1.
+They are called <code class="reqn">\alpha</code> and <code class="reqn">U</code> below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape</code></td>
+<td>
+
+<p>Numeric.
+Optional initial value for the shape parameter.
+A <code>NULL</code> means a value is obtained internally.
+If failure to converge occurs try specifying a value, e.g., 1 or 2.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+If failure to converge occurs then try specifying a value for
+<code>ishape</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A random variable <code class="reqn">Y</code> has a Pareto distribution if
+</p>
+<p style="text-align: center;"><code class="reqn">P[Y&gt;y] = C / y^{k}</code>
+</p>
+
+<p>for some positive <code class="reqn">k</code> and <code class="reqn">C</code>.
+This model is important in many applications due to the power
+law probability tail, especially for large values of <code class="reqn">y</code>.
+</p>
+<p>The Pareto distribution, which is used a lot in economics,
+has a probability density function that can be written
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\alpha,k) = k  \alpha^k / y^{k+1}</code>
+</p>
+
+<p>for <code class="reqn">0 &lt; \alpha &lt; y</code> and <code class="reqn">0&lt;k</code>.
+The <code class="reqn">\alpha</code> is called the <em>scale</em> parameter, and
+it is either assumed <em>known</em> or else <code>min(y)</code> is used.
+The parameter <code class="reqn">k</code> is called the <em>shape</em> parameter.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">\alpha k/(k-1)</code> provided <code class="reqn">k &gt; 1</code>.
+Its variance is
+<code class="reqn">\alpha^2 k /((k-1)^2 (k-2))</code>
+provided <code class="reqn">k &gt; 2</code>.
+</p>
+<p>The upper truncated Pareto distribution
+has a probability density function that can be written
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = k \alpha^k / [y^{k+1} (1-(\alpha/U)^k)]</code>
+</p>
+
+<p>for <code class="reqn">0 &lt; \alpha &lt; y &lt; U &lt; \infty</code>
+and <code class="reqn">k&gt;0</code>.
+Possibly, better names for <code class="reqn">k</code> are
+the <em>index</em> and <em>tail</em> parameters.
+Here, <code class="reqn">\alpha</code> and <code class="reqn">U</code> are known.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">k \alpha^k (U^{1-k}-\alpha^{1-k}) /
+       [(1-k)(1-(\alpha/U)^k)]</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>The usual or unbounded Pareto distribution has two
+parameters (called <code class="reqn">\alpha</code> and <code class="reqn">k</code> here)
+but the family function <code>paretoff</code> estimates only
+<code class="reqn">k</code> using iteratively reweighted least squares.
+The MLE of the <code class="reqn">\alpha</code> parameter lies on the
+boundary and is <code>min(y)</code> where <code>y</code> is the
+response. Consequently, using the default argument
+values, the standard errors are incorrect when one does a
+<code>summary</code> on the fitted object. If the user inputs
+a value for <code>alpha</code> then it is assumed known with
+this value and then <code>summary</code> on the fitted object
+should be correct. Numerical problems may occur for small
+<code class="reqn">k</code>, e.g., <code class="reqn">k &lt; 1</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Outside of economics, the Pareto distribution is known as the
+Bradford distribution.
+</p>
+<p>For <code>paretoff</code>,
+if the estimate of <code class="reqn">k</code> is less than or equal to unity
+then the fitted values will be <code>NA</code>s.
+Also, <code>paretoff</code> fits the Pareto(I) distribution.
+See <code>paretoIV</code> for the more general Pareto(IV/III/II)
+distributions, but there is a slight change in notation: <code class="reqn">s = k</code>
+and <code class="reqn">b=\alpha</code>.
+</p>
+<p>In some applications the Pareto law is truncated by a
+natural upper bound on the probability tail.
+The upper truncated Pareto distribution has three parameters (called
+<code class="reqn">\alpha</code>, <code class="reqn">U</code> and <code class="reqn">k</code> here) but the family function
+<code>truncpareto()</code> estimates only <code class="reqn">k</code>.
+With known lower and upper limits, the ML estimator of <code class="reqn">k</code> has
+the usual properties of MLEs.
+Aban (2006) discusses other inferential details.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+<p>Aban, I. B., Meerschaert, M. M. and Panorska, A. K. (2006).
+Parameter estimation for the truncated Pareto distribution,
+<em>Journal of the American Statistical Association</em>,
+<b>101</b>(473),
+270–277.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Pareto</code>,
+<code>Truncpareto</code>,
+<code>paretoIV</code>,
+<code>gpd</code>,
+<code>benini1</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">alpha &lt;- 2; kay &lt;- exp(3)
+pdata &lt;- data.frame(y = rpareto(n = 1000, scale = alpha, shape = kay))
+fit &lt;- vglm(y ~ 1, paretoff, data = pdata, trace = TRUE)
+fit@extra  # The estimate of alpha is here
+head(fitted(fit))
+with(pdata, mean(y))
+coef(fit, matrix = TRUE)
+summary(fit)  # Standard errors are incorrect!!
+
+# Here, alpha is assumed known
+fit2 &lt;- vglm(y ~ 1, paretoff(scale = alpha), data = pdata, trace = TRUE)
+fit2@extra  # alpha stored here
+head(fitted(fit2))
+coef(fit2, matrix = TRUE)
+summary(fit2)  # Standard errors are okay
+
+# Upper truncated Pareto distribution
+lower &lt;- 2; upper &lt;- 8; kay &lt;- exp(2)
+pdata3 &lt;- data.frame(y = rtruncpareto(n = 100, lower = lower,
+                                      upper = upper, shape = kay))
+fit3 &lt;- vglm(y ~ 1, truncpareto(lower, upper), data = pdata3, trace = TRUE)
+coef(fit3, matrix = TRUE)
+c(fit3@misc$lower, fit3@misc$upper)
+</code></pre>
+
+
+</div>

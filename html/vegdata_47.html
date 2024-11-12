@@ -1,0 +1,116 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tv.write</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Write species-plot observations and site information to Turboveg database.</h2>
+
+<h3>Description</h3>
+
+<p>Write species-plot observations and site information to Turboveg database.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tv.write(x, site, name, tvadmin, remarks, dict = "", cover = c("code", "perc"),
+drop = FALSE, obl = TRUE, overwrite = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>(data.frame) Either observations data.frame with RELEVE_NR, TaxonUsageID and COVER_CODE (see tv.obs) columns or vegetation matrix of class "veg".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>site</code></td>
+<td>
+<p>(character) Header data for plots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>(character) Name of the new database.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tvadmin</code></td>
+<td>
+<p>(data.frame) Dataframe with plot UUID's and Turboveg columns from TvAdmin.dbf. A new file with new unique identifiers will be created if omitted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>remarks</code></td>
+<td>
+<p>(data.frame) Remarks in Turboveg format if the comments for individual plots exceed 254 characters. See remarks.dbf in Turboveg databases. An empty file will be created if omitted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dict</code></td>
+<td>
+<p>(character) Turboveg dictionary name</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cover</code></td>
+<td>
+<p>(logical) Use of covercodes or (mean) cover percentages, see Details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drop</code></td>
+<td>
+<p>(logical) Drop columns which are empty or contain only NA values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obl</code></td>
+<td>
+<p>(logical) Add obligatory fields defined in the TV dictionary but not present in the site data table.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overwrite</code></td>
+<td>
+<p>(logical) Should an existing database be overwritten.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>By default Covercode is written to Turboveg. This is only meaningful, if correct CoverScales are given in the site dataframe. Unique plot ID's are stored in *TvAdmin.dbf*. If you want to preserve already given UUID's you have to prepare an appropriate data.frame. Look for existing *TvAdmin.dbf* files for necessary columns.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Five files will be created in "tv_home/Data/databasename" directory. *tvabund.dbf* with occurrence information n long format, *tvhabita.dbf* with plot information, remarks.dbf with comments longer then 255 characters, *TvAdmin.dbf* with plot UUID's and tvwin.dbf with information about taxonomic reference list, and dictionary used.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Florian Jansen @email florian.jansen@uni-rostock.de
+</p>
+
+
+<h3>See Also</h3>
+
+<p>tv.veg
+</p>
+
+
+</div>

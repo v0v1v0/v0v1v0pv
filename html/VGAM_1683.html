@@ -1,0 +1,158 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>slash</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Slash Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the two parameters of the
+slash distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">slash(lmu = "identitylink", lsigma = "loglink",
+      imu = NULL, isigma = NULL, gprobs.y = ppoints(8), nsimEIM = 250,
+      zero = NULL, smallno = .Machine$double.eps*1000)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>lmu, lsigma</code></td>
+<td>
+
+<p>Parameter link functions applied to the <code class="reqn">\mu</code>
+and <code class="reqn">\sigma</code> parameters, respectively.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>imu, isigma</code></td>
+<td>
+
+<p>Initial values.
+A <code>NULL</code> means an initial value is chosen internally.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gprobs.y</code></td>
+<td>
+
+<p>Used to compute the initial values for <code>mu</code>.
+This argument is fed into the <code>probs</code> argument of
+<code>quantile</code> to construct a grid,
+which is used to evaluate the log-likelihood.
+This must have values between 0 and 1.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smallno</code></td>
+<td>
+
+<p>Small positive number, used to test for the singularity.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The standard slash distribution is the distribution of the ratio of
+a standard normal variable to an independent standard uniform(0,1) variable.
+It is mainly of use in simulation studies.
+One of its properties is that it has heavy tails, similar to those of
+the Cauchy.
+</p>
+<p>The general slash distribution can be obtained by replacing
+the univariate normal variable by a general normal
+<code class="reqn">N(\mu,\sigma)</code> random variable.
+It has a density that can be written as
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \left\{
+\begin{array}{cl}
+  1/(2 \sigma \sqrt(2 \pi)) &amp; if y=\mu, \\
+  1-\exp(-(((y-\mu)/\sigma)^2)/2))/(\sqrt(2 pi) \sigma ((y-\mu)/\sigma)^2) &amp; if y \ne \mu.
+\end{array} \right . </code>
+</p>
+
+<p>where <code class="reqn">\mu</code> and <code class="reqn">\sigma</code> are
+the mean and standard deviation of
+the univariate normal distribution respectively.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Fisher scoring using simulation is used.
+Convergence is often quite slow.
+Numerical problems may occur.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee and C. S. Chee </p>
+
+
+<h3>References</h3>
+
+<p>Johnson, N. L. and Kotz, S. and Balakrishnan, N. (1994).
+<em>Continuous Univariate Distributions</em>,
+2nd edition, Volume 1, New York: Wiley.
+</p>
+<p>Kafadar, K. (1982).
+A Biweight Approach to the One-Sample Problem
+<em>Journal of the American Statistical Association</em>,
+<b>77</b>, 416–424.
+</p>
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>rslash</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+sdata &lt;- data.frame(y = rslash(n = 1000, mu = 4, sigma = exp(2)))
+fit &lt;- vglm(y ~ 1, slash, data = sdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+summary(fit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

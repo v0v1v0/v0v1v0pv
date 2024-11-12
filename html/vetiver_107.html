@@ -1,0 +1,165 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_api</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a Plumber API to predict with a deployable <code>vetiver_model()</code> object</h2>
+
+<h3>Description</h3>
+
+<p>Use <code>vetiver_api()</code> to add a POST endpoint for predictions from a
+trained <code>vetiver_model()</code> to a Plumber router.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetiver_api(
+  pr,
+  vetiver_model,
+  path = "/predict",
+  debug = is_interactive(),
+  ...
+)
+
+vetiver_pr_post(
+  pr,
+  vetiver_model,
+  path = "/predict",
+  debug = is_interactive(),
+  ...,
+  check_prototype = TRUE,
+  check_ptype = deprecated()
+)
+
+vetiver_pr_docs(pr, vetiver_model, path = "/predict", all_docs = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>pr</code></td>
+<td>
+<p>A Plumber router, such as from <code>plumber::pr()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vetiver_model</code></td>
+<td>
+<p>A deployable <code>vetiver_model()</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path</code></td>
+<td>
+<p>The endpoint path</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>debug</code></td>
+<td>
+<p><code>TRUE</code> provides more insight into your API errors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments passed to <code>predict()</code>, such as prediction <code>type</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check_prototype</code></td>
+<td>
+<p>Should the input data prototype stored in
+<code>vetiver_model</code> (used for visual API documentation) also be used to check
+new data at prediction time? Defaults to <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check_ptype</code></td>
+<td>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all_docs</code></td>
+<td>
+<p>Should the interactive visual API documentation be created
+for <em>all</em> POST endpoints in the router <code>pr</code>? This defaults to <code>TRUE</code>, and
+assumes that all POST endpoints use the <code>vetiver_model()</code> input data
+prototype.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>You can first store and version your <code>vetiver_model()</code> with
+<code>vetiver_pin_write()</code>, and then create an API endpoint with <code>vetiver_api()</code>.
+</p>
+<p>Setting <code>debug = TRUE</code> may expose any sensitive data from your model in
+API errors.
+</p>
+<p>Several GET endpoints will also be added to the router <code>pr</code>, depending on the
+characteristics of the model object:
+</p>
+
+<ul>
+<li>
+<p> a <code style="white-space: pre;">⁠/pin-url⁠</code> endpoint to return the URL of the pinned model
+</p>
+</li>
+<li>
+<p> a <code style="white-space: pre;">⁠/metadata⁠</code> endpoint to return any metadata stored with the model
+</p>
+</li>
+<li>
+<p> a <code style="white-space: pre;">⁠/ping⁠</code> endpoint for the API health
+</p>
+</li>
+<li>
+<p> a <code style="white-space: pre;">⁠/prototype⁠</code> endpoint for the model's input data prototype (use
+<code>cereal::cereal_from_json()</code>) to convert this back to a <a href="https://vctrs.r-lib.org/articles/type-size.html">vctrs ptype</a>
+</p>
+</li>
+</ul>
+<p>The function <code>vetiver_api()</code> uses:
+</p>
+
+<ul>
+<li> <p><code>vetiver_pr_post()</code> for endpoint definition and
+</p>
+</li>
+<li> <p><code>vetiver_pr_docs()</code> to create visual API documentation
+</p>
+</li>
+</ul>
+<p>These modular functions are available for more advanced use cases.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A Plumber router with the prediction endpoint added.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+cars_lm &lt;- lm(mpg ~ ., data = mtcars)
+v &lt;- vetiver_model(cars_lm, "cars_linear")
+
+library(plumber)
+pr() %&gt;% vetiver_api(v)
+## is the same as:
+pr() %&gt;% vetiver_pr_post(v) %&gt;% vetiver_pr_docs(v)
+## for either, next, pipe to `pr_run()`
+
+</code></pre>
+
+
+</div>

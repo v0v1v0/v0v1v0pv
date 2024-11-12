@@ -1,0 +1,81 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>protectedCall</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Wrap Function-Calls to Execute Additional Checks.</h2>
+
+<h3>Description</h3>
+
+<p>Function can be used to wrap function-calls, here, intended for model fitting
+functions <code>anovaVCA</code>, <code>anovaMM</code>, <code>remlVCA</code>, <code>remlMM</code>,
+<code>fitVCA</code>, and <code>fitLMM</code>. When wrapped, there is the option to 
+perform additional checks and reporting back identified problems by setting 'ErrorType="Detailed"'.
+There is no error-handling provided by this function, i.e. any error issued will remain an error.
+It would need to be handled by <code>try</code>, <code>tryCatch</code> or similar.
+Note, that inline definition of datasets within 'expr' is not supported and will issue an error.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">protectedCall(expr, ErrorType = c("Simple", "Detailed"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>expr</code></td>
+<td>
+<p>(expression) to be protected, typically, a call to a model-fitting 
+function from this package (see details)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ErrorType</code></td>
+<td>
+<p>(ErrorType) "Simple"=default error-messages, "Detailed"= additional
+data consistency checks will be performed</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# nothing happens if no error occurs
+data(dataEP05A2_1)
+res &lt;- protectedCall(anovaVCA(form=y~day/run, Data=dataEP05A2_1))
+res
+# error message without additional consistency checks (default)
+dat3 &lt;- data.frame(	y=rnorm(8,10),
+						day=rep(c(1,2),c(4,4)), 
+						run=rep(c(2,1), c(4,4)))
+protectedCall(anovaVCA(form=y~day/run, Data=dat3), ErrorType="Simple")
+# error message with additional consistency checks hopefully helpful for the user
+protectedCall(anovaVCA(form=y~day/run, Data=dat3), ErrorType="Detailed")
+
+# handle error
+res &lt;- try(protectedCall(anovaVCA(form=y~day/run, Data=dat3), ErrorType="Detailed"), silent=TRUE)
+if(is(res, "try-error"))
+	cat(sub(", ErrorType .*\\)", "", sub("protectedCall\\(", "", res)))
+
+# inline-definition of data.frames issues an error
+protectedCall(anovaVCA(	form=y~day/run, 
+							Data=data.frame(y=rnorm(8,10),
+								day=rep(c(1,2),c(4,4)), 
+								run=rep(c(2,1), c(4,4)))))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

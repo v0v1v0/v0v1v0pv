@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>clustcentroid</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Cluster centers of a classification
+</h2>
+
+<h3>Description</h3>
+
+<p>Function <code>clustcentroid</code> calculates the centroid (multivariate average) coordinates of a classification. Function <code>clustmedoid</code> determines the medoid (object whose average dissimilarity to all the other objects is minimal) for each cluster in the classification.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">clustcentroid(x, y, m = 1)
+clustmedoid(x, y, m = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>Community data, a site-by-species data frame. In function <code>clustmedoid</code>, <code>x</code> can alternatively be an object of class <code>dist</code> (otherwise, the dissimilarity measure is assumed to be the Euclidean distance). 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+
+<p>It can be (a) A vector indicating the cluster that each object in <code>x</code> belongs to; (b) a fuzzy/hard site-by-group matrix of membership values; (c) an object of class <code>vegclust</code> or <code>vegclass</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>Fuzziness exponent, only effective when <code>y</code> is a fuzzy membership matrix.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Function <code>clustcentroid</code> returns a group-by-species matrix containing species average abundance values (i.e. the coordinates of each cluster centroid). Function <code>clustmedoid</code> returns a vector of indices (medoids).
+</p>
+
+
+<h3>Note</h3>
+
+<p>In order to assign new plot record data into a predefined set of classes, one should use functions <code>as.vegclust</code> and <code>vegclass</code> instead.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, CREAF
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>as.vegclust</code>, <code>vegclass</code>, <code>vegclust</code>, <code>kmeans</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Loads stats
+library(stats)
+  
+## Loads data
+data(wetland)
+  
+## This equals the chord transformation 
+## (see also \code{\link{decostand}} in package 'vegan')
+wetland.chord = as.data.frame(sweep(as.matrix(wetland), 1,
+                              sqrt(rowSums(as.matrix(wetland)^2)), "/"))
+
+## Performs a K-means clustering
+wetland.km = kmeans(wetland.chord, centers=3, nstart=10)
+
+## Gets the coordinates corresponding to the centroids of KM clusters
+clustcentroid(wetland.chord, y=wetland.km$cluster)
+
+## Gets the object indices corresponding to the medoids of KM clusters
+clustmedoid(wetland.chord, y=wetland.km$cluster)
+
+</code></pre>
+
+
+</div>

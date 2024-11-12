@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>iterative_grid_search</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Iterative Grid Search</h2>
+
+<h3>Description</h3>
+
+<p><code>iterative_grid_search</code> is an iterative method to choose hyper-parameters of
+the linear Gaussian State-Space Model with time-invariant variances.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">iterative_grid_search(
+  X,
+  y,
+  q_list,
+  Q_init = NULL,
+  max_iter = 0,
+  delay = 1,
+  use = NULL,
+  restrict = NULL,
+  mode = "gaussian",
+  p1 = 0,
+  ncores = 1,
+  train_theta1 = NULL,
+  train_Q = NULL,
+  verbose = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>the explanatory variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>the observations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q_list</code></td>
+<td>
+<p>the possible values of <code>diag(Q) / sig^2</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Q_init</code></td>
+<td>
+<p>(default <code>NULL</code>) initial value of <code>Q / sig^2</code>,
+if <code>NULL</code> it is set to 0</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_iter</code></td>
+<td>
+<p>(optional 0) maximal number of iterations. If 0 then optimization is
+done as long as we can improve the log-likelihood</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delay</code></td>
+<td>
+<p>(optional, default 1) to predict <code>y[t]</code> we have access to <code>y[t-delay]</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use</code></td>
+<td>
+<p>(optional, default <code>NULL</code>) the availability variable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>restrict</code></td>
+<td>
+<p>(optional, default <code>NULL</code>) if not <code>NULL</code> it allows to specify the
+indices of the diagonal coefficient to optimize</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mode</code></td>
+<td>
+<p>(optional, default <code>gaussian</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p1</code></td>
+<td>
+<p>(optional, default <code>0</code>) coefficient for <code>P1/sig^2 = p1 I</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncores</code></td>
+<td>
+<p>(optional, default <code>1</code>) number of available cores for computation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>train_theta1</code></td>
+<td>
+<p>(optional, default <code>NULL</code>) training set for estimation of <code>theta1</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>train_Q</code></td>
+<td>
+<p>(optional, default <code>NULL</code>) time steps on which the log-likelihood is computed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>(optional, default <code>TRUE</code>) whether to print intermediate progress</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>We restrict ourselves to a diagonal matrix <code>Q</code> and we optimize <code>Q / sig^2</code> on
+a grid. Each diagonal coefficient is assumed to belong to a pre-defined <code>q_list</code>.<br>
+We maximize the log-likelihood on that region of search in an iterative fashion.
+At each step, we change the diagonal coefficient improving the most the log-likelihood.
+We stop when there is no possible improvement. This doesn't guarantee an optimal point
+on the grid, but the computational time is much lower.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a list containing values for <code>P,theta,sig,Q</code>, as well as <code>LOGLIK</code>,
+the evolution of the log-likelihood during the search.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(1)
+### Simulate data
+n &lt;- 100
+d &lt;- 5
+Q &lt;- diag(c(0,0,0.25,0.25,0.25))
+sig &lt;- 1
+
+X &lt;- cbind(matrix(rnorm((d-1)*n,sd=1),n,d-1),1)
+theta &lt;- matrix(rnorm(d), d, 1)
+theta_arr &lt;- matrix(0, n, d)
+for (t in 1:n) {
+  theta_arr[t,] &lt;- theta
+  theta &lt;- theta + matrix(mvtnorm::rmvnorm(1,matrix(0,d,1),Q),d,1)
+}
+y &lt;- rowSums(X * theta_arr) + rnorm(n, sd=sig)
+
+l &lt;- viking::iterative_grid_search(X, y, seq(0,1,0.25))
+print(l$Q)
+print(l$sig)
+</code></pre>
+
+
+</div>

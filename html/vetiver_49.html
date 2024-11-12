@@ -1,0 +1,219 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_compute_metrics</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Aggregate model metrics over time for monitoring</h2>
+
+<h3>Description</h3>
+
+<p>These three functions can be used for model monitoring (such as in a
+monitoring dashboard):
+</p>
+
+<ul>
+<li> <p><code>vetiver_compute_metrics()</code> computes metrics (such as accuracy for a
+classification model or RMSE for a regression model) at a chosen time
+aggregation <code>period</code>
+</p>
+</li>
+<li> <p><code>vetiver_pin_metrics()</code> updates an existing pin storing model metrics
+over time
+</p>
+</li>
+<li> <p><code>vetiver_plot_metrics()</code> creates a plot of metrics over time
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetiver_compute_metrics(
+  data,
+  date_var,
+  period,
+  truth,
+  estimate,
+  ...,
+  metric_set = yardstick::metrics,
+  every = 1L,
+  origin = NULL,
+  before = 0L,
+  after = 0L,
+  complete = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A <code>data.frame</code> containing the columns specified by <code>truth</code>,
+<code>estimate</code>, and <code>...</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>date_var</code></td>
+<td>
+<p>The column in <code>data</code> containing dates or date-times for
+monitoring, to be aggregated with <code>.period</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p><code style="white-space: pre;">⁠[character(1)]⁠</code>
+</p>
+<p>A string defining the period to group by. Valid inputs can be roughly
+broken into:
+</p>
+
+<ul>
+<li> <p><code>"year"</code>, <code>"quarter"</code>, <code>"month"</code>, <code>"week"</code>, <code>"day"</code>
+</p>
+</li>
+<li> <p><code>"hour"</code>, <code>"minute"</code>, <code>"second"</code>, <code>"millisecond"</code>
+</p>
+</li>
+<li> <p><code>"yweek"</code>, <code>"mweek"</code>
+</p>
+</li>
+<li> <p><code>"yday"</code>, <code>"mday"</code>
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>truth</code></td>
+<td>
+<p>The column identifier for the true results (that
+is <code>numeric</code> or <code>factor</code>). This should be an unquoted column name
+although this argument is passed by expression and support
+quasiquotation (you can unquote column
+names).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estimate</code></td>
+<td>
+<p>The column identifier for the predicted results
+(that is also <code>numeric</code> or <code>factor</code>). As with <code>truth</code> this can be
+specified different ways but the primary method is to use an
+unquoted variable name.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>A set of unquoted column names or one or more
+<code>dplyr</code> selector functions to choose which variables contain the
+class probabilities. If <code>truth</code> is binary, only 1 column should be selected,
+and it should correspond to the value of <code>event_level</code>. Otherwise, there
+should be as many columns as factor levels of <code>truth</code> and the ordering of
+the columns should be the same as the factor levels of <code>truth</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metric_set</code></td>
+<td>
+<p>A <code>yardstick::metric_set()</code> function for computing metrics.
+Defaults to <code>yardstick::metrics()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>every</code></td>
+<td>
+<p><code style="white-space: pre;">⁠[positive integer(1)]⁠</code>
+</p>
+<p>The number of periods to group together.
+</p>
+<p>For example, if the period was set to <code>"year"</code> with an every value of <code>2</code>,
+then the years 1970 and 1971 would be placed in the same group.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>origin</code></td>
+<td>
+<p><code style="white-space: pre;">⁠[Date(1) / POSIXct(1) / POSIXlt(1) / NULL]⁠</code>
+</p>
+<p>The reference date time value. The default when left as <code>NULL</code> is the
+epoch time of <code style="white-space: pre;">⁠1970-01-01 00:00:00⁠</code>, <em>in the time zone of the index</em>.
+</p>
+<p>This is generally used to define the anchor time to count from, which is
+relevant when the every value is <code style="white-space: pre;">⁠&gt; 1⁠</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>before, after</code></td>
+<td>
+<p><code style="white-space: pre;">⁠[integer(1) / Inf]⁠</code>
+</p>
+<p>The number of values before or after the current element to
+include in the sliding window. Set to <code>Inf</code> to select all elements
+before or after the current element. Negative values are allowed, which
+allows you to "look forward" from the current element if used as the
+<code>.before</code> value, or "look backwards" if used as <code>.after</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>complete</code></td>
+<td>
+<p><code style="white-space: pre;">⁠[logical(1)]⁠</code>
+</p>
+<p>Should the function be evaluated on complete windows only? If <code>FALSE</code>,
+the default, then partial computations will be allowed.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For arguments used more than once in your monitoring dashboard,
+such as <code>date_var</code>, consider using
+<a href="https://bookdown.org/yihui/rmarkdown/parameterized-reports.html">R Markdown parameters</a>
+to reduce repetition and/or errors.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A dataframe of metrics.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vetiver_pin_metrics()</code>, <code>vetiver_plot_metrics()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(dplyr)
+library(parsnip)
+data(Chicago, package = "modeldata")
+Chicago &lt;- Chicago %&gt;% select(ridership, date, all_of(stations))
+training_data &lt;- Chicago %&gt;% filter(date &lt; "2009-01-01")
+testing_data &lt;- Chicago %&gt;% filter(date &gt;= "2009-01-01", date &lt; "2011-01-01")
+monitoring &lt;- Chicago %&gt;% filter(date &gt;= "2011-01-01", date &lt; "2012-12-31")
+lm_fit &lt;- linear_reg() %&gt;% fit(ridership ~ ., data = training_data)
+
+library(pins)
+b &lt;- board_temp()
+
+original_metrics &lt;-
+    augment(lm_fit, new_data = testing_data) %&gt;%
+    vetiver_compute_metrics(date, "week", ridership, .pred, every = 4L)
+
+new_metrics &lt;-
+    augment(lm_fit, new_data = monitoring) %&gt;%
+    vetiver_compute_metrics(date, "week", ridership, .pred, every = 4L)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,122 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>read_bed</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Read BED and related files.</h2>
+
+<h3>Description</h3>
+
+<p>read functions for BED and related formats. Filenames can be
+local file or URLs. The read functions load data into tbls with consistent
+<code>chrom</code>, <code>start</code> and <code>end</code> colnames.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">read_bed(
+  filename,
+  col_types = bed12_coltypes,
+  sort = TRUE,
+  ...,
+  n_fields = NULL
+)
+
+read_bed12(filename, ...)
+
+read_bedgraph(filename, ...)
+
+read_narrowpeak(filename, ...)
+
+read_broadpeak(filename, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>filename</code></td>
+<td>
+<p>file or URL</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col_types</code></td>
+<td>
+<p>column type spec for <code>readr::read_tsv()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sort</code></td>
+<td>
+<p>sort the tbl by chrom and start</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>options to pass to <code>readr::read_tsv()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_fields</code></td>
+<td>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><a href="https://genome.ucsc.edu/FAQ/FAQformat.html#format1">https://genome.ucsc.edu/FAQ/FAQformat.html#format1</a>
+</p>
+<p><a href="https://genome.ucsc.edu/FAQ/FAQformat.html#format1">https://genome.ucsc.edu/FAQ/FAQformat.html#format1</a>
+</p>
+<p><a href="https://genome.ucsc.edu/goldenPath/help/bedgraph.html">https://genome.ucsc.edu/goldenPath/help/bedgraph.html</a>
+</p>
+<p><a href="https://genome.ucsc.edu/FAQ/FAQformat.html#format12">https://genome.ucsc.edu/FAQ/FAQformat.html#format12</a>
+</p>
+<p><a href="https://genome.ucsc.edu/FAQ/FAQformat.html#format13">https://genome.ucsc.edu/FAQ/FAQformat.html#format13</a>
+</p>
+
+
+<h3>Value</h3>
+
+<p>ivl_df
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other read functions: 
+<code>read_genome()</code>,
+<code>read_vcf()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># read_bed assumes 3 field BED format.
+read_bed(valr_example("3fields.bed.gz"))
+
+# result is sorted by chrom and start unless `sort = FALSE`
+read_bed(valr_example("3fields.bed.gz"), sort = FALSE)
+
+
+read_bed12(valr_example("mm9.refGene.bed.gz"))
+
+
+read_bedgraph(valr_example("test.bg.gz"))
+
+
+read_narrowpeak(valr_example("sample.narrowPeak.gz"))
+
+
+read_broadpeak(valr_example("sample.broadPeak.gz"))
+
+</code></pre>
+
+
+</div>

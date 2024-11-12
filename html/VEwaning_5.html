@@ -1,0 +1,73 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ve</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Retrieve the Estimated Vaccine Efficacy</h2>
+
+<h3>Description</h3>
+
+<p>Uses a prior veWaning() analysis to estimate the vaccine efficacy
+at the provided times since vaccination.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ve(x, taus)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class VEwaning. The object returned by a call to
+veWaning()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>taus</code></td>
+<td>
+<p>A numeric vector object. The times since vaccination at which
+the vaccine efficacy is to be estimated.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A matrix object. The first column contains the times since
+vaccination at which the estimates are provided; the second column
+contains estimated vaccine efficacy; and the third is the standard error.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(veWaningData)
+
+set.seed(1234)
+
+ind &lt;- sample(1:nrow(veWaningData), 2500)
+# NOTE: This sample size is chosen for example only -- larger data sets
+# should be used.
+
+res &lt;- veWaning(data = veWaningData[ind,], 
+                L = 52,  
+                lag = 6,  
+                modelGam1 = ~ X1+X2+A+A:X1+A:X2, 
+                modelGam2 = ~ X1+X2, 
+                modelEntry = ~ X1+X2, 
+                modelPsiGam1 = ~ X1+X2, 
+                modelPsiGam2 = ~ X1+X2, 
+                gFunc = 'piece', 
+                v = c(20))
+
+ve(x = res, taus = c(10,20,30,40,50))
+</code></pre>
+
+
+</div>

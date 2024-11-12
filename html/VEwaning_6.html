@@ -1,0 +1,285 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>veWaning</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimation of Vaccine Efficacy Ove Time</h2>
+
+<h3>Description</h3>
+
+<p>Implements methods for inference on potential waning of vaccine
+efficacy and for estimation of vaccine efficacy at a user-specified time
+after vaccination based on data from a randomized, double-blind,
+placebo-controlled vaccine trial in which participants may be unblinded
+and placebo subjects may be crossed over to the study vaccine.  The
+methods also allow adjustment for possible confounding via inverse
+probability weighting through specification of models for the trial
+entry process, unblinding mechanisms, and the probability an unblinded
+placebo participant accepts study vaccine. Tsiatis, A. A. and Davidian,
+M. (2021) &lt;arXiv:2102.13103&gt;
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">veWaning(
+  data,
+  L,
+  ...,
+  lag = 0,
+  modelGam1 = NULL,
+  modelGam2 = NULL,
+  modelEntry = NULL,
+  modelPsiGam1 = NULL,
+  modelPsiGam2 = NULL,
+  gFunc = NULL,
+  v = NULL,
+  minWgt = NULL,
+  maxWgt = NULL,
+  txName = "A",
+  infectionTime = "U",
+  entryTime = "E",
+  Gamma = "Gam",
+  unblindTime = "R",
+  vaccinated = "Psi"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data.frame object containing all relevant data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>L</code></td>
+<td>
+<p>A numeric object. The analysis time.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Ignored. Used only to require named inputs.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag</code></td>
+<td>
+<p>A numeric object. The lag time between the initial vaccine
+dose and full efficacy.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modelGam1</code></td>
+<td>
+<p>A formula object. The coxph model for Gamma = 1.
+The LHS is set as the appropriate Surv() object internally. If a LHS
+is provided, it is ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modelGam2</code></td>
+<td>
+<p>A formula object. The coxph model for Gamma = 2.
+The LHS is set as the appropriate Surv() object internally. If a LHS
+is provided, it is ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modelEntry</code></td>
+<td>
+<p>A formula object. The coxph model for entry times.
+The LHS is set as the appropriate Surv() object internally. If a LHS
+is provided, it is ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modelPsiGam1</code></td>
+<td>
+<p>A formula object. The logistic model for vaccination
+for participants with Gamma = 1.
+If a LHS is provided, it is ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modelPsiGam2</code></td>
+<td>
+<p>A formula object. The logistic model for vaccination
+for participants with Gamma = 2.
+If a LHS is provided, it is ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gFunc</code></td>
+<td>
+<p>A character object. The model of infection rates. Must be one
+of {'lin', 'piece', 'splin', 'spcub'} for the linear,
+piecewise constant, linear spline, and cubic spline models respectively</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>A numeric vector. The knots or cut-offs to be used by gFunc.
+If gFunc = 'lin', this input is ignored. For 'splin' and 'spcub', this
+is the knots of the spline on (0,L). For 'piece', v is the cut-offs on 
+(0,L). Note that this input should not include the extremes 0 and L.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minWgt</code></td>
+<td>
+<p>A numeric object. If not NULL, the minimum non-zero value a 
+weight can have, i.e., weight = max(minWgt, weight). If NULL, no
+truncation of weights is performed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxWgt</code></td>
+<td>
+<p>A numeric object. If not NULL, the maximum value a 
+weight can have, i.e., weight = min(maxWgt, weight). If NULL, no
+truncation of weights is performed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>txName</code></td>
+<td>
+<p>A character object. The header of the column of data 
+containing the treatment variable. Default value is 'A'.
+Treatment must be coded as 0/1, where 1 indicates that participant
+was vaccinated; 0 otherwise.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>infectionTime</code></td>
+<td>
+<p>A character object. The header of the column of data 
+containing the time of infection on the scale of the calendar time. 
+Default value is 'U'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>entryTime</code></td>
+<td>
+<p>A character object. The header of the column of data 
+containing the time of entry into the study on the scale of the
+calendar time. Default value is 'E'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Gamma</code></td>
+<td>
+<p>A character object. The header of the column of data 
+containing the category for the unblinding dynamic. 
+Default value is 'Gam'.
+Data must be 0/1/2, where 0 indicates infection occurs before requested/
+offered unblinding; 1 indicates unblinding was requested by participant
+prior to the commencement of participant decision clinic visits; 
+and 2 indicates that unblinding occurred after the commencement of
+participant decision clinic visits</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>unblindTime</code></td>
+<td>
+<p>A character object. The header of the column of data 
+containing the time to requested unblinding, participant  decision
+clinic visit/requested unblinding, or infection, whichever comes first.
+Default value is 'R'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vaccinated</code></td>
+<td>
+<p>A character object. The header of the column of data 
+containing the indicator of vaccination, where 1 if participant is
+vaccinated; 0 otherwise.
+Default value is 'Psi'.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Note the infection time, U, can take 
+values NA or a value &gt; L if the participant did not become infected.
+All other data must be complete.
+</p>
+<p>The returned S3 object has 4 attributes needed for post-processing
+tools ve() and plot(). Specifically, "gFunc" is a character object
+specifying the model selected for the infection rate (input gFunc);
+"v", the knots or cut-offs to be used by gFunc (input v);
+"maxTau", the maximum vaccination time included in the analysis; and
+"lag", the lag time between the initial vaccine dose and full efficacy.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A an S3 object of class "VEwaning", which comprises a list object
+containing 
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+<p>A vector object containing the estimated theta parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cov</code></td>
+<td>
+<p>The covariance estimated using the sandwich estimator.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SE</code></td>
+<td>
+<p>The standard error estimated using the sandwich estimator.</p>
+</td>
+</tr>
+</table>
+<p>and attributes  "gFunc", "maxTau", "lag", and "v", which store
+details of the original analysis that are required for post-processing
+convenience functions ve() and plot(). See details for further
+information.
+</p>
+
+
+<h3>References</h3>
+
+<p>Tsiatis, A. A. and Davidian, M. (2021) Estimating Vaccine
+Efficacy Over Time After a Randomized Study is Unblinded. Submitted.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(veWaningData)
+
+set.seed(1234)
+
+ind &lt;- sample(1:nrow(veWaningData), 2500)
+# NOTE: This sample size is chosen for example only -- larger data sets
+# should be used.
+
+res &lt;- veWaning(data = veWaningData[ind,], 
+                L = 52,  
+                lag = 6,  
+                modelGam1 = ~ X1+X2+A+A:X1+A:X2, 
+                modelGam2 = ~ X1+X2, 
+                modelEntry = ~ X1+X2, 
+                modelPsiGam1 = ~ X1+X2, 
+                modelPsiGam2 = ~ X1+X2, 
+                gFunc = 'piece', 
+                v = c(15,30))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,207 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Genpois0</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generalized Poisson Distribution
+(Original Parameterization)</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and
+random generation
+for the original parameterization of the
+generalized Poisson distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dgenpois0(x, theta, lambda = 0, log = FALSE)
+pgenpois0(q, theta, lambda = 0, lower.tail = TRUE)
+qgenpois0(p, theta, lambda = 0)
+rgenpois0(n, theta, lambda = 0, algorithm = c("qgenpois0",
+          "inv", "bup","chdn", "napp", "bran"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+<p>Vector of quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>Vector of probabilities. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>Similar to <code>runif</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta, lambda</code></td>
+<td>
+
+<p>See <code>genpoisson0</code>.
+The default value of <code>lambda</code> corresponds to an
+ordinary Poisson distribution.
+<em>Nonnegative</em> values
+of <code>lambda</code> are currently required.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail, log</code></td>
+<td>
+
+<p>Similar to <code>Poisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>algorithm</code></td>
+<td>
+
+<p>Character.
+Six choices are available, standing for the
+<em>qgenpois0</em>,
+<em>inversion</em>, <em>build-up</em>, <em>chop-down</em>,
+<em>normal approximation</em> and <em>branching</em> methods.
+The first one is the default and
+calls <code>qgenpois0</code> with <code>runif</code> as
+its first argument.
+The value inputted may be abbreviated, e.g., <code>alg = "n"</code>.
+The last 5 algorithms are a direct implementation of Demirtas (2017)
+and the relative performance of the algorithms are
+described there—however, the vectorization here may render
+the comments on relative speed as no longer holding.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Most of the background to these functions are given
+in <code>genpoisson0</code>.
+Some warnings relevant to this distribution are given there.
+The complicated range of the
+parameter <code>lambda</code> when negative is no longer
+supported because the distribution is not normalized.
+For other GPD variants see <code>Genpois1</code>.
+</p>
+
+
+
+
+<h3>Value</h3>
+
+<p><code>dgenpois0</code> gives the density,
+<code>pgenpois0</code> gives the distribution function,
+<code>qgenpois0</code> gives the quantile function, and
+<code>rgenpois</code> generates random deviates.
+For some of these functions such as
+<code>dgenpois0</code> and <code>pgenpois0</code>
+the value <code>NaN</code> is returned for elements not satisfying
+the parameter restrictions, e.g., if <code class="reqn">\lambda &gt; 1</code>.
+For some of these functions such as
+<code>rgenpois0</code>
+the input must not contain <code>NA</code>s or <code>NaN</code>s, etc. since
+the implemented algorithms are fragile.
+</p>
+
+
+
+<h3>Warning </h3>
+
+<p>These have not been tested thoroughly.
+</p>
+
+
+
+<p>For <code>pgentpois0()</code> <code>mapply</code> is called
+with <code>0:q</code> as input, hence will be very slow and
+memory-hungry for large values of <code>q</code>.
+Likewise <code>qgentpois0()</code> and <code>rgentpois0()</code>
+may suffer from the same limitations.
+</p>
+
+
+<h3>Note</h3>
+
+<p>For <code>rgentpois0()</code>:
+(1). <code>"inv"</code>, <code>"bup"</code> and <code>"chdn"</code> appear similar and
+seem to work okay.
+(2). <code>"napp"</code> works only when theta is large, away from 0.
+It suffers from 0-inflation.
+(3). <code>"bran"</code> has a relatively heavy RHS tail and
+requires positive <code>lambda</code>.
+More details can be found in
+Famoye (1997) and
+Demirtas (2017).
+</p>
+<p>The function <code>dgenpois0</code>
+uses <code>lfactorial</code>, which
+equals <code>Inf</code> when <code>x</code> is approximately <code>1e306</code>
+on many machines.
+So the density is returned as <code>0</code> in very extreme cases;
+see <code>.Machine</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee.
+For <code>rgenpois0()</code> the last 5 algorithms are based on
+code written in H. Demirtas (2017) and vectorized by T. W. Yee;
+but the <code>"bran"</code> algorithm was rewritten from
+Famoye (1997).
+</p>
+
+
+<h3>References</h3>
+
+<p>Demirtas, H. (2017).
+On accurate and precise generation of generalized Poisson variates.
+<em>Communications in Statistics—Simulation and Computation</em>,
+<b>46</b>, 489–499.
+</p>
+<p>Famoye, F. (1997).
+Generalized Poisson random variate generation.
+<em>Amer. J. Mathematical and Management Sciences</em>,
+<b>17</b>, 219–237.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>genpoisson0</code>,
+<code>Genpois1</code>,
+<code>dpois</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">sum(dgenpois0(0:1000, theta = 2, lambda = 0.5))
+## Not run: theta &lt;- 2; lambda &lt;- 0.2; y &lt;- 0:10
+proby &lt;- dgenpois0(y, theta = theta, lambda = lambda, log = FALSE)
+plot(y, proby, type = "h", col = "blue", lwd = 2, ylab = "Pr(Y=y)",
+     main = paste0("Y ~ GP-0(theta=", theta, ", lambda=",
+                   lambda, ")"), las = 1, ylim = c(0, 0.3),
+     sub = "Orange is the Poisson probability function")
+lines(y + 0.1, dpois(y, theta), type = "h", lwd = 2, col = "orange") 
+## End(Not run)
+</code></pre>
+
+
+</div>

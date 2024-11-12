@@ -1,0 +1,151 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sc.studentt2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Scaled Student t Distribution with 2 df Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the location and scale parameters of
+a scaled Student t distribution with 2 degrees of freedom,
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sc.studentt2(percentile = 50, llocation = "identitylink",
+    lscale = "loglink", ilocation = NULL, iscale = NULL,
+    imethod = 1, zero = "scale")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>percentile</code></td>
+<td>
+
+<p>A numerical vector containing values between 0 and 100,
+which are the quantiles and expectiles.
+They will be returned as ‘fitted values’.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>llocation, lscale</code></td>
+<td>
+
+<p>See <code>Links</code> for more choices,
+and <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilocation, iscale, imethod, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for details.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Koenker (1993) solved for the distribution whose quantiles are
+equal to its expectiles.
+Its canonical form has mean and mode at 0,
+and has a heavy tail (in fact, its variance is infinite).
+</p>
+
+<p>The standard (“canonical”) form of this
+distribution can be endowed with a location and scale parameter.
+The standard form has a density
+that can be written as
+</p>
+<p style="text-align: center;"><code class="reqn">f(z) = 2 / (4 + z^2)^{3/2}</code>
+</p>
+
+<p>for real <code class="reqn">y</code>.
+Then <code class="reqn">z = (y-a)/b</code> for location and scale parameters
+<code class="reqn">a</code> and <code class="reqn">b &gt; 0</code>.
+The mean of <code class="reqn">Y</code> is <code class="reqn">a</code>.
+By default, <code class="reqn">\eta_1=a)</code> and
+<code class="reqn">\eta_2=\log(b)</code>.
+The expectiles/quantiles corresponding to <code>percentile</code>
+are returned as the fitted values;
+in particular, <code>percentile = 50</code> corresponds to the mean
+(0.5 expectile) and  median (0.5 quantile).
+</p>
+<p>Note that if <code class="reqn">Y</code> has a standard <code>dsc.t2</code>
+then <code class="reqn">Y = \sqrt{2} T_2</code> where <code class="reqn">T_2</code>
+has a Student-t distribution with 2 degrees of freedom.
+The two parameters here can also be estimated using
+<code>studentt2</code> by specifying <code>df = 2</code> and making
+an adjustment for the scale parameter, however, this <span class="pkg">VGAM</span>
+family function is more efficient since the EIM is known
+(Fisher scoring is implemented.)
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Koenker, R. (1993).
+When are expectiles percentiles? (solution)
+<em>Econometric Theory</em>,
+<b>9</b>, 526–527.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>dsc.t2</code>,
+<code>studentt2</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(123); nn &lt;- 1000
+kdata &lt;- data.frame(x2 = sort(runif(nn)))
+kdata &lt;- transform(kdata, mylocat = 1 + 3 * x2,
+                          myscale = 1)
+kdata &lt;- transform(kdata, y = rsc.t2(nn, loc = mylocat, scale = myscale))
+fit  &lt;- vglm(y ~ x2, sc.studentt2(perc = c(1, 50, 99)), data = kdata)
+fit2 &lt;- vglm(y ~ x2,    studentt2(df = 2), data = kdata)  # 'same' as fit
+
+coef(fit, matrix = TRUE)
+head(fitted(fit))
+head(predict(fit))
+
+# Nice plot of the results
+## Not run:  plot(y ~ x2, data = kdata, col = "blue", las = 1,
+     sub  = paste("n =", nn),
+     main = "Fitted quantiles/expectiles using the sc.studentt2() distribution")
+matplot(with(kdata, x2), fitted(fit), add = TRUE, type = "l", lwd = 3)
+legend("bottomright", lty = 1:3, lwd = 3, legend = colnames(fitted(fit)),
+       col = 1:3) 
+## End(Not run)
+
+fit@extra$percentile  # Sample quantiles
+</code></pre>
+
+
+</div>

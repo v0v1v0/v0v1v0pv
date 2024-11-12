@@ -1,0 +1,113 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vtype</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Estimates the Variable Type in Error Afflicted Data.
+</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the type of variables in not quality controlled data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vtype(data, qvalue=0.75, miss_values=NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+
+<p>a data frame.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qvalue</code></td>
+<td>
+
+<p>Quality value from 0.1 to 1, specifies the proportion of data assumed to be well formatted.
+The default value of 0.75 works very well most of the time. If the quality of the data is very poor, the q-value can be reduced.
+If the sample size is very small, it can be increased to use a greater portion of data.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>miss_values</code></td>
+<td>
+
+<p>a character vector of values considered to be invalid (missing).
+Important, if missing values were coded as -9 or 9999, otherwise it looks like valid numeric values.
+Values as NA, NaN, Inf, -Inf, NULL and spaces are automatic considered as invalid (missing) values.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The prediction is based on a pre-trained random forest model, trained on over 5000 medical variables with OOB accuracy of 99pct.
+The accuracy depends heavily on the type and coding style of data. For example, often categorical variables are coded as integers 1 to x, if the number of categories is very large, there is no way to distinguish it from a continuous integer variable.
+Some types are per definition very sensitive to errors in data, like ID, missing or constant, where a single alternative non-missing value makes it not constant or not missing anymore.
+The data is assumed to be cross sectional, where ID is unique (no multiple entries per ID).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame with following entries
+</p>
+
+<ul>
+<li>
+<p>variable:     name of the variable 
+</p>
+</li>
+<li>
+<p>type:         estimated variable type 
+</p>
+</li>
+<li>
+<p>probability:  probability for estimated type 
+</p>
+</li>
+<li>
+<p>format:       format of the variable (depending on the type) 
+</p>
+</li>
+<li>
+<p>class:        broader categorization of type 
+</p>
+</li>
+<li>
+<p>alternative:  posible alternative type with lesser probability  
+</p>
+</li>
+<li>
+<p>n:            number of non-missing values 
+</p>
+</li>
+<li>
+<p>missings:     number of missing values 
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Application to a sample data set included in the package. 
+
+vtype(sim_nqc_data, miss_values='9999')
+
+</code></pre>
+
+
+</div>

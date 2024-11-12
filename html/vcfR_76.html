@@ -1,0 +1,65 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>is_het</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Query genotypes for heterozygotes</h2>
+
+<h3>Description</h3>
+
+<p>Query a matrix of genotypes for heterozygotes
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">is_het(x, na_is_false = TRUE)
+
+is.het(x, na_is_false = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a matrix of genotypes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na_is_false</code></td>
+<td>
+<p>should missing data be returned as NA (FALSE) or FALSE (TRUE)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function was designed to identify heterozygous positions in a matrix of genotypes.
+The matrix of genotypes can be created with <code>extract.gt</code>.
+Because the goal was to identify heterozygotes it may be reasonable to ignore missing values by setting na_is_false to TRUE so that the resulting matrix will consist of only TRUE and FALSE.
+In order to preserve missing data as missing na_is_false can be set to FALSE where if at least one allele is missing NA is returned.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>extract.gt</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vcfR_test)
+gt &lt;- extract.gt(vcfR_test)
+hets &lt;- is_het(gt)
+# Censor non-heterozygous positions.
+is.na(vcfR_test@gt[,-1][!hets]) &lt;- TRUE
+
+</code></pre>
+
+
+</div>

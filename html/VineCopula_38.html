@@ -1,0 +1,148 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopKPlot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Kendall's Plot for Bivariate Copula Data</h2>
+
+<h3>Description</h3>
+
+<p>This function creates a Kendall's plot (K-plot) of given bivariate copula
+data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopKPlot(u1, u2, PLOT = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>u1, u2</code></td>
+<td>
+<p>Data vectors of equal length with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PLOT</code></td>
+<td>
+<p>Logical; whether the results are plotted. If <code>PLOT = FALSE</code>, the values <code>W.in</code> and <code>Hi.sort</code> are returned (see below;
+default: <code>PLOT = TRUE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional plot arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For observations <code class="reqn">u_{i,j},\ i=1,...,N,\ j=1,2,</code> the K-plot considers two quantities: First, the ordered values of
+the empirical bivariate distribution function
+<code class="reqn">H_i:=\hat{F}_{U_1U_2}(u_{i,1},u_{i,2})</code> and, second, <code class="reqn">W_{i:N}</code>,
+which are the expected values of the order statistics from a random sample
+of size <code class="reqn">N</code> of the random variable <code class="reqn">W=C(U_1,U_2)</code> under the null
+hypothesis of independence between <code class="reqn">U_1</code> and <code class="reqn">U_2</code>. <code class="reqn">W_{i:N}</code>
+can be calculated as follows </p>
+<p style="text-align: center;"><code class="reqn"> W_{i:n}= N {N-1 \choose i-1}
+\int\limits_{0}^1 \omega k_0(\omega) ( K_0(\omega) )^{i-1} ( 1-K_0(\omega)
+)^{N-i} d\omega, </code>
+</p>
+<p> where
+</p>
+<p style="text-align: center;"><code class="reqn">K_0(\omega) = \omega - \omega \log(\omega), </code>
+</p>
+
+<p>and <code class="reqn">k_0(\cdot)</code> is the corresponding density.
+</p>
+<p>K-plots can be seen as the bivariate copula equivalent to QQ-plots. If the
+points of a K-plot lie approximately on the diagonal <code class="reqn">y=x</code>, then
+<code class="reqn">U_1</code> and <code class="reqn">U_2</code> are approximately independent. Any deviation from
+the diagonal line points towards dependence. In case of positive dependence,
+the points of the K-plot should be located above the diagonal line, and vice
+versa for negative dependence. The larger the deviation from the diagonal,
+the stronger is the degree of dependency. There is a perfect positive
+dependence if points <code class="reqn">\left(W_{i:N},H_i\right)</code> lie on the curve
+<code class="reqn">K_0(\omega)</code> located above the main diagonal. If points
+<code class="reqn">\left(W_{i:N},H_i\right)</code> however lie on the x-axis,
+this indicates a perfect negative dependence between <code class="reqn">U_1</code> and
+<code class="reqn">U_2</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>W.in</code></td>
+<td>
+<p>W-statistics (x-axis).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Hi.sort</code></td>
+<td>
+<p>H-statistics
+(y-axis).</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Natalia Belgorodski, Ulf Schepsmeier
+</p>
+
+
+<h3>References</h3>
+
+<p>Genest, C. and A. C. Favre (2007). Everything you always wanted
+to know about copula modeling but were afraid to ask. Journal of Hydrologic
+Engineering, 12 (4), 347-368.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopMetaContour()</code>, <code>BiCopChiPlot()</code>,
+<code>BiCopLambda()</code>, <code>BiCopGofTest()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Gaussian and Clayton copulas
+n &lt;- 500
+tau &lt;- 0.5
+
+# simulate from Gaussian copula
+fam &lt;- 1
+par &lt;- BiCopTau2Par(fam, tau)
+cop1 &lt;- BiCop(fam, par)
+set.seed(123)
+dat1 &lt;- BiCopSim(n, cop1)
+
+# simulate from Clayton copula
+fam &lt;- 3
+par &lt;- BiCopTau2Par(fam, tau)
+cop2 &lt;- BiCop(fam, par)
+set.seed(123)
+dat2 &lt;- BiCopSim(n, cop2)
+
+# create K-plots
+op &lt;- par(mfrow = c(1, 2))
+BiCopKPlot(dat1[,1], dat1[,2], main = "Gaussian copula")
+BiCopKPlot(dat2[,1], dat2[,2], main = "Clayton copula")
+par(op)
+
+</code></pre>
+
+
+</div>

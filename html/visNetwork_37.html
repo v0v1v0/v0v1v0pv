@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visHierarchicalLayout</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Network visualization Hierarchical layout options</h2>
+
+<h3>Description</h3>
+
+<p>Network visualization Hierarchical layout options. For full documentation, have a look at visDocumentation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visHierarchicalLayout(
+  graph,
+  enabled = TRUE,
+  levelSeparation = NULL,
+  nodeSpacing = NULL,
+  treeSpacing = NULL,
+  blockShifting = NULL,
+  edgeMinimization = NULL,
+  parentCentralization = NULL,
+  direction = NULL,
+  sortMethod = NULL,
+  shakeTowards = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>graph</code></td>
+<td>
+<p>: a visNetwork object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>enabled</code></td>
+<td>
+<p>: Boolean. Default to TRUE when calling this function.    Enable or disable the hierarchical layout.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>levelSeparation</code></td>
+<td>
+<p>: Number. Default to 150.  The distance between the different levels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodeSpacing</code></td>
+<td>
+<p>: Number. Default to 100. Minimum distance between nodes on the free axis. This is only for the initial layout. If you enable physics, the node distance there will be the effective node distance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>treeSpacing</code></td>
+<td>
+<p>: Number. Default to 200. Distance between different trees (independent networks). This is only for the initial layout. If you enable physics, the repulsion model will denote the distance between the trees.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>blockShifting</code></td>
+<td>
+<p>: Boolean. Default to true. Method for reducing whitespace. Can be used alone or together with edge minimization. Each node will check for whitespace and will shift it's branch along with it for as far as it can, respecting the nodeSpacing on any level. This is mainly for the initial layout. If you enable physics, they layout will be determined by the physics. This will greatly speed up the stabilization time though!</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>edgeMinimization</code></td>
+<td>
+<p>: Boolean. Default to true. Method for reducing whitespace. Can be used alone or together with block shifting. Enabling block shifting will usually speed up the layout process. Each node will try to move along its free axis to reduce the total length of it's edges. This is mainly for the initial layout. If you enable physics, they layout will be determined by the physics. This will greatly speed up the stabilization time though!</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parentCentralization</code></td>
+<td>
+<p>: Boolean. Default to true. When true, the parents nodes will be centered again after the the layout algorithm has been finished.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>direction</code></td>
+<td>
+<p>: String. Default to 'UD'. The direction of the hierarchical layout. The available options are: UD, DU, LR, RL. To simplify: up-down, down-up, left-right, right-left.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sortMethod</code></td>
+<td>
+<p>: String. Default to 'hubsize'.  The algorithm used to ascertain the levels of the nodes based on the data. The possible options are: hubsize, directed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shakeTowards</code></td>
+<td>
+<p>: String. Default to 'roots'. Controls whether in directed layout should all the roots be lined up at the top and their child nodes as close to their roots as possible (roots) or all the leaves lined up at the bottom and their parents as close to their children as possible (leaves, default</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>See online documentation <a href="https://datastorm-open.github.io/visNetwork/">https://datastorm-open.github.io/visNetwork/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>visNodes for nodes options, visEdges for edges options, visGroups for groups options, 
+visLegend for adding legend, visOptions for custom option, visLayout &amp; visHierarchicalLayout for layout, 
+visPhysics for control physics, visInteraction for interaction, visNetworkProxy &amp; visFocus &amp; visFit for animation within shiny,
+visDocumentation, visEvents, visConfigure ...
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+nodes &lt;- data.frame(id = 1:10)
+edges &lt;- data.frame(from = round(runif(8)*10), to = round(runif(8)*10))
+
+visNetwork(nodes, edges) %&gt;%
+ visHierarchicalLayout()
+
+visNetwork(nodes, edges) %&gt;%
+ visHierarchicalLayout(direction = "LR")
+ 
+</code></pre>
+
+
+</div>

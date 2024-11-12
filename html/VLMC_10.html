@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>draw.vlmc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Draw a "VLMC" Object (in ASCII) as Tree</h2>
+
+<h3>Description</h3>
+
+<p>Draws a <code>vlmc</code> object, typically the result of
+<code>vlmc(.)</code>, to the <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> console,
+using one line per node.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">draw(x, ...)
+## S3 method for class 'vlmc'
+draw(x, kind = 3, flag = TRUE, show.hidden = 0,
+     cumulative = TRUE, delta = cumulative, debug = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>typically the result of <code>vlmc(..)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kind</code></td>
+<td>
+<p>integer code for the “kind of drawing”, in {0,1,2,3}.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>flag</code></td>
+<td>
+<p>logical; ..</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.hidden</code></td>
+<td>
+<p>integer code; if not <code>0</code>, give some
+indications about hidden (final) nodes .....</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cumulative</code></td>
+<td>
+<p>logical indicating if the cumulative counts should
+be shown for nonterminal nodes; the ‘delta’s can only be computed
+from the cumulative counts, i.e., <code>cumulative = FALSE</code> should
+be used only by the knowing one.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>logical indicating if delta,
+i.e. <code class="reqn">\delta</code><code class="reqn">(n, p(n))</code> should be computed and
+printed for each (non-root) node <code class="reqn">n</code> with parent <code class="reqn">p(n)</code>.  Note
+that this does not really make sense when <code>cumulative = FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>debug</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, some extraneous progress
+information is printed to the <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> console.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>(potentially more arguments)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>.............
+</p>
+
+<p>.............
+</p>
+<p>Note that the counts internally are stored “non-cumulatively”,
+i.e., as <em>difference</em> counts which is useful for likelihood (ratio)
+computations.  In the internal C code, the <em>difference</em> counts are
+originally computed by the <code>comp_difference()</code> function after tree
+generation.  <code>draw(*, cumulative = TRUE)</code> internally calls the C
+function <code>cumulate()</code> for the cumulative sums.
+</p>
+
+
+<h3>Value</h3>
+
+<p>nothing is returned.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vlmc</code>.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  example(vlmc)
+  draw(vlmc.dt1c01)
+  draw(vlmc.dt1c01, flag = FALSE)
+  draw(vlmc.dt1c01, kind = 1)
+  draw(vlmc.dt1)
+  draw(vlmc.dt1, show = 3)
+  draw(vlmc.dt1, cumulative = FALSE)
+</code></pre>
+
+
+</div>

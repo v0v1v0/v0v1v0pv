@@ -1,0 +1,159 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>image</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create or write image</h2>
+
+<h3>Description</h3>
+
+<p>If you have <strong><a href="https://CRAN.R-project.org/package=V8">V8</a></strong>,
+<strong><a href="https://withr.r-lib.org/">withr</a></strong>,  and <strong><a href="https://fs.r-lib.org/">fs</a></strong>
+installed, you can use these functions can to create
+or write images as PNG or SVG, using a <code>vegaspec</code> or <code>vegawidget</code>.
+To convert to a bitmap, or write a PNG file, you will additionally need
+the <strong><a href="https://CRAN.R-project.org/package=rsvg">rsvg</a></strong> and
+<strong><a href="https://CRAN.R-project.org/package=png">png</a></strong> packages.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vw_to_svg(spec, width = NULL, height = NULL, base_url = NULL, seed = NULL)
+
+vw_to_bitmap(spec, scale = 1, width = NULL, height = NULL, ...)
+
+vw_write_svg(spec, path, width = NULL, height = NULL, ...)
+
+vw_write_png(spec, path, scale = 1, width = NULL, height = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>spec</code></td>
+<td>
+<p>An object to be coerced to <code>vegaspec</code>, a Vega/Vega-Lite specification</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p><code>integer</code>, if specified, the total rendered width (in pixels)
+of the chart - valid only for single-view charts and layered charts;
+the default is to use the width in the chart specification</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p><code>integer</code>, if specified, the total rendered height (in pixels)
+of the chart - valid only for single-view charts and layered charts;
+the default is to use the height in the chart specification</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>base_url</code></td>
+<td>
+<p><code>character</code>, the base URL for a data file, useful for
+specifying a local directory; defaults to an empty string</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p><code>integer</code>, the random seed for a Vega specification,
+defaults to a "random" integer</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p><code>numeric</code>, useful for specifying larger images supporting the
+increased-resolution of retina displays</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments passed to <code>vw_to_svg()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path</code></td>
+<td>
+<p><code>character</code>, local path to which to write the file</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>These functions can be called using (an object that can be coerced to)
+a <code>vegaspec</code>.
+</p>
+<p>The scripts used are adapted from the Vega
+<a href="https://vega.github.io/vega/usage/#cli">command line utilities</a>.
+</p>
+
+
+<h3>Value</h3>
+
+
+<dl>
+<dt><code>vw_to_svg()</code></dt>
+<dd>
+<p><code>character</code>, SVG string</p>
+</dd>
+<dt><code>vw_to_bitmap()</code></dt>
+<dd>
+<p><code>array</code>, bitmap array</p>
+</dd>
+<dt><code>vw_write_svg()</code></dt>
+<dd>
+<p>invisible <code>vegaspec</code> or <code>vegawidget</code>, called for side-effects</p>
+</dd>
+<dt><code>vw_write_png()</code></dt>
+<dd>
+<p>invisible <code>vegaspec</code> or <code>vegawidget</code>, called for side-effects</p>
+</dd>
+</dl>
+<h3>See Also</h3>
+
+<p><a href="https://github.com/vega/vega-view#image-export">vega-view library</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  # call any of these functions using either a vegaspec or a vegawidget
+  svg &lt;- vw_to_svg(vegawidget(spec_mtcars))
+  bmp &lt;- vw_to_bitmap(spec_mtcars)
+  vw_write_png(spec_mtcars, file.path(tempdir(), "temp.png"))
+  vw_write_svg(spec_mtcars, file.path(tempdir(), "temp.svg"))
+
+  # To specify the path to a local file, use base_url
+  spec_precip &lt;-
+    list(
+      `$schema` = vega_schema(),
+      data = list(url = "seattle-weather.csv"),
+      mark = "tick",
+      encoding = list(
+        x = list(field = "precipitation", type = "quantitative")
+      )
+    ) %&gt;%
+    as_vegaspec()
+
+  data_dir &lt;- system.file("example-data/", package = "vegawidget")
+  vw_write_png(
+    spec_precip,
+    file.path(tempdir(), "temp-local.png"),
+    base_url = data_dir
+  )
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,128 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>deriveCx</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Determine C5 and C95 or any Concentration Cx.</h2>
+
+<h3>Description</h3>
+
+<p>This function makes use of a precision profile. The concentration is sought
+at which 100 * 'Cx'% of the measurements lie above 'cutoff' theoretically
+as each X-value corresponds to a normal distribution with mean=X and SD as
+read off the precision profile. In case of e.g. "C5" exactly 5% will be
+above cutoff, whereas for "C95" 95% will  be larger than cutoff. This follows
+the CLSI EP12 guideline whenever an internal continuous result (ICR) is 
+available and measurement imprecision can be assumed to be normally distributed. 
+The CLSI EP12 recommends to base derivation of C5 and C95 on the results of 
+intermediate precision analyses using multiple samples. This includes between-day 
+and between-run as additional variance components besides repeatability.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">deriveCx(
+  vfp,
+  model.no = NULL,
+  start = NULL,
+  cutoff = NULL,
+  Cx = 0.05,
+  tol = 1e-06,
+  plot = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vfp</code></td>
+<td>
+<p>(VFP) object representing a precision profile to be used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model.no</code></td>
+<td>
+<p>(integer) specifying which model to use, if NULL the "best"
+model will be used automatically</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start</code></td>
+<td>
+<p>(numeric) start concentration, e.g. for C5 smaller than r,
+for C95 larger than R</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cutoff</code></td>
+<td>
+<p>(numeric) the cutoff of to be used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Cx</code></td>
+<td>
+<p>(numeric) the probability, e.g. for C5 use 0.05 and for 
+C95 use 0.95</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>(numeric) tolerance value determining when the iterative
+bisections search can terminate, i.e. when the difference
+becomes smalle enough</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p>(logical) TRUE = plot the result</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>(numeric) Mean and SD of concentration Cx
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# perform variance component analysis
+library(VCA)
+data(VCAdata1)
+# perform VCA-anaylsis
+lst &lt;- anovaVCA(y~(device+lot)/day/run, VCAdata1, by="sample")
+# transform list of VCA-objects into required matrix
+mat &lt;- getMat.VCA(lst)		# automatically selects "total"
+mat
+# fit all models batch-wise
+res &lt;- fit.vfp(model.no=1:10, Data=mat)
+# now search for the C5 concentration
+deriveCx(res, start=15, cutoff=20, Cx=0.05, plot=TRUE)
+deriveCx(res, start=25, cutoff=20, Cx=0.95, plot=TRUE)
+deriveCx(res, start=25, cutoff=20, Cx=0.25, plot=TRUE)
+deriveCx(res, start=25, cutoff=20, Cx=0.75, plot=TRUE)
+
+#
+p &lt;- c(seq(.01, .12, .01), seq(.15, .85, .05), seq(.88, .99, .01))
+system.time(x &lt;- deriveCx(res, Cx=p, cutoff=20))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

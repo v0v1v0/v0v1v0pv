@@ -1,0 +1,244 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetr_settings</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate Control Settings For vetr and alike</h2>
+
+<h3>Description</h3>
+
+<p>Utility function to generate setting values.  We strongly recommend
+that you generate the settings outside of function calls so that setting
+generation does not become part of the <code>vet/vetr/alike</code> evaluation as
+that could add noticeable overhead to the function evaluation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetr_settings(
+  type.mode = 0L,
+  attr.mode = 0L,
+  lang.mode = 0L,
+  fun.mode = 0L,
+  rec.mode = 0L,
+  suppress.warnings = FALSE,
+  fuzzy.int.max.len = 100L,
+  width = -1L,
+  env.depth.max = 65535L,
+  symb.sub.depth.max = 65535L,
+  symb.size.max = 15000L,
+  nchar.max = 65535L,
+  track.hash.content.size = 63L,
+  env = NULL,
+  result.list.size.init = 64L,
+  result.list.size.max = 1024L
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>type.mode</code></td>
+<td>
+<p>integer(1L) in 0:2, defaults to 0, determines how object
+types (as in <code>typeof</code>) are compared: </p>
+
+<ul>
+<li>
+<p> 0: integer like numerics (e.g. <code>1.0</code>) can match against
+integer templates, and integers always match real templates; all
+function types are considered of the same type
+</p>
+</li>
+<li>
+<p> 1: integers always match against numeric templates, but not vice
+versa, and integer-like numerics are treated only as numerics;
+functions only match same function type (i.e. closures only match
+closures, builtins builtins, and specials specials)
+</p>
+</li>
+<li>
+<p> 2: types must be equal for all objects types (for functions, this
+is unchanged from 1)
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>attr.mode</code></td>
+<td>
+<p>integer(1L) in 0:2, defaults to 0,  determines strictness of
+attribute comparison: </p>
+
+<ul>
+<li> <p><code>0</code> only checks attributes that are present in target, and
+uses special comparisons for the special attributes (<code>class</code>,
+<code>dim</code>, <code>dimnames</code>, <code>names</code>, <code>row.names</code>,
+<code>levels</code>, <code>srcref</code>, and <code>tsp</code>) while requiring other
+attributes to be <code>alike</code>
+</p>
+</li>
+<li> <p><code>1</code> is like <code>0</code>, except all atributes must be
+<code>alike</code>
+</p>
+</li>
+<li> <p><code>2</code> requires all attributes to be present in <code>target</code> and
+<code>current</code> and to be alike
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lang.mode</code></td>
+<td>
+<p>integer(1L) in 0:1, defaults to 0, controls language
+matching, set to <code>1</code> to turn off use of <code>match.call()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fun.mode</code></td>
+<td>
+<p>NOT IMPLEMENTED, controls how functions are compared</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rec.mode</code></td>
+<td>
+<p>integer(1L) <code>0</code> currently unused, intended to control how
+recursive structures (other than language objects) are compared</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>suppress.warnings</code></td>
+<td>
+<p>logical(1L) suppress warnings if TRUE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fuzzy.int.max.len</code></td>
+<td>
+<p>max length of numeric vectors to consider for
+integer likeness (e.g. <code>c(1, 2)</code> can be considered "integer", even
+though it is numeric); currently we limit this check to vectors
+shorter than 100 to avoid a potentially expensive computation on large
+vectors, set to -1 to apply to all vectors irrespective of length</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p>to use when deparsing expressions; default <code>-1</code>
+equivalent to <code>getOption("width")</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>env.depth.max</code></td>
+<td>
+<p>integer(1L) maximum number of nested environments to
+recurse through, defaults to 65535L; these are tracked to make sure we do
+not get into an infinite recursion loop, but because they are tracked we
+keep a limit on how many we will go through, set to -1 to allow unlimited
+recursion depth.  You should not need to change this unless you are running
+into the recursion limit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>symb.sub.depth.max</code></td>
+<td>
+<p>integer(1L) maximum recursion depth when
+recursively substituting symbols in vetting expression, defaults to 65535L</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>symb.size.max</code></td>
+<td>
+<p>integer(1L) maximum number of characters that a symbol
+is allowed to have in vetting expressions, defaults to 15000L.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nchar.max</code></td>
+<td>
+<p>integer(1L) defaults to 65535L, threshold after which
+strings encountered in C code are truncated.  This is the read limit.  In
+theory <code>vetr</code> can produce strings longer than that by combining multiple
+shorter pieces.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>track.hash.content.size</code></td>
+<td>
+<p>integer(1L) (advanced) used to set the initial
+size of the symbol tracking vector used with the hash table that detects
+recursive symbol substitution.  If the tracking vector fills up it will be
+grown by 2x.  This parameter is exposed mostly for developer use.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>env</code></td>
+<td>
+<p>what environment to use to match calls and evaluate vetting
+expressions, although typically you would specify this with the <code>env</code>
+argument to <code>vet</code>; if NULL will use the calling frame to
+<code>vet/vetr/alike</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>result.list.size.init</code></td>
+<td>
+<p>initial value for token tracking.   This will be
+grown by a factor of two each time it fills up until we reach
+<code>result.list.size.max</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>result.list.size.max</code></td>
+<td>
+<p>maximum number of tokens we keep track of,
+intended mostly as a safeguard in case a logic error causes us to keep
+allocating memory.  Set to 1024 as a default value since it should be
+exceedingly rare to have vetting expressions with such a large number of
+tokens, enough so that if we reach that number it is more likely something
+went wrong.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Settings after <code>fuzzy.int.max.len</code> are fairly low level and exposed mostly
+for testing purposes.  You should generally not need to use them.
+</p>
+<p>Note that a successful evaluation of this function does not guarantee a
+correct settings list.  Those checks are carried out internally by
+<code>vet/vetr/alike</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>list with all the setting values
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>type_alike</code>, <code>alike</code>, <code>vetr</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">type_alike(1L, 1.0, settings=vetr_settings(type.mode=2))
+## better if you are going to re-use settings to reduce overhead
+set &lt;- vetr_settings(type.mode=2)
+type_alike(1L, 1.0, settings=set)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,164 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineAIC</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>AIC and BIC of an R-Vine Copula Model</h2>
+
+<h3>Description</h3>
+
+<p>These functions calculate the Akaike and Bayesian Information criteria of a
+d-dimensional R-vine copula model for a given copula data set.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineAIC(data, RVM, par = RVM$par, par2 = RVM$par2)
+
+RVineBIC(data, RVM, par = RVM$par, par2 = RVM$par2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>An N x d data matrix (with uniform margins).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p>An <code>RVineMatrix()</code> object including the structure and
+the pair-copula families and parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>A d x d matrix with the pair-copula parameters (optional;
+default: <code>par = RVM$par</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>A d x d matrix with the second parameters of pair-copula
+families with two parameters (optional; default: <code>par2 = RVM$par2</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If <code class="reqn">k</code> denotes the number of parameters of an R-vine copula model with
+log-likelihood <code class="reqn">l_{RVine}</code> and parameter set
+<code class="reqn">\boldsymbol{\theta}</code>, then the Akaike Information Criterion (AIC)
+by Akaike (1973) is defined as
+</p>
+<p style="text-align: center;"><code class="reqn">AIC := -2 l_{RVine}\left(\boldsymbol{\theta}|\boldsymbol{u}\right) +
+2 k,</code>
+</p>
+<p>  for observations
+<code class="reqn">\boldsymbol{u}=(\boldsymbol{u}_1^\prime,...,
+\boldsymbol{u}_N^\prime)^\prime</code>.
+</p>
+<p>Similarly, the Bayesian Information Criterion (BIC) by Schwarz (1978) is
+given by </p>
+<p style="text-align: center;"><code class="reqn"> BIC := -2
+l_{RVine}\left(\boldsymbol{\theta}|\boldsymbol{u}\right) + \log(N) k. </code>
+</p>
+
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>AIC, BIC</code></td>
+<td>
+<p>The computed AIC or BIC value, respectively.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pair.AIC, pair.BIC</code></td>
+<td>
+<p>A d x d matrix of individual contributions to the
+AIC or BIC value for each pair-copula, respectively. Note: <code>AIC = sum(pair.AIC)</code> and similarly <code>BIC = sum(pair.BIC)</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Eike Brechmann
+</p>
+
+
+<h3>References</h3>
+
+<p>Akaike, H. (1973). Information theory and an extension of the
+maximum likelihood principle. In B. N. Petrov and F. Csaki (Eds.),
+Proceedings of the Second International Symposium on Information Theory
+Budapest, Akademiai Kiado, pp. 267-281.
+</p>
+<p>Schwarz, G. E. (1978). Estimating the dimension of a model. Annals of
+Statistics 6 (2), 461-464.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineLogLik()</code>, <code>RVineVuongTest()</code>,
+<code>RVineClarkeTest()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# define 5-dimensional R-vine tree structure matrix
+Matrix &lt;- c(5, 2, 3, 1, 4,
+            0, 2, 3, 4, 1,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 1)
+Matrix &lt;- matrix(Matrix, 5, 5)
+
+# define R-vine pair-copula family matrix
+family &lt;- c(0, 1, 3, 4, 4,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 3,
+            0, 0, 0, 0, 0)
+family &lt;- matrix(family, 5, 5)
+
+# define R-vine pair-copula parameter matrix
+par &lt;- c(0, 0.2, 0.9, 1.5, 3.9,
+         0, 0, 1.1, 1.6, 0.9,
+         0, 0, 0, 1.9, 0.5,
+         0, 0, 0, 0, 4.8,
+         0, 0, 0, 0, 0)
+par &lt;- matrix(par, 5, 5)
+
+# define second R-vine pair-copula parameter matrix
+par2 &lt;- matrix(0, 5, 5)
+
+# define RVineMatrix object
+RVM &lt;- RVineMatrix(Matrix = Matrix, family = family, par = par, par2 = par2,
+                   names=c("V1", "V2", "V3", "V4", "V5"))
+
+# simulate a sample of size 300 from the R-vine copula model
+set.seed(123)
+simdata &lt;- RVineSim(300,RVM)
+
+# compute AIC and BIC
+RVineAIC(simdata, RVM)
+RVineBIC(simdata, RVM)
+
+</code></pre>
+
+
+</div>

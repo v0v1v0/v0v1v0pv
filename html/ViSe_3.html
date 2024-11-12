@@ -1,0 +1,344 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>calculate_d</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+<code class="reqn">d_s</code> for Between Subjects with Pooled SD Denominator</h2>
+
+<h3>Description</h3>
+
+<p>This function displays d for two between subjects groups
+and gives the central and non-central confidence interval
+using the pooled standard deviation as the denominator.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">calculate_d(
+  m1 = NULL,
+  m2 = NULL,
+  sd1 = NULL,
+  sd2 = NULL,
+  n1 = NULL,
+  n2 = NULL,
+  t = NULL,
+  model = NULL,
+  df = NULL,
+  x_col = NULL,
+  y_col = NULL,
+  d = NULL,
+  a = 0.05,
+  lower = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>m1</code></td>
+<td>
+<p>mean group one</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m2</code></td>
+<td>
+<p>mean group two</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd1</code></td>
+<td>
+<p>standard deviation group one</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd2</code></td>
+<td>
+<p>standard deviation group two</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>sample size group one</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>sample size group two</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t</code></td>
+<td>
+<p>optional, calculate d from independent t, you must
+include n1 and n2 for degrees of freedom</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>optional, calculate d from t.test for independent t,
+you must still include n1 and n2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>optional dataframe that includes the x_col and y_col</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x_col</code></td>
+<td>
+<p>name of the column that contains the factor levels OR
+a numeric vector of group 1 scores</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_col</code></td>
+<td>
+<p>name of the column that contains the dependent score OR
+a numeric vector of group 2 scores</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+<p>a previously calculated d value from a study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a</code></td>
+<td>
+<p>significance level</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower</code></td>
+<td>
+<p>Use this to indicate if you want the lower or upper bound
+of d for one sided confidence intervals. If d is positive, you generally
+want <code>lower = TRUE</code>, while negative d values should enter
+<code>lower = FALSE</code> for the upper bound that is closer to zero.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>To calculate <code class="reqn">d_s</code>, mean two is subtracted from mean one and divided
+by the pooled standard deviation.
+</p>
+<p style="text-align: center;"><code class="reqn">d_s = \frac{M_1 - M_2}{S_{pooled}}</code>
+</p>
+
+<p>You should provide one combination of the following:
+</p>
+<p>1: m1 through n2
+</p>
+<p>2: t, n1, n2
+</p>
+<p>3: model, n1, n2
+</p>
+<p>4: df, "x_col", "y_col"
+</p>
+<p>5: x_col, y_col as numeric vectors
+</p>
+<p>6: d, n1, n2
+</p>
+<p>You must provide alpha and lower to ensure the right confidence
+interval is provided for you.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Provides the effect size (Cohen's *d*) with associated
+central and non-central confidence intervals,
+the *t*-statistic, the confidence intervals associated with the means of
+each group, as well as the standard deviations and standard errors
+of the means for each group. The one-tailed confidence interval
+is also included for sensitivity analyses.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+<p>effect size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dlow</code></td>
+<td>
+<p>noncentral lower level confidence interval of d value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dhigh</code></td>
+<td>
+<p>noncentral upper level confidence interval of d value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dlow_central</code></td>
+<td>
+<p>central lower level confidence interval of d value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dhigh_central</code></td>
+<td>
+<p>central upper level confidence interval of d value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>done_low</code></td>
+<td>
+<p>noncentral lower bound of one tailed confidence interval</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>done_low_central</code></td>
+<td>
+<p>central lower bound of
+one tailed confidence interval</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M1</code></td>
+<td>
+<p>mean of group one</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd1</code></td>
+<td>
+<p>standard deviation of group one mean</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se1</code></td>
+<td>
+<p>standard error of group one mean</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M1low</code></td>
+<td>
+<p>lower level confidence interval of group one mean</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M1high</code></td>
+<td>
+<p>upper level confidence interval of group one mean</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M2</code></td>
+<td>
+<p>mean of group two</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd2</code></td>
+<td>
+<p>standard deviation of group two mean</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se2</code></td>
+<td>
+<p>standard error of group two mean</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M2low</code></td>
+<td>
+<p>lower level confidence interval of group two mean</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M2high</code></td>
+<td>
+<p>upper level confidence interval of group two mean</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spooled</code></td>
+<td>
+<p>pooled standard deviation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sepooled</code></td>
+<td>
+<p>pooled standard error</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>sample size of group one</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>sample size of group two</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>degrees of freedom (n1 - 1 + n2 - 1)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t</code></td>
+<td>
+<p>t-statistic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>p-value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estimate</code></td>
+<td>
+<p>the d statistic and confidence interval in
+APA style for markdown printing</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>statistic</code></td>
+<td>
+<p>the t-statistic in APA style for markdown printing</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">calculate_d(m1 = 14.37, # neglect mean
+   sd1 = 10.716, # neglect sd
+   n1 = 71, # neglect n
+   m2 = 10.69, # none mean
+   sd2 = 8.219, # none sd
+   n2 = 3653, # none n
+   a = .05, # alpha/confidence interval
+   lower = TRUE) # lower or upper bound
+
+</code></pre>
+
+
+</div>

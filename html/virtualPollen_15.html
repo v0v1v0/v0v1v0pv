@@ -1,0 +1,119 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simulateAccumulationRate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulates a virtual sediment accumulation rate.</h2>
+
+<h3>Description</h3>
+
+<p>Generates a virtual sediment accumulation rate to be applied to the results of <code>simulatePopulation</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">simulateAccumulationRate(
+  seed=50,
+  time=1:1000,
+  output.min=10,
+  output.max=40,
+  direction=1,
+  plot=TRUE
+  )
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>integer, seed to be used by <code>set.seed</code> to configure the state of the pseudo-random number generator. It defines the shape of the curve.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time</code></td>
+<td>
+<p>vector of time values (ideally the same used to generate the simulations). <strong>Important</strong>: the <code>time</code> column goes from "left to right", meaning that oldest samples have the lowest values of age/time, and viceversa.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output.min</code></td>
+<td>
+<p>numeric, in years per centimetre, minimum sediment accumulation rate (10 by default).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output.max</code></td>
+<td>
+<p>numeric, in years per centimetre, maximum sediment accumulation rate (40 bu default).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>direction</code></td>
+<td>
+<p>integer, values 1 or -1, to invert the resulting accumulation rate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p>boolean, plots output accumulation rate if <code>TRUE</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The accumulation rate curve is generated through a random walk smoothed by a GAM model. The value of the <code>seed</code> argument changes the shape of the curve, but the user has no more control than trying different values to achieve a curve closer to the desired one. If <code>plot</code> is set to <code>TRUE</code>, the accumulation rate curve is printed on screen, but not exported to pdf.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A dataframe like <code>accumulationRate</code>, with the following columns:
+</p>
+
+<ul>
+<li> <p><em>time</em>: numeric, time or age of the given case.
+</p>
+</li>
+<li> <p><em>accumulation.rate</em>: numeric, in years per centimetre, simulated accumulation rate.
+</p>
+</li>
+<li> <p><em>grouping</em>: integer, grouping variable to aggregate together (with <code>aggregateSimulation</code>) samples deposited in the same centimetre according <em>accumulation.rate</em>.
+</p>
+</li>
+</ul>
+<h3>Author(s)</h3>
+
+<p>Blas M. Benito  &lt;blasbenito@gmail.com&gt;
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>simulatePopulation</code>, <code>aggregateSimulation</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+acc.rate &lt;- simulateAccumulationRate(
+ seed = 50,
+ time = 1:1000,
+ output.min = 10,
+ output.max = 40,
+ direction = 1,
+ plot = TRUE
+ )
+
+str(acc.rate)
+
+</code></pre>
+
+
+</div>

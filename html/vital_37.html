@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>net_migration</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate net migration from a vital object</h2>
+
+<h3>Description</h3>
+
+<p>Calculate net migration from a vital object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">net_migration(deaths, births)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>deaths</code></td>
+<td>
+<p>A vital object containing at least a time index, age,
+population at 1 January, and death rates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>births</code></td>
+<td>
+<p>A vital object containing at least a time index and number of births per time period.
+It is assumed that
+the population variable is the same as in the deaths object, and that the same keys other than age
+are present in both objects.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A vital object containing population, estimated deaths (not actual deaths) and net migration,
+using the formula Net Migration = Population - lag(Population cohort) - Deaths + Births.
+Births are returned as Population at Age -1, and deaths are estimated from the life table
+</p>
+
+
+<h3>References</h3>
+
+<p>Hyndman and Booth (2008) Stochastic population forecasts using functional data
+models for mortality, fertility and migration. <em>International Journal of Forecasting</em>, 24(3), 323-342.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">net_migration(norway_mortality, norway_births)
+## Not run: 
+# Files downloaded from the [Human Mortality Database](https://mortality.org)
+deaths &lt;- read_hmd_files(c("Population.txt", "Mx_1x1.txt"))
+births &lt;- read_hmd_file("Births.txt")
+mig &lt;- net_migration(deaths, births)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

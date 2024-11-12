@@ -1,0 +1,175 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lino</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Generalized Beta Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the 3-parameter
+generalized beta distribution as proposed by Libby and Novick
+(1982).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lino(lshape1 = "loglink", lshape2 = "loglink", llambda = "loglink",
+     ishape1 = NULL,   ishape2 = NULL,   ilambda = 1, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape1, lshape2</code></td>
+<td>
+
+<p>Parameter link functions applied to the two
+(positive) shape parameters <code class="reqn">a</code> and <code class="reqn">b</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>llambda</code></td>
+<td>
+
+<p>Parameter link function applied to the
+parameter <code class="reqn">\lambda</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape1, ishape2, ilambda</code></td>
+<td>
+
+<p>Initial values for the parameters. A <code>NULL</code> value means
+one is computed internally. The argument <code>ilambda</code> must
+be numeric, and the default corresponds to a standard beta
+distribution.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Can be an integer-valued vector specifying which
+linear/additive predictors are modelled as intercepts only.
+Here, the values must be from the set {1,2,3} which correspond
+to <code class="reqn">a</code>, <code class="reqn">b</code>, <code class="reqn">\lambda</code>, respectively.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Proposed by Libby and Novick (1982),
+this distribution has density
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;a,b,\lambda) = \frac{\lambda^{a} y^{a-1} (1-y)^{b-1}}{
+   B(a,b) \{1 - (1-\lambda) y\}^{a+b}}</code>
+</p>
+
+<p>for <code class="reqn">a &gt; 0</code>, <code class="reqn">b &gt; 0</code>, <code class="reqn">\lambda &gt; 0</code>,
+<code class="reqn">0 &lt; y &lt; 1</code>.
+Here <code class="reqn">B</code> is the beta function (see
+<code>beta</code>).
+The mean is a complicated function involving the Gauss hypergeometric
+function.
+If <code class="reqn">X</code> has a <code>lino</code> distribution with parameters
+<code>shape1</code>, <code>shape2</code>, <code>lambda</code>, then
+<code class="reqn">Y=\lambda X/(1-(1-\lambda)X)</code>
+has a standard beta distribution with parameters <code>shape1</code>,
+<code>shape2</code>.
+</p>
+<p>Since <code class="reqn">\log(\lambda)=0</code> corresponds to the
+standard beta distribution, a <code>summary</code> of the fitted model
+performs a t-test for whether the data belongs to a standard
+beta distribution (provided the <code>loglink</code> link for
+<code class="reqn">\lambda</code> is used; this is the default).
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The fitted values, which is usually the mean, have not
+been implemented yet.
+Currently the median is returned as the fitted values.
+</p>
+
+<p>Although Fisher scoring is used, the working weight matrices
+are positive-definite only in a certain region of the parameter
+space. Problems with this indicate poor initial values or an
+ill-conditioned model or insufficient data etc.
+</p>
+<p>This model is can be difficult to fit. A reasonably good value of
+<code>ilambda</code> seems to be needed so if the self-starting initial
+values fail, try experimenting with the initial value arguments.
+Experience suggests <code>ilambda</code> is better a little larger,
+rather than smaller, compared to the true value.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Libby, D. L. and Novick, M. R. (1982).
+Multivariate generalized beta distributions with applications to
+utility assessment.
+<em>Journal of Educational Statistics</em>,
+<b>7</b>, 271–294.
+</p>
+<p>Gupta, A. K. and Nadarajah, S. (2004).
+<em>Handbook of Beta Distribution and Its Applications</em>,
+NY: Marcel Dekker, Inc.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Lino</code>,
+<code>genbetaII</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ldata &lt;- data.frame(y1 = rbeta(n = 1000, exp(0.5), exp(1)))  # Std beta
+fit &lt;- vglm(y1 ~ 1, lino, data = ldata, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+head(fitted(fit))
+summary(fit)
+
+# Nonstandard beta distribution
+ldata &lt;- transform(ldata, y2 = rlino(1000, shape1 = exp(1),
+                                     shape2 = exp(2), lambda = exp(1)))
+fit2 &lt;- vglm(y2 ~ 1,
+             lino(lshape1 = "identitylink", lshape2 = "identitylink",
+                  ilamb = 10), data = ldata, trace = TRUE)
+coef(fit2, matrix = TRUE)
+</code></pre>
+
+
+</div>

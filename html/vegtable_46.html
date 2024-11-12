@@ -1,0 +1,100 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>df2vegtable</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Convert a data frame into a vegtable object.</h2>
+
+<h3>Description</h3>
+
+<p>Conversion of a data frame containing a cross table of abundance or cover of
+species in single plots.
+</p>
+<p>This function coerces a data frame containing a vegetation cross table into
+a vegtable object. The input data frame <code>x</code> may include information
+on the layers or not.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">df2vegtable(x, species, layer, ...)
+
+## S4 method for signature 'data.frame,numeric,numeric'
+df2vegtable(x, species, layer, ...)
+
+## S4 method for signature 'data.frame,numeric,missing'
+df2vegtable(x, species, layer, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A data frame formatted for a taxlist object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species</code></td>
+<td>
+<p>Numeric or integer indicating the position of the column with
+species names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>layer</code></td>
+<td>
+<p>Numeric or integer indicating the position of the column with
+layers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments passed from or to other methods.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A vegtable object.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miguel Alvarez <a href="mailto:kamapu78@gmail.com">kamapu78@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Creating data set 'dune_veg'
+library(vegan)
+
+## Load data from vegan
+data(dune)
+data(dune.env)
+
+## Conversion to vegtable
+dune_veg &lt;- data.frame(
+  species = colnames(dune), t(dune),
+  stringsAsFactors = FALSE, check.names = FALSE
+)
+dune_veg &lt;- df2vegtable(dune_veg, species = 1)
+
+summary(dune_veg)
+
+## Adding environmental variables
+dune.env$ReleveID &lt;- as.integer(rownames(dune.env))
+header(dune_veg) &lt;- dune.env
+
+summary(dune_veg)
+</code></pre>
+
+
+</div>

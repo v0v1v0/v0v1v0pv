@@ -1,0 +1,257 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>generateSpFromFun</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate a virtual species distributions with responses to environmental
+variables</h2>
+
+<h3>Description</h3>
+
+<p>This function generates a virtual species distribution from a stack of
+environmental
+variables and a defined set of responses to each environmental parameter.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">generateSpFromFun(
+  raster.stack,
+  parameters,
+  rescale = TRUE,
+  formula = NULL,
+  species.type = "multiplicative",
+  rescale.each.response = TRUE,
+  plot = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>raster.stack</code></td>
+<td>
+<p>a SpatRaster object, in which each layer represent an 
+environmental 
+variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parameters</code></td>
+<td>
+<p>a list containing the functions of response of the species
+to environmental variables with their parameters. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rescale</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, the final 
+probability of presence is rescaled between 0 and 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>a character string or <code>NULL</code>. The formula used to combine
+partial responses into the final
+environmental suitability value (e.g., <code>"layername1 + 2 * layername2 +
+layername3 * layername4 etc."</code>). If <code>NULL</code> then partial responses will 
+be added or multiplied according to
+<code>species.type</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species.type</code></td>
+<td>
+<p><code>"additive"</code> or <code>"multiplicative"</code>. Only used 
+if <code>formula = NULL</code>. 
+Defines how the final environmental suitability is calculated: if 
+<code>"additive"</code>, responses to each
+variable are summed; if <code>"multiplicative"</code>, responses are multiplied.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rescale.each.response</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, 
+the individual responses to
+each environmental variable are rescaled between 0 and 1 (see details).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, the generated 
+virtual species will be plotted.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><a href="http://borisleroy.com/virtualspecies_tutorial/02-response.html">Online 
+tutorial for this function</a>
+</p>
+<p>This function proceeds in two steps:
+</p>
+
+<ol>
+<li>
+<p>The response to each environmental variable is calculated with the 
+functions provided
+in <code>parameters</code>. This results in a suitability  of each variable.
+</p>
+<p><b>By default, each response is rescaled between 0 and 1.</b> Disable with 
+<code>rescale.each.response = FALSE</code>
+</p>
+</li>
+<li>
+<p>The final environmental suitability is calculated according to the 
+chosen <code>species.type</code>.
+</p>
+<p><b>By default, the final suitability is rescaled between 0 and 1.</b> 
+Disable with 
+<code>rescale = FALSE</code>
+</p>
+</li>
+</ol>
+<p>The SpatRaster stack containing environmental variables must have consistent 
+names, 
+because they will be checked with the <code>parameters</code>. For example, they 
+can be named
+var1, var2, etc. Names can be checked and set with <code>names(my.stack)</code>.
+</p>
+<p>The <code>parameters</code> have to be carefully created, otherwise the function 
+will not work:
+</p>
+
+<ul>
+<li>
+<p>Either see <code>formatFunctions</code> to easily create your list of 
+parameters
+</p>
+</li>
+<li>
+<p>Or create a <code>list</code> defined according to the following template:<br><code>list(
+           var1 = list(fun = 'fun1', args = list(arg1 = ..., arg2 = ..., 
+           etc.)),
+           var2 = list(fun = 'fun2', args = list(arg1 = ..., arg2 = ..., 
+           etc.)))</code><br>
+It is important to keep the same names in the parameters as in the stack of 
+environmental
+variables. Similarly, argument names must be identical to argument names in 
+the associated 
+function (e.g., if you use <code>fun = 'dnorm'</code>, then args should look like 
+<code>list(mean = 0, sd = 1)</code>).
+</p>
+<p>See the example section below for more examples.</p>
+</li>
+</ul>
+<p>Any response function that can be applied to the environmental variables can
+be chosen here. Several functions are proposed in this package:
+<code>linearFun</code>, <code>logisticFun</code> and 
+<code>quadraticFun</code>.
+Another classical example is the normal distribution: 
+<code>stats::dnorm()</code>.
+Users can also create and use their own functions very easily.
+</p>
+<p>If <code>rescale.each.response = TRUE</code>, then the probability response to each
+variable will be normalised between 0 and 1 according to the following 
+formula:
+P.rescaled = (P - min(P)) / (max(P) - min (P))
+This rescaling has a strong impact on response functions, so users may 
+prefer to
+use <code>rescale.each.response = FALSE</code> and apply their own rescaling within
+their response functions.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a <code>list</code> with 3 elements:
+</p>
+
+<ul>
+<li>
+<p><code>approach</code>: the approach used to generate the species, 
+<em>i.e.</em>, <code>"response"</code>
+</p>
+</li>
+<li>
+<p><code>details</code>: the details and parameters used to generate the 
+species
+</p>
+</li>
+<li>
+<p><code>suitab.raster</code>: the raster containing the environmental 
+suitability of the virtual species
+</p>
+</li>
+</ul>
+<p>The structure of the virtualspecies object can be seen using <code>str()</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+</p>
+<p>with help from C. N. Meynard, C. Bellard &amp; F. Courchamp
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>generateSpFromPCA</code> to generate a virtual species with 
+a PCA approach
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Create an example stack with two environmental variables
+a &lt;- matrix(rep(dnorm(1:100, 50, sd = 25)), 
+            nrow = 100, ncol = 100, byrow = TRUE)
+env &lt;- c(rast(a * dnorm(1:100, 50, sd = 25)),
+         rast(a * 1:100))
+names(env) &lt;- c("variable1", "variable2")
+plot(env) # Illustration of the variables
+
+# Easy creation of the parameter list:
+# see in real time the shape of the response functions
+parameters &lt;- formatFunctions(variable1 = c(fun = 'dnorm', mean = 1e-04, 
+                                             sd = 1e-04),
+                              variable2 = c(fun = 'linearFun', a = 1, b = 0))
+                              
+# If you provide env, then you can see the shape of response functions:
+parameters &lt;- formatFunctions(x = env,
+                              variable1 = c(fun = 'dnorm', mean = 1e-04, 
+                                             sd = 1e-04),
+                              variable2 = c(fun = 'linearFun', a = 1, b = 0))
+
+# Generation of the virtual species
+sp1 &lt;- generateSpFromFun(env, parameters)
+sp1
+par(mfrow = c(1, 1))
+plot(sp1)
+
+
+# Manual creation of the parameter list
+# Note that the variable names are the same as above
+parameters &lt;- list(variable1 = list(fun = 'dnorm',
+                                    args = list(mean = 0.00012,
+                                                sd = 0.0001)),
+                   variable2 = list(fun = 'linearFun',
+                                    args = list(a = 1, b = 0)))
+# Generation of the virtual species
+sp1 &lt;- generateSpFromFun(env, parameters, plot = TRUE)
+sp1
+plot(sp1)
+</code></pre>
+
+
+</div>

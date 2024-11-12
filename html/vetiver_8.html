@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>api_spec</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Update the OpenAPI specification using model metadata</h2>
+
+<h3>Description</h3>
+
+<p>Update the OpenAPI specification using model metadata
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">api_spec(spec, vetiver_model, path, all_docs = TRUE)
+
+glue_spec_summary(prototype, return_type)
+
+## Default S3 method:
+glue_spec_summary(prototype, return_type = NULL)
+
+## S3 method for class 'data.frame'
+glue_spec_summary(prototype, return_type = "predictions")
+
+## S3 method for class 'array'
+glue_spec_summary(prototype, return_type = "predictions")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>spec</code></td>
+<td>
+<p>An OpenAPI Specification formatted list object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vetiver_model</code></td>
+<td>
+<p>A deployable <code>vetiver_model()</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path</code></td>
+<td>
+<p>The endpoint path</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all_docs</code></td>
+<td>
+<p>Should the interactive visual API documentation be created
+for <em>all</em> POST endpoints in the router <code>pr</code>? This defaults to <code>TRUE</code>, and
+assumes that all POST endpoints use the <code>vetiver_model()</code> input data
+prototype.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prototype</code></td>
+<td>
+<p>An input data prototype from a model</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>return_type</code></td>
+<td>
+<p>Character string to describe what endpoint returns, such
+as "predictions"</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>api_spec()</code> returns the updated OpenAPI Specification object. This
+function uses <code>glue_spec_summary()</code> internally, which returns a <code>glue</code>
+character string.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(plumber)
+cars_lm &lt;- lm(mpg ~ ., data = mtcars)
+v &lt;- vetiver_model(cars_lm, "cars_linear")
+
+glue_spec_summary(v$prototype)
+
+modify_spec &lt;- function(spec) api_spec(spec, v, "/predict")
+pr() %&gt;% pr_set_api_spec(api = modify_spec)
+
+</code></pre>
+
+
+</div>

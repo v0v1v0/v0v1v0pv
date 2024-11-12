@@ -1,0 +1,171 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gamma1Qlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Link functions for the quantiles of several 1–parameter continuous
+distributions
+</h2>
+
+<h3>Description</h3>
+
+<p>Computes the <code>gamma1Qlink</code> transformation, its inverse and the
+first two derivatives.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  gamma1Qlink(theta, p = stop("Argument 'p' must be specified."),
+               bvalue = NULL, inverse = FALSE,
+               deriv = 0, short = TRUE, tag = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character. It is <code class="reqn">\theta</code> by default although
+it could be <code class="reqn">\eta</code> depending upon other arguments. 
+See <code>Links</code> for further details about this.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+
+<p>A numeric vector of <code class="reqn">p</code>–quantiles (numbers between 0 and 1) 
+to be modeled by this link function. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue, inverse, deriv, short, tag</code></td>
+<td>
+
+<p>See <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This link function has been specifically designed to model any 
+<code class="reqn">p</code>–quantile of the 1–parameter gamma distribution, 
+<code>gamma1</code>, in the VGLM/VGAM context. 
+It is defined as
+
+</p>
+<p style="text-align: center;"><code class="reqn">\eta = \log {\tt{qgamma}}({\tt{p}}, {\tt{shape =}} s),</code>
+</p>
+
+
+<p>where <code class="reqn">s</code> is a positive shape parameter as in 
+<code>gamma1</code>, whilst
+<code class="reqn">{\tt{qgamma()}}</code> is the quantile function 
+<code>qgamma</code>.
+
+
+
+
+</p>
+<p>The inverse of the <code>gamma1Qlink</code> cannot be expressed in closed
+form. Instead, the inverse image, <code class="reqn">s_{\eta}</code>,
+of <code class="reqn">\eta</code> is numerically approximated by 
+<code>newtonRaphson.basic</code>.
+</p>
+<p>Numerical values of <code class="reqn">s</code> or <code class="reqn">p</code> out of range will 
+result in <code>Inf</code>, <code>-Inf</code>, <code>NA</code> or <code>NaN</code>
+correspondingly.
+</p>
+<p>Arguments <code>inverse</code> and <code>deriv</code> are dismissed
+if <code>theta</code> is character.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the <code>gamma1Qlink</code> transformation of
+<code>theta</code>, when <code>inverse = FALSE</code>. 
+If <code>inverse = TRUE</code>, then
+<code>theta</code> becomes <code class="reqn">\eta</code>, and therefore,
+the approximate inverse image of <code class="reqn">\eta</code> is returned.
+</p>
+<p>For <code>deriv = 1</code>, the partial derivative 
+<code class="reqn">d</code> <code>eta</code> / <code class="reqn">d</code> <code>theta</code> is returned, 
+if <code>inverse = FALSE</code>. If <code>inverse = TRUE</code>, 
+then the reciprocal 
+<code class="reqn">d</code> <code>theta</code> / <code class="reqn">d</code> <code>eta</code> as a function of <code>theta</code>.
+</p>
+<p>If <code>deriv = 2</code>, then the second order derivatives as a function
+of <code>theta</code>. 
+</p>
+
+
+<h3>Note</h3>
+
+<p>Numerical instability may occur for values <code>theta</code> too large, or
+too close to 0.0. Use argument <code>bvalue</code> to replace them before
+computing the link.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gamma1</code>, 
+<code>qgamma</code>,
+<code>Links</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+  ## E1. gamma1QLink() and values causing NaNs or out of range  ##
+  
+  p &lt;- 0.75                            # The third quartile is of interest.
+  my.s &lt;- seq(0, 5, by = 0.1)[-1]
+  
+  max(my.s - gamma1Qlink(gamma1Qlink(my.s, p = p), p = p, inverse  =TRUE)) ## Zero
+  
+  ## E2. Special values of theta ##
+  gamma1Qlink(theta = c(-0.15, -0.10, 0, 1:10) , p = p, inverse  = FALSE)  ## NaNs
+  gamma1Qlink(theta = c(-5, -3, 0, 1:10) , p = p, inverse  = TRUE)         ## Out of range
+   
+   
+  ## E3. Plot of gamma1QLink() and its inverse. ##
+  
+  
+    # gamma1Qlink()
+    plot(gamma1Qlink(theta = my.s, p = p) ~ my.s,
+         type = "l", col = "blue", lty = "dotted", lwd = 3,
+         xlim = c(-0.1, 5), ylim = c(-5, 15), las = 1,
+         main = c("Blue is gamma1Qlink(), green is the inverse"),
+         ylab = "gamma1Qlink transformation", xlab = "theta")
+     abline(h = 0, v = 0, lwd = 2)
+
+     # The inverse
+     lines(my.s, gamma1Qlink(theta = my.s, p = p, inverse = TRUE),
+           col = "green", lwd = 2, lty = "dashed")
+           
+      # The identity function, for double-checking.
+     lines(my.s, my.s, lty = "dotted")
+  
+</code></pre>
+
+
+</div>

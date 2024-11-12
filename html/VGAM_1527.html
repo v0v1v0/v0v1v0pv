@@ -1,0 +1,122 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>N1binom</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Linear Model and Binomial
+Mixed Data Type
+Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density,
+and random generation
+for the (four parameter bivariate)
+Linear Model–Bernoulli copula distribution.
+</p>
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dN1binom(x1, x2, mean = 0, sd = 1, prob, apar = 0,
+         copula = "gaussian", log = FALSE)
+rN1binom(n, mean = 0, sd = 1, prob,
+         apar = 0, copula = "gaussian")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x1, x2</code></td>
+<td>
+<p>vector of quantiles.
+The valid values of <code>x2</code> are <code class="reqn">0</code>
+and <code class="reqn">1</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Same as <code>rnorm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>copula</code></td>
+<td>
+
+<p>See <code>N1binomial</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean, sd, prob, apar</code></td>
+<td>
+
+<p>See <code>N1binomial</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical.
+If <code>TRUE</code> then the logarithm is returned.
+</p>
+
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See <code>N1binomial</code>, the <span class="pkg">VGAM</span>
+family functions for estimating the
+parameter by maximum likelihood estimation,
+for details.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dN1binom</code> gives the probability density/mass function,
+<code>rN1binom</code> generates random deviate and returns
+a two-column matrix.
+</p>
+
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>N1binomial</code>,
+<code>rnorm</code>,
+<code>rbinom</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  
+nn &lt;- 1000;  apar &lt;- rhobitlink(1.5, inverse = TRUE)
+prob &lt;- logitlink(0.5, inverse = TRUE)
+mymu &lt;- 1; sdev &lt;- exp(1)
+mat &lt;- rN1binom(nn, mymu, sdev, prob, apar)
+bndata &lt;- data.frame(y1 = mat[, 1], y2 = mat[, 2])
+with(bndata, plot(jitter(y1), jitter(y2), col = "blue"))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

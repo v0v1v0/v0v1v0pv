@@ -1,0 +1,420 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ARIMAXff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> VGLTSMs Family functions: 
+The Order–<code class="reqn">(p, d, q)</code> Autoregressive Integrated Moving
+Average Model (ARIMA(p, d, q)) with covariates</h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the drift,
+standard deviation or variance of the random noise,
+and coefficients of an autoregressive integrated
+moving average process of order-<code class="reqn">(p, d, q)</code>
+with covariates by MLE using Fisher scoring.
+No seasonal terms handled yet. No seasonal components
+handled yet.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">      ARIMAXff(order   = c(1, 1, 0),
+               zero     = c("ARcoeff", "MAcoeff"),
+               diffCovs = TRUE,
+               xLag     = 0,
+               include.current = FALSE,
+               type.EIM = c("exact", "approximate")[1], 
+               var.arg  = TRUE,
+               nodrift  = FALSE,
+               noChecks = FALSE,
+               ldrift   = "identitylink", 
+               lsd      = "loglink",
+               lvar     = "loglink",
+               lARcoeff = "identitylink",
+               lMAcoeff = "identitylink", 
+               idrift   = NULL,
+               isd      = NULL,
+               ivar     = NULL,
+               iARcoeff = NULL, 
+               iMAcoeff = NULL) 
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>order</code></td>
+<td>
+
+<p>Integer vector with three components, 
+(<code>p, d, q</code>): The AR order 
+(<code>p</code>), the degree of differencing (<code>d</code>),
+and the MA order (<code>q</code>).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Integer or character–strings vector. 
+Name(s) or position(s) of the parameters/linear predictors
+to be modeled as intercept-only. Details at 
+<code>zero</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>diffCovs</code></td>
+<td>
+
+<p>Logical. The default is <code>diffCovs = TRUE</code>, which means that
+the order–<code>d</code> differences
+of the covariates (if entered) are internally computed and then
+incorporated in the conditional–mean model. Otherwise,
+only the current <code>actual</code> values of the covariates are included.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xLag</code></td>
+<td>
+
+<p>Integer, non–negative. If <code>xLag</code> &gt; 0, the covariates
+at <em>current</em> time, <code class="reqn">\boldsymbol{x}_t</code>, plus
+the lagged covariates up to order <code>'xLag'</code> are
+embedded into the design matrix (as covariates too).
+Leave <code>xLag = 0</code> and only the
+<em>current</em> value, <code class="reqn">\boldsymbol{x}_t</code>,
+will be considered. See more details below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>include.current</code></td>
+<td>
+
+<p>Logical. Same as 
+<code>ARIMAX.errors.ff</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.EIM</code></td>
+<td>
+
+<p>The type of expected information matrix (EIM) of the ARMA process
+to be utilized in Fisher scoring.
+<code>type.EIM = "exact"</code> (default)
+enables the <em>exact</em> IM (Porat, et.al. 1986),
+otherwise the <code>approximate</code> version is utilized.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.arg</code></td>
+<td>
+
+<p>Logical. If <code>FALSE</code> (default), then the standard deviation
+of the random noise is estimated. Else, the variance estimate is 
+returned.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodrift</code></td>
+<td>
+
+<p>Logical. <code>nodrift = TRUE</code> supresses estimation of the 
+intercept (the <em>drift</em> in the ARMA case),
+which is set to zero internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>noChecks</code></td>
+<td>
+
+<p>Logical. If <code>FALSE</code> (default), this family function internally
+checks <em>stationarity</em> (AR case) and
+<em>invertibility</em> (MA case) of the the estimated model.
+A <code>warning</code> is correspondingly displayed.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ldrift, lsd, lvar, lARcoeff, lMAcoeff</code></td>
+<td>
+
+<p>Link functions applied to the intercept, 
+the random noise standard deviation (or optionally,
+the variance), and the coefficients in the 
+ARMA–type conditional–mean model.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>idrift, isd, ivar, iARcoeff, iMAcoeff</code></td>
+<td>
+
+<p>Optional initial values for the intercept (drift), noise SD
+(or variance), and ARMA coeffcients (a vector of length <code class="reqn">p + q</code>). 
+If failure to converge occurs then try different values and monitor 
+convergence by using <code>trace = TRUE</code> in the <code>vglm()</code> call.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Let <code class="reqn">\boldsymbol{x}_t</code> be a (probably time–varying) vector of 
+suitable covariates. The ARIMAX model handled by <code>ARIMAXff</code> is
+</p>
+<p style="text-align: center;"><code class="reqn"> \nabla^d Y_t = \mu^{\star} + \boldsymbol{\beta}^T 
+              \nabla^d \boldsymbol{x}_t +
+             \theta_1 \nabla^d Y_{t - 1} + \cdots +
+             \theta_p \nabla^d Y_{t - p} +
+             \phi_1 \varepsilon_{t - 1} + \cdots + 
+             \phi_q \varepsilon_{t - q} + \varepsilon, </code>
+</p>
+
+<p>with <code class="reqn">\nabla^d (\cdot)</code> the operator differencing a
+series <code>d</code> times. If <code>diffCovs = TRUE</code>, this function
+differencing the covariates <code>d</code> times too. 
+</p>
+<p>Similarly, <code>ARMAXff</code> manages
+</p>
+<p style="text-align: center;"><code class="reqn"> \nabla^d Y_t = \mu^{\star} + \boldsymbol{\beta}^T \boldsymbol{x}_t +
+             \theta_1 Y_{t - 1} + \cdots + \theta_p Y_{t - p} +
+             \phi_1 \varepsilon_{t - 1} + \cdots + 
+             \phi_q \varepsilon_{t - q} + \varepsilon, </code>
+</p>
+
+<p>where
+</p>
+<p style="text-align: center;"><code class="reqn">    \varepsilon_{t | \Phi_{t - 1}}
+         \sim N(0, \sigma_{\varepsilon_t | \Phi_{t - 1}}^2).</code>
+</p>
+ 
+<p>Note, <code class="reqn">\sigma_{\varepsilon | \Phi_{t - 1}}^2</code> is <em>conditional</em> on 
+<code class="reqn">\Phi_{t - 1}</code>, 
+the information
+of the joint process
+<code class="reqn">\left(Y_{t - 1}, \boldsymbol{x}_t \right)</code>,
+at time <code class="reqn">t</code>, and hence may be 
+modelled in terms of <code class="reqn">\boldsymbol{x}_t</code>,
+if required.
+</p>
+<p><code>ARIMAXff()</code> and <code>ARMAXff()</code>
+handle <em>multiple responses</em>, thus a
+matrix can be used as the response. 
+Note, no seasonal terms handled. This feature is to be
+incorporated shortly.
+</p>
+<p>The default linear predictor is
+</p>
+<p style="text-align: center;"><code class="reqn">\boldsymbol{\eta} = \left( 
+\mu, \log \sigma^{2}_{\varepsilon_{t | \Phi_{t - 1}}},
+\theta_1, \ldots, \theta_p,
+\phi_1, \ldots, \phi_q
+\right)^T.</code>
+</p>
+
+<p>Other links are also handled. See <code>Links</code>.
+</p>
+<p>Further choices for the random noise, besides Gaussian, will
+be implemented over time.
+</p>
+<p>As with <code>ARXff</code>
+and <code>MAXff</code>, 
+choices for the EIMs are <code>"exact"</code> and <code>"approximate"</code>.
+Covariates may be incorporated in the fit for any linear
+predictor above. Hence, <code>ARIMAXff</code> supports non–stationary 
+processes (<code class="reqn">\sigma_{\varepsilon_t | \Phi_{t - 1}}^2</code>) may depend on 
+<code class="reqn">\boldsymbol{X}_t</code>.
+Also, constraint matrices 
+on the linear predictors may be
+entered through <code>cm.ARMA</code> or
+using the argument <code>constraints</code>, from
+<code>vglm</code>.
+</p>
+<p>Checks on stationarity and
+invertibility on the esitmated process are performed by default.
+Set <code>noChecks = TRUE</code> to dismiss this step.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> 
+(see <code>vglmff-class</code>)
+to be used by VGLM/VGAM modelling functions, e.g.,
+<code>vglm</code> or <code>vgam</code>.
+</p>
+
+
+
+
+
+
+
+<h3>Warning</h3>
+
+<p><code>zero</code> can be a <b>numeric</b> or a <b>character–strings</b> 
+vector specifying the position(s) or the name(s) of 
+the parameter(s) modeled as intercept–only.
+Numeric values can be set as 
+usual (See <code>CommonVGAMffArguments</code>).
+If names are entered, the parameter names in this 
+family function are:
+</p>
+<p><code>c("drift.mean", "noiseVar" || "noiseSD", "ARcoeff", "MAcoeff")</code>.
+</p>
+<p>Manually modify this if required.
+For simplicity, the second choice is recommended.
+</p>
+
+
+<h3>Note</h3>
+
+<p>No seasonal components handled yet.
+</p>
+<p>If no covariates, <code class="reqn">\boldsymbol{x}_t</code>,
+are incorporated in the analysis,
+then <code>ARIMAXff</code> fits an ordinary ARIMA model.
+Ditto with <code>ARMAXff</code>.
+</p>
+<p>If <code>nodrift = TRUE</code>, then the 'drift' is removed from the
+vector of parameters and is not estimated.
+</p>
+<p>By default, an ARMA model of order–<code class="reqn">c(1, 0)</code> with
+order–1 differences is fitted. When initial
+values are entered (<code>isd</code>, <code>iARcoeff</code>, etc.),
+they are recycled
+according to the number of responses.
+</p>
+<p>Also, the ARMA coefficients 
+are intercept–only (note, <code>zero = c("ARcoeff", </code>
+<code> "MAcoeff")</code>)
+This may altered via <code>zero</code>, or by
+constraint matrices (See <code>constraints</code>)
+using <code>cm.ARMA</code>.
+</p>
+<p>Checks on stationarity and/or
+invertibility can be manually via
+<code>checkTS.VGAMextra</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda and T. W. Yee
+</p>
+
+
+<h3>References</h3>
+
+<p>Miranda, V. and Yee, T.W. (2018)
+Vector Generalized Linear Time Series Models.
+<em>In preparation</em>.
+</p>
+<p>Porat, B., and Friedlander, B. (1986)
+Computation of the Exact Information Matrix of Gaussian
+Time Series with Stationary Random Components.
+<em>IEEE Transactions on Acoustics, Speech and Signal
+Processing</em>. <b>ASSp-34(1)</b>, 118–130.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ARXff</code>,
+<code>MAXff</code>,
+<code>checkTS.VGAMextra</code>,
+<code>cm.ARMA</code>,
+<code>CommonVGAMffArguments</code>,
+<code>constraints</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(3)
+nn      &lt;- 90
+theta   &lt;- c(0.12, 0.17)  # AR coefficients
+phi     &lt;- c(-0.15, 0.20)  # MA coefficients.
+sdWNN &lt;- exp(1.0)          # SDs
+mu    &lt;- c(1.25, 0.85)     # Mean (not drift) of the process.
+covX  &lt;- runif(nn + 1)     # A single covariate.
+mux3  &lt;- mu[1] + covX
+##
+## Simulate ARMA processes. Here, the drift for 'tsd3' depends on covX.
+##
+tsdata &lt;- data.frame(TS1 = mu[1] + arima.sim(model = list(ar = theta, ma = phi,
+                             order = c(2, 1, 2)), n = nn, sd = sdWNN ),
+                      TS2 = mu[2] + arima.sim(model = list(ar = theta, ma = phi,
+                            order = c(2, 1, 2)), n = nn, sd = exp(2 + covX)),
+                      TS3 =  mux3 + arima.sim(model = list(ar = theta, ma = phi,
+                            order = c(2, 1, 2)), n = nn, sd = exp(2 + covX) ),
+                      x2 = covX)
+
+### EXAMPLE 1. Fitting a simple ARIMA(2, 1, 2) using vglm(). 
+# Note that no covariates involved. 
+fit.ARIMA1 &lt;-  vglm(TS1 ~ 1, ARIMAXff(order = c(2, 1, 2), var.arg = FALSE,
+                       # OPTIONAL INITIAL VALUES
+                       # idrift = c(1.5)*(1 - sum(theta)), 
+                       # ivar = exp(4), isd = exp(2),
+                       # iARcoeff = c(0.20, -0.3, 0.1),
+                       # iMAcoeff = c(0.25, 0.35, 0.1),
+                        type.EIM = "exact"), 
+                 data = tsdata, trace = TRUE, crit = "log")
+Coef(fit.ARIMA1)
+summary(fit.ARIMA1)
+vcov(fit.ARIMA1, untransform = TRUE)
+#------------------------------------------------------------------------#
+# Fitting same model using arima().
+#------------------------------------------------------------------------#
+# COMPARE to EXAMPLE1 
+( fitArima  &lt;- arima(tsdata$TS1, order = c(2, 1, 2)) ) 
+
+
+### EXAMPLE 2. Here only the ARMA coefficients and drift are intercept-only.
+# The random noise variance is not constant.
+fit.ARIMA2 &lt;-  vglm(TS2 ~ x2,  ARIMAXff(order = c(2, 1, 2), var.arg = TRUE,
+                     lARcoeff = "rhobitlink", lMAcoeff = "identitylink",
+                     type.EIM = c("exact", "approximate")[1], 
+                     # NOTE THE ZERO ARGUMENT. 
+                     zero = c("drift.mean", "ARcoeff", "MAcoeff")),
+              data = tsdata, trace = TRUE)
+
+coef(fit.ARIMA2, matrix = TRUE)
+summary(fit.ARIMA2)
+constraints(fit.ARIMA2)
+
+
+
+### EXAMPLE 3. Here only ARMA coefficients are intercept-only.
+# The random noise variance is not constant.
+# Note that the "drift" and the "variance" are "generated" in 
+# terms of 'x2' above for TS3.
+
+fit.ARIMA3 &lt;- vglm(TS3 ~ x2,  ARIMAXff(order = c(1, 1, 2), var.arg = TRUE,
+                     lARcoeff = "identitylink", lMAcoeff = "identitylink",
+                     type.EIM = c("exact", "approximate")[1], nodrift = FALSE,
+                     zero = c( "ARcoeff", "MAcoeff")), # NOTE THE ZERO ARGUMENT. 
+              data = tsdata, trace = TRUE)
+              
+coef(fit.ARIMA3, matrix = TRUE)
+summary(fit.ARIMA3)
+constraints(fit.ARIMA3)
+
+</code></pre>
+
+
+</div>

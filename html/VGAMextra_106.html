@@ -1,0 +1,154 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Q.reg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+
+Conditional quantile regression with <span class="pkg">VGAM</span>
+
+</h2>
+
+<h3>Description</h3>
+
+<p>Use this function to adequately confer the <code>formula</code> 
+in <span class="pkg">VGAM</span> when fitting quantile regression models.
+
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    Q.reg(y, pvector = NULL, length.arg = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+
+<p>Numeric, a vector or a matrix. It is the response or dependent 
+variable in the <code>formula</code> of the model to be fit, as in 
+<code>vglm</code> or <code>vgam</code>.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pvector</code></td>
+<td>
+
+<p>A prototype vector. Entries are the conditional <code class="reqn">p</code>–quantiles
+in the fitting process.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>length.arg</code></td>
+<td>
+
+<p>A length–1 positive integer. It is the number of <code class="reqn">p</code>–quantiles
+to be modelled.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Conditional quantile regression can be carried out using family
+functions in <span class="pkg">VGAM</span> and <span class="pkg">VGAMextra</span>.
+The <code>formula</code> must be set up using this function, <code>Q.reg</code>.
+Here, the <code class="reqn">p</code>–quantiles of interest may be entered via
+<code>pvector</code>. Alternatively, use argument <code>length.arg</code> by
+establishing the length of <code>pvector</code>.
+</p>
+<p>Besides, the corresponding link must be entered.
+For example, <code>gamma1Qlink</code>
+is the proper link to fit models of conditional quantiles for 
+data distributed as Gamma via the family function
+<code>gamma1</code>.
+</p>
+<p>See examples for further details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix, each column adequately arranged for regression on conditional
+quantiles, conforming with <span class="pkg">VGAM</span>. 
+</p>
+<p>Indeed, this is equivalent to <code>cbind(y, y, ...)</code>, where the 
+total number of columns is, either the length of <code>pvector</code>, or
+<code>length.arg</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Link functions for quantile regression in <span class="pkg">VGAM</span> require the
+vector of <code class="reqn">p</code>–quantiles of interest via the argument <code>p</code>.
+See <code>normal1sdQlink</code> or
+<code>maxwellQlink</code> for instance.
+</p>
+<p>Therefore, the integer entered at <code>length.arg</code> in this function, 
+if utilized, must match the length of the vector <code>p</code>. Else,
+it will be recycled.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and T. W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>normal1sdQlink</code>,
+<code>maxwellQlink</code>,
+<code>gamma1Qlink</code>,
+<code>gamma1</code>,
+<code>vglm</code>,
+<code>vgam</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">   
+  ###  Quantile regression with data distributed as Maxwell(s)  ###
+   set.seed(12073)
+   x2 &lt;- seq(0, 100,length.out = 100)       # independent variable
+   b0 &lt;- 0.5                                # true intercept
+   b1 &lt;- 0.25                               # true slope
+   b2 &lt;- 0.02                               # true second order coef.
+   alpha &lt;- b0 + b1 * x2 + b2 * x2^2        # Quadratically modelling the parameters
+   nn &lt;- 100                                # Sample size
+  
+   # The data as a data frame. #
+   mdata &lt;- data.frame(y = rmaxwell(n = nn, rate = alpha), x2 = x2, x3 = x2^2)
+   
+   # Quantile regression using our link function maxwellQlink(). #
+   # Quantiles 25%, 50%, 75% are of interest #
+   my.p &lt;- c(0.25, 0.50, 0.75)
+   
+   fit &lt;- vglm(Q.reg(y, pvector = my.p) ~ x2 + x3, 
+   
+  # OPTIONALLY Q.reg(y, length = length(my.p)) ~ x2 + x3
+   
+              maxwell(link = maxwellQlink(p = my.p)), 
+              data = mdata,  trace = TRUE, crit = "coef")
+
+   coef(fit, matrix = TRUE) 
+   summary(fit)
+   head(predict(fit))
+   constraints(fit)
+</code></pre>
+
+
+</div>

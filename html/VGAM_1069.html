@@ -1,0 +1,178 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ordsup</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Ordinal Superiority
+Measures </h2>
+
+<h3>Description</h3>
+
+<p>Ordinal superiority measures for the linear model
+and cumulative link models: 
+the probability that an observation from one
+distribution falls above an independent observation
+from the other distribution,
+adjusted for explanatory variables in a model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ordsup(object, ...)
+ordsup.vglm(object, all.vars = FALSE, confint = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>A <code>vglm</code> fit.
+Currently it must be one of:
+<code>cumulative</code>,
+<code>uninormal</code>.
+The links for <code>cumulative</code> must be
+<code>logitlink</code> or <code>probitlink</code>,
+and <code>parallel = TRUE</code> is also needed.
+For <code>uninormal</code> the mean must
+use <code>identitylink</code> and model the
+<code>sd</code> as intercept-only.
+</p>
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.vars</code></td>
+<td>
+
+<p>Logical. The default is to use explanatory variables
+which are binary, but all variables are used (except the intercept)
+if set to <code>TRUE</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>confint</code></td>
+<td>
+
+<p>Logical.
+If <code>TRUE</code> then <code>confintvglm</code>
+is called to return confidence intervals for
+<code class="reqn">\gamma</code> and
+<code class="reqn">\Delta</code>.
+By default, Wald intervals are produced, but they
+can be replaced by profile intervals by setting
+<code>method = "profile"</code>.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Parameters that can be fed into <code>confintvglm</code>,
+e.g., <code>level = 0.95</code> and
+<code>method = c("wald", "profile")</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Details are given in Agresti and Kateri (2017) and this help
+file draws directly from this.
+This function returns two quantities for comparing two groups
+on an ordinal categorical response variable, while adjusting
+for other explanatory variables.
+They are called “ordinal superiority” measures, and
+the two groups can be compared without supplementary
+explanatory variables.
+Let <code class="reqn">Y_1</code> and <code class="reqn">Y_2</code> be independent random
+variables from groups A and B, say, for a quantitative ordinal
+categorical scale. Then
+<code class="reqn">\Delta = P(Y_1 &gt; Y_2) -
+    P(Y_2 &gt; Y_1)</code> 
+summarizes their relative size.
+A second quantity is
+<code class="reqn">\gamma = P(Y_1 &gt; Y_2) -
+    0.5 \times P(Y_2 = Y_1)</code>.
+Then <code class="reqn">\Delta=2 \times \gamma - 1</code>.
+whereas <code class="reqn">\gamma=(\Delta + 1)/2</code>.
+The range of <code class="reqn">\gamma</code> is <code class="reqn">[0, 1]</code>, while
+the range of <code class="reqn">\Delta</code> is <code class="reqn">[-1, 1]</code>.
+The examples below are based on that paper.
+This function is currently implemented for a very limited
+number of specific models.
+</p>
+
+
+<h3>Value</h3>
+
+<p>By default,
+a list with components
+<code>gamma</code> and
+<code>Delta</code>,
+where each is a vector with elements corresponding to
+binary explanatory variables (i.e., 0 or 1),
+and if no explanatory variables are binary then a
+<code>NULL</code> is returned.
+If <code>confint = TRUE</code> then the list contains 4 more components:
+<code>lower.gamma</code>,
+<code>upper.gamma</code>,
+<code>Lower.Delta</code>,
+<code>Upper.Delta</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Agresti, A. and Kateri, M. (2017).
+Ordinal probability effect measures for group
+comparisons in multinomial cumulative link models.
+<em>Biometrics</em>, <b>73</b>, 214–219.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>cumulative</code>,
+<code>propodds</code>,
+<code>uninormal</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+Mental &lt;- read.table("http://www.stat.ufl.edu/~aa/glm/data/Mental.dat",
+                     header = TRUE)  # Make take a while to load in
+Mental$impair &lt;- ordered(Mental$impair)
+pfit3 &lt;- vglm(impair ~ ses + life, data = Mental,
+         cumulative(link = "probitlink", reverse = FALSE, parallel = TRUE))
+coef(pfit3, matrix = TRUE)
+ordsup(pfit3)  # The 'ses' variable is binary
+
+# Fit a crude LM
+fit7 &lt;- vglm(as.numeric(impair) ~ ses + life, uninormal, data = Mental)
+coef(fit7, matrix = TRUE)  # 'sd' is estimated by MLE
+ordsup(fit7)
+ordsup(fit7, all.vars = TRUE)  # Some output may not be meaningful
+ordsup(fit7, confint = TRUE, method = "profile")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

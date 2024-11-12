@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>applyCategoricalFilters</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Filter out graph vertices not in selected category</h2>
+
+<h3>Description</h3>
+
+<p>This function removes vertices that are not in the selected categories values list or sub-categories.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">applyCategoricalFilters(
+  g,
+  selected_cat,
+  selected_subcats,
+  cat_prefix = "vosonCA_"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p><span class="pkg">igraph</span> <code>graph</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selected_cat</code></td>
+<td>
+<p>Character string. Selected vertex category without prefix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selected_subcats</code></td>
+<td>
+<p>List. Selected sub-category values to include in graph.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cat_prefix</code></td>
+<td>
+<p>Character string. Category attribute prefix format to match. Default is <code>"vosonCA_"</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An igraph graph object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# return a graph containing only vertices that have the vertex category 
+# attribute "vosonCA_Stance" value "liberal"
+g &lt;- loadPackageGraph("DividedTheyBlog_40Alist_release.graphml")
+
+g &lt;- applyCategoricalFilters(g, "Stance", c("liberal"))
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ageRanges</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Find the age range for each taxon in a dataframe</h2>
+
+<h3>Description</h3>
+
+<p>Find the age range (first occurrence and last occurrence) for each taxon in a PBDB dataset. Can be run for any level of the taxonomic hierarchy (e.g., family, genus).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ageRanges(Data, Taxonomy = "genus")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>A data frame downloaded from the paleobiology database API.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Taxonomy</code></td>
+<td>
+<p>A characer string identifying the desired level of the taxonomic hierarchy.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Returns a data frame of that states gives the time of origination and extinction for each taxon as numeric values. Note that older versions of this function automatically dropped hanging factors and NA's, but that cleaning step should ideally be dictated by the user up-front. So that functionality has been dropped. This may introduce breaking chanes in legacy scripts, but is easily fixed by standard data cleaning steps.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A numeric matrix of first and last ages for each taxon, with tax as rownames.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andrew A. Zaffos
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Download a test dataset of Cenozoic bivalves.
+# DataPBDB&lt;-downloadPBDB(Taxa="Bivalvia",StartInterval="Cenozoic",StopInterval="Cenozoic")
+
+# Find the first occurrence and last occurrence for all Cenozoic bivalves in DataPBDB
+# AgeRanges&lt;-ageRanges(DataPBDB,"genus")
+
+</code></pre>
+
+
+</div>

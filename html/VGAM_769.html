@@ -1,0 +1,126 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>altered</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Altered, Inflated, Truncated and Deflated Values in GAITD Regression
+</h2>
+
+<h3>Description</h3>
+
+<p>Return the altered, inflated, truncated and deflated values
+in a GAITD regression object,
+else test whether the model is altered, inflated, truncated or deflated.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">altered(object, ...)
+inflated(object, ...)
+truncated(object, ...)
+is.altered(object, ...)
+is.deflated(object, ...)
+is.inflated(object, ...)
+is.truncated(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>an object of class <code>"vglm"</code>.
+Currently only a GAITD regression object returns
+valid results of these functions.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>any additional arguments, to future-proof this function.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Yee and Ma (2023) propose GAITD regression
+where values from four (or seven since
+there are parametric and nonparametric
+forms) disjoint sets are referred to as
+<em>special</em>.  These extractor functions
+return one set each; they are the <code>alter</code>,
+<code>inflate</code>, <code>truncate</code>, <code>deflate</code>
+(and sometimes <code>max.support</code>) arguments
+from the family function.
+</p>
+
+
+
+
+<h3>Value</h3>
+
+<p>Returns one type of ‘special’ sets associated with GAITD regression.
+This is a vector, else a list for truncation.
+All three sets are returned by <code>specialsvglm</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>Some of these functions are subject to change.
+Only family functions beginning with <code>"gaitd"</code> will
+work with these functions, hence
+<code>zipoisson</code> fits will return <code>FALSE</code> or empty
+values.
+</p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Ma, C. (2024).
+Generally altered, inflated, truncated and deflated regression.
+<em>Statistical Science</em>, <b>39</b> (in press).
+</p>
+
+
+
+<h3>See Also</h3>
+
+<p><code>vglm</code>,
+<code>vglm-class</code>,
+<code>specialsvglm</code>,
+<code>gaitdpoisson</code>,
+<code>gaitdlog</code>,
+<code>gaitdzeta</code>,
+<code>Gaitdpois</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+abdata &lt;- data.frame(y = 0:7, w = c(182, 41, 12, 2, 2, 0, 0, 1))
+fit1 &lt;- vglm(y ~ 1, gaitdpoisson(a.mix = 0),
+             data = abdata, weight = w, subset = w &gt; 0)
+specials(fit1)  # All three sets
+altered(fit1)  # Subject to change
+inflated(fit1)  # Subject to change
+truncated(fit1)  # Subject to change
+is.altered(fit1)
+is.inflated(fit1)
+is.truncated(fit1)  
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_pin_write</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Read and write a trained model to a board of models</h2>
+
+<h3>Description</h3>
+
+<p>Use <code>vetiver_pin_write()</code> to pin a trained model to a board of models,
+along with an input prototype for new data and other model metadata. Use
+<code>vetiver_pin_read()</code> to retrieve that pinned object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetiver_pin_write(board, vetiver_model, ..., check_renv = FALSE)
+
+vetiver_pin_read(board, name, version = NULL, check_renv = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>board</code></td>
+<td>
+<p>A pin board, created by <code>board_folder()</code>, <code>board_connect()</code>,
+<code>board_url()</code> or another <code>board_</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vetiver_model</code></td>
+<td>
+<p>A deployable <code>vetiver_model()</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments passed on to methods for a specific board.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check_renv</code></td>
+<td>
+<p>Use <a href="https://rstudio.github.io/renv/">renv</a> to record the
+packages used at training time with <code>vetiver_pin_write()</code> and check for
+differences with <code>vetiver_pin_read()</code>. Defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>Pin name.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>version</code></td>
+<td>
+<p>Retrieve a specific version of a pin. Use <code>pin_versions()</code> to
+find out which versions are available and when they were created.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>These functions read and write a <code>vetiver_model()</code> pin on the
+specified <code>board</code> containing the model object itself and other elements
+needed for prediction, such as the model's input data prototype or which
+packages are needed at prediction time. You may use <code>pins::pin_read()</code> or
+<code>pins::pin_meta()</code> to handle the pin, but <code>vetiver_pin_read()</code> returns a
+<code>vetiver_model()</code> object ready for deployment.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>vetiver_pin_read()</code> returns a <code>vetiver_model()</code>; <code>vetiver_pin_write()</code>
+returns the name of the new pin, invisibly.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(pins)
+model_board &lt;- board_temp()
+
+cars_lm &lt;- lm(mpg ~ ., data = mtcars)
+v &lt;- vetiver_model(cars_lm, "cars_linear")
+vetiver_pin_write(model_board, v)
+model_board
+
+vetiver_pin_read(model_board, "cars_linear")
+
+# can use `version` argument to read a specific version:
+pin_versions(model_board, "cars_linear")
+
+# can store an renv lockfile as part of the pin:
+vetiver_pin_write(model_board, v, check_renv = TRUE)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>zetaff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Zeta Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the parameter of the zeta distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">zetaff(lshape = "loglink", ishape = NULL, gshape = 1 + exp(-seq(7)),
+       zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape, ishape, zero</code></td>
+<td>
+
+<p>These arguments apply to the (positive) parameter <code class="reqn">p</code>.
+See <code>Links</code> for more choices.
+Choosing <code>loglog</code> constrains <code class="reqn">p&gt;1</code>, but
+may fail if the maximum likelihood estimate is less than one.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gshape</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In this long tailed distribution
+the response must be a positive integer.
+The probability function for a response <code class="reqn">Y</code> is
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y=y) = 1/[y^{p+1} \zeta(p+1)],\ \ \  p&gt;0,\ \ \  y=1,2,...</code>
+</p>
+
+<p>where <code class="reqn">\zeta</code> is Riemann's zeta function.
+The parameter <code class="reqn">p</code> is positive, therefore a log link
+is the default.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">\mu = \zeta(p) / \zeta(p+1)</code>
+(provided <code class="reqn">p&gt;1</code>) and these are the fitted values.
+The variance of <code class="reqn">Y</code> is
+<code class="reqn">\zeta(p-1) / \zeta(p+1) - \mu^2</code>
+provided <code class="reqn">p&gt;2</code>.
+</p>
+<p>It appears that good initial values are needed for successful
+convergence. If convergence is not obtained, try several values
+ranging from values near 0 to values about 10 or more.
+</p>
+<p>Multiple responses are handled.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The <code>zeta</code> function may be used to compute values
+of the zeta function.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>pp.527– of Chapter 11 of
+Johnson N. L., Kemp, A. W. and Kotz S. (2005).
+<em>Univariate Discrete Distributions</em>,
+3rd edition,
+Hoboken, New Jersey: Wiley.
+</p>
+<p>Knight, K. (2000).
+<em>Mathematical Statistics</em>.
+Boca Raton, FL, USA: Chapman &amp; Hall/CRC Press.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>zeta</code>,
+<code>Zeta</code>,
+<code>gaitdzeta</code>,
+<code>oazeta</code>,
+<code>oizeta</code>,
+<code>otzeta</code>,
+<code>diffzeta</code>,
+<code>hzeta</code>,
+<code>zipf</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">zdata &lt;- data.frame(y = 1:5, w =  c(63, 14, 5, 1, 2))  # Knight, p.304
+fit &lt;- vglm(y ~ 1, zetaff, data = zdata, trace = TRUE, weight = w, crit = "c")
+(phat &lt;- Coef(fit))  # 1.682557
+with(zdata, cbind(round(dzeta(y, phat) * sum(w), 1), w))
+
+with(zdata, weighted.mean(y, w))
+fitted(fit, matrix = FALSE)
+predict(fit)
+
+# The following should be zero at the MLE:
+with(zdata, mean(log(rep(y, w))) + zeta(1+phat, deriv = 1) / zeta(1+phat))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Gumbel-II</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Gumbel-II Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, cumulative distribution function,
+quantile function
+and
+random generation for
+the Gumbel-II distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dgumbelII(x, scale = 1, shape, log = FALSE)
+pgumbelII(q, scale = 1, shape, lower.tail = TRUE, log.p = FALSE)
+qgumbelII(p, scale = 1, shape, lower.tail = TRUE, log.p = FALSE)
+rgumbelII(n, scale = 1, shape)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+<p>vector of quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>vector of probabilities.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Same as in <code>runif</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical.
+If <code>log = TRUE</code> then the logarithm of the density is returned.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail, log.p</code></td>
+<td>
+
+<p>Same meaning as in <code>pnorm</code>
+or <code>qnorm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape, scale</code></td>
+<td>
+<p>positive shape and scale parameters. </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See <code>gumbelII</code> for details.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dgumbelII</code> gives the density,
+<code>pgumbelII</code> gives the cumulative distribution function,
+<code>qgumbelII</code> gives the quantile function, and
+<code>rgumbelII</code> generates random deviates.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee and Kai Huang
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gumbelII</code>,
+<code>dgumbel</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">probs &lt;- seq(0.01, 0.99, by = 0.01)
+Scale &lt;- exp(1); Shape &lt;- exp( 0.5);
+max(abs(pgumbelII(qgumbelII(p = probs, shape = Shape, Scale),
+                  shape = Shape, Scale) - probs))  # Should be 0
+
+## Not run:  x &lt;- seq(-0.1, 10, by = 0.01);
+plot(x, dgumbelII(x, shape = Shape, Scale), type = "l", col = "blue",
+     main = "Blue is density, orange is the CDF", las = 1,
+     sub = "Red lines are the 10,20,...,90 percentiles",
+     ylab = "", ylim = 0:1)
+abline(h = 0, col = "blue", lty = 2)
+lines(x, pgumbelII(x, shape = Shape, Scale), col = "orange")
+probs &lt;- seq(0.1, 0.9, by = 0.1)
+Q &lt;- qgumbelII(probs, shape = Shape, Scale)
+lines(Q, dgumbelII(Q, Scale, Shape), col = "red", lty = 3, type = "h")
+pgumbelII(Q, shape = Shape, Scale) - probs # Should be all zero
+abline(h = probs, col = "red", lty = 3) 
+## End(Not run)
+</code></pre>
+
+
+</div>

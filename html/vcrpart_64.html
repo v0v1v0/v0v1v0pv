@@ -1,0 +1,342 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tvcm-plot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+<code>plot</code> method for <code>tvcm</code> objects.</h2>
+
+<h3>Description</h3>
+
+<p><code>plot</code> method and panel functions for <code>tvcm</code> objects. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'tvcm'
+plot(x, type = c("default", "coef", 
+        "simple", "partdep", "cv"),
+     main, part = NULL, drop_terminal = TRUE,
+     tnex, newpage = TRUE, ask = NULL,
+     pop = TRUE, gp = gpar(), ...)
+
+panel_partdep(object, parm = NULL,
+              var = NULL, ask = NULL,
+              prob = NULL, neval = 50, add = FALSE,
+              etalab = c("int", "char", "eta"), ...)
+
+panel_coef(object, parm = NULL, 
+           id = TRUE, nobs = TRUE,
+           exp = FALSE,
+           plot_gp = list(),
+           margins, yadj = 0.1,
+           mean = FALSE, mean_gp = list(),
+           conf.int = FALSE, conf.int_gp = list(),
+           abbreviate = TRUE, etalab = c("int", "char", "eta"), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, object</code></td>
+<td>
+<p>An object of class <code>tvcm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>the type of the plot. Available types are
+<code>"default"</code>, <code>"simple"</code>, <code>"coef"</code>,
+<code>"partdep"</code> and <code>"cv"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>character. A main title for the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drop_terminal</code></td>
+<td>
+<p>a logical indicating whether all terminal nodes
+should be plotted at the bottom. See also
+<code>plot.party</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tnex</code></td>
+<td>
+<p>a numeric value giving the terminal node extension in
+relation to the inner nodes. By default the value is computed
+adaptively to the tree size.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newpage</code></td>
+<td>
+<p>a logical indicating whether <code>grid.newpage()</code>
+should be called.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pop</code></td>
+<td>
+<p>a logical whether the viewport tree should be popped before
+return.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gp</code></td>
+<td>
+<p>graphical parameters. See <code>gpar</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>part</code></td>
+<td>
+<p>integer or letter. The partition i.e. varying 
+coefficient component to be plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parm</code></td>
+<td>
+<p>character vector (<code>panel_partdep</code> and
+<code>panel_coef</code>) or list of character vectors
+(<code>panel_coef</code>) with names of model
+coefficients corresponding to the chosen component. Indicates which 
+coefficients should be visualized. If <code>parm</code> is a list, a
+separate panel is allocated for each list component.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var</code></td>
+<td>
+<p>character vector. Indicates the partitioning variables
+to be visualized.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ask</code></td>
+<td>
+<p>logical. Whether an input should be asked before printing
+the next panel.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prob</code></td>
+<td>
+<p>a probability between 0 and 1. Gives the size of the
+random subsample over which the coefficients are averaged. May be
+smaller than 1 if the sample is large.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>neval</code></td>
+<td>
+<p>the maximal number of distinct values of the variable to
+be evaluated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add</code></td>
+<td>
+<p>logical. Whether the panel is to be added into an active
+plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>logical. Whether the node id should be displayed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nobs</code></td>
+<td>
+<p>logical. Whether the number of observations in each node
+should be displayed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>exp</code></td>
+<td>
+<p>logical. Whether the labels in the y-axes should be the
+exponential of coefficients.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot_gp</code></td>
+<td>
+<p>a list of graphical parameters for the panels. Includes
+components <code>xlim</code>, <code>ylim</code>, <code>pch</code>, <code>ylab</code>,
+<code>type</code> (the type of symbols, e.g. <code>"b"</code>), <code>label</code>
+(characters for ticks at the x axis), <code>height</code>, <code>width</code>,
+<code>gp</code> (a list produced by <code>gpar</code>). If <code>parm</code> 
+is a list, <code>plot_gp</code> may be a nested list specifying the
+graphical parameters for each list component of <code>parm</code>. See
+examples.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>margins</code></td>
+<td>
+<p>a numeric vector <code>c(bottom, left, top, right)</code>
+specifying the space on the margins for each panel. By default
+the values are computed adaptively to the tree size.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>yadj</code></td>
+<td>
+<p>a numeric scalar larger than zero that increases the
+margin above the panel. May be useful if the edge labels are covered
+by the coefficient panels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean</code></td>
+<td>
+<p>logical. Whether the average coefficients over the
+population should be visualized.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean_gp</code></td>
+<td>
+<p>list with graphical parameters for plotting the mean
+coefficients. Includes a component <code>gp = gpar(...)</code> and a
+component <code>pch</code>. See examples.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>conf.int</code></td>
+<td>
+<p>logical. Whether confidence intervals should be
+visualized. These are indicative values only. They do not account
+for the uncertainty of model selection procedure.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>conf.int_gp</code></td>
+<td>
+<p>a list of graphical parameters for the confidence
+intervals applied to <code>arrow</code>. Includes <code>angle</code>,
+<code>length</code>, <code>ends</code> and <code>type</code>. See examples.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>abbreviate</code></td>
+<td>
+<p>logical scalar. Whether labels of coefficients should
+be abbreviated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>etalab</code></td>
+<td>
+<p>character. Whether category-specific effects should be
+labeled by integers of categories (default), the labels of the
+categories (<code>"char"</code>) or the index of the predictor
+(<code>"eta"</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments passed to
+<code>panel_partdep</code> or <code>panel_coef</code> or
+other methods.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The plot functions allow the diagnosis of fitted <code>tvcm</code>
+objects. <code>type = "default"</code>, <code>type = "coef"</code> and
+<code>type = "simple"</code> show the tree structure and coefficients in
+each node. <code>type = "partdep"</code> plots partial dependency plots, see
+Hastie et al. (2001), section 10.13.2. Finally, <code>type = "cv"</code>
+shows, if available, the results from cross-validation. 
+</p>
+<p>The functions <code>panel_partdep</code> and
+<code>panel_coef</code> are exported to show the additional
+arguments that can be passed to <code>...</code> of a
+<code>plot</code> call.  
+</p>
+<p>Notice that user-defined plots can be generated by the use of the
+<code>plot.party</code> function, see <span class="pkg">partykit</span>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The <code>plot.fvcm</code> method returns <code>NULL</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>References</h3>
+
+<p>Hastie, T., R. Tibshirani and J. Friedman (2001). <em>The Elements
+of Statistical Learning</em> (2 ed.). New York, USA: Springer-Verlag.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>tvcm</code>, <code>tvcm-methods</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## ------------------------------------------------------------------- #
+## Dummy example:
+##
+## Plotting the types "coef" and "partdep" for a 'tvcm' object fitted 
+## on the artificial data 'vcrpart_2'.
+## ------------------------------------------------------------------- # 
+
+data(vcrpart_2)
+
+## fit the model
+model &lt;- tvcglm(y ~ vc(z1, z2, by = x1, intercept = TRUE) + x2,
+                data = vcrpart_2, family = gaussian(),
+                control = tvcm_control(maxwidth = 3, minbucket = 5L))
+
+## plot type "coef"
+plot(model, "coef")
+
+## add various (stupid) plot parameters
+plot(model, "coef",
+     plot_gp = list(type = "p", pch = 2, ylim = c(-4, 4),
+       label = c("par1", "par2"), gp = gpar(col = "blue")),
+     conf.int_gp = list(angle = 45, length = unit(2, "mm"),
+       ends = "last", type = "closed"),
+     mean_gp = list(pch = 16,
+       gp = gpar(fontsize = 16, cex = 2, col = "red")))
+
+## separate plots with separate plot parameters
+plot(model, "coef", parm = list("(Intercept)", "x1"), tnex = 2,
+     plot_gp = list(list(gp = gpar(col = "red")),
+                    list(gp = gpar(col = "blue"))),
+     mean_gp = list(list(gp = gpar(col = "green")),
+                    list(gp = gpar(col = "yellow"))))
+
+## plot type "partdep"
+par(mfrow = c(1, 2))
+plot(model, "partdep", var = "z1", ask = FALSE)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,144 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bifrankcop</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Frank's Bivariate Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimate the association parameter of Frank's bivariate
+distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bifrankcop(lapar = "loglink", iapar = 2, nsimEIM = 250)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lapar</code></td>
+<td>
+
+<p>Link function applied to the (positive) association parameter
+<code class="reqn">\alpha</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iapar</code></td>
+<td>
+
+<p>Numeric. Initial value for <code class="reqn">\alpha</code>.
+If a convergence failure occurs try assigning a different value.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The cumulative distribution function is
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y_1 \leq y_1, Y_2 \leq y_2) = H_{\alpha}(y_1,y_2) =
+\log_{\alpha} [1 + (\alpha^{y_1}-1)(\alpha^{y_2}-1)/
+(\alpha-1)] </code>
+</p>
+
+<p>for <code class="reqn">\alpha \ne 1</code>.
+Note the logarithm here is to base <code class="reqn">\alpha</code>.
+The support of the function is the unit square.
+</p>
+<p>When <code class="reqn">0 &lt; \alpha &lt; 1</code> the probability density function
+<code class="reqn">h_{\alpha}(y_1,y_2)</code>
+is symmetric with respect to the lines <code class="reqn">y_2=y_1</code>
+and <code class="reqn">y_2=1-y_1</code>.
+When <code class="reqn">\alpha &gt; 1</code> then
+<code class="reqn">h_{\alpha}(y_1,y_2) = h_{1/\alpha}(1-y_1,y_2)</code>.
+</p>
+<p><code class="reqn">\alpha=1</code> then <code class="reqn">H(y_1,y_2) = y_1 y_2</code>,
+i.e., uniform on the unit square.
+As <code class="reqn">\alpha</code> approaches 0 then
+<code class="reqn">H(y_1,y_2) = \min(y_1,y_2)</code>.
+As <code class="reqn">\alpha</code> approaches infinity then
+<code class="reqn">H(y_1,y_2) = \max(0, y_1+y_2-1)</code>.
+</p>
+<p>The default is to use Fisher scoring implemented using
+<code>rbifrankcop</code>.
+For intercept-only models an alternative is to set
+<code>nsimEIM=NULL</code> so that a variant of Newton-Raphson is used.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be a two-column matrix. Currently, the fitted
+value is a matrix with two columns and values equal to a half.
+This is because the marginal distributions correspond to a
+standard uniform distribution.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Genest, C. (1987).
+Frank's family of bivariate distributions.
+<em>Biometrika</em>,
+<b>74</b>, 549–555.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rbifrankcop</code>,
+<code>bifgmcop</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+ymat &lt;- rbifrankcop(n = 2000, apar = exp(4))
+plot(ymat, col = "blue")
+fit &lt;- vglm(ymat ~ 1, fam = bifrankcop, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+vcov(fit)
+head(fitted(fit))
+summary(fit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

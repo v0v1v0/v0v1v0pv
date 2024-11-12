@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>effect_metrics</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Output effect sizes and test statistics for metric data</h2>
+
+<h3>Description</h3>
+
+<p>The calculations depend on the number of selected columns:
+</p>
+
+<ul>
+<li>
+<p> One metric column: see effect_metrics_one
+</p>
+</li>
+<li>
+<p> Multiple metric columns: see effect_metrics_items
+</p>
+</li>
+</ul>
+<p>Group comparisons:
+</p>
+
+<ul>
+<li>
+<p> One metric column and one grouping column: see effect_metrics_one_grouped
+</p>
+</li>
+<li>
+<p> Multiple metric columns and one grouping column: see effect_metrics_items_grouped
+</p>
+</li>
+<li>
+<p> Multiple metric columns and multiple grouping columns: not yet implemented
+</p>
+</li>
+</ul>
+<p>By default, if you provide two column selections, the second column is treated as categorical.
+Setting the metric-parameter to TRUE will call the appropriate functions for correlation analysis:
+</p>
+
+<ul>
+<li>
+<p> Two metric columns: see effect_metrics_one_cor
+</p>
+</li>
+<li>
+<p> Multiple metric columns and one metric column: see effect_metrics_items_cor
+</p>
+</li>
+<li>
+<p> Two metric column selections: see effect_metrics_items_cor_items
+</p>
+</li>
+</ul>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">effect_metrics(data, cols, cross = NULL, metric = FALSE, clean = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>A tidy column selection,
+e.g. a single column (without quotes)
+or multiple columns selected by methods such as starts_with().</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross</code></td>
+<td>
+<p>Optional, a grouping column (without quotes).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metric</code></td>
+<td>
+<p>When crossing variables, the cross column parameter can contain categorical or metric values.
+By default, the cross column selection is treated as categorical data.
+Set metric to TRUE, to treat it as metric and calculate correlations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clean</code></td>
+<td>
+<p>Prepare data by data_clean.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other parameters passed to the appropriate effect function.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A volker tibble.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(volker)
+data &lt;- volker::chatgpt
+
+effect_metrics(data, sd_age, sd_gender)
+
+</code></pre>
+
+
+</div>

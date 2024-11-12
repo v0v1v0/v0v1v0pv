@@ -1,0 +1,235 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.visreg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualization of regression functions</h2>
+
+<h3>Description</h3>
+
+<p>A function for visualizing regression models quickly and easily.
+Default plots contain a confidence band, prediction line, and partial
+residuals.  Factors, transformations, conditioning, interactions, and a
+variety of other options are supported.  The <code>plot.visreg</code> function
+accepts a <code>visreg</code> or <code>visregList</code> object as calculated by
+<code>visreg</code> and creates the plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'visreg'
+plot(x, overlay=FALSE, print.cond=FALSE,
+whitespace=0.2, partial=identical(x$meta$trans, I), band=TRUE,
+rug=ifelse(partial, 0, 2), strip.names=is.numeric(x$fit[,x$meta$by]),
+legend=TRUE, top=c('line', 'points'), gg=FALSE, line.par=NULL,
+fill.par=NULL, points.par=NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A <code>visreg</code> or <code>visregList</code> object; see
+<code>visreg</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overlay</code></td>
+<td>
+
+<p>When <code>by</code> is specified, by default separate panels are used to
+display each cross-section.  If <code>overlay=TRUE</code>, these
+cross-sections are overlaid on top of each other in a single plot.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>print.cond</code></td>
+<td>
+
+<p>If <code>print.cond=TRUE</code>, the explanatory variable values
+conditioned on in a conditional plot are printed to the console
+(default: <code>FALSE</code>). If <code>print.cond=TRUE</code> and
+<code>type="contrast"</code>, the conditions will still be printed, but
+they have no bearing on the plot unless interactions are present.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>whitespace</code></td>
+<td>
+
+<p>When <code>xvar</code> is a factor, whitespace determines the amount of
+space in between factors on the x-axis.  Default is 0.2, meaning
+that 20 percent of the horizontal axis is whitespace.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>partial</code></td>
+<td>
+
+<p>If <code>partial=TRUE</code> (the default), partial residuals are shown on
+the plot.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>band</code></td>
+<td>
+
+<p>If <code>band=TRUE</code> (the default), confidence bands are shown on the
+plot.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rug</code></td>
+<td>
+
+<p>By default, partial residuals are plotted.  Alternatively, a
+<code>rug</code> may be plotted along the horizontal axis instead.
+Setting <code>rug=TRUE</code> turns off partial residuals by default; if
+one wants both to be plotted, both <code>rug=TRUE</code> and
+<code>partial=TRUE</code> need to be specified.  Two types of rug plots
+are available.  If <code>rug=1</code> or <code>rug=TRUE</code>, then a basic rug
+is drawn on the bottom.  If <code>rug=2</code>, then separate rugs are
+drawn on the top for observations with positive residuals and on the
+bottom for observations with negative residuals.  Such plots are
+particularly useful in logistic regression (see examples).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>strip.names</code></td>
+<td>
+
+<p>When <code>by=TRUE</code>, <code>strip.names=TRUE</code> adds the name of the
+<code>by</code> variable to the strip at the top of each panel.  Default
+is <code>FALSE</code> for factors and <code>TRUE</code> for numeric <code>by</code>
+variables.  <code>strip.names</code> can also be a character vector, in
+which case it replaces the strip names altogether with values chosen
+by the user.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+
+<p>For overlay plots, (<code>overlay=TRUE</code>), should visreg create a
+legend?  If <code>legend=TRUE</code> (the default), a legend is placed in
+the top margin.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>top</code></td>
+<td>
+
+<p>By default, the model fits <code>'line'</code> are plotted on top of the
+partial residuals; usually this is preferable, but it does run the
+risk of obscuring certain residuals.  To change this behavior and
+plot the partial residuals on top, specify <code>top='points'</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gg</code></td>
+<td>
+
+<p>By default (<code>gg=FALSE</code>), <code>visreg</code> will use the
+<code>lattice</code> package to render the plot if multiple panels are
+required.  If <code>gg=TRUE</code>, it will use the <code>ggplot2</code> package
+instead, provided that it is installed.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>line.par</code></td>
+<td>
+
+<p>List of parameters (see <code>par</code>) to pass to
+<code>lines(...)</code> when lines are drawn in the plots.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fill.par</code></td>
+<td>
+
+<p>List of parameters (see <code>par</code>) to pass to
+<code>polygon(...)</code> when shaded confidence regions are drawn in the
+plots.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>points.par</code></td>
+<td>
+
+<p>List of parameters (see <code>par</code>) to pass to
+<code>points(...)</code> when partial residuals are drawn in the plots.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Graphical parameters can be passed to the function to customize the
+plots.  If <code>by=TRUE</code>, lattice parameters can be passed, such as
+layout (see examples below).
+</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Patrick Breheny and Woodrow Burchett
+</p>
+
+
+<h3>References</h3>
+
+
+<ul>
+<li> <p><a href="http://pbreheny.github.io/visreg">http://pbreheny.github.io/visreg</a>
+</p>
+</li>
+<li>
+<p> Breheny, P. and Burchett, W. (2017), Visualizing regression
+models using visreg.
+<a href="https://journal.r-project.org/archive/2017/RJ-2017-046/index.html">https://journal.r-project.org/archive/2017/RJ-2017-046/index.html</a>
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><a href="http://pbreheny.github.io/visreg/options.html">http://pbreheny.github.io/visreg/options.html</a>
+<code>visreg</code>
+<code>visreg2d</code>
+<code>visreg-faq</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fit &lt;- lm(Ozone ~ Solar.R + Wind + Temp,data=airquality)
+visreg(fit, "Wind", line=list(col="red"), points=list(cex=1, pch=1))
+
+## Changing appearance
+visreg(fit, "Wind", line=list(col="red"), points=list(cex=1, pch=1))
+
+## See ?visreg and http://pbreheny.github.io/visreg for more examples
+</code></pre>
+
+
+</div>

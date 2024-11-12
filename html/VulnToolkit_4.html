@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>fld.dur</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Flooding duration</h2>
+
+<h3>Description</h3>
+
+<p>Calculates the percent of time an elevation is submerged
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">fld.dur(z, level)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>z</code></td>
+<td>
+<p>elevation of interest</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>a numeric vector of water levels. Time interval between measurements must be uniform.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Calculates the percent of time an elevation is submerged
+</p>
+
+
+<h3>Value</h3>
+
+<p>value the decimal fraction of measurements in <code>level</code> that fall above <code>z</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>fld.frq</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(NL_6min_2013)
+a &lt;- fld.dur(0.9117, NL_6min_2013[,2]); a # flooding duration at MHW
+a * length(NL_6min_2013[,2]) / 10 # convert to hours per year
+
+b &lt;- fld.dur(0, NL_6min_2013[,2]); b # flooding duration at MLLW
+b * length(NL_6min_2013[,2]) / 10 # hours per year
+
+elev.dur &lt;- data.frame(elev = seq(from = -0.5, to = 1.25, by = 0.005))
+elev.dur$dur &lt;- fld.dur(elev.dur$elev, NL_6min_2013[,2]) * length(NL_6min_2013[,2]) / 10 
+
+plot(elev.dur$dur ~ elev.dur$elev, pch = 19, 
+ylab = "flooding duration (hours per year)", xlab = "elevation (m; MLLW)")
+</code></pre>
+
+
+</div>

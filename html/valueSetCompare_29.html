@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compute_utility_stats</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>compute_utility_stats</h2>
+
+<h3>Description</h3>
+
+<p>Compute utility statistics for given EQ5D versions and value sets.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compute_utility_stats(
+  value_sets_3L = NULL,
+  value_sets_5L = NULL,
+  value_sets_XW = NULL,
+  value_sets_XWR = NULL,
+  value_sets_others = NULL,
+  format_results = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>value_sets_3L</code></td>
+<td>
+<p>(Optional) A character vector specifying the country value sets for EQ5D-3L version.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value_sets_5L</code></td>
+<td>
+<p>(Optional) A character vector specifying the country value sets for EQ5D-5L version.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value_sets_XW</code></td>
+<td>
+<p>(Optional) A character vector specifying the country value sets for EQ5D-XW version.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value_sets_XWR</code></td>
+<td>
+<p>(Optional) A character vector specifying the country value sets for EQ5D-XWR version.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value_sets_others</code></td>
+<td>
+<p>(Optional) A list of lists specifying the inputs for other instruments. Each list within the main list should be named and contain a data frame ('df'), a column specifying the health states ('stateColumn'), and a column specifying the utility values ('utilityColumn').</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>format_results</code></td>
+<td>
+<p>(Optional) A logical indicating whether the result should be formatted. Default is FALSE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame containing utility statistics for each provided value set.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Mean single level transitions are calculated only for EQ-5D.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">compute_utility_stats(value_sets_3L = "ES", value_sets_5L = "ES")
+value_set_other &lt;- list(instrument1 = list(df = data.frame(state=c(1, 2, 3), utility = c(-1, 0, 1)), 
+                        stateColumn = "state", 
+                        utilityColumn = "utility"))
+compute_utility_stats(value_sets_3L = "AR", value_sets_others = value_set_other)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,124 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>fix.crossing</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fixing a Quantile Regression having Crossing</h2>
+
+<h3>Description</h3>
+
+<p>Returns a similar object fitted with columns of the constraint
+matrices amalgamated so it is a
+partially parallel VGLM object.
+The columns combined correspond to certain crossing quantiles.
+This applies especially to an extlogF1() VGLM object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">fix.crossing.vglm(object, maxit = 100, trace = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>an object such as
+a <code>vglm</code> object with
+family function <code>extlogF1</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxit, trace</code></td>
+<td>
+
+<p>values for overwriting components in <code>vglm.control</code>.
+Setting these to <code>NULL</code> will mean
+the values in <code>vglm.control</code> on <code>object</code> will
+be retained.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>additional optional arguments.
+Currently unused.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The quantile crossing problem has been described as
+<em>disturbing</em> and <em>embarrassing</em>.
+This function was specifically written for
+a <code>vglm</code> with family function <code>extlogF1</code>.
+It examines the fitted quantiles of <code>object</code> to see if any cross.
+If so, then a pair of columns is combined to make those
+two quantiles parallel.
+After fitting the submodel it then repeats testing for
+crossing quantiles and repairing them, until there is
+no more quantile crossing detected.
+Note that it is possible that the quantiles cross in
+some subset of the covariate space not covered by the
+data—see <code>is.crossing</code>.
+</p>
+<p>This function is fragile and likely to change in the future.
+For <code>extlogF1</code> models, it is assumed
+that argument <code>data</code> has been assigned a data frame,
+and
+that the default values of the argument <code>parallel</code>
+has been used; this means that the second constraint
+matrix is <code>diag(M)</code>.
+The constraint matrix of the intercept term remains unchanged
+as <code>diag(M)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object very similar to the original object, but
+with possibly different constraint matrices
+(partially parallel) so as to remove any quantile crossing.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>extlogF1</code>,
+<code>is.crossing</code>,
+<code>lms.bcn</code>.
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  ooo &lt;- with(bmi.nz, order(age))
+bmi.nz &lt;- bmi.nz[ooo, ]  # Sort by age
+with(bmi.nz, plot(age, BMI, col = "blue"))
+mytau &lt;- c(50, 93, 95, 97) / 100  # Some quantiles are quite close
+fit1 &lt;- vglm(BMI ~ ns(age, 7), extlogF1(mytau), bmi.nz, trace = TRUE)
+plot(BMI ~ age, bmi.nz, col = "blue", las = 1,
+     main = "Partially parallel (darkgreen) &amp; nonparallel quantiles",
+     sub = "Crossing quantiles are orange")
+fix.crossing(fit1)
+matlines(with(bmi.nz, age), fitted(fit1), lty = 1, col = "orange")
+fit2 &lt;- fix.crossing(fit1)  # Some quantiles have been fixed
+constraints(fit2)
+matlines(with(bmi.nz, age), fitted(fit2), lty = "dashed",
+         col = "darkgreen", lwd = 2)  
+## End(Not run)
+</code></pre>
+
+
+</div>

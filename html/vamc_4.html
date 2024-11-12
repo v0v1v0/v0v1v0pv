@@ -1,0 +1,62 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>calcMortFactors</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate Mortality Factors</h2>
+
+<h3>Description</h3>
+
+<p>Calculates the mortality factors (t - 1)px q(x + t - 1) and tpx required to
+valuate the inPolicy. Extract gender, age (birth date &amp; current date),
+valuation date (current date), and maturity date from inPolicy, mortality
+rates from mortTable.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">calcMortFactors(inPolicy, mortTable, dT = 1/12)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>inPolicy</code></td>
+<td>
+<p>A vector containing 45 attributes of a VA policy,
+usually a row of a VA portfolio dataframe.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mortTable</code></td>
+<td>
+<p>A dataframe with three columns of doubles representing the
+mortality table.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dT</code></td>
+<td>
+<p>A double of stepsize in years; dT = 1 / 12 would be monthly.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Outputs a two-column data frame of doubles of mortFactors (t - 1)px
+q(x + t - 1) and tpx.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">exPolicy &lt;- VAPort[1, ]
+calcMortFactors(exPolicy, mortTable, dT = 1 / 12)
+</code></pre>
+
+
+</div>

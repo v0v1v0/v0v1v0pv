@@ -1,0 +1,134 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Fsweep</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calling F90-implementation of the SWEEP-Operator</h2>
+
+<h3>Description</h3>
+
+<p>Function calls a fast Fortran90-implementation of the SWEEP operator using the
+transpose of the original augmented matrix <code class="reqn">X'X</code> (see <code>getSSQsweep</code>).
+In the sweeping step, also the C matrix, needed to obtain the variance estimates from 
+the sum of squares and the Covariance matrix of the estimates are calculated.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Fsweep(M, asgn, thresh = 1e-10, tol = 1e-10, Ncpu = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>M</code></td>
+<td>
+<p>(matrix) matrix, representing the augmented matrix <code class="reqn">X'X</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>asgn</code></td>
+<td>
+<p>(integer) vector, identifying columns in <code class="reqn">M</code> corresponding to variables, 
+respectively, to their coefficients</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thresh</code></td>
+<td>
+<p>(numeric) value used to check whether the influence of the a coefficient
+to reducing the error sum of squares is small enough to conclude that the
+corresponding column in <code class="reqn">X'X</code> is a linear combination of preceding 
+columns</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>(numeric) value used to check numerical equivalence to zero</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Ncpu</code></td>
+<td>
+<p>(integer) number of cores to be used for parallel processing
+(not yet used)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is an utility-function not intended to be called directly.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(list) with eight elements:<br></p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>SSQ</code></td>
+<td>
+<p>(numeric) vector of ANOVA sum of squares</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LC</code></td>
+<td>
+<p>(integer) vector indicating linear dependence of each column</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>DF</code></td>
+<td>
+<p>(integer) degrees of freedom</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>(double precision) Matrix relating the sums of squares to the variances</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Ci</code></td>
+<td>
+<p>(double precision) inverse of matrix relating the sums of squares to the variances</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VC</code></td>
+<td>
+<p>(double precision)  variance</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SD</code></td>
+<td>
+<p>(double precision) standard deviations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Var</code></td>
+<td>
+<p>(double precision) covariance matrix of the estimated variances</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Florian Dufey <a href="mailto:florian.dufey@roche.com">florian.dufey@roche.com</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Goodnight, J.H. (1979), A Tutorial on the SWEEP Operator, The American Statistician, 33:3, 149-158
+</p>
+
+
+</div>

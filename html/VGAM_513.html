@@ -1,0 +1,208 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>expexpff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Exponentiated Exponential Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the two parameters of the exponentiated exponential
+distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">expexpff(lrate = "loglink", lshape = "loglink",
+         irate = NULL, ishape = 1.1, tolerance = 1.0e-6, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape, lrate</code></td>
+<td>
+
+<p>Parameter link functions for the
+<code class="reqn">\alpha</code> and <code class="reqn">\lambda</code> parameters.
+See <code>Links</code> for more choices.
+The defaults ensure both parameters are positive.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape</code></td>
+<td>
+
+<p>Initial value for the <code class="reqn">\alpha</code>
+parameter. If convergence fails try setting a different
+value for this argument.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>irate</code></td>
+<td>
+
+<p>Initial value for the <code class="reqn">\lambda</code> parameter.
+By default, an initial value is chosen internally using
+<code>ishape</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tolerance</code></td>
+<td>
+
+<p>Numeric. Small positive value for testing whether values
+are close enough to 1 and 2.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+<p> An integer-valued vector specifying which
+linear/additive predictors are modelled as intercepts only.
+The default is none of them.
+If used, choose one value from the set {1,2}.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The exponentiated exponential distribution is an alternative
+to the Weibull and the gamma distributions.
+The formula for the density is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\lambda,\alpha) =
+    \alpha \lambda (1-\exp(-\lambda y))^{\alpha-1}
+    \exp(-\lambda y) </code>
+</p>
+
+<p>where <code class="reqn">y&gt;0</code>,
+<code class="reqn">\lambda&gt;0</code> and
+<code class="reqn">\alpha&gt;0</code>.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">(\psi(\alpha+1)-\psi(1))/\lambda</code>
+(returned as the fitted values)
+where <code class="reqn">\psi</code> is the digamma function.
+The variance of <code class="reqn">Y</code> is
+<code class="reqn">(\psi'(1)-\psi'(\alpha+1))/\lambda^2</code>
+where <code class="reqn">\psi'</code> is the trigamma function.
+</p>
+<p>This distribution has been called the two-parameter generalized
+exponential distribution by Gupta and Kundu (2006).
+A special case of the exponentiated exponential distribution:
+<code class="reqn">\alpha=1</code> is the exponential distribution.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Practical experience shows that reasonably good initial values really
+helps. In particular, try setting different values for the <code>ishape</code>
+argument if numerical problems are encountered or failure to convergence
+occurs. Even if convergence occurs try perturbing the initial value
+to make sure the global solution is obtained and not a local solution.
+The algorithm may fail if the estimate of the shape parameter is
+too close to unity.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Fisher scoring is used, however, convergence is usually very slow.
+This is a good sign that there is a bug, but I have yet to check
+that the expected information is correct.
+Also, I have yet to implement Type-I right censored data using the
+results of Gupta and Kundu (2006).
+</p>
+<p>Another algorithm for fitting this model is implemented in
+<code>expexpff1</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Gupta, R. D. and Kundu, D. (2001).
+Exponentiated exponential family: an alternative to
+gamma and Weibull distributions,
+<em>Biometrical Journal</em>,
+<b>43</b>,
+117–130.
+</p>
+<p>Gupta, R. D. and Kundu, D. (2006).
+On the comparison of Fisher information of the
+Weibull and GE distributions,
+<em>Journal of Statistical Planning and Inference</em>,
+<b>136</b>,
+3130–3144.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>expexpff1</code>,
+<code>gammaR</code>,
+<code>weibullR</code>,
+<code>CommonVGAMffArguments</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# A special case: exponential data
+edata &lt;- data.frame(y = rexp(n &lt;- 1000))
+fit &lt;- vglm(y ~ 1, fam = expexpff, data = edata, trace = TRUE, maxit = 99)
+coef(fit, matrix = TRUE)
+Coef(fit)
+
+
+# Ball bearings data (number of million revolutions before failure)
+edata &lt;- data.frame(bbearings = c(17.88, 28.92, 33.00, 41.52, 42.12, 45.60,
+48.80, 51.84, 51.96, 54.12, 55.56, 67.80, 68.64, 68.64,
+68.88, 84.12, 93.12, 98.64, 105.12, 105.84, 127.92,
+128.04, 173.40))
+fit &lt;- vglm(bbearings ~ 1, fam = expexpff(irate = 0.05, ish = 5),
+            trace = TRUE, maxit = 300, data = edata)
+coef(fit, matrix = TRUE)
+Coef(fit)    # Authors get c(rate=0.0314, shape=5.2589)
+logLik(fit)  # Authors get -112.9763
+
+
+# Failure times of the airconditioning system of an airplane
+eedata &lt;- data.frame(acplane = c(23, 261, 87, 7, 120, 14, 62, 47,
+225, 71, 246, 21, 42, 20, 5, 12, 120, 11, 3, 14,
+71, 11, 14, 11, 16, 90, 1, 16, 52, 95))
+fit &lt;- vglm(acplane ~ 1, fam = expexpff(ishape = 0.8, irate = 0.15),
+            trace = TRUE, maxit = 99, data = eedata)
+coef(fit, matrix = TRUE)
+Coef(fit)    # Authors get c(rate=0.0145, shape=0.8130)
+logLik(fit)  # Authors get log-lik -152.264
+
+## End(Not run)
+</code></pre>
+
+
+</div>

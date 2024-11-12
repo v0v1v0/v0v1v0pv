@@ -1,0 +1,164 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>stat_stepribbon</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Step ribbon statistic</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+Provides stair-step values for ribbon plots, often using in
+conjunction with <code>ggplot2::geom_step()</code>.
+The step ribbon can be added with <code>stat_stepribbon()</code> or
+identically with <code>ggplot2::geom_ribbon(stat = "stepribbon")</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">stat_stepribbon(
+  mapping = NULL,
+  data = NULL,
+  geom = "ribbon",
+  position = "identity",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  direction = "hv",
+  ...
+)
+
+StatStepribbon
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mapping</code></td>
+<td>
+<p>Set of aesthetic mappings created by <code>aes()</code>. If specified and
+<code>inherit.aes = TRUE</code> (the default), it is combined with the default mapping
+at the top level of the plot. You must supply <code>mapping</code> if there is no plot
+mapping.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>The data to be displayed in this layer. There are three
+options:
+</p>
+<p>If <code>NULL</code>, the default, the data is inherited from the plot
+data as specified in the call to <code>ggplot()</code>.
+</p>
+<p>A <code>data.frame</code>, or other object, will override the plot
+data. All objects will be fortified to produce a data frame. See
+<code>fortify()</code> for which variables will be created.
+</p>
+<p>A <code>function</code> will be called with a single argument,
+the plot data. The return value must be a <code>data.frame</code>, and
+will be used as the layer data. A <code>function</code> can be created
+from a <code>formula</code> (e.g. <code>~ head(.x, 10)</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>geom</code></td>
+<td>
+<p>which geom to use; defaults to "<code>ribbon</code>"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>position</code></td>
+<td>
+<p>Position adjustment, either as a string naming the adjustment
+(e.g. <code>"jitter"</code> to use <code>position_jitter</code>), or the result of a call to a
+position adjustment function. Use the latter if you need to change the
+settings of the adjustment.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>If <code>FALSE</code>, the default, missing values are removed with
+a warning. If <code>TRUE</code>, missing values are silently removed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.legend</code></td>
+<td>
+<p>logical. Should this layer be included in the legends?
+<code>NA</code>, the default, includes if any aesthetics are mapped.
+<code>FALSE</code> never includes, and <code>TRUE</code> always includes.
+It can also be a named logical vector to finely select the aesthetics to
+display.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inherit.aes</code></td>
+<td>
+<p>If <code>FALSE</code>, overrides the default aesthetics,
+rather than combining with them. This is most useful for helper functions
+that define both data and aesthetics and shouldn't inherit behaviour from
+the default plot specification, e.g. <code>borders()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>direction</code></td>
+<td>
+<p><code>hv</code> for horizontal-vertical steps, <code>vh</code> for
+vertical-horizontal steps</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments passed on to <code>layer()</code>. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+<code>colour = "red"</code> or <code>size = 3</code>. They may also be parameters
+to the paired geom/stat.</p>
+</td>
+</tr>
+</table>
+<h3>Format</h3>
+
+<p>An object of class <code>StatStepRibbon</code> (inherits from <code>Stat</code>, <code>ggproto</code>, <code>gg</code>) of length 3.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a ggplot
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://groups.google.com/forum/?fromgroups=#!topic/ggplot2/9cFWHaH1CPs">https://groups.google.com/forum/?fromgroups=#!topic/ggplot2/9cFWHaH1CPs</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># using ggplot2::geom_ribbon()
+survival::survfit(survival::Surv(time, status) ~ 1, data = survival::lung) %&gt;%
+  survival::survfit0() %&gt;%
+  broom::tidy() %&gt;%
+  ggplot2::ggplot(ggplot2::aes(x = time, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  ggplot2::geom_step() +
+  ggplot2::geom_ribbon(stat = "stepribbon", alpha = 0.2)
+
+# using stat_stepribbon() with the same result
+survival::survfit(survival::Surv(time, status) ~ 1, data = survival::lung) %&gt;%
+  survival::survfit0() %&gt;%
+  broom::tidy() %&gt;%
+  ggplot2::ggplot(ggplot2::aes(x = time, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  ggplot2::geom_step() +
+  visR::stat_stepribbon(alpha = 0.2)
+</code></pre>
+
+
+</div>

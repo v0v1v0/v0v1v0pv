@@ -1,0 +1,98 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>zonotope_approximation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>A function to over-approximate a zonotope with PCA method and to evaluate the approximation by computing a ratio of fitness.</h2>
+
+<h3>Description</h3>
+
+<p>For the evaluation of the PCA method the exact volume of the approximation body is computed and the volume of the input zonotope is computed by CoolingBodies algorithm. The ratio of fitness is <code class="reqn">R=vol(P) / vol(P_{red})</code>, where <code class="reqn">P_{red}</code> is the approximate polytope.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">zonotope_approximation(
+  Z,
+  fit_ratio = FALSE,
+  settings = list(error = 0.1, walk_length = 1, win_len = 250, hpoly = FALSE)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>A zonotope.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fit_ratio</code></td>
+<td>
+<p>Optional. A boolean parameter to request the computation of the ratio of fitness.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>settings</code></td>
+<td>
+<p>Optional. A list that declares the values of the parameters of CB algorithm as follows:
+</p>
+
+<dl>
+<dt>
+<code>error</code> </dt>
+<dd>
+<p> A numeric value to set the upper bound for the approximation error. The default value is <code class="reqn">0.1</code>.</p>
+</dd>
+<dt>
+<code>walk_length</code> </dt>
+<dd>
+<p> An integer to set the number of the steps for the random walk. The default value is <code class="reqn">1</code>.</p>
+</dd>
+<dt>
+<code>win_len</code> </dt>
+<dd>
+<p> The length of the sliding window for CB algorithm. The default value is <code class="reqn">250</code>.</p>
+</dd>
+<dt>
+<code>hpoly</code> </dt>
+<dd>
+<p> A boolean parameter to use H-polytopes in MMC of CB algorithm. The default value is <code>TRUE</code> when the order of the zonotope is <code class="reqn">&lt;5</code>, otherwise it is <code>FALSE</code>.</p>
+</dd>
+<dt>
+<code>seed</code> </dt>
+<dd>
+<p> Optional. A fixed seed for the number generator.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list that contains the approximation body in H-representation and the ratio of fitness
+</p>
+
+
+<h3>References</h3>
+
+<p><cite>A.K. Kopetzki and B. Schurmann and M. Althoff,
+“Methods for Order Reduction of Zonotopes,” <em>IEEE Conference on Decision and Control,</em> 2017.</cite>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># over-approximate a 2-dimensional zonotope with 10 generators and compute the ratio of fitness
+Z = gen_rand_zonotope(2, 8)
+retList = zonotope_approximation(Z = Z)
+
+</code></pre>
+
+
+</div>

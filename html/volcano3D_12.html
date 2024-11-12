@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>polar_coords</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Coordinates for Three Way Polar Plot</h2>
+
+<h3>Description</h3>
+
+<p>This function creates a 'volc3d' object of S4 class for downstream plots
+containing the p-values from a three-way group comparison, expression data
+sample data and polar coordinates. For RNA-Seq count data, two functions
+<code>deseq_polar</code> or <code>voom_polar</code> can be used instead.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">polar_coords(
+  outcome,
+  data,
+  pvals = NULL,
+  padj = pvals,
+  pcutoff = 0.05,
+  fc_cutoff = NULL,
+  scheme = c("grey60", "red", "gold2", "green3", "cyan", "blue", "purple"),
+  labs = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>outcome</code></td>
+<td>
+<p>Outcome vector with 3 groups, ideally as a factor. If it is
+not a factor, this will be coerced to a factor. This must have exactly 3
+levels. NOTE: if <code>pvals</code> is given, the order of the levels in <code>outcome</code>
+must correspond to the order of columns in <code>pvals</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Dataframe or matrix with variables in columns</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pvals</code></td>
+<td>
+<p>Matrix or dataframe with p-values. The first column represents a
+test across all 3 categories such as one-way ANOVA or likelihood ratio
+test. Columns 2-4 represent pairwise tests comparing groups A vs B, A vs C
+and B vs C, where A, B, C represent levels 1, 2, 3 in <code>outcome</code>. Columns
+2-4 must be provided in the correct order. If <code>pvals</code> is not given, it is
+calculated using the function <code>calc_pvals</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>padj</code></td>
+<td>
+<p>Matrix or dataframe with adjusted p-values. If not supplied,
+defaults to use nominal p-values from <code>pvals</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pcutoff</code></td>
+<td>
+<p>Cut-off for p-value significance</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fc_cutoff</code></td>
+<td>
+<p>Cut-off for fold change on radial axis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scheme</code></td>
+<td>
+<p>Vector of colours starting with non-significant variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labs</code></td>
+<td>
+<p>Optional character vector for labelling groups. Default <code>NULL</code>
+leads to abbreviated labels based on levels in <code>outcome</code> using
+<code>abbreviate()</code>. A vector of length 3 with custom abbreviated names for the
+outcome levels can be supplied. Otherwise a vector length 7 is expected, of
+the form "ns", "B+", "B+C+", "C+", "A+C+", "A+", "A+B+", where "ns" means
+non-significant and A, B, C refer to levels 1, 2, 3 in <code>outcome</code>, and must
+be in the correct order.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Optional arguments passed to <code>calc_pvals</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns an S4 'volc3d' object containing:
+</p>
+
+<ul>
+<li>
+<p>'df' A list of 2 dataframes. Each dataframe contains both x,y,z
+coordinates as well as polar coordinates r, angle. The first dataframe has
+coordinates on scaled data. The 2nd dataframe has unscaled data (e.g. log2
+fold change for gene expression). The <code>type</code> argument in
+<code>volcano3D</code>, <code>radial_plotly</code> and
+<code>radial_ggplot</code> corresponds to these dataframes.
+</p>
+</li>
+<li>
+<p>'outcome' The three-group contrast factor used for comparisons
+</p>
+</li>
+<li>
+<p>'data' Dataframe or matrix containing the expression data
+</p>
+</li>
+<li>
+<p>'pvals' A dataframe containing p-values. First column is the 3-way
+comparison (LRT or ANOVA). Columns 2-4 are pairwise comparisons between
+groups A vs B, A vs C and B vs C, where A, B, C are the 3 levels in the
+outcome factor.
+</p>
+</li>
+<li>
+<p>'padj' A dataframe containing p-values adjusted for multiple testing
+</p>
+</li>
+<li>
+<p>'pcutoff Numeric value for cut-off for p-value significance
+</p>
+</li>
+<li>
+<p>'scheme' Character vector with colour scheme for plotting
+</p>
+</li>
+<li>
+<p>'labs' Character vector with labels for colour groups
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><code>deseq_polar</code>, <code>voom_polar</code>,
+<code>calc_pvals</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(example_data)
+syn_polar &lt;- polar_coords(outcome = syn_example_meta$Pathotype,
+                          data = t(syn_example_rld))
+
+</code></pre>
+
+
+</div>

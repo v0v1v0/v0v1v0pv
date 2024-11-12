@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>createVARCoefs_ltriangular</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create coefficients of a VAR model</h2>
+
+<h3>Description</h3>
+
+<p>Randomly create sparse lower-triangular matrices for VAR coefficients of
+lagged endogenous variables, and set a constant vector.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">createVARCoefs_ltriangular(p = 1, K = 5, diag_val = 1/p,
+  num_nonzero = 0, const_vector = NULL, range_min = 0.2,
+  range_max = 1/p)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>lag order</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>K</code></td>
+<td>
+<p>Number of time series variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>diag_val</code></td>
+<td>
+<p>diagonal values of A1,...,Ap</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>num_nonzero</code></td>
+<td>
+<p>Number of nonzero entries on the lower-triangular parts of
+A1, ..., Ap</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>const_vector</code></td>
+<td>
+<p>constant vector c of the VAR model</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>range_min, range_max</code></td>
+<td>
+<p>Each nonzero off-diagonal entry of coefficient
+matrices is drawn uniformly from the interval
+[-range_max, -range_min] U [range_min, range_max]</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Consider VAR(p) model:
+</p>
+<p style="text-align: center;"><code class="reqn">y_t = A_1 y_{t-1} + ... + A_p y_{t-p} + c + e_t,</code>
+</p>
+
+<p>with the constant deterministic variable (d_t = 1).
+The function creates the coefficient matrices A_1, ..., A_p and constant
+vector c.
+</p>
+<p>Diagonal elements of each K-by-K matrix A_k are all equal to diag_val,
+and off-diagonal elements are all zero except for a few randomly selected
+nonzero elements. Nonzero off-diagonal elements are selected from
+lower-triangular parts of A_i and the values are drawn from a uniform
+distribution over [-range_max, -range_min] U [range_min, range_max].
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list object with components $A and $c. $A is a list of K-by-K
+matrices A_1, ..., A_p, and $c is a constant vector of length K.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">p &lt;- 1; K &lt;- 20;
+const_vector &lt;- c(rep(0.2, 5), rep(0.7, 15))
+createVARCoefs_ltriangular(p = p, K = K, diag_val = 0.6,
+num_nonzero = K, const_vector = const_vector, range_max = 1)
+</code></pre>
+
+
+</div>

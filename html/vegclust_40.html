@@ -1,0 +1,63 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vegclust2kmeans</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Reshapes as kmeans object
+</h2>
+
+<h3>Description</h3>
+
+<p>This function casts an object of class <code>vegclust</code> into an object of class <code>kmeans</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vegclust2kmeans(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class <code>vegclust</code> to be casted, where <code>method="KM"</code> and <code>mode="raw"</code>.</p>
+</td>
+</tr></table>
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, CREAF
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vegclust</code>, <code>kmeans</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Loads data  
+data(wetland)
+  
+## This equals the chord transformation 
+## (see also  \code{\link{decostand}} in package vegan)
+wetland.chord = as.data.frame(sweep(as.matrix(wetland), 1, 
+                              sqrt(rowSums(as.matrix(wetland)^2)), "/"))
+
+## Create noise clustering with 3 clusters. Perform 10 starts from random seeds 
+wetland.vc = vegclust(wetland.chord, mobileCenters=3, 
+                      method="KM", nstart=10)
+
+## Reshapes as kmeans object
+wetland.km = vegclust2kmeans(wetland.vc)
+wetland.km
+</code></pre>
+
+
+</div>

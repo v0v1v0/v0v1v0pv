@@ -1,0 +1,247 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lssVarReg.multi</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Semi parametric location, shape and scale regression</h2>
+
+<h3>Description</h3>
+
+<p><code>lssVarReg.multi</code> performs a semiparametric location (<code class="reqn">\xi</code> or xi), shape (<code class="reqn">\nu</code> or nu) and scale (<code class="reqn">\omega</code> or omega) regression model. This is designed for multiple covariates that are fit in the location, scale and shape models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lssVarReg.multi(
+  y,
+  x,
+  locationmodel = c("constant", "linear", "semi"),
+  location.vars = c(1),
+  scale2model = c("constant", "linear", "semi"),
+  scale2.vars = c(1),
+  shapemodel = c("constant", "linear", "semi"),
+  shape.vars = c(1),
+  knots.l = NULL,
+  knots.sc = NULL,
+  knots.sh = NULL,
+  degree = 2,
+  location.init = NULL,
+  scale2.init = NULL,
+  shape.init = NULL,
+  int.maxit = 1000,
+  print.it = FALSE,
+  control = list(...),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Vector containing outcome data. Must be no missing data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Matrix containing the covariate data, same length as <code>y</code>. Must be no missing data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>locationmodel</code></td>
+<td>
+<p>Vector to specify the location model to be fit for each covariate. Options: <code>"constant"</code> = constant model (intercept only), <code>"linear"</code> = linear term with x covariate, <code>"semi"</code> = semiparametric spline (specify with <code>knots.l</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>location.vars</code></td>
+<td>
+<p>Vector to specify the column(s) in <code>x</code> referring to covariates to be fit in the location model, eg c(1,2) indicates columns 1 and 2 in <code>x</code>. Must be the same length as <code>locationmodel</code> which specifies if they are fit as linear/semi. If semi, use <code>knots.l</code> to specify knots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale2model</code></td>
+<td>
+<p>Vector to specify the scale^2 model to be fit for each covariate. Options: <code>"constant"</code> = constant term only, <code>"linear"</code> = linear term with <code>x</code> covariate, <code>"semi"</code> = semiparametric spline (specify with <code>knots.sc</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale2.vars</code></td>
+<td>
+<p>Vector to specify the column(s) in <code>x</code> referring to covariates to be fit in the scale^2 model, eg c(1,2) indicates columns 1 and 2 in <code>x</code>. Must be the same length as <code>scale2model</code> which specifies if they are fit as linear/semi. If semi, use <code>knots.sc</code> to specify knots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shapemodel</code></td>
+<td>
+<p>Vector to specify the shape model to be fit for each covariate. Options: <code>"constant"</code> = constant shape model, <code>"linear"</code> = linear term with x covariate, <code>"semi"</code> = semiparametric spline (specify with <code>knots.sh</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape.vars</code></td>
+<td>
+<p>Vector to specify the column(s) in <code>x</code> referring to covariates to be fit in the shape model, eg c(1,2) indicates columns 1 and 2 in <code>x</code>. Must be the same length as <code>shapemodel</code> which specifies if they are fit as linear/semi. If semi, use <code>knots.sh</code> to specify knots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knots.l</code></td>
+<td>
+<p>Vector indicating the number of internal knots to be fit in the location model for each covariate. Default is '2'. (Note that the knots are placed equidistantly over x.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knots.sc</code></td>
+<td>
+<p>Vector indicating the number of internal knots to be fit in the scale^2 model for each covariate. Default is '2'. (Note that the knots are placed equidistantly over x.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knots.sh</code></td>
+<td>
+<p>Vector indicating the number of internal knots to be fit in the shape model for each covariate. Default is '2'. (Note that the knots are placed equidistantly over x.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>degree</code></td>
+<td>
+<p>Integer to indicate the degree of the splines fit in the location, scale and shape.  Default is '2'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>location.init</code></td>
+<td>
+<p>Vector of initial parameter estimates for the location model. Defaults to vector of 1's of appropriate length.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale2.init</code></td>
+<td>
+<p>Vector of initial parameter estimates for the scale^2 model. Defaults to vector of 1's of appropriate length.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape.init</code></td>
+<td>
+<p>Vector of initial parameter estimates for the shape model. Defaults to vector of 1's of appropriate length.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>int.maxit</code></td>
+<td>
+<p>Integer of maximum iterations for the internal location and scale EM algorithm. Default is 1000 iterations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>print.it</code></td>
+<td>
+<p>Logical for printing progress of estimates through each iteration. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>List of control parameters for the algorithm. See <code>VarReg.control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be used to form the default control argument if it is not supplied
+directly</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>lssVarReg</code> returns an object of class <code>"lssVarReg"</code>, which inherits most from class
+<code>"VarReg"</code>. This object of class <code>lssVarReg</code> is a list of the following components:
+</p>
+
+<ul>
+<li> <p><code>modeltype</code>: Text indicating the model that was fit, always "LSS model" for this model.
+</p>
+</li>
+<li> <p><code>locationmodel</code>, <code>scale2model</code>, <code>shapemodel</code>, <code>knots.l</code>, <code>knots.sc</code>,
+<code>knots.sh</code>, <code>degree</code>,<code>mono.scale</code> : Returning the input variables as described above
+</p>
+</li>
+<li>
+<p><code>converged</code>: Logical argument indicating if convergence occurred.
+</p>
+</li>
+<li>
+<p><code>iterations</code>: Total iterations performed of the main algorithm (not including the
+internal EM algorithm).
+</p>
+</li>
+<li>
+<p><code>reldiff</code>: the positive convergence tolerance that occured at the final iteration.
+</p>
+</li>
+<li>
+<p><code>loglik</code>: Numeric variable of the maximised log-likelihood.
+</p>
+</li>
+<li>
+<p><code>aic.c</code>: Akaike information criterion corrected for small samples
+</p>
+</li>
+<li>
+<p><code>aic</code>: Akaike information criterion
+</p>
+</li>
+<li>
+<p><code>bic</code>: Bayesian information criterion
+</p>
+</li>
+<li>
+<p><code>hqc</code>: Hannan-Quinn information criterion
+</p>
+</li>
+<li>
+<p><code>location</code>: Vector of the maximum likelihood estimates of the location parameters.
+</p>
+</li>
+<li>
+<p><code>scale2</code>: Vector of the maximum likelihood estimates of the scale (squared) parameters.
+</p>
+</li>
+<li>
+<p><code>shape</code>: Vector of the maximum likelihood estimates of the shape parameters.
+</p>
+</li>
+<li>
+<p><code>data</code>: Dataframe containing the variables included in the model.
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><code>VarReg.control</code>  <code>plotlssVarReg</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## not run
+## library(palmerpenguins)
+## cc&lt;-na.omit(penguins)
+## y&lt;-cc$body_mass_g
+## x&lt;-as.data.frame(cbind(cc$bill_length_mm, cc$flipper_length_mm,cc$bill_depth_mm))
+## colnames(x) &lt;-c("bill length mm", "flipper length mm","bill depth mm")
+## model1&lt;-lssVarReg.multi(y, x,
+##                         locationmodel="linear", location.vars = 2,
+##                         scale2model="constant",
+##                         shapemodel=c("linear", "semi"), shape.vars = c(2,3),
+##                         knots.sh = 1, int.maxit=10 )
+## model1[-21] ## print model
+</code></pre>
+
+
+</div>

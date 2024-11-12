@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Sliding.Window</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Sliding Window
+</h2>
+
+<h3>Description</h3>
+
+<p>Creates a sliding window analysis plot for the VLFs in a matrix of sequences.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Sliding.Window(VLF, seqlength, n = 30)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>VLF</code></td>
+<td>
+
+<p>A vector of VLFs per position across the barcocde.  Can be a single vector of all VLFs per positions, or can be a matrix containing singleton and shared VLFs.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seqlength</code></td>
+<td>
+
+<p>Length of the barcode sequence.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+
+<p>The number of positions to average the window across (n = 30 by default).
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The argument VLF can be calculated using the function VLF.count.pos for all VLFs, or find.singles for singleton and shared VLFs.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A sliding window plot for the VLFs in each position of the barcode averaged over n.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: data(birds)
+species.names &lt;- birds[,2]
+specimen.Number &lt;- nrow(birds)
+rownames(birds) &lt;- species.names
+Nuc.count &lt;- count.function(birds, specimen.Number, 648)
+frequency.matrix &lt;- ffrequency.matrix.function(Nuc.count, 648)
+birdSpec.freq &lt;- specimen.frequencies(frequency.matrix, birds, specimen.Number, species.names, 648)
+Bird_position_VLFcount &lt;- VLF.count.pos(birdSpec.freq, 0.001, 648)
+Sliding.Window(Bird_position_VLFcount, 648)
+## End(Not run)
+</code></pre>
+
+
+</div>

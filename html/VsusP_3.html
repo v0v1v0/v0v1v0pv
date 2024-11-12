@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>S2MVarSelection</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variable selection using shrinkage priors :: S2MVarSelection</h2>
+
+<h3>Description</h3>
+
+<p>S2MVarSelection function will take S2M: a list obtained from the 2Means.variables function and H: the estimated number of signals obtained from the optimal.H.b.i function. This will give out the important subset of variables for the Gaussian Linear model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">S2MVarSelection(Beta, H = 5)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Beta</code></td>
+<td>
+<p>matrix consisting of N posterior samples of p variables that is known either to user or from Sequential2Means function</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H</code></td>
+<td>
+<p>Estimated number of signals obtained from the optimal.b.i function of numeric data type</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a vector containing indices of important subset of variables of dimension H X 1.
+</p>
+
+
+<h3>References</h3>
+
+<p>Makalic, E. &amp; Schmidt, D. F.
+High-Dimensional Bayesian Regularised Regression with the BayesReg Package
+arXiv:1611.06649, 2016
+</p>
+<p>Li, H., &amp; Pati, D.
+Variable selection using shrinkage priors
+Computational Statistics &amp; Data Analysis, 107, 107-119.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+n &lt;- 10
+p &lt;- 5
+X &lt;- matrix(rnorm(n * p), n, p)
+beta &lt;- exp(rnorm(p))
+Y &lt;- as.vector(X %*% beta + rnorm(n, 0, 1))
+df &lt;- data.frame(X, Y)
+# Fit a model using gaussian horseshoe+ for 200 samples
+# # recommended n.samples is 5000 and burning is 2000
+rv.hs &lt;- bayesreg::bayesreg(Y ~ ., df, "gaussian", "horseshoe+", 110, 100)
+
+Beta &lt;- rv.hs$beta
+H &lt;- 3
+impVariablesGLM &lt;- S2MVarSelection(Beta, H)
+impVariablesGLM
+
+</code></pre>
+
+
+</div>

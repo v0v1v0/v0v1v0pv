@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gof.vblpcm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Goodness of fit based on simulations from the fitted object. 
+</h2>
+
+<h3>Description</h3>
+
+<p>Create a goodness of fit statistics and plots based on the degree distributions of networks simulated fitted 
+from a fitted variational approximation. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vblpcm'
+gof(object, ...,
+         nsim=100,
+         GOF=NULL,
+         verbose=FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>fitted VBLPCM object; usually output from vblpcmfit() or vblpcmstart()
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>optional arguments for lower level functions
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsim</code></td>
+<td>
+<p>number of networks to simulate
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>GOF</code></td>
+<td>
+<p>formula; an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> formula object, of the form
+<code>~ &lt;model terms&gt;</code> specifying the
+statistics to use to diagnosis the goodness-of-fit of the model.
+They do not need to be in the model formula specified in
+<code>formula</code>, and typically are not.
+Examples are the degree distribution ("degree"),
+minimum geodesic distances ("dist"), and shared partner distributions
+("espartners" and "dspartners").
+For the details on the possible
+<code>&lt;model terms&gt;</code>, see <code>ergm-terms</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Provide verbose information on the progress of the
+simulation.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A sample of graphs is randomly drawn from the posterior of the vblpcmfit() result. 
+</p>
+<p>A plot of the summary measures may then be plotted using plot().  
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Salter-Townshend
+</p>
+
+
+<h3>See Also</h3>
+
+<p>latentnet::gof.ergmm
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(sampson,package="VBLPCM")
+v.start&lt;-vblpcmstart(samplike,G=3,model="rreceiver",LSTEPS=1e3)
+v.fit&lt;-vblpcmfit(v.start,STEPS=20)
+### plot the mean posterior positions
+plot(v.fit, R2=0.05,main="Sampson's Monks: VB with Receiver Effects")
+### Look at gof plots
+plot(gof(v.fit,GOF=~distance,nsim=50))
+</code></pre>
+
+
+</div>

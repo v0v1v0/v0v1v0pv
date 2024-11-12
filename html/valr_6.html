@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_complement</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Identify intervals in a genome not covered by a query.</h2>
+
+<h3>Description</h3>
+
+<p>Identify intervals in a genome not covered by a query.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_complement(x, genome)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>genome</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>ivl_df
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other single set operations: 
+<code>bed_cluster()</code>,
+<code>bed_flank()</code>,
+<code>bed_genomecov()</code>,
+<code>bed_merge()</code>,
+<code>bed_partition()</code>,
+<code>bed_shift()</code>,
+<code>bed_slop()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 0,      10,
+  "chr1", 75,     100
+)
+
+genome &lt;- tibble::tribble(
+  ~chrom, ~size,
+  "chr1", 200
+)
+
+bed_glyph(bed_complement(x, genome))
+
+genome &lt;- tibble::tribble(
+  ~chrom,  ~size,
+  "chr1",  500,
+  "chr2",  600,
+  "chr3",  800
+)
+
+x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 100,    300,
+  "chr1", 200,    400,
+  "chr2", 0,      100,
+  "chr2", 200,    400,
+  "chr3", 500,    600
+)
+
+# intervals not covered by x
+bed_complement(x, genome)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vcov.VCA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate Variance-Covariance Matrix of Fixed Effects for an 'VCA' Object</h2>
+
+<h3>Description</h3>
+
+<p>Return the variance-covariance matrix of fixed effects for a linear mixed model
+applicable for objects of class 'VCA'.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VCA'
+vcov(object, quiet = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>(VCA) object for which the variance-covariance matrix of
+fixed effects shall be calculated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = will suppress any warning, which will be issued otherwise</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Actually this function only extracts this matrix or, if not available, calls function
+<code>vcovFixed</code> which performs calculations. It exists for compatibility reasons,
+i.e. for coneniently using objects of class 'VCA' with other packages expecting this
+function, e.g. the 'multcomp' package for general linear hypotheses for parametric
+models.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(matrix) corresponding to the variance-covariance matrix of fixed effects
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+fit1 &lt;- anovaMM(y~day/(run), dataEP05A2_1)
+vcov(fit1)
+
+fit2 &lt;- anovaVCA(y~day/run, dataEP05A2_1)
+vcov(fit2)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getInfectionRate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate infection rate</h2>
+
+<h3>Description</h3>
+
+<p>'getInfectionRate()' requires at least five years prior to the target_year of arthro collections data to calculate for the specified parameters. The function uses the methods of the Gateway Abundance Anomaly calculator, and will not work if there is fewer than five years of data present.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getInfectionRate(
+  pools,
+  interval,
+  target_disease,
+  pt_estimate,
+  scale = 1000,
+  species_list = NULL,
+  trap_list = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>pools</code></td>
+<td>
+<p>Pools data retrieved from 'getPools()'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>interval</code></td>
+<td>
+<p>Calculation interval for infection rate, accepts “collection_date”,“Biweek”,“Week”, and “Month</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>target_disease</code></td>
+<td>
+<p>The disease to calculate infection rate for–i.e. “WNV”. Disease acronyms are the accepted input. To see a list of disease acronyms, run 'unique(pools$target_acronym)'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pt_estimate</code></td>
+<td>
+<p>The estimation type for infection rate. Options include: “mle”,“bc-mle”, “mir”</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>Constant to multiply infection rate by</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species_list</code></td>
+<td>
+<p>Species filter for calculating infection rate species_display_name is the accepted notation. To see a list of species present in your data run 'unique(pools$species_display_name)'. If species is unspecified, the default 'NULL' will return data for all species in data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trap_list</code></td>
+<td>
+<p>Trap filter for calculating infection rate. Trap_acronym is the is the accepted notation. Run 'unique(pools$trap_acronym)' to see trap types present in your data. If trap_list is unspecified, the default 'NULL' will return data for all trap types.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Dataframe of infection rate calculation
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">getInfectionRate(sample_pools,
+                 interval = "Biweek",
+                 target_disease = "WNV",
+                 pt_estimate = "mle",
+                 scale = 1000,
+                 species_list = list("Cx pipiens"),
+                 trap_list = list("CO2"))
+</code></pre>
+
+
+</div>

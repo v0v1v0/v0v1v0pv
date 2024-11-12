@@ -1,0 +1,241 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>create_vote</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a vote Object that can be used in counting methods</h2>
+
+<h3>Description</h3>
+
+<p>Some counting methods in this package only accept <code>vote</code> object created by 
+this function. So the first step should always be using this function. The function 
+will return the modified ballots and some other helpful information. See Details 
+and Values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">create_vote(x, xtype = 2, candidate = NULL, isna = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a data.frame, matrix or list of raw ballots. See Details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xtype</code></td>
+<td>
+<p>should be 1, 2 (default) or 3, designating the 
+type of <code>x</code>. See Details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>candidate</code></td>
+<td>
+<p>if <code>xtype</code> is 1, this argument is ignored. 
+If <code>xtype</code> is 2 or 3, candidate names
+must be given as a character or numeric vector. If a name is not given, 
+but is still on a ballot, then the name is ignored !</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>isna</code></td>
+<td>
+<p>entries which should be taken as NAs. 
+<code>NA</code> in <code>x</code> will always be taken as missing value, 
+however, you can add more (e.g., you may use 99, 999 as missing values). 
+If x contains characters, 
+this argument should also be provided with a 
+character vector, and if numeric, then numeric vector. Do 
+not add <code>NA</code> to <code>isna</code>, because the default (NULL)  
+means <code>NA</code> is already included.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function accepts the following input:
+</p>
+
+<ul>
+<li>
+<p> (1) when <code>xtype</code> is 1, x must be a matrix. Column names are candidate names (if
+column names are NULL, they will be created: x1, x2, x3...). Candidate number is the number 
+of columns of the matrix. Entry ij is the numeric score assigned by 
+the ith voter to the jth candidate.
+</p>
+</li>
+<li>
+<p> (2) when <code>xtype</code> is 2, x can be a matrix or data.frame. 
+Candidate number is the length of <code>candidate</code>. 
+Entries are names (character or numeric) of candidates. 
+The i1, i2, i3... entries are the 1st, 2nd, 
+3rd... preferences of voter i.
+</p>
+</li>
+<li>
+<p> (3) when <code>xtype</code> is 3, x should be a list. 
+Each element of the list is a ballot, a vector 
+contains the names (character or numeric) of candidates. 
+The 1st preference is in the 1st position of 
+the vector, the 2nd preference is in the 2nd position... The number of candidates is the length 
+of <code>candidate</code>; as a result, a ballot with number of names 
+larger than candidate number is 
+labelled as wrong.
+</p>
+</li>
+</ul>
+<p>The function also returns Condorcet matrix. Suppose candidates are i, j, k. 
+The voter likes i best, so he assigns 1 to i. The 2nd choice is j, so 
+he assigns 2 to j, leaving k as NA. Now computing the Condorcet matrix: 
+since i's score is smaller than j' score, we add 1 to the ij cell of the matrix, 
+and add 0 to the ji cell. Candidate k's NA is automatically set to the 
+highest (that is, the worst) score: 3 (since there are 3 candidates); i &lt; k, so 
+we add 1 to the ik cell and add 0 to ki cell. Besides, there is also a score 
+difference matrix: we add 2 - 1 = 1 to the ij cell of score difference matrix, 
+and add 3 - 1 = 2 to the ik cell. If tie appears, both sides acquire 0.
+</p>
+<p>Note the ways we calculate the Condorcet matrix. (1) It allow ties, that is, 
+duplicated score values. (2) NA is deems as the worst, which means: if a 
+voter does not mention a candidate, the candidate will be given the 
+highest (worst) score. (3) Ballots mention only one name are assumed 
+to express preference, since unmentioned candidates are assumed to 
+be equally hated. (4) The Condorcet matrix returned 
+by <code>create_vote</code> uses ballots that may have duplicated values 
+and have only one valid entry. However, Condorcet family 
+methods in this package provide possibility to recalculate the matrix. 
+And, the simplest way to get rid of duplicated values and NAs is 
+to delete some ballots.
+</p>
+
+
+<h3>Value</h3>
+
+<p>an object of class <code>vote</code> is returned, which 
+is essentially a list. It has the following elements.
+</p>
+
+<ul>
+<li>
+<p> (1) <code>call</code> the call.
+</p>
+</li>
+<li>
+<p> (2) <code>ballot</code> the returned ballot. It is always a score matrix. 
+The column names are candidate names; entries are numeric scores 
+assigned by voters. Missing values are all set to NA.
+</p>
+</li>
+<li>
+<p> (3) <code>nas</code> those which are taken as NA in data cleaning.
+</p>
+</li>
+<li>
+<p> (4) <code>candidate</code> candidate names.
+</p>
+</li>
+<li>
+<p> (5) <code>candidate_num</code> number of candidates.
+</p>
+</li>
+<li>
+<p> (6) <code>ballot_num</code> number of ballots.
+</p>
+</li>
+<li>
+<p> (7) <code>ballot_at_least_one</code> number of ballots that mention
+at least one candidate.
+</p>
+</li>
+<li>
+<p> (8) <code>cdc</code> the Condorcet matrix calculated with ballots 
+that have no NA entries.
+</p>
+</li>
+<li>
+<p> (9) <code>cdc_with_na</code> the Condorcet matrix calculated with 
+ballots that have at least one valid entry.
+</p>
+</li>
+<li>
+<p> (10) <code>dif</code> the score difference matrix calculated with 
+ballots that have no NA entries.
+</p>
+</li>
+<li>
+<p> (11) <code>dif_with_na</code> the score difference matrix calculated 
+with ballots that have at least one valid entry.
+</p>
+</li>
+<li>
+<p> (12) <code>row_with_na</code> rows of <code>ballot</code> with NAs.
+</p>
+</li>
+<li>
+<p> (13) <code>row_non_na</code> for rows with NAs, the number of 
+non-NA entries of them.
+</p>
+</li>
+<li>
+<p> (14) <code>row_with_dup</code> rows of <code>ballot</code> with 
+duplicated score values.
+</p>
+</li>
+<li>
+<p> (15) <code>approval_able</code> if length of <code>row_non_dup</code> 
+is 0, then it is TRUE, else, FALSE. It indicates whether approval 
+method can be used. When <code>xtype</code> is 2 or 3, it is always TRUE.
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># xtype is 2
+raw &lt;- c(
+    rep(c('m', 'n', 'c', 'k'), 42), 
+    rep(c('n', 'c', 'k', 'm'), 26), 
+    rep(c('c', 'k', 'n', 'm'), 15), 
+    rep(c('k', 'c', 'n', 'm'), 17)
+) 
+raw &lt;- matrix(raw, ncol = 4, byrow = TRUE)
+vote &lt;- create_vote(raw, xtype = 2, candidate = c('m', 'n', 'k', 'c'))
+
+# xtype is 3
+raw &lt;- list(
+    c('a', 'e', 'c', 'd', 'b'), 
+    c('b', 'a', 'e'), 
+    c('c', 'd', 'b'), 
+    c('d', 'a', 'b'), 
+    c('a', 'a', 'b', 'b', 'b'), 
+    c(NA, NA, NA, NA), 
+    v7 = NULL, 
+    v8 = c('a', NA, NA, NA, NA, NA, NA), 
+    v9 = rep(" ", 3)
+)
+y &lt;- check_dup_wrong(raw, xtype = 3, candidate = letters[1: 4])
+raw2 &lt;- raw[-y$row_with_wrong]
+vote &lt;- create_vote(raw2, xtype = 3, candidate = letters[1: 4])
+
+# xtype is 1
+raw &lt;- rbind(
+    c(1, 2, 5, 3, 3), 	
+    c(2, 1, 1, 3, 5), 	
+    c(1, 2, 5, 3, 4), 
+    c(1, 2, 5, 3, 4), 
+    c(NA, NA, NA, NA, NA),		
+    c(NA, 3, 5, 1, 2), 
+    c(NA, 999, NA, 1, 5)
+)
+vote &lt;- create_vote(raw, xtype = 1, isna = 999)
+</code></pre>
+
+
+</div>

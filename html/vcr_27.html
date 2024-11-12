@@ -1,0 +1,146 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RequestHandlerHttr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>RequestHandlerHttr</h2>
+
+<h3>Description</h3>
+
+<p>Methods for the httr package, building on RequestHandler
+</p>
+
+
+<h3>Super class</h3>
+
+<p><code>vcr::RequestHandler</code> -&gt; <code>RequestHandlerHttr</code>
+</p>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-RequestHandlerHttr-new"><code>RequestHandlerHttr$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-RequestHandlerHttr-clone"><code>RequestHandlerHttr$clone()</code></a>
+</p>
+</li>
+</ul>
+<details open><summary>Inherited methods</summary><ul>
+<li><span class="pkg-link" data-pkg="vcr" data-topic="RequestHandler" data-id="handle"><a href="../../vcr/html/RequestHandler.html#method-RequestHandler-handle"><code>vcr::RequestHandler$handle()</code></a></span></li>
+</ul></details><hr>
+<a id="method-RequestHandlerHttr-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a new <code>RequestHandlerHttr</code> object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>RequestHandlerHttr$new(request)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>request</code></dt>
+<dd>
+<p>The request from an object of class <code>HttpInteraction</code></p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>A new <code>RequestHandlerHttr</code> object
+</p>
+
+
+<hr>
+<a id="method-RequestHandlerHttr-clone"></a>
+
+
+
+<h4>Method <code>clone()</code>
+</h4>
+
+<p>The objects of this class are cloneable with this method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>RequestHandlerHttr$clone(deep = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>deep</code></dt>
+<dd>
+<p>Whether to make a deep clone.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+vcr_configure(
+ dir = tempdir(),
+ record = "once"
+)
+
+# GET request
+library(httr)
+load("~/httr_req.rda")
+req
+x &lt;- RequestHandlerHttr$new(req)
+# x$handle()
+
+# POST request
+library(httr)
+webmockr::httr_mock()
+mydir &lt;- file.path(tempdir(), "testing_httr")
+invisible(vcr_configure(dir = mydir))
+use_cassette(name = "testing2", {
+  res &lt;- POST("https://hb.opencpu.org/post", body = list(foo = "bar"))
+}, match_requests_on = c("method", "uri", "body"))
+
+load("~/httr_req_post.rda")
+insert_cassette("testing3")
+httr_req_post
+x &lt;- RequestHandlerHttr$new(httr_req_post)
+x
+# x$handle()
+self=x
+
+
+## End(Not run)
+</code></pre>
+
+
+</div>

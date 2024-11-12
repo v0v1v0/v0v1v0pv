@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mSampling3D</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>3D background sampling</h2>
+
+<h3>Description</h3>
+
+<p>Samples XYZ coordinates from a shapefile
+from maximum to minimum occurrence depth at XYZ
+resolution of envBrick.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mSampling3D(occs, envBrick, mShp, depthLimit = "all", verbose = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>occs</code></td>
+<td>
+<p>A <code>data.frame</code> with at least three columns
+named "longitude", "latitude", and "depth", or that
+can be coerced into this format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>envBrick</code></td>
+<td>
+<p>A <code>SpatRaster</code> vector object to serve
+as a template for generating background sampling
+coordinates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mShp</code></td>
+<td>
+<p>A shapefile defining the area from
+which background points should be sampled.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>depthLimit</code></td>
+<td>
+<p>An argument controlling the depth
+extent of sampling. Refer to <code>Details</code> for more information.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p><code>logical</code>. Switching to <code>FALSE</code> mutes message describing
+which columns in <code>occs</code> are interpreted as x, y, and z coordinates.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is designed to sample background points for
+distributional modeling in three dimensions. If a voxel (3D pixel)
+in the <code>SpatRaster</code> vector intersects with an occurrence from
+<code>occs</code>, it is removed. Note that this function returns points
+representing every voxel in the background area within the
+specified depth range. It is up to the user to downsample from
+these data as necessary, depending on the model type being used.
+</p>
+<p><code>depthLimit</code> argument options:
+</p>
+
+<ul>
+<li> <p><code>occs</code> Samples background from the full depth extent of <code>occs</code>.
+</p>
+</li>
+<li> <p><code>all</code> Samples background from the full depth extent of <code>envBrick</code>.
+</p>
+</li>
+<li>
+<p> A <code>vector</code> of length 2 with maximum and minimum depth values from
+which to sample.
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>A <code>data.frame</code> with 3D coordinates of points for background
+sampling.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(terra)
+
+# Create test raster
+r1 &lt;- rast(ncol=10, nrow=10)
+values(r1) &lt;- 1:100
+r2 &lt;- rast(ncol=10, nrow=10)
+values(r2) &lt;- c(rep(20, times = 50), rep(60, times = 50))
+r3 &lt;- rast(ncol=10, nrow=10)
+values(r3) &lt;- 8
+envBrick &lt;- c(r1, r2, r3)
+names(envBrick) &lt;- c(0, 10, 30)
+
+# Create test occurrences
+set.seed(0)
+longitude &lt;- sample(ext(envBrick)[1]:ext(envBrick)[2],
+                    size = 10, replace = FALSE)
+set.seed(0)
+latitude &lt;- sample(ext(envBrick)[3]:ext(envBrick)[4],
+                   size = 10, replace = FALSE)
+set.seed(0)
+depth &lt;- sample(0:35, size = 10, replace = TRUE)
+occurrences &lt;- data.frame(longitude,latitude,depth)
+
+# Generate background sampling buffer
+buffPts &lt;- vect(occurrences,
+                c("longitude", "latitude"))
+crs(buffPts) &lt;- crs(envBrick)
+mShp &lt;- aggregate(buffer(buffPts, width = 1000000))
+
+# Here's the function
+occSample3d &lt;- mSampling3D(occs = occurrences,
+                           envBrick = envBrick,
+                           mShp = mShp,
+                           depthLimit = "occs")
+
+</code></pre>
+
+
+</div>

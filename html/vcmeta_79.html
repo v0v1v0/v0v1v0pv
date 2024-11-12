@@ -1,0 +1,164 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>replicate.slope</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares and combines slope coefficients in original and follow-up studies</h2>
+
+<h3>Description</h3>
+
+<p>This function computes confidence intervals for a slope from the original and
+follow-up studies, the difference in slopes, and the average of the slopes.
+Equality of error variances across studies is not assumed. The confidence
+interval for the difference uses a 1 - 2*alpha confidence level, which is
+recommended for equivalence testing. Use the replicate.gen
+function for slopes in other types of models (e.g., binary logistic, ordinal
+logistic, SEM).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">replicate.slope(alpha, b1, se1, n1, b2, se2, n2, s)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha or 1 - 2alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b1</code></td>
+<td>
+<p>sample slope in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se1</code></td>
+<td>
+<p>standard error of slope in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>sample size in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b2</code></td>
+<td>
+<p>sample slope in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se2</code></td>
+<td>
+<p>standard error of slope in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>sample size in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s</code></td>
+<td>
+<p>number of predictor variables in model</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A 4-row matrix. The rows are:
+</p>
+
+<ul>
+<li>
+<p> Row 1 summarizes the original study
+</p>
+</li>
+<li>
+<p> Row 2 summarizes the follow-up study
+</p>
+</li>
+<li>
+<p> Row 3 estimates the difference in slopes
+</p>
+</li>
+<li>
+<p> Row 4 estimates the average slope
+</p>
+</li>
+</ul>
+<p>The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - slope estimate (single study, difference, average)
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> t - t-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+<li>
+<p> df - degrees of freedom
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2021).
+“Design and analysis of replication studies.”
+<em>Organizational Research Methods</em>, <b>24</b>(3), 513–529.
+ISSN 1094-4281, <a href="https://doi.org/10.1177/1094428120911088">doi:10.1177/1094428120911088</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">replicate.slope(.05, 23.4, 5.16, 50, 18.5, 4.48, 90, 4)
+
+# Should return: 
+#                       Estimate       SE         t            p
+# Original:                23.40 5.160000 4.5348837 4.250869e-05
+# Follow-up:               18.50 4.480000 4.1294643 8.465891e-05
+# Original - Follow-up:     4.90 6.833447 0.7170612 4.749075e-01
+# Average:                 20.95 3.416724 6.1316052 1.504129e-08
+#                              LL       UL       df
+# Original:             13.007227 33.79277  45.0000
+# Follow-up:             9.592560 27.40744  85.0000
+# Original - Follow-up: -6.438743 16.23874 106.4035
+# Average:              14.176310 27.72369 106.4035
+
+
+</code></pre>
+
+
+</div>

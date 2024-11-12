@@ -1,0 +1,296 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>normal.vcm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Univariate Normal Distribution as a Varying-Coefficient Model </h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of all the coefficients of a LM
+where each of the usual regression coefficients is modelled
+with other explanatory variables via parameter link functions.
+Thus this is a basic varying-coefficient model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">normal.vcm(link.list = list("(Default)" = "identitylink"),
+           earg.list = list("(Default)" = list()),
+           lsd = "loglink", lvar = "loglink",
+           esd = list(), evar = list(),
+           var.arg = FALSE, imethod = 1,
+           icoefficients = NULL, isd = NULL, zero = "sd",
+           sd.inflation.factor = 2.5)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link.list, earg.list</code></td>
+<td>
+
+<p>Link functions and extra arguments
+applied to the coefficients of the LM, excluding
+the standard deviation/variance.
+See <code>CommonVGAMffArguments</code> for more information.
+The default is for an identity link to be applied to
+each of the regression coefficients.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lsd, esd, lvar, evar</code></td>
+<td>
+
+<p>Link function and extra argument
+applied to
+the standard deviation/variance.
+See <code>CommonVGAMffArguments</code> for more information.
+Same as <code>uninormal</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>icoefficients</code></td>
+<td>
+
+<p>Optional initial values for the coefficients.
+Recycled to length <code class="reqn">M-1</code> (does not include the
+standard deviation/variance).
+Try using this argument if there is a link function that is not
+programmed explicitly to handle range restrictions in
+the <code>initialize</code> slot.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.arg, imethod, isd</code></td>
+<td>
+
+<p>Same as, or similar to, <code>uninormal</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+The default applies to the last one,
+viz. the standard deviation/variance parameter.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd.inflation.factor</code></td>
+<td>
+
+<p>Numeric, should be greater than 1.
+The initial value of the standard deviation is multiplied by this,
+unless <code>isd</code> is inputted.
+Experience has shown that it is safer to start off with a larger value
+rather than a smaller one.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function allows all the usual LM regression coefficients to be
+modelled as functions of other explanatory variables via parameter link
+functions. For example, we may want some of them to be positive. Or we
+may want a subset of them to be positive and add to unity. So a class
+of such models have been named <em>varying-coefficient models</em> (VCMs).
+</p>
+<p>The usual linear model is specified through argument
+<code>form2</code>.  As with all other <span class="pkg">VGAM</span> family
+functions, the linear/additive predictors are specified
+through argument <code>formula</code>.
+</p>
+<p>The <code>multilogitlink</code> link allows a subset of the
+coefficients to be positive and add to unity.  Either
+none or more than one call to <code>multilogitlink</code>
+is allowed. The last variable will be used as the
+baseline/reference group, and therefore excluded from
+the estimation.
+</p>
+<p>By default,
+the log of the standard deviation is the last
+linear/additive predictor. It is recommended that this
+parameter be estimated as intercept-only, for numerical
+stability.
+</p>
+<p>Technically,
+the Fisher information matrix is of unit-rank for all but
+the last parameter (the standard deviation/variance).
+Hence an approximation is used that pools over all the
+observations.
+</p>
+<p>This <span class="pkg">VGAM</span> family function cannot handle multiple responses.
+Also, this function will probably not have the
+full capabilities of the class of varying-coefficient models as
+described by Hastie and Tibshirani (1993). However, it should
+be able to manage some simple models, especially involving the
+following links:
+<code>identitylink</code>,
+<code>loglink</code>,
+<code>logofflink</code>,
+<code>logloglink</code>,
+<code>logitlink</code>,
+<code>probitlink</code>,
+<code>cauchitlink</code>.
+<code>clogloglink</code>,
+<code>rhobitlink</code>,
+<code>fisherzlink</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>This <span class="pkg">VGAM</span> family function is fragile.
+One should monitor convergence, and possibly enter initial values
+especially when there are non-<code>identity</code>-link functions.
+If the initial value of the standard deviation/variance is too
+small then numerical problems may occur.
+One trick is to fit an intercept-only only model and feed its
+<code>predict()</code> output into argument <code>etastart</code> of a
+more complicated model.
+The use of the <code>zero</code> argument is recommended in order
+to keep models as simple as possible.
+</p>
+
+
+
+
+
+<h3>Note</h3>
+
+<p>The standard deviation/variance parameter is best modelled as
+intercept-only.
+</p>
+<p>Yet to do: allow an argument such as <code>parallel</code> that enables
+many of the coefficients to be equal.
+Fix a bug: <code>Coef()</code> does not work for intercept-only models.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Hastie, T. and Tibshirani, R. (1993).
+Varying-coefficient models.
+<em>J. Roy. Statist. Soc. Ser. B</em>,
+<b>55</b>, 757–796.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>uninormal</code>,
+<code>lm</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ndata &lt;- data.frame(x2 = runif(nn &lt;- 2000))
+# Note that coeff1 + coeff2 + coeff5 == 1. So try "multilogitlink".
+myoffset &lt;- 10
+ndata &lt;- transform(ndata,
+           coeff1 = 0.25,  # "multilogitlink"
+           coeff2 = 0.25,  # "multilogitlink"
+           coeff3 = exp(-0.5),  # "loglink"
+# "logofflink" link:
+           coeff4 = logofflink(+0.5, offset = myoffset, inverse = TRUE),
+           coeff5 = 0.50,  # "multilogitlink"
+           coeff6 = 1.00,  # "identitylink"
+           v2 = runif(nn),
+           v3 = runif(nn),
+           v4 = runif(nn),
+           v5 = rnorm(nn),
+           v6 = rnorm(nn))
+ndata &lt;- transform(ndata,
+           Coeff1 =              0.25 - 0 * x2,
+           Coeff2 =              0.25 - 0 * x2,
+           Coeff3 =   logitlink(-0.5  - 1 * x2, inverse = TRUE),
+           Coeff4 =  logloglink( 0.5  - 1 * x2, inverse = TRUE),
+           Coeff5 =              0.50 - 0 * x2,
+           Coeff6 =              1.00 + 1 * x2)
+ndata &lt;- transform(ndata,
+                   y1 = coeff1 * 1 +
+                        coeff2 * v2 +
+                        coeff3 * v3 +
+                        coeff4 * v4 +
+                        coeff5 * v5 +
+                        coeff6 * v6 + rnorm(nn, sd = exp(0)),
+                   y2 = Coeff1 * 1 +
+                        Coeff2 * v2 +
+                        Coeff3 * v3 +
+                        Coeff4 * v4 +
+                        Coeff5 * v5 +
+                        Coeff6 * v6 + rnorm(nn, sd = exp(0)))
+
+# An intercept-only model
+fit1 &lt;- vglm(y1 ~ 1,
+             form2 = ~ 1 + v2 + v3 + v4 + v5 + v6,
+             normal.vcm(link.list = list("(Intercept)" = "multilogitlink",
+                                         "v2"          = "multilogitlink",
+                                         "v3"          = "loglink",
+                                         "v4"          = "logofflink",
+                                         "(Default)"   = "identitylink",
+                                         "v5"          = "multilogitlink"),
+                        earg.list = list("(Intercept)" = list(),
+                                         "v2"          = list(),
+                                         "v4"          = list(offset = myoffset),
+                                         "v3"          = list(),
+                                         "(Default)"   = list(),
+                                         "v5"          = list()),
+                        zero = c(1:2, 6)),
+             data = ndata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+summary(fit1)
+# This works only for intercept-only models:
+multilogitlink(rbind(coef(fit1, matrix = TRUE)[1, c(1, 2)]), inverse = TRUE)
+
+# A model with covariate x2 for the regression coefficients
+fit2 &lt;- vglm(y2 ~ 1 + x2,
+             form2 = ~ 1 + v2 + v3 + v4 + v5 + v6,
+             normal.vcm(link.list = list("(Intercept)" = "multilogitlink",
+                                         "v2"          = "multilogitlink",
+                                         "v3"          = "logitlink",
+                                         "v4"          = "logloglink",
+                                         "(Default)"   = "identitylink",
+                                         "v5"          = "multilogitlink"),
+                        earg.list = list("(Intercept)" = list(),
+                                         "v2"          = list(),
+                                         "v3"          = list(),
+                                         "v4"          = list(),
+                                         "(Default)"   = list(),
+                                         "v5"          = list()),
+                        zero = c(1:2, 6)),
+             data = ndata, trace = TRUE)
+
+coef(fit2, matrix = TRUE)
+summary(fit2)
+</code></pre>
+
+
+</div>

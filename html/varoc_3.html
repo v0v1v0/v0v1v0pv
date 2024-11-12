@@ -1,0 +1,182 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>varoc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>VAROC: value added receiver operating characteristics (ROC) curve</h2>
+
+<h3>Description</h3>
+
+<p>ROC curve to visualize classification and continuity performances of biomarkers, diagnostic tests, or risk prediction models.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">varoc(fit,
+mzr,mzr.min=NULL,mzr.max=NULL,
+main="VAROC",ylab="True positive fraction",xlab="False positive fraction",
+col=c("#9932cc","#87ceeb","#ffe135","#f56642"),
+legend="right",lwd=1,
+cex.main=1,cex.axis=1,cex.lab=1,cex.legend=1,digits=2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fit</code></td>
+<td>
+<p>fitted results from the amd() function in the varoc R package.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mzr</code></td>
+<td>
+<p>mzr="AMD" (or "zAMD") if VAROC curve adds AMD (or zAMD, i.e. normalized AMD or test statistics). Note that mzr="zAMD" works only when pval="yes" was used for the amd() function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mzr.min</code></td>
+<td>
+<p>minimum value of AMD (or ZAMD) that is displayed on the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mzr.max</code></td>
+<td>
+<p>maximum value of AMD (or ZAMD) that is displayed on the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>title for the plot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>title for the y axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>title for the x axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>color that separates AMD on the plot. Default: c("#9932cc","#87ceeb","#ffe135","#f56642")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+<p>legend location, "bottomright", "bottom", "bottomleft", "left", "topleft", "top", "topright", "right" and "center".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwd</code></td>
+<td>
+<p>line width</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex.main</code></td>
+<td>
+<p>main size.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex.axis</code></td>
+<td>
+<p>axis size.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex.lab</code></td>
+<td>
+<p>label size.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex.legend</code></td>
+<td>
+<p>legend size.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>number of decimals.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The varoc function plot true positive fraction(c) (or sensitivity(c)) versus false positive fraction(c) (or one minus specificty(c)) at each threshold c colored by above mean difference(c). See the amd fuction for more details.</p>
+
+
+<h3>Value</h3>
+
+<p>No return value, called for side effects.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Yunro Chung [aut, cre]</p>
+
+
+<h3>References</h3>
+
+<p>Danielle Brister and Yunro Chung, Value added receiver operating characteristics curve (in-progress)</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(1)
+
+n1=50
+n0=50
+
+#1. marker 1 (useless biomaker)
+y1=c(rep(1,n1),rep(0,n0))
+x1=abs(c(rnorm(n1,0,1),rnorm(n0,0,1)))
+
+#1.1.amd
+fit1=amd(y=y1,x=x1,fpf=0.3)
+print(fit1)
+
+#1.2. varoc
+varoc(fit1)
+
+#1.3. jdp
+jdp(fit1)
+
+#2. marker 2 (useful biomarker)
+y2=y1
+x2=abs(c(rnorm(n1,1,1),rnorm(n0,0,1)))
+
+#2.1. amd
+fit2=amd(y=y2,x=x2,fpf=0.3)
+
+#2.2. varoc for marker 1 vs marker 2
+mzr.min=min(c(fit1$res$amd,fit2$res$amd))
+mzr.max=max(c(fit1$res$amd,fit2$res$amd))
+
+varoc(fit1,mzr="AMD",mzr.min=mzr.min,mzr.max=mzr.max)
+varoc(fit2,mzr="AMD",mzr.min=mzr.min,mzr.max=mzr.max)
+
+#2.3. varoc for marker 1 vs marker 2
+min=min(c(x1,x2))
+max=max(c(x1,x2))
+jdp(fit1,min=min,max=max)
+jdp(fit2,min=min,max=max)
+</code></pre>
+
+
+</div>

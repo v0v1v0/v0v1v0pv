@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.varSelRF</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot a varSelRF object</h2>
+
+<h3>Description</h3>
+
+<p>Plots a varSelRF object, showing the initial variable importances, and
+the change in OOB error with the number of variables.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'varSelRF'
+plot(x, nvar = NULL, which = c(1, 2), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+ 
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>The varSelRF object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nvar</code></td>
+<td>
+<p>The number of variables for which the initial variable
+importances should be shown. By default, only the 30 with the
+largest importance are shown.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>which</code></td>
+<td>
+<p>which plots should be drawn, either <code>1</code> (for the initial
+variable importance plot), <code>2</code> (for the change in OOB error with the
+number of variables) or <code>c(1,2)</code> for drawing both plots</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function is only used for its side effect of producing plots.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>The OOB Error rate is biased down (and can be
+severely biased down) because we do (potentially many) rounds of
+reducing the set of predictor variables until we minimize this OOB
+error rate.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ramon Diaz-Uriarte <a href="mailto:rdiaz02@gmail.com">rdiaz02@gmail.com</a></p>
+
+
+<h3>References</h3>
+
+<p>Diaz-Uriarte, R. and Alvarez de Andres,
+S. (2005) Variable selection from random forests: application to gene
+expression
+data. Tech. report. <a href="http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html">http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>varSelRF</code>, <code>randomForest</code>,
+<code>importance</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- matrix(rnorm(25 * 30), ncol = 30)
+x[1:10, 1:2] &lt;- x[1:10, 1:2] + 2
+cl &lt;- factor(c(rep("A", 10), rep("B", 15)))  
+
+rf.vs1 &lt;- varSelRF(x, cl, ntree = 200, ntreeIterat = 100,
+                   vars.drop.frac = 0.2)
+rf.vs1
+plot(rf.vs1)
+</code></pre>
+
+
+</div>

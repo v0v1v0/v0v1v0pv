@@ -1,0 +1,60 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sim.AV</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function to apply Antithetic Variates Algorithm.</h2>
+
+<h3>Description</h3>
+
+<p>Given matrix input with d dimension, this function runs simulation two times using positive and negative signed versions of the input matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sim.AV(zm, q.av, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>zm</code></td>
+<td>
+<p>A matrix with dimension d and length n.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q.av</code></td>
+<td>
+<p>q function that sim.AV function gets target vectors to apply variance reduction.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>ellipsis parameter. different parameters can be passed depending on the problem.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>y target vector with theoretically lower variance with the same expected value as the initial y vector.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> sim.outer(n=1e3, d=3, q.outer = sim.AV,
+q.av = myq_asian, K=100, ti=(1:3/12), r=0.03, sigma=0.3, S0=100)
+
+sim.outer(n=1e3, d=3, q.outer = sim.AV, q.av = sim.InnerCV,
+q.cv = myq_asian, K=100, ti=(1:3/12), r=0.03, sigma=0.3, S0=100)
+
+</code></pre>
+
+
+</div>

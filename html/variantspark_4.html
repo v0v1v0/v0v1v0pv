@@ -1,0 +1,81 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vs_importance_analysis</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Importance Analysis</h2>
+
+<h3>Description</h3>
+
+<p>This function performs an Importance Analysis using random forest algorithm.
+For more details, please look at
+<a href="https://variantspark.readthedocs.io/en/latest/overview.html#importance-analysis">here</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vs_importance_analysis(vsc, vcf_source, labels, n_trees)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vsc</code></td>
+<td>
+<p>A variantspark connection.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vcf_source</code></td>
+<td>
+<p>An object with <code>VCFFeatureSource</code> class, usually the
+output of the <code>vs_read_vcf()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p>An object with <code>CsvLabelSource</code>  class, usually the output
+of the <code>vs_read_labels()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_trees</code></td>
+<td>
+<p>The number of trees using in the random forest.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>spark_jobj, shell_jobj
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(sparklyr)
+sc &lt;- spark_connect(master = "local")
+vsc &lt;- vs_connect(sc)
+
+hipster_vcf &lt;- vs_read_vcf(vsc, 
+                           system.file("extdata/hipster.vcf.bz2",
+                                       package =  "variantspark"))
+
+labels &lt;- vs_read_labels(vsc, 
+                         system.file("extdata/hipster_labels.txt",
+                                      package =  "variantspark"))
+
+vs_importance_analysis(vsc, hipster_vcf, labels, 10)
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

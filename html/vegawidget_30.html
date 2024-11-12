@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vega_version</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get Vega JavaScript versions</h2>
+
+<h3>Description</h3>
+
+<p>Use these functions to get which versions of Vega JavaScript libraries
+are available. <code>vega_version_all()</code> returns a data frame showing all
+versions included in this package, <code>vega_version_available()</code> returns
+all versions available - subject to locking,
+<code>vega_version()</code> shows the default version.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vega_version(major = FALSE)
+
+vega_version_all(major = FALSE)
+
+vega_version_available(major = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>major</code></td>
+<td>
+<p><code>logical</code> return major version-tags rather than the
+tags for the specific versions supported by this package</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>This package offers multiple widgets, each corresponding to a major version
+of Vega-Lite. Only one of these widgets can be used for a given loading of
+this package. When <code>vegawidget()</code> is first called, the widget is "locked"
+according to the <code style="white-space: pre;">⁠$schema⁠</code> in the <code>vegaspec</code> used, or the default - the
+most-recent version.
+</p>
+
+<dl>
+<dt><code>is_locked</code></dt>
+<dd>
+<p>indicates if <code>vegawidget()</code> is has locked the version.</p>
+</dd>
+<dt><code>widget</code></dt>
+<dd>
+<p>indicates which version of the widget would be used.</p>
+</dd>
+</dl>
+<h3>Value</h3>
+
+
+<dl>
+<dt>vega_version()</dt>
+<dd>
+<p><code>list</code> with elements: <code>is_locked</code>, <code>widget</code>,
+<code>vega_lite</code>, <code>vega</code>, <code>vega_embed</code>.</p>
+</dd>
+<dt>vega_version_all()</dt>
+<dd>
+<p><code>data.frame</code> with elements: <code>widget</code>,
+<code>vega_lite</code>, <code>vega</code>, <code>vega_embed</code>.</p>
+</dd>
+<dt>vega_version_available()</dt>
+<dd>
+<p><code>data.frame</code> with elements: <code>widget</code>,
+<code>vega_lite</code>, <code>vega</code>, <code>vega_embed</code>.</p>
+</dd>
+</dl>
+<h3>Examples</h3>
+
+<pre><code class="language-R">  vega_version()
+  vega_version(major = TRUE)
+  vega_version_all()
+  vega_version_available()
+</code></pre>
+
+
+</div>

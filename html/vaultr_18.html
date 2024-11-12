@@ -1,0 +1,287 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vault_client_secrets</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vault Secret Configuration</h2>
+
+<h3>Description</h3>
+
+<p>Vault Secret Configuration
+</p>
+<p>Vault Secret Configuration
+</p>
+
+
+<h3>Details</h3>
+
+<p>Interact with vault's secret backends.
+</p>
+
+
+<h3>Super class</h3>
+
+<p><code>vaultr::vault_client_object</code> -&gt; <code>vault_client_secrets</code>
+</p>
+
+
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>cubbyhole</code></dt>
+<dd>
+<p>The cubbyhole backend:
+vault_client_cubbyhole</p>
+</dd>
+<dt><code>kv1</code></dt>
+<dd>
+<p>The version 1 key-value backend:
+vault_client_kv1</p>
+</dd>
+<dt><code>kv2</code></dt>
+<dd>
+<p>The version 2 key-value backend:
+vault_client_kv2</p>
+</dd>
+<dt><code>transit</code></dt>
+<dd>
+<p>The transit backend:
+vault_client_transit</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-vault_client_secrets-new"><code>vault_client_secrets$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_secrets-disable"><code>vault_client_secrets$disable()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_secrets-enable"><code>vault_client_secrets$enable()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_secrets-list"><code>vault_client_secrets$list()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_secrets-move"><code>vault_client_secrets$move()</code></a>
+</p>
+</li>
+</ul>
+<details open><summary>Inherited methods</summary><ul>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="format"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-format"><code>vaultr::vault_client_object$format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="help"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-help"><code>vaultr::vault_client_object$help()</code></a></span></li>
+</ul></details><hr>
+<a id="method-vault_client_secrets-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a <code>vault_client_secrets</code> object. Not typically
+called by users.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_secrets$new(api_client)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>api_client</code></dt>
+<dd>
+<p>A vault_api_client object</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_secrets-disable"></a>
+
+
+
+<h4>Method <code>disable()</code>
+</h4>
+
+<p>Disable a previously-enabled secret engine
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_secrets$disable(path)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>Path of the secret engine</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_secrets-enable"></a>
+
+
+
+<h4>Method <code>enable()</code>
+</h4>
+
+<p>Enable a secret backend in the vault server
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_secrets$enable(
+  type,
+  path = type,
+  description = NULL,
+  version = NULL
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>type</code></dt>
+<dd>
+<p>The type of secret backend (e.g., <code>transit</code>, <code>kv</code>).</p>
+</dd>
+<dt><code>path</code></dt>
+<dd>
+<p>Specifies the path in which to enable the auth
+method. Defaults to be the same as <code>type</code>.</p>
+</dd>
+<dt><code>description</code></dt>
+<dd>
+<p>Human-friendly description of the backend;
+will be returned by <code style="white-space: pre;">⁠$list()⁠</code></p>
+</dd>
+<dt><code>version</code></dt>
+<dd>
+<p>Used only for the <code>kv</code> backend, where an integer
+is used to select between vault_client_kv1 and
+vault_client_kv2 engines.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_secrets-list"></a>
+
+
+
+<h4>Method <code>list()</code>
+</h4>
+
+<p>List enabled secret engines
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_secrets$list(detailed = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>detailed</code></dt>
+<dd>
+<p>Logical, indicating if detailed output is
+wanted.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_secrets-move"></a>
+
+
+
+<h4>Method <code>move()</code>
+</h4>
+
+<p>Move the path that a secret engine is mounted at
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_secrets$move(from, to)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>from</code></dt>
+<dd>
+<p>Original path</p>
+</dd>
+<dt><code>to</code></dt>
+<dd>
+<p>New path</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+server &lt;- vaultr::vault_test_server(if_disabled = message)
+if (!is.null(server)) {
+  client &lt;- server$client()
+
+  # To remove the default version 1 kv store and replace with a
+  # version 2 store:
+  client$secrets$disable("/secret")
+  client$secrets$enable("kv", "/secret", version = 2)
+
+  # cleanup
+  server$kill()
+}
+</code></pre>
+
+
+</div>

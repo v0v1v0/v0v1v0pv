@@ -1,0 +1,94 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>copula</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Construct a copula using uniform sampling from the unit simplex</h2>
+
+<h3>Description</h3>
+
+<p>Given two families of parallel hyperplanes or a family of parallel hyperplanes and a family of concentric ellispoids centered at the origin intersecting the canonical simplex, this function uniformly samples from the canonical simplex and construct an approximation of the bivariate probability distribution, called copula (see <a href="https://en.wikipedia.org/wiki/Copula_(probability_theory)">https://en.wikipedia.org/wiki/Copula_(probability_theory)</a>).
+At least two families of hyperplanes or one family of hyperplanes and one family of ellipsoids have to be given as input.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">copula(r1, r2 = NULL, sigma = NULL, m = NULL, n = NULL, seed = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>r1</code></td>
+<td>
+<p>The <code class="reqn">d</code>-dimensional normal vector of the first family of parallel hyperplanes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r2</code></td>
+<td>
+<p>Optional. The <code class="reqn">d</code>-dimensional normal vector of the second family of parallel hyperplanes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma</code></td>
+<td>
+<p>Optional. The <code class="reqn">d\times d</code> symmetric positive semidefine matrix that describes the family of concentric ellipsoids centered at the origin.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>The number of the slices for the copula. The default value is 100.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>The number of points to sample. The default value is <code class="reqn">5\cdot 10^5</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>Optional. A fixed seed for the number generator.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code class="reqn">m\times m</code> numerical matrix that corresponds to a copula.
+</p>
+
+
+<h3>References</h3>
+
+<p><cite>L. Cales, A. Chalkis, I.Z. Emiris, V. Fisikopoulos,
+“Practical volume computation of structured convex bodies, and an application to modeling portfolio dependencies and financial crises,” <em>Proc. of Symposium on Computational Geometry, Budapest, Hungary,</em> 2018.</cite>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># compute a copula for two random families of parallel hyperplanes
+h1 = runif(n = 10, min = 1, max = 1000)
+h1 = h1 / 1000
+h2=runif(n = 10, min = 1, max = 1000)
+h2 = h2 / 1000
+cop = copula(r1 = h1, r2 = h2, m = 10, n = 100000)
+
+# compute a copula for a family of parallel hyperplanes and a family of conentric ellipsoids
+h = runif(n = 10, min = 1, max = 1000)
+h = h / 1000
+E = replicate(10, rnorm(20))
+E = cov(E)
+cop = copula(r1 = h, sigma = E, m = 10, n = 100000)
+
+</code></pre>
+
+
+</div>

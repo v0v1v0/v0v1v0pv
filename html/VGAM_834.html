@@ -1,0 +1,123 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>linkfun</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Link Functions for VGLMs </h2>
+
+<h3>Description</h3>
+
+<p>Returns the link functions, and parameter names,
+for <em>vector generalized linear models</em> (VGLMs).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">linkfun(object, ...)
+linkfunvlm(object, earg = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>An object which has parameter link functions, e.g.,
+has class <code>"vglm"</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>earg</code></td>
+<td>
+<p> Logical.
+Return the extra arguments associated with each
+link function? If <code>TRUE</code> then a list is returned.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Arguments that might be used
+in the future.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>All fitted VGLMs have a link function applied to each parameter.
+This function returns these, and optionally, the extra
+arguments associated with them.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Usually just a (named) character string, with the link functions
+in order.
+It is named with the parameter names.
+If <code>earg = TRUE</code> then a list with the following components.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>The default output.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>earg</code></td>
+<td>
+<p>The extra arguments, in order.
+</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>Presently, the multinomial logit model has only
+one link function, <code>multilogitlink</code>,
+so a warning is not issued for that link.
+For other models, if the number of link functions does
+not equal <code class="reqn">M</code> then a warning may be issued.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>linkfun</code>,
+<code>multilogitlink</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pneumo &lt;- transform(pneumo, let = log(exposure.time))
+fit1 &lt;- vglm(cbind(normal, mild, severe) ~ let, propodds, data = pneumo)
+coef(fit1, matrix = TRUE)
+linkfun(fit1)
+linkfun(fit1, earg = TRUE)
+
+fit2 &lt;- vglm(cbind(normal, mild, severe) ~ let, multinomial, data = pneumo)
+coef(fit2, matrix = TRUE)
+linkfun(fit2)
+linkfun(fit2, earg = TRUE)
+</code></pre>
+
+
+</div>

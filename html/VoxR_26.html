@@ -1,0 +1,121 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tree_metrics</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimates a set of morphological parameters from a tls point cloud of a tree.</h2>
+
+<h3>Description</h3>
+
+<p>Estimates a set of morphological parameters from a tls point cloud of a tree.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tree_metrics(
+  data,
+  dbh,
+  height,
+  crown_diameter,
+  crown_proj_area,
+  volume,
+  message
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data.frame or data.table containing the x, y, z, ... coordinates of a point cloud.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dbh</code></td>
+<td>
+<p>numeric and optional. Estimate tree DBH ?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p>numeric and optional. Estimate tree height ?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>crown_diameter</code></td>
+<td>
+<p>numeric and optional. Estimate tree average crown diameter ?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>crown_proj_area</code></td>
+<td>
+<p>numeric and optional. Estimate tree crown projected area ?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>volume</code></td>
+<td>
+<p>numeric and optional. Estimate tree volume ?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>message</code></td>
+<td>
+<p>logical. If FALSE, messages are disabled. Default = TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+
+<h4>Selecting parameters to compute</h4>
+
+<p>If none of <code>dbh</code>,<code>height</code>,<code>crown_diameter</code>,
+<code>crown_proj_area</code> and <code>volume</code> are passed, all parameters are computed. However, the
+user can select a set of parameters by declaring wich parameters should be computed (all other are not).</p>
+
+
+
+<h4>Parameters estimates</h4>
+
+<p>The tree DBH is estimated as the diameter of a circle fitted to the point cloud between
+1.2m and 1.4m above the ground. The tree height is computed as the elevation difference between the lowest and
+the highest points of the point cloud. Two values are provided for crown parameter. First a 2D convex hull
+is used to identify the external points of the crown. Then, a first estimate of the crown diameter ("distant_points")
+is computed as the average distance of each point to the further point. A second estimate ("circle_fitting") correspond
+to the diameter of a circle fitted to the crown external points. The crown projected area is computed as the area of a
+2D convex hull that wraps the projected crown. The volume is computed as the volume of a 3D convex hull that wraps the point cloud.</p>
+
+
+
+<h3>Value</h3>
+
+<p>a list containing the estimated value for each parameter.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#- import tls data
+tls=data.table::fread(system.file("extdata", "Tree_t0.asc", package="VoxR"))
+
+#- compute all metrics
+VoxR::tree_metrics(tls)
+
+#- compute DBH only
+VoxR::tree_metrics(tls,dbh = TRUE)
+
+#- compute DBH and height
+VoxR::tree_metrics(tls,dbh = TRUE,height = TRUE)
+</code></pre>
+
+
+</div>

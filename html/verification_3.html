@@ -1,0 +1,217 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>attribute</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Attribute plot</h2>
+
+<h3>Description</h3>
+
+<p>An attribute plot  illustrates
+the reliability, resolution and uncertainty of a forecast with
+respect to the observation.
+The frequency of binned forecast probabilities are plotted
+against proportions of binned observations.  A perfect forecast would
+be indicated by a line plotted along the 1:1 line.  Uncertainty
+is described as the vertical distance between this point and the
+1:1 line.  The
+relative frequency for each forecast value is displayed in parenthesis. </p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## Default S3 method:
+attribute(x, obar.i,  prob.y = NULL, obar = NULL,
+    class = "none", main = NULL, CI = FALSE, n.boot = 100, alpha = 0.05,
+    tck = 0.01, freq = TRUE, pred = NULL, obs = NULL, thres = thres,
+    bins = FALSE, ...)
+
+## S3 method for class 'prob.bin'
+attribute(x, ...)
+       </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A vector of forecast probabilities or a “prob.bin”
+class object produced by the <code>verify</code> function. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obar.i</code></td>
+<td>
+<p>A vector of observed relative frequency of forecast bins.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prob.y</code></td>
+<td>
+<p>Relative frequency of forecasts of forecast bins. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obar</code></td>
+<td>
+<p>Climatological or sample mean of observed
+events.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>class</code></td>
+<td>
+<p>Class of object.  If prob.bin, the function will
+use the data to estimate confidence intervals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>Plot title.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CI</code></td>
+<td>
+<p>Confidence Intervals. This is only an option if the
+data is accessible by using the verify command first. Calculated by bootstrapping
+the observations and prediction, then calculating PODy and
+PODn values.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.boot</code></td>
+<td>
+<p>Number of bootstrap samples.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Confidence interval.  By default = 0.05</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tck</code></td>
+<td>
+<p>Tick width on confidence interval whiskers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>freq</code></td>
+<td>
+<p>Should the frequecies be plotted. Default = TRUE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred</code></td>
+<td>
+<p>Required to create confidence intervals</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>Required to create confidence intervals</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thres</code></td>
+<td>
+<p>thresholds used to create bins for plotting confidence intervals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bins</code></td>
+<td>
+<p>Should probabilities be binned or treated as unique predictions?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Graphical parameters</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>Points and bins are plotted at the mid-point of bins.  This can create distorted graphs if forecasts are created at irregular intervals.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich</p>
+
+
+<h3>References</h3>
+
+<p>Hsu, W. R., and A. H. Murphy, 1986: The attributes diagram: A geometrical framework for assessing the quality of probability forecasts.  <em>Int. J. Forecasting</em> <b>2</b>, 285–293.
+</p>
+<p>Wilks, D. S. (2005) <em>Statistical Methods in the Atmospheric Sciences </em> Chapter 7, San Diego: Academic Press.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>verify</code>  <code>reliability.plot</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Data from Wilks, table 7.3 page 246.
+ y.i   &lt;- c(0,0.05, seq(0.1, 1, 0.1))
+ obar.i &lt;- c(0.006, 0.019, 0.059, 0.15, 0.277, 0.377, 0.511, 
+             0.587, 0.723, 0.779, 0.934, 0.933)
+ prob.y&lt;- c(0.4112, 0.0671, 0.1833, 0.0986, 0.0616, 0.0366,
+            0.0303,  0.0275, 0.245, 0.022, 0.017, 0.203) 
+ obar&lt;- 0.162
+ 
+attribute(y.i, obar.i, prob.y, obar, main = "Sample Attribute Plot")  
+
+## Function will work with a ``prob.bin'' class objects as well.
+## Note this is a random forecast.
+obs&lt;- round(runif(100))
+pred&lt;- runif(100)
+
+A&lt;- verify(obs, pred, frcst.type = "prob", obs.type = "binary")
+attribute(A, main = "Alternative plot", xlab = "Alternate x label" )
+## to add a line from another model
+obs&lt;- round(runif(100))
+pred&lt;- runif(100)
+
+B&lt;- verify(obs, pred, frcst.type = "prob", obs.type = "binary")
+lines.attrib(B, col = "green")
+
+
+## Same with confidence intervals
+attribute(A, main = "Alternative plot", xlab = "Alternate x label", CI =
+TRUE)
+
+#### add lines to plot
+data(pop)
+d &lt;- pop.convert()
+## internal function used to
+## make binary observations for
+## the pop figure.
+
+### note the use of bins = FALSE
+mod24 &lt;- verify(d$obs_rain, d$p24_rain,
+    bins = FALSE)
+
+mod48 &lt;- verify(d$obs_rain, d$p48_rain,
+    bins = FALSE)
+plot(mod24, freq = FALSE)
+
+lines.attrib(mod48, col = "green",
+    lwd = 2, type = "b")
+
+</code></pre>
+
+
+</div>

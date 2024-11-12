@@ -1,0 +1,163 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopCDF</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Distribution Function of a Bivariate Copula</h2>
+
+<h3>Description</h3>
+
+<p>This function evaluates the cumulative distribution function (CDF) of a
+given parametric bivariate copula.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopCDF(u1, u2, family, par, par2 = 0, obj = NULL, check.pars = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>u1, u2</code></td>
+<td>
+<p>numeric vectors of equal length with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>integer; single number or vector of size <code>length(u1)</code>;
+defines the bivariate copula family: <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula) <br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>7</code> = BB1 copula <br><code>8</code> = BB6 copula <br><code>9</code> = BB7 copula <br><code>10</code> = BB8 copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; <code style="white-space: pre;">⁠survival Joe'') \cr `17` = rotated BB1 copula (180 degrees; ⁠</code>survival BB1”)<br><code>18</code> = rotated BB6 copula (180 degrees; <code style="white-space: pre;">⁠survival BB6'')\cr `19` = rotated BB7 copula (180 degrees; ⁠</code>survival BB7”)<br><code>20</code> = rotated BB8 copula (180 degrees; “survival BB8”)<br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'27' = rotated BB1 copula (90 degrees) <br>
+'28' = rotated BB6 copula (90 degrees) <br>
+'29' = rotated BB7 copula (90 degrees) <br>
+'30' = rotated BB8 copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br>
+'37' = rotated BB1 copula (270 degrees) <br>
+'38' = rotated BB6 copula (270 degrees) <br>
+'39' = rotated BB7 copula (270 degrees) <br>
+'40' = rotated BB8 copula (270 degrees) <br>
+'104' = Tawn type 1 copula <br>
+'114' = rotated Tawn type 1 copula (180 degrees) <br>
+'124' = rotated Tawn type 1 copula (90 degrees) <br>
+'134' = rotated Tawn type 1 copula (270 degrees) <br>
+'204' = Tawn type 2 copula <br>
+'214' = rotated Tawn type 2 copula (180 degrees) <br>
+'224' = rotated Tawn type 2 copula (90 degrees) <br>
+'234' = rotated Tawn type 2 copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>numeric; single number or vector of size <code>length(u1)</code>;
+copula parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>numeric; single number or vector of size <code>length(u1)</code>;
+second parameter for bivariate copulas with two parameters (BB1, BB6, BB7,
+BB8, Tawn type 1 and type 2; default: <code>par2 = 0</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p><code>BiCop</code> object containing the family and parameter
+specification.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.pars</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>; if <code>FALSE</code>, checks
+for family/parameter-consistency are omitted (should only be used with
+care).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If the family and parameter specification is stored in a <code>BiCop()</code>
+object <code>obj</code>, the alternative version <br></p>
+<pre>BiCopCDF(u1, u2, obj)</pre>
+<p>can be used.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A numeric vector of the bivariate copula distribution function
+</p>
+
+<ul>
+<li>
+<p> of the copula <code>family</code>
+</p>
+</li>
+<li>
+<p> with parameter(s) <code>par</code>, <code>par2</code>
+</p>
+</li>
+<li>
+<p> evaluated at <code>u1</code> and <code>u2</code>.
+</p>
+</li>
+</ul>
+<h3>Note</h3>
+
+<p>The calculation of the cumulative distribution function (CDF) of the
+Student's t copula (<code>family = 2</code>) is only approximate. For numerical
+reasons, the degree of freedom parameter (<code>par2</code>) is rounded to an
+integer before calculation of the CDF.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Eike Brechmann
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopPDF()</code>,
+<code>BiCopHfunc()</code>,
+<code>BiCopSim()</code>,
+<code>BiCop()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## simulate from a bivariate Clayton copula
+set.seed(123)
+cop &lt;- BiCop(family = 3, par = 3.4)
+simdata &lt;- BiCopSim(300, cop)
+
+## evaluate the distribution function of the bivariate Clayton copula
+u1 &lt;- simdata[,1]
+u2 &lt;- simdata[,2]
+BiCopCDF(u1, u2, cop)
+
+## select a bivariate copula for the simulated data
+cop &lt;- BiCopSelect(u1, u2)
+summary(cop)
+## and evaluate its CDF
+BiCopCDF(u1, u2, cop)
+
+</code></pre>
+
+
+</div>

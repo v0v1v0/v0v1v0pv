@@ -1,0 +1,117 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vkOAuth</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Client authorization</h2>
+
+<h3>Description</h3>
+
+<p>Client authorization
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vkOAuth(client_id, scope = "friends", email, password)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>client_id</code></td>
+<td>
+<p>Application ID</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scope</code></td>
+<td>
+<p>Requested application access permissions (see below).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>email</code></td>
+<td>
+<p>Email or phone number</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>password</code></td>
+<td>
+<p>Password</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>List of Available Settings of <a href="https://vk.com/dev/permissions">Access Permissions</a>:
+</p>
+
+<ul>
+<li> <p><strong>friends</strong> Access to friends.
+</p>
+</li>
+<li> <p><strong>photos</strong> Access to photos.
+</p>
+</li>
+<li> <p><strong>audio</strong> Access to audios.
+</p>
+</li>
+<li> <p><strong>video</strong> Access to videos.
+</p>
+</li>
+<li> <p><strong>docs</strong> Access to documents.
+</p>
+</li>
+<li> <p><strong>notes</strong> Access to user notes.
+</p>
+</li>
+<li> <p><strong>pages</strong> Access to wiki pages.
+</p>
+</li>
+<li> <p><strong>status</strong> Access to user status.
+</p>
+</li>
+<li> <p><strong>wall</strong> Access to standard and advanced methods for the wall.
+</p>
+</li>
+<li> <p><strong>groups</strong> Access to user groups.
+</p>
+</li>
+<li> <p><strong>messages</strong> Access to advanced methods for messaging.
+</p>
+</li>
+<li> <p><strong>notifications</strong> Access to notifications about answers to the user.
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# an example of an authenticated request
+vkOAuth(client_id = 123456,
+        scope = "friends,groups,messages",
+        email = "your_email@example.com",
+        password = "your_secret_password")
+
+# save access token for future sessions
+at &lt;- getAccessToken()
+
+# an example of request
+me()
+
+# an example of an authenticated request without specifying email and password
+vkOAuth(client_id = 123456, scope = "friends,groups,messages")
+
+# copy access token from browser address bar
+setAccessToken("your_secret_access_token")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

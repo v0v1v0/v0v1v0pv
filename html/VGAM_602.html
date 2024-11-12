@@ -1,0 +1,472 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gaitdnbinomial</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Generally Altered, Inflated, Truncated and Deflated
+Negative Binomial Regression
+</h2>
+
+<h3>Description</h3>
+
+<p>Fits a generally altered, inflated truncated and deflated
+negative binomial regression by MLE.
+The GAITD combo model having 7 types of special values
+is implemented.
+This allows mixtures of negative binomial distributions
+on nested and/or partitioned
+support as well as a multinomial logit model for
+(nonparametric) altered, inflated and deflated values.
+</p>
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R"> gaitdnbinomial(a.mix = NULL, i.mix = NULL, d.mix = NULL,
+     a.mlm = NULL, i.mlm = NULL, d.mlm = NULL,
+     truncate = NULL, zero = c("size", "pobs", "pstr", "pdip"),
+     eq.ap = TRUE, eq.ip = TRUE, eq.dp = TRUE,
+     parallel.a = FALSE, parallel.i = FALSE, parallel.d = FALSE,
+     lmunb.p = "loglink",
+     lmunb.a = lmunb.p, lmunb.i = lmunb.p, lmunb.d = lmunb.p,
+     lsize.p = "loglink",
+     lsize.a = lsize.p, lsize.i = lsize.p, lsize.d = lsize.p,
+     type.fitted = c("mean", "munbs", "sizes", "pobs.mlm",
+     "pstr.mlm", "pdip.mlm", "pobs.mix", "pstr.mix", "pdip.mix",
+     "Pobs.mix", "Pstr.mix", "Pdip.mix", "nonspecial", "Numer",
+     "Denom.p", "sum.mlm.i", "sum.mix.i",
+     "sum.mlm.d", "sum.mix.d", "ptrunc.p", "cdf.max.s"),
+     gpstr.mix = ppoints(7) / 3,
+     gpstr.mlm = ppoints(7) / (3 + length(i.mlm)),
+     imethod = 1, mux.init = c(0.75, 0.5, 0.75, 0.5),
+     imunb.p = NULL, imunb.a = imunb.p,
+     imunb.i = imunb.p, imunb.d = imunb.p,
+     isize.p = NULL,  isize.a = isize.p,
+     isize.i = isize.p, isize.d = isize.p,
+     ipobs.mix = NULL, ipstr.mix = NULL,
+     ipdip.mix = NULL, ipobs.mlm = NULL,
+     ipstr.mlm = NULL, ipdip.mlm = NULL,
+     byrow.aid = FALSE, ishrinkage = 0.95, probs.y = 0.35,
+     nsimEIM = 500, cutoff.prob = 0.999, eps.trig = 1e-7,
+     nbd.max.support = 4000, max.chunk.MB = 30)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>truncate</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a.mix, i.mix, d.mix</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a.mlm, i.mlm, d.mlm</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lmunb.p, lmunb.a, lmunb.i, lmunb.d</code></td>
+<td>
+
+<p>Link functions pertaining to the mean parameters.
+See <code>gaitdpoisson</code> where <code>llambda.p</code>
+etc. are
+the equivalent.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lsize.p, lsize.a, lsize.i, lsize.d</code></td>
+<td>
+
+<p>Link functions pertaining to the <code>size</code> parameters.
+See <code>NegBinomial</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eq.ap, eq.ip, eq.dp</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code>.
+These apply to both <code>munb</code> and <code>size</code> parameters
+simultaneously.
+See <code>NegBinomial</code> also.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel.a, parallel.i, parallel.d</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.fitted</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gpstr.mix, gpstr.mlm</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>imethod, ipobs.mix, ipstr.mix, ipdip.mix</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code> and
+<code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipobs.mlm, ipstr.mlm, ipdip.mlm</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mux.init</code></td>
+<td>
+
+<p>Numeric, of length 4.
+General downward multiplier for initial values for
+the sample proportions (MLEs actually).
+See <code>gaitdpoisson</code>.
+The fourth value corresponds to <code>size</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imunb.p, imunb.a, imunb.i, imunb.d</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code>;
+<code>imunb.p</code> is similar to  <code>ilambda.p</code>, etc.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>isize.p, isize.a, isize.i, isize.d</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code>;
+<code>isize.p</code> is similar to  <code>ilambda.p</code>, etc.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>probs.y, ishrinkage</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>byrow.aid</code></td>
+<td>
+
+<p>Details are at <code>Gaitdpois</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>See <code>gaitdpoisson</code> and
+<code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM, cutoff.prob, eps.trig</code></td>
+<td>
+
+<p>See <code>negbinomial</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nbd.max.support, max.chunk.MB</code></td>
+<td>
+
+<p>See <code>negbinomial</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The GAITD–NB combo model is the pinnacle of GAITD regression
+for counts because it potentially handles
+underdispersion, 
+equidispersion and
+overdispersion relative to the Poisson,
+as well as
+alteration,
+inflation,
+deflation and
+truncation at arbitrary support points.
+In contrast, <code>gaitdpoisson</code> cannot handle
+overdispersion so well.
+The GAITD–NB is so flexible that it can accommodate up to
+seven modes.
+</p>
+<p>The full
+GAITD–NB–NB–MLM–NB-MLM–NB-MLM combo model
+may be fitted with this family function.
+There are seven types of special values and all
+arguments for these
+may be used in a single model.
+Here, the MLM represents the nonparametric while the NB
+refers to the negative binomial mixtures.
+The defaults for this function correspond to an
+ordinary negative binomial
+regression so that <code>negbinomial</code> is called instead.
+</p>
+<p>While much of the documentation here draws upon
+<code>gaitdpoisson</code>, there are additional
+details here because the NBD is a <em>two</em> parameter
+distribution that handles <em>overdispersion</em> relative
+to the Possion.
+Consequently, this family function is exceeding flexible
+and there are many more pitfalls to avoid.
+</p>
+<p>The order of the linear/additive predictors is
+best explained by an example.
+Suppose a combo model has
+<code>length(a.mix) &gt; 3</code> and
+<code>length(i.mix) &gt; 3</code>,
+<code>length(d.mix) &gt; 3</code>,
+<code>a.mlm = 3:5</code>,
+<code>i.mlm = 6:9</code> and
+<code>d.mlm = 10:12</code>, say.
+Then <code>loglink(munb.p)</code> and <code>loglink(size.p)</code>
+are the first two.
+The third is <code>multilogitlink(pobs.mix)</code> followed
+by <code>loglink(munb.a)</code>
+and <code>loglink(size.a)</code>
+because <code>a.mix</code> is long enough.
+The sixth is <code>multilogitlink(pstr.mix)</code> followed
+by <code>loglink(munb.i)</code>
+and <code>loglink(size.i)</code>
+because <code>i.mix</code> is long enough.
+The ninth is <code>multilogitlink(pdip.mix)</code> followed
+by <code>loglink(munb.d)</code>
+and <code>loglink(size.d)</code>
+because <code>d.mix</code> is long enough.
+Next are the probabilities for the <code>a.mlm</code> values.
+Then are the probabilities for the <code>i.mlm</code> values.
+Lastly are the probabilities for the <code>d.mlm</code> values.
+All the probabilities are estimated by one big MLM
+and effectively
+the <code>"(Others)"</code> column of left over probabilities is
+associated with the nonspecial values.
+These might be called the
+<em>nonspecial baseline probabilities</em> (NBP)
+or reserve probabilities.
+The dimension of the vector of linear/additive predictors here
+is <code class="reqn">M=21</code>.
+</p>
+
+<p>Apart from the order of the linear/additive predictors,
+the following are (or should be) equivalent:
+<code>gaitdnbinomial()</code> and <code>negbinomial()</code>,
+<code>gaitdnbinomial(a.mix = 0)</code>
+and <code>zanegbinomial(zero = "pobs0")</code>,
+<code>gaitdnbinomial(i.mix = 0)</code>
+and <code>zinegbinomial(zero = "pstr0")</code>,
+<code>gaitdnbinomial(truncate = 0)</code>
+and <code>posnegbinomial()</code>.
+Likewise, if
+<code>a.mix</code> and <code>i.mix</code> are assigned a scalar then
+it effectively moves that scalar to <code>a.mlm</code>
+and <code>i.mlm</code>
+because there is no
+parameters such as <code>munb.i</code> being estimated.
+Thus
+<code>gaitdnbinomial(a.mix = 0)</code>
+and <code>gaitdnbinomial(a.mlm = 0)</code>
+are the effectively same, and ditto for
+<code>gaitdnbinomial(i.mix = 0)</code>
+and <code>gaitdnbinomial(i.mlm = 0)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+<p>The <code>fitted.values</code> slot of the fitted object,
+which should be extracted by the generic function <code>fitted</code>,
+returns the mean <code class="reqn">\mu</code> by default.
+See the information above on <code>type.fitted</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>See <code>gaitdpoisson</code>.
+Also, having <code>eq.ap = TRUE</code>, <code>eq.ip = TRUE</code>
+and <code>eq.dp = TRUE</code> is often needed to obtain
+initial values that are good enough because they borrow
+strength across the different operators.
+It is usually easy to relax these assumptions later.
+</p>
+<p>This family function is under constant development and
+future changes will occur.
+</p>
+
+
+<h3>Note</h3>
+
+<p>If <code>length(a.mix)</code> is 1 then effectively this becomes a
+value of <code>a.mlm</code>.
+If <code>length(a.mix)</code> is 2 then an error message
+will be issued (overfitting really).
+If <code>length(a.mix)</code> is 3 then this is almost
+overfitting too.
+Hence <code>length(a.mix)</code> should be 4 or more.
+Ditto for <code>length(i.mix)</code> and <code>length(d.mix)</code>.
+</p>
+<p>See <code>gaitdpoisson</code> for notes about numerical
+problems that can easily arise. With the NBD there is
+even more potential trouble that can occur.
+In particular, good initial values are more necessary so
+it pays to experiment with arguments such as
+<code>imunb.p</code> and <code>isize.p</code>, as well as
+fitting an intercept-only model first before adding
+covariates and using <code>etastart</code>.
+</p>
+<p>Currently <code>max.support</code> is missing because only
+<code>Inf</code> is handled. This might change later.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee</p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Ma, C. (2024).
+Generally altered, inflated, truncated and deflated regression.
+<em>Statistical Science</em>, <b>39</b> (in press).
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>Gaitdnbinom</code>,
+<code>dgaitdplot</code>,
+<code>multinomial</code>,
+<code>rootogram4</code>,
+<code>specials</code>,
+<code>plotdgaitd</code>,
+<code>spikeplot</code>,
+<code>meangaitd</code>,
+<code>KLD</code>,
+<code>gaitdpoisson</code>,
+<code>gaitdlog</code>,
+<code>gaitdzeta</code>,
+<code>multilogitlink</code>,
+<code>multinomial</code>,
+<code>goffset</code>,
+<code>Trunc</code>,
+<code>negbinomial</code>,
+<code>CommonVGAMffArguments</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+i.mix &lt;- c(5, 10, 12, 16)  # Inflate these values parametrically
+i.mlm &lt;- c(14, 15)  # Inflate these values
+a.mix &lt;- c(1, 6, 13, 20)  # Alter these values
+tvec &lt;- c(3, 11)   # Truncate these values
+pstr.mlm &lt;- 0.1  # So parallel.i = TRUE
+pobs.mix &lt;- pstr.mix &lt;- 0.1; set.seed(1)
+gdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+gdata &lt;- transform(gdata, munb.p = exp(2 + 0.0 * x2),
+                   size.p = exp(1))
+gdata &lt;- transform(gdata,
+  y1 = rgaitdnbinom(nn, size.p, munb.p, a.mix = a.mix,
+                    i.mix = i.mix,
+                    pobs.mix = pobs.mix, pstr.mix = pstr.mix,
+                    i.mlm = i.mlm, pstr.mlm = pstr.mlm,
+                    truncate = tvec))
+gaitdnbinomial(a.mix = a.mix, i.mix = i.mix, i.mlm = i.mlm)
+with(gdata, table(y1))
+fit1 &lt;- vglm(y1 ~ 1, crit = "coef", trace = TRUE, data = gdata,
+             gaitdnbinomial(a.mix = a.mix, i.mix = i.mix,
+                            i.mlm = i.mlm,
+                            parallel.i = TRUE, eq.ap = TRUE,
+                            eq.ip = TRUE, truncate = tvec))
+head(fitted(fit1, type.fitted = "Pstr.mix"))
+head(predict(fit1))
+t(coef(fit1, matrix = TRUE))  # Easier to see with t()
+summary(fit1)
+spikeplot(with(gdata, y1), lwd = 2)
+plotdgaitd(fit1, new.plot = FALSE, offset.x = 0.2, all.lwd = 2)  
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>recode_ia</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Recode interest area IDs and/or interest area labels</h2>
+
+<h3>Description</h3>
+
+<p><code>recode_ia</code> replaces existing interest area IDs and/or labels for both 
+eyes. For subsequent data processing, it is important that the ID values range 
+between 0 and 8 (with 0 representing Outside all predefined interest areas).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">recode_ia(data, IDs = NULL, Labels = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data table object output by <code>relabel_na</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>IDs</code></td>
+<td>
+<p>A named character vector specifying the desired interest area 
+IDs and the corresponding existing IDs where the first element is the old
+value and the second element is the new value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Labels</code></td>
+<td>
+<p>A named character vector specifying the desired interest area 
+labels and the corresponding existing labels where the first element is the 
+old value and the second element is the new value.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data table with the same dimensions as <code>data</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(VWPre)
+# To recode both IDs and Labels...
+df &lt;- recode_ia(data=dat, IDs=c("234"="2", "0"="0", "35"="3", "11"="1", 
+"4"="6666"), Labels=c(Outside="Outside", Target="NewTargName", 
+Dist2="NewDist2Name", Comp="NewCompName", Dist1="NewDist1Name"))
+ 
+# For a more complete tutorial on VWPre plotting functions:
+vignette("SR_Interest_Areas", package="VWPre")
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

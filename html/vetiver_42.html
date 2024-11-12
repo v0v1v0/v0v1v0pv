@@ -1,0 +1,98 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_dashboard</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>R Markdown format for model monitoring dashboards</h2>
+
+<h3>Description</h3>
+
+<p>R Markdown format for model monitoring dashboards
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetiver_dashboard(pins = list(), display_pins = TRUE, ...)
+
+get_vetiver_dashboard_pins()
+
+pin_example_kc_housing_model(board = pins::board_local(), name = "seattle_rf")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>pins</code></td>
+<td>
+<p>A list containing <code>board</code>, <code>name</code>, and <code>version</code>, as in
+<code>pins::pin_read()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>display_pins</code></td>
+<td>
+<p>Should the dashboard display a link to the pin(s)?
+Defaults to <code>TRUE</code>, but only creates a link if the pin contains a URL in
+its metadata.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Arguments passed to <code>flexdashboard::flex_dashboard()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>board</code></td>
+<td>
+<p>A pin board, created by <code>board_folder()</code>, <code>board_connect()</code>,
+<code>board_url()</code> or another <code>board_</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>Pin name.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>vetiver_dashboard()</code> function is a specialized type of
+<span class="pkg">flexdashboard</span>. See the flexdashboard website for additional
+documentation:
+<a href="https://pkgs.rstudio.com/flexdashboard/">https://pkgs.rstudio.com/flexdashboard/</a>
+</p>
+<p>Before knitting the example <code>vetiver_dashboard()</code> template, execute the
+helper function <code>pin_example_kc_housing_model()</code> to set up demonstration
+model and metrics pins needed for the monitoring demo. This function will:
+</p>
+
+<ul>
+<li>
+<p> fit an example model to training data
+</p>
+</li>
+<li>
+<p> pin the vetiver model to your own <code>pins::board_local()</code>
+</p>
+</li>
+<li>
+<p> compute metrics from testing data
+</p>
+</li>
+<li>
+<p> pin these metrics to the same local board
+</p>
+</li>
+</ul>
+<p>These are the steps you need to complete before setting up monitoring your
+real model.
+</p>
+
+
+</div>

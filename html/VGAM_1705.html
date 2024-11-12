@@ -1,0 +1,243 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sratio</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Ordinal Regression with Stopping Ratios </h2>
+
+<h3>Description</h3>
+
+<p>Fits a stopping ratio logit/probit/cloglog/cauchit/...
+regression model to an ordered (preferably) factor response.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sratio(link = "logitlink", parallel = FALSE, reverse = FALSE,
+       zero = NULL, ynames = FALSE, Thresh = NULL, Trev = reverse,
+       Tref = if (Trev) "M" else 1, whitespace = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to the <code class="reqn">M</code>
+stopping ratio probabilities.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+
+<p>A logical, or formula specifying which terms have
+equal/unequal coefficients.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>reverse</code></td>
+<td>
+
+<p>Logical.
+By default, the stopping ratios used are
+<code class="reqn">\eta_j = logit(P[Y=j|Y \geq j])</code>
+for <code class="reqn">j=1,\dots,M</code>.
+If <code>reverse</code> is <code>TRUE</code>, then
+<code class="reqn">\eta_j = logit(P[Y=j+1|Y \leq j+1])</code>
+will be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ynames</code></td>
+<td>
+
+<p>See <code>multinomial</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Can be an integer-valued vector specifying which
+linear/additive predictors are modelled as intercepts only.
+The values must be from the set {1,2,...,<code class="reqn">M</code>}.
+The default value means none are modelled as
+intercept-only terms.
+See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Thresh, Trev, Tref</code></td>
+<td>
+
+<p>See <code>cumulative</code> for information.
+These arguments apply to ordinal
+categorical regression models.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>whitespace</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In this help file the response <code class="reqn">Y</code> is assumed to be a factor
+with ordered values <code class="reqn">1,2,\dots,M+1</code>, so that
+<code class="reqn">M</code> is the number of linear/additive predictors
+<code class="reqn">\eta_j</code>.
+</p>
+<p>There are a number of definitions for the <em>continuation ratio</em>
+in the literature. To make life easier, in the <span class="pkg">VGAM</span> package,
+we use <em>continuation</em> ratios (see <code>cratio</code>)
+and <em>stopping</em> ratios.
+Continuation ratios deal with quantities such as
+<code>logitlink(P[Y&gt;j|Y&gt;=j])</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>No check is made to verify that the response is ordinal if the
+response is a matrix;
+see <code>ordered</code>.
+</p>
+
+<p>Boersch-Supan (2021) considers a sparse data set
+(called <code>budworm</code>)
+and the numerical problems encountered when
+fitting models such as
+<code>cratio</code>,
+<code>sratio</code>,
+<code>cumulative</code>.
+Although improvements to links such as
+<code>clogloglink</code> have been made,
+currently these family functions have not been
+properly adapted to handle sparse data as well as they could.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response should be either a matrix of counts
+(with row sums that
+are all positive), or a factor. In both cases,
+the <code>y</code> slot
+returned by <code>vglm</code>/<code>vgam</code>/<code>rrvglm</code>
+is the matrix
+of counts.
+</p>
+<p>For a nominal (unordered) factor response, the multinomial
+logit model (<code>multinomial</code>) is more appropriate.
+</p>
+<p>Here is an example of the usage of the <code>parallel</code> argument.
+If there are covariates <code>x1</code>, <code>x2</code> and <code>x3</code>, then
+<code>parallel = TRUE ~ x1 + x2 -1</code> and
+<code>parallel = FALSE ~ x3</code> are equivalent. This would constrain
+the regression coefficients for <code>x1</code> and <code>x2</code> to be
+equal; those of the intercepts and <code>x3</code> would be different.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Agresti, A. (2013).
+<em>Categorical Data Analysis</em>,
+3rd ed. Hoboken, NJ, USA: Wiley.
+</p>
+<p>Boersch-Supan, P. H. (2021).
+Modeling insect phenology using ordinal
+regression and continuation ratio models.
+<em>ReScience C</em>,
+<b>7.1</b>, 1–14.
+<a href="https://doi.org/10.18637/jss.v032.i10">doi:10.18637/jss.v032.i10</a>.
+</p>
+
+
+
+
+<p>McCullagh, P. and Nelder, J. A. (1989).
+<em>Generalized Linear Models</em>,
+2nd ed. London: Chapman &amp; Hall.
+</p>
+<p>Tutz, G. (2012).
+<em>Regression for Categorical Data</em>,
+Cambridge: Cambridge University Press.
+</p>
+<p>Yee, T. W. (2010).
+The <span class="pkg">VGAM</span> package for categorical data analysis.
+<em>Journal of Statistical Software</em>,
+<b>32</b>, 1–34.
+<a href="https://doi.org/10.18637/jss.v032.i10">doi:10.18637/jss.v032.i10</a>.
+</p>
+
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>cratio</code>,
+<code>acat</code>,
+<code>cumulative</code>,
+<code>multinomial</code>,
+<code>CM.equid</code>,
+<code>CommonVGAMffArguments</code>,
+<code>margeff</code>,
+<code>pneumo</code>,
+<code>budworm</code>,
+<code>logitlink</code>,
+<code>probitlink</code>,
+<code>clogloglink</code>,
+<code>cauchitlink</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pneumo &lt;- transform(pneumo, let = log(exposure.time))
+(fit &lt;- vglm(cbind(normal, mild, severe) ~ let,
+             sratio(parallel = TRUE), data = pneumo))
+coef(fit, matrix = TRUE)
+constraints(fit)
+predict(fit)
+predict(fit, untransform = TRUE)
+</code></pre>
+
+
+</div>

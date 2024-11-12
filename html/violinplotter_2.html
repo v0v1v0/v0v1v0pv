@@ -1,0 +1,164 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>violinplotter</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plotting and Comparing Means with Violin Plots</h2>
+
+<h3>Description</h3>
+
+<p>Plotting and Comparing Means with Violin Plots
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">violinplotter(formula, 
+                     data=NULL, 
+                     TITLE="", 
+                     XLAB="", 
+                     YLAB="", 
+                     VIOLIN_COLOURS=c("#e0f3db","#a8ddb5","#7bccc4","#2b8cbe"), 
+                     PLOT_BARS=TRUE, 
+                     ERROR_BAR_COLOURS=c("#636363","#1c9099","#de2d26"), 
+                     SHOW_SAMPLE_SIZE=FALSE, 
+                     SHOW_MEANS=TRUE, 
+                     CATEGORICAL=TRUE, 
+                     LOGX=FALSE, 
+                     LOGX_BASE=10, 
+                     MANN_WHITNEY=TRUE, 
+                     HSD=FALSE, 
+                     ALPHA=0.05, 
+                     REGRESS=FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>R's compact symbolic form to represent linear models with fixed additive and interaction effects (See ?formula for more information) [mandatory]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>data.frame containing the response and explanatory variables which forms the formula above [default=NULL]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>TITLE</code></td>
+<td>
+<p>string or vector of strings corresponding to violin plot title/s [default: combinations of the "response variable name X explanatory variable" from the dataframe column names]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>XLAB</code></td>
+<td>
+<p>string or vector of strings specifying the x-axis labels [default: column names of the explanatory variables (and their combinations) from data]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>YLAB</code></td>
+<td>
+<p>string or vector of strings specifying the y-axis labels [default: column names of the response variable from data]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VIOLIN_COLOURS</code></td>
+<td>
+<p>vector or list of vectors of colors of the violin plots which are repeated if the length is less than the number of explanatory factor levels or less than the number of explanatory factors in the case of a list [default=c("#e0f3db", "#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe")]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PLOT_BARS</code></td>
+<td>
+<p>logical (i.e. TRUE or FALSE) to plot all or none of the bars; or vector strings which bars to plot (e.g. "stdev", "sterr", "ci") [default=TRUE=c("stdev", "sterr", "ci")]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ERROR_BAR_COLOURS</code></td>
+<td>
+<p>vector of colors of standard deviation, standard error and 95 percent confidence interval error bars (error bar selection via leaving one of the three colors empty) [default=c("#636363", "#1c9099", "#de2d26")]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SHOW_SAMPLE_SIZE</code></td>
+<td>
+<p>logical referring to whether or not to show the sample sizes for each category [default=FALSE]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SHOW_MEANS</code></td>
+<td>
+<p>logical referring to whether or not to show the means [default=TRUE]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CATEGORICAL</code></td>
+<td>
+<p>logical or vector of logicals referring to whether the explanatory variable/s is/are strictly categorical [default=TRUE]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LOGX</code></td>
+<td>
+<p>logical or vector of logicals referring to whether to transform the explanatory variable/s into the logarithm scale [default=FALSE]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LOGX_BASE</code></td>
+<td>
+<p>numeric or vector of numerics referring to the logarithm base to transform the explanatory variable/s with [default=1]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>MANN_WHITNEY</code></td>
+<td>
+<p>logical or vector of logicals referring to whether to perform Mann-Whitney Grouping [default=TRUE]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>HSD</code></td>
+<td>
+<p>logical or vector of logicals referring to whether to perform Tukey's Honest Significance Grouping [default=FALSE]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ALPHA</code></td>
+<td>
+<p>numeric significance level for the analysis of variance F-test and Tukey's mean comparison [default=0.05]</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>REGRESS</code></td>
+<td>
+<p>logical or vector of logicals referring to whether to regress the response variable against the explanatory variable/s [default=FALSE]</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Violin plot/s with optional error bars, mean comparison grouping/s, and regression line/s
+</p>
+<p>Mean comparison grouping/s based on Tukey's Hones significant difference and regression line statistics, if applicable
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x1 = rep(rep(rep(c(1:5), each=5), times=5), times=5)
+x2 = rep(rep(letters[6:10], each=5*5), times=5)
+x3 = rep(letters[11:15], each=5*5*5)
+y = rep(1:5, each=5*5*5) + rnorm(rep(1:5, each=5), length(x1))
+formula = log(y) ~ exp(x1) + x2 + x3 + (x2:x3)
+test1 = violinplotter(formula=formula)
+test2 = violinplotter(formula=formula, PLOT_BARS=c("ci", "stdev"))
+
+</code></pre>
+
+
+</div>

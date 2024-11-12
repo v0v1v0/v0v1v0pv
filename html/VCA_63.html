@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>print.VCAinference</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Standard Print Method for Objects of Class 'VCAinference'</h2>
+
+<h3>Description</h3>
+
+<p>Prints the list-type 'VCAinference'-object as tabulated output.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VCAinference'
+print(x, digits = 4L, what = c("all", "VC", "SD", "CV", "VCA"), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>(VCAinference) object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>(integer) number of decimal digits.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>what</code></td>
+<td>
+<p>(character) one of "all", "VC", "SD", "CV", "VCA" specifying which part of the 'VCA'-object is to be printed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments to be passed to or from methods.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Formats the list-type objects of class 'VCAinference' for a more comprehensive
+presentation of results, which are easier to grasp. The default is to show the complete
+object (VCA ANOVA-table, VC-, SD-, and CV-CIs). Using parameter 'what' allows to
+restrict the printed output to certain parts. Print-function invisibly returns a matrix
+or a list of matrices, depending on the values of 'what', i.e. it can be used as for
+packing the inference-information in one or multiple matrix-objects and extracting it/them.
+</p>
+
+
+<h3>Value</h3>
+
+<p>invisibly returns sub-elements of 'x' specified via 'what'
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VCAinference</code>, <code>anovaVCA</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# load data (CLSI EP05-A2 Within-Lab Precision Experiment) 
+data(dataEP05A2_1)
+
+# perform ANOVA-estimation of variance components for a nested design
+res &lt;- anovaVCA(y~day/run, Data=dataEP05A2_1)
+res
+inf &lt;- VCAinference(res)
+inf
+
+# show certain parts and extract them invisibly
+CVmat &lt;- print(inf, what="CV")
+CVmat
+
+# show numerical values with more digits
+print(inf, digit=12)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

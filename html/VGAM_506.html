@@ -1,0 +1,145 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>erlang</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Erlang Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the scale parameter of the Erlang distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">erlang(shape.arg, lscale = "loglink", imethod = 1, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>shape.arg</code></td>
+<td>
+
+<p>The shape parameters.
+The user must specify a positive integer,
+or integers for multiple responses.
+They are recycled <code>by.row = TRUE</code>
+according to <code>matrix</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lscale</code></td>
+<td>
+
+<p>Link function applied to the (positive) <code class="reqn">scale</code> parameter.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more details.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Erlang distribution is a special case of
+the gamma distribution
+with <em>shape</em> that is a positive integer.
+If <code>shape.arg = 1</code>
+then it simplifies to the exponential distribution.
+As illustrated
+in the example below, the Erlang distribution is
+the distribution of
+the sum of <code>shape.arg</code> independent and
+identically distributed
+exponential random variates.
+</p>
+<p>The probability density function of the Erlang
+distribution is given by
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \exp(-y/scale)
+    y^{shape-1} scale^{-shape} / \Gamma(shape)</code>
+</p>
+
+<p>for known positive integer <code class="reqn">shape</code>,
+unknown <code class="reqn">scale &gt; 0</code>  and <code class="reqn">y &gt; 0</code>.
+Here,
+<code class="reqn">\Gamma(shape)</code> is the gamma
+function, as in <code>gamma</code>.
+The mean of <em>Y</em>
+is <code class="reqn">\mu=shape \times scale</code> and
+its variance is <code class="reqn">shape \times scale^2</code>.
+The linear/additive predictor, by default, is
+<code class="reqn">\eta=\log(scale)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Multiple responses are permitted.
+The <code>rate</code> parameter found in <code>gammaR</code>
+is <code>1/scale</code> here—see also <code>rgamma</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Most standard texts on statistical distributions describe
+this distribution, e.g.,
+</p>
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gammaR</code>,
+<code>exponential</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rate &lt;- exp(2); myshape &lt;- 3
+edata &lt;- data.frame(y = rep(0, nn &lt;- 1000))
+for (ii in 1:myshape)
+  edata &lt;- transform(edata, y = y + rexp(nn, rate = rate))
+fit &lt;- vglm(y ~ 1, erlang(shape = myshape), edata, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)  # Answer = 1/rate
+1/rate
+summary(fit)
+</code></pre>
+
+
+</div>

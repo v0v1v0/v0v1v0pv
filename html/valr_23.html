@@ -1,0 +1,147 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_slop</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Increase the size of input intervals.</h2>
+
+<h3>Description</h3>
+
+<p>Increase the size of input intervals.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_slop(
+  x,
+  genome,
+  both = 0,
+  left = 0,
+  right = 0,
+  fraction = FALSE,
+  strand = FALSE,
+  trim = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>genome</code></td>
+<td>
+<p>genome_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>both</code></td>
+<td>
+<p>number of bases on both sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>left</code></td>
+<td>
+<p>number of bases on left side</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>right</code></td>
+<td>
+<p>number of bases on right side</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fraction</code></td>
+<td>
+<p>define flanks based on fraction of interval length</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>strand</code></td>
+<td>
+<p>define <code>left</code> and <code>right</code> based on strand</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trim</code></td>
+<td>
+<p>adjust coordinates for out-of-bounds intervals</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>extra arguments (not used)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>ivl_df
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/slop.html">https://bedtools.readthedocs.io/en/latest/content/tools/slop.html</a>
+</p>
+<p>Other single set operations: 
+<code>bed_cluster()</code>,
+<code>bed_complement()</code>,
+<code>bed_flank()</code>,
+<code>bed_genomecov()</code>,
+<code>bed_merge()</code>,
+<code>bed_partition()</code>,
+<code>bed_shift()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 110,    120,
+  "chr1", 225,    235
+)
+
+genome &lt;- tibble::tribble(
+  ~chrom, ~size,
+  "chr1", 400
+)
+
+bed_glyph(bed_slop(x, genome, both = 20, trim = TRUE))
+
+genome &lt;- tibble::tribble(
+  ~chrom, ~size,
+  "chr1", 5000
+)
+
+x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end, ~name, ~score, ~strand,
+  "chr1", 500, 1000, ".", ".", "+",
+  "chr1", 1000, 1500, ".", ".", "-"
+)
+
+bed_slop(x, genome, left = 100)
+
+bed_slop(x, genome, right = 100)
+
+bed_slop(x, genome, both = 100)
+
+bed_slop(x, genome, both = 0.5, fraction = TRUE)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,168 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>embed</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Embed video from service</h2>
+
+<h3>Description</h3>
+
+<p>These functions are used to embed video into your <strong>rmarkdown</strong> html-documents,
+or into your <strong>shiny</strong> apps. There are functions to embed from
+YouTube, Vimeo, Microsoft Channel 9 (who host the UseR! 2016 videos), and Box.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">embed_box(
+  id,
+  custom_domain = getOption("vembedr.box_custom_domain"),
+  width = NULL,
+  height = 300,
+  ratio = c("16by9", "4by3"),
+  frameborder = 0,
+  allowfullscreen = TRUE
+)
+
+embed_msstream(
+  id,
+  width = NULL,
+  height = 300,
+  ratio = c("16by9", "4by3"),
+  query = NULL
+)
+
+embed_vimeo(
+  id,
+  width = NULL,
+  height = 300,
+  ratio = c("16by9", "4by3"),
+  frameborder = 0,
+  allowfullscreen = TRUE,
+  query = NULL,
+  fragment = NULL
+)
+
+embed_youtube(
+  id,
+  width = NULL,
+  height = 300,
+  ratio = c("16by9", "4by3"),
+  frameborder = 0,
+  allowfullscreen = TRUE,
+  query = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p><code>character</code>, identifier provided by the service</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>custom_domain</code></td>
+<td>
+<p><code>character</code>, (used by Box) name of Box-instance
+to use. It can be useful to use <code>getOption("vembedr.box_custom_domain")</code>
+if you are using a corporate instance of Box. If <code>NULL</code>, it will use
+the standard Box instance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p><code>numeric</code>, width of iframe (px)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p><code>numeric</code>, height of iframe (px)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ratio</code></td>
+<td>
+<p><code>character</code>, indicates aspect ratio for the <code style="white-space: pre;">⁠&lt;iframe/&gt;⁠</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>frameborder</code></td>
+<td>
+<p><code>numeric</code>, size of frame border (px)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allowfullscreen</code></td>
+<td>
+<p><code>logical</code>, indicates if to allow fullscreen</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>query</code></td>
+<td>
+<p><code>list</code>, items to include in url-query string</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fragment</code></td>
+<td>
+<p><code>character</code>, string to include as url-fragment</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>These services allow you to customize a lot of things by specifying
+an optional query string. The specification for the query string will differ
+according to the service being used:
+</p>
+
+<dl>
+<dt>YouTube</dt>
+<dd>
+<p><a href="https://developers.google.com/youtube/player_parameters">https://developers.google.com/youtube/player_parameters</a></p>
+</dd>
+<dt>Vimeo</dt>
+<dd>
+<p><a href="https://developer.vimeo.com/player/embedding">https://developer.vimeo.com/player/embedding</a></p>
+</dd>
+<dt>Box</dt>
+<dd>
+<p><a href="https://developer.box.com/guides/embed/box-embed/#programmatically">https://developer.box.com/guides/embed/box-embed/#programmatically</a></p>
+</dd>
+<dt>Microsoft Stream</dt>
+<dd>
+<p><a href="https://docs.microsoft.com/en-us/stream/portal-embed-video">https://docs.microsoft.com/en-us/stream/portal-embed-video</a></p>
+</dd>
+</dl>
+<h3>Value</h3>
+
+<p>Object with S3 class <code>vembedr_embed</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>use_start_time()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">embed_youtube("dQw4w9WgXcQ")
+embed_vimeo("45196609")
+embed_box("m5do45hvzw32iv2aors3urf5pgkxxazx")
+embed_msstream("ae21b0ac-4a2b-41f4-b3fc-f1720dd20f48")
+
+</code></pre>
+
+
+</div>

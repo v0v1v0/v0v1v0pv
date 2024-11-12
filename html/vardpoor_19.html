@@ -1,0 +1,458 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vardcros</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variance estimation for cross-sectional, longitudinal measures for single and multistage stage cluster sampling designs</h2>
+
+<h3>Description</h3>
+
+<p>Computes the variance estimation for cross-sectional and longitudinal measures for any stage cluster sampling designs.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vardcros(
+  Y,
+  H,
+  PSU,
+  w_final,
+  ID_level1,
+  ID_level2,
+  Dom = NULL,
+  Z = NULL,
+  gender = NULL,
+  country = NULL,
+  period,
+  dataset = NULL,
+  X = NULL,
+  countryX = NULL,
+  periodX = NULL,
+  X_ID_level1 = NULL,
+  ind_gr = NULL,
+  g = NULL,
+  q = NULL,
+  datasetX = NULL,
+  linratio = FALSE,
+  percentratio = 1,
+  use.estVar = FALSE,
+  ID_level1_max = TRUE,
+  outp_res = FALSE,
+  withperiod = TRUE,
+  netchanges = TRUE,
+  confidence = 0.95,
+  checking = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Variables of interest. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H</code></td>
+<td>
+<p>The unit stratum variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PSU</code></td>
+<td>
+<p>Primary sampling unit variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_final</code></td>
+<td>
+<p>Weight variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ID_level1</code></td>
+<td>
+<p>Variable for level1 ID codes. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ID_level2</code></td>
+<td>
+<p>Optional variable for unit ID codes. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dom</code></td>
+<td>
+<p>Optional variables used to define population domains. If supplied, variables are calculated for each domain. An object convertible to <code>data.table</code> or variable names as character vector, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>Optional variables of denominator for ratio estimation. If supplied, the ratio estimation is computed. Object convertible to <code>data.table</code> or variable names as character, column numbers. This variable is <code>NULL</code> by default.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gender</code></td>
+<td>
+<p>Numerical variable for gender, where 1 is for males, but 2 is for females. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>country</code></td>
+<td>
+<p>Variable for the survey countries. The values for each country are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>Variable for the survey periods. The values for each period are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>Optional survey data object convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Optional matrix of the auxiliary variables for the calibration estimator. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>countryX</code></td>
+<td>
+<p>Optional variable for the survey countries. The values for each country are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>periodX</code></td>
+<td>
+<p>Optional variable of the survey periods and countries. If supplied, residual estimation of calibration is done independently for each time period. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X_ID_level1</code></td>
+<td>
+<p>Variable for level1 ID codes. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ind_gr</code></td>
+<td>
+<p>Optional variable by which divided independently X matrix of the auxiliary variables for the calibration. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>Optional variable of the g weights. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>Variable of the positive values accounting for heteroscedasticity. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>datasetX</code></td>
+<td>
+<p>Optional survey data object in household level convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>linratio</code></td>
+<td>
+<p>Logical value. If value is <code>TRUE</code>, then the linearized variables for the ratio estimator is used for variance estimation. If value is <code>FALSE</code>, then the gradients is used for variance estimation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentratio</code></td>
+<td>
+<p>Positive numeric value. All linearized variables are multiplied with <code>percentratio</code> value, by default - 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use.estVar</code></td>
+<td>
+<p>Logical value. If value is <code>TRUE</code>, then <code>R</code> function <code>estVar</code> is used for the  estimation of covariance matrix of the residuals. If value is <code>FALSE</code>, then <code>R</code> function <code>estVar</code> is not used for the estimation of covariance matrix of the residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ID_level1_max</code></td>
+<td>
+<p>Logical value. If value is <code>TRUE</code>, then the size of sample for variance under simple random sampling is taken as maximum value of size in ID_level1 . If value is <code>FALSE</code>, then the size of sample for variance under simple random sampling is taken as count of ID_level2 in ID_level1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outp_res</code></td>
+<td>
+<p>Logical value. If <code>TRUE</code> estimated residuals of calibration will be printed out.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>withperiod</code></td>
+<td>
+<p>Logical value. If <code>TRUE</code> is value, the results is with period, if <code>FALSE</code>, without period.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>netchanges</code></td>
+<td>
+<p>Logical value. If value is TRUE, then produce two objects: the first object is aggregation of weighted data by period (if available), country, strata and PSU, the second object is an estimation for Y, the variance, gradient for numerator and denominator by country and period (if available). If value is FALSE, then both objects containing <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>confidence</code></td>
+<td>
+<p>Optional positive value for confidence interval. This variable by default is 0.95.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>checking</code></td>
+<td>
+<p>Optional variable if this variable is TRUE, then function checks data preparation errors, otherwise not checked. This variable by default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with four objects are returned by the function:
+</p>
+
+<ul>
+<li> <p><code>res_out</code> - a <code>data.table</code> containing the estimated residuals of calibration with ID_level1 and PSU.
+</p>
+</li>
+<li> <p><code>data_net_changes</code> - a <code>data.table</code> containing aggregation of weighted data by period (if available) and countries (if available), country, strata, PSU.
+</p>
+</li>
+<li> <p><code>var_grad</code> - a <code>data.table</code> containing estimation for Y, the variance, gradient for numerator and denominator by period, country (if available) and population domains (if available).
+</p>
+</li>
+<li>
+<p> results A <code>data.table</code> containing: <br><code>period</code> -  survey periods, <br><code>country</code> - survey countries (if available), <br><code>Dom</code> - optional variable of the population domains, <br><code>namesY</code> - names of variables of interest, <br><code>namesZ</code> - optional variable for names of denominator for ratio estimation, <br><code>sample_size</code> - the sample size (in numbers of individuals), <br><code>pop_size</code> - the population size (in numbers of individuals), <br><code>total</code> - the estimated totals, <br><code>variance</code> - the estimated variance of cross-sectional or longitudinal measures, <br><code>sd_w</code> - the estimated weighted variance of simple random sample, <br><code>sd_nw</code> - the estimated variance estimation of simple random sample, <br><code>pop</code> - the population size (in numbers of households), <br><code>sampl_siz</code> - the sample size (in numbers of households), <br><code>stderr_w</code> - the estimated weighted standard error of simple random sample, <br><code>stderr_nw</code> - the estimated standard error of simple random sample, <br><code>se</code> - the estimated standard error of cross-sectional or longitudinal, <br><code>rse</code> - the estimated relative standard error (coefficient of variation), <br><code>cv</code> - the estimated relative standard error (coefficient of variation) in percentage, <br><code>absolute_margin_of_error</code> - the estimated absolute margin of error, <br><code>relative_margin_of_error</code> - the estimated relative margin of error, <br><code>CI_lower</code> - the estimated confidence interval lower bound, <br><code>CI_upper</code> - the estimated confidence interval upper bound, <br><code>confidence_level</code> - the positive value for confidence interval.
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Guillaume Osier,  Yves Berger,  Tim Goedeme, (2013), Standard error estimation for the EU-SILC indicators of poverty and social exclusion,  Eurostat Methodologies and Working papers, URL <a href="http://ec.europa.eu/eurostat/documents/3888793/5855973/KS-RA-13-024-EN.PDF">http://ec.europa.eu/eurostat/documents/3888793/5855973/KS-RA-13-024-EN.PDF</a>. <br>
+Yves G. Berger, Tim Goedeme, Guillame Osier (2013). Handbook on standard error estimation and other related sampling issues in EU-SILC, URL <a href="https://ec.europa.eu/eurostat/cros/content/handbook-standard-error-estimation-and-other-related-sampling-issues-ver-29072013_en">https://ec.europa.eu/eurostat/cros/content/handbook-standard-error-estimation-and-other-related-sampling-issues-ver-29072013_en</a> <br>
+Eurostat Methodologies and Working papers, Handbook on precision requirements and variance estimation for ESS household surveys, 2013, URL <a href="http://ec.europa.eu/eurostat/documents/3859598/5927001/KS-RA-13-029-EN.PDF">http://ec.europa.eu/eurostat/documents/3859598/5927001/KS-RA-13-029-EN.PDF</a>. <br></p>
+
+
+<h3>See Also</h3>
+
+<p><code>domain</code>,
+<code>lin.ratio</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library("data.table")
+library("laeken")
+
+# Example 1
+data(eusilc)
+set.seed(1)
+dataset1 &lt;- data.table(eusilc)
+dataset1[, year := 2010]
+dataset1[, country := "AT"]
+dataset1[age &lt; 0, age := 0]
+PSU &lt;- dataset1[, .N, keyby = "db030"][, N := NULL]
+PSU[, PSU := trunc(runif(nrow(PSU), 0, 100))]
+dataset1 &lt;- merge(dataset1, PSU, by = "db030", all = TRUE)
+PSU &lt;- eusilc &lt;- 0
+  
+dataset1[, strata := "XXXX"]
+dataset1[, t_pov := trunc(runif(nrow(dataset1), 0, 2))]
+dataset1[, t_dep := trunc(runif(nrow(dataset1), 0, 2))]
+dataset1[, t_lwi := trunc(runif(nrow(dataset1), 0, 2))]
+dataset1[, exp := 1]
+dataset1[, exp2 := 1 * (age &lt; 60)]
+  
+# At-risk-of-poverty (AROP)
+dataset1[, pov := ifelse (t_pov == 1, 1, 0)]
+  
+# Severe material deprivation (DEP)
+dataset1[, dep := ifelse (t_dep == 1, 1, 0)]
+  
+# Low work intensity (LWI)
+dataset1[, lwi := ifelse (t_lwi == 1 &amp; exp2 == 1, 1, 0)]
+  
+# At-risk-of-poverty or social exclusion (AROPE)
+dataset1[, arope := ifelse (pov == 1 | dep == 1 | lwi == 1, 1, 0)]
+
+result11 &lt;- vardcros(Y="arope", H = "strata",
+                     PSU = "PSU", w_final = "rb050",
+                     ID_level1 = "db030", ID_level2 = "rb030",
+                     Dom = "rb090", Z = NULL, country = "country",
+                     period = "year", dataset = dataset1,
+                     linratio = FALSE, withperiod = TRUE,
+                     netchanges = TRUE, confidence = .95)
+   
+## Not run: 
+# Example 2
+data(eusilc)
+set.seed(1)
+dataset1 &lt;- data.table(rbind(eusilc, eusilc),
+                       year = c(rep(2010, nrow(eusilc)),
+                                rep(2011, nrow(eusilc))))
+dataset1[, country := "AT"]
+dataset1[age &lt; 0, age := 0]
+PSU &lt;- dataset1[, .N, keyby = "db030"][, N := NULL]
+PSU[, PSU := trunc(runif(nrow(PSU), 0, 100))]
+dataset1 &lt;- merge(dataset1, PSU, by = "db030", all = TRUE)
+PSU &lt;- eusilc &lt;- 0
+dataset1[, strata := "XXXX"]
+dataset1[, strata := as.character(strata)]
+dataset1[, t_pov := trunc(runif(nrow(dataset1), 0, 2))]
+dataset1[, t_dep := trunc(runif(nrow(dataset1), 0, 2))]
+dataset1[, t_lwi := trunc(runif(nrow(dataset1), 0, 2))]
+dataset1[, exp := 1]
+dataset1[, exp2 := 1 * (age &lt; 60)]
+    
+# At-risk-of-poverty (AROP)
+dataset1[, pov := ifelse(t_pov == 1, 1, 0)]
+    
+# Severe material deprivation (DEP)
+dataset1[, dep := ifelse(t_dep == 1, 1, 0)]
+    
+# Low work intensity (LWI)
+dataset1[, lwi := ifelse(t_lwi == 1 &amp; exp2 == 1, 1, 0)]
+    
+# At-risk-of-poverty or social exclusion (AROPE)
+dataset1[, arope := ifelse(pov == 1 | dep == 1 | lwi == 1, 1, 0)]
+    
+result11 &lt;- vardcros(Y = c("pov", "dep", "arope"),
+                     H = "strata", PSU = "PSU", w_final = "rb050",
+                     ID_level1 = "db030", ID_level2 = "rb030",
+                     Dom = "rb090", Z = NULL, country = "country",
+                     period = "year", dataset = dataset1,
+                     linratio = FALSE, withperiod = TRUE,
+                     netchanges = TRUE, confidence = .95)
+    
+dataset2 &lt;- dataset1[exp2 == 1]
+result12 &lt;- vardcros(Y = c("lwi"), H = "strata",
+                     PSU = "PSU", w_final = "rb050",
+                     ID_level1 = "db030", ID_level2 = "rb030",
+                     Dom = "rb090", Z = NULL,
+                     country = "country", period = "year",
+                     dataset = dataset2, linratio = FALSE, 
+                     withperiod = TRUE, netchanges = TRUE,
+                     confidence = .95)
+    
+### Example 3
+data(eusilc)
+set.seed(1)
+year &lt;- 2011
+dataset1 &lt;- data.table(rbind(eusilc, eusilc, eusilc, eusilc),
+                       rb010 = c(rep(2008, nrow(eusilc)),
+                                 rep(2009, nrow(eusilc)),
+                                 rep(2010, nrow(eusilc)),
+                                 rep(2011, nrow(eusilc))))
+dataset1[, rb020 := "AT"]
+        
+dataset1[, u := 1]
+dataset1[age &lt; 0, age := 0]
+dataset1[, strata := "XXXX"]
+PSU &lt;- dataset1[, .N, keyby = "db030"][, N:=NULL]
+PSU[, PSU := trunc(runif(nrow(PSU), 0, 100))]
+dataset1 &lt;- merge(dataset1, PSU, by = "db030", all = TRUE)
+thres &lt;- data.table(rb020 = as.character(rep("AT", 4)),
+                   thres = c(11406, 11931, 12371, 12791),
+                   rb010 = 2008:2011)
+dataset1 &lt;- merge(dataset1, thres, all.x = TRUE, by = c("rb010", "rb020"))
+dataset1[is.na(u), u := 0]
+dataset1 &lt;- dataset1[u == 1]
+    
+#############
+# T3        #
+#############
+    
+T3 &lt;- dataset1[rb010 == year - 3]
+T3[, strata1 := strata]
+T3[, PSU1 := PSU]
+T3[, w1 := rb050]
+T3[, inc1 := eqIncome]
+T3[, rb110_1 := db030]
+T3[, pov1 := inc1 &lt;= thres]
+T3 &lt;- T3[, c("rb020", "rb030", "strata", "PSU", "inc1", "pov1"), with = FALSE]
+    
+#############
+# T2        #
+#############
+T2 &lt;- dataset1[rb010 == year - 2]
+T2[, strata2 := strata]
+T2[, PSU2 := PSU]
+T2[, w2 := rb050]
+T2[, inc2 := eqIncome]
+T2[, rb110_2 := db030]
+setnames(T2, "thres", "thres2")
+T2[, pov2 := inc2 &lt;= thres2]
+T2 &lt;- T2[, c("rb020", "rb030", "strata2", "PSU2", "inc2", "pov2"), with = FALSE]
+    
+#############
+# T1        #
+#############
+T1 &lt;- dataset1[rb010 == year - 1]
+T1[, strata3 := strata]
+T1[, PSU3 := PSU]
+T1[, w3 := rb050]
+T1[, inc3 := eqIncome]
+T1[, rb110_3 := db030]
+setnames(T1, "thres", "thres3")
+T1[, pov3 := inc3 &lt;= thres3]
+T1 &lt;- T1[, c("rb020", "rb030", "strata3", "PSU3", "inc3", "pov3"), with = FALSE]
+    
+#############
+# T0        #
+#############
+T0 &lt;- dataset1[rb010 == year]
+T0[, PSU4 := PSU]
+T0[, strata4 := strata]
+T0[, w4 := rb050]
+T0[, inc4 := eqIncome]
+T0[, rb110_4 := db030]
+setnames(T0, "thres", "thres4")
+T0[, pov4 := inc4 &lt;= thres4]
+T0 &lt;- T0[, c("rb010", "rb020", "rb030", "strata4", "PSU4", "w4", "inc4", "pov4"), with = FALSE]
+apv &lt;- merge(T3, T2, all = TRUE, by = c("rb020", "rb030"))
+apv &lt;- merge(apv, T1, all = TRUE, by = c("rb020", "rb030"))
+apv &lt;- merge(apv, T0, all = TRUE, by = c("rb020", "rb030"))
+apv &lt;- apv[(!is.na(inc1)) &amp; (!is.na(inc2)) &amp; (!is.na(inc3)) &amp; (!is.na(inc4))]
+apv[, ppr := ifelse(((pov4 == 1) &amp; ((pov1 == 1 &amp; pov2 == 1 &amp; pov3 == 1) 
+                                  | (pov1 == 1 &amp; pov2 == 1 &amp; pov3 == 0)
+                                  | (pov1 == 1 &amp; pov2 == 0 &amp; pov3 == 1)
+                                  | (pov1 == 0 &amp; pov2 ==1 &amp; pov3 == 1))), 1, 0)]
+                                  
+result20 &lt;- vardcros(Y = "ppr", H = "strata", PSU = "PSU",
+                     w_final = "w4", ID_level1 = "rb030",
+                     ID_level2 = "rb030", Dom = NULL,
+                     Z = NULL, country = "rb020",
+                     period = "rb010", dataset = apv,
+                     linratio = FALSE, 
+                     withperiod = TRUE,
+                     netchanges = FALSE,
+                     confidence = .95)
+result20
+## End(Not run)
+
+
+</code></pre>
+
+
+</div>

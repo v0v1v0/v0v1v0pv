@@ -1,0 +1,138 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>loglinb3</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Loglinear Model for Three Binary Responses </h2>
+
+<h3>Description</h3>
+
+<p>Fits a loglinear model to three binary responses.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">loglinb3(exchangeable = FALSE, zero = c("u12", "u13", "u23"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>exchangeable</code></td>
+<td>
+<p> Logical.
+If <code>TRUE</code>, the three marginal probabilities are
+constrained to be equal.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+<p> Which linear/additive predictors are modelled as
+intercept-only?
+A <code>NULL</code> means none.
+See <code>CommonVGAMffArguments</code> for further
+information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The model is
+<code class="reqn">P(Y_1=y_1,Y_2=y_2,Y_3=y_3) =</code>
+</p>
+<p style="text-align: center;"><code class="reqn">\exp(u_0+u_1 y_1+u_2 y_2+u_3 y_3+u_{12} y_1 y_2+
+      u_{13} y_1 y_3+u_{23} y_2 y_3)</code>
+</p>
+
+<p>where <code class="reqn">y_1</code>, <code class="reqn">y_2</code> and <code class="reqn">y_3</code> are 0
+or 1, and the parameters are <code class="reqn">u_1</code>, <code class="reqn">u_2</code>,
+<code class="reqn">u_3</code>, <code class="reqn">u_{12}</code>, <code class="reqn">u_{13}</code>,
+<code class="reqn">u_{23}</code>.
+The normalizing parameter <code class="reqn">u_0</code> can be expressed as a
+function of the other parameters.
+Note that a third-order association parameter,
+<code class="reqn">u_{123}</code> for the product <code class="reqn">y_1 y_2 y_3</code>,
+is assumed to be zero for this family function.
+</p>
+<p>The linear/additive predictors are
+<code class="reqn">(\eta_1,\eta_2,\ldots,\eta_6)^T =
+(u_1,u_2,u_3,u_{12},u_{13},u_{23})^T</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code> and <code>vgam</code>.
+</p>
+<p>When fitted, the <code>fitted.values</code> slot of the object
+contains the eight joint probabilities, labelled as
+<code class="reqn">(Y_1,Y_2,Y_3)</code> = (0,0,0), (0,0,1), (0,1,0),
+(0,1,1), (1,0,0), (1,0,1), (1,1,0), (1,1,1), respectively.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be a 3-column matrix of ones and zeros only.
+Note that each of the 8 combinations of the multivariate
+response need to appear in the data set, therefore data sets
+will need to be large in order for this family function to work.
+After estimation, the response attached to the object is also
+a 3-column matrix; possibly in the future it might change into
+a 8-column matrix.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Wild, C. J. (2001).
+Discussion to: “Smoothing spline ANOVA for multivariate
+Bernoulli observations, with application to ophthalmology data
+(with discussion)”
+by Gao, F., Wahba, G., Klein, R., Klein, B.
+<em>Journal of the American Statistical Association</em>,
+<b>96</b>, 127–160.
+</p>
+<p>McCullagh, P. and Nelder, J. A. (1989).
+<em>Generalized Linear Models</em>, 2nd ed. London: Chapman &amp; Hall.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>loglinb2</code>,
+<code>binom2.or</code>,
+<code>hunua</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">lfit &lt;- vglm(cbind(cyadea, beitaw, kniexc) ~ altitude, loglinb3,
+             data = hunua, trace = TRUE)
+coef(lfit, matrix = TRUE)
+head(fitted(lfit))
+summary(lfit)
+</code></pre>
+
+
+</div>

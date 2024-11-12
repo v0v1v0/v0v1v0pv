@@ -1,0 +1,158 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>parallel_stan</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Wrapper for the stan function to parallelize chains</h2>
+
+<h3>Description</h3>
+
+<p>This funcntion takes Stan model code, compiles the Stan model,
+and then runs multiple chains in parallel.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">parallel_stan(model_code, standata, totaliter, warmup, thin = 1, chains, cl,
+  cores, seeds, modelfit, verbose = FALSE, pars = NA, sample_file = NA,
+  diagnostic_file = NA, init = "random", ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>model_code</code></td>
+<td>
+<p>A character string of Stan code</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>standata</code></td>
+<td>
+<p>A data list suitable for Stan for the model given</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>totaliter</code></td>
+<td>
+<p>The total number of iterations for inference.
+Note that the total number of iterations is automatically
+distributed across chains.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>warmup</code></td>
+<td>
+<p>How many warmup iterations should be used?  Note
+that every chain will use the same number of warmups and these
+will be <em>added on top of the total iterations</em> for each chain.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thin</code></td>
+<td>
+<p>The thin used, default to 1 indicating that all samples
+be saved.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>chains</code></td>
+<td>
+<p>The number of independent chains to run.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cl</code></td>
+<td>
+<p>(optional) The name of a cluster to use to run the chains.
+If not specified, the function will make a new cluster.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cores</code></td>
+<td>
+<p>(optional) If the <code>cl</code> argument is not used,
+this specifies the number of cores to make on the new cluster.
+If both <code>cl</code> and <code>cores</code> are missing, defaults to
+the minimum of the number of chains specified or the number of
+cores available on the machine.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seeds</code></td>
+<td>
+<p>(optional) A vector of random seeds the same length as the number
+of independent chains being run, to make results replicable.
+If missing, random seeds will be generated and stored for reference
+in the output.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modelfit</code></td>
+<td>
+<p>(optional) A compiled Stan model, if available, saves
+compiling <code>model_code</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>A logical whether to print verbose output
+(defaults to <code>FALSE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pars</code></td>
+<td>
+<p>Parameter names from Stan to store</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_file</code></td>
+<td>
+<p>The sample file for Stan</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>diagnostic_file</code></td>
+<td>
+<p>The diagnostic file for Stan</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>init</code></td>
+<td>
+<p>A character string (“random”) or a named list of starting values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments, not currently used.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a named list with three elements, the <code>results</code>,
+compiled Stan <code>model</code>, and the random <code>seeds</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Joshua F. Wiley &lt;josh@elkhartgroup.com&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Make me!
+</code></pre>
+
+
+</div>

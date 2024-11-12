@@ -1,0 +1,107 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>video-server</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Update video.js Server-Side</h2>
+
+<h3>Description</h3>
+
+<p>Change the state of the video player from the server.
+</p>
+<p><code>playVideo</code>, <code>pauseVideo</code> and <code>stopVideo</code> will all be applied to the current video.
+</p>
+<p><code>changeVideo</code> will update the track to the URL or file specified.
+</p>
+<p><code>updatePlaybackRate</code> will change how fast the video is playing.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">playVideo(id, session = getDefaultReactiveDomain())
+
+pauseVideo(id, session = getDefaultReactiveDomain())
+
+stopVideo(id, session = getDefaultReactiveDomain())
+
+seekVideo(id, seek, session = getDefaultReactiveDomain())
+
+changeVideo(id, files, format = NULL, session = getDefaultReactiveDomain())
+
+updatePlaybackRate(id, playrate = 1, session = getDefaultReactiveDomain())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>ID of the <code>video</code> to update</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>session</code></td>
+<td>
+<p>Shiny session</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seek</code></td>
+<td>
+<p>Time (in seconds) to set the position of the track</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>files</code></td>
+<td>
+<p>A vector of file paths or URLs pointing</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>format</code></td>
+<td>
+<p>An optional list of formats of <code>video</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>playrate</code></td>
+<td>
+<p>Speed of playback of the video. Default is set to 1 (normal speed)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Updates the the state of the specified <code>video</code> in the shiny application.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">if (interactive()) {
+  library(shiny)
+
+  ui &lt;- fluidPage(
+    title = "howler.js Player",
+    video(
+      "https://vjs.zencdn.net/v/oceans.mp4",
+      elementId = "video"
+     ),
+    actionButton("pause", "Pause Video")
+  )
+
+  server &lt;- function(input, output) {
+    observeEvent(input$pause, pauseVideo("video"))
+  }
+
+  runShiny(ui, server)
+}
+
+</code></pre>
+
+
+</div>

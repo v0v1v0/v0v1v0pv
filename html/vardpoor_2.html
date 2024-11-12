@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>incPercentile</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimation of weighted percentiles</h2>
+
+<h3>Description</h3>
+
+<p>The function computes the estimates of weighted percentiles.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">incPercentile(
+  Y,
+  weights = NULL,
+  sort = NULL,
+  Dom = NULL,
+  period = NULL,
+  k = c(20, 80),
+  dataset = NULL,
+  checking = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Study variable (for example equalized disposable income). One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>Optional weight variable. One dimensional object convert to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sort</code></td>
+<td>
+<p>Optional variable to be used as tie-breaker for sorting. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dom</code></td>
+<td>
+<p>Optional variables used to define population domains. If supplied, the estimates of percentiles are computed for each domain. An object convertible to <code>data.table</code> or variable names as character vector, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>Optional variable for survey period. If supplied, linearization of at-risk-of-poverty threshold is done for each survey period. Object convertible to <code>data.table</code> or variable names as character, column numbers as numeric vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>A vector of values between 0 and 100 specifying the percentiles to be computed (0 gives the minimum, 100 gives the maximum).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>Optional survey data object convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>checking</code></td>
+<td>
+<p>Optional variable if this variable is TRUE, then function checks data preparation errors, otherwise not checked. This variable by default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data.table containing the estimates of weighted income percentiles specified by <code>k</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>Working group on Statistics on Income and Living Conditions (2004) Common cross-sectional EU indicators based on EU-SILC; the gender pay gap. <em>EU-SILC 131-rev/04</em>, Eurostat.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>linarpt</code>, <code>linarpr</code>, <code>linqsr</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library("laeken")
+data("eusilc")
+incPercentile(Y = "eqIncome", weights = "rb050", Dom = "db040", dataset = eusilc)
+
+</code></pre>
+
+
+</div>

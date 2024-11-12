@@ -1,0 +1,225 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>poissonff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Poisson Regression </h2>
+
+<h3>Description</h3>
+
+<p>Family function for a generalized linear
+model fitted to Poisson responses.
+</p>
+
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">poissonff(link = "loglink", imu = NULL, imethod = 1,
+          parallel = FALSE, zero = NULL, bred = FALSE,
+          earg.link = FALSE, type.fitted = c("mean", "quantiles"),
+          percentiles = c(25, 50, 75))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to the mean or means.
+See <code>Links</code> for more choices
+and information.
+</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+
+<p>A logical or formula. Used only if the response is a matrix.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imu, imethod</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Can be an integer-valued vector specifying which linear/additive
+predictors
+are modelled as intercepts only.  The values must be from the set
+{1,2,...,<code class="reqn">M</code>}, where <code class="reqn">M</code> is the number of columns of the
+matrix response.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bred, earg.link</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+Setting <code>bred = TRUE</code> should work for
+multiple responses and all <span class="pkg">VGAM</span> link functions;
+it has been tested for
+<code>loglink</code>,
+<code>identity</code> but further testing is required.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.fitted, percentiles</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code class="reqn">M</code> defined above is the number of linear/additive predictors.
+With overdispersed data try <code>negbinomial</code>.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see
+<code>vglmff-class</code>).
+The object is used by modelling functions
+such as
+<code>vglm</code>, <code>vgam</code>,
+<code>rrvglm</code>, <code>cqo</code>,
+and <code>cao</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>With multiple responses, assigning a
+known dispersion parameter for <em>each</em>
+response is not handled well yet.  Currently,
+only a single known dispersion parameter is
+handled well.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function will handle a matrix response automatically.
+</p>
+
+
+
+
+<p>Regardless of whether the dispersion
+parameter is to be estimated or not, its
+value can be seen from the output from the
+<code>summary()</code> of the object.
+</p>
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>McCullagh, P. and Nelder, J. A. (1989).
+<em>Generalized Linear Models</em>, 2nd ed. London: Chapman &amp; Hall.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Links</code>,
+<code>hdeff.vglm</code>,
+<code>negbinomial</code>,
+<code>genpoisson1</code>,
+<code>genpoisson2</code>,
+<code>genpoisson0</code>,
+<code>gaitdpoisson</code>,
+<code>zipoisson</code>,
+<code>N1poisson</code>,
+<code>pospoisson</code>,
+<code>skellam</code>,
+<code>mix2poisson</code>,
+<code>cens.poisson</code>,
+<code>ordpoisson</code>,
+<code>amlpoisson</code>,
+<code>inv.binomial</code>,
+<code>simulate.vlm</code>,
+<code>loglink</code>,
+<code>polf</code>,
+<code>rrvglm</code>,
+<code>cqo</code>,
+<code>cao</code>,
+<code>binomialff</code>,
+<code>poisson</code>,
+<code>Poisson</code>,
+<code>poisson.points</code>,
+<code>ruge</code>,
+<code>V1</code>,
+<code>V2</code>,
+<code>residualsvglm</code>,
+<code>margeff</code>.
+</p>
+
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">poissonff()
+
+set.seed(123)
+pdata &lt;- data.frame(x2 = rnorm(nn &lt;- 100))
+pdata &lt;- transform(pdata, y1 = rpois(nn, exp(1 + x2)),
+                          y2 = rpois(nn, exp(1 + x2)))
+(fit1 &lt;- vglm(cbind(y1, y2) ~ x2, poissonff, data = pdata))
+(fit2 &lt;- vglm(y1 ~ x2, poissonff(bred = TRUE), data = pdata))
+coef(fit1, matrix = TRUE)
+coef(fit2, matrix = TRUE)
+
+nn &lt;- 200
+cdata &lt;- data.frame(x2 = rnorm(nn), x3 = rnorm(nn), x4 = rnorm(nn))
+cdata &lt;- transform(cdata, lv1 = 0 + x3 - 2*x4)
+cdata &lt;- transform(cdata, lambda1 = exp(3 - 0.5 *  (lv1-0)^2),
+                          lambda2 = exp(2 - 0.5 *  (lv1-1)^2),
+                          lambda3 = exp(2 - 0.5 * ((lv1+4)/2)^2))
+cdata &lt;- transform(cdata, y1 = rpois(nn, lambda1),
+                          y2 = rpois(nn, lambda2),
+                          y3 = rpois(nn, lambda3))
+## Not run:  lvplot(p1, y = TRUE, lcol = 2:4, pch = 2:4, pcol = 2:4, rug = FALSE) 
+</code></pre>
+
+
+</div>

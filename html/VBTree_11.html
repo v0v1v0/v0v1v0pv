@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dl2vbt</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Convert a double list to vector binary tree</h2>
+
+<h3>Description</h3>
+
+<p>Convert a double list to vector binary tree. The pure numeric layers will be sorted intrinsically then
+all elements be exported in character form.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dl2vbt(x, regularize = TRUE, splt = "-")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A double list to be converted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>regularize</code></td>
+<td>
+<p>A boolean value to control the treatment of empty layers of double listed to be converted.
+The default value <code>TRUE</code> will fill the empty layer by mark "*". The default value is recommanded.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>splt</code></td>
+<td>
+<p>A string pattern to split the binding elements in each layer if the sub-constructure exists.
+The default pattern uses "-".</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Return a vector binary tree.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vbtinq</code>, <code>vbtsub</code>, <code>advbtinq</code>,
+<code>advbtsub</code>, <code>trvssubinq</code>, <code>dl2ts</code>,
+<code>dl2arr</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#Structurize the column names of datatest:
+colname &lt;- colnames(datatest)
+colnamedl &lt;- chrvec2dl(colname, "-")
+colnamevbt &lt;- dl2vbt(colnamedl)
+
+#Simple data cleaning for sub-constructure existing double list;
+#Make unregulated double list:
+unregdl &lt;- list(c("7", 2, 10), c("chr", "5"), c(),
+c("var2", "var1", "var3"), c("M-8-9", "3-2"), c("6-3", "2-7"))
+regvbt &lt;- dl2vbt(unregdl)
+regvbt2 &lt;- dl2vbt(unregdl, FALSE) # not recommended
+</code></pre>
+
+
+</div>

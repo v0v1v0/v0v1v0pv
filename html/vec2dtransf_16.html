@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getResiduals</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get residuals</h2>
+
+<h3>Description</h3>
+
+<p>Retrieves the residuals if redundant control points were provided 
+when creating the transformation object</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getResiduals(object)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Object of the class SimilarityTransformation or 
+AffineTransformation</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>Residuals are determined only if Least Squares is applied, i.e., if 
+more than the required control points were provided. Residuals are the 
+difference between transformed source coordinates and target coordinates of 
+control points.
+</p>
+
+
+<h3>Value</h3>
+
+<p>2-column matrix with coordinate differences</p>
+
+
+<h3>Author(s)</h3>
+
+<p>German Carrillo</p>
+
+
+<h3>References</h3>
+
+<p>Iliffe, J. and Lott, R. Datums and map projections: For remote sensing, 
+GIS and surveying. Section 4.9.3-4. pp.135-137, 2008.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>SimilarityTransformation-class</code>
+<code>AffineTransformation-class</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(control.points)
+at &lt;- AffineTransformation(control.points[2:5])
+calculateParameters(at)
+getResiduals(at) 
+</code></pre>
+
+
+</div>

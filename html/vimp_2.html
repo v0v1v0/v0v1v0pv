@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>average_vim</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Average multiple independent importance estimates</h2>
+
+<h3>Description</h3>
+
+<p>Average the output from multiple calls to <code>vimp_regression</code>, for different independent groups, into a single estimate with a corresponding standard error and confidence interval.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">average_vim(..., weights = rep(1/length(list(...)), length(list(...))))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>an arbitrary number of <code>vim</code> objects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>how to average the vims together, and must sum to 1; defaults to 1/(number of vims) for each vim, corresponding to the arithmetic mean</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>an object of class <code>vim</code> containing the (weighted) average of the individual importance estimates, as well as the appropriate standard error and confidence interval.
+This results in a list containing:
+</p>
+
+<ul>
+<li>
+<p>s - a list of the column(s) to calculate variable importance for
+</p>
+</li>
+<li>
+<p>SL.library - a list of the libraries of learners passed to <code>SuperLearner</code>
+</p>
+</li>
+<li>
+<p>full_fit - a list of the fitted values of the chosen method fit to the full data
+</p>
+</li>
+<li>
+<p>red_fit - a list of the fitted values of the chosen method fit to the reduced data
+</p>
+</li>
+<li>
+<p>est- a vector with the corrected estimates
+</p>
+</li>
+<li>
+<p>naive- a vector with the naive estimates
+</p>
+</li>
+<li>
+<p>update- a list with the influence curve-based updates
+</p>
+</li>
+<li>
+<p>mat - a matrix with the estimated variable importance, the standard error, and the <code class="reqn">(1-\alpha) \times 100</code>% confidence interval
+</p>
+</li>
+<li>
+<p>full_mod - a list of the objects returned by the estimation procedure for the full data regression (if applicable)
+</p>
+</li>
+<li>
+<p>red_mod - a list of the objects returned by the estimation procedure for the reduced data regression (if applicable)
+</p>
+</li>
+<li>
+<p>alpha - the level, for confidence interval calculation
+</p>
+</li>
+<li>
+<p>y - a list of the outcomes
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># generate the data
+p &lt;- 2
+n &lt;- 100
+x &lt;- data.frame(replicate(p, stats::runif(n, -5, 5)))
+
+# apply the function to the x's
+smooth &lt;- (x[,1]/5)^2*(x[,1]+7)/5 + (x[,2]/3)^2
+
+# generate Y ~ Normal (smooth, 1)
+y &lt;- smooth + stats::rnorm(n, 0, 1)
+
+# set up a library for SuperLearner; note simple library for speed
+library("SuperLearner")
+learners &lt;- c("SL.glm", "SL.mean")
+
+# get estimates on independent splits of the data
+samp &lt;- sample(1:n, n/2, replace = FALSE)
+
+# using Super Learner (with a small number of folds, for illustration only)
+est_2 &lt;- vimp_regression(Y = y[samp], X = x[samp, ], indx = 2, V = 2,
+           run_regression = TRUE, alpha = 0.05,
+           SL.library = learners, cvControl = list(V = 2))
+
+est_1 &lt;- vimp_regression(Y = y[-samp], X = x[-samp, ], indx = 2, V = 2,
+           run_regression = TRUE, alpha = 0.05,
+           SL.library = learners, cvControl = list(V = 2))
+
+ests &lt;- average_vim(est_1, est_2, weights = c(1/2, 1/2))
+
+</code></pre>
+
+
+</div>

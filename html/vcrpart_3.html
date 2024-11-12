@@ -1,0 +1,502 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>olmm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fitting ordinal and nominal two-stage linear mixed models</h2>
+
+<h3>Description</h3>
+
+<p>Fits different types of two-stage linear mixed models for longitudinal 
+(or clustered) ordinal (or multinomial) responses. O	ne-stage models 
+are also allowed. Random effects are assumed to be multivariate normal  
+distributed with expectation 0. At the time being, cumulative link 
+models with the logit, probit or cauchy link, the baseline-category 
+logit and the adjacent-category logit model are
+implemented. Coefficients can be category-specific
+(i.e. non-proportional odds effects) or global (i.e. proportional
+odds, or parallel effects). 
+</p>
+<p>The function solves the score function for coefficients of the
+marginal likelihood by using Gauss-Hermite quadrature (e.g., Hedeker; 
+1994). Random effects are predicted by their expectation (see Hartzl
+et al.; 2001). Standard deviations of parameter estimates are, by
+default, based on the expected Fisher-information matrix. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cumulative(link = c("logit", "probit", "cauchy"))
+adjacent(link = "logit")
+baseline(link = "logit")
+
+olmm(formula, data, family = cumulative(), 
+     weights, subset, na.action = na.omit,
+     offset, contrasts, control = olmm_control(), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>a symbolic description of the model. This should be
+something like
+</p>
+<p><code>y ~ ce(x1) + ge(x2) +re(1 + ge(w2) | id)</code> 
+</p>
+<p>where <code>ce(x1)</code> specifies that the predictor <code>x1</code> has a 
+category-specific i.e. non-proportional odds effect and
+<code>ge(x2)</code> that the predictor <code>x2</code> has global
+i.e. proportional odds fixed effect, see <code>ge</code>,
+resp. <code>ce</code>. Random effects are specified within the
+<code>re</code> term, where the variable <code>id</code> above behind
+the vertical bar <code>|</code> defines the subject i.e. cluster
+factor. Notice that only one subject factor is allowed. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>an optional data frame with the variables
+in <code>formula</code>. By default the variables are taken from the 
+environment from which <code>olmm</code> is called.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>an <code>family.olmm</code> object produced by
+<code>cumulative</code>, <code>adjacent</code> or <code>baseline</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>a numeric vector of weights with length equal the
+number of observations. The weights should be constant for
+subjects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>offset</code></td>
+<td>
+<p>a matrix specifying the offset separately for each
+predictor equation, of which there are the number of categories of 
+the response minus one.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subset, na.action, contrasts</code></td>
+<td>
+<p>further model
+specification arguments as in <code>lm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>a list of control parameters produced by
+<code>olmm_control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+<p>character string. The name of the link function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be passed to <code>control</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function can be used to fit simple ordinal two-stage
+mixed effect models with up to 3-4 random effects. For
+models with higher dimensions on random effects, the procedure may
+not convergence (cf. Tutz; 1996). Coefficients for the
+adjacent-category logit model are extracted via coefficient
+transformation (e.g. Agresti; 2010). 
+</p>
+<p>The three implemented families are defined as follows:
+<code>cumulative</code> is defined as the link of the sum of
+probabilities of lower categories, e.g., for <code>link = "logit"</code>,
+the logit of the sum of probabilities of lower
+categories. <code>adjacent</code> is defined as the logit of 
+the probability of the lower of two adjacent
+categories. <code>baseline</code> is defined as the logit of the
+probability of a category with reference to the highest
+category. Notice that the estimated coefficients of cumulative models 
+may have the opposite sign those obtained with alternative software.  
+</p>
+<p>For alternative fitting functions, see for example the 
+functions <code>clmm</code> of <span class="pkg">ordinal</span>,
+<code>nplmt</code> of package <span class="pkg">mixcat</span>,
+<code>DPolmm</code> of package <span class="pkg">DPpackage</span>, 
+<code>lcmm</code> of package <span class="pkg">lcmm</span>,
+<code>MCMCglmm</code> of package <span class="pkg">MCMCglmm</span> or
+<code>OrdinalBoost</code> of package <span class="pkg">GMMBoost</span>. 
+</p>
+<p>The implementation adopts functions of the packages <span class="pkg">statmod</span>
+(Novomestky, 2012) and <span class="pkg">matrixcalc</span> (Smyth et al., 2014), which 
+is not visible for the user. The authors are grateful for these
+codes.
+</p>
+<p>The <code>formula</code> argument specifies the model to be
+fitted. Categorical regression models distinguish between global
+effects (or proportional-odds effects), which are defined with
+<code>ge</code> terms, and category-specific effects, which are
+defined by <code>ce</code> terms. For undefined terms, the
+function will use <code>ge</code> terms. Notice that this default
+does not necessarily yield interpretable outputs. For example, for the
+<code>baseline</code> model you may use only <code>ce</code>
+terms, which must be specified manually manually. See the example
+below. For <code>cumulative</code> models at present it is not
+possible to specifiy <code>ce</code> for the random effects
+component because the internal, unconstraint integration would
+yield unusable predictor values. 
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>olmm</code> returns an object of class
+<code>olmm</code>. <code>cumulative</code>,
+<code>adjacent</code> and <code>baseline</code> yield an
+object of class <code>family.olmm</code>. The <code>olmm</code> class is
+a list containing the following components: 
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>env</code></td>
+<td>
+<p>environment in which the object was built.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>frame</code></td>
+<td>
+<p>the model frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>the matched call to the function that created the object 
+(class <code>"call"</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>a list of class <code>olmm_control</code> produced by
+<code>olmm_control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>the formula of the call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>terms</code></td>
+<td>
+<p>a list of <code>terms</code> of the fitted model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>an object of class <code>family.olmm</code> that specifies
+that family of the fitted model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>(ordered) categorical response vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>model matrix for the fixed effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>W</code></td>
+<td>
+<p>model matrix for the random effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subject</code></td>
+<td>
+<p>a factor vector with grouping levels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subjectName</code></td>
+<td>
+<p>variable name of the subject vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>numeric observations weights vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights_sbj</code></td>
+<td>
+<p>numeric weights vector of length N.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>offset</code></td>
+<td>
+<p>numeric offset matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlevels</code></td>
+<td>
+<p>(only where relevant) a list of levels of the
+factors used in fitting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>contrasts</code></td>
+<td>
+<p>(only where relevant) a list of contrasts
+used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dims</code></td>
+<td>
+<p>a named integer of dimensions. Some of the
+dimensions are <code class="reqn">n</code> is the number of observations, <code class="reqn">p</code> is
+the number of fixed effects per predictor and <code class="reqn">q</code> is the total 
+number of random effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fixef</code></td>
+<td>
+<p>a matrix of fixed effects (one column for each
+predictor).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ranefCholFac</code></td>
+<td>
+<p>a lower triangular matrix. The cholesky
+decomposition of the covariance matrix of the random effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coefficients</code></td>
+<td>
+<p>a numeric vector of several fitted model
+parameters</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>restricted</code></td>
+<td>
+<p>a logical vector indicating which elements
+of the <code>coefficients</code> slot are restricted to an initial value 
+at the estimation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eta</code></td>
+<td>
+<p>a matrix of unconditional linear predictors of
+the fixed effects without random effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>u</code></td>
+<td>
+<p>a matrix of orthogonal standardized random
+effects (one row for each subject level).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logLik_obs</code></td>
+<td>
+<p>a numeric vector of log likelihood value
+(one value for each observation).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logLik_sbj</code></td>
+<td>
+<p>a numeric vector of log likelihood values
+(one value for each subject level).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logLik</code></td>
+<td>
+<p>a numeric value. The log likelihood of the
+model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>score_obs</code></td>
+<td>
+<p>a matrix of observation-wise partial
+derivates of the marginal log-likelihood equation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>score_sbj</code></td>
+<td>
+<p>a matrix of subject-wise partial derivates
+of the marginal log-likelihood equation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>score</code></td>
+<td>
+<p>a numeric vector of (total) partial derivates
+of the log-Likelihood function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>info</code></td>
+<td>
+<p>the information matrix (default is the expected
+information).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ghx</code></td>
+<td>
+<p>a matrix of quadrature points for the
+Gauss-Hermite quadrature integration.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ghw</code></td>
+<td>
+<p>a matrix of weights for the Gauss-Hermite
+quadrature integration.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ranefElMat</code></td>
+<td>
+<p>a transformation matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optim</code></td>
+<td>
+<p>a list of arguments for calling the optimizer
+function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>a list of used control arguments produced by
+<code>olmm_control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output</code></td>
+<td>
+<p>the output of the optimizer (class
+<code>"list"</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>References</h3>
+
+<p>Agresti, A. (2010). <em>Analysis of Ordinal Categorical Data</em> (2
+ed.). New Jersey, USA: John Wiley &amp; Sons.
+</p>
+<p>Hartzel, J., A. Agresti and B. Caffo (2001). Multinomial Logit Random
+Effect Models, <em>Statistical Modelling</em> <b>1</b>(2), 81–102.
+</p>
+<p>Hedeker, D. and R. Gibbons (1994). A Random-Effects Ordinal
+Regression Model for Multilevel Analysis, <em>Biometrics</em>
+<b>20</b>(4), 933–944. 
+</p>
+<p>Tutz, G. and W. Hennevogl (1996). Random Effects in Ordinal Regression 
+Models, <em>Computational Statistics &amp; Data Analysis</em> <b>22</b>(5),
+537–557. 
+</p>
+<p>Tutz, G. (2012). <em>Regression for Categorical Data</em>. New York,
+USA: Cambridge Series in Statistical and Probabilistic Mathematics.
+</p>
+<p>Novomestky, F. (2012). matrixcalc: Collection of Functions for 
+Matrix Calculations. R package version 1.0-3. URL 
+<a href="https://CRAN.R-project.org/package=matrixcalc">https://CRAN.R-project.org/package=matrixcalc</a>
+</p>
+<p>Smyth, G., Y. Hu, P. Dunn, B. Phipson and Y. Chen (2014). statmod:
+Statistical Modeling. R package version 1.4.20. URL
+<a href="https://CRAN.R-project.org/package=statmod">https://CRAN.R-project.org/package=statmod</a> 
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>olmm-methods</code>, <code>olmm_control</code>,
+<code>ordered</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## ------------------------------------------------------------------- #
+## Example 1: Schizophrenia
+##
+## Estimating the cumulative mixed models of
+## Agresti (2010) chapters 10.3.1
+## ------------------------------------------------------------------- #
+
+data(schizo)
+
+model.10.3.1 &lt;-
+  olmm(imps79o ~ tx + sqrt(week) + re(1|id),
+       data = schizo, family = cumulative())
+
+summary(model.10.3.1)
+
+## ------------------------------------------------------------------- #
+## Example 2: Movie critics
+##
+## Estimating three of several adjacent-categories
+## mixed models of Hartzl et. al. (2001)
+## ------------------------------------------------------------------- #
+
+data(movie)
+
+## model with category-specific effects for "review"
+model.24.1 &lt;- olmm(critic ~ ce(review) + re(1|movie, intercept = "ce"),
+                   data = movie, family = adjacent())
+
+summary(model.24.1)
+</code></pre>
+
+
+</div>

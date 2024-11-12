@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>encode_path</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Encode detail "path"</h2>
+
+<h3>Description</h3>
+
+<p>Grouping data is another important operation in visualizing data. For
+aggregated plots, all encoded fields without aggregate functions are used as
+grouping fields in the aggregation (similar to fields in GROUP BY in SQL).
+For line and area marks, mapping a data field to color or shape channel will
+group the lines and stacked areas by the field.<br><br>
+By default, line marks order their points in their paths by the field of
+channel x or y. However, to show a pattern of data change over time between x &amp; y
+we use path channel to sort points in a paritcular order (e.g. by time).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">encode_path(vl, field = NULL, type, aggregate = NULL, sort = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vl</code></td>
+<td>
+<p>Vega-Lite object created by <code>vegalite</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>field</code></td>
+<td>
+<p>single element character vector naming the column</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>the encoded field’s type of measurement. This can be either a full type
+name (<code>quantitative</code>, <code>temporal</code>, <code>ordinal</code>, and <code>nominal</code>)
+or an initial character of the type name (<code>Q</code>, <code>T</code>, <code>O</code>, <code>N</code>).
+This property is case insensitive. If <code>auto</code> is used, the type will
+be guessed (so you may want to actually specify it if you want consistency).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aggregate</code></td>
+<td>
+<p>perform aggregaton on <code>field</code>. See
+<a href="http://vega.github.io/vega-lite/docs/aggregate.html">Supported Aggregation Options</a> for
+more info on valid operations. Leave <code>NULL</code> for no aggregation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sort</code></td>
+<td>
+<p>either one of <code>ascending</code>, <code>descending</code> or (for ordinal scales)
+the result of a call to <code>sort_def</code></p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>right now, <code>type</code> == "<code>auto</code>" just assume "<code>quantitative</code>". It
+will eventually get smarter, but you are better off specifying it.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="http://vega.github.io/vega-lite/docs/encoding.html">Vega-Lite Encoding spec</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vegalite() %&gt;%
+  cell_size(300, 300) %&gt;%
+  add_data("https://vega.github.io/vega-editor/app/data/driving.json") %&gt;%
+  encode_x("miles", "quantitative") %&gt;%
+  encode_y("gas", "quantitative") %&gt;%
+  encode_path("year", "temporal") %&gt;%
+  scale_x_linear(zero=FALSE) %&gt;%
+  scale_y_linear(zero=FALSE) %&gt;%
+  mark_line()
+</code></pre>
+
+
+</div>

@@ -1,0 +1,111 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>run_ca</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Shiny App for Correspondence Analysis of Adverse Events</h2>
+
+<h3>Description</h3>
+
+<p>Shiny App for Correspondence Analysis of Adverse Events
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">run_ca(
+  data,
+  id,
+  group,
+  ae_grade = NULL,
+  ae_domain = NULL,
+  ae_term = NULL,
+  ae_cycle = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>data.frame or tibble object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>unquoted expression indicating the
+variable name in <code>data</code> that corresponds to the id variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>unquoted expression indicating the
+variable name in <code>data</code> that corresponds to the group variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ae_grade</code></td>
+<td>
+<p>unquoted expression indicating the
+variable name in <code>data</code> that corresponds to AE grade class.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ae_domain</code></td>
+<td>
+<p>unquoted expression indicating the
+variable name in <code>data</code> that corresponds to AE domain class.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ae_term</code></td>
+<td>
+<p>unquoted expression indicating the
+variable name in <code>data</code> that corresponds to AE term class.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ae_cycle</code></td>
+<td>
+<p>unquoted expression indicating the
+variable name in <code>data</code> that corresponds to AE cycle.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>an interactive web application to perform correspondence analysis
+for adverse event data.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(magrittr)
+library(dplyr)
+patient_id &lt;- 1:100
+group &lt;- c(rep("A", 50), rep("B", 50))
+ae_grade &lt;- sample(1:5, size = 100, replace = TRUE)
+ae_domain &lt;- sample(c("C", "D"), size = 100, replace = TRUE)
+ae_term &lt;- sample(c("E", "F", "G", "H"), size = 100, replace = TRUE)
+dt &lt;- tibble(patient_id = patient_id, trt = group,
+            ae_g = ae_grade, ae_d = ae_domain, ae_t = ae_term)
+dt %&gt;% run_ca(., group = trt,
+             id = patient_id,
+             ae_grade = ae_g,
+             ae_domain = ae_d,
+             ae_term = ae_t)
+             
+## End(Not run)
+
+</code></pre>
+
+
+</div>

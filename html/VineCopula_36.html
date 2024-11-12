@@ -1,0 +1,107 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopIndTest</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Independence Test for Bivariate Copula Data</h2>
+
+<h3>Description</h3>
+
+<p>This function returns the p-value of a bivariate asymptotic independence
+test based on Kendall's <code class="reqn">\tau</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopIndTest(u1, u2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>u1, u2</code></td>
+<td>
+<p>Data vectors of equal length with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The test exploits the asymptotic normality of the test statistic
+</p>
+<p style="text-align: center;"><code class="reqn">\texttt{statistic} := T =
+\sqrt{\frac{9N(N - 1)}{2(2N + 5)}} \times |\hat{\tau}|, </code>
+</p>
+
+<p>where <code class="reqn">N</code> is the number of observations (length of <code>u1</code>) and
+<code class="reqn">\hat{\tau}</code> the empirical Kendall's tau of the data vectors <code>u1</code>
+and <code>u2</code>. The p-value of the null hypothesis of bivariate independence
+hence is asymptotically
+</p>
+<p style="text-align: center;"><code class="reqn">\texttt{p.value} = 2 \times \left(1 - \Phi\left(T\right)\right), </code>
+</p>
+
+<p>where <code class="reqn">\Phi</code> is the standard normal distribution function.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>statistic</code></td>
+<td>
+<p>Test statistic of the independence test.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value</code></td>
+<td>
+<p>P-value of the independence test.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Jeffrey Dissmann
+</p>
+
+
+<h3>References</h3>
+
+<p>Genest, C. and A. C. Favre (2007). Everything you always wanted
+to know about copula modeling but were afraid to ask. Journal of Hydrologic
+Engineering, 12 (4), 347-368.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopGofTest()</code>, <code>BiCopPar2Tau()</code>,
+<code>BiCopTau2Par()</code>, <code>BiCopSelect()</code>,<br><code>RVineCopSelect()</code>, <code>RVineStructureSelect()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Example 1: Gaussian copula with large dependence parameter
+cop &lt;- BiCop(1, 0.7)
+dat &lt;- BiCopSim(500, cop)
+
+# perform the asymptotic independence test
+BiCopIndTest(dat[, 1], dat[, 2])
+
+## Example 2: Gaussian copula with small dependence parameter
+cop &lt;- BiCop(1, 0.01)
+dat &lt;- BiCopSim(500, cop)
+
+# perform the asymptotic independence test
+BiCopIndTest(dat[, 1], dat[, 2])
+
+</code></pre>
+
+
+</div>

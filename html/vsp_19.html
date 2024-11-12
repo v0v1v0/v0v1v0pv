@@ -1,0 +1,175 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_varimax_z_pairs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a pairs plot of select Y factors</h2>
+
+<h3>Description</h3>
+
+<p>To avoid overplotting, plots data for a maximum of 1000 nodes. If there
+are more than 1000 nodes, samples 1000 nodes randomly proportional to
+row norms (i.e. nodes with embeddings larger in magniture are more likely
+to be sampled).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_varimax_z_pairs(fa, factors = 1:min(5, fa$rank), ...)
+
+plot_varimax_y_pairs(fa, factors = 1:min(5, fa$rank), ...)
+
+plot_svd_u(fa, factors = 1:min(5, fa$rank))
+
+plot_svd_v(fa, factors = 1:min(5, fa$rank))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fa</code></td>
+<td>
+<p>A <code>vsp_fa()</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>factors</code></td>
+<td>
+<p>The specific columns to index into. The most reliable
+option here is to index with an integer vector of column indices,
+but you could also use a character vector if columns have been named.
+By default returns all factors/singular vectors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Arguments passed on to <code>GGally::ggpairs</code>
+</p>
+
+<dl>
+<dt><code>data</code></dt>
+<dd>
+<p>data set using.  Can have both numerical and categorical data.</p>
+</dd>
+<dt><code>mapping</code></dt>
+<dd>
+<p>aesthetic mapping (besides <code>x</code> and <code>y</code>).  See <code>aes()</code>.  If <code>mapping</code> is numeric, <code>columns</code> will be set to the <code>mapping</code> value and <code>mapping</code> will be set to <code>NULL</code>.</p>
+</dd>
+<dt><code>columns</code></dt>
+<dd>
+<p>which columns are used to make plots.  Defaults to all columns.</p>
+</dd>
+<dt><code>title</code></dt>
+<dd>
+<p>title, x label, and y label for the graph</p>
+</dd>
+<dt><code>xlab</code></dt>
+<dd>
+<p>title, x label, and y label for the graph</p>
+</dd>
+<dt><code>ylab</code></dt>
+<dd>
+<p>title, x label, and y label for the graph</p>
+</dd>
+<dt><code>upper</code></dt>
+<dd>
+<p>see Details</p>
+</dd>
+<dt><code>lower</code></dt>
+<dd>
+<p>see Details</p>
+</dd>
+<dt><code>diag</code></dt>
+<dd>
+<p>see Details</p>
+</dd>
+<dt><code>params</code></dt>
+<dd>
+<p>deprecated.  Please see <code>wrap_fn_with_param_arg</code></p>
+</dd>
+<dt><code>axisLabels</code></dt>
+<dd>
+<p>either "show" to display axisLabels, "internal" for labels in the diagonal plots, or "none" for no axis labels</p>
+</dd>
+<dt><code>columnLabels</code></dt>
+<dd>
+<p>label names to be displayed.  Defaults to names of columns being used.</p>
+</dd>
+<dt><code>labeller</code></dt>
+<dd>
+<p>labeller for facets. See <code>labellers</code>. Common values are <code>"label_value"</code> (default) and <code>"label_parsed"</code>.</p>
+</dd>
+<dt><code>switch</code></dt>
+<dd>
+<p>switch parameter for facet_grid. See <code>ggplot2::facet_grid</code>.  By default, the labels are displayed on the top and right of the plot. If <code>"x"</code>, the top labels will be displayed to the bottom. If <code>"y"</code>, the right-hand side labels will be displayed to the left. Can also be set to <code>"both"</code></p>
+</dd>
+<dt><code>showStrips</code></dt>
+<dd>
+<p>boolean to determine if each plot's strips should be displayed. <code>NULL</code> will default to the top and right side plots only. <code>TRUE</code> or <code>FALSE</code> will turn all strips on or off respectively.</p>
+</dd>
+<dt><code>legend</code></dt>
+<dd>
+<p>May be the two objects described below or the default <code>NULL</code> value.  The legend position can be moved by using ggplot2's theme element <code>pm + theme(legend.position = "bottom")</code> </p>
+<dl>
+<dt>a numeric vector of length 2</dt>
+<dd>
+<p>provides the location of the plot to use the legend for the plot matrix's legend. Such as <code>legend = c(3,5)</code> which will use the legend from the plot in the third row and fifth column</p>
+</dd>
+<dt>a single numeric value</dt>
+<dd>
+<p>provides the location of a plot according to the display order. Such as <code>legend = 3</code> in a plot matrix with 2 rows and 5 columns displayed by column will return the plot in position <code>c(1,2)</code></p>
+</dd>
+<dt>a object from <code>grab_legend()</code>
+</dt>
+<dd>
+<p>a predetermined plot legend that will be displayed directly</p>
+</dd>
+</dl>
+</dd>
+<dt><code>cardinality_threshold</code></dt>
+<dd>
+<p>maximum number of levels allowed in a character / factor column.  Set this value to NULL to not check factor columns. Defaults to 15</p>
+</dd>
+<dt><code>progress</code></dt>
+<dd>
+<p><code>NULL</code> (default) for a progress bar in interactive sessions with more than 15 plots, <code>TRUE</code> for a progress bar, <code>FALSE</code> for no progress bar, or a function that accepts at least a plot matrix and returns a new <code>progress::progress_bar</code>.  See <code>ggmatrix_progress</code>.</p>
+</dd>
+<dt><code>proportions</code></dt>
+<dd>
+<p>Value to change how much area is given for each plot. Either <code>NULL</code> (default), numeric value matching respective length, <code>grid::unit</code> object with matching respective length or <code>"auto"</code> for automatic relative proportions based on the number of levels for categorical variables.</p>
+</dd>
+<dt><code>legends</code></dt>
+<dd>
+<p>deprecated</p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>ggplot2::ggplot()</code> plot or <code>GGally::ggpairs()</code> plot.
+</p>
+
+
+<h3>Functions</h3>
+
+
+<ul>
+<li> <p><code>plot_varimax_y_pairs</code>: Create a pairs plot of select Z factors
+</p>
+</li>
+<li> <p><code>plot_svd_u</code>: Create a pairs plot of select left singular vectors
+</p>
+</li>
+<li> <p><code>plot_svd_v</code>: Create a pairs plot of select right singular vectors
+</p>
+</li>
+</ul>
+</div>

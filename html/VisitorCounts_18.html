@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.decomposition</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Decomposition Plot Methods</h2>
+
+<h3>Description</h3>
+
+<p>Methods for plotting objects of the class "decomposition".
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'decomposition'
+plot(x, type = c("full", "period", "classical"), legend = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class "decomposition".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>A character string. One of "full","period", or "classical". If "full", the full reconstruction is plotted. If "period", the reconstruction of each period is plotted individually. If "classical", the trend and seasonality are plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+<p>A Boolean specifying whether a legend should be added when type is "full". The default option is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A plot of the reconstruction in the "decomposition" class object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data("park_visitation")
+
+park &lt;- "YELL"
+nps_ts &lt;- ts(park_visitation[park_visitation$park == park,]$nps, start = 2005, frequency = 12)
+nps_ts &lt;- log(nps_ts)
+
+pud_ts &lt;- ts(park_visitation[park_visitation$park == park,]$pud, start = 2005, frequency = 12)
+pud_ts &lt;- log(pud_ts)
+nps_ts &lt;- ts(park_visitation[park_visitation$park == park,]$nps, start = 2005, frequency = 12)
+nps_ts &lt;- log(nps_ts)
+
+
+
+decomposition_pud &lt;- auto_decompose(pud_ts)
+decomposition_nps &lt;- auto_decompose(nps_ts)
+
+plot(decomposition_pud,lwd = 2)
+plot(decomposition_pud,type = "period")
+plot(decomposition_pud,type = "classical")
+
+
+plot(decomposition_nps,legend = TRUE)
+
+
+plot(decomposition_nps,type = "period")
+plot(decomposition_nps,type = "classical")
+
+</code></pre>
+
+
+</div>

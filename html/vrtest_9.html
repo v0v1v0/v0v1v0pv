@@ -1,0 +1,94 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Chow.Denning</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Chow-Denning Multiple Variance Ratio Tests </h2>
+
+<h3>Description</h3>
+
+<p>This function returns Chow-Denning test statistics.
+</p>
+<p>CD1: test for iid series; CD2: test for uncorrelated series with possible heteroskedasticity.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Chow.Denning(y, kvec)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p> a vector of time series, typically  financial return </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kvec</code></td>
+<td>
+<p> a vector of holding periods </p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Holding.Periods </code></td>
+<td>
+<p>holding periods used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CD1 </code></td>
+<td>
+<p>CD1 statistic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CD2 </code></td>
+<td>
+<p>CD2 statistic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Critical.Values_10_5_1_percent </code></td>
+<td>
+<p>10 5 1 percent critical values</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>See Chow and Denning (1993) for the details of critical value calculation
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Jae H. Kim </p>
+
+
+<h3>References</h3>
+
+<p> Chow,K. V., K. C. DENNING, 1993, A Simple Multiple Variance Ratio Test, Journal of Econometrics, 58, 385-401. </p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(exrates)
+y &lt;- exrates$ca                  
+nob &lt;- length(y)
+r &lt;- log(y[2:nob])-log(y[1:(nob-1)])      
+kvec &lt;- c(2,5,10)
+Chow.Denning(r,kvec) 
+</code></pre>
+
+
+</div>

@@ -1,0 +1,212 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vmideal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visual magnitude distribution of ideal distributed meteor magnitudes</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random generation for the
+visual magnitude distribution of ideal distributed meteor magnitudes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dvmideal(m, lm, psi, log = FALSE, perception.fun = NULL)
+
+pvmideal(m, lm, psi, lower.tail = TRUE, log = FALSE, perception.fun = NULL)
+
+qvmideal(p, lm, psi, lower.tail = TRUE, perception.fun = NULL)
+
+rvmideal(n, lm, psi, perception.fun = NULL)
+
+cvmideal(lm, psi, log = FALSE, perception.fun = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>integer; visual meteor magnitude.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lm</code></td>
+<td>
+<p>numeric; limiting magnitude.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>psi</code></td>
+<td>
+<p>numeric; the location parameter of a probability distribution.
+It is the only parameter of the distribution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, probabilities p are given as <code>log(p)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>perception.fun</code></td>
+<td>
+<p>function; perception probability function (optional).
+Default is vmperception.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail</code></td>
+<td>
+<p>logical; if <code>TRUE</code> (default) probabilities are
+<code class="reqn">P[M &lt; m]</code>, otherwise, <code class="reqn">P[M \ge m]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>numeric; probability.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>numeric; count of meteor magnitudes.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The density of an ideal magnitude distribution is
+</p>
+<p style="text-align: center;"><code class="reqn">
+    {\displaystyle f(m) = \frac{\mathrm{d}p}{\mathrm{d}m} = \frac{3}{2} \, \log(r) \sqrt{\frac{r^{3 \, \psi + 2 \, m}}{(r^\psi + r^m)^5}}}
+</code>
+</p>
+
+<p>where <code class="reqn">m</code> is the meteor magnitude, <code class="reqn">r = 10^{0.4} \approx 2.51189 \dots</code> is a constant and
+<code class="reqn">\psi</code> is the only parameter of this magnitude distribution.
+</p>
+<p>In visual meteor observation, it is common to estimate meteor magnitudes in integer values.
+Hence, this distribution is discrete and has the density
+</p>
+<p style="text-align: center;"><code class="reqn">
+   {\displaystyle P[M = m] \sim g(m) \, \int_{m-0.5}^{m+0.5} f(m) \, \, \mathrm{d}m} \, \mathrm{,}
+</code>
+</p>
+
+<p>where <code class="reqn">g(m)</code> is the perception probability.
+This distribution is thus a product of the
+perception probabilities and the
+actual ideal distribution of the meteor magnitudes.
+</p>
+<p>If the perception probabilities function <code>perception.fun</code> is given,
+it must have the signature <code style="white-space: pre;">⁠function(M)⁠</code> and must return the perception probabilities of
+the difference <code>M</code> between the limiting magnitude and the meteor magnitude.
+If <code>m &gt;= 15.0</code>, the <code>perception.fun</code> function should return the perception probability of <code>1.0</code>.
+If <code>log = TRUE</code> is given, the logarithm value of the perception probabilities
+must be returned. <code>perception.fun</code> is resolved using match.fun.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dvmideal</code> gives the density, <code>pvmideal</code> gives the distribution function,
+<code>qvmideal</code> gives the quantile function, and <code>rvmideal</code> generates random deviates.
+<code>cvmideal</code> gives the partial convolution of the ideal meteor magnitude distribution
+with the perception probabilities.
+</p>
+<p>The length of the result is determined by <code>n</code> for <code>rvmideal</code>, and is the maximum
+of the lengths of the numerical vector arguments for the other functions.
+</p>
+<p>Since the distribution is discrete, <code>qvmideal</code> and <code>rvmideal</code> always return integer values.
+<code>qvmideal</code> can return <code>NaN</code> value with a warning.
+</p>
+
+
+<h3>References</h3>
+
+<p>Richter, J. (2018) <em>About the mass and magnitude distributions of meteor showers</em>.
+WGN, Journal of the International Meteor Organization, vol. 46, no. 1, p. 34-38
+</p>
+
+
+<h3>See Also</h3>
+
+<p>mideal
+vmperception
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">N &lt;- 100
+psi &lt;- 5.0
+limmag &lt;- 6.5
+(m &lt;- seq(6, -4))
+
+# discrete density of `N` meteor magnitudes
+(freq &lt;- round(N * dvmideal(m, limmag, psi)))
+
+# log likelihood function
+lld &lt;- function(psi) {
+    -sum(freq * dvmideal(m, limmag, psi, log=TRUE))
+}
+
+# maximum likelihood estimation (MLE) of psi
+est &lt;- optim(2, lld, method='Brent', lower=0, upper=8, hessian=TRUE)
+
+# estimations
+est$par # mean of psi
+
+# generate random meteor magnitudes
+m &lt;- rvmideal(N, limmag, psi)
+
+# log likelihood function
+llr &lt;- function(psi) {
+    -sum(dvmideal(m, limmag, psi, log=TRUE))
+}
+
+# maximum likelihood estimation (MLE) of psi
+est &lt;- optim(2, llr, method='Brent', lower=0, upper=8, hessian=TRUE)
+
+# estimations
+est$par # mean of psi
+sqrt(1/est$hessian[1][1]) # standard deviation of psi
+
+m &lt;- seq(6, -4, -1)
+p &lt;- vismeteor::dvmideal(m, limmag, psi)
+barplot(
+    p,
+    names.arg = m,
+    main = paste0('Density (psi = ', psi, ', limmag = ', limmag, ')'),
+    col = "blue",
+    xlab = 'm',
+    ylab = 'p',
+    border = "blue",
+    space = 0.5
+)
+axis(side = 2, at = pretty(p))
+
+plot(
+    function(lm) vismeteor::cvmideal(lm, psi, log = TRUE),
+    -5, 10,
+    main = paste0(
+        'Partial convolution of the ideal meteor magnitude distribution\n',
+        'with the perception probabilities (psi = ', psi, ')'
+    ),
+    col = "blue",
+    xlab = 'lm',
+    ylab = 'log(rate)'
+)
+</code></pre>
+
+
+</div>

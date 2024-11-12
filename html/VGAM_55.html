@@ -1,0 +1,173 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>asinlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Arcsine Link Function</h2>
+
+<h3>Description</h3>
+
+<p>Computes the arcsine link,
+including its inverse and
+the first few derivatives.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">asinlink(theta, bvalue = NULL, inverse = FALSE,
+   deriv = 0, short = TRUE, tag = FALSE, c10 = c(4, -pi))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue</code></td>
+<td>
+
+<p>See <code>Links</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inverse, deriv, short, tag</code></td>
+<td>
+
+<p>Details at <code>Links</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>c10</code></td>
+<td>
+
+<p>Similar to <code>sqrtlink</code>.
+The default is intended to match
+<code>lcalogitlink</code> for <code>binomialff</code>
+at binomial probabilities (<code>theta</code>) equal
+to 0.5.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Function <code>alogitlink</code>
+gives some motivation for this link.
+However, the problem with this link
+is that it is bounded by default
+between <code>(-pi, pi)</code>
+so that it can be unsuitable for regression.
+This link is a scaled and centred
+CDF of the arcsine distribution.
+The centring is chosen so that
+<code>asinlink(0.5)</code> is 0,
+and the scaling is chosen so that
+<code>asinlink(0.5, deriv = 1)</code> and
+<code>logitlink(0.5, deriv = 1)</code>
+are equal (the value 4 actually),
+hence this link will operate similar to the
+<code>logitlink</code>
+when close to 0.5.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Similar to <code>logitlink</code>
+but using different formulas.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>It is possible that the scaling might change
+in the future.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>logitlink</code>,
+<code>alogitlink</code>,
+<code>Links</code>,
+<code>probitlink</code>,
+<code>clogloglink</code>,
+<code>cauchitlink</code>,
+<code>binomialff</code>,
+<code>sloglink</code>,
+<code>hdeff</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">p &lt;- seq(0.01, 0.99, length= 10)
+asinlink(p)
+max(abs(asinlink(asinlink(p), inv = TRUE) - p))  # 0?
+
+## Not run: 
+par(mfrow = c(2, 2), lwd = (mylwd &lt;- 2))
+y &lt;- seq(-4, 4, length = 100)
+p &lt;- seq(0.01, 0.99, by = 0.01)
+
+for (d in 0:1) {
+  matplot(p, cbind(logitlink(p, deriv = d), probitlink(p, deriv = d)),
+          type = "n", col = "blue", ylab = "transformation",
+          log = ifelse(d == 1, "y", ""),
+          las = 1, main = if (d == 0) "Some probability link functions"
+          else "First derivative")
+  lines(p,   logitlink(p, deriv = d), col = "green")
+  lines(p,  probitlink(p, deriv = d), col = "blue")
+  lines(p, clogloglink(p, deriv = d), col = "tan")
+  lines(p,    asinlink(p, deriv = d), col = "red3")
+  if (d == 0) {
+    abline(v = 0.5, h = 0, lty = "dashed")
+    legend(0, 4.5, c("logitlink", "probitlink", "clogloglink",
+           "asinlink"), lwd = mylwd,
+           col = c("green", "blue", "tan", "red3"))
+  } else
+    abline(v = 0.5, lwd = 0.5, col = "gray")
+}
+
+for (d in 0) {
+  matplot(y, cbind( logitlink(y, deriv = d, inverse = TRUE),
+                   probitlink(y, deriv = d, inverse = TRUE)),
+          type  = "n", col = "blue", xlab = "transformation", ylab = "p",
+          main = if (d == 0) "Some inverse probability link functions"
+          else "First derivative", las=1)
+  lines(y,   logitlink(y, deriv = d, inverse = TRUE), col = "green")
+  lines(y,  probitlink(y, deriv = d, inverse = TRUE), col = "blue")
+  lines(y, clogloglink(y, deriv = d, inverse = TRUE), col = "tan")
+  lines(y,    asinlink(y, deriv = d, inverse = TRUE), col = "red3")
+  if (d == 0) {
+      abline(h = 0.5, v = 0, lwd = 0.5, col = "gray")
+      legend(-4, 1, c("logitlink", "probitlink", "clogloglink",
+             "asinlink"), lwd = mylwd,
+             col = c("green", "blue", "tan", "red3"))
+  }
+}
+par(lwd = 1)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

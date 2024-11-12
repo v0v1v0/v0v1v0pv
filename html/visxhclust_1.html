@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>annotate_clusters</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Annotate data frame with clusters</h2>
+
+<h3>Description</h3>
+
+<p>Annotate data frame with clusters
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">annotate_clusters(df, cluster_labels, long = TRUE, selected_clusters = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>a data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cluster_labels</code></td>
+<td>
+<p>list of cluster labels, automatically converted to factor.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>long</code></td>
+<td>
+<p>if <code>TRUE</code>, returned data frame will be in long format. See details for spec. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selected_clusters</code></td>
+<td>
+<p>optional cluster labels to filter</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Long data frame will have columns: <code>Cluster</code>, <code>Measurement</code> and <code>Value</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a wide or long data frame
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dmat &lt;- compute_dmat(iris, "euclidean", TRUE, c("Petal.Length", "Sepal.Length"))
+res &lt;- compute_clusters(dmat, "complete")
+cluster_labels &lt;- cut_clusters(res, 2)
+annotated_data &lt;- annotate_clusters(iris[, c("Petal.Length", "Sepal.Length")], cluster_labels)
+head(annotated_data)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,95 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_voxels_full_grid</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Voxel cloud visualization when voxel cloud includes the empty voxels.</h2>
+
+<h3>Description</h3>
+
+<p>Voxel cloud visualization when voxel cloud includes the empty voxels.
+Filled voxels are plotted as plain vertices and only the edges of empty voxels are plotted.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_voxels_full_grid(data, res, ecol, fcol, lwd, alpha, plot, message)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data.frame or data.table containing at least the voxel cloud x, y, z coordinates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>res</code></td>
+<td>
+<p>numeric. The voxel resolution. If not provided, the function will guess it.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ecol</code></td>
+<td>
+<p>color for the edges of empty voxels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fcol</code></td>
+<td>
+<p>color for the facets of filled voxels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwd</code></td>
+<td>
+<p>numeric. The line width for the edges of empty voxels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>numeric. The transparency of the voxel facets for filled voxels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p>logical. Plot the voxels ? See return for mesh capture. Default = TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>message</code></td>
+<td>
+<p>logical. If FALSE removes the message from the resolution guessing.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>At anytime the mesh object that enables to plot the voxels can be captured to plot it using
+the <code>shade3d</code> function from rgl. The returned object is a list containing
+the 3D mesh of filled and empty voxels separately.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#- import tls data
+tls=data.table::fread(system.file("extdata", "Tree_t0.asc", package="VoxR"))
+
+#- voxelisation with full.grid option
+voxels=VoxR::vox(tls,0.3,full.grid = TRUE)
+
+#- plot the voxels
+VoxR::plot_voxels_full_grid(voxels)
+</code></pre>
+
+
+</div>

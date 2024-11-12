@@ -1,0 +1,92 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotGAM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>GAM plotting using ggplot2</h2>
+
+<h3>Description</h3>
+
+<p>GAM plotting using ggplot2
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotGAM(gamFit, smooth.cov, groupCovs = NULL, orderedAsFactor = T,
+  rawOrFitted = F, plotCI = T)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>gamFit</code></td>
+<td>
+<p>fitted gam model as produced by mgcv::gam()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smooth.cov</code></td>
+<td>
+<p>(character) name of smooth term to be plotted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groupCovs</code></td>
+<td>
+<p>(character)  name of group variable to plot by, if NULL (default) then there are no groups in plot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>orderedAsFactor</code></td>
+<td>
+<p>if TRUE then the model is refitted with ordered variables as factors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rawOrFitted</code></td>
+<td>
+<p>If FALSE (default) then only smooth terms are plotted; if rawOrFitted = "raw" then raw values are plotted against smooth; if rawOrFitted = "fitted" then fitted values are plotted against smooth</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plotCI</code></td>
+<td>
+<p>if TRUE (default) upper and lower confidence intervals are added at 2 standard errors above and below the mean</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a ggplot object that can be visualized using the print() function
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Plotting: <code>plotGAMM</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data &lt;- data.frame(x = rep(1:20, 2), group = rep(1:2, each = 20))
+set.seed(1)
+data$y &lt;- (data$x^2)*data$group*3 + rnorm(40, sd = 200)
+data$group &lt;- ordered(data$group)
+
+gam &lt;- mgcv::gam(y ~ s(x) + group, data=data)
+
+plot1 &lt;- plotGAM(gamFit = gam, smooth.cov = "x", groupCovs = NULL,
+                  rawOrFitted = "raw", plotCI=TRUE, orderedAsFactor = FALSE)
+gam &lt;- mgcv::gam(y ~ s(x) + group + s(x, by=group), data=data)
+plot2 &lt;- plotGAM(gamFit = gam, smooth.cov = "x", groupCovs = "group",
+                             rawOrFitted = "raw", orderedAsFactor = FALSE)
+</code></pre>
+
+
+</div>

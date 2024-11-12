@@ -1,0 +1,182 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>add_risktable</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add risk tables to visR plots through an S3 method</h2>
+
+<h3>Description</h3>
+
+<p>S3 method for adding risk tables to visR plots. The function has following workflow:
+</p>
+
+<ul>
+<li>
+<p>The risktables are calculated using <code>get_risktable</code>
+
+</p>
+</li>
+<li>
+<p>The risktables are placed underneath visR plots using <code>plot_grid</code>
+
+</p>
+</li>
+<li>
+<p>Both the initial visR plot as the individual risktables are stored as attribute <code>component</code>
+in the final object to allow post-modification of the individual plots if desired
+
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">add_risktable(gg, ...)
+
+## S3 method for class 'ggsurvfit'
+add_risktable(
+  gg,
+  times = NULL,
+  statlist = "n.risk",
+  label = NULL,
+  group = "strata",
+  collapse = FALSE,
+  rowgutter = 0.16,
+  ...
+)
+
+## S3 method for class 'ggtidycuminc'
+add_risktable(
+  gg,
+  times = NULL,
+  statlist = "n.risk",
+  label = NULL,
+  group = "strata",
+  collapse = FALSE,
+  rowgutter = 0.16,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>gg</code></td>
+<td>
+<p>visR plot of class <code>ggsurvfit</code> or <code>ggtidycmprsk</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments passed on to the method add_risktable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>times</code></td>
+<td>
+<p>Numeric vector indicating the times at which the risk set, censored subjects, events are calculated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>statlist</code></td>
+<td>
+<p>Character vector indicating which summary data to present. Current choices are "n.risk" "n.event"
+"n.censor", "cum.event", "cum.censor".
+Default is "n.risk".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label</code></td>
+<td>
+<p>Character vector with labels for the statlist. Default matches "n.risk" with "At risk", "n.event" with
+"Events", "n.censor" with "Censored", "cum.event" with "Cum. Event", and "cum.censor" with "Cum. Censor".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>String indicating the grouping variable for the risk tables.
+Current options are:
+</p>
+
+<ul>
+<li>
+<p>"strata": groups the risk tables per stratum.
+The <code>label</code> specifies the label within each risk table. The strata levels
+are used for the titles of the risk tables. This is the default
+</p>
+</li>
+<li>
+<p>"statlist": groups the risk tables per statlist.
+The <code>label</code> specifies the title for each risk table. The strata levels
+are used for labeling within each risk table.
+</p>
+</li>
+</ul>
+<p>Default is "strata".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>collapse</code></td>
+<td>
+<p>Boolean, indicates whether to present the data overall.
+Default is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rowgutter</code></td>
+<td>
+<p>A numeric relative value between 0 and 1 indicates the height used by the table versus the height
+used by the plot, as described in <code>cowplot::plot_grid(rel_heights=)</code>. The default is 0.16.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Object of class <code>ggplot</code> with added risk table.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>plot_grid</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Display 2 risk tables, 1 per statlist
+adtte %&gt;%
+  visR::estimate_KM(strata = "TRTP") %&gt;%
+  visR::visr() %&gt;%
+  visR::add_risktable(
+    label = c("Subjects at Risk", "Censored"),
+    statlist = c("n.risk", "n.censor", "n.event"),
+    group = "statlist"
+  )
+
+## Display overall risk table at selected times
+adtte %&gt;%
+  visR::estimate_KM(strata = "TRTP") %&gt;%
+  visR::visr() %&gt;%
+  visR::add_risktable(
+    label = c("Subjects at Risk", "Censored"),
+    statlist = c("n.risk", "n.censor"),
+    collapse = TRUE,
+    times = c(0, 20, 40, 60)
+  )
+
+## Add risk set as specified times
+adtte %&gt;%
+  visR::estimate_KM(strata = "TRTP") %&gt;%
+  visR::visr() %&gt;%
+  visR::add_risktable(times = c(0, 20, 40, 100, 111, 200))
+
+</code></pre>
+
+
+</div>

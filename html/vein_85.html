@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>moves_rpdy_sf</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>MOVES estimation of using rates per distance by model year</h2>
+
+<h3>Description</h3>
+
+<p><code>moves_rpdy_sf</code> estimates running exhaust emissions
+using MOVES emission factors.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">moves_rpdy_sf(
+  veh,
+  lkm,
+  ef,
+  speed_bin,
+  profile,
+  source_type_id = 21,
+  vehicle = NULL,
+  vehicle_type = NULL,
+  fuel_subtype = NULL,
+  path_all,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>veh</code></td>
+<td>
+<p>"Vehicles" data-frame or list of "Vehicles" data-frame. Each data-frame
+as number of columns matching the age distribution of that ype of vehicle.
+The number of rows is equal to the number of streets link.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lkm</code></td>
+<td>
+<p>Length of each link in miles</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ef</code></td>
+<td>
+<p>emission factors from EmissionRates_running exported from MOVES
+filtered by sourceTypeID and fuelTypeID.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>speed_bin</code></td>
+<td>
+<p>Data.frame or vector of avgSpeedBinID as defined by MOVES.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>profile</code></td>
+<td>
+<p>numeric vector  of normalized traffic for the morning rush hour</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>source_type_id</code></td>
+<td>
+<p>Number to identify type of vehicle as defined by MOVES.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vehicle</code></td>
+<td>
+<p>Character, type of vehicle</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vehicle_type</code></td>
+<td>
+<p>Character, subtype of vehicle</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fuel_subtype</code></td>
+<td>
+<p>Character, subtype of vehicle</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path_all</code></td>
+<td>
+<p>Character to export whole estimation. It is not recommended since it
+is usually too heavy.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical; To show more information. Not implemented yet</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list with emissions at each street and data.base aggregated by categories. See <code>link{emis_post}</code>
+</p>
+
+
+<h3>Note</h3>
+
+<p>'decoder' shows a decoder for MOVES
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">{
+data(decoder)
+decoder
+}
+</code></pre>
+
+
+</div>

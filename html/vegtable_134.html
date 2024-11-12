@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>veg_aggregate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Aggregating information into a data frame</h2>
+
+<h3>Description</h3>
+
+<p>Compute summarizing tables from vegtable objects.
+This function works in a similar way as <code>crosstable()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">veg_aggregate(object, data, FUN, ...)
+
+## S4 method for signature 'formula,vegtable,'function''
+veg_aggregate(object, data, FUN, use_nas = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>A formula indicating the variables used for the summary.
+As in <code>crosstable()</code>, the keywords <code>"TaxonName"</code> and <code>"AcceptedName"</code>
+can be used to retrieve taxonomic names, where the second will set the
+accepted name for names considered as synonyms.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Either a data frame or an object of class vegtable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>FUN</code></td>
+<td>
+<p>Function used to aggregate values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments passed to the function <code>stats::aggregate()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use_nas</code></td>
+<td>
+<p>Logical value indicating whether NA's should be included in
+categorical variables or not.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class data.frame.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miguel Alvarez <a href="mailto:kamapu78@gmail.com">kamapu78@gmail.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>aggregate()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Transform cover to percentage cover
+veg &lt;- cover_trans(x = Kenya_veg, to = "cover")
+
+## Frequency of taxa per publication
+atab &lt;- veg_aggregate(object = cover ~ AcceptedName + REFERENCE, data = veg, FUN = length)
+head(atab)
+
+## Life form proportions per plot
+atab &lt;- veg_aggregate(object = cover ~ lf_behn_2018 + ReleveID, data = veg, FUN = sum)
+head(atab)
+
+</code></pre>
+
+
+</div>

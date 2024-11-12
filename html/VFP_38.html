@@ -1,0 +1,85 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary.VFP</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summary Objects of Class 'VFP'</h2>
+
+<h3>Description</h3>
+
+<p>Summary Objects of Class 'VFP'
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VFP'
+summary(
+  object,
+  model.no = NULL,
+  digits = 4,
+  type = c("simple", "complex"),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>(object) of class 'VFP'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model.no</code></td>
+<td>
+<p>(integer) specifying a fitted model in 'x', if NULL the best fitting
+model will be printed, i.e. the one with min(RSS)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>(integer) number of significant digits</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>(character) "simple" = short summary, "complex" = calls the summary-method
+for objects of class "gnm"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters passed forward</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(VCA)
+data(CA19_9)
+fits.CA19_9 &lt;- anovaVCA(result~site/day, CA19_9, by="sample")
+# extract repeatability
+mat.CA19_9 &lt;- getMat.VCA(fits.CA19_9, "error")
+res.CA19_9 &lt;- fit.vfp(mat.CA19_9, 1:10)
+summary(res.CA19_9)
+print(res.CA19_9)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,124 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>resSep</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Select Peptides with the Specified Amino Acid Residue(s) at an Indicated Position
+</h2>
+
+<h3>Description</h3>
+
+<p>Allows the experimenter to subset peptide data based on a selected amino acid residue
+or sequence a specified position(s). Requires the experimenter to select the residue(s)
+and position(s) of interest at a given length or length/charge combination.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">resSep(File,Length,Charge = NULL,Pos,Res)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>File</code></td>
+<td>
+
+<p>An object, generally a <code>data.frame</code>, the <code>vFormat</code> object with peptide and signal data.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Length</code></td>
+<td>
+
+<p>An <code>integer</code>, the desired length of the peptides to separate.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Charge</code></td>
+<td>
+
+<p>An <code>integer</code>, the desired charge of the peptides to separate.
+Defaults to <code>Charge = NULL</code>, which carries out length separation only. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Pos</code></td>
+<td>
+
+<p>An <code>integer</code> or <code>sequence</code>, the position(s) to check for the 
+residue(s) of interest.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Res</code></td>
+<td>
+
+<p>A <code>character</code> input. The residue(s) to check for at the given position(s). The lengths of
+the arguments <code>Pos</code> and <code>Res</code> must match. Multiple residues are entered as a single
+character string. Ex: <code>Res = "RA"</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The lengths of the arguments <code>Pos</code> and <code>Res</code> must match.
+</p>
+<p>Sequence Positions are read from right to left. 
+</p>
+<p>Ex: The residue "R" in 5-mer sequence "RSGSG" is at position 5. 
+</p>
+<p>When typing in a sequence of interest, it will be in reverse with regard to the displayed sequence.
+</p>
+<p>Ex: Sequence "SR" at positions 4:5 in the 5-mer"RSGSG"
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>data.frame</code> of the same format as the argument <code>File</code> containing only peptides
+that contain the specified residue(s) at the indicated position(s).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Cody Moore
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vSep</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Example data.frame ##
+
+protEx.resSep &lt;- data.frame(Peptides = c("PWRGPWARVGSG","GYNRVGQGSG","PNGYRSGVKGSG","GSG"),
+Length = c(12,10,12,3),Charge = c(2,1,2,0),Kd = c(0.2572361,2.8239730,3.3911868,281.3058),
+C_6uM = c(65011.48,47462.24,24778,2613.03),C_6uM2 = c(62637.81,20723.85,21313.67,2300.216))
+
+## Single Residue Separation ##
+
+resSepEx1 &lt;- resSep(protEx.resSep,12,2,5,"R")
+
+## Positional Sequence Separation ##
+
+resSepEx2 &lt;- resSep(protEx.resSep,12,2,5:6,c("RA"))
+</code></pre>
+
+
+</div>

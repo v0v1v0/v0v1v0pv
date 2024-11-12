@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hcr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Heterogeneity-constrained random resampling (HCR) 
+</h2>
+
+<h3>Description</h3>
+
+<p>Returns a set of indices of the original data set that maximizes the mean and minimizes the variance of the distances between pairs of plot records.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hcr(d, nout, nsampl=1000)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+
+<p>An object of class <code>dist</code> containing the distance values between pairs of sites (plot records).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nout</code></td>
+<td>
+<p>The number of sites (plot records) to be chosen among those available in <code>d</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsampl</code></td>
+<td>
+<p>The number of resampling trials to be compared.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Many subsets of the input data are selected randomly. These subsets are sorted by decreasing mean dissimilarity between pairs of plot records, and then sorted again by increasing variance of these dissimilarities. Ranks from both sortings are summed for each subset, and the subset with the lowest summed rank is considered as the most representative.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns a vector containing the indices of the selected sites (plot records) to be used for sub-setting the original table.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, CREAF
+</p>
+
+
+<h3>References</h3>
+
+<p>Lengyel, A., Chytry, M., Tichy, L. (2011) Heterogeneity-constrained random resampling of phytosociological databases. Journal of Vegetation Science 22: 175-183.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Loads data (38 columns and 33 species)
+data(wetland)
+dim(wetland)
+  
+## Constructs the chord distance matrix
+## (see also  \code{\link{decostand}} in package vegan)
+wetland.chord =dist(as.data.frame(sweep(as.matrix(wetland), 1, 
+                    sqrt(rowSums(as.matrix(wetland)^2)), "/")))
+
+## Performs HCR resampling. Returns indices of objects
+sel = hcr(wetland.chord, nout=20, nsampl=1000)
+
+## Prints the names of the plot records
+print(row.names(wetland)[sel])
+
+## Subset the original distance matrix
+sel.chord = as.dist(as.matrix(wetland.chord)[sel,sel])
+</code></pre>
+
+
+</div>

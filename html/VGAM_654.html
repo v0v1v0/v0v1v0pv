@@ -1,0 +1,145 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>goffset</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+GAITD Offset for the GTE Method
+</h2>
+
+<h3>Description</h3>
+
+<p>Utility function to create a matrix of log-offset values,
+to help facilitate the Generally-Truncated-Expansion method
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">goffset(mux, n,
+        a.mix = NULL, i.mix = NULL, d.mix = NULL,
+        a.mlm = NULL, i.mlm = NULL, d.mlm = NULL, par1or2 = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mux</code></td>
+<td>
+
+<p>Multiplier. Usually a small positive integer.
+Must be positive.
+The value 1 means no change.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+
+<p>Number of rows.
+A positive integer, it should be the number of rows of
+the data frame containing the data.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a.mix, i.mix, d.mix</code></td>
+<td>
+
+<p>See, e.g., <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a.mlm, i.mlm, d.mlm</code></td>
+<td>
+
+<p>See, e.g., <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par1or2</code></td>
+<td>
+
+<p>Number of parameters of the parent distribution.
+Set <code>par1or2 = 2</code>  for <code>gaitdnbinomial</code>,
+else the default value should be used.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is intended to make the 
+Generally-Truncated-Expansion (GTE) method
+easier for the user.
+It only makes sense if the linear predictors(s) are
+log  of the mean of the parent distribution,
+which is the usual case for
+<code>gaitdpoisson</code> and
+<code>gaitdnbinomial</code>.
+However, for <code>gaitdlog</code>
+and  <code>gaitdzeta</code> one should be using
+<code>logffMlink</code> and
+<code>zetaffMlink</code>.
+</p>
+<p>Without this function, the user must do quite a lot
+of book-keeping to know which columns of the offset
+matrix is to be assigned <code>log(mux)</code>.
+This can be rather laborious.
+</p>
+<p>In the fictitional example below the response is underdispersed
+with respect to a Poisson distribution and
+doubling the response achieves approximate equidispersion.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix with <code>n</code> rows and the same number of
+columns that a GAITD regression would produce for
+its matrix of linear predictors.
+The matrix can be inputted into <code>vglm</code>
+by assigning the <code>offset</code> argument.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is still in a developmental stage.
+The order of the arguments might change, hence it's
+safest to invoke it with full specification.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gaitdpoisson</code>,
+<code>gaitdlog</code>,
+<code>gaitdzeta</code>,
+<code>gaitdnbinomial</code>,
+<code>Trunc</code>,
+<code>offset</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">i.mix &lt;- c(5, 10, 15, 20); a.mlm &lt;- 13; mymux &lt;- 2
+goffset(mymux, 10, i.mix = i.mix, a.mlm = a.mlm)
+## Not run: org1  &lt;- with(gdata, range(y))  # Original range of the data
+vglm(mymux * y ~ 1,
+     offset = goffset(mymux, nrow(gdata), i.mix = i.mix, a.mlm = a.mlm),
+     gaitdpoisson(a.mlm = mymux * a.mlm, i.mix = mymux * i.mix,
+                  truncate = Trunc(org1, mymux)),
+     data = gdata)
+
+## End(Not run)</code></pre>
+
+
+</div>

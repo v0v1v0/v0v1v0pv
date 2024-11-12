@@ -1,0 +1,125 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot,validator-method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot a validator object</h2>
+
+<h3>Description</h3>
+
+<p>The matrix of variables x rules is plotted, in which rules that are
+recognized as linear (in)equations are differently colored. 
+The augmented matrix is returned, but can also be calculated using
+<code>variables(x, as="matrix")</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'validator'
+plot(
+  x,
+  y,
+  use_blocks = TRUE,
+  col = c("#b2df8a", "#a6cee3"),
+  cex = 1,
+  show_legend = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>validator object with rules</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>not used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use_blocks</code></td>
+<td>
+<p><code>logical</code> if <code>TRUE</code> the matrix is sorted
+according to the connected sub sets of variables (aka blocks).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p><code>character</code> with color codes for plotting variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex</code></td>
+<td>
+<p>size of the variables plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show_legend</code></td>
+<td>
+<p>should a legend explaining the colors be drawn?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>passed to image</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>(invisible) the matrix
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>variables</code>
+</p>
+<p>Other validator-methods: 
+<code>+,validator,validator-method</code>,
+<code>validator</code>
+</p>
+<p>Other expressionset-methods: 
+<code>as.data.frame()</code>,
+<code>as.data.frame,expressionset-method</code>,
+<code>created()</code>,
+<code>description()</code>,
+<code>label()</code>,
+<code>meta()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>origin()</code>,
+<code>summary()</code>,
+<code>variables()</code>,
+<code>voptions()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rules &lt;- validator( r1 = staff.costs &lt; total.costs
+                  , r2 = turnover + other.rev == total.rev
+                  , r3 = other.rev &gt; 0
+                  , r4 = total.rev &gt; 0
+                  , r5 = nace %in% c("A", "B")
+                  )
+plot(rules, cex=0.8, show_legend=TRUE)
+
+data(retailers)
+cf &lt;- confront(retailers, rules)
+plot(cf, main="Retailers check")
+</code></pre>
+
+
+</div>

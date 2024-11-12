@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Sequential2MeansBeta</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variable selection using shrinkage prior :: Sequential2MeansBeta</h2>
+
+<h3>Description</h3>
+
+<p>Sequential2MeansBeta function will take as input Beta : N by p matrix consisting of N posterior samples of p variables, lower : the lower bound of the chosen values of the tuning parameter, upper : the upper bound of the chosen values of the tuning parameter, and l :the number of chosen values of the tuning parameter. The function will return a list S2M which will hold p: the total number of variables, b.i: the values of the tuning parameter, H.b.i : the estimated number of signals corresponding to each b.i, abs.post.median: medians of the absolute values of the posterior samples.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Sequential2MeansBeta(Beta, lower, upper, l)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Beta</code></td>
+<td>
+<p>N by p matrix consisting of N posterior samples of p variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower</code></td>
+<td>
+<p>the lower bound of the chosen values of the tuning parameter of numeric data type.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>upper</code></td>
+<td>
+<p>the upper bound of the chosen values of the tuning parameter of numeric data type.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>l</code></td>
+<td>
+<p>the number of chosen values of the tuning parameter of numeric data type.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list S2M which will hold p, b.i, and H.b.i:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>total number of variables in the model</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b.i</code></td>
+<td>
+<p>the vector values of the tuning parameter specified by the user</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H.b.i</code></td>
+<td>
+<p>the estimated number of signals corresponding to each b.i of numeric data type</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Makalic, E. &amp; Schmidt, D. F.
+High-Dimensional Bayesian Regularised Regression with the BayesReg Package
+arXiv:1611.06649, 2016
+</p>
+<p>Li, H., &amp; Pati, D.
+Variable selection using shrinkage priors
+Computational Statistics &amp; Data Analysis, 107, 107-119.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# -----------------------------------------------------------------
+# Example 1: Gaussian Model and Horseshoe prior
+
+n &lt;- 10
+p &lt;- 5
+X &lt;- matrix(rnorm(n * p), n, p)
+beta &lt;- exp(rnorm(p))
+Y &lt;- as.vector(X %*% beta + rnorm(n, 0, 1))
+df &lt;- data.frame(X, Y)
+
+# beta samples for gaussian model using horseshow prior and gibbs sampling
+rv.hs &lt;- bayesreg::bayesreg(Y ~ ., df, "gaussian", "horseshoe+", 110, 100)
+
+Beta &lt;- t(rv.hs$beta)
+lower &lt;- 0
+upper &lt;- 1
+l &lt;- 20
+S2Mbeta &lt;- Sequential2MeansBeta(Beta, lower, upper, l)
+H.b.i &lt;- S2Mbeta$H.b.i
+
+# -----------------------------------------------------------------
+# Example 2: normal model and lasso prior
+
+#' n &lt;- 10
+p &lt;- 5
+X &lt;- matrix(rnorm(n * p), n, p)
+beta &lt;- exp(rnorm(p))
+Y &lt;- as.vector(X %*% beta + rnorm(n, 0, 1))
+df &lt;- data.frame(X, Y)
+rv.hs &lt;- bayesreg::bayesreg(Y ~ ., df, "normal", "lasso", 150, 100)
+
+Beta &lt;- t(rv.hs$beta)
+lower &lt;- 0
+upper &lt;- 1
+l &lt;- 15
+S2Mbeta &lt;- Sequential2MeansBeta(Beta, lower, upper, l)
+H.b.i &lt;- S2Mbeta$H.b.i
+
+</code></pre>
+
+
+</div>

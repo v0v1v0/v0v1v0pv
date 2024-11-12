@@ -1,0 +1,73 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Examp2.4.3.1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Examp2.4.3.1 from Duchateau, L. and Janssen, P. and Rowlands, G. J. (1998).<em>Linear Mixed Models. An Introduction with applications in Veterinary Research</em>. International Livestock Research Institute.</h2>
+
+<h3>Description</h3>
+
+<p>Examp2.4.3.1 is used for inspecting probability distribution and to define a plausible process through
+linear models and generalized linear models.
+</p>
+
+
+<h3>Author(s)</h3>
+
+
+<ol><li>
+<p>  Muhammad Yaseen (<a href="mailto:myaseen208@gmail.com">myaseen208@gmail.com</a>)
+</p>
+</li></ol>
+<h3>References</h3>
+
+
+<ol><li>
+<p> Duchateau, L. and Janssen, P. and Rowlands, G. J. (1998).<em>Linear Mixed Models. An Introduction with applications in Veterinary Research</em>.
+International Livestock Research Institute.
+</p>
+</li></ol>
+<h3>See Also</h3>
+
+<p><code>ex124</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#-------------------------------------------------------------
+## Example 2.4.3.1 p-66
+#-------------------------------------------------------------
+ # PROC MIXED DATA=ex127;
+ # CLASS sire;
+ # MODEL ww=;
+ # RANDOM sire/solution;
+ # RUN;
+ 
+library(lme4)
+str(ex127)
+fm2.8 &lt;- 
+  lme4::lmer(
+         formula    = Ww~(1|sire)
+       , data       = ex127
+       , REML       = TRUE
+       , control    = lmerControl()
+       , start      = NULL
+       , verbose    = 0L
+    #  , subset
+    #  , weights
+    #  , na.action
+    #  , offset
+       , contrasts  = NULL
+       , devFunOnly = FALSE
+    #  , ...
+       )  
+summary(fm2.8)
+lme4::fixef(fm2.8)
+lme4::ranef(fm2.8)
+
+</code></pre>
+
+
+</div>

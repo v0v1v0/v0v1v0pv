@@ -1,0 +1,57 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>norway_births</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Norwegian mortality and births data</h2>
+
+<h3>Description</h3>
+
+<p><code>norway_births</code> is an annual <code>vital</code> object covering the years 1900-2022, as provided
+by the Human Mortality Database on 21 April 2024.
+</p>
+<p><code>norway_fertality</code> is an annual <code>vital</code> covering the years 1967-2022, as provided
+by the Human Fertility Database on 21 April 2024.
+</p>
+<p><code>norway_mortality</code> is an annual <code>vital</code> covering the years 1900-2022, as provided
+by the Human Mortality Database on 21 April 2024.
+</p>
+
+
+<h3>Format</h3>
+
+<p>Time series of class <code>vital</code>
+</p>
+
+
+<h3>Source</h3>
+
+<p>Human Mortality Database <a href="https://mortality.org">https://mortality.org</a>
+</p>
+<p>Human Fertility Database <a href="https://www.humanfertility.org">https://www.humanfertility.org</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(ggplot2)
+# Births
+norway_births
+norway_births |&gt;
+  autoplot(Births)
+# Deaths
+norway_mortality
+norway_mortality |&gt;
+  dplyr::filter(Age &lt; 85, Year &lt; 1950, Sex != "Total") |&gt;
+  autoplot(Mortality) +
+  scale_y_log10()
+# Fertility
+norway_fertility
+norway_fertility |&gt;
+  autoplot(Fertility)
+
+</code></pre>
+
+
+</div>

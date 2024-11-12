@@ -1,0 +1,81 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>relation2header</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Insert variables from relations into header</h2>
+
+<h3>Description</h3>
+
+<p>Information associated to categories listed in slot <strong>relations</strong> can be
+inserted to slot <strong>header</strong> for further statistical comparisons.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">relation2header(vegtable, ...)
+
+## S3 method for class 'vegtable'
+relation2header(vegtable, relation, vars, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vegtable</code></td>
+<td>
+<p>An vegtable object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments passed among methods</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>relation</code></td>
+<td>
+<p>A character value indicating the relation to be used for
+inserting new variables in slot header.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vars</code></td>
+<td>
+<p>A selection of variables from the relation to be inserted in
+header. This function will check the existence of the variables in the
+respective relation and retrieve an error if none is matching the names.
+If missing in the arguments, all variables of the respective relation
+will be inserted.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A vegtable object.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miguel Alvarez, <a href="mailto:kamapu78@gmail.com">kamapu78@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Insert publication year of the source into header
+veg &lt;- relation2header(Kenya_veg, "REFERENCE", "YEAR")
+
+## Show the frequency of plots per publication year
+summary(as.factor(veg$YEAR))
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,384 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simu_lstsp</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function to deploy simulation with LSTSP algorithm</h2>
+
+<h3>Description</h3>
+
+<p>A function to generate simulation with LSTSP algorithm
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">simu_lstsp(
+  nreps,
+  simu_method = c("LS"),
+  nob,
+  k,
+  lags = 1,
+  lags_vector = NULL,
+  brk,
+  sigma,
+  skip = 50,
+  group_mats = NULL,
+  group_type = c("columnwise", "rowwise"),
+  group_index = NULL,
+  sparse_mats = NULL,
+  sp_density = NULL,
+  signals = NULL,
+  rank = NULL,
+  info_ratio = NULL,
+  sp_pattern = c("off-diagonal", "diagoanl", "random"),
+  singular_vals = NULL,
+  spectral_radius = 0.9,
+  alpha_L = 0.25,
+  lambda.1 = NULL,
+  mu.1 = NULL,
+  lambda.1.seq = NULL,
+  mu.1.seq = NULL,
+  lambda.2,
+  mu.2,
+  lambda.3,
+  mu.3,
+  omega = NULL,
+  h = NULL,
+  step.size = NULL,
+  tol = 1e-04,
+  niter = 100,
+  backtracking = TRUE,
+  rolling.skip = 5,
+  cv = FALSE,
+  nfold = NULL,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>nreps</code></td>
+<td>
+<p>A positive integer, indicating the number of simulation replications</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>simu_method</code></td>
+<td>
+<p>the structure of time series: only available for "LS"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nob</code></td>
+<td>
+<p>sample size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>dimension of transition matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lags</code></td>
+<td>
+<p>lags of VAR time series. Default is 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lags_vector</code></td>
+<td>
+<p>a vector of lags of VAR time series for each segment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>brk</code></td>
+<td>
+<p>a vector of break points with (nob+1) as the last element</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma</code></td>
+<td>
+<p>the variance matrix for error term</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>skip</code></td>
+<td>
+<p>an argument to control the leading data points to obtain a stationary time series</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group_mats</code></td>
+<td>
+<p>transition matrix for group sparse case</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group_type</code></td>
+<td>
+<p>type for group lasso: "columnwise", "rowwise". Default is "columnwise".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group_index</code></td>
+<td>
+<p>group index for group lasso.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sparse_mats</code></td>
+<td>
+<p>transition matrix for sparse case</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sp_density</code></td>
+<td>
+<p>if we choose random pattern, we should provide the sparsity density for each segment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>signals</code></td>
+<td>
+<p>manually setting signal for each segment (including sign)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rank</code></td>
+<td>
+<p>if we choose method is low rank plus sparse, we need to provide the ranks for each segment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>info_ratio</code></td>
+<td>
+<p>the information ratio leverages the signal strength from low rank and sparse components</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sp_pattern</code></td>
+<td>
+<p>a choice of the pattern of sparse component: diagonal, 1-off diagonal, random, custom</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>singular_vals</code></td>
+<td>
+<p>singular values for the low rank components</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spectral_radius</code></td>
+<td>
+<p>to ensure the time series is piecewise stationary.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha_L</code></td>
+<td>
+<p>a positive numeric value, indicating the restricted space of low rank component, default is 0.25</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.1</code></td>
+<td>
+<p>tuning parameter for sparse component for the first step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu.1</code></td>
+<td>
+<p>tuning parameter for low rank component for the first step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.1.seq</code></td>
+<td>
+<p>a sequence of lambda to the left segment for cross-validation, it's not mandatory to provide</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu.1.seq</code></td>
+<td>
+<p>a sequence of mu to the left segment, low rank component tuning parameter</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.2</code></td>
+<td>
+<p>tuning parameter for sparse for the second step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu.2</code></td>
+<td>
+<p>tuning parameter for low rank for the second step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda.3</code></td>
+<td>
+<p>tuning parameter for estimating sparse components</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu.3</code></td>
+<td>
+<p>tuning parameter for estimating low rank components</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>omega</code></td>
+<td>
+<p>tuning parameter for information criterion, the larger of omega, the fewer final selected change points</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>h</code></td>
+<td>
+<p>window size of the first rolling window step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>step.size</code></td>
+<td>
+<p>rolling step</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>tolerance for the convergence in the second screening step, indicates when to stop</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>niter</code></td>
+<td>
+<p>the number of iterations required for FISTA algorithm</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>backtracking</code></td>
+<td>
+<p>A boolean argument to indicate use backtrack to FISTA model</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rolling.skip</code></td>
+<td>
+<p>The number of observations need to skip near the boundaries</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cv</code></td>
+<td>
+<p>A boolean argument, indicates whether the user will apply cross validation to select tuning parameter, default is FALSE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nfold</code></td>
+<td>
+<p>An positive integer, the number of folds for cross validation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>If is TRUE, then it will print all information about current step.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A S3 object of class <code>VARDetect.simu.result</code>, containing the following entries:
+</p>
+
+<dl>
+<dt>sizes</dt>
+<dd>
+<p>A 2-d numeric vector, indicating the size of time series data</p>
+</dd>
+<dt>true_lag</dt>
+<dd>
+<p>True time lags for the process, here is fixed to be 1.</p>
+</dd>
+<dt>true_lagvector</dt>
+<dd>
+<p>A vector recording the time lags for different segments, not available under this model setting,
+here is fixed to be NULL</p>
+</dd>
+<dt>true_cp</dt>
+<dd>
+<p>True change points for simulation, a numeric vector</p>
+</dd>
+<dt>true_sparse</dt>
+<dd>
+<p>A list of numeric matrices, indicating the true sparse components for all segments</p>
+</dd>
+<dt>true_lowrank</dt>
+<dd>
+<p>A list of numeric matrices, indicating the true low rank components for all segments</p>
+</dd>
+<dt>est_cps</dt>
+<dd>
+<p>A list of estimated change points, including all replications</p>
+</dd>
+<dt>est_lag</dt>
+<dd>
+<p>A numeric value, estimated time lags, which is user specified</p>
+</dd>
+<dt>est_lagvector</dt>
+<dd>
+<p>A vector for estimated time lags, not available for this model, set as NULL.</p>
+</dd>
+<dt>est_sparse_mats</dt>
+<dd>
+<p>A list of estimated sparse components for all replications</p>
+</dd>
+<dt>est_lowrank_mats</dt>
+<dd>
+<p>A list of estimated low rank components for all replications</p>
+</dd>
+<dt>est_phi_mats</dt>
+<dd>
+<p>A list of estimated model parameters, transition matrices for VAR model</p>
+</dd>
+<dt>running_times</dt>
+<dd>
+<p>A numeric vector, containing all running times</p>
+</dd>
+</dl>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+nob &lt;- 100
+p &lt;- 15
+brk &lt;- c(50, nob+1)
+rank &lt;- c(1, 3)
+signals &lt;- c(-0.7, 0.8)
+singular_vals &lt;- c(1, 0.75, 0.5)
+info_ratio &lt;- rep(0.35, 2)
+lambda1 = lambda2 = lambda3 &lt;- c(2.5, 2.5)
+mu1 = mu2 = mu3 &lt;- c(15, 15)
+try_simu &lt;- simu_lstsp(nreps = 3, simu_method = "LS", nob = nob, k = p,
+                       brk = brk, sigma = diag(p), signals = signals,
+                       rank = rank, singular_vals = singular_vals,
+                       info_ratio = info_ratio, sp_pattern = "off-diagonal",
+                       spectral_radius = 0.9, lambda.1 = lambda1, mu.1 = mu1,
+                       lambda.2 = lambda2, mu.2 = mu2, lambda.3 = lambda3,
+                       mu.3 = mu3, step.size = 5, niter = 20, rolling.skip = 5,
+                       cv = FALSE, verbose = TRUE)
+summary(try_simu, critical = 5)
+
+</code></pre>
+
+
+</div>

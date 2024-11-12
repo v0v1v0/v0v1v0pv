@@ -1,0 +1,658 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vault_client</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Make a vault client</h2>
+
+<h3>Description</h3>
+
+<p>Make a vault client.  This must be done before accessing the
+vault.  The default values for arguments are controlled by
+environment variables (see Details) and values provided as
+arguments override these defaults.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vault_client(
+  login = FALSE,
+  ...,
+  addr = NULL,
+  tls_config = NULL,
+  namespace = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>login</code></td>
+<td>
+<p>Login method.  Specify a string to be passed along as
+the <code>method</code> argument to <code style="white-space: pre;">⁠$login⁠</code>.  The default
+<code>FALSE</code> means not to login.  <code>TRUE</code> means to login
+using a default method specified by the environment variable
+<code>VAULTR_AUTH_METHOD</code> - if that variable is not set, an
+error is thrown.  The value of <code>NULL</code> is the same as
+<code>TRUE</code> but does not throw an error if
+<code>VAULTR_AUTH_METHOD</code> is not set.  Supported methods are
+<code>token</code>, <code>github</code>, <code>approle</code>, <code>ldap</code>, and <code>userpass</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments passed along to the authentication
+method indicated by <code>login</code>, if used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>addr</code></td>
+<td>
+<p>The vault address <em>including protocol and port</em>,
+e.g., <code style="white-space: pre;">⁠https://vault.example.com:8200⁠</code>.  If not given, the
+default is the environment variable <code>VAULT_ADDR</code>, which is
+the same as used by vault's command line client.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tls_config</code></td>
+<td>
+<p>TLS (https) configuration.  For most uses this
+can be left blank.  However, if your vault server uses a
+self-signed certificate you will need to provide this.  Defaults
+to the environment variable <code>VAULT_CAPATH</code>, which is the
+same as vault's command line client.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>namespace</code></td>
+<td>
+<p>A vault namespace, when using enterprise
+vault. If given, then this must be a string, and your vault must
+support namespaces, which is an enterprise feature. If the
+environment variable <code>VAULT_NAMESPACE</code> is set, we use that
+namespace when <code>NULL</code> is provided as an argument (this is the
+same variable as used by vault's command line client).</p>
+</td>
+</tr>
+</table>
+<h3>Environment variables</h3>
+
+<p>The creation of a client is affected by a number of environment
+variables, following the main vault command line client.
+</p>
+
+<ul>
+<li> <p><code>VAULT_ADDR</code>: The url of the vault server.  Must
+include a protocol (most likely <code style="white-space: pre;">⁠https://⁠</code> but in testing
+<code style="white-space: pre;">⁠http://⁠</code> might be used)
+</p>
+</li>
+<li> <p><code>VAULT_CAPATH</code>: The path to CA certificates
+</p>
+</li>
+<li> <p><code>VAULT_TOKEN</code>: A vault token to use in authentication.
+Only used for token-based authentication
+</p>
+</li>
+<li> <p><code>VAULT_AUTH_GITHUB_TOKEN</code>: As for the command line
+client, a github token for authentication using the github
+authentication backend
+</p>
+</li>
+<li> <p><code>VAULTR_AUTH_METHOD</code>: The method to use for
+authentication
+</p>
+</li>
+</ul>
+<h3>Super class</h3>
+
+<p><code>vaultr::vault_client_object</code> -&gt; <code>vault_client</code>
+</p>
+
+
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>auth</code></dt>
+<dd>
+<p>Authentication backends: vault_client_auth</p>
+</dd>
+<dt><code>audit</code></dt>
+<dd>
+<p>Audit methods: vault_client_audit</p>
+</dd>
+<dt><code>cubbyhole</code></dt>
+<dd>
+<p>The vault cubbyhole key-value store:
+vault_client_cubbyhole</p>
+</dd>
+<dt><code>operator</code></dt>
+<dd>
+<p>Operator methods: vault_client_operator</p>
+</dd>
+<dt><code>policy</code></dt>
+<dd>
+<p>Policy methods: vault_client_policy</p>
+</dd>
+<dt><code>secrets</code></dt>
+<dd>
+<p>Secret backends: vault_client_secrets</p>
+</dd>
+<dt><code>token</code></dt>
+<dd>
+<p>Token methods: vault_client_token</p>
+</dd>
+<dt><code>tools</code></dt>
+<dd>
+<p>Vault tools: vault_client_tools</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-vault_client-new"><code>vault_client_$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client-api"><code>vault_client_$api()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client-read"><code>vault_client_$read()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client-write"><code>vault_client_$write()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client-delete"><code>vault_client_$delete()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client-list"><code>vault_client_$list()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client-login"><code>vault_client_$login()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client-status"><code>vault_client_$status()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client-unwrap"><code>vault_client_$unwrap()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client-wrap_lookup"><code>vault_client_$wrap_lookup()</code></a>
+</p>
+</li>
+</ul>
+<details open><summary>Inherited methods</summary><ul>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="format"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-format"><code>vaultr::vault_client_object$format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="help"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-help"><code>vaultr::vault_client_object$help()</code></a></span></li>
+</ul></details><hr>
+<a id="method-vault_client-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a new vault client. Not typically called
+directly, but via the <code>vault_client</code> method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_$new(addr, tls_config, namespace)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>addr</code></dt>
+<dd>
+<p>The vault address, including protocol and port</p>
+</dd>
+<dt><code>tls_config</code></dt>
+<dd>
+<p>The TLS config, if used</p>
+</dd>
+<dt><code>namespace</code></dt>
+<dd>
+<p>The namespace, if used</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client-api"></a>
+
+
+
+<h4>Method <code>api()</code>
+</h4>
+
+<p>Returns an api client object that can be used to
+directly interact with the vault server.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_$api()</pre></div>
+
+
+<hr>
+<a id="method-vault_client-read"></a>
+
+
+
+<h4>Method <code>read()</code>
+</h4>
+
+<p>Read a value from the vault.  This can be used to
+read any value that you have permission to read, and can also
+be used as an interface to a version 1 key-value store (see
+vault_client_kv1.  Similar to the vault CLI command
+<code style="white-space: pre;">⁠vault read⁠</code>.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_$read(path, field = NULL, metadata = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>Path for the secret to read, such as
+<code style="white-space: pre;">⁠/secret/mysecret⁠</code></p>
+</dd>
+<dt><code>field</code></dt>
+<dd>
+<p>Optional field to read from the secret.  Each
+secret is stored as a key/value set (represented in R as a
+named list) and this is equivalent to using <code style="white-space: pre;">⁠[[field]]⁠</code> on
+the return value.  The default, <code>NULL</code>, returns the full set
+of values.</p>
+</dd>
+<dt><code>metadata</code></dt>
+<dd>
+<p>Logical, indicating if we should return
+metadata for this secret (lease information etc) as an
+attribute along with the values itself.  Ignored if <code>field</code>
+is specified.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client-write"></a>
+
+
+
+<h4>Method <code>write()</code>
+</h4>
+
+<p>Write data into the vault.  This can be used to
+write any value that you have permission to write, and can
+also be used as an interface to a version 1 key-value store
+(see vault_client_kv1.  Similar to the vault CLI
+command <code style="white-space: pre;">⁠vault write⁠</code>.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_$write(path, data)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>Path for the secret to write, such as
+<code style="white-space: pre;">⁠/secret/mysecret⁠</code></p>
+</dd>
+<dt><code>data</code></dt>
+<dd>
+<p>A named list of values to write into the vault at
+this path.  This <em>replaces</em> any existing values.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client-delete"></a>
+
+
+
+<h4>Method <code>delete()</code>
+</h4>
+
+<p>Delete a value from the vault
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_$delete(path)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>The path to delete</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client-list"></a>
+
+
+
+<h4>Method <code>list()</code>
+</h4>
+
+<p>List data in the vault at a given path.  This can
+be used to list keys, etc (e.g., at <code style="white-space: pre;">⁠/secret⁠</code>).
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_$list(path, full_names = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>The path to list</p>
+</dd>
+<dt><code>full_names</code></dt>
+<dd>
+<p>Logical, indicating if full paths (relative
+to the vault root) should be returned.</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>A character vector (of zero length if no keys are
+found).  Paths that are "directories" (i.e., that contain
+keys and could themselves be listed) will be returned with a
+trailing forward slash, e.g. <code style="white-space: pre;">⁠path/⁠</code>
+</p>
+
+
+<hr>
+<a id="method-vault_client-login"></a>
+
+
+
+<h4>Method <code>login()</code>
+</h4>
+
+<p>Login to the vault.  This method is more
+complicated than most.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_$login(
+  ...,
+  method = "token",
+  mount = NULL,
+  renew = FALSE,
+  quiet = FALSE,
+  token_only = FALSE,
+  use_cache = TRUE
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>...</code></dt>
+<dd>
+<p>Additional named parameters passed through to the
+underlying method</p>
+</dd>
+<dt><code>method</code></dt>
+<dd>
+<p>Authentication method to use, as a string.
+Supported values include <code>token</code> (the default), <code>github</code>,
+<code>approle</code>, <code>ldap</code>, and <code>userpass</code>.</p>
+</dd>
+<dt><code>mount</code></dt>
+<dd>
+<p>The mount path for the authentication backend, <em>if
+it has been mounted in a nonstandard location</em>.  If not
+given, then it is assumed that the backend was mounted at a
+path corresponding to the method name.</p>
+</dd>
+<dt><code>renew</code></dt>
+<dd>
+<p>Login, even if we appear to hold a valid token.
+If <code>FALSE</code> and we have a token then <code>login</code> does nothing.</p>
+</dd>
+<dt><code>quiet</code></dt>
+<dd>
+<p>Suppress some informational messages</p>
+</dd>
+<dt><code>token_only</code></dt>
+<dd>
+<p>Logical, indicating that we do not want to
+actually log in, but instead just generate a token and return
+that.  IF given then <code>renew</code> is ignored and we always
+generate a new token.</p>
+</dd>
+<dt><code>use_cache</code></dt>
+<dd>
+<p>Logical, indicating if we should look in the
+session cache for a token for this client.  If this is <code>TRUE</code>
+then when we log in we save a copy of the token for this
+session and any subsequent calls to <code>login</code> at this vault
+address that use <code>use_cache = TRUE</code> will be able to use this
+token.  Using cached tokens will make using some
+authentication backends that require authentication with
+external resources (e.g., <code>github</code>) much faster.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client-status"></a>
+
+
+
+<h4>Method <code>status()</code>
+</h4>
+
+<p>Return the status of the vault server, including
+whether it is sealed or not, and the vault server version.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_$status()</pre></div>
+
+
+<hr>
+<a id="method-vault_client-unwrap"></a>
+
+
+
+<h4>Method <code>unwrap()</code>
+</h4>
+
+<p>Returns the original response inside the given
+wrapping token. The vault endpoints used by this method
+perform validation checks on the token, returns the original
+value on the wire rather than a JSON string representation of
+it, and ensures that the response is properly audit-logged.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_$unwrap(token)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>token</code></dt>
+<dd>
+<p>Specifies the wrapping token ID</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client-wrap_lookup"></a>
+
+
+
+<h4>Method <code>wrap_lookup()</code>
+</h4>
+
+<p>Look up properties of a wrapping token.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_$wrap_lookup(token)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>token</code></dt>
+<dd>
+<p>Specifies the wrapping token ID to lookup</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Author(s)</h3>
+
+<p>Rich FitzJohn
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+# We work with a test vault server here (see ?vault_test_server) for
+# details.  To use it, you must have a vault binary installed on your
+# system.  These examples will not affect any real running vault
+# instance that you can connect to.
+server &lt;- vaultr::vault_test_server(if_disabled = message)
+
+if (!is.null(server)) {
+  # Create a vault_client object by providing the address of the vault
+  # server.
+  client &lt;- vaultr::vault_client(addr = server$addr)
+
+  # The client has many methods, grouped into a structure:
+  client
+
+  # For example, token related commands:
+  client$token
+
+  # The client is not authenticated by default:
+  try(client$list("/secret"))
+
+  # A few methods are unauthenticated and can still be run
+  client$status()
+
+  # Login to the vault, using the token that we know from the server -
+  # ordinarily you would use a login approach suitable for your needs
+  # (see the vault documentation).
+  token &lt;- server$token
+  client$login(method = "token", token = token)
+
+  # The vault contains no secrets at present
+  client$list("/secret")
+
+  # Secrets can contain any (reasonable) number of key-value pairs,
+  # passed in as a list
+  client$write("/secret/users/alice", list(password = "s3cret!"))
+
+  # The whole list can be read out
+  client$read("/secret/users/alice")
+  # ...or just a field
+  client$read("/secret/users/alice", "password")
+
+  # Reading non-existant values returns NULL, not an error
+  client$read("/secret/users/bob")
+
+  client$delete("/secret/users/alice")
+}
+</code></pre>
+
+
+</div>

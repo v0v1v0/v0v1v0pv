@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>get_cov_data</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get datasets from Vancouver Open Data Portal</h2>
+
+<h3>Description</h3>
+
+<p>Get datasets from Vancouver Open Data Portal
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">get_cov_data(
+  dataset_id,
+  select = "*",
+  where = NULL,
+  apikey = getOption("VancouverOpenDataApiKey"),
+  rows = NULL,
+  cast_types = TRUE,
+  refresh = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dataset_id</code></td>
+<td>
+<p>Dataset id from the Vancouver Open Data catalogue</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>select</code></td>
+<td>
+<p>select string for fields to return, returns all fields by default.
+It accepts <a href="https://help.opendatasoft.com/apis/ods-search-v2/#select-clause">ODSQL syntax</a>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>where</code></td>
+<td>
+<p>Query parameter to filter data (default 'NULL' no filter)
+It accepts <a href="https://help.opendatasoft.com/apis/ods-search-v2/#where-clause">ODSQL syntax</a>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>apikey</code></td>
+<td>
+<p>Vancouver Open Data API key, default 'getOption("VancouverOpenDataApiKey")'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rows</code></td>
+<td>
+<p>Maximum number of rows to return (default 'NULL' returns all rows)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cast_types</code></td>
+<td>
+<p>Logical, use metadata to look up types and type-cast automatically, default 'TRUE'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>refresh</code></td>
+<td>
+<p>refresh cached data, default 'FALSE“</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>optional ignored parameters, for compatibility with previous versions that relied on the 'format' parameter</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>tibble or sf object data table output, depending on whether the dataset is spatial and 'cast_types' is 'TRUE'
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Get all parking tickets issued at the 1100 block of Alberni Street between 2017 and 2019
+## Not run: 
+get_cov_data("parking-tickets-2017-2019",where = "block = 1100 AND street = 'ALBERNI ST'")
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

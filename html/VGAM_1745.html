@@ -1,0 +1,128 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summarypvgam</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summarizing Penalized Vector Generalized Additive Model Fits</h2>
+
+<h3>Description</h3>
+
+<p>These functions are all <code>methods</code> for class <code>"pvgam"</code> or
+<code>summary.pvgam</code> objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">summarypvgam(object, dispersion = NULL, digits = options()$digits - 2,
+            presid = TRUE)
+## S3 method for class 'summary.pvgam'
+show(x, quote = TRUE, prefix = "", digits = options()$digits -
+    2, signif.stars = getOption("show.signif.stars"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>an object of class <code>"pvgam"</code>,
+which is the result of a
+call to <code>vgam</code> with at least one
+<code>sm.os</code> or
+<code>sm.ps</code> term.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class <code>"summary.pvgam"</code>,
+which is the result of a call to <code>summarypvgam()</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dispersion, digits, presid</code></td>
+<td>
+
+<p>See <code>summaryvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quote, prefix, signif.stars</code></td>
+<td>
+
+<p>See <code>summaryvglm</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This methods function reports a summary more similar to
+<code>summary.gam</code> from <span class="pkg">mgcv</span> than
+<code>summary.gam()</code> from <span class="pkg">gam</span>.
+It applies to G2-VGAMs using
+<code>sm.os</code> and O-splines, else
+<code>sm.ps</code> and P-splines.
+In particular, the hypothesis test for whether each
+<code>sm.os</code> or
+<code>sm.ps</code>
+term can be deleted follows quite closely to
+<code>summary.gam</code>.
+The p-values from this type of test tend to be biased downwards (too
+small)
+and corresponds to <code>p.type = 5</code>.
+It is hoped in the short future that improved p-values be implemented,
+somewhat like the default of
+<code>summary.gam</code>.
+This methods function was adapted from
+<code>summary.gam</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>summarypvgam</code> returns an object of class <code>"summary.pvgam"</code>;
+see <code>summary.pvgam-class</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>See <code>sm.os</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vgam</code>,
+<code>summaryvgam</code>,
+<code>summary.pvgam-class</code>,
+<code>sm.os</code>,
+<code>sm.ps</code>,
+<code>summary.glm</code>,
+<code>summary.lm</code>,
+<code>summary.gam</code> from <span class="pkg">mgcv</span>, 
+<code>summaryvgam</code> for G1-VGAMs.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+hfit2 &lt;- vgam(agaaus ~ sm.os(altitude), binomialff, data = hunua)
+coef(hfit2, matrix = TRUE)
+summary(hfit2)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

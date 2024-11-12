@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>as_vegaspec</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Coerce to vegaspec</h2>
+
+<h3>Description</h3>
+
+<p>Vega and Vega-Lite use JSON as their specification-format. Within R,
+it seems natural to work with these specifications as lists. Accordingly,
+a <code>vegaspec</code> is also a list. This family of functions is used to coerce lists,
+JSON, and character strings to <code>vegaspec</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">as_vegaspec(spec, ...)
+
+## Default S3 method:
+as_vegaspec(spec, ...)
+
+## S3 method for class 'vegaspec'
+as_vegaspec(spec, ...)
+
+## S3 method for class 'list'
+as_vegaspec(spec, ...)
+
+## S3 method for class 'json'
+as_vegaspec(spec, ...)
+
+## S3 method for class 'character'
+as_vegaspec(spec, encoding = "UTF-8", ...)
+
+## S3 method for class 'vegawidget'
+as_vegaspec(spec, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>spec</code></td>
+<td>
+<p>An object to be coerced to <code>vegaspec</code>, a Vega/Vega-Lite specification</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments (attempt to future-proof)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>encoding</code></td>
+<td>
+<p><code>character</code>, if spec is a file or a URL, specifies the encoding.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>character</code> method for this function will take:
+</p>
+
+<ul>
+<li>
+<p>JSON string.
+</p>
+</li>
+<li>
+<p>A path to a local JSON file.
+</p>
+</li>
+<li>
+<p>A URL that returns a JSON file.
+</p>
+</li>
+</ul>
+<p>For Vega and Vega-Lite, the translation between lists and JSON is a little
+bit particular. This function, <code>as_vegaspec()</code>, can be used to translate
+from JSON; <code>vw_as_json()</code> can be used to translate to JSON.
+</p>
+<p>You can use the function <code>vw_spec_version()</code> to determine if a <code>vegaspec</code> is built for
+Vega-Lite or Vega. You can use <code>vw_to_vega()</code> to translate a Vega-Lite spec to Vega.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object with S3 class <code>vegaspec</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://vega.github.io/vega/">Vega</a>,
+<a href="https://vega.github.io/vega-lite/">Vega-Lite</a>,
+<code>vw_as_json()</code>, <code>vw_spec_version()</code>, <code>vw_to_vega()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  spec &lt;- list(
+    `$schema` = vega_schema(),
+    data = list(values = mtcars),
+    mark = "point",
+    encoding = list(
+      x = list(field = "wt", type = "quantitative"),
+      y = list(field = "mpg", type = "quantitative"),
+      color = list(field = "cyl", type = "nominal")
+    )
+  )
+
+  as_vegaspec(spec)
+
+  ## Not run: 
+    # requires network-access
+    as_vegaspec("https://vega.github.io/vega-lite/examples/specs/bar.vl.json")
+  
+## End(Not run)
+</code></pre>
+
+
+</div>

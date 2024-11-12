@@ -1,0 +1,489 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vfgpar</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plots for visual fields data</h2>
+
+<h3>Description</h3>
+
+<p>Graphical tools for visualization and statistical analysis of
+visual fields.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vfgpar(
+  coord,
+  tess = vftess(coord),
+  probs = c(0, 0.005, 0.01, 0.02, 0.05, 0.95, 0.98, 0.99, 0.995, 1),
+  cols = c("#000000", colorRampPalette(c("#FF0000", "#FFFF00"))(4), "#F7F0EB",
+    colorRampPalette(c("#00FF00", "#008000"))(4)),
+  floor = 0,
+  ltprobs = c(0, 0.005, 0.01, 0.02, 0.05, 0.95, 1),
+  ltcols = c("#000000", colorRampPalette(c("#FF0000", "#FFFF00"))(4), "#F7F0EB",
+    "#008000"),
+  gtprobs = c(0, 0.05, 0.95, 0.98, 0.99, 0.995, 1),
+  gtcols = c("#000000", "#FF0000", "#F7F0EB", colorRampPalette(c("#00FF00",
+    "#008000"))(4)),
+  neprobs = c(0, 0.0025, 0.005, 0.01, 0.25, 0.975, 0.99, 0.995, 0.9975, 1),
+  necols = c("#000000", colorRampPalette(c("#FF0000", "#FFFF00"))(4), "#F7F0EB",
+    colorRampPalette(c("#FFFF00", "#FF0000"))(4)),
+  bprobs = c(0, 0.005, 0.01, 0.02, 0.05, 0.95, 0.98, 0.99, 0.995, 1),
+  bcols = c("#000000", colorRampPalette(c("#FF0000", "#FFFF00"))(4), "#F7F0EB",
+    colorRampPalette(c("#00FF00", "#008000"))(4))
+)
+
+vftess(coord, floor = 0, delta = 3)
+
+vfcolscheme(
+  probs = c(0, 0.005, 0.01, 0.02, 0.05, 0.95, 0.98, 0.99, 0.995, 1),
+  cols = c("#000000", colorRampPalette(c("#FF0000", "#FFFF00"))(4), "#F7F0EB",
+    colorRampPalette(c("#00FF00", "#008000"))(4)),
+  floor = 0
+)
+
+vfprogcolscheme(
+  probs = c(0, 0.005, 0.01, 0.02, 0.05, 0.95, 1),
+  cols = c("#000000", colorRampPalette(c("#FF0000", "#FFFF00"))(4), "#F7F0EB", "#008000")
+)
+
+vfplot(vf, td = NULL, tdp = NULL, pd = NULL, pdp = NULL, type = "td", ...)
+
+vfplotplr(
+  vf,
+  alternative = "LT",
+  xoffs = 0,
+  yoffs = 0,
+  addSpark = FALSE,
+  thr = 2,
+  width = 4,
+  height = 2,
+  ...
+)
+
+vflegoplot(
+  vf,
+  type = "td",
+  grp = 3,
+  addSpark = FALSE,
+  thr = 2,
+  width = 4,
+  height = 2,
+  ...
+)
+
+vfsparklines(vf, thr = 2, width = 4, height = 2, add = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>coord</code></td>
+<td>
+<p>print x and y coordinates. Check section
+<code>Structure of graphical parameters</code> for details</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tess</code></td>
+<td>
+<p>tesselation for the visual field maps. Check section
+<code>Tesselation in visualFields</code> for details</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>probs</code></td>
+<td>
+<p>probability scale to use for TD and PD values. It is a numeric vector
+of probabilities with values in [0,1]. The values 0 and 1 must be included.
+Although not technically necessary, it would be best if it is the same as for
+the normative values used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>corresponding colors for each of the probability levels</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>floor</code></td>
+<td>
+<p>Flooring value, typically in dB. Default is 0</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ltprobs, ltcols</code></td>
+<td>
+<p>color map for progression with the alternative hypothesis
+lower than (LT)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gtprobs, gtcols</code></td>
+<td>
+<p>color map for progression with the alternative hypothesis
+lower than (GT)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>neprobs, necols</code></td>
+<td>
+<p>color map for progression with the alternative hypothesis
+not equal (NE)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bprobs, bcols</code></td>
+<td>
+<p>color map for progression with blth alternative
+hypotheses LT and GT (B for both)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>Distance over which the boundary should be shifted. See for <code>polyclip</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vf</code></td>
+<td>
+<p>the visual fields data to plot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>td</code></td>
+<td>
+<p>the total deviation values. If <code>NULL</code> (default) then use
+visualFields normative values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tdp</code></td>
+<td>
+<p>the total deviation probability values. If <code>NULL</code> (default)
+then use visualFields normative values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pd</code></td>
+<td>
+<p>the pattern deviation values. If <code>NULL</code> (default) then use
+visualFields normative values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pdp</code></td>
+<td>
+<p>the pattern deviation probability values. If <code>NULL</code> (default)
+then use visualFields normative values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>the type of data to plot: sensitivities ('<code>s</code>'),
+total deviation values ('<code>td</code>'), pattern deviation values ('<code>pd</code>'),
+a hybrid plot that shows sensitivity grayscale with TD values and corresponding
+probability levels ('<code>tds</code>'), or PD values and corresponding probability
+levels ('<code>pds</code>'). Default is '<code>td</code>'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other graphical arguments. See <code>plot</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alternative</code></td>
+<td>
+<p>alternative hypothesis used in progression analyses.
+Allowed values are '<code>LT</code>' (as in "lower than", default),
+'<code>GT</code>' (as in "greater than"), '<code>NE</code>' (as in "not equal"),
+and '<code>both</code>' (both '<code>LT</code>' and '<code>GT</code>')</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xoffs, yoffs</code></td>
+<td>
+<p>offset x and y where to print the slope values. That is,
+the distance from the center of each Voronoy polygons in degrees of visual angle</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>addSpark</code></td>
+<td>
+<p>whether to overlay a sparkline graph in each visual field location.
+The parameters <code>thr</code>, <code>width</code>, and <code>height</code> are used only if
+<code>addSpark</code> is <code>TRUE</code>. Default value is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thr</code></td>
+<td>
+<p>threshold used for the median absolute deviation of residuals
+from simple linear regression. If greater than the threshold, the
+sparkline for that location is plotted in red and with a thicker line.
+Default is '<code>2</code>' (dB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p>the width of each pointwise sparkline plot. Default is
+'<code>4</code>' (degrees of visual angle)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p>the height of each pointwise sparkline plot. Default is
+'<code>2</code>' (degrees of visual angle)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grp</code></td>
+<td>
+<p>number of baseline (first) and last visual fields to group.
+Default is '<code>3</code>'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add</code></td>
+<td>
+<p>whether to generate a new plot ('<code>FALSE</code>', as default)
+or to add to an existing figure ('<code>TRUE</code>')</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The following functions generate plots using visual fields data
+</p>
+
+<ul>
+<li>
+<p><code>vfgpar</code> generates simple graphical parameters
+</p>
+</li>
+<li>
+<p><code>vftess</code> generates a structure to handle the visual field tessellation.
+Check section <code>Tesselation in visualFields</code> below for further details
+</p>
+</li>
+<li>
+<p><code>vfcolscheme</code> generates the structures to handle the color scheme
+Check section <code>Color schemes in visualFields</code> below for further details
+</p>
+</li>
+<li>
+<p><code>vfprogcolscheme</code> generates the structures to handle the color scheme
+for progression analysis. Check section <code>Color schemes in visualFields</code>
+below for further details
+</p>
+</li>
+<li>
+<p><code>vfplot</code> plots a single test for visual field data
+</p>
+</li>
+<li>
+<p><code>vfplotsens</code> plots a single test for visual field sensitivity data
+with a grayscale where darker means greater sensitivity loss
+</p>
+</li>
+<li>
+<p><code>vfplotdev</code> plots a single test for visual field total or pattern
+deviation data with probability scales represented in color
+</p>
+</li>
+<li>
+<p><code>vfplotplr</code> plots the results of pointwise linear regression for
+a series of visual fields for an eye from a subject
+</p>
+</li>
+<li>
+<p><code>vflegoplot</code> the legoplot shows the differences between the average
+values of visual field tests taken as baseline and those at the end of
+follow up
+</p>
+</li>
+<li>
+<p><code>vflegoplotsens</code> the legoplot for visual field sensitivity data with
+a grayscale where darker means greater sensitivity loss
+</p>
+</li>
+<li>
+<p><code>vflegoplotdev</code> the legoplot for visual field total or pattern
+deviation data with probability scales represented in color
+</p>
+</li>
+<li>
+<p><code>vfsparklines</code> the sparklines graph shows spark lines for the series
+of visual field sensitivities, or total or pattern deviation data for each
+location
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p><code>vfgpar</code> returns a list with graphical parameters to be used for vfplots
+</p>
+<p><code>vftess</code> returns a list with the <code>xlim</code>, <code>ylim</code>, tessellation tiles and an outer hull
+to be used for vfplots
+</p>
+<p><code>vfcolscheme</code> returns a list with a lookup table and a function that define the color scheme
+to be used for vfplots
+</p>
+<p><code>vfprogcolscheme</code> returns the default <code>vfcolscheme</code> to be used for vfplots
+</p>
+<p><code>vfplot</code> No return value
+</p>
+<p><code>vfplotplr</code> No return value
+</p>
+<p><code>vflegoplot</code> No return value
+</p>
+<p><code>vfsparklines</code> No return value
+</p>
+
+
+<h3>Structure of graphical parameters</h3>
+
+<p>Graphical parameters for visualFields must be a list containing
+</p>
+
+<ul>
+<li>
+<p><code>coord</code> print x and y coordinates. They could be different from the
+the real visual field location testing coordinates in complex visual field
+grids to help readability and improve visualization of statistical results
+</p>
+</li>
+<li>
+<p><code>tess</code> tesselation for the visual field maps. Check section
+<code>Tesselation in visualFields</code>
+</p>
+</li>
+<li>
+<p><code>colmap</code> color map representing the probability scale. Check section
+<code>Color schemes in visualFields</code>
+</p>
+</li>
+</ul>
+<p>A default graphical parameters can be generated with <code>generategpar</code>
+</p>
+
+
+<h3>Tesselation in visualFields</h3>
+
+<p>A tesselation in visualFields must be defined with a list containing
+</p>
+
+<ul>
+<li>
+<p><code>xlim</code>, </p>
+</li>
+<li>
+<p><code>ylim</code> 2-dimensional vectors containing the minimum
+and maximum x and y values
+</p>
+</li>
+<li>
+<p><code>floor</code> the value to be assinged to any sensitivity value lower than
+<code>floor</code>
+</p>
+</li>
+<li>
+<p><code>tiles</code> a list of as many tiles defining the tesselation as visual field
+test locations. Each element of the list is a table with x and y coordinates defining
+a polygon containing the corresponding test location. Each polygon is thus the tile
+for each visual field test location
+</p>
+</li>
+<li>
+<p><code>hull</code> a table with x and y coordinates defining the outer hull of the
+tessellation
+</p>
+</li>
+</ul>
+<p>A default tessellation can be generated with <code>vftess</code>
+</p>
+
+
+<h3>Color schemes in visualFields</h3>
+
+<p>A color scheme in visualFields must be defined with a list containing
+</p>
+
+<ul>
+<li>
+<p><code>map</code> a table mapping probabilities levels with colors defined
+in hexadecimal base
+</p>
+</li>
+<li>
+<p><code>fun</code> a function that takes sensitivity values and deviation
+probability levels and returns the corresponding color code.
+</p>
+</li>
+</ul>
+<p>A default color scheme can be generated with <code>vfcolscheme</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># generate a structure with default graphical parameters for the 30-2 map
+vfgpar(locmaps$p30d2$coord)
+# generate a structure with default tesselation for the 30-2 map
+vftess(locmaps$p30d2$coord)
+# default color scheme
+vfcolscheme()
+# default color scheme for progression
+vfprogcolscheme()
+# plot visual field values for the last field in the series for the first
+# subject in the dataset vfpwgSunyiu24d2
+# grayscale with sensitivity values
+vfplot(vfselect(vffilter(vfpwgRetest24d2, id == 1), n = 1), type = "s")
+# TD values
+vfplot(vfselect(vffilter(vfpwgRetest24d2, id == 1), n = 1), type = "td")
+# PD values
+vfplot(vfselect(vffilter(vfpwgRetest24d2, id == 1), n = 1), type = "pd")
+# hybrid sensitivities and TD values
+vfplot(vfselect(vffilter(vfpwgRetest24d2, id == 1), n = 1), type = "tds")
+# hybrid sensitivities and PD values
+vfplot(vfselect(vffilter(vfpwgRetest24d2, id == 1), n = 1), type = "pds")
+# plot results from pointwise linear regression for the series of
+# visual fields for the right eye in the dataset vfpwgSunyiu24d2
+# with sensitivity values
+vfplotplr(vffilter(vfpwgSunyiu24d2, eye == "OD"))
+# TD values
+vfplotplr(gettd(vffilter(vfpwgSunyiu24d2, eye == "OD")))
+# PD values
+vfplotplr(getpd(gettd(vffilter(vfpwgSunyiu24d2, eye == "OD"))))
+# legoplot for the series of visual fields for the right eye
+# of the subject in the dataset vfpwgSunyiu24d2
+# with sensitivity values
+vflegoplot(vffilter(vfpwgSunyiu24d2, eye == "OD"), type = "s")
+# TD values
+vflegoplot(vffilter(vfpwgSunyiu24d2, eye == "OD"), type = "td")
+# PD values
+vflegoplot(vffilter(vfpwgSunyiu24d2, eye == "OD"), type = "pd")
+# sparklines for the series of visual fields for the right eye of
+# the subject in the dataset vfpwgSunyiu24d2
+# with sensitivity values
+vfsparklines(vffilter(vfpwgSunyiu24d2, eye == "OD"))
+# TD values
+vfsparklines(gettd(vffilter(vfpwgSunyiu24d2, eye == "OD")))
+# PD values
+vfsparklines(getpd(gettd(vffilter(vfpwgSunyiu24d2, eye == "OD"))))
+</code></pre>
+
+
+</div>

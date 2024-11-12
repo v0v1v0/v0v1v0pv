@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getDF</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract Degrees of Freedom from Linear Hypotheses of Fixed Effects or LS Means</h2>
+
+<h3>Description</h3>
+
+<p>Determine degrees of freedom for custom linear hypotheses of fixed effects or LS Means
+using one of three possible approximation methods.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getDF(obj, L, method = c("contain", "residual", "satterthwaite"), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(VCA) object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>L</code></td>
+<td>
+<p>(matrix) specifying one or multiple linear hypothese, as returned by function
+<code>getL</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>(character) the method to be used to determine the degrees of freedom for a 
+linear hypothesis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a convenience function to determine the DFs for linear hypotheses in the same way
+as function <code>test.fixef</code>. Only the "DF" part is returned here which can be passed
+to other functions expecting DFs as input.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(numeric) vector with the DFs for each row of 'L'
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(VCAdata1)
+tmpDat &lt;- VCAdata1[VCAdata1$sample==1,]
+tmpDat &lt;- tmpDat[-c(11,51,73:76),]
+fitMM &lt;- anovaMM(y~(lot+device)/(day)/(run), tmpDat)
+fitMM
+L &lt;- getL(fitMM, c("lot1-lot2", "device1-device2"))
+getDF(fitMM, L)						# method="contain" is Default
+getDF(fitMM, L, method="res")
+
+getDF(fitMM, L, method="satt")		# takes quite long for this model
+
+## End(Not run)
+</code></pre>
+
+
+</div>

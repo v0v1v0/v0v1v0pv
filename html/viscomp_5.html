@@ -1,0 +1,117 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>loccos</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Leaving One Component Combination Out Scatter plot</h2>
+
+<h3>Description</h3>
+
+<p>The function based on the network meta-analysis (NMA) estimates explores if a set of components has a
+positive or a negative impact on the outcome, by creating a scatter plot based on the set of
+interventions that differ by a specific set of components.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">loccos(
+  model,
+  sep = "+",
+  combination = NULL,
+  random = TRUE,
+  z_value = FALSE,
+  histogram = TRUE,
+  histogram.color = "blue"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>An object of class <code>netmeta</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sep</code></td>
+<td>
+<p>A single character that defines the separator between interventions components.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>combination</code></td>
+<td>
+<p>A single character that specifies the component combination of interest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>random</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> the random-effects NMA model is used instead of the fixed-effect NMA model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z_value</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> z-values are used instead of interventions effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>histogram</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> histograms are added to the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>histogram.color</code></td>
+<td>
+<p>A single character that specifies the color of the histogram. See <code>ggMarginal</code> for more details.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Axis y represents the intervention's effect when the component combination is not included in the
+intervention, while axis x represents the intervention's effect when is included.
+Line <code class="reqn">y = x</code> splits the plot in two parts. For a beneficial outcome, dots above the line
+indicates that the inclusion of component combination balk the intervention's efficacy, while
+dots below the line indicate that the inclusion of the component combination increases intervention's efficacy.
+The opposite holds for harmful outcomes.
+</p>
+<p>The component combination of interest is specified by the argument <code>combination</code>. For example, if <code>combination = "A"</code>, the
+function plots all the interventions that differ by the component <code>"A"</code>. If <code>combination = NULL</code>, all interventions
+that differ by one component are plotted.
+</p>
+<p>The function by default uses the NMA relative effects estimates, but it can be adjusted to use the z-values by setting the argument <code>z_value = TRUE</code>.
+Histograms for the nodes that include and not include the component combination can be added to the scatter plot,
+by setting the argument <code>histogram = TRUE</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>ggplot</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>In the case of dichotomous outcomes, the log-scale is used for both axis. Also, the function can be applied
+only in network meta-analysis models that contain multi-component interventions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(nmaMACE)
+loccos(model = nmaMACE, combination = c("B"))
+
+</code></pre>
+
+
+</div>

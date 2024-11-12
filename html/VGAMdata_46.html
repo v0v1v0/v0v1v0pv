@@ -1,0 +1,205 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ecb06.it</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Italian Household Data for 2006 and 2014</h2>
+
+<h3>Description</h3>
+
+
+<p>Part of the data collected
+at two time points (2006 and 2014)
+by the Bank of Italy, as part of
+the European Central Banks Eurosystem collection of statistics,
+within the periodic 
+sample surveys on households, businesses and selected intermediaries.
+</p>
+
+
+<h3>Format</h3>
+
+<p>Data frame with the following 20 variables:
+</p>
+
+<dl>
+<dt><code>ID</code></dt>
+<dd>
+<p>a numeric vector, a unique identification number of the
+household.</p>
+</dd>
+<dt><code>area</code></dt>
+<dd>
+<p>a factor with 5 levels,
+the Italian  geographic area or region
+in which the household lives:
+<code>NW</code> = North-West,
+<code>NE</code> = North-East,
+<code>C</code> = Center,
+<code>S</code> = South,
+<code>I</code> = Islands.
+For users wanting a North–South contrast,
+this variable might be coded as
+<code>NC</code> = North and Center (NW, NE and C),
+<code>SI</code> = South and Islands (S and I).
+</p>
+</dd>
+<dt><code>sex</code></dt>
+<dd>
+<p>a factor with 2 levels,
+the gender of the head householder:
+<code>M</code> = Male,
+<code>F</code> = Female.
+</p>
+</dd>
+<dt><code>age</code></dt>
+<dd>
+<p>a numeric vector, age in years of the head householder.</p>
+</dd>
+<dt><code>marital</code></dt>
+<dd>
+<p>a factor with 4 levels, marital status of the head 
+householder: 
+<code>married</code> = Married,
+<code>single</code> = Single,
+<code>separated</code> = Separated or divorced,
+<code>widowed</code> = Widowed.
+</p>
+</dd>
+<dt><code>education</code></dt>
+<dd>
+<p>an ordered factor with 8 levels,
+the education level of the head householder:
+<code>none</code> = No education,
+<code>primaryschool</code> = Primary school,
+<code>middleschool</code> = Middle school,
+<code>profschool</code> = Professional school,
+<code>highschool</code> = High school,
+<code>bachelors</code> = Bachelors degree,
+<code>masters</code> = Masters degree,
+<code>higherdegree</code> = Higher degree.
+</p>
+</dd>
+<dt><code>job</code></dt>
+<dd>
+<p>a factor with 7 levels,
+the type of job done by the head householder:
+<code>worker</code> = Worker,
+<code>employee</code> = Employee,
+<code>manager</code> = Manager,
+<code>business</code> = Business person,
+<code>other</code> = Other kind of independent job,
+<code>retired</code> = Retired,
+<code>unemployed</code> = Unemployed.
+</p>
+</dd>
+<dt><code>occupants</code></dt>
+<dd>
+<p>a numeric vector, the number of people living in 
+the same house.</p>
+</dd>
+<dt><code>children</code></dt>
+<dd>
+<p>a numeric vector, the number of children of the head
+householder living with him/her.</p>
+</dd>
+<dt><code>other.children</code></dt>
+<dd>
+<p>a numeric vector, the number of children of the
+head householder not living with the household.</p>
+</dd>
+<dt><code>house.owned</code></dt>
+<dd>
+<p>a numeric vector, the ownership of the house in 
+which the householder lives;
+<code>0</code> = The house is not owned,
+<code>1</code> = The house is owned.
+</p>
+</dd>
+<dt><code>houses</code></dt>
+<dd>
+<p>a numeric vector, the number of houses owned 
+by the family, including the one in which the family lives.</p>
+</dd>
+<dt><code>earners</code></dt>
+<dd>
+<p>a numeric vector, the number of people in the house 
+who have salary or some kind of earnings.</p>
+</dd>
+<dt><code>accounts</code></dt>
+<dd>
+<p>a numeric vector, the number of bank accounts 
+collectively owned by the household.</p>
+</dd>
+<dt><code>ccards</code></dt>
+<dd>
+<p>a numeric vector, the number of credit cards 
+collectively owned by the household.</p>
+</dd>
+<dt>
+<code>tot.income</code>,
+<code>dep.income</code>,
+<code>pens.income</code>,
+<code>self.income</code>,
+<code>cap.income</code>
+</dt>
+<dd>
+<p>numeric vectors, the amount of income 
+(in Euros) collectively earned by the household through different 
+activities. The variables can be negative if the household has installments. 
+In order, they are the total amount of income,
+the amount of income earned through dependent working,
+the amount of income earned by the household through pensions,
+the amount of income earned by the household through self-dependent working,
+the amount of income earned by the household through capital investments.
+</p>
+</dd>
+</dl>
+<h3>Details</h3>
+
+
+<p>The European Central Banks (ECB) Eurosystem requests and
+helps organize
+each country within the European Union to routinely collect statistical
+information via their central banks.
+These data frames are a subset from data collected by the
+Bank of Italy.
+Each year can be considered a cross-sectional study, although
+there are some people common to each year. Hence the data
+collectively can be considered partly a longitudinal study too.
+</p>
+
+
+<h3>Source</h3>
+
+<p>Data was downloaded at <code>https://www.bancaditalia.it</code> in May 2016 by Lucia 
+Pilleri.
+</p>
+
+
+
+<h3>References</h3>
+
+<p><em>Supplements to the Statistical Bulletin,
+Sample Surveys, Household Income and Wealth in 2006</em>,
+New series, Volume XVIII, Number 7–28, January 2008.
+Banca D'Italia, Centro Stampa, Roma, Pubbl. Mensile,
+<code>https://www.bancaditalia.it</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(ecb06.it); data(ecb14.it)
+summary(ecb06.it)
+summary(ecb14.it)
+## Not run: 
+with(ecb14.it, table(house.owned))
+with(ecb14.it, barplot(table(education), col = "lightblue"))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

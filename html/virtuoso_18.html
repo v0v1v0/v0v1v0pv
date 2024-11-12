@@ -1,0 +1,77 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vos_status</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Query the server status</h2>
+
+<h3>Description</h3>
+
+<p>Query the server status
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vos_status(p = NA, wait = 10)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>a process object, returned by
+<code>vos_process()</code> or  <code>vos_start()</code>.
+(will be restored from cache if not provided)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wait</code></td>
+<td>
+<p>number of seconds to wait for server to come online</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Note: Use <code>vos_log()</code> to see the full log
+</p>
+
+
+<h3>Value</h3>
+
+<p>a character string indicating the state of the server:
+</p>
+
+<ul>
+<li>
+<p> "not detected" if no process can be found
+</p>
+</li>
+<li>
+<p> "dead" process exists but reports that server is not alive.  Server may fail
+to come online due to errors in configuration file. see <code>vos_configure()</code>
+</p>
+</li>
+<li>
+<p> "running" Server is up and accepting queries.
+</p>
+</li>
+<li>
+<p> "sleeping" Server is up and accepting queries.
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">if(has_virtuoso())
+  vos_status()
+
+</code></pre>
+
+
+</div>

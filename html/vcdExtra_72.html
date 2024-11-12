@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>modFit</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Brief Summary of Model Fit for a glm or loglm Object</h2>
+
+<h3>Description</h3>
+
+<p>Formats a brief summary of model fit for a <code>glm</code> or <code>loglm</code> object, showing
+the likelihood ratio Chisq (df) value and or AIC.  Useful for inclusion in a plot
+title or annotation. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">modFit(x, ...)
+## S3 method for class 'glm'
+modFit(x, stats="chisq", digits=2, ...)
+## S3 method for class 'loglm'
+modFit(x, stats="chisq", digits=2, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A <code>glm</code> or <code>loglm</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Arguments passed down</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stats</code></td>
+<td>
+<p>One or more of <code>chisq</code> or <code>aic</code>, determining the statistics displayed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>Number of digits after the decimal point in displayed statistics.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A character string containing the formatted values of the chosen statistics.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Friendly</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Summarise</code> (soon to be deprecated),
+<code>LRstats</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Mental)
+require(MASS)
+(Mental.tab &lt;- xtabs(Freq ~ ses + mental, data=Mental))
+(Mental.mod &lt;- loglm(~ses + mental, Mental.tab))
+Mental.mod
+modFit(Mental.mod)
+
+# use to label mosaic()
+mosaic(Mental.mod, main=paste("Independence model,", modFit(Mental.mod)))
+</code></pre>
+
+
+</div>

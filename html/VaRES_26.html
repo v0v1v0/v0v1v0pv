@@ -1,0 +1,151 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>clg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compound Laplace gamma distribution</h2>
+
+<h3>Description</h3>
+
+<p>Computes the pdf, cdf, value at risk and expected shortfall for the compound Laplace gamma distribution given by
+</p>
+<p style="text-align: center;"><code class="reqn">\begin{array}{ll}
+&amp;\displaystyle
+f (x) = \frac {a b}{2} \left\{ 1 + b \left | x - \theta \right | \right\}^{-\left( a + 1 \right)},
+\\
+&amp;\displaystyle
+F (x) =
+\left\{
+\begin{array}{ll}
+\displaystyle
+\frac {1}{2} \left\{ 1 + b \left | x - \theta \right | \right\}^{-a}, &amp;
+\mbox{if $x \leq \theta$,}
+\\
+\\
+\displaystyle
+1 - \frac {1}{2} \left\{ 1 + b \left | x - \theta \right | \right\}^{-a}, &amp;
+\mbox{if $x &gt; \theta$,}
+\end{array}
+\right.
+\\
+&amp;\displaystyle
+{\rm VaR}_p (X) =
+\left\{
+\begin{array}{ll}
+\displaystyle
+\theta - \frac {1}{b} - \frac {(2 p)^{-1/a}}{b}, &amp; \mbox{if $p \leq 1/2$,}
+\\
+\\
+\displaystyle
+\theta - \frac {1}{b} + \frac {(2 (1 - p))^{-1/a}}{b}, &amp;
+\mbox{if $p &gt; 1/2$,}
+\end{array}
+\right.
+\\
+&amp;\displaystyle
+{\rm ES}_p (X) =  \left\{
+\begin{array}{ll}
+\displaystyle
+\theta - \frac {1}{b} - \frac {(2 p)^{-1/a}}{b (1 - 1/a)}, &amp;
+\mbox{if $p \leq 1/2$,}
+\\
+\\
+\displaystyle
+\theta - \frac {1}{b} - \frac {\left[ 2 (1 - p) \right]^{1 - 1/a}}{2 p b (1 - 1/a)}, &amp;
+\mbox{if $p &gt; 1/2$}
+\end{array}
+\right.
+\end{array}</code>
+</p>
+
+<p>for <code class="reqn">-\infty &lt; x &lt; \infty</code>, <code class="reqn">0 &lt; p &lt; 1</code>, <code class="reqn">-\infty &lt; \theta &lt; \infty</code>, the location parameter,
+<code class="reqn">b &gt; 0</code>, the scale parameter, and <code class="reqn">a &gt; 0</code>, the shape parameter.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dclg(x, a=1, b=1, theta=0, log=FALSE)
+pclg(x, a=1, b=1, theta=0, log.p=FALSE, lower.tail=TRUE)
+varclg(p, a=1, b=1, theta=0, log.p=FALSE, lower.tail=TRUE)
+esclg(p, a=1, b=1, theta=0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>scaler or vector of values at which the pdf or cdf needs to be computed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>scaler or vector of values at which the value at risk or expected shortfall needs to be computed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+<p>the value of the location parameter, can take any real value, the default is zero</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b</code></td>
+<td>
+<p>the value of the scale parameter, must be positive, the default is 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a</code></td>
+<td>
+<p>the value of the shape parameter, must be positive, the default is 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+<p>if TRUE then log(pdf) are returned</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log.p</code></td>
+<td>
+<p>if TRUE then log(cdf) are returned and quantiles are computed for exp(p)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail</code></td>
+<td>
+<p>if FALSE then 1-cdf are returned and quantiles are computed for 1-p</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of the same length as <code>x</code>, giving the pdf or cdf values computed at <code>x</code> or an object of the same length as <code>p</code>, giving the values at risk or expected shortfall computed at <code>p</code>.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Saralees Nadarajah</p>
+
+
+<h3>References</h3>
+
+<p>Stephen Chan, Saralees Nadarajah &amp; Emmanuel Afuecheta (2016). An R Package for Value at Risk and Expected Shortfall, Communications in Statistics - Simulation and Computation, 45:9, 3416-3434, <a href="https://doi.org/10.1080/03610918.2014.944658">doi:10.1080/03610918.2014.944658</a></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x=runif(10,min=0,max=1)
+dclg(x)
+pclg(x)
+varclg(x)
+esclg(x)</code></pre>
+
+
+</div>

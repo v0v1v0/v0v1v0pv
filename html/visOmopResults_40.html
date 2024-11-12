@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>uniteAdditional</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Unite one or more columns in additional_name-additional_level format</h2>
+
+<h3>Description</h3>
+
+<p>Unites targeted table columns into additional_name-additional_level columns.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">uniteAdditional(
+  x,
+  cols = character(0),
+  keep = FALSE,
+  ignore = c(NA, "overall")
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Tibble or dataframe.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>Columns to aggregate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keep</code></td>
+<td>
+<p>Whether to keep the original columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ignore</code></td>
+<td>
+<p>Level values to ignore.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A tibble with the new columns.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- dplyr::tibble(
+  variable = "number subjects",
+  value = c(10, 15, 40, 78),
+  sex = c("Male", "Female", "Male", "Female"),
+  age_group = c("&lt;40", "&gt;40", "&gt;40", "&lt;40")
+)
+
+x |&gt;
+  uniteAdditional(c("sex", "age_group"))
+
+</code></pre>
+
+
+</div>

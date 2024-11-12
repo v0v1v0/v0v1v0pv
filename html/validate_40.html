@@ -1,0 +1,177 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>confront</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confront data with a (set of) expressionset(s)</h2>
+
+<h3>Description</h3>
+
+<p>An expressionset is a general class storing rich expressions (basically
+expressions and some meta data) which we call 'rules'. Examples of
+expressionset implementations are <code>validator</code> objects, storing
+validation rules and <code>indicator</code> objects, storing data quality
+indicators. The <code>confront</code> function evaluates the expressions one by one
+on a dataset while recording some process meta data. All results are stored in
+a (subclass of a) <code>confrontation</code> object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">confront(dat, x, ref, ...)
+
+## S4 method for signature 'data.frame,indicator,ANY'
+confront(dat, x, key = NULL, ...)
+
+## S4 method for signature 'data.frame,indicator,environment'
+confront(dat, x, ref, key = NULL, ...)
+
+## S4 method for signature 'data.frame,indicator,data.frame'
+confront(dat, x, ref, key = NULL, ...)
+
+## S4 method for signature 'data.frame,indicator,list'
+confront(dat, x, ref, key = NULL, ...)
+
+## S4 method for signature 'data.frame,validator,ANY'
+confront(dat, x, key = NULL, ...)
+
+## S4 method for signature 'data.frame,validator,environment'
+confront(dat, x, ref, key = NULL, ...)
+
+## S4 method for signature 'data.frame,validator,data.frame'
+confront(dat, x, ref, key = NULL, ...)
+
+## S4 method for signature 'data.frame,validator,list'
+confront(dat, x, ref, key = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dat</code></td>
+<td>
+<p>An R object carrying data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An R object carrying <code>rule</code>s.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ref</code></td>
+<td>
+<p>Optionally, an R object carrying reference data. See examples for usage.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Options used at execution time (especially <code>'raise'</code>). 
+See <code>voptions</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>key</code></td>
+<td>
+<p>(optional) name of identifying variable in x.</p>
+</td>
+</tr>
+</table>
+<h3>Reference data</h3>
+
+<p>Reference data is typically a <code>list</code> with a items such as
+a code list, or a data frame of which rows match the rows of the
+data under scrutiny.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>voptions</code>
+</p>
+<p>Other confrontation-methods: 
+<code>[,expressionset-method</code>,
+<code>as.data.frame,confrontation-method</code>,
+<code>confrontation-class</code>,
+<code>errors()</code>,
+<code>event()</code>,
+<code>keyset()</code>,
+<code>length,expressionset-method</code>,
+<code>values()</code>
+</p>
+<p>Other validation-methods: 
+<code>aggregate,validation-method</code>,
+<code>all,validation-method</code>,
+<code>any,validation-method</code>,
+<code>barplot,validation-method</code>,
+<code>check_that()</code>,
+<code>compare()</code>,
+<code>event()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>plot,validation-method</code>,
+<code>sort,validation-method</code>,
+<code>summary()</code>,
+<code>validation-class</code>,
+<code>values()</code>
+</p>
+<p>Other indication-methods: 
+<code>event()</code>,
+<code>indication-class</code>,
+<code>summary()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# a basic validation example
+v &lt;- validator(height/weight &lt; 0.5, mean(height) &gt;= 0)
+cf &lt;- confront(women, v)
+summary(cf)
+plot(cf)
+as.data.frame(cf)
+
+# an example checking metadata
+v &lt;- validator(nrow(.) == 15, ncol(.) &gt; 2)
+summary(confront(women, v))
+
+# An example using reference data
+v &lt;- validator(weight == ref$weight)
+summary(confront(women, v, women))
+
+# Usging custom names for reference data
+v &lt;- validator(weight == test$weight)
+summary( confront(women,v, list(test=women)) )
+
+# Reference data in an environment
+e &lt;- new.env()
+e$test &lt;- women
+v &lt;- validator(weight == test$weight)
+summary( confront(women, v, e) )
+
+# the effect of using a key
+w &lt;- women
+w$id &lt;- letters[1:nrow(w)]
+v &lt;- validator(weight == ref$weight)
+
+# with complete data; already matching
+values( confront(w, v, w, key='id'))
+
+# with scrambled rows in reference data (reference gets sorted according to dat)
+i &lt;- sample(nrow(w))
+values(confront(w, v, w[i,],key='id'))
+
+# with incomplete reference data
+values(confront(w, v, w[1:10,],key='id'))
+
+
+</code></pre>
+
+
+</div>

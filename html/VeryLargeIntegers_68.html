@@ -1,0 +1,73 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>11. Extended Euclidean algorithm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extended Euclidean Algorithm for vli Objects</h2>
+
+<h3>Description</h3>
+
+<p>Computation of the Extended Euclidean algorithm for vli (Very Large Integers) objects. Given two positive integers, <code>x</code> and <code>y</code>, the Extended Euclidean algorithm looks for two integers <code>a</code> and <code>b</code> (called Bezout's coefficients) such that <code>(a * x) + (b * y) = 1</code>. To do this, the algorithm needs to compute the greatest common divisor of <code>x</code> and <code>y</code>, so it is also returned by the function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">exteuclid(x, y)
+
+## Default S3 method:
+exteuclid(x, y)
+
+## S3 method for class 'numeric'
+exteuclid(x, y)
+
+## S3 method for class 'vli'
+exteuclid(x, y)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>object of class vli or 32 bits integer</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>object of class vli or 32 bits integer</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The returned object is a list of 3 elements. To access the numbers, it is necessary to use the list operator <code>[[i]]</code>, where "<code>i</code>" has to be 1 for the greatest common divisor, 2 for the first Bezout coefficient and 3 for the second Bezout coefficient (see the example).
+</p>
+
+
+<h3>Value</h3>
+
+<p>list of 3 objects of class vli: the first is the greatest common divisor of <code>x</code> and <code>y</code>, and the other two are the Bezout's coefficients
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Javier Leiva Cuadrado
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- as.vli("232636113097")
+y &lt;- as.vli("52442092785616")
+result &lt;- exteuclid(x, y)
+( result[[2]] * x ) + ( result[[3]] * y )
+</code></pre>
+
+
+</div>

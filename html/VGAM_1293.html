@@ -1,0 +1,153 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Zibinom</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Zero-Inflated Binomial Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random
+generation for the zero-inflated binomial distribution with
+parameter <code>pstr0</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dzibinom(x, size, prob, pstr0 = 0, log = FALSE)
+pzibinom(q, size, prob, pstr0 = 0)
+qzibinom(p, size, prob, pstr0 = 0)
+rzibinom(n, size, prob, pstr0 = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+<p>vector of quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>vector of probabilities.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size</code></td>
+<td>
+<p>number of trials. It is the <code class="reqn">N</code> symbol in the formula
+given in <code>zibinomial</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prob</code></td>
+<td>
+<p>probability of success on each trial. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p> Same as in <code>runif</code>.  </p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Same as <code>pbinom</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pstr0</code></td>
+<td>
+
+<p>Probability of a structural zero
+(i.e., ignoring the binomial distribution),
+called <code class="reqn">\phi</code>.
+The default value of <code class="reqn">\phi=0</code> corresponds to
+the response having an ordinary binomial distribution.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability function of <code class="reqn">Y</code> is 0 with probability
+<code class="reqn">\phi</code>, 
+and <code class="reqn">Binomial(size, prob)</code> with
+probability <code class="reqn">1-\phi</code>. Thus
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y=0) =\phi + (1-\phi) P(W=0)</code>
+</p>
+
+<p>where <code class="reqn">W</code> is
+distributed <code class="reqn">Binomial(size, prob)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dzibinom</code> gives the density,
+<code>pzibinom</code> gives the distribution function,
+<code>qzibinom</code> gives the quantile function, and
+<code>rzibinom</code> generates random deviates.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The argument <code>pstr0</code> is recycled to the required length,
+and must have values which lie in the interval <code class="reqn">[0,1]</code>.
+</p>
+<p>These functions actually allow for <em>zero-deflation</em>.
+That is, the resulting probability of a zero count
+is <em>less than</em> the nominal value of the parent
+distribution.
+See <code>Zipois</code> for more information.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>zibinomial</code>,
+<code>Gaitdbinom</code>,
+<code>Binomial</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">prob &lt;- 0.2; size &lt;- 10; pstr0 &lt;- 0.5
+(ii &lt;- dzibinom(0:size, size, prob, pstr0 = pstr0))
+max(abs(cumsum(ii) - pzibinom(0:size, size, prob, pstr0 = pstr0)))  # 0?
+table(rzibinom(100, size, prob, pstr0 = pstr0))
+
+table(qzibinom(runif(100), size, prob, pstr0 = pstr0))
+round(dzibinom(0:10, size, prob, pstr0 = pstr0) * 100)  # Similar?
+
+## Not run:  x &lt;- 0:size
+barplot(rbind(dzibinom(x, size, prob, pstr0 = pstr0),
+                dbinom(x, size, prob)),
+    beside = TRUE, col = c("blue", "green"), ylab = "Probability",
+    main = paste0("ZIB(", size, ", ", prob, ", pstr0 = ", pstr0, ")",
+                 " (blue) vs Binomial(", size, ", ", prob, ") (green)"),
+    names.arg = as.character(x), las = 1, lwd = 2) 
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>est_overall</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimate overall risk and vaccine efficacy</h2>
+
+<h3>Description</h3>
+
+<p>Estimate overall risk and vaccine efficacy.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">est_overall(dat, t_0, method = "Cox", risk = TRUE, ve = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dat</code></td>
+<td>
+<p>A data object returned by load_data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t_0</code></td>
+<td>
+<p>Time point of interest</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>One of c("KM", "Cox"), corresponding to either a Kaplan-Meier
+estimator ("KM") or a marginalized Cox proportional hazards model
+("Cox").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>risk</code></td>
+<td>
+<p>Boolean. If TRUE, the controlled risk (CR) curve is computed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ve</code></td>
+<td>
+<p>Boolean. If TRUE, the controlled vaccine efficacy (CVE) curve is
+computed.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A dataframe containing estimates
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(hvtn505)
+dat &lt;- load_data(time="HIVwk28preunblfu", event="HIVwk28preunbl", vacc="trt",
+                 marker="IgG_V2", covariates=c("age","BMI","bhvrisk"),
+                 weights="wt", ph2="casecontrol", data=hvtn505)
+est_overall(dat=dat, t_0=578, method="KM")
+</code></pre>
+
+
+</div>

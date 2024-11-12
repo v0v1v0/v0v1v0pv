@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mat.sq.dist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Squared distance matrix</h2>
+
+<h3>Description</h3>
+
+<p>Computes the squared distance matrix of a set of covariance matrices
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mat.sq.dist(Sm, dist. = "Riemannian", method = 0, pa = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Sm</code></td>
+<td>
+<p>a (p x p x m) array of covariance matrices,
+where p is the number of variables and m the number of groups.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dist.</code></td>
+<td>
+<p>"Riemannian" or "Euclidean"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>an integer for the method of matrix inversion</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pa</code></td>
+<td>
+<p>an integer for the parameter of matrix inversion</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The matrix of squared Riemannian or Euclidean distances
+</p>
+
+
+<h3>See Also</h3>
+
+<p>See <code>minv</code> for the method and the parameter used for the matrix inversion
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Data matrix of 2D landmark coordinates
+data("Tropheus.IK.coord")
+coords &lt;- which(names(Tropheus.IK.coord) == "X1"):which(names(Tropheus.IK.coord) == "Y19")
+proc.coord &lt;- as.matrix(Tropheus.IK.coord[coords])
+
+# Data reduction
+phen.pca &lt;- prcomp(proc.coord, rank. = 5, tol = sqrt(.Machine$double.eps))
+pc.scores &lt;- phen.pca$x
+
+# Covariance matrix of each population
+S.phen.pop &lt;- cov.group(pc.scores, groups = Tropheus.IK.coord$POP.ID)
+
+# Squared Riemannian distance matrix of the covariance matrices of all populations
+eigen.phen.r &lt;- mat.sq.dist(S.phen.pop, dist. = "Riemannian")
+
+# Squared Euclidean distance matrix of the covariance matrices of all populations
+eigen.phen.e &lt;- mat.sq.dist(S.phen.pop, dist. = "Euclidean")
+
+</code></pre>
+
+
+</div>

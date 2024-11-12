@@ -1,0 +1,59 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>fitCopula</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>A dedicated method to use the estimation routines from the VineCopula package</h2>
+
+<h3>Description</h3>
+
+<p>Bivariate copulas are estimated based on <code>BiCopEst</code> and vine copulas through <code>RVineStructureSelect</code> or <code>RVineCopSelect</code> depending on the <code>method</code> argument.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BCfitCopula(copula, data, method = "ml")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>copula</code></td>
+<td>
+<p>an object of the desired copula class</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a matrix holding the U(0,1) distributed data columns</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>for BIVARIATE copulas either "ml" or "itau" for maximum likelihood estimation or inverse tau estimation (for one parameter families) respectively. See <code>BiCopEst</code> for details. In case of a VINE copulas a list with names entries <code>StructureSelect</code> (default: FALSE), <code>indeptest</code> (default: FALSE), <code>familyset</code> (default: 'NA') and <code>indeptest</code> (default: FALSE). See <code>RVineStructureSelect</code> or <code>RVineCopSelect</code> for details.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>an object of class <code>fitCopula</code> as in the copula package.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+u &lt;- rCopula(1000, tawnT1Copula(c(3, 0.5)))
+
+fitCopula(tawnT1Copula(), u)
+
+</code></pre>
+
+
+</div>

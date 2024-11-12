@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dataPrep</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function for data preparation</h2>
+
+<h3>Description</h3>
+
+<p>Function to deal with NAs, right truncated data, and
+datatype (i.e. cumulative survival or incremental mortality).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  dataPrep(time, sdata, datatype, rc.data,
+    returnMatrix = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>time</code></td>
+<td>
+<p>A vector of observation dates</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sdata</code></td>
+<td>
+<p>A vector of survival data of the same length
+as <code>time</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>datatype</code></td>
+<td>
+<p>either <code>"CUM"</code> for cumulative or
+<code>"INC"</code> for incremental</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rc.data</code></td>
+<td>
+<p>Boolean. Is data right-censored?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>returnMatrix</code></td>
+<td>
+<p>Boolean. False returns a data frame,
+true returns a matrix. (as in the original), if "matrix"
+returns a matrix instead, with the "rc.data" column being
+0 for FALSE, 1 for TRUE, or 2 for TF</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is designed for use in the primary vitality model fitting functions in this package. See package documentation.</p>
+
+
+<h3>Value</h3>
+
+<p>Returns a data.frame or matrix with columns time, sfract,
+x1, x2, Ni (incremental survival fraction), rc.data.
+</p>
+
+
+</div>

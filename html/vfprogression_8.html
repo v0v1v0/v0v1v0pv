@@ -1,0 +1,51 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>progression.schell2014</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Schell 2014 VF progression</h2>
+
+<h3>Description</h3>
+
+<p><code>progression.schell2014</code> returns the progression criterion after Schell et al. 2014, which is essentially like CIGTS but with MD, and only one follow-up is enough to confirm progression.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">progression.schell2014(measmatrix)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>measmatrix</code></td>
+<td>
+<p>is a data frame. MUST contain the following columns: 'md' (mean deviation) and 'eyeid'. Rows represent the single measurements. The minimum measurements (rows) is 4.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>"stable", "worsening", or "improving" of measurements in <code>measmatrix</code>.  Note: If a VF series is temporarily improving and temporarily worsening, it is assumed to be "stable" overall
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4495761/">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4495761/</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vf.schell2014)
+colnames(vf.schell2014)
+progression.schell2014(vf.schell2014)
+progression.schell2014(vf.schell2014[vf.schell2014$eyeid == 1,])
+progression.schell2014(vf.schell2014[vf.schell2014$eyeid == 2,])
+</code></pre>
+
+
+</div>

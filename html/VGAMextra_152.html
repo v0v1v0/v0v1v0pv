@@ -1,0 +1,211 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>weibullMlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Link functions for the mean of 2–parameter 
+continuous distributions: The Weibull distribution.
+</h2>
+
+<h3>Description</h3>
+
+
+<p>Computes the <code>weibullMlink</code> transformation, its inverse and
+the first two derivatives.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">       weibullMlink(theta, shape = NULL, wrt.param = NULL,
+                    bvalue = NULL, inverse = FALSE,
+                    deriv = 0, short = TRUE, tag = FALSE)
+                       
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character. This is <code class="reqn">\theta</code>
+('scale' parameter) but it may 
+be <code class="reqn">\eta</code> depending on the other parameters.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+
+<p>The shape parameter. Required for this link to work.
+See
+<code>weibullRff</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wrt.param</code></td>
+<td>
+
+<p>Positive integer, either <code class="reqn">1</code> or <code class="reqn">2</code>. The partial derivatives
+are computed with respect to one of the two linear predictors 
+involved with this link. Further details listed below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue, inverse, deriv, short, tag</code></td>
+<td>
+
+<p>See <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is the link for the mean of 
+the 2–parameter Weibull distribution, also known as the
+<code>weibullMlink</code> transformation.
+It can only be used within
+<code>weibullRff</code>
+and is defined as
+
+
+
+
+
+</p>
+<p style="text-align: center;"><code class="reqn"> \tt{weibullMlink}(\beta; \alpha) = \eta(\beta; \alpha) = 
+                \log [\beta \cdot \Gamma (1 + 1/\alpha)],</code>
+</p>
+
+
+<p>for <em>given</em> <code class="reqn">\alpha</code> ('shape' parameter) where
+<code class="reqn">\beta &gt; 0</code> is the <em>scale</em> parameter.
+
+
+
+<code>weibullMlink</code> is expressly a function of <code class="reqn">\beta</code>, i.e.
+<code class="reqn">\theta</code>, therefore <code class="reqn">\alpha</code> (<em>shape</em>)
+must be entered at every call.
+</p>
+<p>Numerical values of <code class="reqn">\alpha</code> or <code class="reqn">\beta</code> out of range may 
+result in <code>Inf</code>, <code>-Inf</code>, <code>NA</code> or <code>NaN</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the <code>weibmeanlnik</code> transformation of
+<code>theta</code>, i.e., <code class="reqn">\beta</code>, when <code>inverse = FALSE</code>.
+If <code>inverse = TRUE</code>, then <code class="reqn">\theta</code> becomes <code class="reqn">\eta</code>,
+and the inverse, 
+<code class="reqn">\exp\left( theta - \log \Gamma(1 + 1/ \alpha)\right),</code>
+<em>for given</em> <code class="reqn">\alpha</code>, is
+returned.
+</p>
+<p>When <code>deriv = 1</code> <code>theta</code> becomes 
+<code class="reqn">\theta = (\beta, \alpha)= (\theta_1, \theta_2)</code>, and
+<code class="reqn">\eta = (\eta_1, \eta_2)</code> with 
+<code class="reqn">\eta_2 = \log~\alpha</code>,
+and the argument <code>wrt.param</code> must be
+considered:
+</p>
+<p>A) If <code>inverse = FALSE</code>, then 
+<code class="reqn">d</code> <code>eta1</code> / <code class="reqn">d</code> <code class="reqn">\beta</code> is returned when 
+<code>wrt.param = 1</code>, and
+<code class="reqn">d</code> <code>eta1</code> / <code class="reqn">d</code> <code class="reqn">\alpha</code> if
+<code>wrt.param = 2</code>.
+</p>
+<p>B) For <code>inverse = TRUE</code>, this function returns
+<code class="reqn">d</code> <code class="reqn">\beta</code> / <code class="reqn">d</code> <code>eta1</code> and
+<code class="reqn">d</code> <code class="reqn">\alpha</code> / <code class="reqn">d</code> <code>eta1</code> conformably arranged
+in a matrix, if <code>wrt.param = 1</code>,
+as a function of <code class="reqn">\theta_i</code>, <code class="reqn">i = 1, 2</code>.
+When <code>wrt.param = 2</code>, a matrix with columns
+<code class="reqn">d\beta</code> / <code class="reqn">d</code> <code>eta2</code> and 
+<code class="reqn">d\alpha</code> / <code class="reqn">d</code> <code>eta2</code>
+is returned.  
+
+
+
+
+
+
+
+
+
+
+
+</p>
+<p>For <code>deriv = 2</code>, the second derivatives in
+terms of <code>theta</code> are likewise returned.
+</p>
+
+
+
+
+
+
+<h3>Note</h3>
+
+<p>Numerical instability may occur for values <code>theta</code> too close
+to zero. Use argument <code>bvalue</code> to replace them before
+computing the link.
+</p>
+<p>If <code>theta</code> is character, then arguments <code>inverse</code> and
+<code>deriv</code> are ignored. See <code>Links</code>
+for further details.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>weibullQlink</code>,
+<code>weibullRff</code>,
+<code>weibullR</code>,
+<code>lgamma</code>,
+<code>Links</code>.
+
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    eta &lt;- seq(-3, 3, by = 0.1) # this is eta = log(mu(b, a)).
+    shape  &lt;- exp(1)    # 'shape' argument.
+ 
+ ## E1. Get 'scale' values with A WARNING (not the same length)!
+   theta &lt;- weibullMlink(theta = eta, shape = shape, inverse = TRUE)  # Scale
+   
+ ## Not run: 
+ ## E2. Plot theta vs. eta, 'shape' fixed.
+ plot(theta, eta, type = "l", ylab = "", col = "blue",
+      main = paste0("weibullMlink(theta; shape = ",
+                    round(shape, 3), ")"))
+  abline(h = -3:3, v = 0, col = "gray", lty = "dashed")
+ 
+## End(Not run)
+ 
+ ## E3. weibullMlink() and its inverse ##
+    etabis  &lt;- weibullMlink(theta = theta, shape = shape, inverse = FALSE)
+    summary(eta - etabis)     # Should be 0
+</code></pre>
+
+
+</div>

@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>notes</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Assign notes to frequencies</h2>
+
+<h3>Description</h3>
+
+<p>Returns a vector of notes for equal-tempered scale, A4 = 440 Hz.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">notes(x, method = "spn", moving.average = FALSE, k = 11)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Numeric vector of frequencies in Hz.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>Method of specifying musical pitch. (Default: <code>spn</code>, i.e., Scientific Pitch Notation).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>moving.average</code></td>
+<td>
+<p>Logical. Must apply moving average? (Default: <code>FALSE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>Integer width of the rolling window used if moving.average is TRUE. (Default: <code>11</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The symbol '#' is being used to represent a sharp note, the higher
+in pitch by one semitone on Scientific Pitch Notation (SPN).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector containing the notes for equal-tempered scale, A4 = 440 Hz. When ‘method = ’spn'‘ the vector is of class ’ordered factor'. When ‘method = ’octave'‘ the vector is of class ’factor'.  When ‘method = ’midi'‘ the vector is of class ’integer'.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://pages.mtu.edu/~suits/notefreqs.html">https://pages.mtu.edu/~suits/notefreqs.html</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>notes_freq</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(voice)
+notes(c(220,440,880))
+notes(c(220,440,880), method = 'octave')
+notes(c(220,440,880), method = 'midi')
+</code></pre>
+
+
+</div>

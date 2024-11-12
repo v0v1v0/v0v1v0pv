@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.CAP</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Draws cummulative abundance profiles
+</h2>
+
+<h3>Description</h3>
+
+<p>Create plots used to inspect one or more cumulative abundance profiles.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'CAP'
+plot(x, sizes=NULL, species=NULL, plots=NULL, switchAxes=FALSE, 
+                   add=FALSE, drawAxes = TRUE, xlab="", ylab="", type="s",...)
+## S3 method for class 'stratifiedvegdata'
+plot(x, sizes=NULL, species=NULL, plots=NULL, switchAxes=FALSE, 
+                   add=FALSE, drawAxes = TRUE, xlab="", ylab="", type="s",...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object returned from function <code>CAP</code> or an object of class <code>stratifiedvegdata</code> (see documentation for function <code>stratifyvegdata</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sizes</code></td>
+<td>
+<p>A vector containing the size values associated to each size class. If <code>NULL</code> the y-axis will be defined using the size class order in <code>x</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species</code></td>
+<td>
+<p>A vector of strings indicating the species whose profile is to be drawn. If <code>NULL</code> all species are plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plots</code></td>
+<td>
+<p>A vector indicating the plot records whose profile is to be drawn. Can be a <code>character</code> vector (for plot names), a <code>numeric</code> vector (for plot indices) or a <code>logical</code> vector (for TRUE/FALSE selection). If <code>NULL</code> all plot records are plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>switchAxes</code></td>
+<td>
+<p>A flag indicating whether ordinate and abscissa axes should be interchanged.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add</code></td>
+<td>
+<p>A flag indicating whether profiles should be drawn on top of current drawing area. If <code>add=FALSE</code> a new plot is created.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drawAxes</code></td>
+<td>
+<p>A flag indicating whether axes should be drawn.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>String label for the x axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>String label for the y axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Type of plot to be drawn ("p" for points, "l" for lines, "s" for steps, ...).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional plotting parameters.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, CREAF
+</p>
+
+
+<h3>References</h3>
+
+<p>De Cáceres, M., Legendre, P. &amp; He, F. (2013) Dissimilarity measurements and the size structure of ecological communities. Methods in Ecology and Evolution 4: 1167-1177.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>CAP</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Load stratified data
+data(medreg)
+
+## Check that 'medreg' has correct class
+class(medreg)
+
+## Create cumulative abundance profile (CAP) for each plot
+medreg.CAP = CAP(medreg)
+
+## Draw the stratified data and profile corresponding to the third plot
+plot(medreg, plots="3")
+plot(medreg.CAP, plots="3")
+
+## Look at the plot and CAP of the same plot
+medreg[["3"]]
+medreg.CAP[["3"]]
+</code></pre>
+
+
+</div>

@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>verbalise</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Describe a pairwise relationship</h2>
+
+<h3>Description</h3>
+
+<p>The description includes all pedigree paths between the two individuals,
+indicating with brackets the topmost common ancestors in each path. See
+<code>print.pairrel()</code> for formatting options when printing the results.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">verbalise(x, ids = leaves(x))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A <code>ped</code> object, or a list of such.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ids</code></td>
+<td>
+<p>A vector containing the names of two pedigree members.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class <code>pairrel</code>. This is essentially a list of lists,
+containing many details about each path between the individuals. Most users
+will not interact with this list directly, but simply use the description
+provided by the <code>print()</code> method.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>print.pairrel()</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Example 1: Family quartet
+
+x = nuclearPed(2)
+verbalise(x, 1:2)
+verbalise(x, 2:3)
+verbalise(x, 3:4)
+
+# Simplified output
+verbalise(x, 2:3) |&gt; print(simplify = TRUE)
+
+# Example 2: Complicated cousin pedigree
+
+y = doubleCousins(degree1 = 1, removal1 = 1, half1 = TRUE,
+                  degree2 = 2, removal2 = 0, half2 = FALSE)
+verbalise(y)
+
+# Example 3: Full sib mating
+
+z = fullSibMating(1)
+verbalise(z)
+verbalise(z, ids = c(1,5))
+verbalise(z, ids = c(1,5)) |&gt; print(simplify = TRUE)
+
+# Example 4: Quad half first cousins
+
+w = quadHalfFirstCousins()
+verbalise(w)
+
+</code></pre>
+
+
+</div>

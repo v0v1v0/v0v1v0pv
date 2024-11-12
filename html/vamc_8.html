@@ -1,0 +1,94 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>genIndexScen</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate Index Scenerio</h2>
+
+<h3>Description</h3>
+
+<p>Simulate a 3D array, numScen-by-numStep-by-numIndex, of Black-Scholes return
+factors for numIndex indices in each of numStep time steps and each of
+numScen scenarios. Covariances among indices are specified in covMatrix.
+Stepsize is given is dT and interpolated discount factors are given in vDF.
+Random seed is optional for reproducibility.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">genIndexScen(
+  covMatrix,
+  numScen,
+  numStep,
+  indexNames,
+  dT = 1/12,
+  forwardCurve,
+  seed
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>covMatrix</code></td>
+<td>
+<p>A numIndex-by-numIndex matrix of doubles of covariances
+among numIndex indices.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numScen</code></td>
+<td>
+<p>An integer of number of scenario (sample paths) to be
+simulated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numStep</code></td>
+<td>
+<p>An integer of number of periods to be simulated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>indexNames</code></td>
+<td>
+<p>A vector of strings containing index names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dT</code></td>
+<td>
+<p>A double of stepsize in years; dT = 1 / 12 would be monthly.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>forwardCurve</code></td>
+<td>
+<p>A vector of doubles of discount rates at each time step.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>An integer of the deterministic seed for random sampling.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Outputs a 3D array (numScen-by-numStep-by-numIndex) of index
+scenarios
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">genIndexScen(mCov, 100, 360, indexNames, 1 / 12, cForwardCurve, 1)
+</code></pre>
+
+
+</div>

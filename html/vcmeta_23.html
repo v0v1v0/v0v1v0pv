@@ -1,0 +1,105 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.ave.spear</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for an average Spearman correlation</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and confidence interval for an
+average Spearman correlation from two or more studies. The Spearman
+correlation is preferred to the Pearson correlation if the relation
+between the two quantitative variables is monotonic rather than linear
+or if the bivariate normality assumption is not plausible.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.ave.spear(alpha, n, cor, bystudy = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>vector of sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor</code></td>
+<td>
+<p>vector of estimated Spearman correlations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bystudy</code></td>
+<td>
+<p>logical to also return each study estimate (TRUE) or not</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is the average estimate across all studies.  If bystudy
+is TRUE, there is 1 additional row for each study.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated effect size
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2008).
+“Meta-analytic interval estimation for bivariate correlations.”
+<em>Psychological Methods</em>, <b>13</b>(3), 173–181.
+ISSN 1939-1463, <a href="https://doi.org/10.1037/a0012868">doi:10.1037/a0012868</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">n &lt;- c(150, 200, 300, 200, 350)
+cor &lt;- c(.14, .29, .16, .21, .23)
+meta.ave.spear(.05, n, cor, bystudy = TRUE)
+
+# Should return:
+#         Estimate         SE          LL        UL
+# Average    0.206 0.02944265  0.14763960 0.2629309
+# Study 1    0.140 0.08031750 -0.02151639 0.2943944
+# Study 2    0.290 0.06492643  0.15476515 0.4145671
+# Study 3    0.160 0.05635101  0.04689807 0.2690514
+# Study 4    0.210 0.06776195  0.07187439 0.3402225
+# Study 5    0.230 0.05069710  0.12690280 0.3281809
+
+
+</code></pre>
+
+
+</div>

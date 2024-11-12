@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tcn_threads</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get threaded conversation tweets</h2>
+
+<h3>Description</h3>
+
+<p>Collects tweets that share the same Twitter conversation ID as supplied tweets.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tcn_threads(
+  tweet_ids = NULL,
+  token = NULL,
+  endpoint = "recent",
+  start_time = NULL,
+  end_time = NULL,
+  annotations = FALSE,
+  max_results = NULL,
+  max_total = NULL,
+  retry_on_limit = TRUE,
+  skip_list = NULL,
+  verbose = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>tweet_ids</code></td>
+<td>
+<p>List. Tweet ids of any tweet that are part of the threaded conversations of interest. Also accepts a
+list of tweet URLs or a mixed list.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>token</code></td>
+<td>
+<p>List. Twitter API tokens.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>endpoint</code></td>
+<td>
+<p>Character string. Twitter API v2 search endpoint. Can be either "recent" for the last 7 days or "all"
+if users app has access to historical "full-archive" tweets. Default is "recent".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start_time</code></td>
+<td>
+<p>Character string. Earliest tweet timestamp to return (UTC in ISO 8601 format). If NULL API will
+default to 30 days before end_time. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>end_time</code></td>
+<td>
+<p>Character string. Latest tweet timestamp to return (UTC in ISO 8601 format). If NULL API will default
+to now - 30 seconds. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>annotations</code></td>
+<td>
+<p>Logical. Include tweet context annotation field in results. If TRUE Twitter imposes a max_results
+limit of 100. Default is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_results</code></td>
+<td>
+<p>Numeric. Set maximum number of tweets to collect per API v2 request. Up to 100 tweets for standard
+or 500 tweets for academic projects can be collected per request. Default is NULL to set maximum allowed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_total</code></td>
+<td>
+<p>Numeric. Set maximum total number of tweets to collect as a cap limit precaution. Will only be
+accurate to within one search request count (being max_results, or 100 for standard or 500 tweets for academic
+project). This will not be ideal for most cases as an API search generally retrieves the most recent tweets first
+(reverse-chronological order), therefore the beginning part of the last conversation thread may be absent. Default
+is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>retry_on_limit</code></td>
+<td>
+<p>Logical. When the API v2 rate-limit has been reached wait for reset time. Default
+is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>skip_list</code></td>
+<td>
+<p>Character vector. List of tweet conversation IDs to skip searching if found.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical. Output additional information. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A named list. Dataframes of tweets, users, errors and request metadata.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# get twitter conversation threads by tweet ids or urls
+tweet_ids &lt;- c("xxxxxxxx",
+               "https://twitter.com/xxxxxxxx/status/xxxxxxxx")
+tweets &lt;- tcn_threads(tweet_ids, token, endpoint = "recent")
+
+# get twitter conversation threads by tweet ids or urls using historical endpoint
+# starting from May 01, 2021.
+tweet_ids &lt;- c("xxxxxxxx",
+               "https://twitter.com/xxxxxxxx/status/xxxxxxxx")
+tweets &lt;- tcn_threads(tweet_ids,
+                      token = token,
+                      endpoint = "all",
+                      start_time = "2021-05-01T00:00:00Z")
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

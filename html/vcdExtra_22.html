@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Crossings</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Crossings Interaction of Factors</h2>
+
+<h3>Description</h3>
+
+<p>Given two ordered factors in a square, n x n frequency table, <code>Crossings</code>
+creates an n-1 column matrix corresponding to different degrees of difficulty
+in crossing from one level to the next, as described by Goodman (1972).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Crossings(...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Two factors
+</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>For two factors of <code>n</code> levels, returns a binary indicator matrix
+of <code>n*n</code> rows and <code>n-1</code> columns.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Friendly and Heather Turner</p>
+
+
+<h3>References</h3>
+
+<p>Goodman, L. (1972).  Some multiplicative models for the analysis of cross-classified data.
+In: <em>Proceedings of the Sixth Berkeley Symposium on Mathematical Statistics and Probability</em>,
+Berkeley, CA: University of California Press, pp. 649-696.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>glm</code>, 
+<code>gnm</code> for model fitting functions for frequency tables
+</p>
+<p><code>Diag</code>, 
+<code>Mult</code>, 
+<code>Symm</code>, 
+<code>Topo</code> 
+for similar extensions to terms in model formulas.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Hauser79)
+# display table
+structable(~Father + Son, data=Hauser79)
+
+hauser.indep &lt;- gnm(Freq ~ Father + Son, 
+                    data=Hauser79, 
+                    family=poisson)
+
+hauser.CR &lt;- update(hauser.indep, 
+                    ~ . + Crossings(Father,Son))
+LRstats(hauser.CR)
+
+hauser.CRdiag &lt;- update(hauser.indep, 
+                        ~ . + Crossings(Father,Son) + Diag(Father,Son))
+LRstats(hauser.CRdiag)
+
+</code></pre>
+
+
+</div>

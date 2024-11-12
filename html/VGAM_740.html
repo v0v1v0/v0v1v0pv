@@ -1,0 +1,145 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>inv.gaussianff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Inverse Gaussian Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the two parameters of the inverse Gaussian distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">inv.gaussianff(lmu = "loglink", llambda = "loglink",
+      imethod = 1, ilambda = NULL,
+      parallel = FALSE, ishrinkage = 0.99, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmu, llambda</code></td>
+<td>
+
+<p>Parameter link functions for the <code class="reqn">\mu</code> and
+<code class="reqn">\lambda</code> parameters.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilambda, parallel</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+If <code>parallel = TRUE</code> then the constraint is not applied
+to the intercept.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod, ishrinkage, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The standard (“canonical”) form of the
+inverse Gaussian distribution has a density
+that can be written as
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\mu,\lambda) = \sqrt{\lambda/(2\pi y^3)}
+       \exp\left(-\lambda (y-\mu)^2/(2 y \mu^2)\right)</code>
+</p>
+
+<p>where <code class="reqn">y&gt;0</code>,
+<code class="reqn">\mu&gt;0</code>, and
+<code class="reqn">\lambda&gt;0</code>.
+The mean of <code class="reqn">Y</code> is <code class="reqn">\mu</code> and its variance is
+<code class="reqn">\mu^3/\lambda</code>.
+By default, <code class="reqn">\eta_1=\log(\mu)</code> and
+<code class="reqn">\eta_2=\log(\lambda)</code>.
+The mean is returned as the fitted values.
+This <span class="pkg">VGAM</span> family function can handle multiple
+responses (inputted as a matrix).
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The inverse Gaussian distribution can be fitted (to a
+certain extent) using the usual GLM framework involving a
+scale parameter. This family function is different from that
+approach in that it estimates both parameters by full maximum
+likelihood estimation.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Johnson, N. L. and Kotz, S. and Balakrishnan, N. (1994).
+<em>Continuous Univariate Distributions</em>,
+2nd edition, Volume 1, New York: Wiley.
+</p>
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Inv.gaussian</code>,
+<code>waldff</code>,
+<code>bisa</code>.
+</p>
+<p>The <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> package <span class="pkg">SuppDists</span> has several functions
+for evaluating the density, distribution function, quantile
+function and generating random numbers from the inverse Gaussian
+distribution.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">idata &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+idata &lt;- transform(idata, mymu   = exp(2 + 1 * x2),
+                          Lambda = exp(2 + 1 * x2))
+idata &lt;- transform(idata, y = rinv.gaussian(nn, mu = mymu, Lambda))
+fit1 &lt;-   vglm(y ~ x2, inv.gaussianff, data = idata, trace = TRUE)
+rrig &lt;- rrvglm(y ~ x2, inv.gaussianff, data = idata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+coef(rrig, matrix = TRUE)
+Coef(rrig)
+summary(fit1)
+</code></pre>
+
+
+</div>

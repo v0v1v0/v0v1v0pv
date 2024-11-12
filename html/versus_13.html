@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>weave_diffs_long</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get differences in context</h2>
+
+<h3>Description</h3>
+
+<p>Get differences in context
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">weave_diffs_long(comparison, column = everything())
+
+weave_diffs_wide(comparison, column = everything())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>comparison</code></td>
+<td>
+<p>The output of <code>compare()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>column</code></td>
+<td>
+<p>&lt;<code>tidy-select</code>&gt;. A row will be in the output if
+the comparison shows differing values for any columns matching this argument</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>weave_diffs_wide()</code></td>
+<td>
+<p>The input <code>table_a</code> filtered to rows where
+differing values exist for one of the columns selected by <code>column</code>.
+The selected columns with differences will be in the result twice, one for
+each input table.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weave_diffs_long()</code></td>
+<td>
+<p>Input tables are filtered to rows where
+differing values exist for one of the columns selected by <code>column</code>.
+These two sets of rows (one for each input table) are interleaved row-wise.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">comp &lt;- compare(example_df_a, example_df_b, by = car)
+comp |&gt; weave_diffs_wide(disp)
+comp |&gt; weave_diffs_wide(c(mpg, disp))
+comp |&gt; weave_diffs_long(disp)
+comp |&gt; weave_diffs_long(c(mpg, disp))
+</code></pre>
+
+
+</div>

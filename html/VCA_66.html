@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ranef.VCA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract Random Effects from 'VCA' Object</h2>
+
+<h3>Description</h3>
+
+<p>Extract random effects and possibly apply a transformation to them (standardization,
+studentization).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VCA'
+ranef(
+  object,
+  term = NULL,
+  mode = c("raw", "student", "standard"),
+  quiet = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>(VCA) object from which random effects shall be extracted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>term</code></td>
+<td>
+<p>(character) string specifying a term (factor) for which random effects 
+should be extracted, one can also specify an integer which is interpreted
+as i-th element of 'obj$res.assign$terms'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mode</code></td>
+<td>
+<p>(character) string or abbreviation specifying whether "raw" residuals
+should be returned or a transformed version c("student" or "standard")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = will suppress any warning, which will be issued otherwise</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Extracting the 'RandomEffects' element of an 'VCA' object if this exists and applying
+standardization (mean 0, sd 1) or studentization. For studentized random effects 
+the i-th random effects is divided by the i-th main diagonal element of matrix <code class="reqn">O = GZ^{T}QZG</code>,
+where <code class="reqn">G</code> is the covariance-matrix of random effects, <code class="reqn">Z</code> is a design matrix assigning 
+random effects to observations and matrix <code class="reqn">Q = V^{-1}(I - H)</code> (see <code>residuals.VCA</code> for further details).
+</p>
+
+
+<h3>References</h3>
+
+<p>Searle, S.R, Casella, G., McCulloch, C.E. (1992), Variance Components, Wiley New York	
+</p>
+<p>Laird, N.M., Ware, J.H., 1982. Random effects models for longitudinal data. Biometrics 38, 963-974.
+</p>
+<p>Schuetzenmeister, A. and Piepho, H.P. (2012). Residual analysis of linear mixed models using a simulation approach.
+Computational Statistics and Data Analysis, 56, 1405-1416
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+fit &lt;- anovaVCA(y~day/run, dataEP05A2_1)
+ranef(fit)
+
+# get variable-specific random effects (REs)
+# both extract the same REs
+ranef(fit, "day")
+ranef(fit, 1)
+
+# get standardized REs
+ranef(fit, "day:run", "standard")
+
+# or studentized REs
+ranef(fit, 2, "stu")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

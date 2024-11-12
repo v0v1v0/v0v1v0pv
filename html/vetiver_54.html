@@ -1,0 +1,160 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_create_description.train</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Model constructor methods</h2>
+
+<h3>Description</h3>
+
+<p>These are developer-facing functions, useful for supporting new model types.
+Each model supported by <code>vetiver_model()</code> uses up to four methods when the
+deployable object is created:
+</p>
+
+<ul>
+<li>
+<p> The <code>vetiver_create_description()</code> function generates a helpful description
+of the model based on its characteristics. This method is required.
+</p>
+</li>
+<li>
+<p> The <code>vetiver_create_meta()</code> function creates the correct <code>vetiver_meta()</code>
+for the model. This is especially helpful for specifying which packages are
+needed for prediction. A model can use the default method here, which is
+to have no special metadata.
+</p>
+</li>
+<li>
+<p> The <code>vetiver_ptype()</code> function finds an input data prototype from the
+training data (a zero-row slice) to use for checking at prediction time.
+This method is required.
+</p>
+</li>
+<li>
+<p> The <code>vetiver_prepare_model()</code> function executes last. Use this function
+for tasks like checking if the model is trained and reducing the size of the
+model via <code>butcher::butcher()</code>. A model can use the default method here,
+which is to return the model without changes.
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'train'
+vetiver_create_description(model)
+
+## S3 method for class 'train'
+vetiver_prepare_model(model)
+
+## S3 method for class 'gam'
+vetiver_create_description(model)
+
+## S3 method for class 'gam'
+vetiver_prepare_model(model)
+
+## S3 method for class 'glm'
+vetiver_create_description(model)
+
+## S3 method for class 'glm'
+vetiver_prepare_model(model)
+
+## S3 method for class 'keras.engine.training.Model'
+vetiver_create_description(model)
+
+## S3 method for class 'keras.engine.training.Model'
+vetiver_prepare_model(model)
+
+## S3 method for class 'kproto'
+vetiver_create_description(model)
+
+## S3 method for class 'kproto'
+vetiver_prepare_model(model)
+
+## S3 method for class 'lm'
+vetiver_create_description(model)
+
+## S3 method for class 'lm'
+vetiver_prepare_model(model)
+
+## S3 method for class 'luz_module_fitted'
+vetiver_create_description(model)
+
+## S3 method for class 'luz_module_fitted'
+vetiver_prepare_model(model)
+
+## S3 method for class 'Learner'
+vetiver_create_description(model)
+
+## S3 method for class 'Learner'
+vetiver_prepare_model(model)
+
+vetiver_create_description(model)
+
+## Default S3 method:
+vetiver_create_description(model)
+
+vetiver_prepare_model(model)
+
+## Default S3 method:
+vetiver_prepare_model(model)
+
+## S3 method for class 'ranger'
+vetiver_create_description(model)
+
+## S3 method for class 'ranger'
+vetiver_prepare_model(model)
+
+## S3 method for class 'recipe'
+vetiver_create_description(model)
+
+## S3 method for class 'recipe'
+vetiver_prepare_model(model)
+
+## S3 method for class 'model_stack'
+vetiver_create_description(model)
+
+## S3 method for class 'model_stack'
+vetiver_prepare_model(model)
+
+## S3 method for class 'workflow'
+vetiver_create_description(model)
+
+## S3 method for class 'workflow'
+vetiver_prepare_model(model)
+
+## S3 method for class 'xgb.Booster'
+vetiver_create_description(model)
+
+## S3 method for class 'xgb.Booster'
+vetiver_prepare_model(model)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>A trained model, such as an <code>lm()</code> model or a tidymodels
+<code>workflows::workflow()</code>.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>These are four generics that use the class of <code>model</code> for dispatch.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+cars_lm &lt;- lm(mpg ~ ., data = mtcars)
+vetiver_create_description(cars_lm)
+vetiver_prepare_model(cars_lm)
+
+</code></pre>
+
+
+</div>

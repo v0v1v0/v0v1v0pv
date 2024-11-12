@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>coef.VFP</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract Model-Coefficients from VFP-Objects.</h2>
+
+<h3>Description</h3>
+
+<p>Extract Model-Coefficients from VFP-Objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VFP'
+coef(object, model.no = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>(object) of class "VFP"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model.no</code></td>
+<td>
+<p>(integer) specifying one of models 1:10, must be one of the 
+fitted models</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters passed forward</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>(numeric) model coefficients
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+Florian Dufey <a href="mailto:florian.dufey@roche.com">florian.dufey@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(VCA)
+data(VCAdata1)
+lst &lt;- anovaVCA(y~(device+lot)/day/run, VCAdata1, by="sample")
+mat &lt;- getMat.VCA(lst)		# automatically selects "total"
+res &lt;- fit.vfp(model.no=1:10, Data=mat)
+coef(res)
+
+</code></pre>
+
+
+</div>

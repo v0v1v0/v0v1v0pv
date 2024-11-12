@@ -1,0 +1,92 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>olmm-summary</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Printing and summarizing <code>olmm</code> objects</h2>
+
+<h3>Description</h3>
+
+<p>Generates summary results of a fitted <code>olmm</code> object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'olmm'
+summary(object, etalab = c("int", "char", "eta"),
+        silent = FALSE, ...)
+
+## S3 method for class 'olmm'
+print(x, etalab = c("int", "char", "eta"), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object, x</code></td>
+<td>
+<p>a fitted <code>olmm</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>etalab</code></td>
+<td>
+<p>character. Whether category-specific effects should be 
+labeled by integers of categories (default), the labels of the 
+categories or the index of the predictor.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>silent</code></td>
+<td>
+<p>logical: should a warning be reported if the computation 
+of the covariance matrix for the estimated coefficients failed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments passed to print.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The <code>summary</code> method returns a list of class
+<code>"summary.olmm"</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>See Also</h3>
+
+<p><code>olmm</code>, <code>olmm-methods</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## ------------------------------------------------------------------- #
+## Dummy example:
+##
+## Printing the summary of a model on artificially generated data.
+## ------------------------------------------------------------------- #
+
+data(vcrpart_1)
+
+model &lt;- olmm(y ~ wave + z4:treat + re(1|id), vcrpart_1, subset = 1:60)
+
+print(model, digits = 2)
+
+summary(model, digits = 2)
+</code></pre>
+
+
+</div>

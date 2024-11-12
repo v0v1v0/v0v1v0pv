@@ -1,0 +1,125 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visTable</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate a formatted table from a <code style="white-space: pre;">⁠&lt;data.table&gt;⁠</code>
+</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+This function combines the functionalities of <code>formatEstimateValue()</code>,
+<code>formatEstimateName()</code>, <code>formatHeader()</code>, and <code>formatTable()</code>
+into a single function. While it does not require the input table to be
+a <code style="white-space: pre;">⁠&lt;summarised_result&gt;⁠</code>, it does expect specific fields to apply some
+formatting functionalities.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visTable(
+  result,
+  estimateName = character(),
+  header = character(),
+  groupColumn = character(),
+  rename = character(),
+  type = "gt",
+  hide = character(),
+  .options = list()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>result</code></td>
+<td>
+<p>A table to format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estimateName</code></td>
+<td>
+<p>A named list of estimate names to join, sorted by
+computation order. Use <code style="white-space: pre;">⁠&lt;...&gt;⁠</code> to indicate estimate names. This argument
+requires that the table has <code>estimate_name</code> and <code>estimate_value</code> columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>header</code></td>
+<td>
+<p>A vector specifying the elements to include in the header.
+The order of elements matters, with the first being the topmost header.
+The vector elements can be column names or labels for overall headers.
+The table must contain an <code>estimate_value</code> column to pivot the headers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groupColumn</code></td>
+<td>
+<p>Columns to use as group labels. By default, the name of the
+new group will be the tidy* column names separated by ";". To specify a custom
+group name, use a named list such as:
+list("newGroupName" = c("variable_name", "variable_level")).
+</p>
+<p>*tidy: The tidy format applied to column names replaces "_" with a space and
+converts them to sentence case. Use <code>rename</code> to customize specific column names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rename</code></td>
+<td>
+<p>A named vector to customize column names, e.g.,
+c("Database name" = "cdm_name"). The function will rename all column names
+not specified here into a tidy* format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>The desired format of the output table. See <code>tableType()</code> for
+allowed options.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hide</code></td>
+<td>
+<p>Columns to drop from the output table.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.options</code></td>
+<td>
+<p>A named list with additional formatting options.
+<code>visOmopResults::tableOptions()</code> shows allowed arguments and their default values.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A tibble, gt, or flextable object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">result &lt;- mockSummarisedResult()
+result |&gt;
+  visTable(
+    estimateName = c("N%" = "&lt;count&gt; (&lt;percentage&gt;)",
+                     "N" = "&lt;count&gt;",
+                     "Mean (SD)" = "&lt;mean&gt; (&lt;sd&gt;)"),
+    header = c("Estimate"),
+    rename = c("Database name" = "cdm_name"),
+    groupColumn = c("strata_name", "strata_level"),
+    hide = c("additional_name", "additional_level", "estimate_type", "result_type")
+  )
+</code></pre>
+
+
+</div>

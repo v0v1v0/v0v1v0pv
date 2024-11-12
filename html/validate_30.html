@@ -1,0 +1,215 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compare</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compare similar data sets</h2>
+
+<h3>Description</h3>
+
+<p>Compare versions of a data set by comparing their performance against a
+set of rules or other quality indicators. This function takes two or
+more data sets and compares the perfomance of data set <code class="reqn">2,3,\ldots</code>
+against that of the first data set (default) or to the previous one
+(by setting <code>how='sequential'</code>).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compare(x, ...)
+
+## S4 method for signature 'validator'
+compare(x, ..., .list = list(), how = c("to_first", "sequential"))
+
+## S4 method for signature 'indicator'
+compare(x, ..., .list = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An R object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>data frames, comma separated. Names become column names in
+the output.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.list</code></td>
+<td>
+<p>Optional list of data sets, will be concatenated with <code>...</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>how</code></td>
+<td>
+<p>how to compare</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>For <code>validator</code>: An array where each column represents 
+one dataset. 
+The rows count the following attributes:
+</p>
+
+<ul>
+<li>
+<p>Number of validations performed
+</p>
+</li>
+<li>
+<p>Number of validations that evaluate to <code>NA</code> (unverifiable)
+</p>
+</li>
+<li>
+<p>Number of validations that evaluate to a logical (verifiable)
+</p>
+</li>
+<li>
+<p>Number of validations that evaluate to <code>TRUE</code>
+</p>
+</li>
+<li>
+<p>Number of validations that evaluate to <code>FALSE</code>
+</p>
+</li>
+<li>
+<p>Number of extra validations that evaluate to <code>NA</code> (new unverifiable)
+</p>
+</li>
+<li>
+<p>Number of validations that still evaluate to <code>NA</code> (still unverifialble)
+</p>
+</li>
+<li>
+<p>Number of validations that still evaluate to <code>TRUE</code>
+</p>
+</li>
+<li>
+<p>Number of extra validations that evaluate to <code>TRUE</code> 
+</p>
+</li>
+<li>
+<p>Number of validations that still evaluate to <code>FALSE</code>
+</p>
+</li>
+<li>
+<p>Number of extra validations that evaluate to <code>FALSE</code>
+</p>
+</li>
+</ul>
+<p>For <code>indicator</code>: A list with the following components:
+</p>
+
+<ul>
+<li>
+<p><code>numeric</code>: An array collecting results of scalar indicator (e.g. <code>mean(x)</code>).
+</p>
+</li>
+<li>
+<p><code>nonnumeric</code>: An array collecting results of nonnumeric scalar indicators (e.g. names(which.max(table(x))))
+</p>
+</li>
+<li>
+<p><code>array</code>: A list of arrays, collecting results of vector-indicators (e.g. x/mean(x))
+</p>
+</li>
+</ul>
+<h3>Comparing datasets by performance against validator objects</h3>
+
+<p>Suppose we have a current and a previous version of a data set. Both
+can be inspected by <code>confront</code>ing them with a rule set.
+The status changes in rule violations can be partitioned as shown in the 
+following figure.
+<img src="../help/figures/rulesplit.png" width="80%" alt="cellwise splitting">
+
+This function computes the partition for two or more
+datasets, comparing the current set to the first (default) or to the 
+previous (by setting <code>compare='sequential'</code>).
+</p>
+
+
+<h3>References</h3>
+
+<p>The figure is reproduced from MPJ van der Loo and E. De Jonge (2018)
+<em>Statistical Data Cleaning with applications in R</em> (John Wiley &amp; Sons).
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other validation-methods: 
+<code>aggregate,validation-method</code>,
+<code>all,validation-method</code>,
+<code>any,validation-method</code>,
+<code>barplot,validation-method</code>,
+<code>check_that()</code>,
+<code>confront()</code>,
+<code>event()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>plot,validation-method</code>,
+<code>sort,validation-method</code>,
+<code>summary()</code>,
+<code>validation-class</code>,
+<code>values()</code>
+</p>
+<p>Other comparing: 
+<code>as.data.frame,cellComparison-method</code>,
+<code>as.data.frame,validatorComparison-method</code>,
+<code>barplot,cellComparison-method</code>,
+<code>barplot,validatorComparison-method</code>,
+<code>cells()</code>,
+<code>match_cells()</code>,
+<code>plot,cellComparison-method</code>,
+<code>plot,validatorComparison-method</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(retailers)
+
+rules &lt;- validator(turnover &gt;=0, staff&gt;=0, other.rev&gt;=0)
+
+# start with raw data
+step0 &lt;- retailers
+
+# impute turnovers
+step1 &lt;- step0
+step1$turnover[is.na(step1$turnover)] &lt;- mean(step1$turnover,na.rm=TRUE)
+
+# flip sign of negative revenues
+step2 &lt;- step1
+step2$other.rev &lt;- abs(step2$other.rev)
+  
+# create an overview of differences, comparing to the previous step
+compare(rules, raw = step0, imputed = step1, flipped = step2, how="sequential")
+
+# create an overview of differences compared to raw data
+out &lt;- compare(rules, raw = step0, imputed = step1, flipped = step2)
+out
+
+# graphical overview
+plot(out)
+barplot(out)
+
+# transform data to data.frame (easy for use with ggplot)
+as.data.frame(out)
+
+
+</code></pre>
+
+
+</div>

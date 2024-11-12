@@ -1,0 +1,225 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>logitlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Logit Link Function </h2>
+
+<h3>Description</h3>
+
+<p>Computes the logit transformation,
+including its inverse and the
+first nine derivatives.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">logitlink(theta, bvalue = NULL, inverse = FALSE, deriv = 0,
+    short = TRUE, tag = FALSE)
+extlogitlink(theta, min = 0, max = 1, bminvalue = NULL,
+    bmaxvalue = NULL, inverse = FALSE, deriv = 0,
+    short = TRUE, tag = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue, bminvalue, bmaxvalue</code></td>
+<td>
+
+<p>See <code>Links</code>.
+These are boundary values.
+For <code>extlogitlink</code>, values of <code>theta</code> less than or
+equal to <code class="reqn">A</code> or greater than or equal to <code class="reqn">B</code> can be
+replaced by <code>bminvalue</code> and <code>bmaxvalue</code>.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>min, max</code></td>
+<td>
+
+<p>For <code>extlogitlink</code>,
+<code>min</code> gives <code class="reqn">A</code>,
+<code>max</code> gives <code class="reqn">B</code>, and for out of range values,
+<code>bminvalue</code> and <code>bmaxvalue</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inverse, deriv, short, tag</code></td>
+<td>
+
+<p>Details at <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The logit link function is very commonly used for parameters
+that lie in the unit interval.
+It is the inverse CDF of the logistic distribution.
+Numerical values of <code>theta</code> close to 0 or 1 or out of range
+result in
+<code>Inf</code>, <code>-Inf</code>, <code>NA</code> or <code>NaN</code>.
+</p>
+<p>The <em>extended</em> logit link function <code>extlogitlink</code>
+should be used more generally for parameters that lie in the
+interval <code class="reqn">(A,B)</code>, say.
+The formula is
+</p>
+<p style="text-align: center;"><code class="reqn">\log((\theta-A)/(B-\theta))</code>
+</p>
+
+<p>and the default values for <code class="reqn">A</code> and <code class="reqn">B</code> correspond to
+the ordinary logit function.
+Numerical values of <code>theta</code> close to <code class="reqn">A</code>
+or <code class="reqn">B</code> or out of range result in
+<code>Inf</code>, <code>-Inf</code>, <code>NA</code> or <code>NaN</code>.
+However these can be replaced by values <code class="reqn">bminvalue</code> and
+<code class="reqn">bmaxvalue</code> first before computing the link function.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>logitlink</code> with <code>deriv = 0</code>, the logit
+of <code>theta</code>, i.e., <code>log(theta/(1-theta))</code> when
+<code>inverse = FALSE</code>, and if <code>inverse = TRUE</code> then
+<code>exp(theta)/(1+exp(theta))</code>.
+</p>
+<p>For <code>deriv = 1</code>, then the function returns
+<em>d</em> <code>eta</code> / <em>d</em> <code>theta</code> as a function of
+<code>theta</code> if <code>inverse = FALSE</code>,
+else if <code>inverse = TRUE</code> then it returns the reciprocal.
+</p>
+<p>Here, all logarithms are natural logarithms, i.e., to base
+<em>e</em>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Numerical instability may occur when <code>theta</code> is
+close to 1 or 0 (for <code>logitlink</code>), or close to <code class="reqn">A</code>
+or <code class="reqn">B</code> for <code>extlogitlink</code>.
+One way of overcoming this is to use, e.g., <code>bvalue</code>.
+</p>
+<p>In terms of the threshold approach with cumulative probabilities
+for an ordinal response this link function corresponds to the
+univariate logistic distribution (see <code>logistic</code>).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>McCullagh, P. and Nelder, J. A. (1989).
+<em>Generalized Linear Models</em>,
+2nd ed. London: Chapman &amp; Hall.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Links</code>,
+<code>alogitlink</code>,
+<code>asinlink</code>,
+<code>logitoffsetlink</code>,
+<code>probitlink</code>,
+<code>clogloglink</code>,
+<code>cauchitlink</code>,
+<code>logistic1</code>,
+<code>loglink</code>,
+<code>Logistic</code>,
+<code>multilogitlink</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">p &lt;- seq(0.01, 0.99, by = 0.01)
+logitlink(p)
+max(abs(logitlink(logitlink(p), inverse = TRUE) - p))  # 0?
+
+p &lt;- c(seq(-0.02, 0.02, by = 0.01), seq(0.97, 1.02, by = 0.01))
+logitlink(p)  # Has NAs
+logitlink(p, bvalue = .Machine$double.eps)  # Has no NAs
+
+p &lt;- seq(0.9, 2.2, by = 0.1)
+extlogitlink(p, min = 1, max = 2,
+             bminvalue = 1 + .Machine$double.eps,
+             bmaxvalue = 2 - .Machine$double.eps)  # Has no NAs
+
+## Not run:  par(mfrow = c(2,2), lwd = (mylwd &lt;- 2))
+y &lt;- seq(-4, 4, length = 100)
+p &lt;- seq(0.01, 0.99, by = 0.01)
+for (d in 0:1) {
+  myinv &lt;- (d &gt; 0)
+  matplot(p, cbind( logitlink(p, deriv = d, inv = myinv),
+                   probitlink(p, deriv = d, inv = myinv)), las = 1,
+          type = "n", col = "purple", ylab = "transformation",
+          main = if (d ==  0) "Some probability link functions"
+          else "1 / first derivative")
+  lines(p,   logitlink(p, deriv = d, inverse = myinv), col = "limegreen")
+  lines(p,  probitlink(p, deriv = d, inverse = myinv), col = "purple")
+  lines(p, clogloglink(p, deriv = d, inverse = myinv), col = "chocolate")
+  lines(p, cauchitlink(p, deriv = d, inverse = myinv), col = "tan")
+  if (d ==  0) {
+    abline(v = 0.5, h = 0, lty = "dashed")
+    legend(0, 4.5, c("logitlink", "probitlink",
+           "clogloglink", "cauchitlink"), col = c("limegreen", "purple",
+           "chocolate", "tan"), lwd = mylwd)
+  } else
+    abline(v = 0.5, lty = "dashed")
+}
+
+for (d in 0) {
+  matplot(y, cbind(logitlink(y, deriv = d, inverse = TRUE),
+                   probitlink(y, deriv = d, inverse = TRUE)), las = 1,
+          type = "n", col = "purple", xlab = "transformation", ylab = "p",
+          main = if (d ==  0) "Some inverse probability link functions"
+          else "First derivative")
+  lines(y,   logitlink(y, deriv = d, inv = TRUE), col = "limegreen")
+  lines(y,  probitlink(y, deriv = d, inv = TRUE), col = "purple")
+  lines(y, clogloglink(y, deriv = d, inv = TRUE), col = "chocolate")
+  lines(y, cauchitlink(y, deriv = d, inv = TRUE), col = "tan")
+  if (d ==  0) {
+    abline(h = 0.5, v = 0, lty = "dashed")
+    legend(-4, 1, c("logitlink", "probitlink", "clogloglink",
+           "cauchitlink"), col = c("limegreen", "purple",
+           "chocolate", "tan"), lwd = mylwd)
+  }
+}
+
+p &lt;- seq(0.21, 0.59, by = 0.01)
+plot(p, extlogitlink(p, min = 0.2, max = 0.6), xlim = c(0, 1),
+     type = "l", col = "black", ylab = "transformation",
+     las = 1, main = "extlogitlink(p, min = 0.2, max = 0.6)")
+par(lwd = 1)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

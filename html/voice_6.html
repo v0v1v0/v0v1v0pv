@@ -1,0 +1,237 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>extract_features</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract audio features</h2>
+
+<h3>Description</h3>
+
+<p>Extracts features from WAV audio files.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">extract_features(
+  x,
+  features = c("f0", "fmt", "rf", "rpf", "rcf", "rfc", "mfcc"),
+  filesRange = NULL,
+  sex = "u",
+  windowShift = 10,
+  numFormants = 8,
+  numcep = 12,
+  dcttype = c("t2", "t1", "t3", "t4"),
+  fbtype = c("mel", "htkmel", "fcmel", "bark"),
+  resolution = 40,
+  usecmp = FALSE,
+  mc.cores = 1,
+  full.names = TRUE,
+  recursive = FALSE,
+  check.mono = FALSE,
+  stereo2mono = FALSE,
+  overwrite = FALSE,
+  freq = 44100,
+  round.to = NULL,
+  verbose = FALSE,
+  pycall = "~/miniconda3/envs/pyvoice38/bin/python3.8"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A vector containing either files or directories of audio files in WAV format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>features</code></td>
+<td>
+<p>Vector of features to be extracted. (Default: <code>'f0','fmt','rf','rcf','rpf','rfc','mfcc'</code>). The <code>'fmt_praat'</code> feature may take long time processing. The following features may contain a variable number of columns: <code>'cep'</code>, <code>'dft'</code>, <code>'css'</code> and <code>'lps'</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filesRange</code></td>
+<td>
+<p>The desired range of directory files (Default: <code>NULL</code>, i.e., all files). Should only be used when all the WAV files are in the same folder.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sex</code></td>
+<td>
+<p><code>= &lt;code&gt;</code> set sex specific parameters where &lt;code&gt; = <code>'f'</code>[emale], <code>'m'</code>[ale] or <code>'u'</code>[nknown] (Default: <code>'u'</code>). Used as 'gender' by <code>wrassp::ksvF0</code>, <code>wrassp::forest</code> and <code>wrassp::mhsF0</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>windowShift</code></td>
+<td>
+<p><code>= &lt;dur&gt;</code> set analysis window shift to &lt;dur&gt;ation in ms (Default: <code>5.0</code>). Used by <code>wrassp::ksvF0</code>, <code>wrassp::forest</code>, <code>wrassp::mhsF0</code>, <code>wrassp::zcrana</code>, <code>wrassp::rfcana</code>, <code>wrassp::acfana</code>, <code>wrassp::cepstrum</code>, <code>wrassp::dftSpectrum</code>, <code>wrassp::cssSpectrum</code> and <code>wrassp::lpsSpectrum</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numFormants</code></td>
+<td>
+<p><code>= &lt;num&gt;</code> &lt;num&gt;ber of formants (Default: <code>8</code>). Used by <code>wrassp::forest</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numcep</code></td>
+<td>
+<p>Number of Mel-frequency cepstral coefficients (cepstra) to return (Default: <code>12</code>). Used by <code>tuneR::melfcc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dcttype</code></td>
+<td>
+<p>Type of DCT used. <code>'t1'</code> or <code>'t2'</code>, <code>'t3'</code> for HTK <code>'t4'</code> for feacalc (Default: <code>'t2'</code>). Used by <code>tuneR::melfcc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fbtype</code></td>
+<td>
+<p>Auditory frequency scale to use: <code>'mel'</code>, <code>'bark'</code>, <code>'htkmel'</code>, <code>'fcmel'</code> (Default: <code>'mel'</code>). Used by <code>tuneR::melfcc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>resolution</code></td>
+<td>
+<p><code>= &lt;freq&gt;</code> set FFT length to the smallest value which results in a frequency resolution of &lt;freq&gt; Hz or better (Default: <code>40.0</code>). Used by <code>wrassp::cssSpectrum</code>, <code>wrassp::dftSpectrum</code> and <code>wrassp::lpsSpectrum</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>usecmp</code></td>
+<td>
+<p>Logical. Apply equal-loudness weighting and cube-root compression (PLP instead of LPC) (Default: <code>FALSE</code>). Used by <code>tuneR::melfcc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mc.cores</code></td>
+<td>
+<p>Number of cores to be used in parallel processing. (Default: <code>1</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>full.names</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, the directory path is prepended to the file names to give a relative file path. If <code>FALSE</code>, the file names (rather than paths) are returned. (Default: <code>TRUE</code>) Used by <code>base::list.files</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>recursive</code></td>
+<td>
+<p>Logical. Should the listing recursively into directories? (Default: <code>FALSE</code>) Used by <code>base::list.files</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.mono</code></td>
+<td>
+<p>Logical. Check if the WAV file is mono. (Default: <code>TRUE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stereo2mono</code></td>
+<td>
+<p>(Experimental) Logical. Should files be converted from stereo to mono? (Default: <code>TRUE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overwrite</code></td>
+<td>
+<p>(Experimental) Logical. Should converted files be overwritten? If not, the file gets the suffix <code>_mono</code>. (Default: <code>FALSE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>freq</code></td>
+<td>
+<p>Frequency in Hz to write the converted files when <code>stereo2mono=TRUE</code>. (Default: <code>44100</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>round.to</code></td>
+<td>
+<p>Number of decimal places to round to. (Default: <code>NULL</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical. Should the running status be showed? (Default: <code>FALSE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pycall</code></td>
+<td>
+<p>Python call. See <a href="https://github.com/filipezabala/voice">https://github.com/filipezabala/voice</a> for details.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The feature 'df' corresponds to 'formant dispersion' (df2:df8) by Fitch (1997), 'pf' to formant position' (pf1:pf8) by Puts, Apicella &amp; Cárdena (2011), 'rf' to 'formant removal' (rf1:rf8) by Zabala (2023), 'rcf' to 'formant cumulated removal' (rcf2:rcf8) by Zabala (2023) and 'rpf' to 'formant position removal' (rpf2:rpf8) by Zabala (2023).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A Media data frame containing the selected features.
+</p>
+
+
+<h3>References</h3>
+
+<p>Levinson N. (1946). The Wiener (root mean square) error criterion in filter design and prediction. Journal of Mathematics and Physics, 25(1-4), 261–278. (<a href="https://doi.org/10.1002/SAPM1946251261">doi:10.1002/SAPM1946251261</a>)
+</p>
+<p>Durbin J. (1960). “The fitting of time-series models.” Revue de l’Institut International de Statistique, pp. 233–244. (<a href="https://www.jstor.org/stable/1401322">https://www.jstor.org/stable/1401322</a>)
+</p>
+<p>Cooley J.W., Tukey J.W. (1965). “An algorithm for the machine calculation of complex Fourier series.” Mathematics of computation, 19(90), 297–301. (<a href="https://www.ams.org/journals/mcom/1965-19-090/S0025-5718-1965-0178586-1/">https://www.ams.org/journals/mcom/1965-19-090/S0025-5718-1965-0178586-1/</a>)
+</p>
+<p>Wasson D., Donaldson R. (1975). “Speech amplitude and zero crossings for automated identification of human speakers.” IEEE Transactions on Acoustics, Speech, and Signal Processing, 23(4), 390–392. (<a href="https://ieeexplore.ieee.org/document/1162690">https://ieeexplore.ieee.org/document/1162690</a>)
+</p>
+<p>Allen J. (1977). “Short term spectral analysis, synthesis, and modification by discrete Fourier transform.” IEEE Transactions on Acoustics, Speech, and Signal Processing, 25(3), 235– 238. (<a href="https://ieeexplore.ieee.org/document/1162950">https://ieeexplore.ieee.org/document/1162950</a>)
+</p>
+<p>Schäfer-Vincent K. (1982). "Significant points: Pitch period detection as a problem of segmentation." Phonetica, 39(4-5), 241–253. (<a href="https://doi.org/10.1159/000261665">doi:10.1159/000261665</a> )
+</p>
+<p>Schäfer-Vincent K. (1983). "Pitch period detection and chaining: Method and evaluation." Phonetica, 40(3), 177–202. (<a href="https://doi.org/10.1159/000261691">doi:10.1159/000261691</a>)
+</p>
+<p>Ephraim Y., Malah D. (1984). “Speech enhancement using a minimum-mean square error short-time spectral amplitude estimator.” IEEE Transactions on acoustics, speech, and signal processing, 32(6), 1109–1121. (<a href="https://ieeexplore.ieee.org/document/1164453">https://ieeexplore.ieee.org/document/1164453</a>)
+</p>
+<p>Delsarte P., Genin Y. (1986). “The split Levinson algorithm.” IEEE transactions on acoustics, speech, and signal processing, 34(3), 470–478. (<a href="https://ieeexplore.ieee.org/document/1164830">https://ieeexplore.ieee.org/document/1164830</a>)
+</p>
+<p>Jackson J.C. (1995). "The Harmonic Sieve: A Novel Application of Fourier Analysis to Machine Learning Theory and Practice." Technical report, Carnegie-Mellon University Pittsburgh PA Schoo; of Computer Science. (<a href="https://apps.dtic.mil/sti/pdfs/ADA303368.pdf">https://apps.dtic.mil/sti/pdfs/ADA303368.pdf</a>)
+</p>
+<p>Fitch, W.T. (1997) "Vocal tract length and formant frequency dispersion correlate with body size in rhesus macaques." J. Acoust. Soc. Am. 102, 1213 – 1222. (<a href="https://doi.org/10.1121/1.421048">doi:10.1121/1.421048</a>)
+</p>
+<p>Boersma P., van Heuven V. (2001). Praat, a system for doing phonetics by computer. Glot. Int., 5(9/10), 341–347. (<a href="https://www.fon.hum.uva.nl/paul/papers/speakUnspeakPraat_glot2001.pdf">https://www.fon.hum.uva.nl/paul/papers/speakUnspeakPraat_glot2001.pdf</a>)
+</p>
+<p>Ellis DPW (2005). “PLP and RASTA (and MFCC, and inversion) in Matlab.” Online web resource. (<a href="https://www.ee.columbia.edu/~dpwe/resources/matlab/rastamat/">https://www.ee.columbia.edu/~dpwe/resources/matlab/rastamat/</a>)
+</p>
+<p>Puts, D.A., Apicella, C.L., Cardenas, R.A. (2012) "Masculine voices signal men's threat potential in forager and industrial societies." Proc. R. Soc. B Biol. Sci. 279, 601–609. (<a href="https://doi.org/10.1098/rspb.2011.0829">doi:10.1098/rspb.2011.0829</a>)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(voice)
+
+# get path to audio file
+path2wav &lt;- list.files(system.file('extdata', package = 'wrassp'),
+pattern = glob2rx('*.wav'), full.names = TRUE)
+
+# minimal usage
+M1 &lt;- extract_features(path2wav)
+M2 &lt;- extract_features(dirname(path2wav))
+identical(M1,M2)
+table(basename(M1$wav_path))
+
+# limiting filesRange
+M3 &lt;- extract_features(path2wav, filesRange = 3:6)
+table(basename(M3$wav_path))
+</code></pre>
+
+
+</div>

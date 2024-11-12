@@ -1,0 +1,92 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>weather</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Ten years of daily weather data
+</h2>
+
+<h3>Description</h3>
+
+<p>The <code>VFS</code> offers the capability of importing weather data from the GHCN, either from local files or the online repository, but this import is slow, so the result of the import is saved as an R object for those examples that need it.
+</p>
+<p>The original GHCN file has many more columns. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data("weather")</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 3653 observations on the following 8 variables.
+</p>
+
+<dl>
+<dt><code>YEAR</code></dt>
+<dd>
+<p>a numeric vector</p>
+</dd>
+<dt><code>MONTH</code></dt>
+<dd>
+<p>a numeric vector</p>
+</dd>
+<dt><code>DAY</code></dt>
+<dd>
+<p>a numeric vector</p>
+</dd>
+<dt><code>PRCP.VALUE</code></dt>
+<dd>
+<p>a numeric vector</p>
+</dd>
+<dt><code>SNOW.VALUE</code></dt>
+<dd>
+<p>a numeric vector</p>
+</dd>
+<dt><code>SNWD.VALUE</code></dt>
+<dd>
+<p>a numeric vector</p>
+</dd>
+<dt><code>TMAX.VALUE</code></dt>
+<dd>
+<p>a numeric vector</p>
+</dd>
+<dt><code>TMIN.VALUE</code></dt>
+<dd>
+<p>a numeric vector</p>
+</dd>
+</dl>
+<h3>Source</h3>
+
+<p><a href="https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/global-historical-climatology-network-ghcn">GHCN</a> data comprises both current and historical weather station data world-wide.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>wth.param</code>, <code>read.dly</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# state college GHCN data
+#
+# created by:
+# weather &lt;- read.dly(system.file("extdata", "USC00368449.dly", package = "VFS"))
+data("weather") # same object: 10 years of daily weather data
+
+weather.param &lt;- wth.param(weather, method="markov")
+
+rain.compare &lt;- rainfall(365*3, weather.param)
+temp.compare &lt;- temperature(365*3, weather.param)
+
+</code></pre>
+
+
+</div>

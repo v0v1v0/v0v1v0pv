@@ -1,0 +1,56 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getIP.remlVCA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Intermediate Precision for remlVCA-fitted objects of class 'VCA'</h2>
+
+<h3>Description</h3>
+
+<p>Intermediate precision in this context here means any sum of variances
+below the full model originally fitted. A typical use case could be 
+reproducibility-experiments with a single lot or multiple lots, where
+a pooled version of within-lab precision shall be determined.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getIP.remlVCA(obj, vc)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(object) of class 'VCA' fitted by 'remlVCA'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vc</code></td>
+<td>
+<p>(character) string specifying the variance component
+up to which an intermediate precision shall be derived</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(dataEP05A2_3)
+res &lt;- remlVCA(y~day/run, dataEP05A2_3)
+IPday &lt;- getIP.remlVCA(res, "day:run")
+VCAinference(IPday)
+</code></pre>
+
+
+</div>

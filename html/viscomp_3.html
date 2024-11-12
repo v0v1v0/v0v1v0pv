@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>denscomp</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Components Density Plot</h2>
+
+<h3>Description</h3>
+
+<p>The function creates density plots in order to explore the efficacy of the components.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">denscomp(
+  model,
+  sep = "+",
+  combination,
+  violin = FALSE,
+  random = TRUE,
+  z_value = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>An object of class <code>netmeta</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sep</code></td>
+<td>
+<p>A single character that defines the separator between interventions components.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>combination</code></td>
+<td>
+<p>A character vector that contains the component combinations of interest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>violin</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> the density is visualized via violins instead of density plots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>random</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> the random-effects NMA model is used, instead of the fixed-effect NMA model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z_value</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> z-values are used, instead intervention effects.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If the length of the argument <code>combination</code> is 1, the function creates two density plots. The first is produced based on the
+interventions that include the component combination of interest (which is specified by the argument <code>combination</code>),
+while the second on the interventions that do not include the underlying component combination.
+</p>
+<p>If the argument <code>combination</code> includes more than one elements, the number of densities is equal with the length of
+the argument <code>combination</code>, and each density is based on the interventions that include the relative component combination.
+For example, if <code>combination = c("A + B", "B + C", "A")</code> the function will produce 3 density plots that are based on
+the interventions that includes components <code>"A"</code> and <code>"B"</code>, the interventions that include components <code>"B"</code> and <code>"C"</code> and
+interventions that includes component <code>"A"</code>, respectively.
+</p>
+<p>The function by default uses the intervention's relative effects (<code>z_value = FALSE</code>) obtained from the random-effects network
+meta-analysis (NMA) model (<code>random = TRUE</code>). It can be also adjusted to use the intervention's z-values
+instead of the relative effects, by setting <code>z_value = TRUE</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>ggplot</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The efficacy of the components could be explored via violins plots instead of density plots, by setting <code>violin = TRUE</code>.
+Also, in the case of dichotomous outcomes, the log-scale is used.
+</p>
+<p>The function can be applied only in network meta-analysis models that contain multi-component interventions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(nmaMACE)
+denscomp(model = nmaMACE, combination = "C")
+
+</code></pre>
+
+
+</div>

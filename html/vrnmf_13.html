@@ -1,0 +1,66 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vol_preprocess</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Preprocess the data for downstream volume analysis.</h2>
+
+<h3>Description</h3>
+
+<p><code>vol_preprocess</code> Routine normalizes the data (as requested), estimates covariance and SVD decomposition.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vol_preprocess(X, col.norm = "sd", row.norm = NULL, pfactor = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>A numeric matrix. Covariance is estimated for column vectors of <code>X</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.norm</code></td>
+<td>
+<p>A character. Specifies column normalization strategy (by default "sd"). NULL to avoid normalization.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>row.norm</code></td>
+<td>
+<p>A character. Specifies row normalization strategy (by default NULL).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pfactor</code></td>
+<td>
+<p>A numeric A factor to normalize co-occurence matrix (by default NULL).
+Row normalization follows column normalization. NULL to avoid normalization.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of objects that include normalized matrix <code>X.process</code>, row and column normalization factors <code>row.factors</code> and <code>col.factors</code>,
+covariance matrix <code>P0</code>, covariance matrix <code>P</code> normalized to maximum value <code>pfactor</code>,
+orthonormal basis <code>U</code> and vector of eigenvalues <code>eigens</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">small_example &lt;- sim_factors(5, 5, 5)
+vol &lt;- vol_preprocess(t(small_example$X))
+
+</code></pre>
+
+
+</div>

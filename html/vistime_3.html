@@ -1,0 +1,162 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hc_vistime</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a Timeline rendered by Highcharts.js</h2>
+
+<h3>Description</h3>
+
+<p>Provide a data frame with event data to create a visual and interactive timeline plot
+rendered by Highcharts. Simplest drawable dataframe can have columns 'event' and 'start'.
+This feature is facilitated by the 'highcharter' package, so, this package needs to be
+installed before attempting to produce any 'hc_vistime()' output.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hc_vistime(
+  data,
+  col.event = "event",
+  col.start = "start",
+  col.end = "end",
+  col.group = "group",
+  col.color = "color",
+  col.tooltip = "tooltip",
+  optimize_y = TRUE,
+  title = NULL,
+  show_labels = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p><code>data.frame</code> that contains the data to be visualized</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.event</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> that contains event
+names. Default: <em>event</em>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.start</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> that contains start
+dates. Default: <em>start</em>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.end</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> that contains end dates.
+Default: <em>end</em>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.group</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> to be used for
+grouping. Default: <em>group</em>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.color</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> that contains colors
+for events. Default: <em>color</em>, if not present, colors are chosen via
+<code>RColorBrewer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.tooltip</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> that contains the
+mouseover tooltips for the events. Default: <em>tooltip</em>, if not present,
+then tooltips are built from event name and date.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optimize_y</code></td>
+<td>
+<p>(optional, logical) distribute events on y-axis by smart heuristic (default),
+otherwise use order of input data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>(optional, character) the title to be shown on top of the timeline.
+Default: <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show_labels</code></td>
+<td>
+<p>(optional, boolean) choose whether or not event labels shall be
+visible. Default: <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>for deprecated arguments up to vistime 1.1.0 (like events, colors, ...)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>hc_vistime</code> returns an object of class <code>highchart</code> and <code>htmlwiget</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Functions <code>?vistime</code> and <code>?gg_vistime</code> for different charting engines (Plotly and ggplot2).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># presidents and vice presidents
+pres &lt;- data.frame(
+  Position = rep(c("President", "Vice"), each = 3),
+  Name = c("Washington", rep(c("Adams", "Jefferson"), 2), "Burr"),
+  start = c("1789-03-29", "1797-02-03", "1801-02-03"),
+  end = c("1797-02-03", "1801-02-03", "1809-02-03"),
+  color = c("#cbb69d", "#603913", "#c69c6e")
+)
+
+hc_vistime(pres, col.event = "Position", col.group = "Name", title = "Presidents of the USA")
+#'
+## Not run: 
+# ------ It is possible to change all attributes of the timeline using highcharter::hc_*():
+data &lt;- read.csv(text="event,start,end
+                       Phase 1,2020-12-15,2020-12-24
+                       Phase 2,2020-12-23,2020-12-29
+                       Phase 3,2020-12-28,2021-01-06
+                       Phase 4,2021-01-06,2021-02-02")
+
+library(highcharter)
+p &lt;- hc_vistime(data, optimize_y = T, col.group = "event",
+                title = "Highcharts customization example")
+p %&gt;% hc_title(style = list(fontSize=30)) %&gt;%
+      hc_yAxis(labels = list(style = list(fontSize=30, color="violet"))) %&gt;%
+      hc_xAxis(labels = list(style = list(fontSize=30, color="red"), rotation=30)) %&gt;%
+      hc_chart(backgroundColor = "lightgreen")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

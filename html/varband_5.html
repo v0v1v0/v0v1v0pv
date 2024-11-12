@@ -1,0 +1,103 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>varband</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute the varband estimate for a fixed tuning parameter value with different penalty options.</h2>
+
+<h3>Description</h3>
+
+<p>Solves the main optimization problem in Yu &amp; Bien (2016):
+</p>
+<p style="text-align: center;"><code class="reqn">min_L -2 \sum_{r=1}^p L_{rr} + tr(SLL^T) + lam * \sum_{r=2}^p P_r(L_{r.})</code>
+</p>
+
+<p>where </p>
+<p style="text-align: center;"><code class="reqn">P_r(L_{r.}) = \sum_{\ell = 2}^{r-1} \left(\sum_{m=1}^\ell w_{\ell m}^2 L_{rm}^2\right)^{1/2}</code>
+</p>
+
+<p>or </p>
+<p style="text-align: center;"><code class="reqn">P_r(L_{r.}) = \sum_{\ell = 1}^{r-1} |L_{r\ell}|</code>
+</p>
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">varband(S, lambda, init, w = FALSE, lasso = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>S</code></td>
+<td>
+<p>The sample covariance matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda</code></td>
+<td>
+<p>Non-negative tuning parameter. Controls sparsity level.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>init</code></td>
+<td>
+<p>Initial estimate of L. Default is a closed-form diagonal estimate of L.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w</code></td>
+<td>
+<p>Logical. Should we use weighted version of the penalty or not? If <code>TRUE</code>, we use general weight. If <code>FALSE</code>, use unweighted penalty. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lasso</code></td>
+<td>
+<p>Logical. Should we use l1 penalty instead of hierarchical group lasso penalty? Note that by using l1 penalty, we lose the banded structure in the resulting estimate. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function decomposes into p independent row problems,
+each of which is solved by an ADMM algorithm.
+see paper for more explanation.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns the variable banding estimate of L, where L^TL = Omega.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>varband_path</code> <code>varband_cv</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(123)
+n &lt;- 50
+true &lt;- varband_gen(p = 50, block = 5)
+x &lt;- sample_gen(L = true, n = n)
+S &lt;- crossprod(scale(x, center = TRUE, scale = FALSE)) / n
+init &lt;- diag(1/sqrt(diag(S)))
+# unweighted estimate
+L_unweighted &lt;- varband(S, lambda = 0.1, init, w = FALSE)
+# weighted estimate
+L_weighted &lt;- varband(S, lambda = 0.1, init, w = TRUE)
+# lasso estimate
+L_lasso &lt;- varband(S, lambda = 0.1, init, w = TRUE, lasso = TRUE)
+</code></pre>
+
+
+</div>

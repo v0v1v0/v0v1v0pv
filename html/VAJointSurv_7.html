@@ -1,0 +1,237 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>joint_ms_profile</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Approximate Likelihood Ratio based Confidence Intervals</h2>
+
+<h3>Description</h3>
+
+<p>Approximate Likelihood Ratio based Confidence Intervals
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">joint_ms_profile(
+  object,
+  opt_out,
+  which_prof,
+  delta,
+  level = 0.95,
+  max_step = 15L,
+  rel_eps = 1e-08,
+  max_it = 1000L,
+  n_threads = object$max_threads,
+  c1 = 1e-04,
+  c2 = 0.9,
+  use_bfgs = TRUE,
+  trace = 0L,
+  cg_tol = 0.5,
+  strong_wolfe = TRUE,
+  max_cg = 0L,
+  pre_method = 3L,
+  quad_rule = object$quad_rule,
+  verbose = TRUE,
+  mask = integer(),
+  cache_expansions = object$cache_expansions,
+  gr_tol = -1,
+  hess = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a joint_ms object from <code>joint_ms_ptr</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>opt_out</code></td>
+<td>
+<p>maximum lower bound estimator from <code>joint_ms_opt</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>which_prof</code></td>
+<td>
+<p>index of the parameter to profile.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>numeric scalar greater than zero for the initial step size.
+Steps are made of size <code>2^(iteration - 1) * delta</code>. A guess of the
+standard deviation is a good value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>confidence level.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_step</code></td>
+<td>
+<p>maximum number of steps to take in each direction when
+constructing the approximate profile likelihood curve.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rel_eps, max_it, c1, c2, use_bfgs, trace, cg_tol, strong_wolfe, max_cg, pre_method, mask, gr_tol</code></td>
+<td>
+<p>arguments to pass to the C++ version of <code>psqn</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_threads</code></td>
+<td>
+<p>number of threads to use. This is not supported on Windows.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quad_rule</code></td>
+<td>
+<p>list with nodes and weights for a quadrature rule for the
+integral from zero to one.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>logical for whether to print output during the construction
+of the approximate profile likelihood curve.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cache_expansions</code></td>
+<td>
+<p><code>TRUE</code> if the expansions in the numerical
+integration in the survival parts of the lower bound should be cached (not
+recomputed). This requires more memory and may be an advantage
+particularly with
+expansions that take longer to compute (like <code>ns_term</code> and
+<code>bs_term</code>). The computation time may be worse particularly if
+you use more threads as the CPU cache is not well utilized.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hess</code></td>
+<td>
+<p>the Hessian from <code>joint_ms_hess</code>. It is used to get
+better starting values along the profile likelihood curve. Use <code>NULL</code>
+if it is not passed.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with the following elements:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>confs</code></td>
+<td>
+<p>profile likelihood based confidence interval.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xs</code></td>
+<td>
+<p>the value of the parameter at which the profile likelihood is evaluated at.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p_log_Lik</code></td>
+<td>
+<p>numeric scalar with the profile log-likelihood.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>list of lists of the output of each point where the profile
+likelihood is evaluated with the optimal parameter values of the
+other parameters given the
+constrained value of the parameter that is being profiled and
+the optimal value of the lower bound.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R"> # load in the data
+library(survival)
+data(pbc, package = "survival")
+
+# re-scale by year
+pbcseq &lt;- transform(pbcseq, day_use = day / 365.25)
+pbc &lt;- transform(pbc, time_use = time / 365.25)
+
+# create the marker terms
+m1 &lt;- marker_term(
+  log(bili) ~ 1, id = id, data = pbcseq,
+  time_fixef = bs_term(day_use, df = 5L),
+  time_rng = poly_term(day_use, degree = 1L, raw = TRUE, intercept = TRUE))
+m2 &lt;- marker_term(
+  albumin ~ 1, id = id, data = pbcseq,
+  time_fixef = bs_term(day_use, df = 5L),
+  time_rng = poly_term(day_use, degree = 1L, raw = TRUE, intercept = TRUE))
+
+# base knots on observed event times
+bs_term_knots &lt;-
+  with(pbc, quantile(time_use[status == 2], probs = seq(0, 1, by = .2)))
+
+boundary &lt;- c(bs_term_knots[ c(1, length(bs_term_knots))])
+interior &lt;- c(bs_term_knots[-c(1, length(bs_term_knots))])
+
+# create the survival term
+s_term &lt;- surv_term(
+  Surv(time_use, status == 2) ~ 1, id = id, data = pbc,
+  time_fixef = bs_term(time_use, Boundary.knots = boundary, knots = interior))
+
+# create the C++ object to do the fitting
+model_ptr &lt;- joint_ms_ptr(
+  markers = list(m1, m2), survival_terms = s_term,
+  max_threads = 2L, ders = list(0L, c(0L, -1L)))
+
+
+# find the starting values
+start_vals &lt;- joint_ms_start_val(model_ptr)
+
+# optimize lower bound
+fit &lt;- joint_ms_opt(object = model_ptr, par = start_vals, gr_tol = .01)
+
+# compute the Hessian
+hess &lt;- joint_ms_hess(object = model_ptr,par = fit$par)
+
+# compute the standard errors
+library(Matrix)
+se &lt;- sqrt(diag(solve(hess$hessian)))
+
+# find index for the first association parameter
+which_prof &lt;- model_ptr$indices$survival[[1]]$associations[1]
+
+# initial step size for finding the confidence interval limits
+delta &lt;- 2*se[which_prof]
+
+# compute profile likelihood based confidence interval
+# for the first association parameter
+profile_CI &lt;- joint_ms_profile(
+  object = model_ptr, opt_out = fit, which_prof = which_prof,
+  delta= delta, gr_tol = .01)
+
+# comparison of CIs
+profile_CI$confs
+fit$par[which_prof]+c(-1,1)*qnorm(0.975)*se[which_prof] 
+</code></pre>
+
+
+</div>

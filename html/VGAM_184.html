@@ -1,0 +1,207 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>clogloglink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Complementary Log-log Link Function </h2>
+
+<h3>Description</h3>
+
+<p>Computes the complementary log-log
+transformation,
+including its inverse and the
+first two derivatives.
+The complementary log transformation is also
+computed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">clogloglink(theta, bvalue = NULL, inverse = FALSE, deriv = 0,
+            short = TRUE, tag = FALSE)
+   cloglink(theta, bvalue = NULL, inverse = FALSE, deriv = 0,
+            short = TRUE, tag = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue</code></td>
+<td>
+
+<p>See <code>Links</code> for general
+information about links.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inverse, deriv, short, tag</code></td>
+<td>
+
+<p>Details at <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The complementary log-log link function is
+commonly used for parameters
+that lie in the unit interval.
+But unlike 
+<code>logitlink</code>,
+<code>probitlink</code> and
+<code>cauchitlink</code>, this link is not
+symmetric.
+It is the inverse CDF of the extreme value
+(or Gumbel or log-Weibull) distribution.
+Numerical values of <code>theta</code>
+close to 0 or 1 or out of range result
+in <code>Inf</code>, <code>-Inf</code>, <code>NA</code> or
+<code>NaN</code>.
+</p>
+
+<p>The complementary log link function is
+the same as the complementary log-log
+but the outer log is omitted.
+This link is suitable for <code>lrho</code> in
+<code>betabinomial</code> because it
+handles probability-like parameters but
+also allows slight negative values in theory.
+In particular, <code>cloglink</code>
+safeguards against parameters exceeding unity.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the complimentary log-log
+of <code>theta</code>,
+i.e., <code>log(-log(1 - theta))</code> when
+<code>inverse = FALSE</code>, and if
+<code>inverse = TRUE</code> then
+<code>1-exp(-exp(theta))</code>.
+</p>
+<p>For <code>deriv = 1</code>, then the function returns
+<em>d</em> <code>eta</code> / <em>d</em> <code>theta</code>
+as a function of <code>theta</code>
+if <code>inverse = FALSE</code>,
+else if <code>inverse = TRUE</code> then it
+returns the reciprocal.
+</p>
+<p>Here, all logarithms are natural logarithms,
+i.e., to base <code class="reqn">e</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Numerical instability may occur when
+<code>theta</code> is close to 1 or 0.
+One way of overcoming this is to use
+<code>bvalue</code>.
+</p>
+<p>Changing 1s to 0s and 0s to 1s in the
+response means that effectively
+a loglog link is fitted. That is,
+tranform <code class="reqn">y</code> by <code class="reqn">1-y</code>.
+That's why only one of <code>clogloglink</code>
+and <code>logloglink</code> is written.
+</p>
+<p>With constrained ordination
+(e.g., <code>cqo</code> and
+<code>cao</code>) used with
+<code>binomialff</code>, a complementary
+log-log link function is preferred over the
+default <code>logitlink</code>,
+for a good reason.  See the example below.
+</p>
+<p>In terms of the threshold approach with
+cumulative probabilities for
+an ordinal response this link function
+corresponds to the extreme
+value distribution.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>McCullagh, P. and Nelder, J. A. (1989).
+<em>Generalized Linear Models</em>, 2nd ed.
+London: Chapman &amp; Hall.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Links</code>,
+<code>logitoffsetlink</code>,
+<code>logitlink</code>,
+<code>probitlink</code>,
+<code>cauchitlink</code>,
+<code>pgumbel</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">p &lt;- seq(0.01, 0.99, by = 0.01)
+clogloglink(p)
+max(abs(clogloglink(clogloglink(p), inverse = TRUE) - p))  # Should be 0
+
+p &lt;- c(seq(-0.02, 0.02, by = 0.01), seq(0.97, 1.02, by = 0.01))
+clogloglink(p)  # Has NAs
+clogloglink(p, bvalue = .Machine$double.eps)  # Has no NAs
+
+## Not run: 
+p &lt;- seq(0.01, 0.99, by = 0.01)
+plot(p, logitlink(p), type = "l", col = "limegreen", lwd = 2, las = 1,
+     main = "Some probability link functions", ylab = "transformation")
+lines(p, probitlink(p), col = "purple", lwd = 2)
+lines(p, clogloglink(p), col = "chocolate", lwd = 2)
+lines(p, cauchitlink(p), col = "tan", lwd = 2)
+abline(v = 0.5, h = 0, lty = "dashed")
+legend(0.1, 4, c("logitlink", "probitlink", "clogloglink", "cauchitlink"),
+       col = c("limegreen", "purple", "chocolate", "tan"), lwd = 2)
+
+## End(Not run)
+
+## Not run: 
+# This example shows that clogloglink is preferred over logitlink
+n &lt;- 500; p &lt;- 5; S &lt;- 3; Rank &lt;- 1  # Species packing model:
+mydata &lt;- rcqo(n, p, S, eq.tol = TRUE, es.opt = TRUE, eq.max = TRUE,
+               family = "binomial", hi.abundance = 5, seed = 123,
+               Rank = Rank)
+fitc &lt;- cqo(attr(mydata, "formula"), I.tol = TRUE, data = mydata,
+            fam = binomialff(multiple.responses = TRUE, link = "cloglog"),
+            Rank = Rank)
+fitl &lt;- cqo(attr(mydata, "formula"), I.tol = TRUE, data = mydata,
+            fam = binomialff(multiple.responses = TRUE, link = "logitlink"),
+            Rank = Rank)
+
+# Compare the fitted models (cols 1 and 3) with the truth (col 2)
+cbind(concoef(fitc), attr(mydata, "concoefficients"), concoef(fitl))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

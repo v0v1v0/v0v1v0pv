@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>smoothRaster</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Smooth rasters</h2>
+
+<h3>Description</h3>
+
+<p>Uses thin plate spline regression from
+<code>fields</code> package to smooth raster values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">smoothRaster(inputRaster, fast = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>inputRaster</code></td>
+<td>
+<p>An object of class <code>SpatRaster</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fast</code></td>
+<td>
+<p>A logical operator. Setting to <code>TRUE</code> triggers use
+of <code>fastTps</code> instead of <code>Tps</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>For any additional arguments passed to <code>Tps</code> or <code>fastTps</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Original raster is smoothed using a thin
+plate spline. This may be desirable in cases where
+the user has a reasonable expectation of spatial autocorrelation,
+but observes putative measurement errors in a raster. The user has
+the option of choosing <code>fastTps</code> to speed calculation,
+but be advised that this is only an approximation
+of a true thin plate spline.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>SpatRaster</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Tps</code>, <code>fastTps</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(terra)
+library(fields)
+# Create sample raster
+r &lt;- rast(ncol=100, nrow=100)
+values(r) &lt;- 1:10000
+
+# Introduce a "bubble"
+values(r)[720:725] &lt;- 9999
+plot(r)
+
+# Smooth bubble with smoothRaster
+fastSmooth &lt;- smoothRaster(r, fast = TRUE, aRange = 10.0)
+plot(fastSmooth)
+
+</code></pre>
+
+
+</div>

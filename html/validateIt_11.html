@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getResults</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get results from Mturk</h2>
+
+<h3>Description</h3>
+
+<p>Get results from Mturk
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getResults(
+  batch_id = "unspecified",
+  hit_ids,
+  retry = TRUE,
+  retry_in_seconds = 60,
+  AWS_id = Sys.getenv("AWS_ACCESS_KEY_ID"),
+  AWS_secret = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
+  sandbox = getOption("pyMTurkR.sandbox", TRUE)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>batch_id</code></td>
+<td>
+<p>any number or string to annotate the batch</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hit_ids</code></td>
+<td>
+<p>hit ids returned from the MTurk API, i.e., output of sendTasks()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>retry</code></td>
+<td>
+<p>if TRUE, retry retriving results from Mturk API five times; default to TRUE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>retry_in_seconds</code></td>
+<td>
+<p>default to 60 seconds</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>AWS_id</code></td>
+<td>
+<p>AWS_ACCESS_KEY_ID</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>AWS_secret</code></td>
+<td>
+<p>AWS_SECRET_ACCESS_KEY</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sandbox</code></td>
+<td>
+<p>sanbox setting</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>this function works for complete or incomplete batches
+</p>
+
+
+<h3>Value</h3>
+
+<p>a data frame with columns:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>batch_id</code></td>
+<td>
+<p>an annotation for the batch</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>local_task_id</code></td>
+<td>
+<p>an identifier for the task in the batch</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mturk_hit_id</code></td>
+<td>
+<p>the ID of the HIT in MTurk</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>assignment_id</code></td>
+<td>
+<p>the ID of the assignment in MTurk</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>worker_id</code></td>
+<td>
+<p>the ID of the worker who completed the assignment</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>result</code></td>
+<td>
+<p>the worker's response to the task</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>completed_at</code></td>
+<td>
+<p>the time when the worker submitted the assignment</p>
+</td>
+</tr>
+</table>
+</div>

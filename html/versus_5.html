@@ -1,0 +1,61 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>slice_diffs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get rows with differing values</h2>
+
+<h3>Description</h3>
+
+<p>Get rows with differing values
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">slice_diffs(comparison, table, column = everything())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>comparison</code></td>
+<td>
+<p>The output of <code>compare()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>table</code></td>
+<td>
+<p>One of <code>"a"</code> or <code>"b"</code> indicating which of the tables used to
+create <code>comparison</code> should be sliced</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>column</code></td>
+<td>
+<p>&lt;<code>tidy-select</code>&gt;. A row will be in the output if
+the comparison shows differing values for any columns matching this argument</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The input table is filtered to the rows for which <code>comparison</code>
+shows differing values for one of the columns selected by <code>column</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">comp &lt;- compare(example_df_a, example_df_b, by = car)
+comp |&gt; slice_diffs("a", mpg)
+comp |&gt; slice_diffs("b", mpg)
+comp |&gt; slice_diffs("a", c(mpg, disp))
+</code></pre>
+
+
+</div>

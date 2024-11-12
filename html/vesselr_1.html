@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>blobness3D</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>3D Volume Blobness</h2>
+
+<h3>Description</h3>
+
+<p>This function returns a blobness map for a 3D array or NIfTI volume. This blobness measure is based on the volume ratio described by Pierpaoli and Basser (1996).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">blobness3D(image, mask, radius = 5, color = "dark", parallel = FALSE,
+  cores = 2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>image</code></td>
+<td>
+<p>a 3D array or image of class <code>nifti</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mask</code></td>
+<td>
+<p>an array or <code>nifti</code> mask of voxels for which vesselness will be calculated,
+with more selective masking improving speed significantly.
+Note that mask should be in the same space as the image volume</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>radius</code></td>
+<td>
+<p>an integer specifying radius of the neighborhood (in voxels) for which the blobness should be calculated.
+Note that this value essentially serves as the scale of the blob objects</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color</code></td>
+<td>
+<p>a string specifying whether blobs will appear darker ("dark") or brighter ("bright") than their surroundings</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+<p>is a logical value that indicates whether the user's computer
+is Linux or Unix (i.e. macOS), and should run the code in parallel</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cores</code></td>
+<td>
+<p>if parallel = TRUE, cores is an integer value that indicates how many cores
+the function should be run on</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A 3D volume of the volume ratio blobness scores.
+</p>
+
+
+<h3>References</h3>
+
+<p>C. Pierpaoli, P.J. Basser (1996). Toward a Quantitative Assessment of Diffusion Anisotropy. Magnetic Resonance in Medicine. 36, pp. 893-906.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(neurobase)
+flair &lt;- readnii('path/to/epi')
+mask &lt;- flair!=0
+brightspots &lt;- blobness3D(image = flair, mask = mask, radius = 5,
+                      color = "bright", parallel = TRUE, cores = 4) 
+## End(Not run)
+</code></pre>
+
+
+</div>

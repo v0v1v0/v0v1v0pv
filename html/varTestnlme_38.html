@@ -1,0 +1,70 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>weightsChiBarSquare</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Monte Carlo approximation of chi-bar-square weights</h2>
+
+<h3>Description</h3>
+
+<p>The function provides a method to approximate the weights of the mixture components, 
+when the number of components is known as well as the degrees of freedom of each chi-square distribution 
+in the mixture, and given a vector of simulated values from the target <code class="reqn">\bar{\chi}^2(V,C)</code> 
+distribution. Note that the estimation is based on (pseudo)-random Monte Carlo samples. For reproducible
+results, one should fix the seed of the (pseudo)-random number generator.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">weightsChiBarSquare(df, V, dimsCone, orthan, control)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>a vector with the degrees of freedom of the chi-square components of the chi-bar-square distribution</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>V</code></td>
+<td>
+<p>a positive semi-definite matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dimsCone</code></td>
+<td>
+<p>a list with the dimensions of the cone C, expressed on the parameter space scale</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>orthan</code></td>
+<td>
+<p>a boolean specifying whether the cone is an orthan</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>(optional) a list of control options for the computation of the chi-bar-weights, containing 
+two elements: <code>parallel</code> a boolean indicating whether computation should be done in parallel (FALSE 
+by default), <code>nb_cores</code> the number of cores for parallel computing (if <code>parallel=TRUE</code> but no value is given
+for <code>nb_cores</code>, it is set to number of detected cores minus 1), and <code>M</code> the Monte Carlo sample
+size for the computation of the weights.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing the estimated weights, the standard deviations of the estimated weights and the
+random sample of <code>M</code> realizations from the chi-bar-square distribution
+</p>
+
+
+</div>

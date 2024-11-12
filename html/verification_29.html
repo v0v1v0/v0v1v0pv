@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>measurement.error</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Skill score with measurement error.</h2>
+
+<h3>Description</h3>
+
+<p>Skill score that incorporates measurement error.
+This function allows the user to incorporate measurement error
+in an observation in a skill score.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">measurement.error( obs, frcs = NULL, theta = 0.5, CI =
+          FALSE, t = 1, u = 0, h = NULL, ...)
+       </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>Information about a forecast and observation can be
+done in one of two ways.  First,  the results of a
+contingency table can be entered as a vector containing
+c(n11, n10, n01, n00), where n11 are the number of correctly
+predicted events and n01 is the number of incorrectly
+predicted non-events.  Actual forecasts and observations can
+be used.  In this case, obs is a vector of binary outcomes
+[0,1].</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>frcs</code></td>
+<td>
+<p>If obs is entered as a contingency table, this
+argument is null.  If obs is a vector of outcomes, this
+column is a vector of probabilistic forecasts.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+<p>Loss value (cost) of making a incorrect forecast
+by a non-event. Defaults to 0.5.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CI</code></td>
+<td>
+<p>Calculate confidence intervals for skill score.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t</code></td>
+<td>
+<p>Probability of forecasting an event, when an event
+occurs.  A perfect value is 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>u</code></td>
+<td>
+<p>Probability of forecasting that no event will occur,
+when and event occurs.  A perfect value is 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>h</code></td>
+<td>
+<p>Threshold for converting a probabilistic forecast into
+a binary forecast.  By default, this value is NULL and the
+theta is used as this threshold.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Optional arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>z</code></td>
+<td>
+<p>Error code</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>Skill score</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>G</code></td>
+<td>
+<p>Likelihood ratio statistic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>p-value for the null hypothesis that the forecast
+contains skill.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+<p>Loss value.  Loss associated with an incorrect
+forecast of a non-event.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ciLO</code></td>
+<td>
+<p>Lower confidence interval</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ciHI</code></td>
+<td>
+<p>Upper confidence interval</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich (R - code)
+</p>
+<p>W.M Briggs &lt;wib2004(at)med.cornell.edu&gt; (Method questions) </p>
+
+
+<h3>References</h3>
+
+<p>W.M. Briggs, 2004.  <em>Incorporating Cost in the  Skill Score</em>
+Technical Report, wm-briggs.com/public/skillocst.pdf. 
+</p>
+<p>W.M. Briggs and D. Ruppert, 2004. <em> Assessing the skill
+of yes/no forecasts. Submitting to Biometrics</em>.
+</p>
+<p>J.P. Finley, 1884. Tornado forecasts. <em> Amer. Meteor. J.</em>
+85-88. (Tornado data used in example.)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">DAT&lt;- data.frame( obs = round(runif(50)), frcs = runif(50))
+
+A&lt;-   measurement.error(DAT$obs, DAT$frcs, CI = TRUE)
+A
+### Finley Data
+
+measurement.error(c(28, 23, 72, 2680)) ## assuming perfect observation,
+                                       
+     </code></pre>
+
+
+</div>

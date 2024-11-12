@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gradient3D</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>3D Volume Gradient</h2>
+
+<h3>Description</h3>
+
+<p>This function returns the gradient images for a 3D array or NIfTI volume.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">gradient3D(image, mask = NULL, which = "all", radius = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>image</code></td>
+<td>
+<p>a 3D array or image of class <code>nifti</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mask</code></td>
+<td>
+<p>an array or <code>nifti</code> mask of voxels for which the gradient will be calculated,
+if <code>NULL</code> the gradient will be run for the full array.
+Note that mask should be in the same space as the image volume</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>which</code></td>
+<td>
+<p>a string specifying the gradient direction that should be returned; either "all" for a list of x, y, and z gradient volumes, or "x", "y", or "z" for a single volume with the given gradient</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>radius</code></td>
+<td>
+<p>an integer specifying radius of the neighborhood (in voxels) for which the gradient should be calculated</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Either a list of three gradient volumes or a single gradient volume, in either array or NIfTI format based on what was input.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(neurobase)
+epi &lt;- readnii('path/to/epi')
+gradients &lt;- gradient3D(image = epi, which = "all") 
+## End(Not run)
+</code></pre>
+
+
+</div>

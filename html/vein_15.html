@@ -1,0 +1,182 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>colplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function to plot columns of data.frames</h2>
+
+<h3>Description</h3>
+
+<p><code>colplot</code> plots columns of data.frame
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">colplot(
+  df,
+  cols = names(df),
+  xlab = "",
+  ylab = "",
+  xlim = c(1, nrow(df)),
+  ylim = range(unlist(df[[cols]]), na.rm = TRUE),
+  main = NULL,
+  theme = "black",
+  col = cptcity::cpt(pal = cptcity::find_cpt("pastel")[4], n = length(names(df))),
+  type = "b",
+  lwd = 2,
+  pch = 1:ncol(df),
+  familyfont = "",
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>data.frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>Character, columns of data.frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>a label for the x axis, defaults to a description of x.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>a label for the x axis, defaults to a description of x.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim</code></td>
+<td>
+<p>x limits</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylim</code></td>
+<td>
+<p>y limits</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>Character, a main title for the plot, see also <code>title</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theme</code></td>
+<td>
+<p>Character; "black", "dark", "clean", "ink"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>The colors for lines and points. Multiple colors can
+be specified so that each point can be given its own color. If
+there are fewer colors than points they are recycled in the
+standard fashion. Default are cptcity colour palette "kst_18_pastels"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>1-character string giving the type of plot desired.
+The following values are possible, for details, see plot: "p" for
+points, "l" for lines, "b" for both points and lines, "c"
+for empty points joined by lines, "o" for overplotted points and
+lines, "s" and "S" for stair steps and "h" for histogram-like vertical
+lines. Finally, "n" does not produce any points or lines.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwd</code></td>
+<td>
+<p>a vector of line widths, see <code>par</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pch</code></td>
+<td>
+<p>plotting ‘character’, i.e., symbol to use. This can either be a
+single character or an integer code for one of a set of graphics symbols.
+The full set of S symbols is available with pch = 0:18, see the
+examples below. (NB: R uses circles instead of the octagons used in S.).
+Value pch = "." (equivalently pch = 46) is handled specially.
+It is a rectangle of side 0.01 inch (scaled by cex). In addition,
+if cex = 1 (the default), each side is at least one pixel
+(1/72 inch on the pdf, postscript and xfig devices).
+For other text symbols, cex = 1 corresponds to the default fontsize
+of the device, often specified by an argument pointsize.
+For pch in 0:25 the default size is about 75
+the character height (see par("cin")).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>familyfont</code></td>
+<td>
+<p>"Character" to specify font, default is"", options "serif",
+"sans", "mono" or more according device</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>plot arguments</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a nice plot
+</p>
+
+
+<h3>Note</h3>
+
+<p>This plot shows values &gt; 0 by default. To plot all values, use all_values = TRUE
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>par</code>
+</p>
+<p>Other helpers: 
+<code>dmonth()</code>,
+<code>to_latex()</code>,
+<code>wide_to_long()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+a &lt;- ef_cetesb("CO", c("PC_G", "PC_FE", "PC_FG", "PC_E"), agemax = 20)
+colplot(df = a, ylab = "CO [g/km]", theme = "dark", type = "b")
+colplot(df = a, ylab = "CO [g/km]", theme = "dark", pch = NULL, type = "b")
+colplot(df = a, ylab = "CO [g/km]", theme = "clean", type = "b")
+colplot(df = a, ylab = "CO [g/km]", theme = "clean", pch = NULL, type = "b")
+#colplot(df = a, cols = "PC_FG", main = "EF", ylab = "CO [g/km]")
+#colplot(df = a, ylab = "CO [g/km]", theme = "clean")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

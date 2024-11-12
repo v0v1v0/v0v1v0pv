@@ -1,0 +1,168 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>seq_loglm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Sequential Loglinear Models for an N-way Table</h2>
+
+<h3>Description</h3>
+
+<p>This function takes an n-way contingency table and fits a series of sequential
+models to the 1-, 2-, ... n-way marginal tables, corresponding to a variety of
+types of loglinear models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">seq_loglm(x, 
+   type = c("joint", "conditional", "mutual", "markov", "saturated"), 
+   marginals = 1:nf, 
+   vorder = 1:nf, 
+   k = NULL, 
+   prefix = "model", 
+   fitted = TRUE,
+   ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a contingency table in array form, with optional category labels specified in the dimnames(x) attribute, or else a data.frame in frequency form, with the frequency variable named <code>"Freq"</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>type of sequential model to fit, a character string.
+One of <code>"joint"</code>, <code>"conditional"</code>, <code>"mutual"</code>, <code>"markov"</code>,
+or  <code>"saturated"</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>marginals</code></td>
+<td>
+<p>which marginal sub-tables to fit? A vector of a (sub)set of the integers, <code>1:nf</code>
+where <code>nf</code> is the number of factors in the full n-way table.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vorder</code></td>
+<td>
+<p>order of variables, a permutation of the integers <code>1:nf</code>,
+used to reorder the variables in the original table for the purpose
+of fitting sequential marginal models. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>conditioning variable(s) for <code>type</code> = <code>"joint"</code>, <code>"conditional"</code> 
+or Markov chain order for <code>type</code> = <code>"markov"</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prefix</code></td>
+<td>
+<p>prefix used to give names to the sequential models</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fitted</code></td>
+<td>
+<p>argument passed to <code>loglm</code> to store the fitted values in the model objects</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments, passed down</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Sequential marginal models for an n-way tables begin with the
+model of equal-probability for the one-way margin
+(equivalent to a <code>chisq.test</code>) and add
+successive variables one at a time in the order specified by
+<code>vorder</code>.
+</p>
+<p>All model types give the same result for the two-way margin,
+namely the test of independence for the first two factors.
+</p>
+<p>Sequential models of <em>joint independence</em> (<code>type="joint"</code>)
+have a particularly simple interpretation, because they
+decompose the likelihood ratio test for the model of 
+mutual independence in the full n-way table, and hence
+account for "total" association in terms of portions attributable
+to the conditional probabilities of each new variable,
+given all prior variables.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"loglmlist"</code>, each of which is a class <code>"loglm"</code> object
+
+
+
+
+</p>
+
+
+<h3>Note</h3>
+
+<p>One-way marginal tables are a bit of a problem here, because they
+cannot be fit directly using <code>loglm</code>.
+The present version uses <code>loglin</code>,
+and repairs the result to look like a <code>loglm</code> object (sort of).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Friendly
+</p>
+
+
+<h3>References</h3>
+
+<p>These functions were inspired by the original SAS implementation of
+mosaic displays, described in the <em>User's Guide</em>,
+<a href="http://www.datavis.ca/mosaics/mosaics.pdf">http://www.datavis.ca/mosaics/mosaics.pdf</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>loglin-utilities</code> for descriptions of sequential models,
+<code>conditional</code>,
+<code>joint</code>,
+<code>mutual</code>, ...
+</p>
+<p><code>loglmlist</code>, 
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Titanic, package="datasets")
+# variables are in the order Class, Sex, Age, Survived
+tt &lt;- seq_loglm(Titanic)
+
+
+</code></pre>
+
+
+</div>

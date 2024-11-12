@@ -1,0 +1,117 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>line_chart</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>line_chart</h2>
+
+<h3>Description</h3>
+
+<p>R wrapper for <a href="https://github.com/visa/visa-chart-components/tree/master/packages/line-chart">@visa/line-chart</a> via <a href="https://www.htmlwidgets.org/">htmlwidgets</a>.
+</p>
+<p>Here is an example of line-chart in action:
+</p>
+<p><img src="../help/figures/line-chart-1.png" width="400" alt="example line chart"></p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">line_chart(
+  data,
+  ordinalAccessor,
+  valueAccessor,
+  seriesAccessor,
+  mainTitle = "",
+  subTitle = "",
+  accessibility = list(),
+  props = list(),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>required to be a valid, R data frame. Data used to create chart, an array of objects which includes keys that map to chart accessors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ordinalAccessor</code></td>
+<td>
+<p>String. Key used to determine line's categorical property. (similar to x in ggplot)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>valueAccessor</code></td>
+<td>
+<p>String. Key used to determine line's numeric property. (similar to y in ggplot)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seriesAccessor</code></td>
+<td>
+<p>String. Key used to determine series (e.g., color/texture).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mainTitle</code></td>
+<td>
+<p>String. The dynamic tag of title for the map (or you can create your own separately). See <code>highestHeadingLevel</code> prop for how tags get assigned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subTitle</code></td>
+<td>
+<p>String. The dynamic tag for a sub title for the map (or you can create your own separately). See <code>highestHeadingLevel</code> prop for how tags get assigned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>accessibility</code></td>
+<td>
+<p>List(). Manages messages and settings for chart accessibility, see <a href="https://github.com/visa/visa-chart-components/tree/master/packages/line-chart#accessibility-props">object definition</a></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>props</code></td>
+<td>
+<p>List(). A valid R list with additional property configurations, see all props for <a href="https://github.com/visa/visa-chart-components/tree/master/packages/line-chart">@visa/line-chart</a></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>All other props passed into the function will be passed through to the chart, see all props for <a href="https://github.com/visa/visa-chart-components/tree/master/packages/line-chart">@visa/line-chart</a>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>To see all available options for the chart properties/API see <a href="https://github.com/visa/visa-chart-components/tree/master/packages/line-chart">@visa/line-chart</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a visaChart htmlwidget object for plotting a line chart
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(dplyr)
+ChickWeight %&gt;%
+  filter(Chick==1 | Chick == 4) %&gt;%
+  line_chart("Time", "weight", "Chick",
+             showBaselineX=FALSE,
+             xAxis=list(label="Time",format="0a", visible=TRUE),
+             yAxis=list(label="Weight", visible=TRUE, gridVisible=TRUE),
+             mainTitle = "Selected chick weight over time")
+</code></pre>
+
+
+</div>

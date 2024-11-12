@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>stepwiseVCA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Bottom-Up Step-Wise VCA-Analysis of the Complete Dataset</h2>
+
+<h3>Description</h3>
+
+<p>Function performs step-wise VCA-analysis on a fitted VCA-object by leaving out N-1 to 0
+top-level variance components (VC).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">stepwiseVCA(obj, VarVC.method = c("scm", "gb"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(VCA) object representing the complete analysis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VarVC.method</code></td>
+<td>
+<p>(character) string specifying the algorithm to be used for estimating variance-covariance matrix
+of VCs (see <code>anovaMM</code> for details).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function uses the complete data to quantify sub-sets of variance components.
+In each step the current total variance is estimated by subtracting the sum of all left-out VCs
+from the total variance of the initial VCA object. Doing this guarantees that the contribution to the total 
+variance which is due to left-out VCs is accounted for, i.e. it is estimated but not included/reported.
+The degrees of freedom (DFs) of the emerging total variances of sub-sets are determined using the Satterthwaite
+approximation. This is achieved by extracting the corresponding sub-matrix from the coefficient matrix <code class="reqn">C</code> of
+the 'VCA' object, the sub-vector of ANOVA mean squares, and the sub-vector of degrees of freedom and calling
+function <code>SattDF</code> method="total".
+</p>
+<p>This step-wise procedure starts one-level above error (repeatability) and ends at the level of the upper-most VC.
+It can only be used on models fitted by ANOVA Type-1, i.e. by function <code>anovaVCA</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(list) of (simplified) 'VCA' objects representing analysis-result of sub-models
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(VCAdata1)
+datS7L1 &lt;- VCAdata1[VCAdata1$sample == 7 &amp; VCAdata1$lot == 1, ]
+fit0 &lt;- anovaVCA(y~device/day/run, datS7L1, MME=TRUE)
+
+# complete VCA-analysis result
+fit0
+
+# perform step-wise (bottom-up) VCA-analyses
+sw.res &lt;- stepwiseVCA(fit0)
+sw.res
+
+# get CIs on intermediate precision 
+VCAinference(sw.res[["device:day"]])
+
+## End(Not run)
+</code></pre>
+
+
+</div>

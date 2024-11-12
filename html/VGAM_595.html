@@ -1,0 +1,242 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>freund61</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Freund's (1961) Bivariate Extension of the
+Exponential Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Estimate the four parameters of the Freund (1961)
+bivariate extension
+of the exponential distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">freund61(la = "loglink",  lap = "loglink",  lb = "loglink",
+         lbp = "loglink", ia = NULL, iap = NULL, ib = NULL,
+         ibp = NULL, independent = FALSE, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>la, lap, lb, lbp</code></td>
+<td>
+
+<p>Link functions applied to the (positive)
+parameters <code class="reqn">\alpha</code>, <code class="reqn">\alpha'</code>,
+<code class="reqn">\beta</code> and <code class="reqn">\beta'</code>, respectively
+(the “<code>p</code>” stands for “prime”).
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ia, iap, ib, ibp</code></td>
+<td>
+
+<p>Initial value for the four parameters respectively.
+The default is to estimate them all internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>independent</code></td>
+<td>
+
+<p>Logical.
+If <code>TRUE</code> then the parameters are constrained
+to satisfy
+<code class="reqn">\alpha=\alpha'</code> and
+<code class="reqn">\beta=\beta'</code>,
+which implies that <code class="reqn">y_1</code> and
+<code class="reqn">y_2</code> are independent
+and each have an ordinary exponential distribution.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>A vector specifying which
+linear/additive predictors are modelled as intercepts only.
+The values can be from the set {1,2,3,4}.
+The default is none of them.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This model represents one type of bivariate extension
+of the exponential
+distribution that is applicable to certain problems,
+in particular,
+to two-component systems which can function if one of
+the components
+has failed. For example, engine failures in
+two-engine planes, paired
+organs such as peoples' eyes, ears and kidneys.
+Suppose <code class="reqn">y_1</code> and <code class="reqn">y_2</code> are random variables
+representing the lifetimes of
+two components <code class="reqn">A</code> and <code class="reqn">B</code>
+in a two component system.
+The dependence between <code class="reqn">y_1</code> and <code class="reqn">y_2</code>
+is essentially such that the failure of the <code class="reqn">B</code> component
+changes the parameter of the exponential life distribution
+of the <code class="reqn">A</code>  component from <code class="reqn">\alpha</code> to
+<code class="reqn">\alpha'</code>, while the failure of
+the <code class="reqn">A</code>  component
+changes the parameter of the exponential life distribution
+of the <code class="reqn">B</code>  component from <code class="reqn">\beta</code> to
+<code class="reqn">\beta'</code>.
+</p>
+<p>The joint probability density function is given by
+</p>
+<p style="text-align: center;"><code class="reqn">f(y_1,y_2) = \alpha \beta' \exp(-\beta' y_2 -
+                      (\alpha+\beta-\beta')y_1) </code>
+</p>
+
+<p>for <code class="reqn">0 &lt; y_1 &lt; y_2</code>, and
+</p>
+<p style="text-align: center;"><code class="reqn">f(y_1,y_2) = \beta \alpha' \exp(-\alpha' y_1 -
+                      (\alpha+\beta-\alpha')y_2) </code>
+</p>
+
+<p>for <code class="reqn">0 &lt; y_2 &lt; y_1</code>.
+Here, all four parameters are positive, as well
+as the responses
+<code class="reqn">y_1</code> and <code class="reqn">y_2</code>.
+Under this model, the probability that component <code class="reqn">A</code>
+is the first to fail is
+<code class="reqn">\alpha/(\alpha+\beta)</code>.
+The time to the first failure is distributed as an
+exponential distribution with rate
+<code class="reqn">\alpha+\beta</code>. Furthermore, the
+distribution of the time from first failure to failure
+of the other component is a mixture of
+Exponential(<code class="reqn">\alpha'</code>) and
+Exponential(<code class="reqn">\beta'</code>) with proportions
+<code class="reqn">\beta/(\alpha+\beta)</code>
+and <code class="reqn">\alpha/(\alpha+\beta)</code>
+respectively.
+</p>
+<p>The marginal distributions are, in general, not exponential.
+By default, the linear/additive predictors are
+<code class="reqn">\eta_1=\log(\alpha)</code>,
+<code class="reqn">\eta_2=\log(\alpha')</code>,
+<code class="reqn">\eta_3=\log(\beta)</code>,
+<code class="reqn">\eta_4=\log(\beta')</code>.
+</p>
+<p>A special case is when <code class="reqn">\alpha=\alpha'</code>
+and <code class="reqn">\beta=\beta'</code>, which means that
+<code class="reqn">y_1</code> and <code class="reqn">y_2</code> are independent, and
+both have an ordinary exponential distribution with means
+<code class="reqn">1 / \alpha</code> and <code class="reqn">1 / \beta</code>
+respectively.
+</p>
+<p>Fisher scoring is used,
+and the initial values correspond to the MLEs of
+an intercept model.
+Consequently, convergence may take only one iteration.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>To estimate all four parameters, it is necessary to have some
+data where <code class="reqn">y_1&lt;y_2</code> and <code class="reqn">y_2&lt;y_1</code>.
+</p>
+<p>The response must be a two-column matrix, with columns
+<code class="reqn">y_1</code> and <code class="reqn">y_2</code>.
+Currently, the fitted value is a matrix with two columns; the
+first column has values
+<code class="reqn">(\alpha'+\beta)/(\alpha' (\alpha+\beta))</code>
+for the mean of <code class="reqn">y_1</code>,
+while the second column has values
+<code class="reqn">(\beta'+\alpha)/(\beta' (\alpha+\beta))</code>
+for the mean of <code class="reqn">y_2</code>.
+The variance of <code class="reqn">y_1</code> is
+</p>
+<p style="text-align: center;"><code class="reqn"> \frac{(\alpha')^2 + 2 \alpha \beta + \beta^2}{
+               (\alpha')^2 (\alpha + \beta)^2}, </code>
+</p>
+
+<p>the variance of <code class="reqn">y_2</code> is
+</p>
+<p style="text-align: center;"><code class="reqn"> \frac{(\beta')^2 + 2 \alpha \beta + \alpha^2 }{
+               (\beta')^2 (\alpha + \beta)^2 }, </code>
+</p>
+
+<p>the covariance of <code class="reqn">y_1</code> and <code class="reqn">y_2</code> is
+</p>
+<p style="text-align: center;"><code class="reqn"> \frac{\alpha' \beta' - \alpha \beta }{
+               \alpha' \beta' (\alpha + \beta)^2}. </code>
+</p>
+
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Freund, J. E. (1961).
+A bivariate extension of the exponential distribution.
+<em>Journal of the American Statistical Association</em>,
+<b>56</b>, 971–977.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>exponential</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fdata &lt;- data.frame(y1 = rexp(nn &lt;- 1000, rate = exp(1)))
+fdata &lt;- transform(fdata, y2 = rexp(nn, rate = exp(2)))
+fit1 &lt;- vglm(cbind(y1, y2) ~ 1, freund61, fdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+Coef(fit1)
+vcov(fit1)
+head(fitted(fit1))
+summary(fit1)
+
+# y1 and y2 are independent, so fit an independence model
+fit2 &lt;- vglm(cbind(y1, y2) ~ 1, freund61(indep = TRUE),
+             data = fdata, trace = TRUE)
+coef(fit2, matrix = TRUE)
+constraints(fit2)
+pchisq(2 * (logLik(fit1) - logLik(fit2)),  # p-value
+       df = df.residual(fit2) - df.residual(fit1),
+       lower.tail = FALSE)
+lrtest(fit1, fit2)  # Better alternative
+</code></pre>
+
+
+</div>

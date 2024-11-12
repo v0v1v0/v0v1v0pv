@@ -1,0 +1,106 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.VARDetect.result</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plotting the output from VARDetect.result class</h2>
+
+<h3>Description</h3>
+
+<p>Plotting method for S3 object of class <code>VARDetect.result</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VARDetect.result'
+plot(
+  x,
+  display = c("cp", "param", "granger", "density"),
+  threshold = 0.1,
+  layout = c("circle", "star", "nicely"),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a <code>VARDetect.result</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>display</code></td>
+<td>
+<p>a character string, indicates the object the user wants to plot; possible values are
+</p>
+
+<dl>
+<dt><code>"cp"</code></dt>
+<dd>
+<p>input time series together with the estimated change points</p>
+</dd>
+<dt><code>"param"</code></dt>
+<dd>
+<p>estimated model parameters</p>
+</dd>
+<dt><code>"granger"</code></dt>
+<dd>
+<p>present the model parameters through Granger causal networks</p>
+</dd>
+<dt><code>"density"</code></dt>
+<dd>
+<p>plot the sparsity levels across all segments</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threshold</code></td>
+<td>
+<p>a positive numeric value, indicates the threshold to present the entries in the sparse matrices</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>layout</code></td>
+<td>
+<p>a character string, indicating the layout of the Granger network</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>not in use</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A plot for change points or a series of plots for Granger causal networks for estimated model parameters
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nob &lt;- 1000
+p &lt;- 15
+brk &lt;- c(floor(nob / 3), floor(2 * nob / 3), nob + 1)
+m &lt;- length(brk)
+q.t &lt;- 1
+try &lt;- simu_var('sparse',nob=nob,k=p,lags=q.t,brk=brk,sp_pattern="off-diagonal",seed = 1)
+data &lt;- try$series
+data &lt;- as.matrix(data)
+fit &lt;- tbss(data, method = "sparse", q = q.t)
+plot(fit, display = "cp")
+plot(fit, display = "param")
+plot(fit, display = "granger", threshold = 0.2, layout = "nicely")
+plot(fit, display = "density", threshold = 0.2)
+</code></pre>
+
+
+</div>

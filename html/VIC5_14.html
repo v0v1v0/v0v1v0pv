@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>XAJ</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Run Xinanjiang (XAJ) model (three sources, lumped).</h2>
+
+<h3>Description</h3>
+
+<p>An R implementation of three-source Xinanjiang model
+by Renjun Zhao, used for daily streamflow simulation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">XAJ(PREC, EVAP, params, area = dt * 3.6, dt = 24, full.UH = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>PREC</code></td>
+<td>
+<p>Time series of precipitation (daily)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>EVAP</code></td>
+<td>
+<p>Time series of pan evaporation or potential evapotranspiration
+(daily), length must equal to <code>PREC</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>params</code></td>
+<td>
+<p>parameters <code>XAJ.param.range()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>area</code></td>
+<td>
+<p>Basin area (km^2).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dt</code></td>
+<td>
+<p>time step (in hour) of the simulation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>full.UH</code></td>
+<td>
+<p>Use the unit hydrograph defined by user, rather than the
+instantaneous unit hydrograph (IUH) of Nash, for routing
+of surface runoff. Default FALSE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function returns a data frame of some common variables of the XAJ
+model at each time step, such as evaporation, soil moisture, surface and
+underground runoff.
+</p>
+
+
+<h4>The variables of the table including:</h4>
+
+
+<ul>
+<li> <p><code>E</code>  : Total evaporation (mm)
+</p>
+</li>
+<li> <p><code>EU</code> : Evaporation (mm) of upper soil layer
+</p>
+</li>
+<li> <p><code>EL</code> : Evaporation (mm) of lower soil layer
+</p>
+</li>
+<li> <p><code>ED</code> : Evaporation (mm) of deep soil layer
+</p>
+</li>
+<li> <p><code>W</code>  : Total soil moisture (mm)
+</p>
+</li>
+<li> <p><code>WU</code> : Soil moisture (mm) of upper soil layer
+</p>
+</li>
+<li> <p><code>WL</code> : Soil moisture (mm) of lower soil layer
+</p>
+</li>
+<li> <p><code>WD</code> : Soil moisture (mm) of deep soil layer
+</p>
+</li>
+<li> <p><code>R</code>  : Total runoff (mm) of each time step
+</p>
+</li>
+<li> <p><code>RS</code> : Surface runoff (mm) of each time step
+</p>
+</li>
+<li> <p><code>RI</code> : Interflow (mm) of each time step
+</p>
+</li>
+<li> <p><code>RG</code> : Underground runoff (mm) of each time step
+</p>
+</li>
+<li> <p><code>Q</code>  : Total runoff (m^3/s) at the outlet of the basin
+</p>
+</li>
+<li> <p><code>QS</code> : Surface runoff (m^3/s) at the outlet of the basin
+</p>
+</li>
+<li> <p><code>QI</code> : Interflow runoff (m^3/s) at the outlet of the basin
+</p>
+</li>
+<li> <p><code>QG</code> : Underground runoff (m^3/s) at the outlet of the basin
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Zhao and Liu, 1995. The Xinanjiang model, Computer Models of Watershed Hydrology,
+Water Resources Publication, Highlands Ranch, CO (1995), pp. 215-232
+</p>
+
+
+</div>

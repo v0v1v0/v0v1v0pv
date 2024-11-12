@@ -1,0 +1,222 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>N1binomial</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Linear Model and Binomial
+Mixed Data Type
+Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimate the four parameters of
+the (bivariate) <code class="reqn">N_1</code>–binomial copula
+mixed data type model
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">N1binomial(lmean = "identitylink", lsd = "loglink",
+    lvar = "loglink", lprob = "logitlink", lapar = "rhobitlink",
+    zero = c(if (var.arg) "var" else "sd", "apar"),
+    nnodes = 20, copula = "gaussian", var.arg = FALSE,
+    imethod = 1, isd = NULL, iprob = NULL, iapar = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmean, lsd, lvar, lprob, lapar</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+See <code>Links</code> for more link function choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod, isd, iprob, iapar</code></td>
+<td>
+
+<p>Initial values.
+Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nnodes</code></td>
+<td>
+
+<p>Number of nodes and weights for the
+Gauss–Hermite (GH) quadrature.
+While a higher value should be more
+accurate, setting an excessive value
+runs the risk of evaluating some
+special functions near the boundary of the
+parameter space and producing numerical
+problems.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>copula</code></td>
+<td>
+
+<p>Type of copula used.
+Currently only the bivariate normal is used
+but more might be implemented in the future.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.arg</code></td>
+<td>
+
+<p>See <code>uninormal</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The bivariate response comprises <code class="reqn">Y_1</code>
+from the linear model having parameters
+<code>mean</code> and <code>sd</code> for
+<code class="reqn">\mu_1</code> and <code class="reqn">\sigma_1</code>,
+and the binary
+<code class="reqn">Y_2</code> having parameter
+<code>prob</code> for its mean <code class="reqn">\mu_2</code>.
+The
+joint probability density/mass function is
+<code class="reqn">P(y_1, Y_2 = 0) = \phi_1(y_1; \mu_1, \sigma_1)
+       (1 - \Delta)</code>
+and
+<code class="reqn">P(y_1, Y_2 = 1) = \phi_1(y_1; \mu_1, \sigma_1)
+       \Delta</code>
+where <code class="reqn">\Delta</code> adjusts <code class="reqn">\mu_2</code>
+according to the <em>association parameter</em>
+<code class="reqn">\alpha</code>.
+The quantity <code class="reqn">\Delta</code> is
+<code class="reqn">\Phi((\Phi^{-1}(\mu_2) - \alpha Z_1)/
+       \sqrt{1 - \alpha^2})</code>.
+The quantity <code class="reqn">Z_1</code> is <code class="reqn">(Y_1-\mu_1) / \sigma_1</code>.
+Thus there is an underlying bivariate normal
+distribution, and a copula is used to bring the
+two marginal distributions together.
+Here,
+<code class="reqn">-1 &lt; \alpha &lt; 1</code>, and
+<code class="reqn">\Phi</code> is the
+cumulative distribution function
+<code>pnorm</code>
+of a standard univariate normal.
+</p>
+<p>The first marginal
+distribution is a normal distribution
+for the linear model.
+The second column of the response must
+have values 0 or 1,
+e.g.,
+Bernoulli random variables.
+When <code class="reqn">\alpha = 0</code>
+then <code class="reqn">\Delta=\mu_2</code>.
+Together, this family function combines
+<code>uninormal</code> and
+<code>binomialff</code>.
+If the response are correlated then
+a more efficient joint analysis
+should result.
+</p>
+<p>This <span class="pkg">VGAM</span> family function cannot handle
+multiple responses. Only a two-column
+matrix is allowed.
+The two-column fitted
+value matrix has columns <code class="reqn">\mu_1</code>
+and <code class="reqn">\mu_2</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This <span class="pkg">VGAM</span> family function is fragile.
+Because the EIMs are approximated by
+GH quadrature it is found that convergence
+may be a little slower than for other models
+whose EIM is tractable.
+Also, the log-likelihood may be flat at the MLE
+with respect to <code class="reqn">\alpha</code> especially
+because the correlation
+between the two mixed data types may be weak.
+</p>
+<p>It pays to set <code>trace = TRUE</code> to
+monitor convergence, especially when
+<code>abs(apar)</code> is high.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Song, P. X.-K. (2007).
+<em>Correlated Data Analysis:
+Modeling, Analytics, and Applications</em>.
+Springer.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rN1binom</code>,
+<code>N1poisson</code>,
+<code>binormalcop</code>,
+<code>uninormal</code>,
+<code>binomialff</code>,
+<code>pnorm</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 1000; mymu &lt;- 1; sdev &lt;- exp(1)
+apar &lt;- rhobitlink(0.5, inverse = TRUE)
+prob &lt;-  logitlink(0.5, inverse = TRUE)
+mat &lt;- rN1binom(nn, mymu, sdev, prob, apar)
+nbdata &lt;- data.frame(y1 = mat[, 1], y2 = mat[, 2])
+fit1 &lt;- vglm(cbind(y1, y2) ~ 1, N1binomial,
+             nbdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+Coef(fit1)
+head(fitted(fit1))
+summary(fit1)
+confint(fit1)
+</code></pre>
+
+
+</div>

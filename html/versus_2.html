@@ -1,0 +1,125 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compare</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compare two data frames</h2>
+
+<h3>Description</h3>
+
+<p><code>compare()</code> creates a representation of the differences between two tables,
+along with a shallow copy of the tables. This output is used
+as the <code>comparison</code> argument when exploring the differences further with other
+versus functions e.g. <code style="white-space: pre;">⁠slice_*()⁠</code> and <code style="white-space: pre;">⁠weave_*()⁠</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compare(table_a, table_b, by, allow_both_NA = TRUE, coerce = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>table_a</code></td>
+<td>
+<p>A data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>table_b</code></td>
+<td>
+<p>A data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>&lt;<code>tidy-select</code>&gt;. Selection of columns to use when matching rows between
+<code>.data_a</code> and <code>.data_b</code>. Both data frames must be unique on <code>by</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allow_both_NA</code></td>
+<td>
+<p>Logical. If <code>TRUE</code> a missing value in both data frames is
+considered as equal</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coerce</code></td>
+<td>
+<p>Logical. If <code>FALSE</code> and columns from the input tables have
+differing classes, the function throws an error.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+
+<dl>
+<dt><code>compare()</code></dt>
+<dd>
+<p>A list of data frames having the following elements:
+</p>
+
+<dl>
+<dt>tables</dt>
+<dd>
+<p>A data frame with one row per input table showing the number of rows
+and columns in each.
+</p>
+</dd>
+<dt>by</dt>
+<dd>
+<p>A data frame with one row per <code>by</code> column showing the class
+of the column in each of the input tables.
+</p>
+</dd>
+<dt>intersection</dt>
+<dd>
+<p>A data frame with one row per column common to <code>table_a</code> and
+<code>table_b</code> and columns "n_diffs" showing the number of values which
+are different between the two tables, "class_a"/"class_b" the class of the
+column in each table, and "value_diffs" a (nested) data frame showing
+the the values in each table which are unequal and the <code>by</code> columns
+</p>
+</dd>
+<dt>unmatched_cols</dt>
+<dd>
+<p>A data frame with one row per column which is in one input table but
+not the other and columns "table": which table the column appears in,
+"column": the name of the column, and "class": the class of the
+column.
+</p>
+</dd>
+<dt>unmatched_rows</dt>
+<dd>
+<p>A data frame which, for each row present in one input table but not
+the other, contains the column "table" showing which table the row appears
+in and the <code>by</code> columns for that row.
+</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<h3>data.table inputs</h3>
+
+<p>If the input is a data.table, you may want <code>compare()</code> to make a deep copy instead
+of a shallow copy so that future changes to the table don't affect the comparison.
+To achieve this, you can set <code>options(versus.copy_data_table = TRUE)</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">compare(example_df_a, example_df_b, by = car)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>diffzeta</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Differenced Zeta Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the parameter of the differenced zeta distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">diffzeta(start = 1, lshape = "loglink", ishape = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape, ishape</code></td>
+<td>
+
+<p>Same as <code>zetaff</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start</code></td>
+<td>
+
+<p>Smallest value of the support of the distribution.
+Must be a positive integer.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The PMF is
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y=y) = (a/y)^{s} -
+      (a/(1+y))^{s},\ \ s&gt;0,\ \ y=a,a+1,\ldots,</code>
+</p>
+
+<p>where <code class="reqn">s</code> is the positive shape parameter, and <code class="reqn">a</code>
+is <code>start</code>.
+According to   Moreno-Sanchez et al. (2016), this model
+fits quite well to about 40 percent of all the English books
+in the Project Gutenberg data base (about 30,000 texts).
+Multiple responses are handled.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions such as
+<code>vglm</code>, and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Moreno-Sanchez, I., Font-Clos, F. and Corral, A. (2016).
+Large-Scale Analysis of Zipf's Law in English Texts,
+<em>PLoS ONE</em>, <b>11</b>(1), 1–19.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Diffzeta</code>,
+<code>zetaff</code>,
+<code>zeta</code>,
+<code>zipf</code>,
+<code>zipf</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">odata &lt;- data.frame(x2 = runif(nn &lt;- 1000))  # Artificial data
+odata &lt;- transform(odata, shape = loglink(-0.25 + x2, inv = TRUE))
+odata &lt;- transform(odata, y1 = rdiffzeta(nn, shape))
+with(odata, table(y1))
+ofit &lt;- vglm(y1 ~ x2, diffzeta, odata, trace = TRUE)
+coef(ofit, matrix = TRUE)
+</code></pre>
+
+
+</div>

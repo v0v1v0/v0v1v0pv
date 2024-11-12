@@ -1,0 +1,138 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>seVarReg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>SE calculations for mean and variance regression models</h2>
+
+<h3>Description</h3>
+
+<p><code>seVarReg</code> calculates SE for an object of class <code>VarReg</code>. If the result is not on a
+boundary, the Fishers Information matrix SE are given. The bootstrapped 95% CI can also be
+calculated. Designed to be called by the plot function <code>plotVarReg</code>, rather than run by a user.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">seVarReg(
+  x,
+  boot = FALSE,
+  bootreps = 1000,
+  vector.mean = x$data[, 2],
+  vector.variance = x$data[, 2],
+  control = list(...),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object of class <code>VarReg</code> to determin the SE (eg. result from <code>semiVarReg</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>boot</code></td>
+<td>
+<p>Logical to indicate if bootstrapped CI should be calculated. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bootreps</code></td>
+<td>
+<p>Number of bootstraps to be performed if <code>boot=TRUE</code>. Default is <code>1000</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vector.mean</code></td>
+<td>
+<p>Vector of <code>x</code> values for which the SE of the mean is to be calculated.
+Default is the <code>x</code> covariate from the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vector.variance</code></td>
+<td>
+<p>Vector of <code>x</code> values for which the SE of the variance is to be calculated.
+Default is the actual <code>x</code> covariate from the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>List of control parameters for the bootstrapped models.
+See <code>VarReg.control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be used to form the default control argument if it is not supplied
+directly</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The result is a list of results. This includes:
+</p>
+
+<ul>
+<li> <p><code>mean.est</code>: dataframe of overall results from the mean model, including parameter estimates
+from the model, SEs from information matrix (if <code>boundary=FALSE</code>) and if specified, the SE
+from bootstrapping with the bootstrapped 95% CI.
+</p>
+</li>
+<li> <p><code>variance.est</code>: dataframe of overall results from the variance model, including parameter
+estimates from the model, SEs from information matrix (if <code>boundary=FALSE</code>) and if specified,
+the SE from bootstrapping with the bootstrapped 95% CI.
+</p>
+</li>
+<li> <p><code>mean.im</code>: dataframe of the expected information matrices for the mean (as appropriate)
+</p>
+</li>
+<li> <p><code>variance.im</code>: dataframe of the expected information matrices for the variance
+(as appropriate)
+</p>
+</li>
+<li> <p><code>mean.outputs</code>: dataframe with complete output for mean graphics. Includes the
+<code>vector.mean</code> as input, and the mean vector (<code>mean.mean</code>) and the SE vector
+<code>mean.se.im</code>, and bootstrapping outputs as appropriate.
+</p>
+</li>
+<li> <p><code>variance.outputs</code>: dataframe with complete output for variance graphics. Includes the
+<code>vector.variance</code> as input, and the mean vector (<code>var.mean</code>) and the SE vector
+<code>var.se.im</code>, and bootstrapping outputs as appropriate.
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><code>semiVarReg</code>, <code>VarReg.control</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(mcycle)
+##Fit model with range as a covariate in the mean and the variance model
+semimodel&lt;-semiVarReg(mcycle$accel, mcycle$times, meanmodel="semi", varmodel="linear",
+knots.m=4, maxit=10000)
+##Calculate SE
+se1&lt;-seVarReg(semimodel, boot=FALSE)
+##not run: with bootstrapping
+##se2&lt;-seVarReg(semimodel, boot=TRUE, bootreps=10)
+##not run: calculate mean and SE for a given sequence
+##test.seq&lt;-seq(min(mcycle$times), max(mcycle$times),
+##by=((max(mcycle$times)-min(mcycle$times))/999))
+##se2&lt;-seVarReg(semimodel, boot=TRUE, bootreps=10, vector.mean=test.seq)
+</code></pre>
+
+
+</div>

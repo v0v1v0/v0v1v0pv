@@ -1,0 +1,134 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pgamma.deriv</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Derivatives of the Incomplete Gamma Integral
+</h2>
+
+<h3>Description</h3>
+
+<p>The first two derivatives of the incomplete gamma integral.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pgamma.deriv(q, shape, tmax = 100)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>q, shape</code></td>
+<td>
+
+<p>As in <code>pgamma</code> but
+these must be vectors of positive values only and finite.
+</p>
+</td>
+</tr></table>
+<table><tr style="vertical-align: top;">
+<td><code>tmax</code></td>
+<td>
+
+<p>Maximum number of iterations allowed in the computation
+(per <code>q</code> value).
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>Write <code class="reqn">x = q</code> and <code>shape =</code> <code class="reqn">a</code>.
+The first and second derivatives with respect to <code class="reqn">q</code> and <code class="reqn">a</code>
+are returned. This function is similar in spirit to
+<code>pgamma</code>;
+define
+</p>
+<p style="text-align: center;"><code class="reqn">P(a,x) = \frac{1}{\Gamma(a)} \int_0^x t^{a-1} e^{-t} dt</code>
+</p>
+
+<p>so that
+<code class="reqn">P(a, x)</code> is <code>pgamma(x, a)</code>.
+Currently a 6-column matrix is returned (in the future this
+may change and an argument may be supplied so that only what
+is required by the user is computed.)
+</p>
+<p>The computations use a series expansion
+for <code class="reqn">a \leq x \leq 1</code> or
+or <code class="reqn">x &lt; a</code>, else
+otherwise a continued fraction expansion.
+Machine overflow can occur for large values of <code class="reqn">x</code>
+when <code class="reqn">x</code> is much greater than <code class="reqn">a</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The first 5 columns, running from left to right, are the derivatives
+with respect to:
+<code class="reqn">x</code>,
+<code class="reqn">x^2</code>,
+<code class="reqn">a</code>,
+<code class="reqn">a^2</code>,
+<code class="reqn">xa</code>.
+The 6th column is <code class="reqn">P(a, x)</code> (but it is not as accurate
+as calling <code>pgamma</code> directly).
+</p>
+
+
+<h3>Note</h3>
+
+<p>If convergence does not occur then try increasing the value of
+<code>tmax</code>.
+</p>
+<p>Yet to do: add more arguments to give greater flexibility in
+the accuracy desired and to compute only quantities that are
+required by the user.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee wrote the wrapper function to the Fortran subroutine
+written by R. J. Moore. The subroutine was modified to run using
+double precision.
+The original code came from <code>http://lib.stat.cmu.edu/apstat/187</code>.
+but this website has since become stale.
+</p>
+
+
+<h3>References</h3>
+
+<p>Moore, R. J. (1982).
+Algorithm AS 187: Derivatives of the Incomplete Gamma Integral.
+<em>Journal of the Royal Statistical Society, Series C</em>
+<em>(Applied Statistics)</em>,
+<b>31</b>(3), 330–335.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>pgamma.deriv.unscaled</code>,
+<code>pgamma</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- seq(2, 10, length = 501)
+head(ans &lt;- pgamma.deriv(x, 2))
+## Not run:  par(mfrow = c(2, 3))
+for (jay in 1:6)
+  plot(x, ans[, jay], type = "l", col = "blue", cex.lab = 1.5,
+       cex.axis = 1.5, las = 1, log = "x",
+       main = colnames(ans)[jay], xlab = "q", ylab = "") 
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>get_attrition</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate cohort attrition table</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#questioning"><img src="../help/figures/lifecycle-questioning.svg" alt="[Questioning]"></a>
+This is an experimental function that may be developed over time.
+</p>
+<p>This function calculates the subjects counts excluded and included
+for each step of the cohort selection process.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">get_attrition(data, criteria_descriptions, criteria_conditions,
+subject_column_name)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Dataframe. It is used as the input data to count the subjects
+that meets the criteria of interest</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>criteria_descriptions</code></td>
+<td>
+<p><code>character</code> It contains the descriptions
+of the inclusion/exclusion criteria.
+Each element of the vector corresponds to the description of each criterion.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>criteria_conditions</code></td>
+<td>
+<p><code>character</code> It contains the corresponding
+conditions of the criteria.
+These conditions will be used in the table to compute the counts of the
+subjects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subject_column_name</code></td>
+<td>
+<p><code>character</code> The column name of the table that
+contains the subject id.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>criteria_descriptions and criteria_conditions need to be of same length
+</p>
+
+
+<h3>Value</h3>
+
+<p>The counts and percentages of the remaining and excluded subjects
+for each step of the cohort selection in a table format.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">visR::get_attrition(adtte,
+  criteria_descriptions =
+    c(
+      "1. Placebo Group", "2. Be 75 years of age or older.",
+      "3. White", "4. Site 709"
+    ),
+  criteria_conditions = c(
+    "TRTP=='Placebo'", "AGE&gt;=75",
+    "RACE=='WHITE'", "SITEID==709"
+  ),
+  subject_column_name = "USUBJID"
+)
+</code></pre>
+
+
+</div>

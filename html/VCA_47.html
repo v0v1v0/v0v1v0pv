@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lmerMatrices</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Derive and Compute Matrices for Objects Fitted by Function 'lmer'</h2>
+
+<h3>Description</h3>
+
+<p>Function derives and computes all matrices required for down-stream
+analyses of VCA-objects fitted with REML via function <code>lmer</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lmerMatrices(obj, tab = NULL, terms = NULL, cov = FALSE, X = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(object) inheriting from 'lmerMod'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tab</code></td>
+<td>
+<p>(data.frame) representing the basic VCA-table</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>terms</code></td>
+<td>
+<p>(character) vector used for ordering variance components</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cov</code></td>
+<td>
+<p>(logical) take non-zero covariances among random effects into account (TRUE) or
+not (FALSE), the latter is the default in this package and also implemented in
+<code>remlVCA</code>, <code>anovaVCA</code>, and <code>anovaMM</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>(matrix) design matrix of fixed effects as constructed to meet VCA-package requirements</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Mixed Model Equations (MME) are solved for fixed and random effects applying the same
+constraints as in <code>anovaMM</code>. 
+The most elaborate and therefore time consuming part is to prepare all matrices required for 
+approximating the variance-covariance matrix of variance components (see <code>getGB</code>).
+To reduce the computational time, this function tries to optimize object-classes depending
+on whether Intel's (M)ath (K)ernel (L)ibrary could be loaded or not. MKL appears to be more
+performant with ordinary matrix-objects, whereas all other computations are perfomred using
+matrix-representations of the <code>Matrix</code>-package.
+</p>
+<p>This function is not intended to be called directly by users and therefore not exported.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(list), a premature 'VCA' object
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>remlVCA</code>, <code>remlMM</code>
+</p>
+
+
+</div>

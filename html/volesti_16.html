@@ -1,0 +1,48 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>inner_ball</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute an inscribed ball of a convex polytope</h2>
+
+<h3>Description</h3>
+
+<p>For a H-polytope described by a <code class="reqn">m\times d</code> matrix <code class="reqn">A</code> and a <code class="reqn">m</code>-dimensional vector <code class="reqn">b</code>, s.t.: <code class="reqn">P=\{x\ |\  Ax\leq b\} </code>, this function computes the largest inscribed ball (Chebychev ball) by solving the corresponding linear program.
+For both zonotopes and V-polytopes the function computes the minimum <code class="reqn">r</code> s.t.: <code class="reqn"> r e_i \in P</code> for all <code class="reqn">i=1, \dots ,d</code>. Then the ball centered at the origin with radius <code class="reqn">r/ \sqrt{d}</code> is an inscribed ball.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">inner_ball(P)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>P</code></td>
+<td>
+<p>A convex polytope. It is an object from class (a) Hpolytope or (b) Vpolytope or (c) Zonotope or (d) VpolytopeIntersection.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>A <code class="reqn">(d+1)</code>-dimensional vector that describes the inscribed ball. The first <code class="reqn">d</code> coordinates corresponds to the center of the ball and the last one to the radius.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># compute the Chebychev ball of the 2d unit simplex
+P = gen_simplex(2,'H')
+ball_vec = inner_ball(P)
+
+# compute an inscribed ball of the 3-dimensional unit cube in V-representation
+P = gen_cube(3, 'V')
+ball_vec = inner_ball(P)
+</code></pre>
+
+
+</div>

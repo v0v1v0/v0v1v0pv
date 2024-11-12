@@ -1,0 +1,152 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.ave.pbcor</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for an average point-biserial correlation</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and confidence interval for an
+average point-biserial correlation from two or more studies. Two types
+of point-biserial correlations can be meta-analyzed. One type uses
+an unweighted variance and is appropriate in 2-group experimental
+designs. The other type uses a weighted variance and is appropriate in
+2-group nonexperimental designs with simple random sampling (but not
+stratified random sampling) within each study. This function requires
+all point-biserial correlations to be of the same type.  Use the
+meta.ave.gen function to meta-analyze any combination of biserial
+correlation types.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.ave.pbcor(alpha, m1, m2, sd1, sd2, n1, n2, type, bystudy = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m1</code></td>
+<td>
+<p>vector of estimated means for group 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m2</code></td>
+<td>
+<p>vector of estimated means for group 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd1</code></td>
+<td>
+<p>vector of estimated SDs for group 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd2</code></td>
+<td>
+<p>vector of estimated SDs for group 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>vector of group 1 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>vector of group 2 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+
+<ul>
+<li>
+<p> set to 1 for weighted variance
+</p>
+</li>
+<li>
+<p> set to 2 for unweighted variance
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bystudy</code></td>
+<td>
+<p>logical to also return each study estimate (TRUE) or not</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is the average estimate across all studies.  If bystudy
+is TRUE, there is 1 additional row for each study.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated effect size
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2020).
+“Point-biserial correlation: Interval estimation, hypothesis testing, meta-analysis, and sample size determination.”
+<em>British Journal of Mathematical and Statistical Psychology</em>, <b>73</b>(S1), 113–144.
+ISSN 0007-1102, <a href="https://doi.org/10.1111/bmsp.12189">doi:10.1111/bmsp.12189</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">m1 &lt;- c(21.9, 23.1, 19.8)
+m2 &lt;- c(16.1, 17.4, 15.0)
+sd1 &lt;- c(3.82, 3.95, 3.67)
+sd2 &lt;- c(3.21, 3.30, 3.02)
+n1 &lt;- c(40, 30, 24)
+n2 &lt;- c(40, 28, 25)
+meta.ave.pbcor(.05, m1, m2, sd1, sd2, n1, n2, 2, bystudy = TRUE)
+
+# Should return:
+#          Estimate         SE        LL        UL
+# Average 0.6159094 0.04363432 0.5230976 0.6942842
+# Study 1 0.6349786 0.06316796 0.4842098 0.7370220
+# Study 2 0.6160553 0.07776700 0.4255342 0.7380898
+# Study 3 0.5966942 0.08424778 0.3903883 0.7283966
+
+
+</code></pre>
+
+
+</div>

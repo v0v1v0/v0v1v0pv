@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>deseq_2x3</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>2 x 3 factor DESeq2 analysis</h2>
+
+<h3>Description</h3>
+
+<p>Experimental function for performing 2x3 factor DESeq2 analyses. Output can
+be passed to <code>deseq_2x3_polar()</code> and subsequently plotted. Example usage
+would include comparing gene expression against a binary outcome e.g.
+response vs non-response, across 3 drugs: the design would be <code>~ response</code>
+and <code>group</code> would refer to the medication column in the metadata.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">deseq_2x3(object, design, group, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object of class 'DESeqDataSet' containing full dataset</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>design</code></td>
+<td>
+<p>Design formula. The main contrast is taken from the last term
+of the formula and must be a binary factor.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>Character value for the column with the 3-way grouping factor
+within the sample information data <code>colData</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Optional arguments passed to <code>DESeq()</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a list of 3 DESeq2 results objects which can be passed onto
+<code>deseq_2x3_polar()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Basic DESeq2 set up
+library(DESeq2)
+
+counts &lt;- matrix(rnbinom(n=3000, mu=100, size=1/0.5), ncol=30)
+rownames(counts) &lt;- paste0("gene", 1:100)
+cond &lt;- rep(factor(rep(1:3, each=5), labels = c('A', 'B', 'C')), 2)
+resp &lt;- factor(rep(1:2, each=15), labels = c('non.responder', 'responder'))
+metadata &lt;- data.frame(drug = cond, response = resp)
+
+# Full dataset object construction
+dds &lt;- DESeqDataSetFromMatrix(counts, metadata, ~response)
+
+# Perform 3x DESeq2 analyses comparing binary response for each drug
+res &lt;- deseq_2x3(dds, ~response, "drug")
+
+# Generate polar object
+obj &lt;- deseq_2x3_polar(res)
+
+# 2d plot
+radial_plotly(obj)
+
+# 3d plot
+volcano3D(obj)
+
+
+</code></pre>
+
+
+</div>

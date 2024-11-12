@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Create.twomode.twitter</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create twitter 2-mode network</h2>
+
+<h3>Description</h3>
+
+<p>Creates a 2-mode network from tweets returned from the twitter search query. In this network there are
+two types of nodes, twitter users who authored or were mentioned in collected tweets and hashtags found within
+tweets. Network edges represent a users tweets that contain hashtags or mention users screen names.
+</p>
+<p>The creation of twitter 2-mode networks requires text processing and the tokenization of tweets. As such this
+function requires the additional installation of the <span class="pkg">tidytext</span> package to achieve this.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'twomode.twitter'
+Create(
+  datasource,
+  type,
+  removeTermsOrHashtags = NULL,
+  rmRetweets = TRUE,
+  verbose = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>datasource</code></td>
+<td>
+<p>Collected social media data with <code>"datasource"</code> and <code>"twitter"</code> class names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Character string. Type of network to be created, set to <code>"twomode"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>removeTermsOrHashtags</code></td>
+<td>
+<p>Character vector. Users or hashtags to remove from the twomode network. For example,
+this parameter could be used to remove the user or hashtag that was used to collect the data by removing any nodes
+with matching name. Default is <code>NULL</code> to remove none.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rmRetweets</code></td>
+<td>
+<p>Logical. Do not process retweets in the input data. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical. Output additional information about the network creation. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional parameters passed to function. Not used in this method.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Network as a named list of two dataframes containing <code>$nodes</code> and <code>$edges</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# twitter 2-mode network creation additionally requires the tidytext
+# package for working with text data
+# install.packages("tidytext")
+
+# create a twitter 2-mode network graph with the hashtag "#auspol" removed
+net_2mode &lt;- collect_tw |&gt;
+  Create("twomode", removeTermsOrHashtags = c("#auspol"), verbose = TRUE)
+
+# network
+# net_2mode$nodes
+# net_2mode$edges
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,162 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>estimate_parameters</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimate Parameters for Visitation Model</h2>
+
+<h3>Description</h3>
+
+<p>Estimate the two parameters (y-intercept and seasonality factor) for the visitation model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">estimate_parameters(
+  popularity_proxy_decomposition_data = NULL,
+  onsite_usage,
+  onsite_usage_decomposition,
+  omit_trend,
+  trend,
+  ref_series,
+  constant,
+  beta,
+  slope,
+  parameter_estimates,
+  is_input_logged,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>popularity_proxy_decomposition_data</code></td>
+<td>
+<p>A "decomposition" class object containing decomposition data for the popularity proxy time series (outputs from <code>auto_decompose</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>onsite_usage</code></td>
+<td>
+<p>A vector which stores monthly onsite usage for a particular social media platform and recreational site.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>onsite_usage_decomposition</code></td>
+<td>
+<p>A "decomposition" class object containing decomposition data for the monthly onsite usage time series (outputs from <code>auto_decompose</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>omit_trend</code></td>
+<td>
+<p>This is obsolete and is left only for compatibility. In other words, <code>trend</code> will overwrite any option chosen in <code>omit_trend</code>. If <code>trend</code> is NULL, then <code>trend</code> is overwritten according to <code>omit_trend</code>. It is a Boolean specifying whether or not to consider the trend component to be 0. The default option is TRUE, in which case, the trend component is 0. If it is set to FALSE, then it is estimated using data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trend</code></td>
+<td>
+<p>A character string specifying how the trend is modeled. Can be any of NULL, "linear", "none", and "estimated", where "none" and "estimated" correspond to <code>omit_trend</code> being TRUE and FALSE, respectively. If NULL, then it follows the value specified in <code>omit_trend</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ref_series</code></td>
+<td>
+<p>A numeric vector specifying the original visitation series. The default option is NULL, implying that no such series is available. If such series is available, then its length must be the same as that of <code>onsite_usage</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constant</code></td>
+<td>
+<p>A numeric specifying the constant term (beta0) in the model. This constant is understood as the mean log adjusted monthly visitation relative to the base month. The default option is 0, implying that the (logged) <code>onsite_usage</code> does not require any constant shift, which is unusual. If <code>ref_series</code> is supplied, the constant is overwritten by the least squares estimate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>A numeric or a character string specifying the seasonality adjustment factor (beta1). The default option is "estimate", in which case, it is estimated by using the Fisher's z-transformed lag-12 autocorrelation. Even if an actual value is supplied, if <code>ref_series</code> is supplied, it is overwritten by the least squares estimate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>slope</code></td>
+<td>
+<p>A numeric specifying the slope coefficient (beta2) in the model. This constant is applicable only when <code>trend</code> is set to "linear". The default option is 0, implying that the linear trend is absent.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parameter_estimates</code></td>
+<td>
+<p>A character string specifying how to estimate beta and constant parameters should a reference series be supplied. Both options use least squares estimates, but "separate" indicates that the differenced series should be used to estimate beta separately from the constant, while "joint" indicates to estimate both using non-differenced detrended series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>is_input_logged</code></td>
+<td>
+<p>A boolean specifying if the input is logged or not</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lagged_proxy_trend_and_forecasts_window</code></td>
+<td>
+<p>A 'ts' object storing the potentially lagged popularity proxy trend and any forecasts needed due to the lag.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ts_trend_window</code></td>
+<td>
+<p>A 'ts' object storing the trend component of the onsite social media usage. This trend component is potentially truncated to match available popularity proxy data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ts_seasonality_window</code></td>
+<td>
+<p>A 'ts' object storing the seasonality component of the onsite social media usage. This seasonality component is potentially truncated to match available popularity proxy data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>latest_starttime</code></td>
+<td>
+<p>A 'tsp' attribute of a 'ts' object representing the latest of the two start times of the potentially lagged populairty proxy and the onsite social media usage.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>endtime</code></td>
+<td>
+<p>A 'tsp' attribute of a 'ts' object representing the time of the final onsite usage observation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>A numeric storing the estimated seasonality adjustment factor.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constant</code></td>
+<td>
+<p>A numeric storing estimated constant term used in the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>slope</code></td>
+<td>
+<p>A numeric storing the estimated slope term used in the model. Applicable when the trend parameter is "linear". Otherwise, NULL is returned.</p>
+</td>
+</tr>
+</table>
+</div>

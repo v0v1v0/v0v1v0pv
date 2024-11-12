@@ -1,0 +1,391 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>verify</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Verification function</h2>
+
+<h3>Description</h3>
+
+<p>Based on the type of inputs, this function
+calculates a range of verification statistics and skill scores.
+Additionally, it creates a verify  class object that can be
+used in further analysis or with other methods such as plot and summary.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">
+verify(obs, pred, p = NULL, baseline = NULL, 
+    frcst.type = "prob", obs.type = "binary",
+    thresholds = seq(0,1,0.1), show = TRUE, bins = TRUE,
+    fudge = 0.01, ...)
+
+       </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>The values with which the verifications are
+verified. May be a vector of length 4 if the forecast and
+predictions are binary data summarized in a contingency
+table.  In this case, the value are entered in the order of
+c(n11, n01, n10, n00).
+If  obs is a matrix, it is assumed to be a contingency table with observed values summarized in the columns and forecasted values summarized in the rows.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred</code></td>
+<td>
+<p>Prediction of event.  The prediction may be in the
+form of the a point prediction or the probability of a
+forecast.  Let pred = NULL if obs is a contingency
+table. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>the probability level of the quantile forecast, any value between 0 and 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>baseline</code></td>
+<td>
+<p>In meteorology, climatology is the baseline
+that represents the
+no-skill forecast.  In other fields this field would
+differ.  This field is used to calculate certain skill
+scores.  If left NULL, these statistics are calculated using
+sample climatology.  If this is not NULL, the mean of these values is used as the baseline forecast.  This interpretation is not appropriate for all applications.  For example, if a baseline forecast is different for each forecast this will not work appropriately.  </p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>frcst.type</code></td>
+<td>
+<p>Forecast type.  One of "prob", "binary",
+"norm.dist", "cat" or "cont", or "quantile".  Defaults to "prob".
+"norm.dist" is used when the forecast is in the form of a
+normal distribution.  See crps for more details. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs.type</code></td>
+<td>
+<p>Observation type.  Either  "binary", "cat" or
+"cont".  Defaults to "binary"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thresholds</code></td>
+<td>
+<p>Thresholds to be considered for point
+forecasts of continuous events.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show</code></td>
+<td>
+<p>Binary; if TRUE (the default), print warning message</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bins</code></td>
+<td>
+<p>Binary; if TRUE (default), the probabilistic forecasts
+are placed in bins defined by the sequence defined in threshold
+and assigned the midpoint value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fudge</code></td>
+<td>
+<p>A numeric fudge factor to be added to each cell of the contingency table in order to avoid division by zero.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional options.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p> See Wilks (2006) and the WMO Joint WWRP/WGNE Working Group web site on verification for more details about these verification statistics.  See Stephenson et al. (2008) and Ferro and Stephenson (2011) for more on the extreme dependence scores and indices.  For information on confidence intervals for these scores, see Gilleland (2010).
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of the verify class.  Depending on the type of
+data used, the following information may be returned.  The
+following notation is used to describe which values are
+produced for which type of forecast/observations. (BB =
+binary/binary, PB = probablistic/binary, CC =
+continuous/continuous, CTCT = categorical/categorical)   
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>BS</code></td>
+<td>
+<p>Brier Score (PB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BSS</code></td>
+<td>
+<p>Brier Skill Score(PB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SS</code></td>
+<td>
+<p>Skill Score (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hit.rate</code></td>
+<td>
+<p>Hit rate, aka PODy, $h$ (PB, CTCT)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>false.alarm.rate</code></td>
+<td>
+<p>False alarm rate, PODn,
+$f$ (PB, CTCT)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>TS</code></td>
+<td>
+<p>Threat Score or Critical Success Index (CSI)(BB, CTCT) </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ETS</code></td>
+<td>
+<p>Equitable Threat Score (BB, CTCT)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BIAS</code></td>
+<td>
+<p>Bias (BB, CTCT) </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PC</code></td>
+<td>
+<p>Percent correct or hit rate (BB, CTCT)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Cont.Table</code></td>
+<td>
+<p>Contingency Table (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>HSS</code></td>
+<td>
+<p>Heidke Skill Score(BB, CTCT) </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>KSS</code></td>
+<td>
+<p>Kuniper Skill Score (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PSS</code></td>
+<td>
+<p>Pierce Skill Score (CTCT) </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>GS</code></td>
+<td>
+<p>Gerrity Score (CTCT) </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ME</code></td>
+<td>
+<p>Mean error (CC) </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>MSE</code></td>
+<td>
+<p>Mean-squared error (CC)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>MAE</code></td>
+<td>
+<p>Mean absolute error (CC)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+<p>Odds Ratio (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log.theta</code></td>
+<td>
+<p>Log Odds Ratio</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.h</code></td>
+<td>
+<p>Degrees of freedom for log.theta (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>orss</code></td>
+<td>
+<p>Odds ratio skill score, aka Yules's Q (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eds</code></td>
+<td>
+<p>Extreme Dependency Score (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eds.se</code></td>
+<td>
+<p>Standard Error for Extreme Dependence Score (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seds</code></td>
+<td>
+<p>Symmetric Extreme Dependency Score (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seds.se</code></td>
+<td>
+<p>Standard Error for Symmetric Extreme Dependency Score (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>EDI</code></td>
+<td>
+<p>Extremal Dependence Index (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>EDI.se</code></td>
+<td>
+<p>Standard Error for Extremal Dependence Index (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SEDI</code></td>
+<td>
+<p>Symmetric Extremal Dependence Index (BB)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SEDI.se</code></td>
+<td>
+<p>Standard Error for Symmetric Extremal Dependence Index (BB)</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+ 
+<p>There are other packages in R and Bioconductor which are usefull for verification tasks.  This includes the <span class="pkg">ROCR</span>, <span class="pkg">ROC</span>, package and the <span class="pkg">limma</span> package (in the Bioconductor repository.)  Written by people in different fields, each provides tools for verification from  different perspectives.
+</p>
+<p>For the categorical forecast and verification, the Gerrity
+score only makes sense for forecast that have order, or are
+basically ordinal. It is assumed that the forecasts are listed
+in order.  For example, if the rows of a contigency table were summarized as "medium, low, high", the Gerrity score will be incorrectly summarized.
+</p>
+<p>As of version 1.37, the intensity scale (IS) verification funcitons have been removed from this package.  Please use <span class="pkg">SpatialVx</span> for this functionality.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich</p>
+
+
+<h3>References</h3>
+
+<p>Ferro, C. A. T. and D. B. Stephenson, 2011.  Extremal dependence indices: Improved verification measures for deterministic forecasts of rare binary events.  <em>Wea. Forecasting</em>, <b>26</b>, 699 - 713.
+</p>
+<p>Gilleland, E., 2010. Confidence intervals for forecast verification. NCAR Technical Note NCAR/TN-479+STR, 71pp.  Available at: http://nldr.library.ucar.edu/collections/technotes/asset-000-000-000-846.pdf
+</p>
+<p>Stephenson, D. B., B. Casati, C. A. T. Ferro, and C. A. Wilson, 2008.  The extreme dependency score: A non-vanishing measure for forecasts of rare events.  <em>Meteor. Appl.</em>, <b>15</b>, 41 - 50.
+</p>
+<p>Wilks, D. S., 2006. <em>Statistical Methods in the Atmospheric Sciences </em>, San Diego: Academic Press., 627 pp. (2nd Editiion).
+</p>
+<p>WMO Joint WWRP/WGNE Working Group on Verification Website
+</p>
+<p><a href="http://www.cawcr.gov.au/projects/verification/">http://www.cawcr.gov.au/projects/verification/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>table.stats</code> </p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># binary/binary example
+obs&lt;- round(runif(100))
+pred&lt;- round(runif(100))
+
+# binary/binary example
+# Finley tornado data.
+
+obs&lt;- c(28, 72, 23, 2680)
+A&lt;- verify(obs, pred = NULL, frcst.type = "binary", obs.type = "binary")
+
+summary(A)
+
+# categorical/categorical example
+# creates a simulated 5 category forecast and observation.
+obs &lt;- round(runif(100, 1,5) )
+pred &lt;- round(runif(100, 1,5) )
+
+A&lt;- verify(obs, pred, frcst.type = "cat", obs.type = "cat" )
+summary(A)
+
+#  probabilistic/ binary example
+
+pred&lt;- runif(100)
+A&lt;- verify(obs, pred, frcst.type = "prob", obs.type = "binary")
+summary(A)
+
+# continuous/ continuous example
+obs&lt;- rnorm(100)
+pred&lt;- rnorm(100)
+baseline &lt;- rnorm(100, sd = 0.5) 
+
+A&lt;- verify(obs, pred, baseline = baseline,  frcst.type = "cont", obs.type = "cont")
+summary(A)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,92 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dina_data_gen</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Artificial data generating function for the DINA model based on the given Q-matrix</h2>
+
+<h3>Description</h3>
+
+<p><code>dina_data_gen()</code> returns the artificially generated item response data for the DINA model
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dina_data_gen(Q, I, attr_cor = 0.1, s = 0.2, g = 0.2, seed = 17)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Q</code></td>
+<td>
+<p>the <code class="reqn">J \times K</code> binary matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>I</code></td>
+<td>
+<p>the number of assumed respondents</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>attr_cor</code></td>
+<td>
+<p>the true value of the correlation among attributes (default: 0.1)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s</code></td>
+<td>
+<p>the true value of the slip parameter (default: 0.2)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>the true value of the guessing parameter (default: 0.2)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>the seed value used for random number generation (default: 17)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list including:
+</p>
+
+<dl>
+<dt>X</dt>
+<dd>
+<p>the generated artificial item response data</p>
+</dd>
+<dt>att_pat</dt>
+<dd>
+<p>the generated true vale of the attribute mastery pattern</p>
+</dd>
+</dl>
+<h3>References</h3>
+
+<p>Oka, M., &amp; Okada, K. (2023). Scalable Bayesian Approach for the Dina
+Q-Matrix Estimation Combining Stochastic Optimization and Variational Inference.
+<em>Psychometrika</em>, 88, 302–331. <a href="https://doi.org/10.1007/s11336-022-09884-4">doi:10.1007/s11336-022-09884-4</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># load Q-matrix
+Q = sim_Q_J80K5
+sim_data = dina_data_gen(Q=Q,I=200)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visGroups</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Network visualization groups options</h2>
+
+<h3>Description</h3>
+
+<p>Network visualization groups options. For full documentation, have a look at visDocumentation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visGroups(graph, useDefaultGroups = TRUE, groupname = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>graph</code></td>
+<td>
+<p>: a visNetwork object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>useDefaultGroups</code></td>
+<td>
+<p>: Boolean. Default to true. If your nodes have groups defined that are not in the Groups module, the module loops over the groups it does have, allocating one for each unknown group. When all are used, it goes back to the first group. By setting this to false, the default groups will not be used in this cycle.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groupname</code></td>
+<td>
+<p>: String. Name of target group.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>: visNodes. You can add multiple groups containing styling information that applies to a certain subset of groups. All options described in the nodes module that make sense can be used here (you're not going to set the same id or x,y position for a group of nodes)</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>See online documentation <a href="https://datastorm-open.github.io/visNetwork/">https://datastorm-open.github.io/visNetwork/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>visNodes for nodes options, visEdges for edges options, visGroups for groups options, 
+visLegend for adding legend, visOptions for custom option, visLayout &amp; visHierarchicalLayout for layout, 
+visPhysics for control physics, visInteraction for interaction, visNetworkProxy &amp; visFocus &amp; visFit for animation within shiny,
+visDocumentation, visEvents, visConfigure ...
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+nodes &lt;- data.frame(id = 1:10, label = paste("Label", 1:10), 
+ group = sample(c("A", "B"), 10, replace = TRUE))
+ edges &lt;- data.frame(from = c(2,5,10), to = c(1,2,10))
+
+visNetwork(nodes, edges) %&gt;%
+ visLegend() %&gt;%
+ visGroups(groupname = "A", color = "red", shape = "database") %&gt;%
+ visGroups(groupname = "B", color = "yellow", shape = "triangle")
+ 
+</code></pre>
+
+
+</div>

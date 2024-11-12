@@ -1,0 +1,122 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Opt</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Optimums </h2>
+
+<h3>Description</h3>
+
+<p>Generic function for the <em>optimums</em> (or optima) of a model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Opt(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p> An object for which the computation or
+extraction of an optimum (or optimums) is meaningful.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Other arguments fed into the specific
+methods function of the model. Sometimes they are fed
+into the methods function for <code>Coef</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Different models can define an optimum in different ways.
+Many models have no such notion or definition.
+</p>
+<p>Optimums occur in quadratic and additive ordination,
+e.g., CQO or CAO.
+For these models the optimum is the value of the latent
+variable where the maximum occurs, i.e., where the fitted value
+achieves its highest value.
+For quadratic ordination models there is a formula
+for the optimum but for additive ordination models the
+optimum must be searched for numerically. If it occurs
+on the boundary, then the optimum is undefined.
+At an optimum, the fitted value of the response is
+called the <em>maximum</em>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The value returned depends specifically on the methods
+function invoked.
+</p>
+
+
+<h3>Note</h3>
+
+<p>In ordination, the optimum of a species is sometimes
+called the <em>species score</em>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2004).
+A new technique for maximum-likelihood
+canonical Gaussian ordination.
+<em>Ecological Monographs</em>,
+<b>74</b>, 685–701.
+</p>
+<p>Yee, T. W. (2006).
+Constrained additive ordination.
+<em>Ecology</em>, <b>87</b>, 203–213.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Opt.qrrvglm</code>,
+<code>Max</code>,
+<code>Tol</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+set.seed(111)  # This leads to the global solution
+hspider[,1:6] &lt;- scale(hspider[,1:6])  # Standardized environmental vars
+p1 &lt;- cqo(cbind(Alopacce, Alopcune, Alopfabr, Arctlute, Arctperi,
+                Auloalbi, Pardlugu, Pardmont, Pardnigr, Pardpull,
+                Trocterr, Zoraspin) ~
+          WaterCon + BareSand + FallTwig + CoveMoss + CoveHerb + ReflLux,
+          family = poissonff, data = hspider, Crow1positive = FALSE)
+Opt(p1)
+
+clr &lt;- (1:(ncol(depvar(p1))+1))[-7]  # Omits yellow
+persp(p1, col = clr, las = 1, main = "Vertical lines at the optimums")
+abline(v = Opt(p1), lty = 2, col = clr)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

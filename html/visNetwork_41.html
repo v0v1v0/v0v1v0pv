@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visLayout</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Network visualization layout options</h2>
+
+<h3>Description</h3>
+
+<p>Network visualization layout options. For full documentation, have a look at visDocumentation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visLayout(
+  graph,
+  randomSeed = NULL,
+  improvedLayout = NULL,
+  clusterThreshold = NULL,
+  hierarchical = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>graph</code></td>
+<td>
+<p>: a visNetwork object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>randomSeed</code></td>
+<td>
+<p>: Number. When NOT using the hierarchical layout, the nodes are randomly positioned initially. This means that the settled result is different every time. If you provide a random seed manually, the layout will be the same every time. Ideally you try with an undefined seed, reload until you are happy with the layout and use the getSeed() method to ascertain the seed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>improvedLayout</code></td>
+<td>
+<p>: Boolean. Default to true. When enabled, the network will use the Kamada Kawai algorithm for initial layout. For networks larger than 100 nodes, clustering will be performed automatically to reduce the amount of nodes. This can greatly improve the stabilization times. If the network is very interconnected (no or few leaf nodes), this may not work and it will revert back to the old method. Performance will be improved in the future.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clusterThreshold</code></td>
+<td>
+<p>:    Number. Default to    150. Cluster threshold to which improvedLayout applies.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hierarchical</code></td>
+<td>
+<p>: Boolean. Default to false. When true, the layout engine positions the nodes in a hierarchical fashion using default settings. For customization you can use visHierarchicalLayout</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>See online documentation <a href="https://datastorm-open.github.io/visNetwork/">https://datastorm-open.github.io/visNetwork/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>visNodes for nodes options, visEdges for edges options, visGroups for groups options, 
+visLegend for adding legend, visOptions for custom option, visLayout &amp; visHierarchicalLayout for layout, 
+visPhysics for control physics, visInteraction for interaction, visNetworkProxy &amp; visFocus &amp; visFit for animation within shiny,
+visDocumentation, visEvents, visConfigure ...
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+nodes &lt;- data.frame(id = 1:10)
+edges &lt;- data.frame(from = round(runif(8)*10), to = round(runif(8)*10))
+
+# fix seed, so you retrieve same network each time...!
+visNetwork(nodes, edges) %&gt;%
+ visLayout(randomSeed = 123) 
+
+visNetwork(nodes, edges) %&gt;%
+ visLayout(randomSeed = 123)   
+ 
+# hierarchical
+visNetwork(nodes, edges) %&gt;%
+ visLayout(hierarchical = TRUE) 
+ 
+visNetwork(nodes, edges) %&gt;%
+ visHierarchicalLayout(direction = "LR")
+
+</code></pre>
+
+
+</div>

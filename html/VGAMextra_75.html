@@ -1,0 +1,204 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>KPSS.test</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>KPSS tests for stationarity</h2>
+
+<h3>Description</h3>
+
+<p>The Kwiatkowski-Phillips-Schmidt-Shin (KPSS) 
+test for the null hypothesis that the series <code class="reqn">x</code> is
+<code>level</code> or <code>trend</code> stationary
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">           KPSS.test(x, type.H0 = c("level", "trend")[1],
+                        trunc.l = c("short", "large")[1],
+                        show.output = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>Numeric. A univariate series.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.H0</code></td>
+<td>
+
+<p>The null hypothesis to be tested: either <code>level</code> or
+<code>trend</code> stationarity.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trunc.l</code></td>
+<td>
+
+<p>The lag truncation parameter. See below for more details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.output</code></td>
+<td>
+
+<p>Logical. Should the results be displyed? Default is 
+<code>TRUE</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>To test the null hypothesis that a univariate time series
+is level–stationary or stationary around a deterministic
+trend. The alternative states the existence of a unit root.
+</p>
+<p>Under this methodology, the series, say
+<code class="reqn"> \{ y_t;~t = 1, \ldots, T\} </code>
+is assumed to be decomposed as
+
+</p>
+<p style="text-align: center;"><code class="reqn">y_t = \rho t + \xi_t + \varepsilon_t,</code>
+</p>
+
+<p>that is, as the sum of a deterministic trend, 
+a random walk (<code class="reqn">\xi_t</code>), and a stationary error
+(<code class="reqn">\varepsilon_t \sim N(0, \sigma^2_z)</code>. 
+Hence, this test reduces to simply test the
+hypothesis that <code class="reqn">\{ \xi_t \} </code> 
+is stationary,
+that is, <code class="reqn">H_0: \sigma^2_z = 0.</code>
+</p>
+<p>The test statistic combines the one–sided Lagrange
+multiplier (LM) statistic 
+and the <em>locally best invariant</em> (LBI) test
+statistic (Nabeya and Tanaka, (1988)). 
+Its asymptotic distribution is discussed
+in Kwiatkowski et al. (1992), and depends on 
+the ‘long–run’ variance <code class="reqn">\sigma^2</code>.
+The test statistic is given by
+</p>
+<p style="text-align: center;"><code class="reqn">\eta = T^{-2} \sum_i S^2_i / \widehat{\sigma}^2= 
+ T^{-2} \sum_i S^2_i / s^2(l).</code>
+</p>
+
+<p>where <code class="reqn">s^2(l)</code> is a consistent estimate of
+<code class="reqn">\sigma^2</code>, given by
+</p>
+<p style="text-align: center;"><code class="reqn">s^2(l) = (1/T)\sum_{t = 1}^T\varepsilon^2_t + 
+   (2 / T) \sum_{s = 1}^l w(s, l) \sum_{t = s + 1}^T \varepsilon_t
+   \varepsilon_{t - s}.</code>
+</p>
+
+<p>Here, <code class="reqn">w(s, l) = 1 - s/(l + 1)</code>, where
+<code>l</code> is taken from <code>trunc.l</code>, the 
+lag–truncation parameter. The choice <code>"short"</code> 
+gives the smallest integer not less than
+<code class="reqn">3 \sqrt{T} / 11</code>, or else,
+<code class="reqn">9 \sqrt{T} / 11</code>, if
+<code>trunc.l = "large"</code>.
+</p>
+<p>Note, here the errors, <code class="reqn">\varepsilon_t</code>, are
+estimated from the regression 
+<code class="reqn">x ~ 1</code> (level) or <code class="reqn">x ~ 1 + t</code> (trend), depending upon 
+the argument <code>type.H0</code>.
+</p>
+<p>Unlike other software using linear interpolates, here
+the p–values for both, trend and level stationarity,
+are interpolated by cubic spline interpolations 
+from the tail critical values given 
+in Table 1 in Kwiatkowski et al. (1992).
+The interpolation takes place on <code class="reqn">\eta</code>. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with the following:
+</p>
+<p>1) Test statistic and P-value,
+</p>
+<p>2) Critical values,
+</p>
+<p>3) Residuals, <code class="reqn">\varepsilon_t</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>There is no standard methodology to select an 
+appropriate value for <code>trunc.l</code>, however,
+satisfactory results have been found for 
+<code>trunc.l</code> proportional to <code class="reqn">T^{1/2}</code>.
+See Andrews, D.W.K. (1991) for a discussion on this.
+Empirically, this parameter may be <em>suggested</em>
+by the problem in turn, and should be large enough to 
+approximate the true dynamic behaviour of the series.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda.
+</p>
+
+
+<h3>References</h3>
+
+<p>Andrews, D.W.K. (1991)
+Heteroskedasticiy and autocorrelation consistent
+covariance matrix estimation.
+<em>Econometrica</em>, <span class="pkg">59</span>, 817–858.
+</p>
+<p>Kwiatkowski, D., Phillips, P.C.B., 
+Schmidt, P., and Shin, Y. (1992)
+Testing the null hypothesis of stationarity against
+the alternative of a unit root.
+<em>Journal of Econometrics</em>, <span class="pkg">54</span>, 159–178.
+</p>
+<p>Nabeya, S. and Tanaka, K. (1988)
+Asymptotic theory of a test for the constancy
+regression coefficients against the random walk
+alternative.
+<em>Annals of Statistics</em>, <span class="pkg">16</span>, 218–235.
+</p>
+<p>Phillips, P.C.B. and Perron, P. (1988)
+Testing for a unit root in time series regression.
+<em>Biometrika</em>, <span class="pkg">75</span>, 335–346.
+</p>
+<p>Phillips, P.C.B. (1987)
+Time series with unit roots.
+<em>Econometrica</em>, <span class="pkg">55</span>, 277–301
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>checkTS.VGAMextra</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(2802)
+test &lt;- KPSS.test(rnorm(20), type.H0 = "trend")
+class(test)
+
+test$crit.value
+</code></pre>
+
+
+</div>

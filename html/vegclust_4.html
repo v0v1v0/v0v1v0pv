@@ -1,0 +1,179 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>as.vegclust</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Turns into vegclust objects
+</h2>
+
+<h3>Description</h3>
+
+<p>Attempts to turn its arguments into a <code>vegclust</code> object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">as.vegclust(x, y, method="KM", m=1.0, dnoise=NULL, eta=NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A site-by-species data matrix (raw mode), or a site-by-site distance matrix (distance mode).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+
+<p>A vector indicating the cluster that each object in <code>x</code> belongs to. Alternatively, a fuzzy/hard site-by-group matrix of membership values.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+
+<p>A clustering model from which <code>y</code> was obtained (normally "KM"). Current accepted models are:
+</p>
+
+<ul>
+<li>
+<p><code>"KM"</code>: K-means or hard c-means (MacQueen 1967)
+</p>
+</li>
+<li>
+<p><code>"KMdd"</code>: Hard c-medoids (Krishnapuram et al. 1999)
+</p>
+</li>
+<li>
+<p><code>"FCM"</code>: Fuzzy c-means (Bezdek 1981)
+</p>
+</li>
+<li>
+<p><code>"FCMdd"</code>: Fuzzy c-medoids (Krishnapuram et al. 1999)
+</p>
+</li>
+<li>
+<p><code>"NC"</code>: Noise clustering (Dave and Krishnapuram 1997)
+</p>
+</li>
+<li>
+<p><code>"NCdd"</code>: Noise clustering with medoids
+</p>
+</li>
+<li>
+<p><code>"HNC"</code>: Hard noise clustering
+</p>
+</li>
+<li>
+<p><code>"HNCdd"</code>: Hard noise clustering with medoids
+</p>
+</li>
+<li>
+<p><code>"PCM"</code>: Possibilistic c-means (Krishnapuram and Keller 1993)
+</p>
+</li>
+<li>
+<p><code>"PCMdd"</code>: Possibilistic c-medoids
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+
+<p>The fuzziness exponent to be used, relevant for all fuzzy models (FCM, FCMdd, NC, NCdd, PCM and PCMdd)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dnoise</code></td>
+<td>
+
+<p>The distance to the noise cluster, relevant for noise clustering models (NC, HNC, NCdd and HNCdd). 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eta</code></td>
+<td>
+
+<p>A vector of reference distances, relevant for possibilistic models (PCM and PCMdd). 
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is used to generate <code>vegclust</code> objects which can then be used in <code>vegclass</code> to classify new data. If the input classification is hard (i.e. yes/no membership), cluster centers are calculated as multivariate means, and the method for assigning new data is assumed to be k-means (<code>"KM"</code>), i.e. plots will be assigned to the nearest cluster center. If community data is given as site-by-species data matrix the cluster centroids are added as <code>mobileCenters</code> in the <code>vegclust</code> object. Centroids will not be computed if community data is given as a site-by-site dissimilarity matrix. Moreover, current implementation does not allow <code>y</code> to be a membership matrix when <code>x</code> is a distance matrix.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>vegclust</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, CREAF.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vegclust</code>, <code>vegclass</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Loads data  
+data(wetland)
+
+## This equals the chord transformation 
+## (see also  \code{\link{decostand}} in package vegan)
+wetland.chord = as.data.frame(sweep(as.matrix(wetland), 1, 
+                              sqrt(rowSums(as.matrix(wetland)^2)), "/"))
+
+## Splits wetland data into two matrices of 30x27 and 11x22
+wetland.30 = wetland.chord[1:30,]
+wetland.30 = wetland.30[,colSums(wetland.30)&gt;0]
+dim(wetland.30)
+wetland.11 = wetland.chord[31:41,]
+wetland.11 = wetland.11[,colSums(wetland.11)&gt;0] 
+dim(wetland.11)
+
+## Performs a K-means clustering of the data set with 30 sites
+wetland.km = kmeans(wetland.30, centers=3, nstart=10)
+
+## Transforms the 'external' classification of 30 sites into a 'vegclust' object
+wetland.30.vc = as.vegclust(wetland.30, wetland.km$cluster)
+
+## Assigns the second set of sites according to the (k-means) membership rule 
+## That is, sites are assigned to the cluster whose cluster centroids is nearest.
+wetland.11.km = vegclass(wetland.30.vc, wetland.11)
+
+## A similar 'vegclust' object is obtained when using the distance mode...
+wetland.d.vc = as.vegclust(dist(wetland.30), wetland.km$cluster)
+
+## which can be also used to produce the assignment of the second set of objects
+wetland.d.11 = as.data.frame(as.matrix(dist(wetland.chord)))[31:41,1:30]
+wetland.d.11.km = vegclass(wetland.d.vc,wetland.d.11)
+</code></pre>
+
+
+</div>

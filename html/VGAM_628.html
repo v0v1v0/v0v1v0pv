@@ -1,0 +1,178 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>genpoisson1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Generalized Poisson Regression
+(GP-1 Parameterization) </h2>
+
+<h3>Description</h3>
+
+<p>Estimation of the two-parameter generalized
+Poisson distribution (GP-1 parameterization)
+which has the variance as a linear function
+of the mean.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">genpoisson1(lmeanpar = "loglink", ldispind = "logloglink",
+     parallel = FALSE, zero = "dispind",
+     vfl = FALSE, Form2 = NULL,
+     imeanpar = NULL, idispind = NULL, imethod = c(1, 1),
+     ishrinkage = 0.95, gdispind = exp(1:5))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmeanpar, ldispind</code></td>
+<td>
+
+<p>Parameter link functions for <code class="reqn">\mu</code>
+and <code class="reqn">\varphi</code>.  They are called
+the <em>mean</em> <em>par</em>ameter and
+<em>disp</em>ersion <em>ind</em>ex respectively.
+See <code>Links</code> for more choices.
+In theory the <code class="reqn">\varphi</code> parameter might
+be allowed to be less than unity to handle
+underdispersion but this is not supported.
+The mean is positive so its default is the
+log link.  The dispersion index is <code class="reqn">&gt; 1</code>
+so its default is the log-log link.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vfl, Form2</code></td>
+<td>
+
+<p>If <code>vfl = TRUE</code> then <code>Form2</code>
+should be assigned a formula having terms
+comprising <code class="reqn">\eta_2=\log \log \varphi</code>.
+This is similar to <code>uninormal</code>.
+See <code>CommonVGAMffArguments</code>
+for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imeanpar, idispind</code></td>
+<td>
+
+<p>Optional initial values for <code class="reqn">\mu</code> and
+<code class="reqn">\varphi</code>.  The default is to choose
+values internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>
+for information.
+The argument is recycled to length 2, and
+the first value corresponds to <code class="reqn">\mu</code>, etc.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishrinkage, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>
+for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gdispind, parallel</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>
+for information.  Argument <code>gdispind</code>
+is similar to <code>gsigma</code> there and is
+currently used only if <code>imethod[2] = 2</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a variant of the generalized Poisson
+distribution (GPD) and is similar to the GP-1
+referred to by some writers such as Yang,
+et al. (2009).  Compared to the original GP-0
+(see <code>genpoisson0</code>) the GP-1 has
+<code class="reqn">\theta  = \mu / \sqrt{\varphi}</code> and
+<code class="reqn">\lambda = 1 - 1 / \sqrt{\varphi}</code> so that
+the variance is <code class="reqn">\mu \varphi</code>.
+The first linear predictor by default is
+<code class="reqn">\eta_1 = \log \mu</code> so that
+the GP-1 is more suitable for regression than
+the GP-1.
+</p>
+<p>This family function can handle only
+overdispersion relative to the Poisson.
+An ordinary Poisson distribution corresponds
+to <code class="reqn">\varphi = 1</code>.  The mean (returned
+as the fitted values) is <code class="reqn">E(Y) = \mu</code>.
+For overdispersed data, this GP parameterization
+is a direct competitor of the NB-1 and
+quasi-Poisson.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see
+<code>vglmff-class</code>).  The object
+is used by modelling functions such as
+<code>vglm</code>, and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>See <code>genpoisson0</code> for warnings
+relevant here, e.g., it is a good idea to
+monitor convergence because of equidispersion
+and underdispersion.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Genpois1</code>,
+<code>genpoisson0</code>,
+<code>genpoisson2</code>,
+<code>poissonff</code>,
+<code>negbinomial</code>,
+<code>Poisson</code>,
+<code>quasipoisson</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">gdata &lt;- data.frame(x2 = runif(nn &lt;- 500))
+gdata &lt;- transform(gdata, y1 = rgenpois1(nn, exp(2 + x2),
+                               logloglink(-1, inverse = TRUE)))
+gfit1 &lt;- vglm(y1 ~ x2, genpoisson1, gdata, trace = TRUE)
+coef(gfit1, matrix = TRUE)
+summary(gfit1)
+</code></pre>
+
+
+</div>

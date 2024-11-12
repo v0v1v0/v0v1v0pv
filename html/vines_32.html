@@ -1,0 +1,112 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Vine-distribution</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vine Distribution Functions</h2>
+
+<h3>Description</h3>
+
+<p>Density evaluation, distribution function evaluation, and random number generation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dvine(vine, u)
+pvine(vine, u)
+rvine(vine, n)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vine</code></td>
+<td>
+<p>A <code>Vine</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>u</code></td>
+<td>
+<p>Vector of the same dimension of the vine or a matrix with one column
+for each variable of the vine.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>Number of observations.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The implementation of the <code>dvine</code> function for <code>CVine</code>
+and <code>DVine</code> objects is based on the Algorithms 3 and 4 
+of (Aas et al. 2009), respectively.
+</p>
+<p>The <code>pvine</code> function is evaluated through the numerical integration of 
+the density function (using the <code>cubature</code> package). This is a 
+computationally demanding procedure, even for small dimensions.
+</p>
+<p>The implementation of the <code>rvine</code> function for <code>CVine</code> 
+and <code>DVine</code> objects is based on the Algorithms 1 and 2 
+of (Aas et al. 2009), respectively.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dnorm</code> returns a vector with the evaluation of the density.
+<code>pnorm</code> returns a vector with the evaluation of the distribution 
+function. <code>rvine</code> returns a matrix with one column for each variable
+of the vine and one row for each observation.
+</p>
+
+
+<h3>References</h3>
+
+<p>Aas, K. and Czado, C. and Frigessi, A. and Bakken, H. (2009)
+Pair-copula constructions of multiple dependence.
+<em>Insurance: Mathematics and Economics</em> <b>44</b>, 182–198.
+</p>
+<p>Bedford, T. and Cooke, R. M. (2001) Monte Carlo simulation of vine
+dependent random variables for applications in uncertainty analysis. 
+In <em>2001 Proceedings of ESREL2001, Turin, Italy</em>.
+</p>
+<p>Bedford, T. and Cooke, R. M. (2001) Probability density decomposition 
+for conditionally dependent random variables modeled by vines. 
+<em>Annals of Mathematics and Artificial Intelligence</em> <b>32</b>,
+245–268.
+</p>
+<p>Kurowicka, D. and Cooke, R. M. (2005) Sampling algorithms for generating 
+joint uniform distributions using the vine-copula method. In <em>3rd 
+IASC World Conference on Computational Statistics &amp; Data Analysis, 
+Limassol, Cyprus</em>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dimension &lt;- 3
+copulas &lt;- matrix(list(normalCopula(0.5), 
+                       claytonCopula(2.75),
+                       tCopula(0.75, df = 2), 
+                       NULL),
+                  ncol = dimension - 1, 
+                  nrow = dimension - 1)
+vine &lt;- DVine(dimension = dimension, trees = dimension - 1,
+              copulas = copulas)
+dimnames(vine) &lt;- c("A", "B", "C")
+
+data &lt;- rvine(vine, 1)
+dvine(vine, data)
+pvine(vine, data)
+</code></pre>
+
+
+</div>

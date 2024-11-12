@@ -1,0 +1,385 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>agent</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>agent</h2>
+
+<h3>Description</h3>
+
+<p>This is an object that represents a villager (agent).
+</p>
+
+
+<h3>Details</h3>
+
+<p>This class acts as an abstraction for handling villager-level logic. It can take a
+number of functions that run at each timestep. It also has an associated
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt><code>as_table()</code></dt>
+<dd>
+<p>Represents the current state of the agent as a tibble</p>
+</dd>
+<dt><code>get_age()</code></dt>
+<dd>
+<p>Returns age in terms of years</p>
+</dd>
+<dt><code>get_gender()</code></dt>
+<dd></dd>
+<dt><code>get_days_sincelast_birth()</code></dt>
+<dd>
+<p>Get the number of days since the agent last gave birth</p>
+</dd>
+<dt><code>initialize()</code></dt>
+<dd>
+<p>Create a new agent</p>
+</dd>
+<dt><code>propagate()</code></dt>
+<dd>
+<p>Runs every day</p>
+</dd>
+</dl>
+<p>Create a new agent
+</p>
+
+
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>identifier</code></dt>
+<dd>
+<p>A unique identifier that can be used to identify and find the agent</p>
+</dd>
+<dt><code>first_name</code></dt>
+<dd>
+<p>The agent's first name</p>
+</dd>
+<dt><code>last_name</code></dt>
+<dd>
+<p>The agent's last name</p>
+</dd>
+<dt><code>age</code></dt>
+<dd>
+<p>The agent's age</p>
+</dd>
+<dt><code>mother_id</code></dt>
+<dd>
+<p>The identifier of the agent's mother</p>
+</dd>
+<dt><code>father_id</code></dt>
+<dd>
+<p>The identifier of the agent's father</p>
+</dd>
+<dt><code>profession</code></dt>
+<dd>
+<p>The agent's profession</p>
+</dd>
+<dt><code>partner</code></dt>
+<dd>
+<p>The identifier of the agent's partner</p>
+</dd>
+<dt><code>gender</code></dt>
+<dd>
+<p>The agent's gender</p>
+</dd>
+<dt><code>alive</code></dt>
+<dd>
+<p>A boolean flag that represents whether the villager is alive or dead</p>
+</dd>
+<dt><code>children</code></dt>
+<dd>
+<p>A list of children identifiers</p>
+</dd>
+<dt><code>health</code></dt>
+<dd>
+<p>A percentage value of the agent's current health</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-agent-new"><code>agent$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent-is_alive"><code>agent$is_alive()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent-get_days_since_last_birth"><code>agent$get_days_since_last_birth()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent-add_child"><code>agent$add_child()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent-as_table"><code>agent$as_table()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent-clone"><code>agent$clone()</code></a>
+</p>
+</li>
+</ul>
+<hr>
+<a id="method-agent-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Used to created new agent objects.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent$new(
+  identifier = NA,
+  first_name = NA,
+  last_name = NA,
+  age = 0,
+  mother_id = NA,
+  father_id = NA,
+  partner = NA,
+  children = vector(mode = "character"),
+  gender = NA,
+  profession = NA,
+  alive = TRUE,
+  health = 100
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>identifier</code></dt>
+<dd>
+<p>The agent's identifier</p>
+</dd>
+<dt><code>first_name</code></dt>
+<dd>
+<p>The agent's first name</p>
+</dd>
+<dt><code>last_name</code></dt>
+<dd>
+<p>The agent's last name</p>
+</dd>
+<dt><code>age</code></dt>
+<dd>
+<p>The age of the agent</p>
+</dd>
+<dt><code>mother_id</code></dt>
+<dd>
+<p>The identifier of the agent's mother</p>
+</dd>
+<dt><code>father_id</code></dt>
+<dd>
+<p>The identifier of the agent' father</p>
+</dd>
+<dt><code>partner</code></dt>
+<dd>
+<p>The identifier of the agent's partner</p>
+</dd>
+<dt><code>children</code></dt>
+<dd>
+<p>An ordered list of of the children from this agent</p>
+</dd>
+<dt><code>gender</code></dt>
+<dd>
+<p>The gender of the agent</p>
+</dd>
+<dt><code>profession</code></dt>
+<dd>
+<p>The agent's profession</p>
+</dd>
+<dt><code>alive</code></dt>
+<dd>
+<p>Boolean whether the agent is alive or not</p>
+</dd>
+<dt><code>health</code></dt>
+<dd>
+<p>A percentage value of the agent's current health</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>A new agent object
+A function that returns true or false whether the villager dies
+This is run each day
+</p>
+
+
+<hr>
+<a id="method-agent-is_alive"></a>
+
+
+
+<h4>Method <code>is_alive()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent$is_alive()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>A boolean whether the agent is alive (true for yes)
+Gets the number of days from the last birth. This is also
+the age of the most recently born agent
+</p>
+
+
+<hr>
+<a id="method-agent-get_days_since_last_birth"></a>
+
+
+
+<h4>Method <code>get_days_since_last_birth()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent$get_days_since_last_birth()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>The number of days since last birth
+Connects a child to the agent. This method ensures that the
+'children' vector is ordered.
+</p>
+
+
+<hr>
+<a id="method-agent-add_child"></a>
+
+
+
+<h4>Method <code>add_child()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent$add_child(child)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>child</code></dt>
+<dd>
+<p>The agent object representing the child</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>None
+Returns a data.frame representation of the agent
+</p>
+
+
+<hr>
+<a id="method-agent-as_table"></a>
+
+
+
+<h4>Method <code>as_table()</code>
+</h4>
+
+<p>I hope there's a more scalable way to do this in R; Adding every new attribute to this
+function isn't practical
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent$as_table()</pre></div>
+
+
+
+<h5>Details</h5>
+
+<p>The village_state holds a copy of all of the villagers at each timestep; this method is used to turn
+the agent properties into the object inserted in the village_state.
+</p>
+
+
+
+<h5>Returns</h5>
+
+<p>A data.frame representation of the agent
+</p>
+
+
+<hr>
+<a id="method-agent-clone"></a>
+
+
+
+<h4>Method <code>clone()</code>
+</h4>
+
+<p>The objects of this class are cloneable with this method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent$clone(deep = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>deep</code></dt>
+<dd>
+<p>Whether to make a deep clone.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+</div>

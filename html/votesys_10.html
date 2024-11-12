@@ -1,0 +1,152 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cdc_schulze</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Schulze Method</h2>
+
+<h3>Description</h3>
+
+<p>Schulze method is essentially a widest path problem.
+With the Condorcet matrix, we must find the so called 
+the strongest path a &gt; b &gt; c &gt; d, and the winner is a. 
+The strength of a path is the strength of its weakest link.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cdc_schulze(x, allow_dup = TRUE, min_valid = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>it accepts the following types of input:
+1st, it can be an object of class <code>vote</code>. 
+2nd, it can be a user-given Condorcet matrix, 
+3rd, it can be a result of another Condorcet method, 
+which is of class <code>condorcet</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allow_dup</code></td>
+<td>
+<p>whether ballots with duplicated score values 
+are taken into account. Default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min_valid</code></td>
+<td>
+<p>default is 1. If the number of valid entries of 
+a ballot is less than this value, it will not be used.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a <code>condorcet</code> object, which is essentially 
+a list.
+</p>
+
+<ul>
+<li>
+<p> (1) <code>call</code> the function call.
+</p>
+</li>
+<li>
+<p> (2) <code>method</code> the counting method.
+</p>
+</li>
+<li>
+<p> (3) <code>candidate</code> candidate names.
+</p>
+</li>
+<li>
+<p> (4) <code>candidate_num</code> number of candidate.
+</p>
+</li>
+<li>
+<p> (5) <code>ballot_num</code> number of ballots in x. When 
+x is not a <code>vote</code> object, it may be NULL.
+</p>
+</li>
+<li>
+<p> (6) <code>valid_ballot_num</code> number of ballots that are 
+actually used to compute the result. When 
+x is not a <code>vote</code> object, it may be NULL.
+</p>
+</li>
+<li>
+<p> (7) <code>winner</code> the winners, may be NULL.
+</p>
+</li>
+<li>
+<p> (8) <code>input_object</code> the class of x. 
+</p>
+</li>
+<li>
+<p> (9) <code>cdc</code> the Condorcet matrix which is actually used.
+</p>
+</li>
+<li>
+<p> (10) <code>dif</code> the score difference matrix. When 
+x is not a <code>vote</code> object, it may be NULL.
+</p>
+</li>
+<li>
+<p> (11) <code>binary</code> win and loss recorded with 1 (win), 
+0 (equal) and -1 (loss).
+</p>
+</li>
+<li>
+<p> (12) <code>summary_m</code> times of win (1), equal (0) 
+and loss (-1).
+</p>
+</li>
+<li>
+<p> (13) <code>other_info</code> a list of 2 elements. The 1st is the strength 
+comparison matrix. The 2nd is the strength comparison matrix in binary 
+mode, 1 for win, 0 for else.
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+
+<ul><li>
+<p> Schulze, M. 2010. A new monotonic, 
+clone-independent, reversal symmetric, 
+and Condorcet-consistent single-winner election method. 
+Social Choice and Welfare, 36(2), 267-303.
+</p>
+</li></ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">raw &lt;- list2ballot(
+    x = list(
+        c('a', 'c', 'b', 'e', 'd'), 
+        c('a', 'd', 'e', 'c', 'b'), 
+        c('b', 'e', 'd', 'a', 'c'), 
+        c('c', 'a', 'b', 'e', 'd'), 
+        c('c', 'a', 'e', 'b', 'd'), 
+        c('c', 'b', 'a', 'd', 'e'), 
+        c('d', 'c', 'e', 'b', 'a'), 
+        c('e', 'b', 'a', 'd', 'c')
+    ), 
+    n = c(5, 5, 8, 3, 7, 2, 7, 8)
+)
+vote &lt;- create_vote(raw, xtype = 3, candidate = c('a', 'b', 'c', 'd', 'e'))
+win1 &lt;- cdc_simple(vote) # no winner
+win2 &lt;- cdc_schulze(vote) # winner is e
+win2 &lt;- cdc_schulze(win1)
+</code></pre>
+
+
+</div>

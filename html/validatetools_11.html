@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>is_contradicted_by</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Find out which rules are conflicting</h2>
+
+<h3>Description</h3>
+
+<p>Find out for a contradicting rule which rules are conflicting. This helps in determining and assessing conflicts in rule sets. Which
+of the rules should stay and which should go?
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">is_contradicted_by(x, rule_name)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>validator</code> object with rules.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rule_name</code></td>
+<td>
+<p><code>character</code> with the names of the rules that are causing infeasibility.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>character</code> with conflicting rules.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other feasibility: 
+<code>detect_boundary_cat()</code>,
+<code>detect_boundary_num()</code>,
+<code>detect_infeasible_rules()</code>,
+<code>is_infeasible()</code>,
+<code>make_feasible()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rules &lt;- validator( x &gt; 0)
+
+is_infeasible(rules)
+
+rules &lt;- validator( rule1 = x &gt; 0
+                  , rule2 = x &lt; 0
+                  )
+
+is_infeasible(rules)
+
+detect_infeasible_rules(rules)
+make_feasible(rules)
+
+# find out the conflict with this rule
+is_contradicted_by(rules, "rule1")
+</code></pre>
+
+
+</div>

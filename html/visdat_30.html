@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vis_value</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualise the value of data values</h2>
+
+<h3>Description</h3>
+
+<p>Visualise all of the values in the data on a 0 to 1 scale. Only works on
+numeric data - see examples for how to subset to only numeric data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vis_value(data, na_colour = "grey90", viridis_option = "D")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data.frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na_colour</code></td>
+<td>
+<p>a character vector of length one describing what colour
+you want the NA values to be. Default is "grey90"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>viridis_option</code></td>
+<td>
+<p>A character string indicating the colormap option to
+use. Four options are available: "magma" (or "A"), "inferno" (or "B"),
+"plasma" (or "C"), "viridis" (or "D", the default option) and "cividis"
+(or "E").</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a ggplot plot of the values
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+vis_value(airquality)
+vis_value(airquality, viridis_option = "A")
+vis_value(airquality, viridis_option = "B")
+vis_value(airquality, viridis_option = "C")
+vis_value(airquality, viridis_option = "E")
+## Not run: 
+library(dplyr)
+diamonds %&gt;%
+  select_if(is.numeric) %&gt;%
+  vis_value()
+
+## End(Not run)
+</code></pre>
+
+
+</div>

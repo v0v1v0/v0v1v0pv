@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bb.de</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Battle of Britain Data (a Luftwaffe subset)
+
+</h2>
+
+<h3>Description</h3>
+
+<p>Luftwaffe losses during a subset of the Battle of Britain.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(bb.de)</code></pre>
+
+
+<h3>Format</h3>
+
+<p>The format is a <code class="reqn">3</code>-dimensional array.
+The first dimension is the event
+(in order:
+shot down or failed to return,
+written off,
+seriously damaged),
+the second dimension is the day,
+the third is the aircraft type.
+</p>
+
+
+<h3>Details</h3>
+
+
+<p>This is a 
+Battle of Britain data set of Luftwaffe losses during operations
+26 August–31 August 1940 continued on to 1–7 September 1940.
+The aircraft types are prefixed
+<code>Bf</code> for Messerschmitt (Bayerische Flugzeugwerke),
+<code>Do</code> for Dornier,
+<code>He</code> for Heinkel,
+<code>Ju</code> for Junkers.
+</p>
+<p>Note that p.151 and p.165 of Bowyer (1990)
+contain tables (during the first week of September) and
+almost the same data;
+however, the former is labelled "shot down" whereas
+the latter is "shot down or failed to return".
+The latter is used here.
+Also, there are some other small discrepancies.
+</p>
+<p>Yet to do: add the data available at other dates,
+and include the RAF data.
+</p>
+
+
+<h3>Source</h3>
+
+<p>Bowyer, M. J. F. (1990)
+<em>The Battle of Britain: 50 years On</em>.
+Patrick Stephens Limited, Northamptonshire, U.K.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(bb.de)
+bb.de[,, "Bf109"]
+
+## Not run: 
+plot(bb.de["sdown",, "Bf109"] ~ as.Date(dimnames(bb.de)[[2]]),
+     type = "h", col = "blue", las = 1, lwd = 3,
+     ylab = "Frequency", xlab = "1940",
+     main = "Numbers shot down (Bf 109)")
+abline(h = c(5, 10, 15, 20), lty = "dashed", col = "grey")
+points(bb.de["sdown",,"Bf109"] ~ as.Date(dimnames(bb.de)[[2]]), col = "blue")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,202 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>truncLognormal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Truncated Log-Normal Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random 
+generation for the truncated log-normal distribution
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dtrunclnorm(x, meanlog = 0, sdlog = 1, min.support = 0, max.support = Inf, log = FALSE)
+ptrunclnorm(q, meanlog = 0, sdlog = 1, min.support = 0, max.support = Inf) 
+qtrunclnorm(p, meanlog = 0, sdlog = 1, min.support = 0, max.support = Inf, log.p = FALSE)
+rtrunclnorm(n, meanlog = 0, sdlog = 1, min.support = 0, max.support = Inf)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, p, n, meanlog, sdlog</code></td>
+<td>
+
+<p>Same as <code>Lognormal</code>. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min.support, max.support</code></td>
+<td>
+ 
+<p>Lower and upper truncation limits.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log, log.p</code></td>
+<td>
+
+<p>Same as <code>Lognormal</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Consider <code class="reqn">Y \sim</code> 
+<code>Lognormal</code><code class="reqn">(\mu_Y, \sigma_Y  )</code> restricted
+to <code class="reqn">(A, B )</code>, 
+that is, <code class="reqn">0 &lt; A  = \code{min.support} &lt; X &lt; B 
+   = \code{max.support}</code>.
+The (conditional)
+random variable
+<code class="reqn">Y = X \cdot I_{(A , B)} </code>
+has a log–truncated normal distribution. Its p.d.f. is given by
+</p>
+<p style="text-align: center;"><code class="reqn">
+  f(y; \mu, \sigma, A, B) = (y^{-1} / \sigma) \cdot
+  \phi(y^*) / [  \Phi(B^*) - \Phi(A^*) ],
+  </code>
+</p>
+
+<p>where <code class="reqn">y^* = [\log(y) - \mu_Y]/ \sigma_Y</code>, 
+<code class="reqn">A^* = [\log(A) - \mu_Y] / \sigma_Y</code>, 
+and
+<code class="reqn">B^* = [\log(B) - \mu_Y] / \sigma_Y</code>.
+</p>
+<p>Its mean is:
+</p>
+<p style="text-align: center;"><code class="reqn">\exp(\mu + \sigma^2/2) \cdot \{\Phi[(\log(B) - \mu) / \sigma
+  - \sigma] - \Phi[(\log(A) - \mu) / \sigma
+  - \sigma] \} / \{ 
+  \Phi[(\log(B) - \mu) / \sigma] - \Phi[(\log(A) - \mu) / \sigma] \}.
+    </code>
+</p>
+
+<p>Here, <code class="reqn">\Phi</code> is the standard normal c.d.f and 
+<code class="reqn">\phi</code> is the standard normal p.d.f.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dtrunclnorm()</code> returns the density, 
+<code>ptrunclnorm()</code> gives the 
+distribution function, 
+<code>qtrunclnorm()</code> gives the quantiles, and 
+<code>rtrunclnorm()</code> generates random deviates.
+</p>
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda and Thomas W. Yee.</p>
+
+
+<h3>References</h3>
+
+<p>Johnson, N. L., Kotz, S. and Balakrishnan, N. (1995) 
+<em>Continuous Univariate Distributions</em>, Second Edition,
+(Chapter 13) Wiley, New York.
+
+
+
+
+
+
+
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Lognormal</code>,
+<code>truncnormal</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+###############
+## Example 1 ##
+
+mymeanlog &lt;- exp(0.5)    # meanlog
+mysdlog   &lt;- exp(-1.5)   # sdlog
+LL   &lt;- 3.5              # Lower bound
+UL   &lt;- 8.0              # Upper bound
+
+## Quantiles:
+pp &lt;- 1:10 / 10
+(quants &lt;- qtrunclnorm(p = pp , min.support = LL, max.support = UL, 
+                        mymeanlog, mysdlog))
+sum(pp - ptrunclnorm(quants, min.support = LL, max.support = UL,
+                      mymeanlog, mysdlog))     # Should be zero
+
+###############
+## Example 2 ##
+
+set.seed(230723)
+nn &lt;- 3000
+
+## Truncated log-normal data
+trunc_data &lt;- rtrunclnorm(nn, mymeanlog, mysdlog, LL, UL)
+
+## non-truncated data - reference
+nontrunc_data &lt;- rtrunclnorm(nn, mymeanlog, mysdlog, 0, Inf)
+
+## Not run: 
+## Densities
+plot.new()
+par(mfrow = c(1, 2))
+plot(density(nontrunc_data), main = "Non-truncated Log--normal", 
+     col = "green", xlim = c(0, 15), ylim = c(0, 0.40))
+abline(v = c(LL, UL), col = "black", lwd = 2, lty = 2)
+plot(density(trunc_data), main = "Truncated Log--normal", 
+     col = "red", xlim = c(0, 15), ylim = c(0, 0.40))
+
+
+## Histograms
+plot.new()
+par(mfrow = c(1, 2))
+hist(nontrunc_data, main = "Non-truncated Log--normal", col = "green", 
+       xlim = c(0, 15), ylim = c(0, 0.40), freq = FALSE, breaks = 22,
+       xlab = "mu = exp(0.5), sd = exp(-1.5), LL = 3.5, UL = 8")
+abline(v = c(LL, UL), col = "black", lwd = 4, lty = 2)
+
+hist(trunc_data, main = "Truncated Log--normal", col = "red",
+     xlim = c(0, 15), ylim = c(0, 0.40), freq = FALSE, 
+     xlab = "mu = exp(0.5), sd = exp(-1.5), LL = 3.5, UL = 8")
+
+## End(Not run)
+
+
+## Area under the estimated densities
+# (a) truncated data
+integrate(approxfun(density(trunc_data)), 
+          lower = min(trunc_data) - 0.1, 
+          upper = max(trunc_data) + 0.1)
+
+# (b) non-truncated data
+integrate(approxfun(density(nontrunc_data)), 
+          lower = min(nontrunc_data), 
+          upper = max(nontrunc_data))
+
+  
+</code></pre>
+
+
+</div>

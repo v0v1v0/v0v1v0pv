@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>fixef.VCA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract Fixed Effects from 'VCA' Object</h2>
+
+<h3>Description</h3>
+
+<p>Conveniently extracting the 'FixedEffects' element of an 'VCA' object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VCA'
+fixef(
+  object,
+  type = c("simple", "complex"),
+  ddfm = c("contain", "residual", "satterthwaite"),
+  tol = 1e-12,
+  quiet = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>(VCA) object where fixed effects shall be extracted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>(character) string or partial string, specifying whether
+to return "simple" (reduced) or a rather "complex" (more detailed) 
+information about fixed effects</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ddfm</code></td>
+<td>
+<p>(character) string specifying the method used for computing the 
+degrees of freedom of the t-statistic. Only used when type="complex".
+Available methods are "contain", "residual", and "satterthwaite".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>(numeric) value representing the numeric tolerance use in comparisons, values
+smaller than 'tol' will be considered equal to 0</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = suppress warning messages, e.g. for non-estimable contrasts</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The default is to return the fixed effects estimates together with their standard errors.
+If setting 'type="complex"' or to an abbreviation (e.g. "c") additional inferential statistics
+on these estimates will be returned, i.e. "t Value", "DF" and respective p-value "Pr &gt; |t|". 
+One can choose one of three denominator degrees of freedom ('ddfm')-methods. The implementation
+of these methods are an attempt to align with the results of SAS PROC MIXED. See the respective
+SAS-documentation for details.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+fit &lt;- anovaVCA(y~day/(run), dataEP05A2_1)
+fixef(fit)
+
+# for complex models it might take some time computing complex output
+data(VCAdata1)
+fit &lt;- anovaMM(y~(lot+device)/(day)/(run), VCAdata1[VCAdata1$sample==2,])
+fixef(fit, "c")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

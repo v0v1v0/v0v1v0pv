@@ -1,0 +1,278 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>break.VGAMextra</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Names/Value of linear predictors/parameters in time series 
+family functions. </h2>
+
+<h3>Description</h3>
+
+<p>Splitting out the names of linear predictors or Numeric values for 
+parameters in time series family functions in <span class="pkg">VGAMextra</span>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">      break.VGAMextra(eta      = NULL,
+                      M1       = NULL,
+                      noInter  = NULL,
+                      bOrder   = NULL,
+                      NOS      = NULL,
+                      lInter   = "identitylink",
+                      lvar     = "loglink",
+                      lsd      = "loglink",
+                      lcoeff1  = "rhobitlink",
+                      lcoeff2  = "rhobitlink",
+                      typeTS   = "AR",
+                      namesLP  = FALSE,
+                      Complete = FALSE,
+                      varArg   = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>eta</code></td>
+<td>
+
+<p>A matrix of dimensions <code>c(n, M)</code> storing the linear predictors 
+values coming from the <code>vglm</code> fit. Here, <code class="reqn">M</code> is the number
+of parameters. See <code>warning</code> below for further information.
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M1</code></td>
+<td>
+
+<p>Number of parameters involved in the <code>vglm</code> fit.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>noInter</code></td>
+<td>
+
+<p>Logical. To determine whether the intercept is 
+estimated. If <code>'TRUE'</code>,
+the intercept is not estimated and set to 0.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bOrder</code></td>
+<td>
+
+<p>A vector. 
+The order of the linear process fitted. Either a single number (if one 
+response), or a vector (if multiple responses).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NOS</code></td>
+<td>
+
+<p>Integer. Number of respones set in the <code>vglm</code> call.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lInter, lvar, lsd, lcoeff1, lcoeff2</code></td>
+<td>
+
+<p>Link functions applied to parameters. Same as in 
+<code>ARXff</code>, or 
+<code>MAXff</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>typeTS</code></td>
+<td>
+
+<p>Character. Currently, options <code>"AR"</code> for Autoregressive, and 
+<code>"MA"</code> for Moving Average processes are handled.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>namesLP</code></td>
+<td>
+
+<p>Logical. This function returns either the names of linear the
+predictors/parameters ( if <code>namesLP = TRUE</code> ) or parameter
+values (default) broken down from the <code>eta</code> matrix.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Complete</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, columns of zeros are incorporated into the
+matrix <code>eta</code>. See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varArg</code></td>
+<td>
+
+<p>Sames as in <code>ARXff</code> or 
+<code>MAXff</code>
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Time series family functions in <span class="pkg">VGAMextra</span> currently recycle 
+the order set in the <code>vglm</code>. 
+Particularly, it occurs when the number of responses is fewer than 
+the specified order. For instance, if the order set in <code>vglm</code>
+is <code class="reqn">c(1, 3)</code>, and 5 responses are managed, then the new order
+becomes <code class="reqn">c(1, 3, 1, 3, 1)</code>. 
+</p>
+<p>Due to such flexibility, time series family functions require 
+specific functions to unload the amount of code within each one. 
+</p>
+<p>Moreover, when the order is recycled, the matrix <code>eta</code> is 
+<em>completed</em>, as if the order was the same for each response.
+This feature is enabled when <code>Complete = TRUE</code>.
+This ‘common’ order turns out to be the maximum order established in
+the vector <code>order</code>. This trick makes the family function to work
+properly. To return to the riginal ‘order’, <code>eta</code> is reduced 
+in the same number of colums initially added.
+
+
+</p>
+<p><code>break.VGAMextra</code> works in this context. It may return either 
+the names of the linear predictors/parameters, or the parameter values 
+splitted out as a list. Thus, link functions entered in the <code>vglm</code> 
+call must be passed down to this functions.
+For further details on link functions refer to 
+<code>CommonVGAMffArguments</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list containing either the names of the linear predictors or the 
+parameters values (not linear predictors) unwrapped from tje
+<code>eta</code> matrix, as follows:
+</p>
+<p>a) If <code>namesLP = FALSE</code> (default), value of parameters are 
+returned in this order: the intercept (1), standard deviation and
+variance of the white noise (2, 3), and the coefficients (4).
+</p>
+<p>b) If <code>namesLP = TRUE</code>, <b>names of linear predictors</b> are
+returned in the first entry, whereas <b>parameter names</b> are
+allocated to the second entry.
+</p>
+<p>Yee and Wild (1996) provide more detailed information about 
+the relationship between linear predictors and parameters within 
+the VGLM statistical framework.
+</p>
+
+
+
+
+
+
+
+<h3>Warning</h3>
+
+<p>Note that library <span class="pkg">VGAM</span> is definitely required.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>Be aware of the dimensions of matrix <code>eta</code>. It is <code>c(n, M)</code>,
+where <code class="reqn">n</code> is the sample size, and <code class="reqn">M</code> is the number of 
+parameters. If multiple responses, then <code class="reqn">M</code> equals the summation
+of parameters individually.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda and T. W. Yee
+</p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Wild, C. J. (1996)
+Vector Generalized Additive Models.
+<em>Journal of the Royal Statistical Society</em>, 
+Series B, Methodological, <b>58(3)</b>, 481–493.
+</p>
+
+
+<h3>See Also</h3>
+
+
+<p><code>ARXff</code>,
+<code>MAXff</code>,
+
+<code>CommonVGAMffArguments</code>,
+<code>vglm</code>.
+
+
+
+
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+library(VGAM)
+
+eta     &lt;- matrix(runif(100), nrow = 10, ncol = 10)
+M1      &lt;- c(5, 5)
+noInter &lt;- FALSE
+bOrder  &lt;- c(3, 3)
+NOS     &lt;- 2
+
+### ONLY LINEAR PREDICTORS/PARAMETERS NAMES!
+### RETURNED OBJECT IS A LIST !
+
+break.VGAMextra(M1      = M1, 
+                noInter = noInter, 
+                bOrder  = bOrder, 
+                NOS     = NOS, 
+                typeTS  = "AR", 
+                namesLP = TRUE, 
+                varArg  = TRUE)
+
+### PARAMETER VALUEs... "UNWRAPPED". Inverse link functions are applied.
+###  Note that namesLP must be set to FALSE
+
+break.VGAMextra(eta     = eta,
+                M1      = M1, 
+                noInter = noInter, 
+                bOrder  = bOrder, 
+                NOS     = NOS, 
+                typeTS  = "AR", 
+                namesLP = FALSE, 
+                varArg  = TRUE)
+
+
+
+
+
+</code></pre>
+
+
+</div>

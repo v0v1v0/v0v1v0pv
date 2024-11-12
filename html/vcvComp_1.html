@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cov.B</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Between-group covariance matrix</h2>
+
+<h3>Description</h3>
+
+<p>Computes the between-group covariance matrix.
+The effect of sexual dimorphism can be removed by using, for each group,
+the average of the mean of males and the mean of females.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cov.B(X, groups, sex = NULL, center = FALSE, weighted = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>a data matrix with variables in columns and group names as row names</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groups</code></td>
+<td>
+<p>a character / factor vector containing grouping variable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sex</code></td>
+<td>
+<p>NULL (default). A character / factor vector containing sex variable,
+to remove sexual dimorphism by averaging males and females in each group</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>center</code></td>
+<td>
+<p>either a logical value or a numeric vector of length equal to the number of columns of X</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weighted</code></td>
+<td>
+<p>logical. Should the between-group covariance matrix be weighted?</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The between-group covariance matrix
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>cov</code>, <code>cov.wt</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Data matrix of 2D landmark coordinates
+data("Tropheus.IK.coord")
+coords &lt;- which(names(Tropheus.IK.coord) == "X1"):which(names(Tropheus.IK.coord) == "Y19")
+proc.coord &lt;- as.matrix(Tropheus.IK.coord[coords])
+
+# Between-group covariance matrix for all populations
+B &lt;- cov.B(proc.coord, groups = Tropheus.IK.coord$POP.ID)
+
+# Between-group covariance matrix for all populations, pooled by sex
+B.mf &lt;- cov.B(proc.coord, groups = Tropheus.IK.coord$POP.ID, sex = Tropheus.IK.coord$Sex)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,253 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>groupsparsewkm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Group-sparse weighted k-means</h2>
+
+<h3>Description</h3>
+
+<p>This function performs group-sparse weighted k-means on a set 
+of observations described by numerical variables organized in groups. 
+It generalizes the sparse clustering algorithm introduced by 
+Witten &amp; Tibshirani (2010) to groups. While the algorithm clusters the observations, the groups of variables are supposed priorly known.
+The algorithm computes a series of weights associated to the groups of variables, the weights
+indicating the importance of each group in the clustering process.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">groupsparsewkm(
+  X,
+  centers,
+  lambda = NULL,
+  nlambda = 20,
+  index = 1:ncol(X),
+  sizegroup = TRUE,
+  nstart = 10,
+  itermaxw = 20,
+  itermaxkm = 10,
+  scaling = TRUE,
+  verbose = 1,
+  epsilonw = 1e-04
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>a numerical matrix or a dataframe of dimension <code>n</code> (observations) by <code>p</code> 
+(variables).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>centers</code></td>
+<td>
+<p>an integer representing the number of clusters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda</code></td>
+<td>
+<p>a vector of numerical values (or a single value) providing 
+a grid of values for the regularization parameter. If NULL (by default), the function computes its 
+own lambda sequence of length <code>nlambda</code> (see details).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nlambda</code></td>
+<td>
+<p>an integer indicating the number of values for the regularization parameter. 
+By default, <code>nlambda=20</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>index</code></td>
+<td>
+<p>a vector of integers of size <code>p</code> providing the group membership
+for each variable. By default, <code>index=1:ncol(X)</code> i.e. no groups or groups of size 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sizegroup</code></td>
+<td>
+<p>a boolean. If TRUE, the group sizes (number of variables in each group) are taken into account in the penalty term (see details).
+By default, <code>sizegroup=TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nstart</code></td>
+<td>
+<p>an integer representing the number of random starts in the k-means algorithm.
+By default, <code>nstart=10</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>itermaxw</code></td>
+<td>
+<p>an integer indicating the maximum number of iterations for the inside 
+loop over the weights <code>w</code>. By default, <code>itermaxw=20</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>itermaxkm</code></td>
+<td>
+<p>an integer representing the maximum number of iterations in the k-means 
+algorithm. By default, <code>itermaxkm=10</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scaling</code></td>
+<td>
+<p>a boolean. If TRUE, variables are scaled to zero mean and unit variance. By default, <code>scaling=TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>an integer value. If <code>verbose=0</code>, the function stays silent, if <code>verbose=1</code> (default option), it  prints
+whether the stopping criterion over the weights <code>w</code> is satisfied.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>epsilonw</code></td>
+<td>
+<p>a positive numerical value. It provides the precision of the stopping criterion over <code>w</code>. By default, <code>epsilonw =1e-04</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Group-sparse weighted k-means performs clustering on data described by numerical variables priorly partitionned into groups, and automatically selects the most discriminant groups by 
+setting to zero the weights of the non-discriminant ones. 
+</p>
+<p>The algorithm is based on the optimization of a cost function which is the weighted between-class variance penalized by a group L1-norm. The groups must be priorly defined through 
+expert knowledge. If there is no group structure (each group contains one variable only), the algorithm reduces to the sparse weighted k-means introduced in Witten &amp; Tibshirani (2010).
+The penalty term may take into account the size of the groups by setting <code>sizegroup=TRUE</code> (see Chavent et al. (2020) for further details on the mathematical expression of the
+optimized criterion). The importance of the penalty term may be adjusted through the regularization parameter <code>lambda</code>. If <code>lambda=0</code>, there is no penalty applied to the 
+weighted between-class variance. The larger <code>lambda</code>, the larger the penalty term and the number of groups with null weights. 
+</p>
+<p>The output of the algorithm is three-folded: one gets a partitioning of the data, a vector of weights associated to each group, and a vector of weights associated to each
+variable. Weights equal to zero imply that the associated variables or the associated groups do not participate in the clustering process. 
+</p>
+<p>Since it is difficult to chose the regularization parameter <code>lambda</code> without prior knowledge, the function builds automatically a grid of parameters and finds the partitioning
+and the vectors of weights associated to each value in the grid. 
+</p>
+<p>Note that when the regularization parameter is equal to 0 (no penalty applied), the output is different from that of a regular k-means, since the optimized criterion is a weighted 
+between-class variance and not the between-class variance only.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lambda</code></td>
+<td>
+<p>a numerical vector containing the regularization parameters (a grid of values).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>W</code></td>
+<td>
+<p>a <code>p</code> by <code>length(lambda)</code> numerical matrix. It contains the weights associated to each variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Wg</code></td>
+<td>
+<p>a <code>L</code> by <code>length(lambda)</code> numerical matrix, where <code>L</code> is the number of groups. It contains the weights associated to each group.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cluster</code></td>
+<td>
+<p>a <code>n</code> by <code>length(lambda)</code> integer matrix. It contains the cluster memberships, for each value of the regularization parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sel.feat</code></td>
+<td>
+<p>a numerical vector of the same length as <code>lambda</code>, giving the number of selected variables for each value of the regularization parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sel.groups</code></td>
+<td>
+<p>a numerical vector of the same length as <code>lambda</code>, giving the number of selected groups of variables for each value of the regularization parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>a matrix of size <code>n</code> by <code>p</code> containing the scaled data if <code>scaling=TRUE</code>, and a copy of <code>X</code> otherwise.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bss.per.feature</code></td>
+<td>
+<p>a matrix of size <code>p</code> by <code>length(lambda)</code>. It contains the between-class variance computed for each variable.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Witten, D. M., &amp; Tibshirani, R. (2010). A framework for feature 
+selection in clustering. Journal of the American Statistical Association, 
+105(490), p.713-726.
+</p>
+<p>Chavent, M. &amp; Lacaille, J. &amp; Mourer, A. &amp; Olteanu, M. (2020). 
+Sparse k-means for mixed data via group-sparse clustering, ESANN proceedings.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>plot.spwkm</code>, <code>info_clust</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(iris)
+# define two groups of variables: 
+# "Sepal.Length" and "Sepal.Width" in group 1
+# "Petal.Length" and "Petal.Width"  in group 2
+index &lt;- c(1, 2, 1, 2)
+# group-sparse k-means
+
+out &lt;- groupsparsewkm(X = iris[,-5], centers = 3, index = index)
+# grid of regularization parameters
+out$lambda
+k &lt;- 10
+# weights of the variables for the k-th regularization parameter
+out$W[,k]
+# weights of the groups for the k-th regularization parameter
+out$Wg[,k]
+# partition obtained with for the k-th regularization parameter
+out$cluster[,k]
+# between-class variance on each variable
+out$bss.per.feature[,k]
+# between-class variance 
+sum(out$bss.per.feature[,k])/length(index)
+
+# one variable per group (equivalent to sparse k-means)
+index &lt;- 1:4 # default option in groupsparsewkm
+# sparse k-means
+out &lt;- groupsparsewkm(X = iris[,-5], centers = 3, index = index)
+# or
+out &lt;- groupsparsewkm(X = iris[,-5], centers = 3)
+# group weights and variable weights are identical in this case
+out$Wg 
+out$W
+
+</code></pre>
+
+
+</div>

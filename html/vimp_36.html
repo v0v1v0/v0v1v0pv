@@ -1,0 +1,166 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>run_sl</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Run a Super Learner for the provided subset of features</h2>
+
+<h3>Description</h3>
+
+<p>Run a Super Learner for the provided subset of features
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">run_sl(
+  Y = NULL,
+  X = NULL,
+  V = 5,
+  SL.library = "SL.glm",
+  univariate_SL.library = NULL,
+  s = 1,
+  cv_folds = NULL,
+  sample_splitting = TRUE,
+  ss_folds = NULL,
+  split = 1,
+  verbose = FALSE,
+  progress_bar = NULL,
+  indx = 1,
+  weights = rep(1, nrow(X)),
+  cross_fitted_se = TRUE,
+  full = NULL,
+  vector = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>the outcome</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>the covariates</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>V</code></td>
+<td>
+<p>the number of folds</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SL.library</code></td>
+<td>
+<p>the library of candidate learners</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>univariate_SL.library</code></td>
+<td>
+<p>the library of candidate learners for
+single-covariate regressions</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s</code></td>
+<td>
+<p>the subset of interest</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cv_folds</code></td>
+<td>
+<p>the CV folds</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_splitting</code></td>
+<td>
+<p>logical; should we use sample-splitting for
+predictiveness estimation?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ss_folds</code></td>
+<td>
+<p>the sample-splitting folds; only used if
+<code>sample_splitting = TRUE</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>split</code></td>
+<td>
+<p>the split to use for sample-splitting; only used if
+<code>sample_splitting = TRUE</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>should we print progress? defaults to FALSE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>progress_bar</code></td>
+<td>
+<p>the progress bar to print to (only if verbose = TRUE)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>indx</code></td>
+<td>
+<p>the index to pass to progress bar (only if verbose = TRUE)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>weights to pass to estimation procedure</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross_fitted_se</code></td>
+<td>
+<p>if <code>TRUE</code>, uses a cross-fitted estimator of
+the standard error; otherwise, uses the entire dataset</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>full</code></td>
+<td>
+<p>should this be considered a "full" or "reduced" regression?
+If <code>NULL</code> (the default), this is determined automatically; a full
+regression corresponds to <code>s</code> being equal to the full covariate vector.
+For SPVIMs, can be entered manually.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vector</code></td>
+<td>
+<p>should we return a vector (<code>TRUE</code>) or a list (<code>FALSE</code>)?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments to Super Learner</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list of length V, with the results of predicting on the hold-out data for each v in 1 through V
+</p>
+
+
+</div>

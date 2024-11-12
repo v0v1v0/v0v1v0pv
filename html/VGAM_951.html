@@ -1,0 +1,231 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>micmen</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Michaelis-Menten Model </h2>
+
+<h3>Description</h3>
+
+<p>Fits a Michaelis-Menten nonlinear regression model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">micmen(rpar = 0.001, divisor = 10, init1 = NULL, init2 = NULL,
+       imethod = 1, oim = TRUE, link1 = "identitylink",
+       link2 = "identitylink", firstDeriv = c("nsimEIM", "rpar"),
+       probs.x = c(0.15, 0.85), nsimEIM = 500, dispersion = 0,
+       zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>rpar</code></td>
+<td>
+
+<p>Numeric. Initial positive ridge parameter.
+This is used to create
+positive-definite weight matrices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>divisor</code></td>
+<td>
+
+<p>Numerical. The divisor used to divide the
+ridge parameter at each
+iteration until it is very small but still positive.
+The value of
+<code>divisor</code> should be greater than one.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>init1, init2</code></td>
+<td>
+
+<p>Numerical.
+Optional initial value for the first and second parameters,
+respectively.  The default is to use a self-starting value.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>link1, link2</code></td>
+<td>
+
+<p>Parameter link function applied to the first and second
+parameters, respectively.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dispersion</code></td>
+<td>
+
+<p>Numerical. Dispersion parameter.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>firstDeriv</code></td>
+<td>
+
+<p>Character. Algorithm for computing the first derivatives and
+working weights.
+The first is the default.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod, probs.x</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>oim</code></td>
+<td>
+
+<p>Use the OIM?
+See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Michaelis-Menten model is given by
+</p>
+<p style="text-align: center;"><code class="reqn">E(Y_i) = (\theta_1 u_i) / (\theta_2 + u_i)</code>
+</p>
+
+<p>where <code class="reqn">\theta_1</code> and <code class="reqn">\theta_2</code>
+are the two parameters.
+</p>
+<p>The relationship between
+iteratively reweighted least squares and the
+Gauss-Newton algorithm is given in Wedderburn (1974).
+However, the
+algorithm used by this family function is different.
+Details are
+given at the Author's web site.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>This function is not (nor could ever be) entirely reliable.
+Plotting the fitted function and monitoring
+convergence is recommended.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The regressor values <code class="reqn">u_i</code> are inputted as the RHS of
+the <code>form2</code> argument.
+It should just be a simple term; no smart prediction is used.
+It should just a single vector, therefore omit
+the intercept term.
+The LHS of the formula <code>form2</code> is ignored.
+</p>
+<p>To predict the response at new values
+of <code class="reqn">u_i</code> one must
+assign the <code>@extra$Xm2</code> slot in the fitted
+object these values,
+e.g., see the example below.
+</p>
+<p>Numerical problems may occur. If so, try setting
+some initial values
+for the parameters. In the future, several
+self-starting initial
+values will be implemented.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Seber, G. A. F. and Wild, C. J. (1989).
+<em>Nonlinear Regression</em>,
+New York: Wiley.
+</p>
+<p>Wedderburn, R. W. M. (1974).
+Quasi-likelihood functions, generalized linear models,
+and the Gauss-Newton method.
+<em>Biometrika</em>,
+<b>61</b>, 439–447.
+</p>
+<p>Bates, D. M. and Watts, D. G. (1988).
+<em>Nonlinear Regression Analysis and Its Applications</em>,
+New York: Wiley.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>enzyme</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">mfit &lt;- vglm(velocity ~ 1, micmen, data = enzyme, trace = TRUE,
+             crit = "coef", form2 = ~ conc - 1)
+summary(mfit)
+
+## Not run: 
+plot(velocity ~ conc, enzyme, xlab = "concentration", las = 1,
+     col = "blue",
+     main = "Michaelis-Menten equation for the enzyme data",
+     ylim = c(0, max(velocity)), xlim = c(0, max(conc)))
+points(fitted(mfit) ~ conc, enzyme, col = 2, pch = "+", cex = 2)
+
+# This predicts the response at a finer grid:
+newenzyme &lt;- data.frame(conc = seq(0, max(with(enzyme, conc)),
+      len = 200))
+mfit@extra$Xm2 &lt;- newenzyme$conc # This is needed for prediction
+lines(predict(mfit, newenzyme, "response") ~ conc, newenzyme,
+      col = "red") 
+## End(Not run)
+</code></pre>
+
+
+</div>

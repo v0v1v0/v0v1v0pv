@@ -1,0 +1,148 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>syntab</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Syntaxonomic frequency tables</h2>
+
+<h3>Description</h3>
+
+<p>Calculate and display relative or absolute frequency tables with or without use of function multipatt from package indicspecies
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">syntab(veg, clust, type = c('rel','abs','mean.cover'), mupa, dec=0, refl, ...)
+
+## S3 method for class 'syntab'
+print(x, zero.print = ".", trait, limit = 1, minstat = 0, alpha = 0.05, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>veg</code></td>
+<td>
+<p>Vegetation dataframe</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clust</code></td>
+<td>
+<p>Vector with cluster information with length equal to number of rows of veg</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Relative or absolute frequency, mean species response values or strength of association.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mupa</code></td>
+<td>
+<p>Either logical for (not) using multipatt from package indicspecies to detect significance of cluster association strength or supply output from previous use of multipatt.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dec</code></td>
+<td>
+<p>Number of decimals in result.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>refl</code></td>
+<td>
+<p>Name of Turboveg taxonomic reference list to use for fullnames.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object from function syntab</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero.print</code></td>
+<td>
+<p>Replacement for zero values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trait</code></td>
+<td>
+<p>Optional vector of trait values to be plotted behind the species.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>limit</code></td>
+<td>
+<p>Minimum value to display.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minstat</code></td>
+<td>
+<p>Minimal indicator value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Significance threshold.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Florian Jansen <a href="mailto:florian.jansen@uni-rostock.de">florian.jansen@uni-rostock.de</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Package indicspecies with function multipatt for indicator species analysis along multiple cluster combinations
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+ elbaue &lt;- tv.veg('elbaue')
+ elbaue.env &lt;- tv.site('elbaue')
+ clust &lt;- vector('integer', nrow(elbaue.env))
+ clust[elbaue.env$MGL &lt; -50 &amp; elbaue.env$SDGL &lt; 50] &lt;- 1
+ clust[elbaue.env$MGL &lt; -50 &amp; elbaue.env$SDGL &gt;= 50] &lt;- 2
+ clust[elbaue.env$MGL &gt;= -50 &amp; elbaue.env$SDGL &gt;= 50] &lt;- 3
+ clust[elbaue.env$MGL &gt;= -50 &amp; elbaue.env$SDGL &lt; 50] &lt;- 4
+ levels(clust) &lt;- c('dry.ld','dry.hd', 'wet.hd','wet.ld')
+ traits &lt;- tv.traits()
+ m &lt;- match(rownames(st$syntab), traits$LETTERCODE, nomatch = 0)
+ trait &lt;- traits[m, c("OEK_F","OEK_N")]
+ rownames(trait) &lt;- traits$LETTERCODE[m]
+ st &lt;- syntab(elbaue, clust, mupa=TRUE)
+ print(st, limit=30, trait=trait)
+ #'  Manipulation of the syntaxonomic table
+ sttable &lt;- st$syntab
+ sttable &lt;- sttable[sttable$p.value &lt; 0.05 &amp; !is.na(sttable$p.value),
+ !names(sttable) %in% c('stat')]
+ taxa &lt;- tax(rownames(sttable))
+ rownames(sttable) &lt;- taxa[match(rownames(sttable), taxa$LETTERCODE, nomatch = 0),'TaxonName']
+ write.csv(sttable, 'sttable.csv')
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

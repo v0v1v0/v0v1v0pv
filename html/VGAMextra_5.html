@@ -1,0 +1,266 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ARIMAX.errors.ff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> VGLTSMs Family Functions:
+Generalized integrated regression
+with order–<code class="reqn">(p, q)</code> ARMA errors</h2>
+
+<h3>Description</h3>
+
+<p>A VLTSMff for dynamic regression.
+Estimates regression models with order–<code class="reqn">(p, d, q)</code> ARIMA
+errors by maximum likelihood.
+
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">      ARIMAX.errors.ff(order = c(1, 1, 1),
+                       zero = "var",  # optionally, "mean".
+                       order.trend = 0,
+                       include.int = TRUE,
+                       diffCovs  = TRUE,
+                       xLag = 0,
+                       include.currentX = TRUE,
+                       lvar = "loglink",
+                       lmean = "identitylink") 
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>order</code></td>
+<td>
+
+<p>The usual <code class="reqn">(p, d, q)</code> integer vector as in, e.g., 
+<code>ARIMAXff</code>. 
+By default, an order–<code class="reqn">(p, q)</code> ARMA model is 
+fitted on the errors, whlist <code class="reqn">d</code> is the 
+degree of differencing on the response.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>What linear predictor is modelled as intercept–only?
+See <code>zero</code> and
+<code>CommonVGAMffArguments</code>
+for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order.trend</code></td>
+<td>
+
+<p>Non–negative integer. Allows to incorporate a polynomial
+trend of order <code>order.trend</code> in the forecast mean
+function. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>include.int</code></td>
+<td>
+
+<p>Logical. Should an intercept (int) be included in
+the model for <code class="reqn">y_t</code>? Default is
+<code>TRUE</code>. See below for details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>diffCovs</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> (default)
+the order–<code>d</code> difference
+of the covariates is internally computed and then
+incorporated in the regression model. Else, 
+only the current values are included.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xLag</code></td>
+<td>
+
+<p>Integer. If entered, the covariates, say 
+<code class="reqn">\boldsymbol{x}_t</code> are laggeg 
+(up to order <code>xLag</code>) and then embedded
+in the regression model. 
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>include.currentX</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, the <em>actual</em> values, 
+<code class="reqn">\boldsymbol{x}_t</code>, are included in the regression
+model. Else, this is ignored and only the lagged
+<code class="reqn">\boldsymbol{x}_{t - 1}, \ldots, \boldsymbol{x}_{t - xLag}</code> will be included.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lvar, lmean</code></td>
+<td>
+
+<p>Link functions applied to conditional mean and the variance.
+Same as <code>uninormal</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The generalized linear regression model with ARIMA errors
+is another subclass of VGLTSMs (Miranda and Yee, 2018).
+</p>
+<p>For a univariate time series, say <code class="reqn">y_t</code>,
+and a <code class="reqn">p</code>–dimensional vector of covariates
+<code class="reqn">\boldsymbol{x}_t</code> covariates,
+the model described by this VGLTSM family function is
+</p>
+<p style="text-align: center;"><code class="reqn">
+ y_t = \boldsymbol{\beta}^T \boldsymbol{x}_t + u_t,
+</code>
+</p>
+
+<p style="text-align: center;"><code class="reqn">
+u_t = \theta_1 u_{t - 1} + \cdots + \theta_p u_{t - p} + z_t +
+    \phi_1 z_{t - 1} + \cdots + \phi_1 z_{t - q}.
+</code>
+</p>
+
+
+<p>The first entry in <code class="reqn">x_t</code> equals 1, allowing 
+an intercept, for every $t$. Set 
+<code>include.int = FALSE</code> to set this to zero,
+dimissing the intercept.
+</p>
+<p>Also, if <code>diffCovs = TRUE</code>, then the differences up to order
+<code>d</code> of the set
+<code class="reqn">\boldsymbol{x}_t</code> are embedded in the model 
+for <code class="reqn">y_t</code>.
+If <code>xLag</code><code class="reqn">&gt; 0</code>, the lagged values up to order
+<code>xLag</code> of the covariates are also included.
+
+
+</p>
+<p>The random disturbances <code class="reqn">z_t</code> are by default
+handled as <code class="reqn">N(0, \sigma^2_z)</code>. Then,
+denoting <code class="reqn">\Phi_{t}</code> as the history of the
+process <code class="reqn">(x_{t + 1}, u_t)</code> up to time <code class="reqn">t</code>, yields
+
+</p>
+<p style="text-align: center;"><code class="reqn"> E(y_t | \Phi_{t - 1}) = \boldsymbol{\beta}^T \boldsymbol{x}_t +
+\theta_1 u_{t - 1} + \cdots + \theta_p u_{t - p} +
+    \phi_1 z_{t - 1} + \cdots + \phi_1 z_{t - q}. </code>
+</p>
+
+<p>Denoting <code class="reqn">\mu_t =  E(y_t | \Phi_{t - 1}),</code>
+the default linear predictor for this VGLTSM family function is
+</p>
+<p style="text-align: center;"><code class="reqn"> \boldsymbol{\eta} = ( \mu_t, \log \sigma^2_{z})^T.</code>
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> 
+(see <code>vglmff-class</code>)
+to be used by VGLM/VGAM modelling functions, e.g.,
+<code>vglm</code> or <code>vgam</code>.
+</p>
+
+
+
+
+
+
+
+<h3>Note</h3>
+
+<p>If <code>d = 0</code> in <code>order</code>, then <code>ARIMAX.errors.ff</code>
+will perform as <code>ARIMAXff</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda 
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ARIMAXff</code>,
+<code>CommonVGAMffArguments</code>,
+<code>uninormal</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">### Estimate a regression model with ARMA(1, 1) errors.
+## Covariates are included up to lag 1.
+set.seed(20171123)
+nn &lt;- 250
+x2 &lt;- rnorm(nn)                                    # One covariate
+sigma2 &lt;- exp(1.15); theta1 &lt;- 0.5; phi1 &lt;- 0.27   # True coefficients
+beta0  &lt;- 1.25; beta1 &lt;- 0.25; beta2 &lt;- 0.5
+
+y &lt;- numeric(nn)
+u &lt;- numeric(nn)
+z &lt;- numeric(nn)
+
+u[1] &lt;- rnorm(1)
+z[1] &lt;- rnorm(1, 0, sqrt(sigma2))
+
+for(ii in 2:nn) {
+  z[ii] &lt;- rnorm(1, 0, sqrt(sigma2))
+  u[ii] &lt;- theta1 * u[ii - 1] + phi1 * z[ii - 1] + z[ii]
+  y[ii] &lt;- beta0 + beta1 * x2[ii] + beta2 * x2[ii - 1] + u[ii]
+}
+
+# Remove warm-up values.
+x2 &lt;- x2[-c(1:100)]
+y  &lt;- y[-c(1:100)]
+
+
+plot(ts(y), lty = 2, col = "blue", type = "b")
+abline(h = 0, lty = 2)
+
+
+## Fit the model.
+ARIMAX.reg.fit &lt;- vglm(y ~ x2, ARIMAX.errors.ff(order = c(1, 0, 1), xLag = 1),
+             data = data.frame(y = y, x2 = x2), trace = TRUE)
+coef(ARIMAX.reg.fit, matrix = TRUE)
+summary(ARIMAX.reg.fit, HD = FALSE)
+
+
+# Compare to arima()
+# arima() can't handle lagged values of 'x2' by default, but these 
+# may entered at argument 'xreg'.
+arima(y, order = c(1, 0, 1), xreg = cbind(x2, c(0, x2[-150])))
+
+
+
+</code></pre>
+
+
+</div>

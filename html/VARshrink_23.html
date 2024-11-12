@@ -1,0 +1,54 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>serial.test_sh</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Test for serially correlated errors for VAR shrinkage estimate</h2>
+
+<h3>Description</h3>
+
+<p>An extension of vars::serial.test() to the class "varshrinkest".
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">serial.test_sh(x, lags.pt = 16, lags.bg = 5,
+  type = c("PT.asymptotic", "PT.adjusted", "BG", "ES"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class "varshrinkest" obtained by VARshrink().</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lags.pt, lags.bg, type</code></td>
+<td>
+<p>Other arguments for vars::serial.test().
+see help(serial.test) for details.</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><code>serial.test</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Canada, package = "vars")
+y &lt;- diff(Canada)
+estim &lt;- VARshrink(y, p = 2, type = "const", method = "ridge")
+serial.test_sh(estim)
+</code></pre>
+
+
+</div>

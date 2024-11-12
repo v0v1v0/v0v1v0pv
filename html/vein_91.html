@@ -1,0 +1,174 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>netspeed</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate speeds of traffic network</h2>
+
+<h3>Description</h3>
+
+<p><code>netspeed</code> Creates a dataframe of speeds for different hours
+and each link based on morning rush traffic data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">netspeed(
+  q = 1,
+  ps,
+  ffs,
+  cap,
+  lkm,
+  alpha = 0.15,
+  beta = 4,
+  net,
+  scheme = FALSE,
+  dist = "km"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>Data-frame of traffic flow to each hour (veh/h)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ps</code></td>
+<td>
+<p>Peak speed (km/h)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ffs</code></td>
+<td>
+<p>Free flow speed (km/h)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cap</code></td>
+<td>
+<p>Capacity of link (veh/h)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lkm</code></td>
+<td>
+<p>Distance of link (km)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Parameter of BPR curves</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>Parameter of BPR curves</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>SpatialLinesDataFrame or Spatial Feature of "LINESTRING"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scheme</code></td>
+<td>
+<p>Logical to create a Speed data-frame with 24 hours and a
+default  profile. It needs ffs and ps:</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dist</code></td>
+<td>
+<p>String indicating the units of the resulting distance in speed.
+Default is units from peak speed 'ps'
+</p>
+
+<table>
+<tr>
+<td style="text-align: right;">
+  00:00-06:00 </td>
+<td style="text-align: left;"> ffs</td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  06:00-07:00 </td>
+<td style="text-align: left;"> average between ffs and ps</td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  07:00-10:00 </td>
+<td style="text-align: left;"> ps</td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  10:00-17:00 </td>
+<td style="text-align: left;"> average between ffs and ps</td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  17:00-20:00 </td>
+<td style="text-align: left;"> ps</td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  20:00-22:00 </td>
+<td style="text-align: left;"> average between ffs and ps</td>
+</tr>
+<tr>
+<td style="text-align: right;">
+  22:00-00:00 </td>
+<td style="text-align: left;"> ffs</td>
+</tr>
+<tr>
+<td style="text-align: right;">
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>dataframe speeds with units or sf.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">{
+data(net)
+data(pc_profile)
+pc_week &lt;- temp_fact(net$ldv+net$hdv, pc_profile)
+df &lt;- netspeed(pc_week, net$ps, net$ffs, net$capacity, net$lkm, alpha = 1)
+class(df)
+plot(df) #plot of the average speed at each hour, +- sd
+# net$ps &lt;- units::set_units(net$ps, "miles/h")
+# net$ffs &lt;- units::set_units(net$ffs, "miles/h")
+# df &lt;- netspeed(pc_week, net$ps, net$ffs, net$capacity, net$lkm, alpha = 1)
+# class(df)
+# plot(df) #plot of the average speed at each hour, +- sd
+# df &lt;- netspeed(ps = net$ps, ffs = net$ffs, scheme = TRUE)
+# class(df)
+# plot(df) #plot of the average speed at each hour, +- sd
+# dfsf &lt;- netspeed(ps = net$ps, ffs = net$ffs, scheme = TRUE, net = net)
+# class(dfsf)
+# head(dfsf)
+# plot(dfsf, pal = cptcity::lucky(colorRampPalette = TRUE, rev = TRUE),
+# key.pos = 1, max.plot = 9)
+}
+</code></pre>
+
+
+</div>

@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>truncnormal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Truncated normal Distribution Family Function
+</h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimate of the two–parameter normal
+distribution with lower/upper truncation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R"> truncnormal(lmean = "identitylink", lsd = "loglink",
+             min.support = -Inf, max.support = Inf, zero = "sd") 
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmean, lsd</code></td>
+<td>
+
+<p>Link functions applied to mean and standard deviation/variance. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min.support, max.support</code></td>
+<td>
+
+<p>Vector of lower and upper truncation limits (recycled).
+<code>min.support</code> enables LHS truncation and
+<code>max.support</code> enables RHS truncation. 
+The default imply no truncation (mimicks 
+<code>uninormal</code>).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>MLE of the two–parameter (univariate) normal distribution subject to 
+lower/upper truncation. All response values are greater
+then <code>min.support</code> and/or lower than <code>max.support</code>.
+</p>
+<p>The truncated–normal density for a response <code class="reqn">Y</code> is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y; \mu, \sigma) =    f(y; \mu, \sigma) /
+  [\Phi(\texttt{max.support}, \mu, \sigma) -
+  \Phi(\texttt{min.support},\mu, \sigma) ], </code>
+</p>
+
+<p>where <code class="reqn">f</code> is the probability density function of standard normal
+distribution and <code class="reqn">\Phi</code> is the standard normal CDF.
+</p>
+<p>The mean of Y, given by
+</p>
+<p style="text-align: center;"><code class="reqn">
+\mu + [\varphi(\texttt{min.support}) + \varphi(\texttt{max.support})/\Delta \Phi(\mu,\sigma)]\cdot \sigma,
+</code>
+</p>
+
+<p>with <code class="reqn">\Delta \Phi(\mu, \sigma) = 
+ \Phi((\texttt{max.support} - \mu)/\sigma )  -
+ \Phi( (\texttt{min.support} - \mu)/\sigma ),</code>
+are returned as the fitted values.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Siqi (Vicky) Liu, Victor Miranda, and Thomas W. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>Nadarajah, S. and Kotz, S. (2003).
+<code>R</code> Programs for Computing Truncated Distributions.
+<em>Journal of Statistical Software, Code
+Snippets</em>,
+<b>16</b>(2), 1–8. 
+</p>
+<p>Cohen, A.C. (1991)
+<em>Truncated and Censored Samples:
+Theory and Applications</em>,
+New York, USA. Marcel Dekker.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>uninormal</code>,
+<code>CommonVGAMffArguments</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 2000
+set.seed(14290909)
+
+## Parameters
+mysd &lt;- exp(1.0)   # sd
+LL   &lt;- -0.5       # Lower bound
+UL   &lt;-  8.0       # Upper bound
+
+## Truncated data
+ldata2 &lt;- data.frame(x2 = runif(nn))
+ldata2 &lt;- transform(ldata2, y1 = rtruncnorm(nn, 1 + 1.5 * x2, mysd, 
+                                min.support = LL, max.support = UL))
+# head(ldata2)
+# hist(ldata2$y1, breaks = 22, col = "blue", xlim = c(-5, 10))
+
+##############################################################
+# Fitting a truncated normal distribution - sd is intercept only
+fit1 &lt;- vglm(y1 ~ x2, truncnormal(zero = "sd", min.support = LL, max.support = UL),
+             data = ldata2, trace = TRUE)
+coef(fit1, matrix = TRUE)
+vcov(fit1)
+             
+##############################################################
+# Fitting a truncated lognormal distribution - zero = NULL
+fit2 &lt;- vglm(y1 ~ x2, truncnormal(zero = NULL, min.support = LL, max.support = UL),
+             data = ldata2, trace = TRUE)
+coef(fit2, matrix = TRUE)
+vcov(fit2)
+
+##############################################################
+# Mimicking uninormal()
+fit3 &lt;- vglm(y1 ~ x2, truncnormal(zero = "sd"),
+             data = ldata2, trace = TRUE)
+coef(fit3, mat = TRUE)
+
+# Same as
+fit3bis &lt;- vglm(y1 ~ x2, uninormal(zero = "sd"),
+                 data = ldata2, trace = TRUE)
+coef(fit3bis, mat = TRUE)
+
+
+
+</code></pre>
+
+
+</div>

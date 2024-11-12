@@ -1,0 +1,172 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tikuv</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Short-tailed Symmetric Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Fits the short-tailed symmetric distribution of
+Tiku and Vaughan (1999).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tikuv(d, lmean = "identitylink", lsigma = "loglink",
+      isigma = NULL, zero = "sigma")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+
+<p>The <code class="reqn">d</code> parameter. It must be a single
+numeric value less than 2.
+Then <code class="reqn">h = 2-d&gt;0</code> is another parameter.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lmean, lsigma</code></td>
+<td>
+
+<p>Link functions for the mean and standard
+deviation parameters of the usual univariate normal distribution
+(see <b>Details</b> below).
+They are <code class="reqn">\mu</code> and <code class="reqn">\sigma</code> respectively.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>isigma</code></td>
+<td>
+
+<p>Optional initial value for <code class="reqn">\sigma</code>.
+A <code>NULL</code> means a value is computed internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>A vector specifying which
+linear/additive predictors are modelled as intercept-only.
+The values can be from the set {1,2}, corresponding
+respectively to <code class="reqn">\mu</code>, <code class="reqn">\sigma</code>.
+If <code>zero = NULL</code> then all linear/additive predictors
+are modelled as
+a linear combination of the explanatory variables.
+For many data sets having <code>zero = 2</code> is a good idea.
+See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The short-tailed symmetric distribution of Tiku and Vaughan (1999)
+has a probability density function that can be written
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \frac{K}{\sqrt{2\pi} \sigma}
+               \left[ 1 + \frac{1}{2h}
+               \left( \frac{y-\mu}{\sigma} \right)^2
+               \right]^2
+               \exp\left( -\frac12
+               (y-\mu)^2 / \sigma^2  \right) </code>
+</p>
+
+<p>where <code class="reqn">h=2-d&gt;0</code>,
+<code class="reqn">K</code> is a function of <code class="reqn">h</code>,
+<code class="reqn">-\infty &lt; y &lt; \infty</code>,
+<code class="reqn">\sigma &gt; 0</code>.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">E(Y) = \mu</code> and this is returned
+as the fitted values.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Under- or over-flow may occur if the data is ill-conditioned,
+e.g., when <code class="reqn">d</code> is very close to 2 or approaches <code>-Inf</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The density function is the product of a univariate normal
+density and a polynomial in the response <code class="reqn">y</code>.
+The distribution is bimodal if <code class="reqn">d&gt;0</code>, else is unimodal.
+A normal distribution arises as the limit
+as <code class="reqn">d</code> approaches
+<code class="reqn">-\infty</code>, i.e., as <code class="reqn">h</code>
+approaches <code class="reqn">\infty</code>.
+Fisher scoring is implemented.
+After fitting the value of <code>d</code> is
+stored in <code>@misc</code> with
+component name <code>d</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Akkaya, A. D. and Tiku, M. L. (2008).
+Short-tailed distributions and inliers.
+<em>Test</em>, <b>17</b>, 282–296.
+</p>
+<p>Tiku, M. L. and Vaughan, D. C. (1999).
+A family of short-tailed symmetric distributions.
+<em>Technical report, McMaster University, Canada</em>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>dtikuv</code>,
+<code>uninormal</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">m &lt;- 1.0; sigma &lt;- exp(0.5)
+tdata &lt;- data.frame(y = rtikuv(1000, d = 1, m = m, s = sigma))
+tdata &lt;- transform(tdata, sy = sort(y))
+fit &lt;- vglm(y ~ 1, tikuv(d = 1), data = tdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+(Cfit &lt;- Coef(fit))
+with(tdata, mean(y))
+## Not run:  with(tdata, hist(y, prob = TRUE))
+lines(dtikuv(sy, d = 1, m = Cfit[1], s = Cfit[2]) ~ sy,
+      data = tdata, col = "orange") 
+## End(Not run)
+</code></pre>
+
+
+</div>

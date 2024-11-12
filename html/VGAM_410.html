@@ -1,0 +1,239 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dirmultinomial</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fitting a Dirichlet-Multinomial Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Fits a Dirichlet-multinomial distribution to a matrix response.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dirmultinomial(lphi = "logitlink", iphi = 0.10, parallel = FALSE,
+               zero = "M")
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lphi</code></td>
+<td>
+
+<p>Link function applied to the <code class="reqn">\phi</code>
+parameter, which lies in the open unit interval <code class="reqn">(0,1)</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iphi</code></td>
+<td>
+
+<p>Numeric. Initial value for <code class="reqn">\phi</code>.
+Must be in the open unit interval <code class="reqn">(0,1)</code>.
+If a failure to converge occurs then try assigning this argument
+a different value.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+
+<p>A logical (formula not allowed here) indicating whether the
+probabilities <code class="reqn">\pi_1,\ldots,\pi_{M-1}</code>
+are to be equal via equal coefficients.
+Note <code class="reqn">\pi_M</code> will generally be different from the
+other probabilities.
+Setting <code>parallel = TRUE</code> will only work if you also set
+<code>zero = NULL</code> because of interference between these
+arguments (with respect to the intercept term).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>An integer-valued vector specifying which
+linear/additive predictors are modelled as intercepts only.
+The values must be from the set <code class="reqn">\{1,2,\ldots,M\}</code>.
+If the character <code>"M"</code> then this means the numerical
+value <code class="reqn">M</code>, which corresponds to linear/additive predictor
+associated with <code class="reqn">\phi</code>.  Setting <code>zero = NULL</code>
+means none of the values from the set <code class="reqn">\{1,2,\ldots,M\}</code>.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Dirichlet-multinomial distribution
+arises from a multinomial distribution where
+the probability parameters are not constant but are generated
+from a
+multivariate distribution called the Dirichlet distribution.
+The Dirichlet-multinomial distribution has probability function
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y_1=y_1,\ldots,Y_M=y_M) =
+     {N_{*} \choose {y_1,\ldots,y_M}}
+        \frac{
+        \prod_{j=1}^{M}
+        \prod_{r=1}^{y_{j}}
+        (\pi_j (1-\phi) + (r-1)\phi)}{
+        \prod_{r=1}^{N_{*}}
+        (1-\phi + (r-1)\phi)}</code>
+</p>
+
+<p>where <code class="reqn">\phi</code> is the <em>over-dispersion</em> parameter
+and <code class="reqn">N_{*} = y_1+\cdots+y_M</code>.  Here,
+<code class="reqn">a \choose b</code> means “<code class="reqn">a</code> choose <code class="reqn">b</code>”
+and refers to combinations (see <code>choose</code>).
+The above formula applies to each row of the matrix response.
+In this <span class="pkg">VGAM</span> family function the first <code class="reqn">M-1</code>
+linear/additive predictors correspond to the first <code class="reqn">M-1</code>
+probabilities via
+</p>
+<p style="text-align: center;"><code class="reqn">\eta_j = \log(P[Y=j]/ P[Y=M]) = \log(\pi_j/\pi_M)</code>
+</p>
+
+<p>where <code class="reqn">\eta_j</code> is the <code class="reqn">j</code>th linear/additive
+predictor (<code class="reqn">\eta_M=0</code> by definition for
+<code class="reqn">P[Y=M]</code> but not for <code class="reqn">\phi</code>)
+and
+<code class="reqn">j=1,\ldots,M-1</code>.
+The <code class="reqn">M</code>th linear/additive predictor corresponds to
+<code>lphi</code> applied to <code class="reqn">\phi</code>.
+</p>
+<p>Note that <code class="reqn">E(Y_j) = N_* \pi_j</code> but
+the probabilities (returned as the fitted values)
+<code class="reqn">\pi_j</code> are bundled together as a <code class="reqn">M</code>-column
+matrix.  The quantities <code class="reqn">N_*</code> are returned as the prior
+weights.
+</p>
+<p>The beta-binomial distribution is a special case of
+the Dirichlet-multinomial distribution when <code class="reqn">M=2</code>;
+see <code>betabinomial</code>.  It is easy to show that
+the first shape parameter of the beta distribution is
+<code class="reqn">shape1=\pi(1/\phi-1)</code>
+and the second shape parameter is
+<code class="reqn">shape2=(1-\pi)(1/\phi-1)</code>.  Also,
+<code class="reqn">\phi=1/(1+shape1+shape2)</code>, which
+is known as the <em>intra-cluster correlation</em> coefficient.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see
+<code>vglmff-class</code>).  The object is used by modelling
+functions such as <code>vglm</code>, <code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+<p>If the model is an intercept-only model then <code>@misc</code> (which is a
+list) has a component called <code>shape</code> which is a vector with the
+<code class="reqn">M</code> values <code class="reqn">\pi_j(1/\phi-1)</code>.
+</p>
+
+
+
+
+<h3>Warning </h3>
+
+<p>This <span class="pkg">VGAM</span> family function is prone to numerical problems,
+especially when there are covariates.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response can be a matrix of non-negative integers, or
+else a matrix of sample proportions and the total number of
+counts in each row specified using the <code>weights</code> argument.
+This dual input option is similar to <code>multinomial</code>.
+</p>
+<p>To fit a ‘parallel’ model with the <code class="reqn">\phi</code>
+parameter being an intercept-only you will need to use the
+<code>constraints</code> argument.
+</p>
+<p>Currently, Fisher scoring is implemented. To compute the
+expected information matrix a <code>for</code> loop is used; this
+may be very slow when the counts are large.  Additionally,
+convergence may be slower than usual due to round-off error
+when computing the expected information matrices.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Paul, S. R., Balasooriya, U. and Banerjee, T. (2005).
+Fisher information matrix of the Dirichlet-multinomial
+distribution.
+<em>Biometrical Journal</em>, <b>47</b>, 230–236.
+</p>
+<p>Tvedebrink, T. (2010).
+Overdispersion in allelic counts and <code class="reqn">\theta</code>-correction in
+forensic genetics.
+<em>Theoretical Population Biology</em>, <b>78</b>, 200–210.
+</p>
+<p>Yu, P. and Shaw, C. A. (2014).
+An Efficient Algorithm for Accurate Computation of
+the Dirichlet-Multinomial Log-Likelihood Function.
+<em>Bioinformatics</em>,
+<b>30</b>, 1547–54.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>dirmul.old</code>,
+<code>betabinomial</code>,
+<code>betabinomialff</code>,
+<code>dirichlet</code>,
+<code>multinomial</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 5; M &lt;- 4; set.seed(1)
+ydata &lt;- data.frame(round(matrix(runif(nn * M, max = 100), nn, M)))
+colnames(ydata) &lt;- paste("y", 1:M, sep = "")  # Integer counts
+
+fit &lt;- vglm(cbind(y1, y2, y3, y4) ~ 1, dirmultinomial,
+            data = ydata, trace = TRUE)
+head(fitted(fit))
+depvar(fit)  # Sample proportions
+weights(fit, type = "prior", matrix = FALSE)  # Total counts per row
+
+## Not run: 
+ydata &lt;- transform(ydata, x2 = runif(nn))
+fit &lt;- vglm(cbind(y1, y2, y3, y4) ~ x2, dirmultinomial,
+            data = ydata, trace = TRUE)
+Coef(fit)
+coef(fit, matrix = TRUE)
+(sfit &lt;- summary(fit))
+vcov(sfit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

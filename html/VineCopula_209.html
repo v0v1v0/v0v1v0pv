@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pobs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Pseudo-Observations</h2>
+
+<h3>Description</h3>
+
+<p>Compute the pseudo-observations for the given data matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pobs(
+  x,
+  na.last = "keep",
+  ties.method = eval(formals(rank)$ties.method),
+  lower.tail = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code class="reqn">n\times d</code>-matrix of random variates to be converted to
+pseudo-observations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.last, ties.method</code></td>
+<td>
+<p>are passed to <code>rank()</code>; see there.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail</code></td>
+<td>
+<p><code>logical()</code> which, if <code>FALSE</code>, returns the
+pseudo-observations when applying the empirical marginal survival functions.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Given <code class="reqn">n</code> realizations
+<code class="reqn">\bm{x}_i=(x_{i1},\dots,x_{id})^T</code>,
+<code class="reqn">i\in\{1,\dots,n\}</code> of a random vector <code class="reqn">\bm{X}</code>,
+the pseudo-observations are defined via <code class="reqn">u_{ij}=r_{ij}/(n+1)</code> for
+<code class="reqn">i\in\{1,\dots,n\}</code> and <code class="reqn">j\in\{1,\dots,d\}</code>, where <code class="reqn">r_{ij}</code> denotes the rank of <code class="reqn">x_{ij}</code> among all
+<code class="reqn">x_{kj}</code>, <code class="reqn">k\in\{1,\dots,n\}</code>.  The
+pseudo-observations can thus also be computed by component-wise applying the
+empirical distribution functions to the data and scaling the result by
+<code class="reqn">n/(n+1)</code>.  This asymptotically negligible scaling factor is used to
+force the variates to fall inside the open unit hypercube, for example, to
+avoid problems with density evaluation at the boundaries. Note that
+<code>pobs(, lower.tail=FALSE)</code> simply returns <code>1-pobs()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>matrix of the same dimensions as <code>x</code> containing the
+pseudo-observations.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is adapted from the <code>copula</code> package.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Marius Hofert, Thomas Nagler
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Simple definition of the function:
+pobs
+
+## simulate data from a multivariate normal distribution
+library(mvtnorm)
+set.seed(123)
+Sigma &lt;- matrix(c(2, 1, -0.2, 1, 1, 0.3, -0.2, 0.3, 0.5), 3, 3)
+mu &lt;- c(-3, 2, 1)
+dat &lt;- rmvnorm(500, sigma = Sigma)
+pairs(dat)  # plot observations
+
+## compute pseudo-observations for copula inference
+udat &lt;- pobs(dat)
+pairs(udat)
+# estimate vine copula model
+fit &lt;- RVineStructureSelect(udat, familyset = c(1, 2))
+
+</code></pre>
+
+
+</div>

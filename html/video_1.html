@@ -1,0 +1,70 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>addVideoLanguages</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add Language Support</h2>
+
+<h3>Description</h3>
+
+<p>Enabling languages (other than English) to appear as tooltips and other buttons in video.js widgets.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">addVideoLanguages(video, languages)
+
+availableLanguages()
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>video</code></td>
+<td>
+<p>A <code>video</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>languages</code></td>
+<td>
+<p>A character vector of languages to support in the video.
+See <code>availableVideoLanguages()</code> for a full list</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If any languages are missing, you can add a separate script in the head of the application
+that will apply the language to all videos. See <a href="https://videojs.com/guides/languages/">https://videojs.com/guides/languages/</a>
+for more details
+</p>
+
+
+<h3>Value</h3>
+
+<p>An updated <code>video</code> with extra language support
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">video &lt;- video("https://vjs.zencdn.net/v/oceans.mp4")
+video &lt;- addVideoLanguages(video, c("es", "fr", "de"))
+
+if (interactive()) {
+  library(shiny)
+
+  ui &lt;- fluidPage(lang = "fr", video)
+  server &lt;- function(input, output) {}
+  shinyApp(ui, server)
+}
+
+</code></pre>
+
+
+</div>

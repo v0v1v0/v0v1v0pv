@@ -1,0 +1,152 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pdpVars</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>pdpVars</h2>
+
+<h3>Description</h3>
+
+<p>Displays the individual conditional expectation (ICE) curves and aggregated partial dependence
+for each variable in a grid.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pdpVars(
+  data,
+  fit,
+  response,
+  vars = NULL,
+  pal = rev(RColorBrewer::brewer.pal(11, "RdYlBu")),
+  gridSize = 10,
+  nmax = 500,
+  class = 1,
+  nIce = 30,
+  predictFun = NULL,
+  limits = NULL,
+  colorVar = NULL,
+  draw = TRUE,
+  probability = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Data frame used for fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fit</code></td>
+<td>
+<p>A supervised machine learning model, which understands condvis2::CVpredict</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>response</code></td>
+<td>
+<p>The name of the response for the fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vars</code></td>
+<td>
+<p>The variables to plot (and their order), defaults to all variables other than response.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pal</code></td>
+<td>
+<p>A vector of colors to show predictions, for use with scale_fill_gradientn</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gridSize</code></td>
+<td>
+<p>The size of the grid for evaluating the predictions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nmax</code></td>
+<td>
+<p>Uses sample of nmax data rows for the pdp.  Default is 500. Use all rows if NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>class</code></td>
+<td>
+<p>Category for classification, a factor level, or a number indicating which factor level.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nIce</code></td>
+<td>
+<p>Number of ice curves to be plotted, defaults to 30.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>predictFun</code></td>
+<td>
+<p>Function of (fit, data) to extract numeric predictions from fit. Uses condvis2::CVpredict by default, which works for many fit classes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>limits</code></td>
+<td>
+<p>A vector determining the limits of the predicted values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colorVar</code></td>
+<td>
+<p>Which variable to colour the predictions by.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>draw</code></td>
+<td>
+<p>If FALSE, then the plot will not be drawn. Default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>probability</code></td>
+<td>
+<p>if TRUE, then returns the partial dependence for classification on the probability scale. If
+FALSE (default), then the partial dependence is returned on a near logit scale.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A grid displaying ICE curves and univariate partial dependence.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Load in the data:
+aq &lt;- na.omit(airquality)
+fit &lt;- lm(Ozone ~ ., data = aq)
+pdpVars(aq, fit, "Ozone")
+
+# Classification
+library(ranger)
+rfClassif &lt;- ranger(Species ~ ., data = iris, probability = TRUE)
+pdpVars(iris, rfClassif, "Species", class = 3)
+
+pp &lt;- pdpVars(iris, rfClassif, "Species", class = 2, draw = FALSE)
+pp[[1]]
+pdpVars(iris, rfClassif, "Species", class = 2, colorVar = "Species")
+
+</code></pre>
+
+
+</div>

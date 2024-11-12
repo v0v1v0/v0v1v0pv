@@ -1,0 +1,70 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>life_table</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute period lifetables from age-specific mortality rates</h2>
+
+<h3>Description</h3>
+
+<p>All available years and ages are included in the tables.
+$qx = mx/(1 + ((1-ax) * mx))$ as per Chiang (1984).
+Warning: the code has only been tested for data based on single-year age groups.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">life_table(.data, mortality)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>.data</code></td>
+<td>
+<p>A <code>vital</code> including an age variable and a variable containing mortality rates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mortality</code></td>
+<td>
+<p>Variable in <code>.data</code> containing Mortality rates (mx). If omitted, the variable with name  <code>mx</code>, <code>Mortality</code> or <code>Rate</code> will be used (not case sensitive).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A vital object containing the index, keys, and the new life table variables <code>mx</code>, <code>qx</code>, <code>lx</code>, <code>dx</code>, <code>Lx</code>, <code>Tx</code> and <code>ex</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Rob J Hyndman
+</p>
+
+
+<h3>References</h3>
+
+<p>Chiang CL. (1984) <em>The life table and its applications</em>. Robert E Krieger Publishing Company: Malabar.
+</p>
+<p>Keyfitz, N, and Caswell, H. (2005) <em>Applied mathematical demography</em>, Springer-Verlag: New York.
+</p>
+<p>Preston, S.H., Heuveline, P., and Guillot, M. (2001) <em>Demography: measuring and modeling population processes</em>. Blackwell
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Compute Victorian life table for females in 2003
+aus_mortality |&gt;
+  dplyr::filter(Code == "VIC", Sex == "female", Year == 2003) |&gt;
+  life_table()
+</code></pre>
+
+
+</div>

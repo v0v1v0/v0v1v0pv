@@ -1,0 +1,305 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>binom2.or</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Bivariate Binary Regression with an Odds Ratio (Family
+Function) </h2>
+
+<h3>Description</h3>
+
+<p>Fits a Palmgren (bivariate odds-ratio model, or
+bivariate logistic regression) model to two binary
+responses. Actually, a bivariate logistic/probit/cloglog/cauchit
+model can be fitted.  The odds ratio is used as a measure
+of dependency.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">binom2.or(lmu = "logitlink", lmu1 = lmu, lmu2 = lmu, loratio = "loglink",
+          imu1 = NULL, imu2 = NULL, ioratio = NULL, zero = "oratio",
+          exchangeable = FALSE, tol = 0.001, more.robust = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmu</code></td>
+<td>
+
+<p>Link function applied to the two marginal probabilities.
+See <code>Links</code> for more choices.
+See the note below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lmu1, lmu2</code></td>
+<td>
+
+<p>Link function applied to the first and second of the two marginal
+probabilities.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>loratio</code></td>
+<td>
+
+<p>Link function applied to the odds ratio.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imu1, imu2, ioratio</code></td>
+<td>
+
+<p>Optional initial values for the marginal probabilities and odds
+ratio.  See <code>CommonVGAMffArguments</code> for more details.
+In general good initial values are often required so use these
+arguments if convergence failure occurs.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Which linear/additive predictor is modelled as an intercept only?
+The default is for the odds ratio.
+A <code>NULL</code> means none.
+See <code>CommonVGAMffArguments</code> for more details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>exchangeable</code></td>
+<td>
+
+<p>Logical.
+If <code>TRUE</code>, the two marginal probabilities are constrained
+to be equal.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+
+<p>Tolerance for testing independence. Should be some
+small positive numerical value.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>more.robust</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> then some measures are taken to compute the
+derivatives and working weights more robustly, i.e., in an attempt
+to avoid numerical problems. Currently this feature is not debugged
+if set <code>TRUE</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Also known informally as the <em>Palmgren model</em>,
+the bivariate logistic model is
+a full-likelihood based model defined as two logistic regressions plus
+<code>log(oratio) = eta3</code> where <code>eta3</code> is the third linear/additive
+predictor relating the odds ratio to explanatory variables.
+Explicitly, the default model is
+</p>
+<p style="text-align: center;"><code class="reqn">logit[P(Y_j=1)] = \eta_j,\ \ \ j=1,2</code>
+</p>
+
+<p>for the marginals, and
+</p>
+<p style="text-align: center;"><code class="reqn">\log[P(Y_{00}=1) P(Y_{11}=1) / (P(Y_{01}=1) P(Y_{10}=1))] = \eta_3,</code>
+</p>
+
+<p>specifies the dependency between the two responses. Here, the responses
+equal 1 for a success and a 0 for a failure, and the odds ratio is often
+written <code class="reqn">\psi=p_{00}p_{11}/(p_{10}p_{01})</code>.
+The model is fitted by maximum likelihood estimation since the full
+likelihood is specified.
+The two binary responses are independent if and only if the odds ratio
+is unity, or equivalently, the log odds ratio is 0.  Fisher scoring
+is implemented.
+</p>
+<p>The default models <code class="reqn">\eta_3</code> as a single parameter only,
+i.e., an intercept-only model, but this can be circumvented by
+setting <code>zero = NULL</code> in order to model the odds ratio as
+a function of all the explanatory variables.
+The function <code>binom2.or()</code> can handle other
+probability link functions such as <code>probitlink</code>,
+<code>clogloglink</code> and <code>cauchitlink</code> links
+as well, so is quite general.  In fact, the two marginal
+probabilities can each have a different link function.
+A similar model is the <em>bivariate probit model</em>
+(<code>binom2.rho</code>), which is based on a standard
+bivariate normal distribution, but the bivariate probit model
+is less interpretable and flexible.
+</p>
+<p>The <code>exchangeable</code> argument should be used when the error
+structure is exchangeable, e.g., with eyes or ears data.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+<p>When fitted, the <code>fitted.values</code> slot of the
+object contains the four joint probabilities, labelled
+as <code class="reqn">(Y_1,Y_2)</code> = (0,0), (0,1), (1,0), (1,1),
+respectively.  These estimated probabilities should be extracted
+with the <code>fitted</code> generic function.
+</p>
+
+
+<h3>Note</h3>
+
+<p>At present we call <code>binom2.or</code> families a
+<em>bivariate odds-ratio model</em>.
+The response should be either a 4-column matrix of counts
+(whose columns correspond
+to <code class="reqn">(Y_1,Y_2)</code> = (0,0), (0,1), (1,0),
+(1,1) respectively), or a two-column matrix where each column
+has two distinct values, or a factor with four levels.
+The function <code>rbinom2.or</code> may be used to generate
+such data.  Successful convergence requires at least one case
+of each of the four possible outcomes.
+</p>
+<p>By default, a constant odds ratio is fitted because <code>zero
+  = 3</code>.  Set <code>zero = NULL</code> if you want the odds ratio to be
+modelled as a function of the explanatory variables; however,
+numerical problems are more likely to occur.
+</p>
+<p>The argument <code>lmu</code>, which is actually redundant, is used for
+convenience and for upward compatibility: specifying <code>lmu</code>
+only means the link function will be applied to <code>lmu1</code>
+and <code>lmu2</code>.  Users who want a different link function for
+each of the two marginal probabilities should use the <code>lmu1</code>
+and <code>lmu2</code> arguments, and the argument <code>lmu</code> is then
+ignored.  It doesn't make sense to specify <code>exchangeable =
+  TRUE</code> and have different link functions for the two marginal
+probabilities.
+</p>
+<p>Regarding Yee and Dirnbock (2009),
+the <code>xij</code> (see <code>vglm.control</code>) argument enables
+environmental variables with different values at the two time
+points to be entered into an exchangeable <code>binom2.or</code>
+model.  See the author's webpage for sample code.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>McCullagh, P. and Nelder, J. A. (1989).
+<em>Generalized Linear Models</em>, 2nd ed. London: Chapman &amp; Hall.
+</p>
+<p>le Cessie, S. and van Houwelingen, J. C. (1994).
+Logistic regression for correlated binary data.
+<em>Applied Statistics</em>,
+<b>43</b>, 95–108.
+</p>
+<p>Palmgren, J. (1989).
+<em>Regression Models for Bivariate Binary Responses</em>.
+Technical Report no. 101, Department of Biostatistics,
+University of Washington, Seattle.
+</p>
+<p>Yee, T. W. and Dirnbock, T. (2009).
+Models for analysing species' presence/absence data
+at two time points.
+Journal of Theoretical Biology, <b>259</b>(4), 684–694.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>rbinom2.or</code>,
+<code>binom2.rho</code>,
+<code>loglinb2</code>,
+<code>loglinb3</code>,
+<code>zipebcom</code>,
+<code>coalminers</code>,
+<code>binomialff</code>,
+<code>logitlink</code>,
+<code>probitlink</code>,
+<code>clogloglink</code>,
+<code>cauchitlink</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Fit the model in Table 6.7 in McCullagh and Nelder (1989)
+coalminers &lt;- transform(coalminers, Age = (age - 42) / 5)
+fit &lt;- vglm(cbind(nBnW, nBW, BnW, BW) ~ Age,
+            binom2.or(zero = NULL), data = coalminers)
+fitted(fit)
+summary(fit)
+coef(fit, matrix = TRUE)
+c(weights(fit, type = "prior")) * fitted(fit)  # Table 6.8
+
+## Not run:  with(coalminers, matplot(Age, fitted(fit), type = "l", las = 1,
+                         xlab = "(age - 42) / 5", lwd = 2))
+with(coalminers, matpoints(Age, depvar(fit), col=1:4))
+legend(x = -4, y = 0.5, lty = 1:4, col = 1:4, lwd = 2,
+       legend = c("1 = (Breathlessness=0, Wheeze=0)",
+                  "2 = (Breathlessness=0, Wheeze=1)",
+                  "3 = (Breathlessness=1, Wheeze=0)",
+                  "4 = (Breathlessness=1, Wheeze=1)")) 
+## End(Not run)
+
+
+# Another model: pet ownership
+## Not run:  data(xs.nz, package = "VGAMdata")
+# More homogeneous:
+petdata &lt;- subset(xs.nz, ethnicity == "European" &amp; age &lt; 70 &amp;
+                         sex == "M")
+petdata &lt;- na.omit(petdata[, c("cat", "dog", "age")])
+summary(petdata)
+with(petdata, table(cat, dog))  # Can compute the odds ratio
+
+fit &lt;- vgam(cbind((1-cat) * (1-dog), (1-cat) * dog,
+                     cat  * (1-dog),    cat  * dog) ~ s(age, df = 5),
+            binom2.or(zero =    3), data = petdata, trace = TRUE)
+colSums(depvar(fit))
+coef(fit, matrix = TRUE)
+
+## End(Not run)
+
+## Not run:  # Plot the estimated probabilities
+ooo &lt;- order(with(petdata, age))
+matplot(with(petdata, age)[ooo], fitted(fit)[ooo, ], type = "l",
+        xlab = "Age", ylab = "Probability", main = "Pet ownership",
+        ylim = c(0, max(fitted(fit))), las = 1, lwd = 1.5)
+legend("topleft", col=1:4, lty = 1:4, leg = c("no cat or dog ",
+       "dog only", "cat only", "cat and dog"), lwd = 1.5) 
+## End(Not run)
+</code></pre>
+
+
+</div>

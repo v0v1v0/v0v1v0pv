@@ -1,0 +1,135 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.sub.spear</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for a subgroup difference in average
+Spearman correlations</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and confidence interval
+for a  difference in average Spearman correlations for two
+mutually exclusive subgroups of studies. Each subgroup can have
+one or more studies.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.sub.spear(alpha, n, cor, group)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>vector of sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor</code></td>
+<td>
+<p>vector of estimated Spearman correlations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>vector of group indicators:
+</p>
+
+<ul>
+<li>
+<p> 1 for set A
+</p>
+</li>
+<li>
+<p> 2 for set B
+</p>
+</li>
+<li>
+<p> 0 to ignore
+</p>
+</li>
+</ul>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix with three rows:
+</p>
+
+<ul>
+<li>
+<p> Row 1 - estimate for Set A
+</p>
+</li>
+<li>
+<p> Row 2 - estimate for Set B
+</p>
+</li>
+<li>
+<p> Row 3 - estimate for difference, Set A - Set B
+</p>
+</li>
+</ul>
+<p>The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated average correlation or difference
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2008).
+“Meta-analytic interval estimation for bivariate correlations.”
+<em>Psychological Methods</em>, <b>13</b>(3), 173–181.
+ISSN 1939-1463, <a href="https://doi.org/10.1037/a0012868">doi:10.1037/a0012868</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">n &lt;- c(55, 190, 65, 35)
+cor &lt;- c(.40, .65, .60, .45)
+group &lt;- c(1, 1, 2, 0)
+meta.sub.spear(.05, n, cor, group)
+
+# Should return:
+#                Estimate         SE         LL        UL
+# Set A:            0.525 0.06483629  0.3865928 0.6402793
+# Set B:            0.600 0.08829277  0.3992493 0.7458512
+# Set A - Set B:   -0.075 0.10954158 -0.2760700 0.1564955
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,116 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>read.dly</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Read GHCN DLY daily weather file into a data frame
+</h2>
+
+<h3>Description</h3>
+
+<p>Imports daily data files from the <a href="https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/global-historical-climatology-network-ghcn">Global Historical Climatology Network (GHCN)</a>, replaces nodata values with NA, and converts precipitation to mm and temperature to C.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">read.dly(filename)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>filename</code></td>
+<td>
+
+<p>Filename or URL of a GHCN DLY file.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>All GHCN DLY files should have these five elements: PRCP (precipitation, originally tenths of a mm but mm in the function output); SNOW (snowfall, mm); SNWD (snow depth, mm), TMAX (maximum temperature, originally tenths of degree C but C in the function output), and  TMIN (minimum temperature, originally tenths of degree C but C in the function output). 
+</p>
+<p>Depending on the station, there may be many other recorded variables. Each variable is accompanied by a series of quality flags, which are preserved from the original file.
+</p>
+<p>Data are in a complex fixed-width format. Please see the <a href="https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/readme.txt">GHCN readme</a> for details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns a data frame with date as three columns, YEAR, MONTH, DAY, and each data value present in the original file along with its quality flags. Please see the <a href="https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/readme.txt">GHCN readme</a> for details.
+</p>
+<p>Note that units for temperature and precipitation have been converted from the GHCN values.
+</p>
+<p>These columns will always be present in the output:
+</p>
+
+<dl>
+<dt><code>YEAR</code></dt>
+<dd>
+<p>Year.</p>
+</dd>
+<dt><code>MONTH</code></dt>
+<dd>
+<p>Month number.</p>
+</dd>
+<dt><code>DAY</code></dt>
+<dd>
+<p>Day of month.</p>
+</dd>
+<dt><code>PRCP</code></dt>
+<dd>
+<p>Precipitation (mm).</p>
+</dd>
+<dt><code>TMAX</code></dt>
+<dd>
+<p>Maximum temperature (C).</p>
+</dd>
+<dt><code>TMIN</code></dt>
+<dd>
+<p>Minimum temperature (C).</p>
+</dd>
+</dl>
+<h3>Author(s)</h3>
+
+<p>Sarah Goslee
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/global-historical-climatology-network-ghcn">GHCN</a> data comprises both current and historical weather station data world-wide. 
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>wth.param</code>, <code>weather</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># ten years of daily weather data, 2000-2009, for State College, PA
+weather &lt;- read.dly(system.file("extdata", "USC00368449.dly", package = "VFS"))
+
+# could also use: 
+# weather &lt;- read.dly("ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/USC00368449.dly")
+# weather &lt;- subset(weather, YEAR &gt;= 2000 &amp; YEAR &lt;= 2009)
+
+# daily precipitation
+summary(weather$PRCP.VALUE)
+
+# monthly average maximum temperature
+aggregate(TMAX.VALUE ~ MONTH, FUN = mean, data = weather)
+
+# generate simulation values
+weather.params &lt;- wth.param(weather)
+</code></pre>
+
+
+</div>

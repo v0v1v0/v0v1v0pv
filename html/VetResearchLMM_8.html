@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Examp1.3.2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>#' @title    Examp1.3.2 from Duchateau, L. and Janssen, P. and Rowlands, G. J. (1998).<em>Linear Mixed Models. An Introduction with applications in Veterinary Research</em>. International Livestock Research Institute.</h2>
+
+<h3>Description</h3>
+
+<p>Examp1.3.2 is used for inspecting probability distribution and to define a plausible process through
+linear models and generalized linear models.
+</p>
+
+
+<h3>Author(s)</h3>
+
+
+<ol><li>
+<p>  Muhammad Yaseen (<a href="mailto:myaseen208@gmail.com">myaseen208@gmail.com</a>)
+</p>
+</li></ol>
+<h3>References</h3>
+
+
+<ol><li>
+<p> Duchateau, L. and Janssen, P. and Rowlands, G. J. (1998).<em>Linear Mixed Models. An Introduction with applications in Veterinary Research</em>.
+International Livestock Research Institute.
+</p>
+</li></ol>
+<h3>See Also</h3>
+
+<p><code>ex124</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#-------------------------------------------------------------
+## Example 1.3.2 p-16
+#-------------------------------------------------------------
+ # PROC GLM DATA=ex124;
+ # CLASS herd dose drug;
+ # MODEL PCVdif=drug herd(drug) dose dose*drug;
+ # RANDOM herd(drug);
+ # RUN;
+
+library(lme4)
+str(ex124)
+summary(ex124)
+
+ex124$herd1 &lt;- factor(ex124$herd)
+ex124$drug1 &lt;- factor(ex124$drug)
+ex124$dose1 &lt;- factor(ex124$dose)
+
+fm1.1 &lt;-
+  aov(
+      formula     = PCVdif ~ drug1 + Error(herd1:drug1) + dose1 + dose1:drug1
+    , data        = ex124
+    , projections = FALSE
+    , qr          = TRUE
+    , contrasts   = NULL
+  #  , ...
+    )
+summary(fm1.1)
+</code></pre>
+
+
+</div>

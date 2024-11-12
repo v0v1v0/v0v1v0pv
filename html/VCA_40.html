@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getSSQsweep</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>ANOVA Sum of Squares via Sweeping</h2>
+
+<h3>Description</h3>
+
+<p>Compute ANOVA Type-1 sum of squares for linear models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getSSQsweep(Data, tobj, random = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>(data.frame) with the data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tobj</code></td>
+<td>
+<p>(terms) object derived from original formula object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>random</code></td>
+<td>
+<p>(character) vector, optionally containing information about each
+model term, whether it is random or fixed (only used in mixed models)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function performs estimation of ANOVA Type-1 sum of squares
+using the SWEEP-operator (see reference), operating on the augmented
+matrix <code class="reqn">X'X</code>, where <code class="reqn">X</code> represents the design matrix not differentiating
+between fixed and random factors. See the numerical example in <code>Fsweep</code>
+exemplifying the type of augmentation of <code class="reqn">X'X</code> on which sweeping is carried out.
+</p>
+<p>This is an utility function not intended to be called directly.
+For each term in the formula the design-matrix <code class="reqn">Z</code> is constructed.
+Matrix <code class="reqn">X</code> corresponds to binding all these <code class="reqn">Z</code>-matrices together column-wise.
+</p>
+<p>Degrees of freedom for each term are determined by subtracting the number of
+linearly dependent columns from the total number of column in X asigned to a
+specific term.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(list) representing the  with variables:<br></p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>aov.tab</code></td>
+<td>
+<p>basic ANOVA-table with degrees of freedom (DF), SS and MS</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Lmat</code></td>
+<td>
+<p>(list) with components 'Z' and 'A'</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>,
+Florian Dufey <a href="mailto:florian.dufey@roche.com">florian.dufey@roche.com</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Goodnight, J.H., (1979), A Tutorial on the SWEEP Operator, The American Statistician, 33:3, p.149-158
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Fsweep</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+res &lt;- VCA:::getSSQsweep(dataEP05A2_1, terms(y~day/run))
+str(res)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getStats</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get Summary AE Statistics</h2>
+
+<h3>Description</h3>
+
+<p>Compares reference and comparison groups to calculate group-wise metrics and p-values for use in AE volcano plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getStats(dfAE, dfDemog, settings, stat = "Risk Ratio")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dfAE</code></td>
+<td>
+<p>Adverse events dataset structured as 1 record per adverse event
+per subject</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dfDemog</code></td>
+<td>
+<p>Subject-level dataset</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>settings</code></td>
+<td>
+<p>Named list of settings (see examples below for standard list)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stat</code></td>
+<td>
+<p>Statistic to calculate for AE plot. Options are risk ratio ("RR"
+or "Risk Ratio"), risk difference ("RD" or "Risk Difference"). Defaults to
+"Risk Ratio".</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a data frame of group-wise statistics for use in the volcano plot
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">settings&lt;-list(
+  stratification_col="AEBODSYS",
+  group_col="ARM",
+  reference_group="Placebo",
+  comparison_group="Xanomeline High Dose",
+  id_col="USUBJID"
+)
+getStats(dfAE=safetyData::adam_adae, dfDemog = safetyData::adam_adsl, settings)
+
+</code></pre>
+
+
+</div>

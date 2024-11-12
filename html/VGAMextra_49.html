@@ -1,0 +1,155 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>expQlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Link functions for the quantiles of several 1–parameter 
+continuous distributions. 
+</h2>
+
+<h3>Description</h3>
+
+
+<p>Computes the <code>expQlink</code> transformation, its inverse and
+the first two derivatives.
+
+
+
+
+
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  expQlink(theta, p = stop("Argument 'p' must be entered."),
+           bvalue = NULL, inverse = FALSE,
+           deriv = 0, short = TRUE, tag = FALSE) 
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character. This is <code class="reqn">\theta</code> although may 
+be <code class="reqn">\eta</code> depending on the other parameters.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+
+<p>Numeric. A prespecified number between 0 and 1.
+The particular <code class="reqn">p</code>–quantile to be modelled.
+For example, <code class="reqn">p = 0.5</code> means that the median is considered 
+by this link function.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue, inverse, deriv, short, tag</code></td>
+<td>
+
+<p>See <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a link function to model any fixed quantile, say 
+<code class="reqn">\xi_p</code>, of the exponential distribution.
+It is called the <code>expQlink</code> transformation and is defined as
+
+</p>
+<p style="text-align: center;"><code class="reqn"> \log (1 - p)^{-1/\lambda},</code>
+</p>
+
+
+<p>where <code class="reqn">\lambda</code> is positive as in 
+<code>exponential</code>.
+</p>
+<p>Numerical values of <code class="reqn">\lambda</code> or <code class="reqn">p</code> out of range may 
+result in <code>Inf</code>, <code>-Inf</code>, <code>NA</code> or <code>NaN</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>With <code>deriv = 0</code>, the <code>expQlink</code> transformation of
+<code>theta</code> for prespecified <code class="reqn">p</code> when <code>inverse = FALSE</code>.
+If <code>inverse = TRUE</code>, then the inverse <code>-log(1 - p)/theta</code>.
+</p>
+<p>For <code>deriv = 1</code>, this link function returns
+<code class="reqn">d</code> <code>eta</code> / <code class="reqn">d</code> <code>theta</code> when <code>inverse = FALSE</code>.
+If <code>inverse = TRUE</code>, then 
+<code class="reqn">d</code> <code>theta</code> / <code class="reqn">d</code> <code>eta</code> as a function of 
+<code>theta</code>.
+</p>
+<p>Similarly, when <code>deriv = 2</code>, the second derivatives in
+terms of <code>theta</code> are returned.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Numerical instability may occur for values <code>theta</code> too close
+to zero. Use argument <code>bvalue</code> to replace them before
+computing the link.
+</p>
+<p>If <code>theta</code> is character, then arguments <code>inverse</code> and
+<code>deriv</code> are ignored. See <code>Links</code>
+for further details.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>exponential</code>, 
+<code>Links</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> ## E1. expQlink() and its inverse ##
+    p &lt;- 0.25            # Modelling the first quartile.
+    my.theta &lt;- seq(0, 5, by = 0.1)[-1]
+    my.diff &lt;- my.theta - expQlink(expQlink(my.theta, p = p), p = p, inverse  =TRUE)
+    summary(my.diff)     # Zero
+
+
+  ## E2. Special values ##
+    expQlink(theta = c(Inf, -Inf, NA, NaN), p = p)
+    
+
+  ##  E3. Plot of expQlink() for different quantiles  ##
+    plot(expQlink(my.theta, p = p) ~ my.theta, 
+         type = "l", lty = "dotted", col = "blue", lwd = 2,
+         main = "expQink(p) transformation", xlab = "theta", ylab = "expQLink",
+         xlim = c(-0.5, 5), ylim = c(-0.5, 5))
+    abline(h = 0, v = 0, lwd = 2)
+    lines(my.theta, expQlink(my.theta, p = 0.50),  col = "green", lty = "dotted", lwd = 2)
+    lines(my.theta, expQlink(my.theta, p = 0.75),  col = "red", lty = "dotted", lwd = 2)
+    legend(2, 4,  c("p = 0.25", "p = 0.50", "p = 0.75"), col = c("blue", "green", "red"),
+           lwd = c(2, 2, 2), lty = c("dotted", "dotted", "dotted"))
+  
+</code></pre>
+
+
+</div>

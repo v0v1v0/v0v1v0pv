@@ -1,0 +1,147 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Expectiles-Normal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Expectiles of the Normal Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Density function, distribution function, and
+expectile function and random generation for the distribution
+associated with the expectiles of a normal distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">denorm(x, mean = 0, sd = 1, log = FALSE)
+penorm(q, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE)
+qenorm(p, mean = 0, sd = 1, Maxit.nr = 10, Tol.nr = 1.0e-6,
+       lower.tail = TRUE, log.p = FALSE)
+renorm(n, mean = 0, sd = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, p, q</code></td>
+<td>
+
+<p>See <code>deunif</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n, mean, sd, log</code></td>
+<td>
+
+<p>See <code>rnorm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail, log.p</code></td>
+<td>
+
+<p>Same meaning as in <code>pnorm</code>
+or <code>qnorm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Maxit.nr, Tol.nr</code></td>
+<td>
+
+<p>See <code>deunif</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>General details are given in <code>deunif</code>
+including
+a note regarding the terminology used.
+Here,
+<code>norm</code> corresponds to the distribution of interest, <code class="reqn">F</code>,
+and
+<code>enorm</code> corresponds to <code class="reqn">G</code>.
+The addition of “<code>e</code>” is for the ‘other’
+distribution associated with the parent distribution.
+Thus
+<code>denorm</code> is for <code class="reqn">g</code>,
+<code>penorm</code> is for <code class="reqn">G</code>,
+<code>qenorm</code> is for the inverse of <code class="reqn">G</code>,
+<code>renorm</code> generates random variates from <code class="reqn">g</code>.
+</p>
+<p>For <code>qenorm</code> the Newton-Raphson algorithm is used to solve for
+<code class="reqn">y</code> satisfying <code class="reqn">p = G(y)</code>.
+Numerical problems may occur when values of <code>p</code> are
+very close to 0 or 1.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>denorm(x)</code> gives the density function <code class="reqn">g(x)</code>.
+<code>penorm(q)</code> gives the distribution function <code class="reqn">G(q)</code>.
+<code>qenorm(p)</code> gives the expectile function:
+the value <code class="reqn">y</code> such that <code class="reqn">G(y)=p</code>.
+<code>renorm(n)</code> gives <code class="reqn">n</code> random variates from <code class="reqn">G</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee and Kai Huang </p>
+
+
+<h3>See Also</h3>
+
+<p><code>deunif</code>,
+<code>deexp</code>,
+<code>dnorm</code>,
+<code>amlnormal</code>,
+<code>lms.bcn</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">my.p &lt;- 0.25; y &lt;- rnorm(nn &lt;- 1000)
+(myexp &lt;- qenorm(my.p))
+sum(myexp - y[y &lt;= myexp]) / sum(abs(myexp - y))  # Should be my.p
+
+# Non-standard normal
+mymean &lt;- 1; mysd &lt;- 2
+yy &lt;- rnorm(nn, mymean, mysd)
+(myexp &lt;- qenorm(my.p, mymean, mysd))
+sum(myexp - yy[yy &lt;= myexp]) / sum(abs(myexp - yy))  # Should be my.p
+penorm(-Inf, mymean, mysd)      #  Should be 0
+penorm( Inf, mymean, mysd)      #  Should be 1
+penorm(mean(yy), mymean, mysd)  #  Should be 0.5
+abs(qenorm(0.5, mymean, mysd) - mean(yy))  #  Should be 0
+abs(penorm(myexp, mymean, mysd) - my.p)    #  Should be 0
+integrate(f = denorm, lower = -Inf, upper = Inf,
+          mymean, mysd)  #  Should be 1
+
+## Not run: 
+par(mfrow = c(2, 1))
+yy &lt;- seq(-3, 3, len = nn)
+plot(yy, denorm(yy), type = "l", col="blue", xlab = "y", ylab = "g(y)",
+     main = "g(y) for N(0,1); dotted green is f(y) = dnorm(y)")
+lines(yy, dnorm(yy), col = "green", lty = "dotted", lwd = 2)  # 'original'
+
+plot(yy, penorm(yy), type = "l", col = "blue", ylim = 0:1,
+     xlab = "y", ylab = "G(y)", main = "G(y) for N(0,1)")
+abline(v = 0, h = 0.5, col = "red", lty = "dashed")
+lines(yy, pnorm(yy), col = "green", lty = "dotted", lwd = 2) 
+## End(Not run)
+</code></pre>
+
+
+</div>

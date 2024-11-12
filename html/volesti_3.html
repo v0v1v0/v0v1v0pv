@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>direct_sampling</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Sample perfect uniformly distributed points from well known convex bodies: (a) the unit simplex, (b) the canonical simplex, (c) the boundary of a hypersphere or (d) the interior of a hypersphere.</h2>
+
+<h3>Description</h3>
+
+<p>The <code class="reqn">d</code>-dimensional unit simplex is the set of points <code class="reqn">\vec{x}\in \R^d</code>, s.t.: <code class="reqn">\sum_i x_i\leq 1</code>, <code class="reqn">x_i\geq 0</code>. The <code class="reqn">d</code>-dimensional canonical simplex is the set of points <code class="reqn">\vec{x}\in \R^d</code>, s.t.: <code class="reqn">\sum_i x_i = 1</code>, <code class="reqn">x_i\geq 0</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">direct_sampling(body, n)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>body</code></td>
+<td>
+<p>A list to request exact uniform sampling from special well known convex bodies through the following input parameters:
+</p>
+
+<dl>
+<dt>
+<code>type</code> </dt>
+<dd>
+<p> A string that declares the type of the body for the exact sampling: a) <code>'unit_simplex'</code> for the unit simplex, b) <code>'canonical_simplex'</code> for the canonical simplex, c) <code>'hypersphere'</code> for the boundary of a hypersphere centered at the origin, d) <code>'ball'</code> for the interior of a hypersphere centered at the origin.</p>
+</dd>
+<dt>
+<code>dimension</code> </dt>
+<dd>
+<p> An integer that declares the dimension when exact sampling is enabled for a simplex or a hypersphere.</p>
+</dd>
+<dt>
+<code>radius</code> </dt>
+<dd>
+<p> The radius of the <code class="reqn">d</code>-dimensional hypersphere. The default value is <code class="reqn">1</code>.</p>
+</dd>
+<dt>
+<code>seed</code> </dt>
+<dd>
+<p> A fixed seed for the number generator.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>The number of points that the function is going to sample.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code class="reqn">d\times n</code> matrix that contains, column-wise, the sampled points from the convex polytope P.
+</p>
+
+
+<h3>References</h3>
+
+<p><cite>R.Y. Rubinstein and B. Melamed,
+“Modern simulation and modeling” <em> Wiley Series in Probability and Statistics,</em> 1998.</cite>
+</p>
+<p><cite>A Smith, Noah and W Tromble, Roy,
+“Sampling Uniformly from the Unit Simplex,” <em> Center for Language and Speech Processing Johns Hopkins University,</em> 2004.</cite>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># 100 uniform points from the 2-d unit ball
+points = direct_sampling(n = 100, body = list("type" = "ball", "dimension" = 2))
+</code></pre>
+
+
+</div>

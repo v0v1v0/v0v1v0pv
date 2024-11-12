@@ -1,0 +1,125 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>abstract</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Turn S3 Objects Into Templates</h2>
+
+<h3>Description</h3>
+
+<p>Create templates for use by <code>alike</code>. Currently somewhat
+experimental; behavior may change in future.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">abstract(x, ...)
+
+## S3 method for class 'data.frame'
+abstract(x, ...)
+
+## Default S3 method:
+abstract(x, ...)
+
+## S3 method for class 'array'
+abstract(x, ...)
+
+## S3 method for class 'matrix'
+abstract(x, ...)
+
+## S3 method for class 'list'
+abstract(x, ...)
+
+## S3 method for class 'lm'
+abstract(x, ...)
+
+## S3 method for class 'environment'
+abstract(x, ...)
+
+## S3 method for class 'ts'
+abstract(x, what = c("start", "end", "frequency"), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>the object to abstract</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments for methods that require further arguments</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>what, </code></td>
+<td>
+<p>for time series which portion of the <code>ts</code> attribute to
+abstract, by default all three are abstracted, but you can select, any one,
+two, or all</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>abstract</code> is intended to create templates for use by
+<code>alike</code>.  The result of abstraction is often a partially
+specified object.  This type of object may not be suited for use in typical
+R computations and may cause errors (or worse) if you try to use them as
+normal R objects.
+</p>
+<p>There is no guarantee that the <code>abstract</code>ed object is suitable for use
+as a template to <code>alike</code> as is.  You may need to modify it further so
+that it suits your purposes.
+</p>
+<p><code>abstract</code> is an S3 generic.  The default method will
+dispatch on implicit classes, so if you attempt to <code>abstract</code> an object
+without an explicit <code>abstract</code> method, it will get abstracted based on
+its implicit class.  If you define your own <code>abstract</code> method and do not
+wish further abstraction based on implicit classes do not use
+<code>NextMethod</code>.
+</p>
+<p>S4 and RC objects are returned unchanged.
+</p>
+
+
+<h3>Value</h3>
+
+<p>abstracted object
+</p>
+
+
+<h3>Time Series</h3>
+
+<p><code>alike</code> will treat time series parameter components with zero in
+them as wildcards.  This function allows you to create these wild card time
+series attributes since R does not allow direct creation/modification of
+<code>ts</code> attributes with zero values.
+</p>
+<p>Make sure you do not try to use the templates you create with this for
+anything other than as <code>alike</code> templates since the result is
+likely undefined given R expects non zero values for the <code>ts</code>
+attribute and attempts to prevent such attributes.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">iris.tpl &lt;- abstract(iris)
+alike(iris.tpl, iris[1:10, ])
+alike(iris.tpl, transform(iris, Species=as.character(Species)))
+
+abstract(1:10)
+abstract(matrix(1:9, nrow=3))
+abstract(list(1:9, runif(10)))
+</code></pre>
+
+
+</div>

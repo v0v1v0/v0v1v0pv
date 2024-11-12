@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>logF</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Natural Exponential Family Generalized Hyperbolic Secant
+Distribution Family Function
+</h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of
+the 2-parameter log F distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R"> logF(lshape1 = "loglink", lshape2 = "loglink",
+      ishape1 = NULL, ishape2 = 1, imethod = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape1, lshape2</code></td>
+<td>
+
+
+<p>Parameter link functions for
+the shape parameters.
+Called <code class="reqn">\alpha</code> and <code class="reqn">\beta</code> respectively.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape1, ishape2</code></td>
+<td>
+
+<p>Optional initial values for the shape parameters.
+If given, it must be numeric and values are recycled to the
+appropriate length.
+The default is to choose the value internally.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>Initialization method.
+Either the value 1, 2, or ....
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The density for this distribution is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y; \alpha, \beta) = \exp(\alpha y) / [B(\alpha,\beta)
+                             (1 + e^y)^{\alpha + \beta}] </code>
+</p>
+
+<p>where <code class="reqn">y</code> is real,
+<code class="reqn">\alpha &gt; 0</code>,
+<code class="reqn">\beta &gt; 0</code>,
+<code class="reqn">B(., .)</code> is the beta function
+<code>beta</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see
+<code>vglmff-class</code>).  The object is used by modelling
+functions such as <code>vglm</code> and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Jones, M. C. (2008).
+On a class of distributions with simple exponential tails.
+<em>Statistica Sinica</em>,
+<b>18</b>(3), 1101–1110.
+
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>dlogF</code>,
+<code>extlogF1</code>,
+<code>logff</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 1000
+ldata &lt;- data.frame(y1 = rnorm(nn, +1, sd = exp(2)),  # Not proper data
+                    x2 = rnorm(nn, -1, sd = exp(2)),
+                    y2 = rnorm(nn, -1, sd = exp(2)))  # Not proper data
+fit1 &lt;- vglm(y1 ~ 1 , logF, ldata, trace = TRUE)
+fit2 &lt;- vglm(y2 ~ x2, logF, ldata, trace = TRUE)
+coef(fit2, matrix = TRUE)
+summary(fit2)
+vcov(fit2)
+
+head(fitted(fit1))
+with(ldata, mean(y1))
+max(abs(head(fitted(fit1)) - with(ldata, mean(y1))))
+</code></pre>
+
+
+</div>

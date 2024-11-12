@@ -1,0 +1,135 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>yeo.johnson</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Yeo-Johnson Transformation</h2>
+
+<h3>Description</h3>
+
+<p>Computes the Yeo-Johnson transformation, which is a
+normalizing transformation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">yeo.johnson(y, lambda, derivative = 0,
+            epsilon = sqrt(.Machine$double.eps), inverse = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Numeric, a vector or matrix. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda</code></td>
+<td>
+<p>Numeric. It is recycled to the same length as
+<code>y</code> if necessary. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>derivative</code></td>
+<td>
+<p>Non-negative integer. The default is
+the ordinary function evaluation, otherwise the derivative
+with respect to <code>lambda</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>epsilon</code></td>
+<td>
+<p> Numeric and positive value. The tolerance given
+to values of <code>lambda</code> when comparing it to 0 or 2. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inverse</code></td>
+<td>
+<p> Logical.
+Return the inverse transformation?
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Yeo-Johnson transformation can be thought of as an extension
+of the Box-Cox transformation. It handles both positive and
+negative values, whereas the Box-Cox transformation only handles
+positive values. Both can be used to transform the data so
+as to improve normality. They can be used to perform LMS
+quantile regression.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The Yeo-Johnson transformation or its inverse, or its
+derivatives with respect to <code>lambda</code>, of <code>y</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>If <code>inverse = TRUE</code> then the
+argument <code>derivative = 0</code> is required.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yeo, I.-K. and Johnson, R. A. (2000).
+A new family of power transformations to improve
+normality or symmetry.
+<em>Biometrika</em>,
+<b>87</b>, 954–959.
+</p>
+<p>Yee, T. W. (2004).
+Quantile regression via vector generalized additive models.
+<em>Statistics in Medicine</em>, <b>23</b>, 2295–2315.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>lms.yjn</code>,
+<code>boxcox</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">y &lt;- seq(-4, 4, len = (nn &lt;- 200))
+ltry &lt;- c(0, 0.5, 1, 1.5, 2)  # Try these values of lambda
+lltry &lt;- length(ltry)
+psi &lt;- matrix(NA_real_, nn, lltry)
+for (ii in 1:lltry)
+  psi[, ii] &lt;- yeo.johnson(y, lambda = ltry[ii])
+
+## Not run: 
+matplot(y, psi, type = "l", ylim = c(-4, 4), lwd = 2,
+        lty = 1:lltry, col = 1:lltry, las = 1,
+        ylab = "Yeo-Johnson transformation", 
+        main = "Yeo-Johnson transformation with some lambda values")
+abline(v = 0, h = 0)
+legend(x = 1, y = -0.5, lty = 1:lltry, legend = as.character(ltry),
+       lwd = 2, col = 1:lltry) 
+## End(Not run)
+</code></pre>
+
+
+</div>

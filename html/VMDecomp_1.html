@@ -1,0 +1,63 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>arrhythmia</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Sample Arrhythmia Data from MIT Boston's Beth Israel Hospital (BIH) Database</h2>
+
+<h3>Description</h3>
+
+<p>Sample arrhythmia data from the MIT-BIH Arrhythmia Database
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(arrhythmia)
+</code></pre>
+
+
+<h3>Format</h3>
+
+<p>An object of class <code>data.table</code> (inherits from <code>data.frame</code>) with 10000 rows and 2 columns.
+</p>
+
+
+<h3>Details</h3>
+
+<p>The data includes two columns "MLII" and "V1". According to <a href="https://www.physionet.org/files/mitdb/1.0.0/mitdbdir/intro.htm">https://www.physionet.org/files/mitdb/1.0.0/mitdbdir/intro.htm</a>,
+"In most records, the upper signal is a modified limb lead II (MLII), obtained by placing the electrodes on the chest. The lower signal is usually a modified lead V1 (occasionally V2 or V5, and in one instance V4)."
+</p>
+<p>The data was downloaded after installing the "wfdb" Python package. The Python code used to save the sample data is the following:
+</p>
+<p><code>import wfdb</code> <br><code>import pandas as pd</code> <br></p>
+<p><code>sample_annotat_200 = wfdb.rdrecord('200', sampfrom = 0, sampto = 10000, pn_dir = 'mitdb')</code> <br><code>arrhythmia = pd.DataFrame(sample_annotat_200.p_signal, columns = sample_annotat_200.sig_name)</code> <br></p>
+
+
+<h3>References</h3>
+
+<p>Moody GB, Mark RG. The impact of the MIT-BIH Arrhythmia Database. IEEE Eng in Med and Biol 20(3):45-50 (May-June 2001). (PMID: 11446209)
+</p>
+<p>Goldberger, A., Amaral, L., Glass, L., Hausdorff, J., Ivanov, P. C., Mark, R., ... &amp; Stanley, H. E. (2000). PhysioBank, PhysioToolkit, and PhysioNet: Components of a new research resource for complex physiologic signals. Circulation (Online). 101 (23), pp. e215–e220.
+</p>
+<p>https://physionet.org/content/mitdb/1.0.0/
+</p>
+<p>https://www.physionet.org/files/mitdb/1.0.0/mitdbdir/intro.htm
+</p>
+<p>https://github.com/MIT-LCP/wfdb-python
+</p>
+<p>https://github.com/MIT-LCP/wfdb-python/blob/main/demo.ipynb
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+require(VMDecomp)
+
+data(arrhythmia)
+</code></pre>
+
+
+</div>

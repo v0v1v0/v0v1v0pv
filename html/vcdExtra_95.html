@@ -1,0 +1,145 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>seq_mosaic</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Sequential Mosaics and Strucplots for an N-way Table
+</h2>
+
+<h3>Description</h3>
+
+<p>This function takes an n-way contingency table and plots mosaics for series of sequential
+models to the 1-, 2-, ... n-way marginal tables, corresponding to a variety of
+types of loglinear models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">seq_mosaic(x, panel = mosaic, 
+   type = c("joint", "conditional", "mutual", "markov", "saturated"), 
+   plots = 1:nf, vorder = 1:nf, 
+   k = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a contingency table in array form, with optional category labels specified in the dimnames(x) attribute, or else a data.frame in frequency form, with the frequency variable named <code>"Freq"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>panel</code></td>
+<td>
+<p>a <code>strucplot</code> panel function, 
+typically <code>mosaic</code> or <code>sieve. NOT yet implemented.</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>type of sequential model to fit, a character string.
+One of <code>"joint"</code>, <code>"conditional"</code>, <code>"mutual"</code>, <code>"markov"</code>, or  <code>"saturated"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plots</code></td>
+<td>
+<p>which marginal sub-tables to plot? A vector of a (sub)set of the integers, <code>1:nf</code> where <code>nf</code> is the number of factors in the full n-way table.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vorder</code></td>
+<td>
+<p>order of variables, a permutation of the integers <code>1:nf</code>, used to reorder the variables in the original table for the purpose
+of fitting sequential marginal models. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>conditioning variable(s) for <code>type</code> = <code>"joint"</code>, <code>"conditional"</code> or Markov chain order for <code>type</code> = <code>"markov"</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments passed to <code>mosaic</code>. </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function produces 
+similar plots to the use of <code>mosaic.loglmlist</code>,
+called with the result of <code>seq_loglm</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>None. Used for its side-effect of producing plots
+
+
+
+
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Friendly
+</p>
+
+
+<h3>References</h3>
+
+<p>These functions were inspired by the original SAS implementation of
+mosaic displays, described in the <em>User's Guide for Mosaics</em>,
+<a href="http://www.datavis.ca/mosaics/mosaics.pdf">http://www.datavis.ca/mosaics/mosaics.pdf</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>loglin-utilities</code> for descriptions of sequential models,
+<code>conditional</code>,
+<code>joint</code>,
+<code>mutual</code>, ...
+</p>
+<p><code>loglmlist</code>,  <code>mosaic.loglmlist</code>,
+<code>seq_loglm</code>
+</p>
+<p><code>mosaic.glm</code>, <code>mosaic</code>,
+<code>strucplot</code>, for the many parameters that control the details of mosaic plots.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data(Titanic, package="datasets")
+
+seq_mosaic(Titanic)  # models of joint independence, Survived last
+seq_mosaic(Titanic, type="condit")
+seq_mosaic(Titanic, type="mutual")
+
+# other panel functions and options: presently BUGGED
+## Not run: 
+seq_mosaic(Titanic, type="mutual", panel=sieve, 
+   gp=shading_Friendly, labeling=labeling_values)
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,123 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>clustvar</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Cluster variance
+</h2>
+
+<h3>Description</h3>
+
+<p>Computes the variation in community composition (i.e. beta diversity) found within the sites of a set of hard or fuzzy clusters.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">clustvar(x, cluster = NULL, defuzzify=FALSE,...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>Community data. Either a site-by-species matrix or a site-by-site matrix of compositional distances between sites  (i.e., an object of class <code>dist</code>). Alternatively, this can be an object of class <code>vegclust</code> or <code>vegclass</code>, and in this case it is unnecessary to provide <code>cluster</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cluster</code></td>
+<td>
+
+<p>A vector indicating the hard membership of each object in <code>x</code> to a set of groups.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>defuzzify</code></td>
+<td>
+
+<p>A flag indicating whether fuzzy memberships should be defuzzified (see function <code>defuzzify</code>). Only applies to the case where an object of class <code>vegclust</code> or <code>vegclass</code> is supplied in <code>x</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Additional parameters for function <code>defuzzify</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function can be used in two ways:
+</p>
+
+<ul>
+<li>
+<p>if <code>x</code> is a data matrix (site by species or distances among sites) and <code>cluster</code> is <code>null</code>, the function assumes a single cluster of all points in <code>x</code>. When <code>cluster</code> is provided, the function computes cluster variance for each (hard) group and this computation implies setting the centroid of the group. Cluster variance is defined as the average squared distance to the centroid.
+</p>
+</li>
+<li>
+<p>If <code>x</code> is an object of class <code>vegclust</code> or <code>vegclass</code>, the function uses the information contained there (distances to cluster centers, memberships and exponent of fuzziness) in order to compute cluster variances. Cluster centers do not need to be recomputed, and the distances to cluster centers are used directly. For centroid-based cluster models (KM, FCM, NC, HNC and PCM) the variance is defined as the average squared distance to the centroid. For medoid-based cluster models (KMdd, FCMdd, NCdd, HNCdd and PCMdd) the variance is defined as average distance to the medoid. The variance for both mobile and fixed clusters is returned. Additionally, membership matrices may be defuzzified if <code>defuzzify=TRUE</code>. 
+
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>A double value (for one cluster) or a vector of values, one per each cluster.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, CREAF
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vegclust</code>, <code>kmeans</code>,<code>defuzzify</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Loads data  
+data(wetland)
+
+## This equals the chord transformation 
+## (see also \code{\link{decostand}} in package 'vegan')
+wetland.chord = as.data.frame(sweep(as.matrix(wetland), 1, 
+                              sqrt(rowSums(as.matrix(wetland)^2)), "/"))
+
+## Create noise clustering with 3 clusters. Perform 10 starts from random seeds 
+## and keep the best solution
+wetland.nc = vegclust(wetland.chord, mobileCenters=3, m = 1.2, dnoise=0.75, 
+                      method="NC", nstart=10)
+
+## Gets cluster variance of fuzzy clusters
+clustvar(wetland.nc)
+
+## Gets cluster variance of fuzzy clusters after defuzzification
+clustvar(wetland.nc, defuzzify=TRUE)
+
+## Similar to the previous, this gets cluster variance of defuzzified (i.e. hard) clusters
+clustvar(wetland.chord, cluster=defuzzify(wetland.nc)$cluster)
+
+## Gets cluster variance of K-means (i.e. hard) clusters
+clustvar(wetland.chord, cluster=kmeans(wetland.chord, centers=3, nstart=10)$cluster)
+
+</code></pre>
+
+
+</div>

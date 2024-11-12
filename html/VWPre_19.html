@@ -1,0 +1,150 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_avg_cdiff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plots average difference between two conditions.</h2>
+
+<h3>Description</h3>
+
+<p><code>plot_avg_cdiff</code> calculates the average of differences between 
+two specified conditions along with standard error and then plots the 
+results.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_avg_cdiff(
+  data,
+  IAColumn = NULL,
+  xlim = NA,
+  type = NULL,
+  Averaging = "Subject",
+  Condition = NULL,
+  CondLabels = NA,
+  ErrorBar = TRUE,
+  VWPreTheme = TRUE,
+  ConfLev = 95,
+  CItype = "simultaneous",
+  ErrorBand = FALSE,
+  ErrorType = "SE"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data table object output by either <code>bin_prop</code>. 
+<code>transform_to_elogit</code>, or <code>create_binomial</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>IAColumn</code></td>
+<td>
+<p>A character vector specifying the desired column
+corresponding to the interest area.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim</code></td>
+<td>
+<p>A vector of two integers specifying the limits of the x-axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>A character string indicating "proportion" or "elogit",
+which influences how standard error and confidence intervals are calculated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Averaging</code></td>
+<td>
+<p>A character string indicating how the averaging should 
+be done. "Subject" (default) will produce the grand mean in the data, while
+"Item" (or, in principle, any other column name) will
+calculate the grand mean by that factor.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Condition</code></td>
+<td>
+<p>A list containing the column name corresponding to the 
+condition and factor levels to be used for calculating the difference.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CondLabels</code></td>
+<td>
+<p>A named character vector specifying the desired labels 
+of the levels of the condition.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ErrorBar</code></td>
+<td>
+<p>A logical indicating whether error bars should be
+included in the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VWPreTheme</code></td>
+<td>
+<p>A logical indicating whether the theme included with the 
+function should be applied, or ggplot2's base theme (to which any other 
+custom theme could be added).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ConfLev</code></td>
+<td>
+<p>A number indicating the confidence level of the CI.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CItype</code></td>
+<td>
+<p>A string indicating "simultaneous" or "pointwise". Simultaneous
+performs a Bonferroni correction for the interval.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ErrorBand</code></td>
+<td>
+<p>A logical indicating whether error bands should be
+included in the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ErrorType</code></td>
+<td>
+<p>A string indicating "SE" or "CI".</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(VWPre)
+# For plotting average difference between conditions...
+plot_avg_cdiff(data = dat, xlim = c(0, 1000), type = "proportion",
+             IAColumn = "IA_1_P", Condition = list(talker = c("EN3", "CH1")),
+             CondLabels = NA, ErrorBar = TRUE, VWPreTheme = TRUE, 
+             ErrorBand = FALSE, ErrorType = "SE")
+
+# For a more complete tutorial on VWPre plotting functions:
+vignette("SR_Plotting", package="VWPre")
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

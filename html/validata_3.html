@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>confirm_strlen</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>confirm string length</h2>
+
+<h3>Description</h3>
+
+<p>returns a count table of string lengths for a character column. The helper function <code>choose_strlen</code>
+filters dataframe for rows containing specific string length for the specified column.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">confirm_strlen(mdb, col)
+
+choose_strlen(cs_output, len)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mdb</code></td>
+<td>
+<p>dataframe</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>unquoted column</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cs_output</code></td>
+<td>
+<p>dataframe. output from <code>confirm_strlen</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>len</code></td>
+<td>
+<p>integer vector.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>prints a summary and returns a dataframe invisibly
+</p>
+<p>dataframe with original columns, filtered to the specific string length
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+iris %&gt;%
+tibble::as_tibble() %&gt;%
+confirm_strlen(Species) -&gt; iris_cs_output
+
+iris_cs_output
+
+iris_cs_output %&gt;%
+choose_strlen(6)
+</code></pre>
+
+
+</div>

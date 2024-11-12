@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>PR.Fore</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Improved Augmented Regression Method for Predictive Regression
+</h2>
+
+<h3>Description</h3>
+
+<p>Function for forecasting based on Imporved ARM
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">PR.Fore(x, y, M, h = 10)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p> predictor or matrix of predictors in column</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p> variable to be predicted, usually stock return</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M</code></td>
+<td>
+<p> Estimation results of the function PR.IARM</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>h</code></td>
+<td>
+<p> forecasting period </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Function for forecasting based on Imporved ARM
+</p>
+
+
+<h3>Value</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>Fore </code></td>
+<td>
+<p>Out-of sample and dynamic forecasts for y and x</p>
+</td>
+</tr></table>
+<h3>Note</h3>
+
+<p>Kim J.H., 2014, Predictive Regression: Improved Augmented Regression Method, Journal of Empirical Finance 25, 13-15.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>jae H. Kim
+</p>
+
+
+<h3>References</h3>
+
+<p>Kim J.H., 2014, Predictive Regression: Improved Augmented Regression Method, Journal of Empirical Finance 25, 13-15.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(data1)
+# Replicating Table 5 (excess return)
+y=data1$ret.nyse.vw*100 -data1$tbill*100
+x=cbind(log(data1$dy.nyse), data1$tbill*100); k=ncol(x) 
+p=4
+Rmat1=Rmatrix(p,k,type=1,index=1); Rmat=Rmat1$Rmat; rvec=Rmat1$rvec
+M=PR.IARM(x,y,p,Rmat,rvec)
+PRF=PR.Fore(x,y,M)
+</code></pre>
+
+
+</div>

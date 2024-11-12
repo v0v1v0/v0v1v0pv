@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>FIC_reorder_univar</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Univariate ordering under FIC approximation, first m chosen by m iter of
+dense univariate reordering</h2>
+
+<h3>Description</h3>
+
+<p>Univariate ordering under FIC approximation, first m chosen by m iter of
+dense univariate reordering
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">FIC_reorder_univar(
+  a,
+  b,
+  m,
+  locs = NULL,
+  covName = NULL,
+  covParms = NULL,
+  covMat = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>a</code></td>
+<td>
+<p>lower bound vector for TMVN</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b</code></td>
+<td>
+<p>upper bound vector for TMVN</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>Vecchia conditioning set size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>locs</code></td>
+<td>
+<p>location (feature) matrix n X d</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>covName</code></td>
+<td>
+<p>covariance function name from the 'GpGp' package</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>covParms</code></td>
+<td>
+<p>parameters for 'covName'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>covMat</code></td>
+<td>
+<p>dense covariance matrix, not needed when 'locs' is not null</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a vector of new order based on FIC assumption and maxmin ordering
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(VeccTMVN)
+n1 &lt;- 5
+n2 &lt;- 5
+n &lt;- n1 * n2
+m &lt;- 5
+locs &lt;- as.matrix(expand.grid((1:n1) / n1, (1:n2) / n2))
+covparms &lt;- c(2, 0.1, 0)
+cov_name &lt;- "matern15_isotropic"
+a &lt;- rep(-Inf, n)
+b &lt;- seq(from = -3, to = 3, length.out = n)
+cat("The output order should be roughly 1 to ", n)
+cat(FIC_reorder_univar(a, b, m, locs, cov_name, covparms))
+
+</code></pre>
+
+
+</div>

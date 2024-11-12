@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>test_selective_inference</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Selective inference for post-clustering variable involvement</h2>
+
+<h3>Description</h3>
+
+<p>Selective inference for post-clustering variable involvement
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">test_selective_inference(
+  X,
+  k1,
+  k2,
+  g,
+  ndraws = 2000,
+  cl_fun,
+  cl = NULL,
+  sig = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>The data matrix of size on which the clustering is applied</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k1</code></td>
+<td>
+<p>The first cluster of interest</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k2</code></td>
+<td>
+<p>The second cluster of interest</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>The variables for which the test is applied</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ndraws</code></td>
+<td>
+<p>The number of Monte-Carlo samples</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cl_fun</code></td>
+<td>
+<p>The clustering function used to build clusters</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cl</code></td>
+<td>
+<p>The labels of the data obtained thanks to the <code>cl_fun</code> function</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sig</code></td>
+<td>
+<p>The estimated standard deviation. Default is NULL and the standard deviation is estimated using only observations in the two clusters of interest</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with the following elements </p>
+
+<ul>
+<li> <p><code>stat_g</code> : the test statistic used for the test.
+</p>
+</li>
+<li> <p><code>pval</code> : The resulting p-values of the test.
+</p>
+</li>
+<li> <p><code>stder</code> : The standard deviation of the p-values computed thanks to the Monte-Carlo samples.
+</p>
+</li>
+<li> <p><code>clusters</code> : The labels of the data.
+</p>
+</li>
+</ul>
+<h3>Note</h3>
+
+<p>This function is adapted from the clusterpval::test_clusters_approx() of Gao et al. (2022) (available on Github: https://github.com/lucylgao/clusterpval)
+</p>
+
+
+<h3>References</h3>
+
+<p>Gao, L. L., Bien, J., &amp; Witten, D. (2022). Selective inference for hierarchical clustering. Journal of the American Statistical Association, (just-accepted), 1-27.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">X &lt;- matrix(rnorm(200),ncol = 2)
+hcl_fun &lt;- function(x){
+return(as.factor(cutree(hclust(dist(x), method = "ward.D2"), k=2)))}
+cl &lt;- hcl_fun(X)
+plot(X, col=cl)
+#Note that in practice the value of ndraws (the number of Monte-Carlo simulations must be higher)
+test_var1 &lt;- test_selective_inference(X, k1=1, k2=2, g=1, ndraws =100, cl_fun = hcl_fun, cl = cl)
+
+
+
+</code></pre>
+
+
+</div>

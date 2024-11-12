@@ -1,0 +1,120 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hurea</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Husler-Reiss Angular Surface
+Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimating the parameter of the Husler-Reiss
+angular surface distribution by
+maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hurea(lshape = "loglink", zero = NULL, nrfs = 1,
+      gshape = exp(3 * ppoints(5) - 1), parallel = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape, gshape</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nrfs, zero, parallel</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Husler-Reiss angular surface distribution
+has a probability density function that can be written
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;s) = (s / (4 * sqrt(2*pi) * y(1-y)^2))
+    exp(-(2 + s^2 * logit y)^2 / [8 s^2])</code>
+</p>
+
+<p>for <code class="reqn">0&lt;y&lt;1</code> and positive shape parameter <code class="reqn">s</code>.
+The mean of <code class="reqn">Y</code> is currently unknown to me,
+as well as its quantiles.
+Hence <code class="reqn">s</code> is currently returned as the
+fitted values.
+Fisher-scoring is implemented.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This <span class="pkg">VGAM</span> family function handles multiple responses.
+It may struggle and/or fail
+when <code class="reqn">s</code> is close to 0.
+Some comments about “u”-shaped versus unimodal
+densities accommodated by this distribution
+are at <code>dhurea</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Mhalla, L. and de Carvalho, M. and Chavez-Demoulin,
+V. (2019).
+Regression-type models for extremal dependence.
+<em>Scandinavian Journal of Statistics</em>,
+<b>46</b>, 1141–1167.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>hurea</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 100; set.seed(1)
+hdata &lt;- data.frame(x2 = runif(nn))
+hdata &lt;-
+  transform(hdata,  # Cannot generate proper random variates!
+    y1 = rbeta(nn, shape1 = 0.5, shape2 = 0.5),  # "U" shaped
+    y2 = rnorm(nn, 0.65, sd = exp(-3 - 4 * x2)))
+# Multiple responses:
+hfit &lt;- vglm(cbind(y1, y2) ~ x2, hurea, hdata, trace = TRUE)
+coef(hfit, matrix = TRUE)
+summary(hfit)
+</code></pre>
+
+
+</div>

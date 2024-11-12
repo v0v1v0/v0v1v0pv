@@ -1,0 +1,155 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rasterComp</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Comparative raster mapping</h2>
+
+<h3>Description</h3>
+
+<p>A convenient wrapper around <code>terra::plot</code>
+to generate formatted plots comparing two rasters.
+This is used in the context of voluModel to
+overlay semi-transparent distributions (coded as 1)
+in two different <code>RasterLayers</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rasterComp(
+  rast1 = NULL,
+  rast2 = NULL,
+  col1 = "#1b9e777F",
+  col2 = "#7570b37F",
+  rast1Name = "Set 1",
+  rast2Name = "Set 2",
+  land = NA,
+  landCol = "black",
+  title = "A Raster Comparison",
+  graticule = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>rast1</code></td>
+<td>
+<p>A single <code>SpatRaster</code> showing the
+distribution of the species corresponding to
+<code>rast1Name</code>. Should have values of 0 (absence)
+and 1 (presence). Can also be <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rast2</code></td>
+<td>
+<p>A single <code>SpatRaster</code> showing the
+distribution of the species corresponding to
+<code>rast2Name</code>. Should have values of 0 (absence)
+and 1 (presence). Must match the extent and
+resolution of <code>rast1</code>. Can also be <code>NULL.</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col1</code></td>
+<td>
+<p>Color for <code>rast1</code> presences</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col2</code></td>
+<td>
+<p>Color for <code>rast2</code> presences</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rast1Name</code></td>
+<td>
+<p>An optional name for the first set
+of occurrences, which will be color-coded to
+<code>occs1Col</code> in the resulting plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rast2Name</code></td>
+<td>
+<p>An optional name for the first set
+of occurrences, which will be color-coded to
+<code>occs2Col</code> in the resulting plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>land</code></td>
+<td>
+<p>An optional coastline polygon shapefile
+of types <code>sf</code> or <code>SpatRaster</code> to provide geographic
+context for the occurrence points.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>landCol</code></td>
+<td>
+<p>Color for land on map.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>A title for the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>graticule</code></td>
+<td>
+<p>Do you want a grid of lon/lat lines?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional optional arguments to pass to
+<code>terra::plot()</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A plot of class <code>recordedplot</code> overlaying mapped,
+semitransparent extents of the input rasters
+</p>
+
+
+<h3>Note</h3>
+
+<p>The extents of <code>rast1</code> and <code>rast2</code>
+must match.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>plot</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(terra)
+rast1 &lt;- rast(ncol=10, nrow=10)
+values(rast1) &lt;- rep(0:1, 50)
+
+rast2 &lt;- rast(ncol=10, nrow=10)
+values(rast2) &lt;- c(rep(0, 50), rep(1,50))
+
+rasterComp(rast1 = rast1, rast2 = rast2)
+
+</code></pre>
+
+
+</div>

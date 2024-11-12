@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getTurnType</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>getTurnType: return type of turn</h2>
+
+<h3>Description</h3>
+
+<p>Identify turn types
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getTurnType(
+  df,
+  i,
+  individual = FALSE,
+  nodecolumn = "speaker",
+  noPauseTypes = F
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>a data frame consisting, minimally, of a column for
+vocalisation/pause start times, a column for end times, and a
+column identifying the speaker, speaker role or 'Floor' (for
+silences).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>i</code></td>
+<td>
+<p>the identifier (index number) whose type will be returned</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>individual</code></td>
+<td>
+<p>if TRUE, return the identifier, a Pause or Grp</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodecolumn</code></td>
+<td>
+<p>the name of the column containing the node
+(speaker) name (e.g. 'speaker', 'role').</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>noPauseTypes</code></td>
+<td>
+<p>if TRUE, ignore distinctions between pauses
+(SwitchingPause, GrpSwitchingPause, etc)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Return one of Vocalisation, GrpVocalisation, ... or identifier.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a string containing the turn type or identifier.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vocdia)
+atddia[1:10,]
+getTurnType(atddia, 3, nodecolumn='role') ## a vocalisation
+getTurnType(atddia, 4, nodecolumn='role') ## a pause
+</code></pre>
+
+
+</div>

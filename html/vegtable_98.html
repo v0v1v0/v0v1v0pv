@@ -1,0 +1,164 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>veg_diverstiy</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculation of statistics at plot level</h2>
+
+<h3>Description</h3>
+
+<p>Calculation of diversity statistics at the plot level allowing for customized
+functions defined as <code>foo(x, ...)</code>, where <code>x</code> is the vector of abundance
+values.
+</p>
+<p>This function calls <code>taxa2samples()</code> to derive taxa from taxon usage names in
+slot <strong>samples</strong> and multiple records of species in a single plot will be
+merged by stats::aggregate.
+</p>
+<p>The functions <code>shannon()</code>, <code>evenness()</code>, and <code>dominance()</code> calculate the
+diversity index of Shannon, the evenness, and the dominance
+(<em>1 - evenness</em>), respectively.
+Dominance is the complementary value to evenness (i.e. <code>1 - evenness</code>).
+</p>
+<p>The function <code>simpson()</code> calculates the Simpson's index using the alternative
+for vegetation plot observations.
+</p>
+<p>The function <code>richness()</code> counts the number of taxa per plot and can be used
+as alternative to vegtable::count_taxa.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">shannon(x, na.rm = TRUE, ...)
+
+evenness(x, ...)
+
+dominance(x, ...)
+
+simpson(x, na.rm = TRUE, ...)
+
+richness(x, na.rm = TRUE, ...)
+
+veg_diversity(object, ...)
+
+## S3 method for class 'vegtable'
+veg_diversity(
+  object,
+  weight,
+  FUN = shannon,
+  aggr_fun = mean,
+  arg_fun = list(),
+  var_name,
+  in_header = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A numeric vector containing the abundance of single species.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>A logical value indicating whether NA values should be removed
+from the abundance vector or not.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments passed among methods. In <code>'evenness()'</code> and
+<code>'dominance()'</code>, these arguments are passed to <code>'shannon()'</code>.
+In <code>'veg_diversity()'</code>, these arguments are passed to <code>aggregate()</code>
+(actually to <code>'FUN'</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>A vegtable object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weight</code></td>
+<td>
+<p>A character value indicating the name of the column at slot
+<strong>samples</strong> which will be used as species abundance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>FUN</code></td>
+<td>
+<p>A function used to calculate the diversity index.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aggr_fun</code></td>
+<td>
+<p>A function used to aggregate abundance values for multiple
+records of a taxon in a plot observation. Average value is used by
+default.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>arg_fun</code></td>
+<td>
+<p>A named list with parameters and arguments passed to
+<code>taxa2samples()</code>, which will
+retrieve the respective taxon concept for each taxon usage name and can
+be used to merge taxa at a determined taxonomic rank, for instance to
+merge all sub-specific taxa into their respective species
+(i.e. <code>'merge_to = "species"'</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var_name</code></td>
+<td>
+<p>A character value used as name for the calculated index.
+If missing, the name of the function will be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>in_header</code></td>
+<td>
+<p>A logical value indicating whether the results should be
+included as variables in the slot <strong>header</strong> of the input object.
+If <code>'in_header = TRUE'</code>, you may assign the result of the function to the
+input object.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Functions <code>shannon()</code>, <code>evenness()</code>, <code>dominance()</code>, <code>simpson()</code>, and
+<code>richness()</code> return a numeric value (the calculated index).
+</p>
+<p>Funtion <code>veg_diversity()</code> produce either a data frame with calculated values
+per plot observation (option <code>'in_header = FALSE'</code>) or a vegtable
+object with the calculated values inserted in the slot <strong>header</strong>
+(option <code>'in_header = TRUE'</code>).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Compare Evenness with Shannon index
+Kenya_veg &lt;- cover_trans(x = Kenya_veg, to = "cover")
+Kenya_veg &lt;- veg_diversity(object = Kenya_veg, weight = "cover")
+Kenya_veg &lt;- veg_diversity(object = Kenya_veg, weight = "cover", FUN = evenness)
+
+with(Kenya_veg@header, plot(shannon, evenness))
+
+</code></pre>
+
+
+</div>

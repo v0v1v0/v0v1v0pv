@@ -1,0 +1,263 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>genpoisson0</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Generalized Poisson Regression
+(Original Parameterization) </h2>
+
+<h3>Description</h3>
+
+<p>Estimation of the two-parameter generalized Poisson distribution
+(original parameterization).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">genpoisson0(ltheta = "loglink", llambda = "logitlink",
+            itheta = NULL, ilambda = NULL, imethod = c(1, 1),
+            ishrinkage = 0.95, glambda = ppoints(5),
+            parallel = FALSE, zero = "lambda")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ltheta, llambda</code></td>
+<td>
+
+<p>Parameter link functions for <code class="reqn">\theta</code> and <code class="reqn">\lambda</code>.
+See <code>Links</code> for more choices.
+In theory the <code class="reqn">\lambda</code> parameter is allowed to be negative to
+handle underdispersion, however this is no longer supported,
+hence <code class="reqn">0 &lt; \lambda &lt; 1</code>.
+The <code class="reqn">\theta</code> parameter is positive, therefore the default is the
+log link.
+</p>
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>itheta, ilambda</code></td>
+<td>
+
+<p>Optional initial values for <code class="reqn">\lambda</code> and <code class="reqn">\theta</code>.
+The default is to choose values internally.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+Each value is an integer <code>1</code> or <code>2</code> or <code>3</code> which
+specifies the initialization method for each of the parameters.
+If failure to converge occurs try another value
+and/or else specify a value for <code>ilambda</code> and/or <code>itheta</code>.
+The argument is recycled to length 2, and the first value
+corresponds to <code>theta</code>, etc.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishrinkage, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>glambda, parallel</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+Argument <code>glambda</code> is similar to <code>gsigma</code>
+there and is currently used only if <code>imethod[2] = 1</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The generalized Poisson distribution (GPD) was proposed by
+Consul and Jain (1973),
+and it has PMF
+</p>
+<p style="text-align: center;"><code class="reqn">f(y)=\theta(\theta+\lambda y)^{y-1} \exp(-\theta-\lambda y) / y!</code>
+</p>
+
+<p>for <code class="reqn">0 &lt; \theta</code> and <code class="reqn">y = 0,1,2,\ldots</code>.
+Theoretically,
+<code class="reqn">\max(-1,-\theta/m) \leq \lambda \leq 1</code>
+where <code class="reqn">m</code>  <code class="reqn">(\geq 4)</code> is the greatest positive
+integer satisfying <code class="reqn">\theta + m\lambda &gt; 0</code>
+when <code class="reqn">\lambda &lt; 0</code>
+[and then <code class="reqn">Pr(Y=y) = 0</code> for <code class="reqn">y &gt; m</code>].
+However, there are problems with a negative <code class="reqn">\lambda</code> such as
+it not being normalized, so this family function restricts
+<code class="reqn">\lambda</code> to <code class="reqn">(0, 1)</code>.
+</p>
+
+
+
+
+<p>This original parameterization is called the GP-0 by <span class="pkg">VGAM</span>,
+partly because there are two other common parameterizations
+called the GP-1 and GP-2 (see Yang et al. (2009)),
+<code>genpoisson1</code>
+and <code>genpoisson2</code>)
+that are more suitable for regression.
+However, <code>genpoisson()</code> has been simplified to
+<code>genpoisson0</code> by only handling positive parameters,
+hence only overdispersion relative to the Poisson is accommodated.
+Some of the reasons for this are described in
+Scollnik (1998), e.g., the probabilities do not
+sum to unity when <code>lambda</code> is negative.
+To simply things, <span class="pkg">VGAM</span> 1.1-4 and later will only
+handle positive <code>lambda</code>.
+</p>
+
+
+
+
+
+
+<p>An ordinary Poisson distribution corresponds
+to <code class="reqn">\lambda = 0</code>.
+The mean (returned as the fitted values) is
+<code class="reqn">E(Y) = \theta / (1 - \lambda)</code>
+and the variance is <code class="reqn">\theta / (1 - \lambda)^3</code>
+so that the variance is proportional to the mean,
+just like the NB-1 and quasi-Poisson.
+</p>
+<p>For more information see Consul and Famoye (2006) for a summary
+and Consul (1989) for more details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Although this family function is far less fragile compared to
+what used to be called <code>genpoisson()</code> it is still a
+good idea to monitor convergence because
+equidispersion may result in numerical problems;
+try <code>poissonff</code> instead.
+And underdispersed data will definitely result in
+numerical problems and warnings;
+try <code>quasipoisson</code> instead.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This family function replaces <code>genpoisson()</code>, and some of the
+major changes are:
+(i) the swapping of the linear predictors;
+(ii) the change from <code>rhobitlink</code> to
+<code>logitlink</code> in <code>llambda</code>
+to reflect the no longer handling of underdispersion;
+(iii) proper Fisher scoring is implemented to give improved
+convergence.
+</p>
+<p>Notationally, and in the literature too,
+don't get confused because <code>theta</code>
+(and not <code>lambda</code>) here really
+matches more closely with <code>lambda</code> of
+<code>dpois</code>.
+</p>
+<p>This family function handles multiple responses.
+This distribution is potentially useful for dispersion modelling.
+Convergence and numerical problems may occur when <code>lambda</code>
+becomes very close to 0 or 1.
+</p>
+
+
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee.
+Easton Huch derived the EIM and it has been implemented
+in the <code>weights</code> slot.
+</p>
+
+
+<h3>References</h3>
+
+<p>Consul, P. C. and Jain, G. C. (1973).
+A generalization of the Poisson distribution.
+<em>Technometrics</em>,
+<b>15</b>, 791–799.
+</p>
+<p>Consul, P. C. and Famoye, F. (2006).
+<em>Lagrangian Probability Distributions</em>,
+Boston, USA: Birkhauser.
+</p>
+<p>Jorgensen, B. (1997).
+<em>The Theory of Dispersion Models</em>.
+London: Chapman &amp; Hall.
+</p>
+<p>Consul, P. C. (1989).
+<em>Generalized Poisson Distributions: Properties and Applications</em>.
+New York, USA: Marcel Dekker.
+</p>
+<p>Yang, Z., Hardin, J. W., Addy, C. L. (2009).
+A score test for overdispersion in Poisson regression based
+on the generalized Poisson-2 model.
+<em>J. Statist. Plann. Infer.</em>,
+<b>139</b>, 1514–1521.
+</p>
+<p>Yee, T. W. (2020).
+On generalized Poisson regression.
+<em>In preparation</em>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Genpois0</code>,
+<code>genpoisson1</code>,
+<code>genpoisson2</code>,
+<code>poissonff</code>,
+<code>negbinomial</code>,
+<code>Poisson</code>,
+<code>quasipoisson</code>.
+</p>
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">gdata &lt;- data.frame(x2 = runif(nn &lt;- 500))
+gdata &lt;- transform(gdata, y1 = rgenpois0(nn, theta = exp(2 + x2),
+                                         logitlink(1, inverse = TRUE)))
+gfit0 &lt;- vglm(y1 ~ x2, genpoisson0, data = gdata, trace = TRUE)
+coef(gfit0, matrix = TRUE)
+summary(gfit0)
+</code></pre>
+
+
+</div>

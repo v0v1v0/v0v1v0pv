@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>leps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Linear Error in Probability Space (LEPS) </h2>
+
+<h3>Description</h3>
+
+<p>Calculates the linear error in probability spaces.
+This is the mean absolute difference between the forecast
+cumulative distribution value (cdf) and the observation.  This
+function creates the empirical cdf function for the observations
+using the sample population.  Linear interpretation is used to
+estimate the cdf values between observation values.  Therefore;
+this may produce awkward results with small datasets.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R"> leps(x, pred, plot = TRUE, ... )
+                         </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A vector of observations or a verification object with “cont.cont” properties.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred</code></td>
+<td>
+<p>A vector of predictions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p>Logical to generate a plot or not.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional plotting options.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>If assigned to an object, the following values are reported.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>leps.0</code></td>
+<td>
+<p>Negatively oriented score on the [0,1] scale, where 0
+is a perfect score.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>leps.1</code></td>
+<td>
+<p>Positively oriented score proposed by Potts.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich</p>
+
+
+<h3>References</h3>
+
+<p>DeQue, Michel. (2003) “Continuous Variables” <b>Chapter 5</b>,
+<em>Forecast Verification: A Practitioner's Guide in Atmospheric
+Science.</em>
+</p>
+<p>Potts, J. M., Folland, C.K., Jolliffe, I.T. and Secton, D. (1996)
+“Revised ‘LEPS’ scores fore assessing climate model simulations and
+long-range forecasts.” <em>J. Climate</em>, <b>9</b>, pp. 34-54.
+</p>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> obs &lt;- rnorm(100, mean = 1, sd = sqrt(50))
+ pred&lt;-  rnorm(100, mean = 10, sd = sqrt(500))
+
+ leps(obs, pred, main = "Sample Plot") 
+## values approximated
+
+OBS &lt;- c(2.7, 2.9, 3.2, 3.3, 3.4, 3.4, 3.5, 3.8, 4, 4.2, 4.4, 4.4, 4.6,
+5.8, 6.4)
+PRED &lt;- c(2.05, 3.6, 3.05, 4.5, 3.5, 3.0, 3.9, 3.2, 2.4, 5.3, 2.5, 2.8,
+3.2, 2.8, 7.5)
+
+a &lt;- leps(OBS, PRED)
+a
+</code></pre>
+
+
+</div>

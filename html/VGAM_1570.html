@@ -1,0 +1,138 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>skewnorm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Skew-Normal Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Density and
+random generation
+for the univariate skew-normal distribution.
+</p>
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dskewnorm(x, location = 0, scale = 1, shape = 0, log = FALSE)
+rskewnorm(n, location = 0, scale = 1, shape = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>vector of quantiles.</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Same as <code>runif</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>location</code></td>
+<td>
+
+<p>The location parameter <code class="reqn">\xi</code>. A vector.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+
+<p>The scale parameter <code class="reqn">\omega</code>. A positive vector.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+
+<p>The shape parameter. It is called <code class="reqn">\alpha</code> in
+<code>skewnormal</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical.
+If <code>log=TRUE</code> then the logarithm of the density is returned.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See <code>skewnormal</code>, which currently only estimates the shape
+parameter.
+More generally here, <code class="reqn">Z = \xi + \omega Y</code> where
+<code class="reqn">Y</code> has a standard skew-normal distribution
+(see <code>skewnormal</code>),
+<code class="reqn">\xi</code> is the location parameter and
+<code class="reqn">\omega</code> is the scale parameter.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dskewnorm</code> gives the density,
+<code>rskewnorm</code> generates random deviates.
+</p>
+
+
+
+
+<h3>Note</h3>
+
+<p>The default values of all three parameters corresponds to the
+skew-normal being the standard normal distribution.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p><code>http://tango.stat.unipd.it/SN</code>.
+</p>
+
+
+
+<h3>See Also</h3>
+
+<p><code>skewnormal</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  N &lt;- 200  # Grid resolution
+shape &lt;- 7; x &lt;- seq(-4, 4, len = N)
+plot(x, dskewnorm(x, shape = shape), type = "l", col = "blue", las = 1,
+     ylab = "", lty = 1, lwd = 2)
+abline(v = 0, h = 0, col = "grey")
+lines(x, dnorm(x), col = "orange", lty = 2, lwd = 2)
+legend("topleft", leg = c(paste("Blue = dskewnorm(x, ", shape,")", sep = ""),
+       "Orange = standard normal density"), lty = 1:2, lwd = 2,
+       col = c("blue", "orange")) 
+## End(Not run)
+</code></pre>
+
+
+</div>

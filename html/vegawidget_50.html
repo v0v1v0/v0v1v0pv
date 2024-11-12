@@ -1,0 +1,66 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vw_set_base_url</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Set base URL</h2>
+
+<h3>Description</h3>
+
+<p>This is useful for specs where data is specified using a URL.
+Using this function to set the base URL, you can specify the data URL
+in specs using the relative path from the base.
+</p>
+<p>For example, this
+<a href="https://vega.github.io/vega-lite/examples/point_2d.html">Vega-Lite example</a>
+uses the base URL <code style="white-space: pre;">⁠https://cdn.jsdelivr.net/npm/vega-datasets@2⁠</code>. In a spec,
+instead of specifying:
+</p>
+<div class="sourceCode"><pre>data = "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/cars.json"
+</pre></div>
+<p>You can call:
+</p>
+<div class="sourceCode"><pre>vw_set_base_url("https://cdn.jsdelivr.net/npm/vega-datasets@2")
+</pre></div>
+<p>Then specify:
+</p>
+<div class="sourceCode"><pre>data = "data/cars.json"
+</pre></div>
+<p>This function sets the value of <code>getOption("vega-embed")$loader$baseURL</code>.
+You need set it only once in a session or RMarkdown file.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vw_set_base_url(url)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>url</code></td>
+<td>
+<p><code>character</code> URL to use as the base URL.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p><code>character</code> called for side effects, it returns the previous value
+invisibly.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> # this is the URL used for Vega datasets
+ previous &lt;- vw_set_base_url("https://cdn.jsdelivr.net/npm/vega-datasets@2")
+
+ # reset to previous value
+ vw_set_base_url(previous)
+</code></pre>
+
+
+</div>

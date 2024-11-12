@@ -1,0 +1,68 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compute_dmat</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute a distance matrix from scaled data</h2>
+
+<h3>Description</h3>
+
+<p>This function applies scaling to the columns of a data frame and
+computes and returns a distance matrix from a chosen distance measure.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compute_dmat(
+  x,
+  dist_method = "euclidean",
+  apply_scaling = FALSE,
+  subset_cols = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a numeric data frame or matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dist_method</code></td>
+<td>
+<p>a distance measure to apply to the scaled data. Must be those supported by <code>stats::dist()</code>, plus <code>"mahalanobis"</code> and <code>"cosine"</code>. Default is <code>"euclidean"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>apply_scaling</code></td>
+<td>
+<p>use TRUE to apply <code>base::scale()</code>. By default does not scale data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subset_cols</code></td>
+<td>
+<p>(optional) a list of columns to subset the data</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>an object of class "dist" (see <code>stats::dist()</code>)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dmat &lt;- compute_dmat(iris, "euclidean", TRUE, c("Petal.Length", "Sepal.Length"))
+print(class(dmat))
+</code></pre>
+
+
+</div>

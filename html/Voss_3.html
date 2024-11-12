@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>voss1d</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fractal Brownian function on 1D grid with a classic Voss algorithm</h2>
+
+<h3>Description</h3>
+
+<p><code>voss1d()</code> function generates realizations of a fractal Brownian function on uniform 1D grid (FBF(x)) with a classic version of the Voss algorithm (random sequential additions).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">voss1d(g=7, H=0.5, r=0.5, center=TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p> a number of iteration. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H</code></td>
+<td>
+<p> a Hurst parameter: <code>(0&lt;H)&amp;(H&lt;1)</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r</code></td>
+<td>
+<p> a partition coefficient for iteration segments. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>center</code></td>
+<td>
+<p> logical; if <code>center=TRUE</code> then the <code>y</code>-coordinates of prefractal points will be centered. </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Voss algorithm on 1D grid is based on an iterative partitioning of the initial segment into smaller subsegments by linear interpolation of additional points.
+</p>
+<p>At each iteration, all values of the fractal Brownian function get normal pseudorandom additions with zero mean and standard deviation, which depends on the iteration index <code>i</code>.
+</p>
+<p>In the classical version of the Voss algorithm a standard deviation is exponentially distributed by iteration: <code>s[i] &lt;- s0*r^(i*H)</code>, where the initial value <code>s0 &lt;- H*log(1/r)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list of Cartesian coordinates of prefractal points.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Pavel V. Moskalev</p>
+
+
+<h3>References</h3>
+
+<p>Moskalev P.V. (2008) Visualization of wavelet spectra of fractal Brownian motion,
+Technical Physics, Vol.53, No.10, pp.1261-1266, doi:10.1134/S1063784208100022.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>voss2d,
+voss1g
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(20120522)
+plot(voss1d(), type="l", xlab="x", ylab="y",
+     main="FBF(x) with a parameter H=0.5")
+abline(h=0, lty=2)
+</code></pre>
+
+
+</div>

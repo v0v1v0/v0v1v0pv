@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>prep_df_summ_aggr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Prepare summarized and aggregated dataframe</h2>
+
+<h3>Description</h3>
+
+<p>This function prepares a summarized dataframe based on provided variables, y-variable,
+color, and total count. The function groups the dataframe by the provided variables,
+calculates the weighted mean for the y-variable, sums up total count per group, and arranges by color.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">prep_df_summ_aggr(
+  df,
+  variables,
+  y,
+  color,
+  total_n_var = rlang::sym("INS_Aantal_eerstejaars"),
+  aggr_split_value_var = rlang::sym("INS_Splits_variabele_waarde")
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>A dataframe to be summarized</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>variables</code></td>
+<td>
+<p>A character vector specifying the columns to be grouped by</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>A character vector specifying the column to be summarized</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color</code></td>
+<td>
+<p>A character vector specifying the column to be used for color arrangement</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>total_n_var</code></td>
+<td>
+<p>A symbol specifying the variable to be used for total count calculation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aggr_split_value_var</code></td>
+<td>
+<p>A symbol specifying the variable to be used for color assignment</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A summarized and aggregated dataframe arranged by color
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">df &lt;- data.frame( split_var_value = c("male", "male", "female", "female", "dutch", "dutch",
+"EER", "EER", "Outside EER", "Outside EER"), other_var = c("Early", "Late", "Early", "Late",
+"Early", "Late", "Early", "Late", "Early", "Late"), value = c(2, 4, 6, 8, 10, 2, 4, 6, 8, 10),
+total = c(10, 10, 20, 20, 30, 30, 40, 40, 50, 50), split_var = c("gender", "gender", "gender",
+"gender", "background", "background", "background", "background", "background", "background") )
+</code></pre>
+
+
+</div>

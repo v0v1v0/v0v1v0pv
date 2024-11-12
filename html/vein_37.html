@@ -1,0 +1,136 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ef_ldv_scaled</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Scaling constant with speed emission factors of Light Duty Vehicles</h2>
+
+<h3>Description</h3>
+
+<p>This function creates a list of scaled functions of emission factors. A scaled
+emission factor which at a speed of the driving cycle (SDC) gives a desired value.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ef_ldv_scaled(df, dfcol, SDC = 34.12, v, t = "4S", cc, f, eu, p)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>deprecated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dfcol</code></td>
+<td>
+<p>Column of the dataframe with the local emission factors eg df$dfcol</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SDC</code></td>
+<td>
+<p>Speed of the driving cycle</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>Category vehicle: "PC", "LCV", "Motorcycle" or "Moped</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t</code></td>
+<td>
+<p>Sub-category of of vehicle: PC:  "ECE_1501", "ECE_1502",
+"ECE_1503", "ECE_1504" , "IMPROVED_CONVENTIONAL", "OPEN_LOOP", "ALL",
+"2S"  or "4S". LCV: "4S", Motorcycle: "2S" or "4S". Moped: "2S" or "4S"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cc</code></td>
+<td>
+<p>Size of engine in cc:  PC: "&lt;=1400", "&gt;1400", "1400_2000", "&gt;2000",
+"&lt;=800", "&lt;=2000". Motorcycle:  "&gt;=50" (for "2S"), "&lt;=250", "250_750", "&gt;=750".
+Moped: "&lt;=50". LCV :  "&lt;3.5" for gross weight.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f</code></td>
+<td>
+<p>Type of fuel: "G", "D", "LPG" or "FH" (Full Hybrid: starts by electric motor)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eu</code></td>
+<td>
+<p>Euro standard: "PRE", "I", "II", "III", "III+DPF", "IV", "V", "VI", "VIc"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>Pollutant: "CO", "FC", "NOx", "HC" or "PM". If your pollutant dfcol
+is based on fuel, use "FC", if it is based on "HC", use "HC".</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function calls "ef_ldv_speed" and calculate the specific k value, dividing the
+local emission factor by the respective speed emissions factor at the speed representative
+of the local emission factor, e.g. If the local emission factors were tested with the
+FTP-75 test procedure, SDC = 34.12 km/h.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list of scaled emission factors  g/km
+</p>
+
+
+<h3>Note</h3>
+
+<p>The length of the list should be equal to the name of the age categories of
+a specific type of vehicle. Thanks to Glauber Camponogara for the help.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>ef_ldv_seed
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">{
+CO &lt;- ef_cetesb(p = "CO", veh = "PC_FG", full = TRUE)
+lef &lt;- ef_ldv_scaled(dfcol = CO$CO,
+                     v = "PC",
+                     t = "4S",
+                     cc = "&lt;=1400",
+                     f = "G",
+                     eu = CO$EqEuro_PC,
+                     p = "CO")
+length(lef)
+ages &lt;- c(1, 10, 20, 30, 40)
+EmissionFactors(do.call("cbind",
+   lapply(ages, function(i) {
+       data.frame(i = lef[[i]](1:100))
+}))) -&gt; df
+names(df) &lt;- ages
+colplot(df)
+}
+</code></pre>
+
+
+</div>

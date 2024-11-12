@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predict.vinereg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Predict conditional mean and quantiles from a D-vine regression model</h2>
+
+<h3>Description</h3>
+
+<p>Predict conditional mean and quantiles from a D-vine regression model
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vinereg'
+predict(object, newdata, alpha = 0.5, cores = 1, ...)
+
+## S3 method for class 'vinereg'
+fitted(object, alpha = 0.5, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>an object of class <code>vinereg</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>matrix of covariate values for which to predict the quantile.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>vector of quantile levels; <code>NA</code> predicts the mean based on an
+average of the <code>1:10 / 11</code>-quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cores</code></td>
+<td>
+<p>integer; the number of cores to use for computations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>unused.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data.frame of quantiles where each column corresponds to one
+value of <code>alpha</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vinereg</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># simulate data
+x &lt;- matrix(rnorm(200), 100, 2)
+y &lt;- x %*% c(1, -2)
+dat &lt;- data.frame(y = y, x = x, z = as.factor(rbinom(100, 2, 0.5)))
+
+# fit vine regression model
+(fit &lt;- vinereg(y ~ ., dat))
+
+# inspect model
+summary(fit)
+plot_effects(fit)
+
+# model predictions
+mu_hat &lt;- predict(fit, newdata = dat, alpha = NA) # mean
+med_hat &lt;- predict(fit, newdata = dat, alpha = 0.5) # median
+
+# observed vs predicted
+plot(cbind(y, mu_hat))
+
+## fixed variable order (no selection)
+(fit &lt;- vinereg(y ~ ., dat, order = c("x.2", "x.1", "z.1")))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,130 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>new_visitation_model</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>"visitation_model" Constructor Function</h2>
+
+<h3>Description</h3>
+
+<p>Constructs objects of the "visitation_model" class.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">new_visitation_model(
+  visitation_fit,
+  differenced_fit,
+  beta,
+  constant,
+  slope,
+  lag_estimate,
+  proxy_decomposition,
+  onsite_usage_decomposition,
+  forecasts_needed,
+  ref_series,
+  criterion,
+  omit_trend,
+  trend,
+  call
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>visitation_fit</code></td>
+<td>
+<p>A time series storing the fitted values of the visitation model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>differenced_fit</code></td>
+<td>
+<p>A time series storing the differenced fitted values of the visitation model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>Seasonality adjustment factor. (beta_1)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constant</code></td>
+<td>
+<p>A numeric describing the constant term used in the model. (beta_0)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>slope</code></td>
+<td>
+<p>A numeric describing the slope term used in the model when trend is set to "linear". (beta_2)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag_estimate</code></td>
+<td>
+<p>An integer representing the lag parameter for the model fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>proxy_decomposition</code></td>
+<td>
+<p>A decomposition class object representing the decomposition of a popularity measure (e.g., US Photo-User-Days).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>onsite_usage_decomposition</code></td>
+<td>
+<p>A decomposition class object representing the decomposition of time series (e.g., park Photo-User-Days).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>forecasts_needed</code></td>
+<td>
+<p>An integer describing how many forecasts for the proxy_decomposition are needed for the fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ref_series</code></td>
+<td>
+<p>A reference time series (or NULL) used in the model fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>criterion</code></td>
+<td>
+<p>A character string specifying the criterion for estimating the lag in popularity_proxy. If "cross-correlation" is chosen, it chooses the lag that maximizes the correlation coefficient between lagged popularity_proxy and onsite_usage. If "MSE" is chosen, it does so by identifying the lagged popularity_proxy whose derivative is closest to that of onsite_usage by minimizing the mean squared error. If "rank" is chosen, it does so by firstly ranking the square errors of the derivatives and identifying the lag which would minimize the mean rank.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>omit_trend</code></td>
+<td>
+<p>This is obsolete and is left only for compatibility. A Boolean specifying whether or not to consider the NPS trend to be zero.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trend</code></td>
+<td>
+<p>A character string specifying how the trend is modeled. Can be any of NULL, "linear", "none", and "estimated", where "none" and "estimated" correspond to <code>omit_trend</code> being TRUE and FALSE, respectively. If NULL, then it follows the value specified in <code>omit_trend</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>A call for the visitation model.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of the class "model_forecast".
+</p>
+
+
+</div>

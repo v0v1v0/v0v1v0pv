@@ -1,0 +1,193 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cauchy</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Cauchy Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates either the location parameter or both the location and scale
+parameters of the Cauchy distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cauchy(llocation = "identitylink", lscale = "loglink",
+       imethod = 1, ilocation = NULL, iscale = NULL,
+       gprobs.y = ppoints(19), gscale.mux = exp(-3:3), zero = "scale")
+cauchy1(scale.arg = 1, llocation = "identitylink", ilocation = NULL,
+        imethod = 1, gprobs.y = ppoints(19), zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>llocation, lscale</code></td>
+<td>
+
+<p>Parameter link functions for the location parameter <code class="reqn">a</code>
+and the scale parameter <code class="reqn">b</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilocation, iscale</code></td>
+<td>
+
+<p>Optional initial value for <code class="reqn">a</code> and <code class="reqn">b</code>.
+By default, an initial value is chosen internally for each.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>Integer, either 1 or 2 or 3.
+Initial method, three algorithms are implemented.
+The user should try all possible values to help avoid
+converging to a local solution.
+Also, choose the another value if convergence fails, or use
+<code>ilocation</code> and/or <code>iscale</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gprobs.y, gscale.mux, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale.arg</code></td>
+<td>
+
+<p>Known (positive) scale parameter, called <code class="reqn">b</code> below.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Cauchy distribution has density function
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;a,b) = \left\{ \pi  b [1 + ((y-a)/b)^2] \right\}^{-1} </code>
+</p>
+
+<p>where <code class="reqn">y</code> and <code class="reqn">a</code> are real and finite,
+and <code class="reqn">b&gt;0</code>.
+The distribution is symmetric about <code class="reqn">a</code> and has a heavy tail.
+Its median and mode are <code class="reqn">a</code>, but the mean does not exist.
+The fitted values are the estimates of <code class="reqn">a</code>.
+Fisher scoring is used.
+</p>
+
+
+<p>If the scale parameter is known (<code>cauchy1</code>) then there
+may be multiple local maximum likelihood solutions for the
+location parameter. However, if both location and scale
+parameters are to be estimated (<code>cauchy</code>) then there
+is a unique maximum likelihood solution provided <code class="reqn">n &gt;
+  2</code> and less than half the data are located at any one point.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see
+<code>vglmff-class</code>).  The object is used by modelling
+functions such as <code>vglm</code>, and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>It is well-known that the Cauchy distribution may have
+local maximums in its likelihood function; make full use of
+<code>imethod</code>, <code>ilocation</code>, <code>iscale</code> etc.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Good initial values are needed.
+By default <code>cauchy</code> searches for a starting
+value for <code class="reqn">a</code> and <code class="reqn">b</code> on a 2-D grid.
+Likewise, by default, <code>cauchy1</code> searches for a starting
+value for <code class="reqn">a</code> on a 1-D grid.
+If convergence to the global maximum is not acheieved then
+it also pays to select a wide range
+of initial values via the <code>ilocation</code> and/or
+<code>iscale</code> and/or <code>imethod</code> arguments.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+<p>Barnett, V. D. (1966).
+Evaluation of the maximum-likehood estimator where the
+likelihood equation has multiple roots.
+<em>Biometrika</em>,
+<b>53</b>, 151–165.
+</p>
+<p>Copas, J. B. (1975).
+On the unimodality of the likelihood for the Cauchy
+distribution.
+<em>Biometrika</em>,
+<b>62</b>, 701–704.
+</p>
+<p>Efron, B. and Hinkley, D. V. (1978).
+Assessing the accuracy of the maximum likelihood estimator:
+Observed versus expected Fisher information.
+<em>Biometrika</em>,
+<b>65</b>, 457–481.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Cauchy</code>,
+<code>cauchit</code>,
+<code>studentt</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Both location and scale parameters unknown
+set.seed(123)
+cdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+cdata &lt;- transform(cdata, loc = exp(1 + 0.5 * x2), scale = exp(1))
+cdata &lt;- transform(cdata, y2 = rcauchy(nn, loc, scale))
+fit2 &lt;- vglm(y2 ~ x2, cauchy(lloc = "loglink"), data = cdata)
+coef(fit2, matrix = TRUE)
+head(fitted(fit2))  # Location estimates
+summary(fit2)
+
+# Location parameter unknown
+cdata &lt;- transform(cdata, scale1 = 0.4)
+cdata &lt;- transform(cdata, y1 = rcauchy(nn, loc, scale1))
+fit1 &lt;- vglm(y1 ~ x2, cauchy1(scale = 0.4), data = cdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+</code></pre>
+
+
+</div>

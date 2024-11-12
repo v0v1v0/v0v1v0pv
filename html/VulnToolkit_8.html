@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>HL</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extracts high and low tides from a record of water levels</h2>
+
+<h3>Description</h3>
+
+<p>Extracts high and low tides from a record of water levels. For reliable results, the time interval between samples must be constant throughout the dataset (e.g., 1 sample per hour, 1 sample per 6 minutes). Datasets with irregularly-spaced observations should be expanded to the smallest time interval to avoid issues.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">HL(
+  level,
+  time,
+  period = 13,
+  phantom = TRUE,
+  tides = "all",
+  semidiurnal = TRUE,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>a numeric vector of water levels</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time</code></td>
+<td>
+<p>a vector (numeric or POSIX*) indicating the time of water 
+level measurements. Units must be minutes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>a single numeric or integer estimate of tidal period 
+(full tidal cycle). Units must be hours.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>phantom</code></td>
+<td>
+<p>a protective measure taken to prevent the inclusion of an 
+artificial ('phantom') high or low tide at the end of the dataset, which occurs because the final observation is always a local maxima/minima for the period following the previous low/high tide. If the water level 
+measurements end precisely at a low or high tide, this can be changed to FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tides</code></td>
+<td>
+<p>is used to optionally subset the output to include 
+only high or low tides. This argument can be 'all' (default), 'H', or 'L'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>semidiurnal</code></td>
+<td>
+<p>logical. If TRUE, higher- and lower- high/low tides are reported in a separate column called 'tide2'. Tides are grouped by day and assigned higher- or lower- status. When a single high or low tide exists in a day, tides on adjacent days are used to make an assignment.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>logical. If TRUE, messages are returned to console identifying the presence of NAs in the input data</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a dataframe of tide levels, associated time stamps, and tide 
+type ('H' or 'L'). If there are NAs present in the water level or time datasets, a message reports this information in the console but the NAs are not removed or otherwise acted upon. The column indicating semidiurnal tides ('tide2') may be NA if tides are identical or in cases where there is a single tide in the first day of the dataset.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>HL.plot</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">HL.NL &lt;- VulnToolkit::HL(level = NL_6min_2013[,2], time = NL_6min_2013[,1])
+head(HL.NL)
+
+## Not run: 
+### Important note: Problems arise when using irregularly-spaced data.
+### The best solution is for the user to ensure their data are evenly-spaced.
+### An example:
+### 
+### pull data at 6-minute intervals
+dat.hr   &lt;- noaa(begindate = "20200101", enddate = "20200630", station = "8467150",
+                 interval = "hourly")
+
+### pull data at 1-hr intervals
+dat.6min &lt;- noaa(begindate = "20200701", enddate = "20201231", station = "8467150",
+                 interval = "6 minute")
+
+dat.combined &lt;- rbind(dat.hr, dat.6min)
+### if time interval is inconsistent the HL output can be unreliable
+HL.plot(level = dat.combined[, 2], time = dat.combined[, 1]) 
+
+### expand 1-hr dataset using the 6-minute time interval
+timeSeq &lt;- data.frame(time_GMT = seq.POSIXt(from = min(dat.hr$time_GMT), 
+                                            to = max(dat.hr$time_GMT), 
+                                            by = "6 min"))
+### create consistently-spaced dataset
+dat.hr2       &lt;- plyr::join_all(list(timeSeq, dat.hr))
+dat.combined2 &lt;- rbind(dat.hr2, dat.6min)
+HL.plot(level = dat.combined2[, 2], time = dat.combined2[, 1]) 
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

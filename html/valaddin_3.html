@@ -1,0 +1,92 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>validate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Validate objects</h2>
+
+<h3>Description</h3>
+
+<p>Validate objects
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">validate(., ..., .checklist = list(), .error_class = "validationError")
+
+.f %checkout% .checks
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>.</code></td>
+<td>
+<p>Object to validate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Input-validation check formula(e).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.checklist</code></td>
+<td>
+<p>List of check formulae. (These are combined with check
+formulae provided via <code>...</code>.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.error_class</code></td>
+<td>
+<p>Subclass of the error condition to be raised when an
+input validation error occurs (character).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.f</code></td>
+<td>
+<p>Interpreted function, i.e., closure.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.checks</code></td>
+<td>
+<p>List of check formulae, optionally containing a character
+vector named <code>.error_class</code>, corresponding to the similarly named
+argument.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(magrittr)
+
+# Valid assertions: data frame returned (invisibly)
+mtcars %&gt;%
+  validate(
+    vld_all(~sapply(., is.numeric)),
+    ~{nrow(.) &gt; 10},
+    vld_all(~c("mpg", "cyl") %in% names(.))
+  )
+
+# Invalid assertions: error raised
+mtcars %&gt;%
+  validate(
+    vld_all(~sapply(., is.numeric)),
+    ~{nrow(.) &gt; 1000},
+    vld_all(~c("mpg", "cylinders") %in% names(.))
+  )
+
+## End(Not run)
+</code></pre>
+
+
+</div>

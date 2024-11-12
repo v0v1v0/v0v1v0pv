@@ -1,0 +1,111 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Oazeta</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> One-Altered Logarithmic Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random
+generation for the one-altered zeta distribution with parameter
+<code>pobs1</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">doazeta(x, shape, pobs1 = 0, log = FALSE)
+poazeta(q, shape, pobs1 = 0)
+qoazeta(p, shape, pobs1 = 0)
+roazeta(n, shape, pobs1 = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, n, p</code></td>
+<td>
+<p> Same <code>Unif</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape, log</code></td>
+<td>
+
+<p>Same as <code>Otzeta</code>).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pobs1</code></td>
+<td>
+
+<p>Probability of (an observed) one, called <code class="reqn">pobs1</code>.
+The default value of <code>pobs1 = 0</code> corresponds
+to the response having a 1-truncated zeta distribution.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability function of <code class="reqn">Y</code> is 1 with probability <code>pobs1</code>,
+else a 1-truncated
+zeta
+distribution.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>doazeta</code> gives the density and
+<code>poazeta</code> gives the distribution function,
+<code>qoazeta</code> gives the quantile function, and
+<code>roazeta</code> generates random deviates.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The argument <code>pobs1</code> is recycled to the required length, and
+must have values which lie in the interval <code class="reqn">[0,1]</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>oazeta</code>,
+<code>Oizeta</code>,
+<code>Otzeta</code>,
+<code>zeta</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">shape &lt;- 1.1; pobs1 &lt;- 0.10; x &lt;- (-1):7
+doazeta(x, shape = shape, pobs1 = pobs1)
+table(roazeta(100, shape = shape, pobs1 = pobs1))
+
+## Not run:  x &lt;- 0:10
+barplot(rbind(doazeta(x, shape = shape, pobs1 = pobs1),
+                dzeta(x, shape = shape)),
+        beside = TRUE, col = c("blue", "orange"), cex.main = 0.7, las = 1,
+        ylab = "Probability", names.arg = as.character(x),
+        main = paste("OAZ(shape = ", shape, ", pobs1 = ", pobs1,
+                   ") [blue] vs",  " zeta(shape = ", shape,
+                   ") [orange] densities", sep = "")) 
+## End(Not run)
+</code></pre>
+
+
+</div>

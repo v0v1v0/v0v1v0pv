@@ -1,0 +1,158 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pospoisson</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Positive Poisson Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Fits a positive Poisson distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pospoisson(link = "loglink", type.fitted = c("mean", "lambda",
+           "prob0"), expected = TRUE, ilambda = NULL, imethod = 1,
+           zero = NULL, gt.1 = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function for the usual mean (lambda) parameter of
+an ordinary Poisson distribution.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>expected</code></td>
+<td>
+
+<p>Logical.
+Fisher scoring is used if <code>expected = TRUE</code>, else Newton-Raphson.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilambda, imethod, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.fitted</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gt.1</code></td>
+<td>
+
+<p>Logical.
+Enforce <code>lambda &gt; 1</code>? The default is to
+enforce <code>lambda &gt; 0</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The positive Poisson  distribution is the ordinary Poisson
+distribution but with the probability of zero being zero.  Thus the
+other probabilities are scaled up (i.e., divided by <code class="reqn">1-P[Y=0]</code>).
+The mean, <code class="reqn">\lambda / (1 - \exp(-\lambda))</code>,
+can be obtained by the extractor function <code>fitted</code> applied to
+the object.
+</p>
+<p>A related distribution is the zero-inflated Poisson, in which the
+probability <code class="reqn">P[Y=0]</code> involves another parameter <code class="reqn">\phi</code>.
+See <code>zipoisson</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+<code>rrvglm</code> and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Under- or over-flow may occur if the data is ill-conditioned.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This family function can handle multiple responses.
+</p>
+<p>Yet to be done: a <code>quasi.pospoisson</code> which estimates a dispersion
+parameter.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Coleman, J. S. and James, J. (1961).
+The equilibrium size distribution of freely-forming groups.
+<em>Sociometry</em>, <b>24</b>, 36–45.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>Gaitdpois</code>,
+<code>gaitdpoisson</code>,
+<code>posnegbinomial</code>,
+<code>poissonff</code>,
+<code>zapoisson</code>,
+<code>zipoisson</code>,
+<code>simulate.vlm</code>,
+<code>otpospoisson</code>,
+<code>Pospois</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Data from Coleman and James (1961)
+cjdata &lt;- data.frame(y = 1:6, freq = c(1486, 694, 195, 37, 10, 1))
+fit &lt;- vglm(y ~ 1, pospoisson, data = cjdata, weights = freq)
+Coef(fit)
+summary(fit)
+fitted(fit)
+
+pdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))  # Artificial data
+pdata &lt;- transform(pdata, lambda = exp(1 - 2 * x2))
+pdata &lt;- transform(pdata, y1 = rgaitdpois(nn, lambda, truncate = 0))
+with(pdata, table(y1))
+fit &lt;- vglm(y1 ~ x2, pospoisson, data = pdata, trace = TRUE, crit = "coef")
+coef(fit, matrix = TRUE)
+</code></pre>
+
+
+</div>

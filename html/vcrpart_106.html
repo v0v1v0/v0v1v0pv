@@ -1,0 +1,220 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tvcm-control</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Control parameters for <code>tvcm</code>.</h2>
+
+<h3>Description</h3>
+
+<p>Various parameters that control aspects for <code>tvcm</code>.  
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tvcm_control(minsize = 30, mindev = ifelse(sctest, 0.0, 2.0),
+             sctest = FALSE, alpha = 0.05, bonferroni = TRUE,
+             trim = 0.1, estfun.args = list(), nimpute = 5, 
+             maxnomsplit = 5, maxordsplit = 9, maxnumsplit = 9,
+             maxstep = 1e3, maxwidth = Inf, maxdepth = Inf,
+             lossfun = neglogLik2, ooblossfun = NULL, fast = TRUE,
+             cp = 0.0, dfpar = 0.0, dfsplit = 1.0,
+             cv = !sctest, folds = folds_control("kfold", 5),
+             prune = cv, papply = mclapply, papply.args = list(),
+             center = fast, seed = NULL, verbose = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha, bonferroni, trim, estfun.args, nimpute</code></td>
+<td>
+<p>See
+<code>tvcolmm_control</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mindev, cv, folds, prune, center</code></td>
+<td>
+<p>See
+<code>tvcglm_control</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minsize</code></td>
+<td>
+<p>numeric (vector). The minimum sum of weights in
+terminal nodes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sctest</code></td>
+<td>
+<p>logical scalar. Defines whether coefficient constancy
+tests should be used for the variable and node selection in each
+iteration.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxnomsplit</code></td>
+<td>
+<p>integer. For nominal partitioning variables with
+more the <code>maxnomsplit</code> the categories are ordered an treated as
+ordinal.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxordsplit</code></td>
+<td>
+<p>integer. The maximum number of splits of ordered
+partitioning variables to be evaluated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxnumsplit</code></td>
+<td>
+<p>integer. The maximum number of splits of numeric
+partitioning variables to be evaluated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxstep</code></td>
+<td>
+<p>integer. The maximum number of iterations i.e. number
+of splits to be processed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxwidth</code></td>
+<td>
+<p>integer (vector). The maximum width of the partition(s).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxdepth</code></td>
+<td>
+<p>integer (vector). The maximum depth of the partition(s).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lossfun</code></td>
+<td>
+<p>a function to extract the training error, typically
+minus two times the negative log likelihood of the fitted model (see
+<code>neglogLik2</code>). Is currently ignored if a <code>glm</code>
+model is fitted and <code>fast = TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ooblossfun</code></td>
+<td>
+<p>a loss function that defines how to compute the
+validation error during cross-validation. The function will be
+assigned to the <code>fun</code> argument of <code>oobloss</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fast</code></td>
+<td>
+<p>logical scalar. Whether the approximative model should be
+used to search for the next split. The approximative search model
+uses only the observations of the node to split and incorporates the
+fitted values of the current model as offsets. Therewith the
+estimation is reduces to the coefficients of the added split. If
+<code>FALSE</code>, the accurate search model is used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cp</code></td>
+<td>
+<p>numeric scalar. The penalty to be multiplied with the
+complexity of the model during partitioning. The complexity of the
+model is defined as the number of coefficients times <code>dfpar</code>
+plus the number of splits times <code>dfsplit</code>. By default, <code>cp
+      = 0</code> (no penalization during partitioning) and <code>dfpar = 0</code> and
+<code>dfsplit = 1</code> (the complexity is measured as the total number
+of splits). <code>cp</code> also presents the minimum evaluated value at
+cross-validation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dfpar</code></td>
+<td>
+<p>numeric scalar. The degree of freedom per model
+coefficient. Is used to compute the complexity of the model, see
+<code>cp</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dfsplit</code></td>
+<td>
+<p>a numeric scalar. The degree of freedom per split. Is
+used to compute the complexity of the model, see <code>cp</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>papply</code></td>
+<td>
+<p>(parallel) apply function, defaults to
+<code>mclapply</code>. The function will parallelize the 
+partition stage and the evaluation of the cross-validation folds as
+well as the final pruning stage.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>papply.args</code></td>
+<td>
+<p>a list of arguments to be passed to <code>papply</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>an integer specifying which seed should be set at the
+beginning.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>logical. Should information about the fitting process
+be printed to the screen?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further, undocumented arguments to be passed.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of class <code>tvcm_control</code> containing
+the control parameters for <code>tvcm</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>See Also</h3>
+
+<p><code>tvcolmm_control</code>,
+<code>tvcglm_control</code>, <code>tvcm</code>,
+<code>fvcm</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">tvcm_control(minsize = 100)
+</code></pre>
+
+
+</div>

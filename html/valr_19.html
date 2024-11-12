@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_random</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate randomly placed intervals on a genome.</h2>
+
+<h3>Description</h3>
+
+<p>Generate randomly placed intervals on a genome.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_random(genome, length = 1000, n = 1e+06, seed = 0, sorted = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>genome</code></td>
+<td>
+<p>genome_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>length</code></td>
+<td>
+<p>length of intervals</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of intervals to generate</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>seed RNG for reproducible intervals</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sorted</code></td>
+<td>
+<p>return sorted output</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Sorting can be suppressed with <code>sorted = FALSE</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>ivl_df
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/random.html">https://bedtools.readthedocs.io/en/latest/content/tools/random.html</a>
+</p>
+<p>Other randomizing operations: 
+<code>bed_shuffle()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">genome &lt;- tibble::tribble(
+  ~chrom,  ~size,
+  "chr1",  10000000,
+  "chr2",  50000000,
+  "chr3",  60000000,
+  "chrX",  5000000
+)
+
+bed_random(genome, seed = 10104)
+
+# sorting can be suppressed
+bed_random(genome, sorted = FALSE, seed = 10104)
+
+# 500 random intervals of length 500
+bed_random(genome, length = 500, n = 500, seed = 10104)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>approval</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Approval and Plurality Vote Count
+</h2>
+
+<h3>Description</h3>
+
+<p>Count votes using the approval and plurality methods. Each voter can select  candidates using  1 for a selection and 0 otherwise. In the approval method, any number of candidates can be selected by a voter, while in the plurality method only one candidate can be chosen by a voter. Thus, plurality voting is a special case of approval voting. The winner(s) in either method is/are the most-approved candidate(s).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">approval(votes, nseats = 1, fsep = "\t", quiet = FALSE, ...)
+
+## S3 method for class 'vote.approval'
+summary(object, ...)
+
+## S3 method for class 'vote.approval'
+view(object, ...)
+
+plurality(votes, nseats = 1, fsep = "\t", quiet = FALSE, ...)
+
+## S3 method for class 'vote.plurality'
+summary(object, ...)
+
+## S3 method for class 'vote.plurality'
+view(object, ...)
+
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>votes</code></td>
+<td>
+<p>Matrix or data frame of zeros and ones containing the votes. Rows correspond to the votes, columns correspond to the candidates. If it is a character string it is interpreted as a file name from which the votes are to be read. Missing values (<code>NA</code>) are interpreted as zeros.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nseats</code></td>
+<td>
+<p>Number of candidates to be elected.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fsep</code></td>
+<td>
+<p>If <code>votes</code> is a file name, this argument gives the column separator in the file.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>If <code>TRUE</code> no output is printed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Object of class <code>vote.approval</code> or <code>vote.plurality</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Functions <code>approval</code> and <code>plurality</code> return an object of class <code>vote.approval</code> and <code>vote.plurality</code>, respectively, both of which are lists with the following objects:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>elected</code></td>
+<td>
+<p>Vector of names of the elected candidates in the order in which they were elected.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>totals</code></td>
+<td>
+<p>Vector of total votes in the same order as candidates (columns) in the input data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Input data with invalid votes removed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>invalid.votes</code></td>
+<td>
+<p>Matrix of invalid votes that were removed from the original dataset.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Hana Sevcikova, Adrian Raftery
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/Approval_voting">https://en.wikipedia.org/wiki/Approval_voting</a>
+</p>
+<p><a href="https://en.wikipedia.org/wiki/Plurality_voting_method">https://en.wikipedia.org/wiki/Plurality_voting_method</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>count.votes</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Example using the IMS Council dataset modified for approval voting
+data(ims_approval)
+approval(ims_approval)
+
+# Example using the IMS Council dataset modified for plurality voting
+data(ims_plurality)
+pl.ims &lt;- plurality(ims_plurality)
+invalid.votes(pl.ims)
+</code></pre>
+
+
+</div>

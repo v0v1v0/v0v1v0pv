@@ -1,0 +1,415 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ef_cetesb</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Emissions factors for Environment Company of Sao Paulo, Brazil (CETESB)</h2>
+
+<h3>Description</h3>
+
+<p><code>ef_cetesb</code> returns a vector or data.frame of Brazilian emission factors.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ef_cetesb(
+  p,
+  veh,
+  year = 2017,
+  agemax = 40,
+  scale = "default",
+  sppm,
+  full = FALSE,
+  efinput,
+  verbose = FALSE,
+  csv
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>Character;
+</p>
+<p>Pollutants: "CO", "HC", "NMHC", "CH4", "NOx", "CO2",
+"RCHO" (aldehydes + formaldehyde), "ETOH",
+"PM", "N2O", "KML", "FC", "NO2", "NO", "NH3",
+"gD/KWH", "gCO2/KWH", "RCHO_0km" (aldehydes + formaldehyde), "PM25RES", "PM10RES",
+"CO_0km", "HC_0km", "NMHC_0km", "NOx_0km", "NO2_0km" ,"NO_0km",
+"RCHO_0km" and "ETOH_0km", "FS" (fuel sales) (g/km). If scale = "tunnel" is
+used, there is also "ALD" for aldehydes and "HCHO" for  formaldehydes
+Evaporative emissions at average temperature ranges:
+"D_20_35", "S_20_35", "R_20_35", "D_10_25", "S_10_25", "R_10_25", "D_0_15",
+"S_0_15" and "R_0_15" where D means diurnal (g/day), S hot/warm soak (g/trip)
+and R hot/warm running losses (g/trip). THe deteriorated emission factors are calculated inside this function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>veh</code></td>
+<td>
+<p>Character; Vehicle categories:
+"PC_G", "PC_FG", "PC_FE", "PC_E",
+"LCV_G", "LCV_FG", "LCV_FE", "LCV_E", "LCV_D",
+"TRUCKS_SL", "TRUCKS_L", "TRUCKS_M", "TRUCKS_SH", "TRUCKS_H",
+"BUS_URBAN", "BUS_MICRO", "BUS_COACH", "BUS_ARTIC",
+"MC_150_G", "MC_150_500_G", "MC_500_G",
+"MC_150_FG", "MC_150_500_FG", "MC_500_FG",
+"MC_150_FE", "MC_150_500_FE", "MC_500_FE",
+"CICLOMOTOR", "GNV"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>year</code></td>
+<td>
+<p>Numeric; Filter the emission factor to start from a specific base year.
+If project is 'constant' values above 2017 and below 1980 will be repeated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>agemax</code></td>
+<td>
+<p>Integer; age of oldest vehicles for that category</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>Character; values "default","tunnel" o  "tunnel2018". If "tunnel", emission
+factors are scaled to represent EF measurements in tunnels in Sao Paulo</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sppm</code></td>
+<td>
+<p>Numeric, sulfur (sulphur) in ppm in fuel.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>full</code></td>
+<td>
+<p>Logical; To return a data.frame instead or a vector adding
+Age, Year, Brazilian emissions standards and its euro equivalents.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>efinput</code></td>
+<td>
+<p>data.frame with efinput structure of sysdata cetesb. Allow
+apply deterioration for future emission factors</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical; To show more information</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>csv</code></td>
+<td>
+<p>String with the path to download the ef in a .csv file. For instance,
+ef.csv</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A vector of Emission Factor or a data.frame
+</p>
+
+
+<h3>Note</h3>
+
+<p>new emission factors ar projects as the lates available,
+</p>
+<p>The new convention for vehicles names are translated from CETESB report:
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+  veh    </td>
+<td style="text-align: left;"> description </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  PC_G   </td>
+<td style="text-align: left;"> Passenger Car Gasohol (Gasoline + 27perc of anhydrous ethanol)  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  PC_E   </td>
+<td style="text-align: left;"> Passenger Car Ethanol (hydrous ethanol) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  PC_FG   </td>
+<td style="text-align: left;"> Passenger Car Flex Gasohol (Gasoline + 27perc of anhydrous ethanol)  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  PC_FE  </td>
+<td style="text-align: left;"> Passenger Car Flex Ethanol (hydrous ethanol) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  LCV_G   </td>
+<td style="text-align: left;"> Light Commercial Vehicle Gasohol (Gasoline + 27perc of anhydrous ethanol)  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  LCV_E   </td>
+<td style="text-align: left;"> Light Commercial Vehicle Ethanol (hydrous ethanol) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  LCV_FG   </td>
+<td style="text-align: left;"> Light Commercial Vehicle Flex Gasohol (Gasoline + 27perc of anhydrous ethanol)  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  LCV_FE  </td>
+<td style="text-align: left;"> Light Commercial Vehicle Flex Ethanol (hydrous ethanol) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  LCV_D  </td>
+<td style="text-align: left;"> Light Commercial Vehicle Diesel (5perc bio-diesel) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  TRUCKS_SL_D  </td>
+<td style="text-align: left;"> Trucks Semi Light Diesel (5perc bio-diesel) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  TRUCKS_L_D  </td>
+<td style="text-align: left;"> Trucks Light Diesel (5perc bio-diesel) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  TRUCKS_M_D  </td>
+<td style="text-align: left;"> Trucks Medium Diesel (5perc bio-diesel) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  TRUCKS_SH_D  </td>
+<td style="text-align: left;"> Trucks Semi Heavy Diesel (5perc bio-diesel) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  TRUCKS_H_D  </td>
+<td style="text-align: left;"> Trucks Heavy Diesel (5perc bio-diesel) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  BUS_URBAN_D  </td>
+<td style="text-align: left;"> Urban Bus Diesel (5perc bio-diesel) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  BUS_MICRO_D  </td>
+<td style="text-align: left;"> Micro Urban Bus Diesel (5perc bio-diesel) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  BUS_COACH_D  </td>
+<td style="text-align: left;"> Coach (inter-state) Bus Diesel (5perc bio-diesel) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  BUS_ARTIC_D  </td>
+<td style="text-align: left;"> Articulated Urban Bus Diesel (5perc bio-diesel) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  MC_150_G   </td>
+<td style="text-align: left;"> Motorcycle engine less than 150cc Gasohol (Gasoline + 27perc of anhydrous ethanol)  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  MC_150_500_G   </td>
+<td style="text-align: left;"> Motorcycle engine 150-500cc Gasohol (Gasoline + 27perc of anhydrous ethanol)  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  MC_500_G   </td>
+<td style="text-align: left;"> Motorcycle greater than 500cc Gasohol (Gasoline + 27perc of anhydrous ethanol)  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  MC_150_FG   </td>
+<td style="text-align: left;"> Flex Motorcycle engine less than 150cc Gasohol (Gasoline + 27perc of anhydrous ethanol)  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  MC_150_500_FG   </td>
+<td style="text-align: left;"> Flex Motorcycle engine 150-500cc Gasohol (Gasoline + 27perc of anhydrous ethanol)  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  MC_500_FG   </td>
+<td style="text-align: left;"> Flex Motorcycle greater than 500cc Gasohol (Gasoline + 27perc of anhydrous ethanol)  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  MC_150_FE   </td>
+<td style="text-align: left;"> Flex Motorcycle engine less than 150cc Ethanol (hydrous ethanol) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  MC_150_500_FE   </td>
+<td style="text-align: left;"> Flex Motorcycle engine 150-500cc Ethanol (hydrous ethanol) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  MC_500_FE   </td>
+<td style="text-align: left;"> Flex Motorcycle greater than 500cc Ethanol (hydrous ethanol) </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  PC_ELEC   </td>
+<td style="text-align: left;"> Passenger Car Electric  </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  LCV_ELEC   </td>
+<td style="text-align: left;"> Light Commercial Vehicle Electric </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+</td>
+</tr>
+</table>
+<p>The percentage varies of biofuels varies by law.
+</p>
+<p>This emission factors are not exactly the same as the report of CETESB.
+</p>
+<p>1) In this emission factors, there is also NO and NO2 based on split by
+published in the EMEP/EEA air pollutant emission inventory guidebook.
+</p>
+<p>2) Also, the emission factors were extended till 50 years of use, repeating
+the oldest value.
+</p>
+<p>3) CNG emission factors were expanded to other pollutants by comparison
+of US.EPA-AP42 emission factor: Section 1.4 Natural Gas Combustion.
+</p>
+<p>In the previous versions I used the letter 'd' for deteriorated. I removed the
+letter 'd' internally to not break older code.
+</p>
+<p>If by mistake, the user inputs one of veh names from the old convention,
+they are internally changed to the new convention:
+"SLT", "LT", "MT", "SHT","HT", "UB", "SUB", "COACH", "ARTIC", "M_G_150",
+"M_G_150_500", "M_G_500", "M_FG_150", "M_FG_150_500", "M_FG_500",
+"M_FE_150", "M_FE_150_500","M_FE_500",
+PC_ELEC, LCV_ELEC, TRUCKS_ELEC, BUS_ELEC,
+MC_150_ELEC, MC_150_500_ELEC, MC_500_ELEC
+</p>
+<p>If pollutant is "SO2", it needs sppm. It is designed when veh has length 1, if it has length 2 or more,
+it will show a warning
+</p>
+<p><strong>Emission factor for vehicles older than the reported by CETESB were filled with las highest EF</strong>
+</p>
+
+<ul>
+<li>
+<p> Range EF from PC and LCV otto: 2018 - 1982. EF for 1981 and older as moving average.
+</p>
+</li>
+<li>
+<p> Range LCV diesel : 2018 - 2006. EF for 2005 and older as moving average.
+</p>
+</li>
+<li>
+<p> Range Trucks and Buse: 2018 - 1998. EF for 1997 and older as moving average.
+</p>
+</li>
+<li>
+<p> Range MC Gasoline: 2018 - 2003.  EF for 2002 and older as moving average.
+</p>
+</li>
+<li>
+<p> Range MC Flex 150-500cc and &gt;500cc: 2018 - 2012.  EF for 2011 and older as moving average.
+</p>
+</li>
+</ul>
+<p>Currently, 2020, there are not any system for recovery of fuel vapors in Brazil. Hence,
+the FS takes into account the vapour that comes from the fuel tank inside the car and
+released into the atmosphere when injecting new fuel. There are discussions about
+increasing implementing stage I and II and/or ORVR these days. The ef FS is calculated
+by transforming g FC/km into  (L/KM)*g/L with g/L 1.14 fgor gasoline and 0.37
+for ethanol (CETESB, 2016). The density considered is 0.75425 for gasoline and
+0.809 for ethanol (t/m^3)
+</p>
+<p>CETESB emission factors did not cover evaporative emissions from motorcycles,
+which occur. Therefore, in the absence of better data, it was assumed the
+same ratio from passenger cars.
+</p>
+<p>Li, Lan, et al. "Exhaust and evaporative emissions from motorcycles fueled
+with ethanol gasoline blends." Science of the Total Environment 502 (2015): 627-631.
+</p>
+<p>If scale is used with tunnel, the references are:
+</p>
+
+<ul>
+<li>
+<p> Pérez-Martinez, P. J., Miranda, R. M., Nogueira, T., Guardani, M. L.,
+Fornaro, A., Ynoue, R., and Andrade, M. F. (2014). Emission
+factors of air pollutants from vehicles measured inside road tunnels in
+Sao Paulo: case study comparison. International Journal of
+Environmental Science and Technology, 11(8), 2155-2168.
+</p>
+</li>
+<li>
+<p> Nogueira, T., de Souza, K. F., Fornaro, A., de Fatima Andrade, M., and
+de Carvalho, L. R. F. (2015). On-road emissions of carbonyls
+from vehicles powered by biofuel blends in traffic tunnels in the
+Metropolitan Area of Sao Paulo, Brazil. Atmospheric Environment, 108, 88-97.
+</p>
+</li>
+<li>
+<p> Nogueira, T., et al (2021). In preparation (for tunnel 2018)
+</p>
+</li>
+</ul>
+<p>Emission factors for resuspension applies <strong>only</strong> with top-down approach
+as a experimental feature. Units are g/(streets*veh)/day. These values were
+derived form a bottom-up resuspension emissions from metropolitan area
+of Sao Paulo 2018, assuming 50000 streets
+</p>
+<p>NH3 from EEA Tier 2
+</p>
+
+
+<h3>References</h3>
+
+<p>Emissoes Veiculares no Estado de Sao Paulo 2016. Technical Report.
+url: https://cetesb.sp.gov.br/veicular/relatorios-e-publicacoes/.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">{
+a &lt;- ef_cetesb(p = "CO", veh = "PC_G")
+a &lt;- ef_cetesb(p = "NOx", veh = "TRUCKS_M_D")
+a &lt;- ef_cetesb("R_10_25", "PC_G")
+a &lt;- ef_cetesb("CO", c("PC_G", "PC_FE"))
+ef_cetesb(p = "CO", veh = "PC_G", year = 1970, agemax = 40)
+ef_cetesb(p = "CO", veh = "TRUCKS_L_D", year = 2018)
+ef_cetesb(p = "CO", veh = "SLT", year = 2018) #  olds names
+a &lt;- ef_cetesb(p = "NMHC", veh = c("PC_G", "PC_FG", "PC_FE", "PC_E"), year = 2018, agemax = 20)
+colplot(a, main = "NMHC EF", ylab = "[g/km]", xlab = "Years of use")
+ef_cetesb(p = "PM25RES", veh = "PC_ELEC", year = 1970, agemax = 40)
+ef_cetesb(p = "PM25RES", veh = "BUS_ELEC", year = 1970, agemax = 40)
+}
+</code></pre>
+
+
+</div>

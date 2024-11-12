@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>value</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Forecast Value Function</h2>
+
+<h3>Description</h3>
+
+<p>Calculates the economic value of a forecast based on
+a cost/loss ratio.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">
+value(obs, pred= NULL, baseline = NULL, cl = seq(0.05, 0.95, 0.05),
+    plot = TRUE, all = FALSE, thresholds = seq(0.05, 0.95, 0.05),
+    ylim = c(-0.05, 1), xlim = c(0,1), ...)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>A vector of binary observations or a contingency
+table summary of values in the form c(n11, n01, n10, n00)
+where in  nab a = obs, b = forecast.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred</code></td>
+<td>
+<p>A vector of probabilistic predictions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>baseline</code></td>
+<td>
+<p>Baseline  or naive forecast.  Typically climatology.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cl</code></td>
+<td>
+<p>Cost loss ratio.  The relative value of being
+unprepared and taking a loss to that of un-necessarily
+preparing.  For example,  cl = 0.1 indicates it
+would cost \$ 1 to prevent a \$10 loss.  This defaults to the
+sequence 0.05 to 0.95  by 0.05.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p> Should a plot be created? Default is TRUE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all</code></td>
+<td>
+<p>In the case of probabilistic forecasts, should value
+curves for each thresholds be displayed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thresholds</code></td>
+<td>
+<p>Thresholds considered for a probabilistic
+forecast.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylim, xlim</code></td>
+<td>
+<p> Plotting options.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Options to be passed into the plotting function.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>If assigned to an object, the following values are reported.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>vmax</code></td>
+<td>
+<p>Maximum value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>V</code></td>
+<td>
+<p>Vector of values for each cl value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>F</code></td>
+<td>
+<p>Conditional false alarm rate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H</code></td>
+<td>
+<p>Conditional hit rate</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cl</code></td>
+<td>
+<p>Vector of cost loss ratios.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s</code></td>
+<td>
+<p>Base rate</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich</p>
+
+
+<h3>References</h3>
+
+<p>Jolliffe, Ian and David B. Stephensen (2003) <em>Forecast
+Verification: A Practioner's Guide in Atmospheric Science</em>, Chapter
+8. Wiley
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## value as a contingency table
+## Finley tornado data
+obs&lt;- c(28, 72, 23, 2680) 
+value(obs)
+aa &lt;- value(obs)
+aa$Vmax # max value
+
+## probabilistic forecast example
+ obs  &lt;- round(runif(100) )
+ pred &lt;-  runif(100)
+
+value(obs, pred, main = "Sample Plot",
+             thresholds = seq(0.02, 0.98, 0.02) ) 
+##########
+data(pop)
+d &lt;- pop.convert()
+
+value(obs = d$obs_rain, pred = d$p24_rain, all = TRUE)
+
+ </code></pre>
+
+
+</div>

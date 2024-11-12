@@ -1,0 +1,166 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mideal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Ideal distributed meteor magnitudes</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random generation
+of ideal distributed meteor magnitudes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dmideal(m, psi = 0, log = FALSE)
+
+pmideal(m, psi = 0, lower.tail = TRUE, log = FALSE)
+
+qmideal(p, psi = 0, lower.tail = TRUE)
+
+rmideal(n, psi = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>numeric; meteor magnitude.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>psi</code></td>
+<td>
+<p>numeric; the location parameter of a probability distribution.
+It is the only parameter of the distribution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, probabilities p are given as <code>log(p)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail</code></td>
+<td>
+<p>logical; if <code>TRUE</code> (default) probabilities are
+<code class="reqn">P[M \le m]</code>, otherwise, <code class="reqn">P[M &gt; m]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>numeric; probability.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>numeric; count of meteor magnitudes.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The density of an ideal magnitude distribution is
+</p>
+<p style="text-align: center;"><code class="reqn">
+    {\displaystyle \frac{\mathrm{d}p}{\mathrm{d}m} = \frac{3}{2} \, \log(r) \sqrt{\frac{r^{3 \, \psi + 2 \, m}}{(r^\psi + r^m)^5}}}
+</code>
+</p>
+
+<p>where <code class="reqn">m</code> is the meteor magnitude, <code class="reqn">r = 10^{0.4} \approx 2.51189 \dots</code> is a constant and
+<code class="reqn">\psi</code> is the only parameter of this magnitude distribution.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dmideal</code> gives the density, <code>pmideal</code> gives the distribution function,
+<code>qmideal</code> gives the quantile function and <code>rmideal</code> generates random deviates.
+</p>
+<p>The length of the result is determined by <code>n</code> for <code>rmideal</code>, and is the maximum
+of the lengths of the numerical vector arguments for the other functions.
+</p>
+<p><code>qmideal</code> can return <code>NaN</code> value with a warning.
+</p>
+
+
+<h3>References</h3>
+
+<p>Richter, J. (2018) <em>About the mass and magnitude distributions of meteor showers</em>.
+WGN, Journal of the International Meteor Organization, vol. 46, no. 1, p. 34-38
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">old_par &lt;- par(mfrow = c(2,2))
+psi &lt;- 5.0
+plot(
+    function(m) dmideal(m, psi, log = FALSE),
+    -5, 10,
+    main = paste0('density of ideal meteor magnitude\ndistribution (psi = ', psi, ')'),
+    col = "blue",
+    xlab = 'm',
+    ylab = 'dp/dm'
+)
+abline(v=psi, col="red")
+
+plot(
+    function(m) dmideal(m, psi, log = TRUE),
+    -5, 10,
+    main = paste0('density of ideal meteor magnitude\ndistribution (psi = ', psi, ')'),
+    col = "blue",
+    xlab = 'm',
+    ylab = 'log( dp/dm )'
+)
+abline(v=psi, col="red")
+
+plot(
+    function(m) pmideal(m, psi),
+    -5, 10,
+    main = paste0('probability of ideal meteor magnitude\ndistribution (psi = ', psi, ')'),
+    col = "blue",
+    xlab = 'm',
+    ylab = 'p'
+)
+abline(v=psi, col="red")
+
+plot(
+    function(p) qmideal(p, psi),
+    0.01, 0.99,
+    main = paste('quantile of ideal meteor magnitude\n distribution (psi = ', psi, ')'),
+    col = "blue",
+    xlab = 'p',
+    ylab = 'm'
+)
+abline(h=psi, col="red")
+
+# generate random meteor magnitudes
+m &lt;- rmideal(1000, psi)
+
+# log likelihood function
+llr &lt;- function(psi) {
+    -sum(dmideal(m, psi, log=TRUE))
+}
+
+# maximum likelihood estimation (MLE) of psi
+est &lt;- optim(2, llr, method='Brent', lower=0, upper=8, hessian=TRUE)
+
+# estimations
+est$par # mean of psi
+sqrt(1/est$hessian[1][1]) # standard deviation of psi
+
+par(old_par)
+</code></pre>
+
+
+</div>

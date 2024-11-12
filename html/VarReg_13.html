@@ -1,0 +1,152 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotVarReg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plots graphics for a mean and variance regression model</h2>
+
+<h3>Description</h3>
+
+<p><code>plotVarReg</code> to produce graphics for models fit in this package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotVarReg(
+  x,
+  knot.lines = FALSE,
+  ci = FALSE,
+  ci.type = c("im", "boot"),
+  bootreps = 1000,
+  xlab = "x",
+  ylab = "y",
+  control = list(...),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object of class <code>VarReg</code> (see <code>semiVarReg</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knot.lines</code></td>
+<td>
+<p>Logical to indicate if knot lines should be shown on graphics
+(if model is type "semi"). Default is <code>FALSE</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ci</code></td>
+<td>
+<p>Logical indicate if 95% CI should be shown on the plots. Default is <code>FALSE</code>
+and <code>ci.type="im"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ci.type</code></td>
+<td>
+<p>Text to indicate the type of CI to plot. Either <code>"im"</code> (information matrix) or <code>"boot"</code> (bootstrapped). Default is <code>"im"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bootreps</code></td>
+<td>
+<p>Integer to indicate the number of bootstrap replications to be performed if <code>ci.type="boot"</code>. Default is <code>1000</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>Text for the label to be placed on the <code>x</code> axis of graphics (covariate)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>Text for the label to be placed on the <code>y</code> axis of graphics (outcome)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>list of control parameters to be used in bootstrapping.
+See <code>VarReg.control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be used to form the default control argument if it is not supplied
+directly</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function returns a 2x2 plot, with slightly different plots given, depending on the outcome data. For uncensored data, the plots are:
+</p>
+
+<ul>
+<li>
+<p> the mean function over the <code>x</code>-variable, with or without 95% CI,  and with or
+without the knot lines indicated
+</p>
+</li>
+<li>
+<p> the variance function over the <code>x</code>-variable, with or without 95% CI and with or
+without the knot lines indicated
+</p>
+</li>
+<li>
+<p> a Q-Q plot of the residuals from the model
+</p>
+</li>
+<li>
+<p> a histogram of the residuals from the model
+</p>
+</li>
+</ul>
+<p>If the outcome data is censored, the last two plots are no longer appropriate.
+Given the censored residuals from the model, we can compare the squared standardised residuals
+(given in black) with their censoring indicator to the chi-squared distribution with one
+degree of freedom (given in red). This is one of the plots given for censored data, and the
+other is a plot of the data, coloured by the censoring status. The triangles with the point at
+the top are bottom censored and the triangles with the point at the bottom are top censored.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>semiVarReg</code>, <code>VarReg.control</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(mcycle)
+linmodel&lt;-semiVarReg(mcycle$accel, mcycle$times, meanmodel="linear", varmodel="linear",
+maxit=10000)
+plotVarReg(linmodel)
+plotVarReg(linmodel, ci=TRUE, ci.type="im", ylab="Range", xlab="Time in seconds")
+##not run
+##plotVarReg(linmodel, ci=TRUE, ci.type="boot", bootreps=10,ylab="Acceleration",
+##xlab="Time in seconds")
+
+##not run
+##semimodel&lt;-semiVarReg(mcycle$accel, mcycle$times, meanmodel="semi", varmodel="semi",
+##knots.m=4, knots.v=2, maxit=10000)
+##plotVarReg(semimodel, ci=TRUE, ci.type="boot",bootreps=10,ylab="Acceleration",
+##xlab="Time in seconds", maxit=10000)
+</code></pre>
+
+
+</div>

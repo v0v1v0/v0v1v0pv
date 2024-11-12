@@ -1,0 +1,120 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>KLD</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Kullback-Leibler Divergence </h2>
+
+<h3>Description</h3>
+
+<p>Calculates the Kullback-Leibler divergence
+for certain fitted model objects
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R"> KLD(object, ...)
+ KLDvglm(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>Some <span class="pkg">VGAM</span> object, for example, having
+class <code>vglm-class</code>.
+Currently <code>object</code> must be intercept-only.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Other possible arguments fed into
+<code>KLDvglm</code> in order to compute the KLD.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <em>Kullback-Leibler divergence</em> (KLD),
+or <em>relative entropy</em>,
+is a measure of how one probability distribution differs
+from a second reference probability distribution.
+Currently the <span class="pkg">VGAM</span> package computes the KLD 
+for GAITD regression models
+(e.g., see <code>gaitdpoisson</code> and
+<code>gaitdnbinomial</code>) where the reference distribution
+is the (unscaled) parent or base distribution.
+For such, the formula for the KLD simplifies somewhat.
+Hence one can obtain a quantitative measure for the overall
+effect of altering, inflating, truncating and deflating certain
+(special) values.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns a numeric nonnegative value with the corresponding KLD.
+A 0 value means no difference between an ordinary parent or base
+distribution.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Numerical problems might occur if any of the evaluated 
+probabilities
+of the unscaled parent distribution are very close to 0.
+</p>
+
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee. </p>
+
+
+<h3>References</h3>
+
+<p>Kullback, S. and Leibler, R. A. (1951).
+On information and sufficiency.
+<em>Annals of Mathematical Statistics</em>,
+<b>22</b>, 79–86.
+</p>
+
+<p>M'Kendrick, A. G. (1925).
+Applications of mathematics to medical problems.
+<em>Proc. Edinb. Math. Soc.</em>,
+<b>44</b>, 98–130.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gaitdpoisson</code>,
+<code>gaitdnbinomial</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#  McKendrick (1925): Data from 223 Indian village households
+cholera &lt;- data.frame(ncases = 0:4,  # Number of cholera cases,
+                      wfreq  = c(168, 32, 16, 6, 1))  # Frequencies
+fit7 &lt;- vglm(ncases ~ 1, gaitdpoisson(i.mlm = 0, ilambda.p = 1),
+             weight = wfreq, data = cholera, trace = TRUE)
+coef(fit7, matrix = TRUE)
+KLD(fit7)
+</code></pre>
+
+
+</div>

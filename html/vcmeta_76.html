@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>replicate.prop1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares and combines single proportion in original and follow-up studies</h2>
+
+<h3>Description</h3>
+
+<p>This function computes confidence intervals for a single proportion from an
+original study and a follow-up study. Confidence intervals for the
+difference between the two proportions and average of the two proportions
+are also computed. The confidence level for the difference is 1 – 2*alpha,
+which is recommended for equivalence testing.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">replicate.prop1(alpha, f1, n1, f2, n2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f1</code></td>
+<td>
+<p>frequency count in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>sample size in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f2</code></td>
+<td>
+<p>frequency count in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>sample size for in follow-up study</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A 4-row matrix. The rows are:
+</p>
+
+<ul>
+<li>
+<p> Row 1 summarizes the original study
+</p>
+</li>
+<li>
+<p> Row 2 summarizes the follow-up study
+</p>
+</li>
+<li>
+<p> Row 3 estimates the difference in proportions
+</p>
+</li>
+<li>
+<p> Row 4 estimates the average proportion
+</p>
+</li>
+</ul>
+<p>The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - proportion estimate (single study, difference, average)
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2021).
+“Design and analysis of replication studies.”
+<em>Organizational Research Methods</em>, <b>24</b>(3), 513–529.
+ISSN 1094-4281, <a href="https://doi.org/10.1177/1094428120911088">doi:10.1177/1094428120911088</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">replicate.prop1(.05, 21, 300, 35, 400)
+
+# Should return:
+#                          Estimate         SE          LL         UL
+# Original:              0.07565789 0.01516725  0.04593064 0.10538515
+# Follow-up:             0.09158416 0.01435033  0.06345803 0.11971029
+# Original - Follow-up: -0.01670456 0.02065098 -0.05067239 0.01726328
+# Average:               0.08119996 0.01032549  0.06096237 0.10143755
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.ave.cor</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for an average Pearson or partial correlation</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and confidence interval for an
+average Pearson or partial correlation from two or more studies. The
+sample correlations must be all Pearson correlations or all partial
+correlations. Use the meta.ave.gen function to meta-analyze any
+combination of Pearson, partial, or Spearman correlations.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.ave.cor(alpha, n, cor, s, bystudy = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>vector of sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor</code></td>
+<td>
+<p>vector of estimated correlations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s</code></td>
+<td>
+<p>number of control variables (set to 0 for Pearson)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bystudy</code></td>
+<td>
+<p>logical to also return each study estimate (TRUE) or not</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is the average estimate across all studies.  If bystudy
+is TRUE, there is 1 additional row for each study.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated effect size
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2008).
+“Meta-analytic interval estimation for bivariate correlations.”
+<em>Psychological Methods</em>, <b>13</b>(3), 173–181.
+ISSN 1939-1463, <a href="https://doi.org/10.1037/a0012868">doi:10.1037/a0012868</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">n &lt;- c(55, 190, 65, 35)
+cor &lt;- c(.40, .65, .60, .45)
+meta.ave.cor(.05, n, cor, 0, bystudy = TRUE)
+
+# Should return:
+#         Estimate         SE        LL        UL
+# Average    0.525 0.05113361 0.4176678 0.6178816
+# Study 1    0.400 0.11430952 0.1506943 0.6014699
+# Study 2    0.650 0.04200694 0.5594086 0.7252465
+# Study 3    0.600 0.08000000 0.4171458 0.7361686
+# Study 4    0.450 0.13677012 0.1373507 0.6811071
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,254 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RequestHandler</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>RequestHandler</h2>
+
+<h3>Description</h3>
+
+<p>Base handler for http requests, deciding whether a
+request is stubbed, to be ignored, recordable, or unhandled
+</p>
+
+
+<h3>Details</h3>
+
+<p><strong>Private Methods</strong>
+</p>
+
+<dl>
+<dt><code>request_type(request)</code></dt>
+<dd>
+<p>Get the request type
+</p>
+</dd>
+<dt><code>externally_stubbed()</code></dt>
+<dd>
+<p>just returns FALSE
+</p>
+</dd>
+<dt><code>should_ignore()</code></dt>
+<dd>
+<p>should we ignore the request, depends on request ignorer
+infrastructure that's not working yet
+</p>
+</dd>
+<dt><code>has_response_stub()</code></dt>
+<dd>
+<p>Check if there is a matching response stub in the
+http interaction list
+</p>
+</dd>
+<dt><code>get_stubbed_response()</code></dt>
+<dd>
+<p>Check for a response and get it
+</p>
+</dd>
+<dt><code>request_summary(request)</code></dt>
+<dd>
+<p>get a request summary
+</p>
+</dd>
+<dt><code>on_externally_stubbed_request(request)</code></dt>
+<dd>
+<p>on externally stubbed request do nothing
+</p>
+</dd>
+<dt><code>on_ignored_request(request)</code></dt>
+<dd>
+<p>on ignored request, do something
+</p>
+</dd>
+<dt><code>on_recordable_request(request)</code></dt>
+<dd>
+<p>on recordable request, record the request
+</p>
+</dd>
+<dt><code>on_unhandled_request(request)</code></dt>
+<dd>
+<p>on unhandled request, run UnhandledHTTPRequestError
+</p>
+</dd>
+</dl>
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>request_original</code></dt>
+<dd>
+<p>original, before any modification</p>
+</dd>
+<dt><code>request</code></dt>
+<dd>
+<p>the request, after any modification</p>
+</dd>
+<dt><code>vcr_response</code></dt>
+<dd>
+<p>holds VcrResponse object</p>
+</dd>
+<dt><code>stubbed_response</code></dt>
+<dd>
+<p>the stubbed response</p>
+</dd>
+<dt><code>cassette</code></dt>
+<dd>
+<p>the cassette holder</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-RequestHandler-new"><code>RequestHandler$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-RequestHandler-handle"><code>RequestHandler$handle()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-RequestHandler-clone"><code>RequestHandler$clone()</code></a>
+</p>
+</li>
+</ul>
+<hr>
+<a id="method-RequestHandler-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a new <code>RequestHandler</code> object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>RequestHandler$new(request)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>request</code></dt>
+<dd>
+<p>The request from an object of class <code>HttpInteraction</code></p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>A new <code>RequestHandler</code> object
+</p>
+
+
+<hr>
+<a id="method-RequestHandler-handle"></a>
+
+
+
+<h4>Method <code>handle()</code>
+</h4>
+
+<p>Handle the request (<code>request</code> given in <code style="white-space: pre;">⁠$initialize()⁠</code>)
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>RequestHandler$handle()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>handles a request, outcomes vary
+</p>
+
+
+<hr>
+<a id="method-RequestHandler-clone"></a>
+
+
+
+<h4>Method <code>clone()</code>
+</h4>
+
+<p>The objects of this class are cloneable with this method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>RequestHandler$clone(deep = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>deep</code></dt>
+<dd>
+<p>Whether to make a deep clone.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# record mode: once
+vcr_configure(
+ dir = tempdir(),
+ record = "once"
+)
+
+data(crul_request)
+crul_request$url$handle &lt;- curl::new_handle()
+crul_request
+x &lt;- RequestHandler$new(crul_request)
+# x$handle()
+
+# record mode: none
+vcr_configure(
+ dir = tempdir(),
+ record = "none"
+)
+data(crul_request)
+crul_request$url$handle &lt;- curl::new_handle()
+crul_request
+insert_cassette("testing_record_mode_none", record = "none")
+#file.path(vcr_c$dir, "testing_record_mode_none.yml")
+x &lt;- RequestHandlerCrul$new(crul_request)
+# x$handle()
+crul_request$url$url &lt;- "https://api.crossref.org/works/10.1039/c8sm90002g/"
+crul_request$url$handle &lt;- curl::new_handle()
+z &lt;- RequestHandlerCrul$new(crul_request)
+# z$handle()
+eject_cassette("testing_record_mode_none")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

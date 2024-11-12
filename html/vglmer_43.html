@@ -1,0 +1,126 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>v_s</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create splines for use in vglmer</h2>
+
+<h3>Description</h3>
+
+<p>This function estimates splines in <code>vglmer</code>, similar to <code>s(...)</code> in
+<code>mgcv</code> albeit with many fewer options than <code>mgcv</code>. It allows for
+truncated (linear) splines (<code>type="tpf"</code>), O'Sullivan splines
+(<code>type="o"</code>), or kernel ridge  regression (<code>type="gKRLS"</code>). Please
+see vglmer for more discussion and examples. For information on kernel
+ridge regression, please consult gKRLS.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">v_s(
+  ...,
+  type = "tpf",
+  knots = NULL,
+  by = NA,
+  xt = NULL,
+  by_re = TRUE,
+  force_vector = FALSE,
+  outer_okay = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Variable name, e.g. <code>v_s(x)</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Default (<code>"tpf"</code>) uses truncated linear splines for the
+basis. <code>"o"</code> uses O'Sullivan splines (Wand and Ormerod 2008).
+Smoothing across multiple covariates, e.g. <code>v_s(x,x2,type="gKRLS")</code>,
+can be done using kernel ridge regression. Chang and Goplerud (2024)
+provide a detailed discussion. Note that <code>"gKRLS"</code> by default uses
+random sketching to create the relevant bases and thus a seed would need to
+be set to ensure exact replicability.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knots</code></td>
+<td>
+<p>Default (<code>NULL</code>) uses <code class="reqn">K=min(N/4,35)</code> knots evenly
+spaced at quantiles of the covariate <code>x</code>. A single number specifies a
+specific number of knots; a vector can set custom locations for knots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>A categorical or factor covariate to interact the spline with; for
+example, <code>v_s(x, by = g)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xt</code></td>
+<td>
+<p>Arguments passed to <code>xt</code> from <code>mgcv</code>; at the moment, this
+is only used for <code>type="gKRLS"</code> to pass the function <code>gKRLS()</code>.
+Please see the documentation of <code>gKRLS</code> for more
+details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by_re</code></td>
+<td>
+<p>Default (<code>TRUE</code>) regularizes the interactions between the
+categorical factor and the covariate. See "Details" in vglmer for
+more discussion.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>force_vector</code></td>
+<td>
+<p>Force that argument to <code>knots</code> is treated as vector.
+This is usually not needed unless <code>knots</code> is a single integer that
+should be treated as a single knot (vs. the number of knots).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outer_okay</code></td>
+<td>
+<p>Default (<code>FALSE</code>) does not permit values in <code>x</code>
+to exceed the outer knots.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function returns a list of class of <code>vglmer_spline</code> that is
+passed to unexported functions. It contains the arguments noted above where
+<code>...</code> is parsed into an argument called <code>term</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>Chang, Qing, and Max Goplerud. 2024. "Generalized Kernel Regularized Least
+Squares." <em>Political Analysis</em> 32(2):157-171.
+</p>
+<p>Wand, Matt P. and Ormerod, John T. 2008. "On Semiparametric Regression with
+O'Sullivan Penalized Splines". <em>Australian &amp; New Zealand Journal of
+Statistics</em>. 50(2): 179-198.
+</p>
+<p>Wood, Simon N. 2017. <em>Generalized Additive Models: An Introduction with
+R</em>. Chapman and Hall/CRC.
+</p>
+
+
+</div>

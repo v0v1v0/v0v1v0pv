@@ -1,0 +1,256 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RequestMatcherRegistry</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>RequestMatcherRegistry</h2>
+
+<h3>Description</h3>
+
+<p>handles request matchers
+</p>
+
+
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>registry</code></dt>
+<dd>
+<p>initialze registry list with a request, or leave empty</p>
+</dd>
+<dt><code>default_matchers</code></dt>
+<dd>
+<p>request matchers to use. default: method, uri</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-RequestMatcherRegistry-new"><code>RequestMatcherRegistry$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-RequestMatcherRegistry-register"><code>RequestMatcherRegistry$register()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-RequestMatcherRegistry-register_built_ins"><code>RequestMatcherRegistry$register_built_ins()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-RequestMatcherRegistry-try_to_register_body_as_json"><code>RequestMatcherRegistry$try_to_register_body_as_json()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-RequestMatcherRegistry-clone"><code>RequestMatcherRegistry$clone()</code></a>
+</p>
+</li>
+</ul>
+<hr>
+<a id="method-RequestMatcherRegistry-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a new RequestMatcherRegistry object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>RequestMatcherRegistry$new(
+  registry = list(),
+  default_matchers = list("method", "uri")
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>registry</code></dt>
+<dd>
+<p>initialze registry list with a request, or leave empty</p>
+</dd>
+<dt><code>default_matchers</code></dt>
+<dd>
+<p>request matchers to use. default: method, uri</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>A new <code>RequestMatcherRegistry</code> object
+</p>
+
+
+<hr>
+<a id="method-RequestMatcherRegistry-register"></a>
+
+
+
+<h4>Method <code>register()</code>
+</h4>
+
+<p>Register a custom matcher
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>RequestMatcherRegistry$register(name, func)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>name</code></dt>
+<dd>
+<p>matcher name</p>
+</dd>
+<dt><code>func</code></dt>
+<dd>
+<p>function that describes a matcher, should return
+a single boolean</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>no return; registers the matcher
+</p>
+
+
+<hr>
+<a id="method-RequestMatcherRegistry-register_built_ins"></a>
+
+
+
+<h4>Method <code>register_built_ins()</code>
+</h4>
+
+<p>Register all built in matchers
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>RequestMatcherRegistry$register_built_ins()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>no return; registers all built in matchers
+</p>
+
+
+<hr>
+<a id="method-RequestMatcherRegistry-try_to_register_body_as_json"></a>
+
+
+
+<h4>Method <code>try_to_register_body_as_json()</code>
+</h4>
+
+<p>Try to register body as JSON
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>RequestMatcherRegistry$try_to_register_body_as_json(r1, r2)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>r1, r2</code></dt>
+<dd>
+<p>Request class objects</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>no return; registers the matcher
+</p>
+
+
+<hr>
+<a id="method-RequestMatcherRegistry-clone"></a>
+
+
+
+<h4>Method <code>clone()</code>
+</h4>
+
+<p>The objects of this class are cloneable with this method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>RequestMatcherRegistry$clone(deep = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>deep</code></dt>
+<dd>
+<p>Whether to make a deep clone.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Note</h3>
+
+<p>r1=from new request; r2=from recorded interaction
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+(x &lt;- RequestMatcherRegistry$new())
+x$default_matchers
+x$registry
+
+## End(Not run)
+</code></pre>
+
+
+</div>

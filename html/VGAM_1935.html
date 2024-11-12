@@ -1,0 +1,199 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>zigeometric</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Zero-Inflated Geometric Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Fits a zero-inflated geometric distribution by maximum likelihood
+estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">zigeometric(lpstr0  = "logitlink", lprob = "logitlink",
+            type.fitted = c("mean", "prob", "pobs0", "pstr0", "onempstr0"),
+            ipstr0  = NULL, iprob = NULL,
+            imethod = 1, bias.red = 0.5, zero = NULL)
+zigeometricff(lprob = "logitlink", lonempstr0 = "logitlink",
+              type.fitted = c("mean", "prob", "pobs0", "pstr0", "onempstr0"),
+              iprob = NULL, ionempstr0 = NULL,
+              imethod = 1, bias.red = 0.5, zero = "onempstr0")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>lpstr0, lprob</code></td>
+<td>
+
+<p>Link functions for the parameters
+<code class="reqn">\phi</code>
+and
+<code class="reqn">p</code> (<code>prob</code>).
+The usual geometric probability parameter is the latter.
+The probability of a structural zero is the former.
+See <code>Links</code> for more choices.
+For the zero-<em>deflated</em> model see below.
+</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>lonempstr0, ionempstr0</code></td>
+<td>
+
+<p>Corresponding arguments for the other parameterization.
+See details below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bias.red</code></td>
+<td>
+
+<p>A constant used in the initialization process of <code>pstr0</code>.
+It should lie between 0 and 1, with 1 having no effect.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.fitted</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>
+and <code>fittedvlm</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipstr0, iprob</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero, imethod</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Function <code>zigeometric()</code> is based on
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y=0) =  \phi + (1-\phi) p,</code>
+</p>
+
+<p>for <code class="reqn">y=0</code>, and
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y=y) = (1-\phi) p (1 - p)^{y}.</code>
+</p>
+
+<p>for <code class="reqn">y=1,2,\ldots</code>.
+The parameter <code class="reqn">\phi</code> satisfies <code class="reqn">0 &lt; \phi &lt; 1</code>.  The mean of <code class="reqn">Y</code> is <code class="reqn">E(Y)=(1-\phi) p / (1-p)</code> and these are returned as the fitted values
+by default.
+By default, the two linear/additive predictors
+are <code class="reqn">(logit(\phi), logit(p))^T</code>.
+Multiple responses are handled.
+</p>
+
+<p>Estimated probabilities of a structural zero and an
+observed zero can be returned, as in <code>zipoisson</code>;
+see <code>fittedvlm</code> for information.
+</p>
+<p>The <span class="pkg">VGAM</span> family function <code>zigeometricff()</code> has a few
+changes compared to <code>zigeometric()</code>.
+These are:
+(i)   the order of the linear/additive predictors is switched so the
+geometric probability comes first;
+(ii)  argument <code>onempstr0</code> is now 1 minus
+the probability of a structural zero, i.e.,
+the probability of the parent (geometric) component,
+i.e., <code>onempstr0</code> is <code>1-pstr0</code>;
+(iii) argument <code>zero</code> has a new default so that the <code>onempstr0</code>
+is intercept-only  by default.
+Now <code>zigeometricff()</code> is generally recommended over
+<code>zigeometric()</code>.
+Both functions implement Fisher scoring and can handle
+multiple responses.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+
+
+<p>The zero-<em>deflated</em> geometric distribution might
+be fitted by setting <code>lpstr0 = identitylink</code>, albeit,
+not entirely reliably. See <code>zipoisson</code>
+for information that can be applied here. Else
+try the zero-altered geometric distribution (see
+<code>zageometric</code>).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>rzigeom</code>,
+<code>geometric</code>,
+<code>zageometric</code>,
+<code>spikeplot</code>,
+<code>rgeom</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">gdata &lt;- data.frame(x2 = runif(nn &lt;- 1000) - 0.5)
+gdata &lt;- transform(gdata, x3 = runif(nn) - 0.5,
+                          x4 = runif(nn) - 0.5)
+gdata &lt;- transform(gdata, eta1 =  1.0 - 1.0 * x2 + 2.0 * x3,
+                          eta2 = -1.0,
+                          eta3 =  0.5)
+gdata &lt;- transform(gdata, prob1 = logitlink(eta1, inverse = TRUE),
+                          prob2 = logitlink(eta2, inverse = TRUE),
+                          prob3 = logitlink(eta3, inverse = TRUE))
+gdata &lt;- transform(gdata, y1 = rzigeom(nn, prob1, pstr0 = prob3),
+                          y2 = rzigeom(nn, prob2, pstr0 = prob3),
+                          y3 = rzigeom(nn, prob2, pstr0 = prob3))
+with(gdata, table(y1))
+with(gdata, table(y2))
+with(gdata, table(y3))
+head(gdata)
+
+fit1 &lt;- vglm(y1 ~ x2 + x3 + x4, zigeometric(zero = 1), data = gdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+head(fitted(fit1, type = "pstr0"))
+
+fit2 &lt;- vglm(cbind(y2, y3) ~ 1, zigeometric(zero = 1), data = gdata, trace = TRUE)
+coef(fit2, matrix = TRUE)
+summary(fit2)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,154 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tab_counts</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Output a frequency table</h2>
+
+<h3>Description</h3>
+
+<p>The type of frequency table depends on the number of selected columns:
+</p>
+
+<ul>
+<li>
+<p> One categorical column: see tab_counts_one
+</p>
+</li>
+<li>
+<p> Multiple categorical columns: see tab_counts_items
+</p>
+</li>
+</ul>
+<p>Cross tabulations:
+</p>
+
+<ul>
+<li>
+<p> One categorical column and one grouping column: see tab_counts_one_grouped
+</p>
+</li>
+<li>
+<p> Multiple categorical columns and one grouping column: see tab_counts_items_grouped
+</p>
+</li>
+<li>
+<p> Multiple categorical columns and multiple grouping columns: see tab_counts_items_grouped_items (not yet implemented)
+</p>
+</li>
+</ul>
+<p>By default, if you provide two column selections, the second column is treated as categorical.
+Setting the metric-parameter to TRUE will call the appropriate functions for correlation analysis:
+</p>
+
+<ul>
+<li>
+<p> One categorical column and one metric column: see tab_counts_one_cor
+</p>
+</li>
+<li>
+<p> Multiple categorical columns and one metric column: see tab_counts_items_cor
+</p>
+</li>
+<li>
+<p> Multiple categorical columns and multiple metric columns: tab_counts_items_cor_items (not yet implemented)
+</p>
+</li>
+</ul>
+<p>Parameters that may be passed to specific count functions:
+</p>
+
+<ul>
+<li> <p><strong>ci</strong>: Add confidence intervals to proportions.
+</p>
+</li>
+<li> <p><strong>percent</strong>: Frequency tables show percentages by default. Set to FALSE to get raw proportions.
+</p>
+</li>
+<li> <p><strong>prop</strong>: For cross tables you can choose between total, row or column percentages.
+</p>
+</li>
+<li> <p><strong>values</strong>: The values to output: n (frequency) or p (percentage) or both (the default).
+</p>
+</li>
+<li> <p><strong>category</strong>: When you have multiple categories in a column, you can focus one of the categories to simplify the plots.
+By default, if a column has only TRUE and FALSE values, the outputs focus the TRUE category.
+</p>
+</li>
+<li> <p><strong>labels</strong>: Labels are extracted from the column attributes.
+Set to FALSE to output bare column names and values.
+</p>
+</li>
+</ul>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tab_counts(data, cols, cross = NULL, metric = FALSE, clean = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>A tidy column selection,
+e.g. a single column (without quotes)
+or multiple columns selected by methods such as starts_with().</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross</code></td>
+<td>
+<p>Optional, a grouping column. The column name without quotes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metric</code></td>
+<td>
+<p>When crossing variables, the cross column parameter can contain categorical or metric values.
+By default, the cross column selection is treated as categorical data.
+Set metric to TRUE, to treat it as metric and calculate correlations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clean</code></td>
+<td>
+<p>Prepare data by data_clean.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other parameters passed to the appropriate table function.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A volker tibble.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(volker)
+data &lt;- volker::chatgpt
+
+tab_counts(data, sd_gender)
+
+</code></pre>
+
+
+</div>

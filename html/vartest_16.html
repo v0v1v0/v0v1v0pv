@@ -1,0 +1,135 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>obrien.test</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+O'Brien Test
+</h2>
+
+<h3>Description</h3>
+
+<p><code>obrien.test</code> performs O'Brien variance homogeneity test.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">obrien.test(formula, data, center = "mean", trim.rate = 0.25, alpha = 0.05, 
+  na.rm = TRUE, verbose = TRUE)</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>a formula of the form <code>lhs ~ rhs</code> where <code>lhs</code> gives the sample values and <code>rhs</code> the corresponding groups.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a tibble or data frame containing the variables in <code>formula</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>center</code></td>
+<td>
+<p>a character string to define how to center. "mean": mean, "median": median, and "trim.mean": trimmed mean.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trim.rate</code></td>
+<td>
+<p>the rate of observations trimmed from each tail of the distribution. Default is set to 0.25.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>the level of significance to assess variance homogeneity. Default is set to alpha = 0.05.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>a logical value indicating whether NA values should be stripped before the computation proceeds.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>a logical for printing output to R console.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing the following components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>statistic</code></td>
+<td>
+<p>the corresponding test statistic.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parameter</code></td>
+<td>
+<p>the parameter(s) of the approximate F distribution of the test statistic.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value</code></td>
+<td>
+<p>the p-value of the test.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>the character string "O'Brien Test".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data frame containing the variables in which NA values (if exist) are removed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>a formula of the form <code>lhs ~ rhs</code> where <code>lhs</code> gives the sample values and <code>rhs</code> the corresponding groups.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Gozde Cosar and Osman Dag
+</p>
+
+
+<h3>References</h3>
+
+<p>O'Brien, R.G. (1981). A Simple Test for Variance Effects in Experimental Designs. <em>Psychological Bulletin</em>, <b>89:3</b>, 570-574.
+</p>
+<p>Gorbunova, A.A., Lemeshko, B.Y. (2012). Application of Parametric Homogeneity of Variances Tests under Violation of Classical Assumption. <em>2nd Stochastic Modeling Techniques and Data Analysis International Conference</em>, <b>5:8</b>, 253-260.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(vartest)
+
+obrien.test(Sepal.Length ~ Species, data = iris, center="mean")
+
+</code></pre>
+
+
+</div>

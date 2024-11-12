@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Variability_Measures</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variability Measures</h2>
+
+<h3>Description</h3>
+
+<p>Variability Measures
+</p>
+<p><code>by_id</code> - Internal function to allow a simple statistic (e.g., SD)
+to be calculated individually by an ID variable and returned
+either as per ID (i.e., wide form) or for every observation of an
+ID (i.e., long form).
+</p>
+<p><code>sd_id</code> - Calculates the standard deviation of observations by <code>ID</code>.
+</p>
+<p><code>rmssd</code> - Calculates the root mean square of successive differences (RMSSD).
+Note that missing values are removed.
+</p>
+<p><code>rmssd_id</code> - Calculates the RMSSD by ID.
+</p>
+<p><code>rolling_diff</code> - Calculates the average rolling difference of the data.
+Within each window, the difference between the maximum and minimum value is
+computed and these are averaged across all windows.  The equation is:
+</p>
+<p style="text-align: center;"><code class="reqn">\frac{\sum_{t = 1}^{N - k} max(x_{t}, \ldots, x_{t + k}) - min(x_{t}, \ldots, x_{t + k})}{N - k}</code>
+</p>
+
+<p><code>rolling_diff_id</code> - Calculates the average rolling difference by ID
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">by_id(x, ID, fun, long = TRUE, ...)
+
+sd_id(x, ID, long = TRUE)
+
+rmssd(x)
+
+rmssd_id(x, ID, long = TRUE)
+
+rolling_diff(x, window = 4)
+
+rolling_diff_id(x, ID, long = TRUE, window = 4)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A data vector to operate on.  Should be a numeric or
+integer vector, or coercible to such (e.g., logical).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ID</code></td>
+<td>
+<p>an ID variable indicating how to split up the <code>x</code>
+vector.  Should be the same length as <code>x</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fun</code></td>
+<td>
+<p>The function to calculate by ID</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>long</code></td>
+<td>
+<p>A logical indicating whether to return results in
+“long” form (the default) or wide (if <code>FALSE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>window</code></td>
+<td>
+<p>An integer indicating the size of the rolling window.
+Must be at least the length of <code>x</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments passed on to <code>fun</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>by_id</code> - A vector the same length as <code>x</code>
+if <code>long=TRUE</code>, or the length of unique <code>ID</code>s if
+<code>long=FALSE</code>.
+</p>
+<p><code>sd_id</code> - A vector of the standard deviations by ID
+</p>
+<p><code>rmssd</code> - The RMSSD for the data.
+</p>
+<p><code>rmssd_id</code> - A vector of the RMSSDs by ID
+</p>
+<p><code>rolling_diff</code> - The average of the rolling differences between maximum and minimum.
+</p>
+<p><code>rolling_diff_id</code> - A vector of the average rolling differences by ID
+</p>
+
+
+<h3>Note</h3>
+
+<p>These are a set of functions designed to calculate various
+measures of variability either on a single data vector, or
+calculate them by an ID.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Joshua F. Wiley &lt;josh@elkhartgroup.com&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">sd_id(mtcars$mpg, mtcars$cyl, long=TRUE)
+sd_id(mtcars$mpg, mtcars$cyl, long=FALSE)
+rmssd(1:4)
+rmssd(c(1, 3, 2, 4))
+rmssd_id(mtcars$mpg, mtcars$cyl)
+rmssd_id(mtcars$mpg, mtcars$cyl, long=FALSE)
+rolling_diff(1:7, window = 4)
+rolling_diff(c(1, 4, 3, 4, 5))
+rolling_diff_id(mtcars$mpg, mtcars$cyl, window = 3)
+</code></pre>
+
+
+</div>

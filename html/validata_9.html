@@ -1,0 +1,82 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>confirm_overlap</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confirm Overlap</h2>
+
+<h3>Description</h3>
+
+<p>Prints a venn-diagram style summary of the unique value
+overlap between two columns and also invisibly returns a dataframe that can be assigned to a variable
+and queried with the overlap helpers. The helpers can return values that appeared only the first col, second col,
+or both cols.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">confirm_overlap(vec1, vec2, return_tibble = F)
+
+co_find_only_in_1(co_output)
+
+co_find_only_in_2(co_output)
+
+co_find_in_both(co_output)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vec1</code></td>
+<td>
+<p>vector 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vec2</code></td>
+<td>
+<p>vector 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>return_tibble</code></td>
+<td>
+<p>logical. If TRUE, returns  a tibble. otherwise by default returns the database invisibly to be queried by helper functions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>co_output</code></td>
+<td>
+<p>dataframe output from confirm_overlap</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>tibble. overlap summary or overlap table
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+confirm_overlap(iris$Sepal.Width, iris$Sepal.Length) -&gt; iris_overlap
+
+iris_overlap
+
+iris_overlap %&gt;%
+co_find_only_in_1()
+
+iris_overlap %&gt;%
+co_find_only_in_2()
+
+iris_overlap %&gt;%
+co_find_in_both()
+</code></pre>
+
+
+</div>

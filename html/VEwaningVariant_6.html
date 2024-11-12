@@ -1,0 +1,92 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ve</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Retrieve the Estimated Vaccine Efficacy</h2>
+
+<h3>Description</h3>
+
+<p>Uses a prior veWaningVariant() analysis to estimate the vaccine efficacy
+at the provided times since full efficacy.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ve(x, times = NULL, nTimes = 20L)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class VEwaningVariant. The object returned by a call to
+veWaningVariant()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>times</code></td>
+<td>
+<p>A numeric vector object or NULL. The times since full
+efficacy at which the vaccine efficacy is to be estimated. If NULL, the
+times will be generated internally as a vector of length nTimes spanning
+the range [0, maxTime], where maxTime is the maximum time since vaccination  
+present in the original analysis. Values provided outside of [0, maxTime] 
+are ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nTimes</code></td>
+<td>
+<p>An integer object. The number of time values at which
+estimates are obtained. The default is 20. If input times is a vector
+object, this input is ignored.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>When the variant under analysis is present only in the unblinded phase, 
+vaccine efficacy cannot be estimated. In this case, ve() returns the  
+relative infection rate at times t since full efficacy reached, defined  
+as infection rate at time t = time since full efficacy reached  
+divided by the infection rate at the time full efficacy is reached (t=0).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix object. The first column contains the times since
+full efficacy at which the estimates are provided; the second column
+contains estimated vaccine efficacy or relative infection rate 
+(see Details); and the third is the standard error.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+data(variantData)
+
+set.seed(1234)
+
+ind &lt;- sample(1:nrow(variantData), 2000)
+# NOTE: This sample size is chosen for example only -- larger data sets
+# should be used.
+
+res &lt;- veWaningVariant(data = variantData[ind,], 
+                       L = 52,  
+                       gFunc = 'piece', 
+                       v = c(15,30))
+
+ve(x = res, times = c(10,20,30,40,50))
+</code></pre>
+
+
+</div>

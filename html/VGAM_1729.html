@@ -1,0 +1,415 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary.drrvglm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summarizing
+Reduced Rank
+Vector Generalized Linear Model (RR-VGLM) and
+Doubly constrained RR-VGLM Fits
+</h2>
+
+<h3>Description</h3>
+
+<p>These functions are all <code>methods</code>
+for class <code>"drrvglm"</code> or
+<code>"summary.drrvglm"</code> objects, or
+for class <code>"rrvglm"</code> or
+<code>"summary.rrvglm"</code> objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'drrvglm'
+summary(object, correlation = FALSE, dispersion = NULL,
+    digits = NULL, numerical = TRUE, h.step = 0.005, omit123 = FALSE,
+     omit13 = FALSE, fixA = FALSE, presid = FALSE,
+    signif.stars = getOption("show.signif.stars"),
+    nopredictors = FALSE, eval0 = TRUE, ...)
+## S3 method for class 'summary.drrvglm'
+show(x, digits = NULL,
+    quote = TRUE, prefix = "", signif.stars = NULL)
+## S3 method for class 'rrvglm'
+summary(object, correlation = FALSE, dispersion = NULL,
+    digits = NULL, numerical = TRUE, h.step = 0.005, omit123 = FALSE,
+     omit13 = FALSE, fixA = TRUE, presid = FALSE,
+    signif.stars = getOption("show.signif.stars"),
+    nopredictors = FALSE, upgrade = FALSE, ...)
+## S3 method for class 'summary.rrvglm'
+show(x, digits = NULL,
+    quote = TRUE, prefix = "", signif.stars = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>an object of class
+<code>"drrvglm"</code> or <code>"rrvglm"</code>,
+a result of a call to
+<code>rrvglm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class
+<code>"summary.drrvglm"</code> or
+<code>"summary.rrvglm"</code>,
+a result of a call to
+<code>summary.drrvglm</code> or
+<code>summary.rrvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dispersion</code></td>
+<td>
+
+<p>used mainly for GLMs.
+Not really implemented in <span class="pkg">VGAM</span> so
+should not be used.
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>correlation</code></td>
+<td>
+
+<p>See <code>summaryvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+
+<p>See <code>summaryvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>signif.stars</code></td>
+<td>
+
+<p>See <code>summaryvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>presid, quote</code></td>
+<td>
+
+<p>See <code>summaryvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nopredictors</code></td>
+<td>
+
+<p>See <code>summaryvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>upgrade</code></td>
+<td>
+
+<p>Logical.
+Upgrade <code>object</code> to
+<code>drrvglm-class</code>?
+Treating the object as a DRR-VGLM has
+advantages since the framework is larger.
+The code for ordinary RR-VGLMs was written
+a long time ago so it is a good idea
+to check that both give the same answer.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>numerical</code></td>
+<td>
+<p>Logical,
+use a finite difference approximation
+for partial derivatives?
+If <code>FALSE</code> then theoretical formulas
+are used (however this option may no longer
+be implemented).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>h.step</code></td>
+<td>
+<p>Numeric,
+positive and close to 0.
+If <code>numerical</code> then
+this is the forward step
+for each finite difference approximation.
+That is, it plays the role of
+<code class="reqn">h</code> in <code class="reqn">(f(x+h)-f(x))/h</code> for
+some function <code class="reqn">f</code>.
+If the overall variance-covariance matrix
+is not positive-definite, varying
+this argument can make a difference,
+e.g., increasing it to
+<code>0.01</code> is recommended.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fixA</code></td>
+<td>
+<p>Logical,
+if <code>TRUE</code> then the largest block matrix
+is for <b>B1</b> and <b>C</b>, else
+it is for <b>A</b> and <b>B1</b>.
+This should not make any difference because
+both estimates of <b>B1</b> should be
+extremely similar, including the SEs.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>omit13</code></td>
+<td>
+<p>Logical,
+if <code>TRUE</code> then the (1,3) block matrix
+is set to <b>O</b>. That is,
+<b>A</b> and <b>C</b> are assumed to
+asymptotically uncorrelated.
+Setting this <code>TRUE</code> is an option when
+<b>V</b> (see below) is not
+positive-definite.
+If this fails,
+another option that is often better
+is to set <code>omit123 = TRUE</code>.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>omit123</code></td>
+<td>
+<p>Logical.
+If <code>TRUE</code> then <em>two</em>
+block matrices are set to <b>O</b>
+(blocks (1,2) and (1,3), else
+blocks (1,3) and (2,3),
+depending on <code>fixA</code>),
+This will almost surely result in an
+overall variance-covariance matrix
+that is positive-definite, however, the
+SEs will be biased.
+This argument is more extreme than
+<code>omit13</code>.
+</p>
+
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>prefix</code></td>
+<td>
+
+<p>See <code>summaryvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eval0</code></td>
+<td>
+
+<p>Logical.
+Check if <b>V</b> is positive-definite?
+That is, all its eigenvalues are positive.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Logical argument <code>check.2</code> might work here.
+If <code>TRUE</code> then some quantities
+are printed out, for checking and debugging.
+</p>
+
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Most of this document concerns DRR-VGLMs but
+also apply equally well to RR-VGLMs as a special
+case.
+</p>
+<p>The overall variance-covariance matrix
+The overall variance-covariance matrix
+(called <b>V</b> below)
+is computed. Since the parameters
+comprise the elements of
+the matrices <b>A</b>, <b>B1</b> and <b>C</b>
+(called here block matrices 1, 2, 3
+respectively), 
+and an alternating algorithm is used for
+estimation, then there are two overlapping
+submodels that are fitted within an IRLS
+algorithm. These have blocks 1 and 2, and
+2 and 3, so that <b>B1</b> is common to both.
+They are combined into one large overall
+variance-covariance matrix.
+Argument <code>fixA</code> specifies which submodel
+the <b>B1</b> block is taken from.
+Block (1,3) is the most difficult to
+compute and numerical approximations based on
+first derivatives are used by default for this.
+</p>
+<p>Sometimes the computed <b>V</b>
+is not positive-definite.
+If so,
+then the standard errors will be <code>NA</code>.
+To avoid this problem,
+try varying <code>h.step</code>
+or refitting the model with a different
+<code>Index.corner</code>.
+Argument <code>omit13</code> and
+<code>omit123</code>
+can also be used to
+give approximate answers.
+If <b>V</b> is not positive-definite
+then this may indicate
+that the model does not fit the
+data very well, e.g.,
+<code>Rank</code> is not a good value.
+Potentially, there are many ways why
+the model may be ill-conditioned.
+Try several options and set <code>trace = TRUE</code>
+to monitor convergence—this is informative
+about how well the model and data agree.
+</p>
+<p>How can one fit an ordinary RR-VGLM as
+a DRR-VGLM?
+If one uses corner constraints (default) then
+one should input <code>H.A</code> as a list
+containing <code>Rank</code> <code>diag(M)</code>
+matrices—one for each column of <b>A</b>.
+Then since <code>Corner = TRUE</code>
+by default, then
+<code>object@H.A.alt</code> has certain columns
+deleted due to corner constraints.
+In contrast, 
+<code>object@H.A.thy</code> is the
+<code>H.A</code> that was inputted.
+FYI, the
+<code>alt</code> suffix indicates the alternating
+algorithm, while
+the suffix <code>thy</code> stands for <em>theory</em>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>summarydrrvglm</code> returns an object
+of class <code>"summary.drrvglm"</code>.
+</p>
+
+
+
+<h3>Warning </h3>
+
+<p>DRR-VGLMs are a recent development so
+it will take some time to get things
+totally ironed out.
+RR-VGLMs were developed a long time ago and
+are more well-established, however they
+have only recently been documented here.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Note that <code>vcov</code>
+methods exist for <code>rrvglm-class</code>
+and <code>drrvglm-class</code> objects.
+</p>
+<p>Sometimes this function can take a long time
+and this is because numerical derivatives
+are computed.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee.  </p>
+
+
+<h3>References</h3>
+
+<p>Chapter 5 of:
+Yee, T. W. (2015).
+Vector Generalized Linear and Additive Models:
+With an Implementation in R.
+New York, USA: <em>Springer</em>.
+Sections 5.2.2 and 5.3 are particularly relevant.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rrvglm</code>,
+<code>rrvglm.control</code>,
+<code>vcovdrrvglm</code>,
+<code>CM.free</code>,
+<code>summaryvglm</code>,
+<code>summary.rrvglm-class</code>,
+<code>summary.drrvglm-class</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:   # Fit a rank-1 RR-VGLM as a DRR-VGLM.
+set.seed(1); n &lt;- 1000; S &lt;- 6  # S must be even
+myrank &lt;- 1
+rdata &lt;- data.frame(x1 = runif(n), x2 = runif(n),
+           x3 = runif(n), x4 = runif(n))
+dval &lt;- ncol(rdata)  # Number of covariates
+# Involves x1, x2, ... a rank-1 model:
+ymatrix &lt;- with(rdata,
+  matrix(rpois(n*S, exp(3 + x1 - 0.5*x2)), n, S))
+H.C &lt;- vector("list", dval)  # Ordinary "rrvglm"
+for (i in 1:dval) H.C[[i]] &lt;- CM.free(myrank)
+names(H.C) &lt;- paste0("x", 1:dval)
+H.A &lt;- list(CM.free(S))  # rank-1
+
+rfit1 &lt;- rrvglm(ymatrix ~ x1 + x2 + x3 + x4,
+           poissonff, rdata, trace = TRUE)
+class(rfit1)
+dfit1 &lt;- rrvglm(ymatrix ~ x1 + x2 + x3 + x4,
+           poissonff, rdata, trace = TRUE,
+           H.A = H.A,    # drrvglm
+           H.C = H.C)    # drrvglm
+class(dfit1)
+Coef(rfit1)  # The RR-VGLM is the same as
+Coef(dfit1)  # the DRR-VGLM.
+max(abs(predict(rfit1) - predict(dfit1)))  # 0
+abs(logLik(rfit1) - logLik(dfit1))  # 0
+summary(rfit1)
+summary(dfit1)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

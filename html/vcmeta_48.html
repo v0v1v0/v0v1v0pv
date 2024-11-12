@@ -1,0 +1,114 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.lm.mean1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Meta-regression analysis for 1-group means</h2>
+
+<h3>Description</h3>
+
+<p>This function estimates the intercept and slope coefficients in a
+meta-regression model where the dependent variable is a mean
+from one group. The estimates are OLS estimates with robust
+standard errors that accomodate residual heteroscedasticity.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.lm.mean1(alpha, m, sd, n, X)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>vector of estimated means</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd</code></td>
+<td>
+<p>vector of estimated standard deviations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>vector of sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>matrix of predictor values</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is for the intercept with one additional
+row per predictor.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - OLS estimate
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> t - t-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+<li>
+<p> df - degrees of freedom
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">n &lt;- c(25, 15, 30, 25, 40)
+m &lt;- c(20.1, 20.5, 19.3, 21.5, 19.4)
+sd &lt;- c(10.4, 10.2, 8.5, 10.3, 7.8)
+x1 &lt;- c(1, 1, 0, 0, 0)
+x2 &lt;- c( 12, 13, 11, 13, 15)
+X &lt;- matrix(cbind(x1, x2), 5, 2)
+meta.lm.mean1(.05, m, sd, n, X)
+
+# Should return: 
+#       Estimate        SE          t     p         LL        UL  df
+# b0 19.45490196 6.7873381 2.86635227 0.005  6.0288763 32.880928 132
+# b1  0.25686275 1.9834765 0.12950128 0.897 -3.6666499  4.180375 132
+# b2  0.04705882 0.5064693 0.09291544 0.926 -0.9547876  1.048905 132
+
+
+</code></pre>
+
+
+</div>

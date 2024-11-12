@@ -1,0 +1,122 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>A1A2A3</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> The A1A2A3 Blood Group System </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the three independent parameters of the
+the A1A2A3 blood group system.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">A1A2A3(link = "logitlink", inbreeding = FALSE, ip1 = NULL, ip2 = NULL, iF = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to <code>p1</code>, <code>p2</code> and <code>f</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inbreeding</code></td>
+<td>
+
+<p>Logical. Is there inbreeding?
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ip1, ip2, iF</code></td>
+<td>
+
+<p>Optional initial value for <code>p1</code>, <code>p2</code> and <code>f</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The parameters <code>p1</code> and <code>p2</code> are probabilities, so that
+<code>p3=1-p1-p2</code> is the third probability.
+The parameter <code>f</code> is the third independent parameter if
+<code>inbreeding = TRUE</code>.
+If <code>inbreeding = FALSE</code> then <code class="reqn">f = 0</code> and Hardy-Weinberg
+Equilibrium (HWE) is assumed.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The input can be a 6-column matrix of counts,
+with columns corresponding to
+<code>A1A1</code>,
+<code>A1A2</code>,
+<code>A1A3</code>,
+<code>A2A2</code>,
+<code>A2A3</code>,
+<code>A3A3</code> (in order).
+Alternatively, the input can be a 6-column matrix of
+proportions (so each row adds to 1) and the <code>weights</code>
+argument is used to specify the total number of counts for each row.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Lange, K. (2002).
+<em>Mathematical and Statistical Methods for Genetic Analysis</em>,
+2nd ed. New York: Springer-Verlag.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>AA.Aa.aa</code>,
+<code>AB.Ab.aB.ab</code>,
+<code>ABO</code>,
+<code>MNSs</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ymat &lt;- cbind(108, 196, 429, 143, 513, 559)
+fit &lt;- vglm(ymat ~ 1, A1A2A3(link = probitlink), trace = TRUE, crit = "coef")
+fit &lt;- vglm(ymat ~ 1, A1A2A3(link = logitlink, ip1 = 0.3, ip2 = 0.3, iF = 0.02),
+            trace = TRUE, crit = "coef")
+Coef(fit)  # Estimated p1 and p2
+rbind(ymat, sum(ymat) * fitted(fit))
+sqrt(diag(vcov(fit)))
+</code></pre>
+
+
+</div>

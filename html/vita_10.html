@@ -1,0 +1,173 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>PimpTest</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+PIMP testing approach
+</h2>
+
+<h3>Description</h3>
+
+<p>Uses permutations to approximate the null importance distributions for all variables and computes the p-values based on the null importance distribution according to the approach of Altmann et al. (2010).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## Default S3 method:
+PimpTest(Pimp, para = FALSE, ...)
+## S3 method for class 'PimpTest'
+print(x, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Pimp</code></td>
+<td>
+<p> an object of class <code>PIMP</code> </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>para</code></td>
+<td>
+<p> If para is TRUE  the null importance distributions are approximated with Gaussian
+distributions else with empirical cumulative distributions. Default is <code> para = FALSE</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> optional parameters, not used </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>for the print method, an <code>PimpTest</code> object </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The vector <code>perVarImp</code> of <code class="reqn">S</code> variable importance measures for every predictor variables from code PIMP are used to approximate the null importance distributions.
+If <code>para</code> is <code>TRUE</code> this implementation of the PIMP algorithm fits for each variable a <em>Gaussian distribution</em> to the <code class="reqn">S</code> null importances. If <code>para</code> is <code>FALSE</code> the PIMP algorithm uses the empirical distribution of the <code class="reqn">S</code> null importances.
+Given the fitted null importance distribution, the p-value is the probability of observing the <em>original VarImp</em> or a larger value.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>VarImp </code></td>
+<td>
+<p> the <em>original permutation variable importance</em> measures of the random forest. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PerVarImp </code></td>
+<td>
+<p>a matrix, where the l-th row contains the <code>S</code> permuted VarImp
+measures for the l-th predictor variable. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>para </code></td>
+<td>
+<p> Was the null distribution approximated by a Gaussian distribution or by the empirical distribution? </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>meanPerVarImp </code></td>
+<td>
+<p>mean for each row of <code>PerVarImp</code>. <code>NULL</code> if <code> para = FALSE</code> </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sdPerVarImp </code></td>
+<td>
+<p> standard deviation for each row of <code>PerVarImp</code>.<code>NULL</code> if <code> para = FALSE</code> </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.ks.test </code></td>
+<td>
+<p>the p-values of the Kolmogorov-Smirnov Tests for each row <code>PerVarImp</code>. Is the
+null importance distribution significantly different from a normal distribution with the mean(PerVarImp) and
+sd(PerVarImp)? <code>NULL</code> if <code> para = FALSE</code> </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pvalue </code></td>
+<td>
+<p> the p-value is the probability of observing the <code>original VarImp</code> or a larger value, given the fitted null importance distribution.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Breiman L. (2001), <em>Random Forests</em>, Machine Learning 45(1),5-32, &lt;doi:10.1023/A:1010933404324&gt;
+</p>
+<p>Altmann A.,Tolosi L., Sander O. and  Lengauer T. (2010),<em>Permutation importance: a corrected feature importance measure</em>, Bioinformatics Volume 26 (10), 1340-1347, &lt;doi:10.1093/bioinformatics/btq134&gt;
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>PIMP</code>,  <code>summary.PimpTest</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+###############################
+#      Regression            #
+##############################
+
+## Simulating data
+X = replicate(15,rnorm(100))
+X = data.frame(X) #"X" can also be a matrix
+y = with(X,2*X1 + 1*X2 + 2*X3 + 1*X4 - 2*X5 - 1*X6 - 1*X7 + 2*X8 )
+
+##############################
+## Regression with Random Forest:
+library("randomForest")
+reg.rf = randomForest(X,y,mtry = 3,ntree=500,importance=TRUE)
+##############################
+## PIMP-Permutation variable importance measure
+
+system.time(pimp.varImp.reg&lt;-PIMP(X,y,reg.rf,S=100, parallel=TRUE, ncores=2))
+pimp.t.reg = PimpTest(pimp.varImp.reg)
+summary(pimp.t.reg,pless = 0.1)
+
+##############################
+#      Classification        #
+##############################
+
+## Simulating data
+X = replicate(10,rnorm(200))
+X= data.frame( X) #"X" can also be a matrix
+z  = with(X,2*X1 + 3*X2 + 2*X3 + 1*X4 -
+            2*X5 - 2*X6 - 2*X7 + 1*X8 )
+pr = 1/(1+exp(-z))         # pass through an inv-logit function
+y = as.factor(rbinom(200,1,pr))
+
+##############################
+## Classification with Random Forest:
+cl.rf = randomForest(X,y,mtry = 3,ntree = 500, importance = TRUE)
+##############################
+## PIMP-Permutation variable importance measure
+system.time(pimp.varImp.cl&lt;-PIMP(X,y,cl.rf,S=100, parallel=TRUE, ncores=2))
+pimp.t.cl = PimpTest(pimp.varImp.cl,para = TRUE)
+summary(pimp.t.cl,pless = 0.1)
+
+</code></pre>
+
+
+</div>

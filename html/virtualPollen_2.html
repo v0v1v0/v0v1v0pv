@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>acfToDf</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Computes temporal autocorrelation in a vector, and returns a dataframe for easy plotting.</h2>
+
+<h3>Description</h3>
+
+<p>It reads a vector representing a time series, applies <code>acf</code> for a given number of lags
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">acfToDf(
+  x = NULL,
+  lag.max = 100,
+  length.out = 10
+  )
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>numeric vector. Must represent a variable sampled at regular times.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag.max</code></td>
+<td>
+<p>integer, number of lags over which to compute temporal autocorrelation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>length.out</code></td>
+<td>
+<p>integer, total number of lags to consider for plotting. Should be a subset of <code>lag.max</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function computes temporal autocorrelation of a given vector using <code>acf</code>, and returns a dataframe ready for easy plotting with <code>plotAcf</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A dataframe with the columns:
+#' </p>
+
+<ul>
+<li> <p><em>lag</em>: numeric, lag in the time units of <code>x</code> with a maximum determined by <code>lag.max</code>, and a number of unique values determined by <code>length.out</code>
+</p>
+</li>
+<li> <p><em>acf</em>: Pearson correlation index returned by the <code>acf</code> for a given number of lags for the given lag.
+</p>
+</li>
+<li> <p><em>ci.max</em>: Maximum value of the confidence interval of <code>acf</code>.
+</p>
+</li>
+<li> <p><em>ci.min</em>: Minimum value of the confidence interval of <code>acf</code>.
+</p>
+</li>
+</ul>
+<h3>Author(s)</h3>
+
+<p>Blas M. Benito  &lt;blasbenito@gmail.com&gt;
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>acf</code>, <code>plotAcf</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+#getting a driver
+data(driverA)
+
+#computing temporal autocorrelations
+x.df &lt;- acfToDf(
+  x = driverA,
+  lag.max = 1000,
+  length.out = 100
+)
+str(x.df)
+
+#plotting output
+plotAcf(x.df)
+
+</code></pre>
+
+
+</div>

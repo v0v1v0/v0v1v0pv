@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>volnmf_logdet</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Update volume-regularized matrix <code>R</code> using logdet volume approximation.</h2>
+
+<h3>Description</h3>
+
+<p><code>volnmf_logdet</code> finds matrix <code>R</code> that minimizes objective
+<code>||X-C*R||^2 + w.vol*log(det(R)+delta)</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">volnmf_logdet(
+  C,
+  X,
+  R,
+  R.constraint = "pos",
+  majorate = FALSE,
+  extrapolate = TRUE,
+  qmax = 100,
+  w.vol = 0.1,
+  delta = 1,
+  err.cut = 0.001,
+  n.iter = 1000
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>Numeric Matrices. Matrices involved in objective function.Matrix R serves as initialization.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Numeric Matrices. Matrices involved in objective function.Matrix R serves as initialization.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R</code></td>
+<td>
+<p>Numeric Matrices. Matrices involved in objective function.Matrix R serves as initialization.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R.constraint</code></td>
+<td>
+<p>A character. Set up ('pos') or not ('no') non-negative constraints on matrix <code>R</code> (by default 'pos').</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>majorate</code></td>
+<td>
+<p>A boolean. Majorate logdet each iteration (by default FALSE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extrapolate</code></td>
+<td>
+<p>A boolean. Use Nesterov acceleration (by default FALSE, currently is not supported).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qmax</code></td>
+<td>
+<p>A numeric. Maximum asymptotic (1 - 1/qmax) of extrapolation step.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w.vol</code></td>
+<td>
+<p>A numeric. Volume (logdet) weight in objective function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>A numeric. Determinant pseudocount in objective function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>err.cut</code></td>
+<td>
+<p>A numeric. Stop algorithm if relative erro in R between iteration is less than <code>err.cut</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.iter</code></td>
+<td>
+<p>An integer. Number of iterations.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An updated matrix <code>R</code>.
+</p>
+
+
+</div>

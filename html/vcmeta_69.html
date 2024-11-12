@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>replicate.gen</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares and combines effect sizes in original and follow-up studies</h2>
+
+<h3>Description</h3>
+
+<p>This function can be used to compare and combine any effect size using the
+effect size estimate and its standard error from the original study and
+the follow-up study. The confidence level for the difference is 1 – 2*alpha,
+which is recommended for equivalence testing.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">replicate.gen(alpha, est1, se1, est2, se2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>est1</code></td>
+<td>
+<p>estimated effect size in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se1</code></td>
+<td>
+<p>effect size standard error in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>est2</code></td>
+<td>
+<p>estimated effect size in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se2</code></td>
+<td>
+<p>effect size standard error in follow-up study</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A 4-row matrix. The rows are:
+</p>
+
+<ul>
+<li>
+<p> Row 1 summarizes the original study
+</p>
+</li>
+<li>
+<p> Row 2 summarizes the follow-up study
+</p>
+</li>
+<li>
+<p> Row 3 estimates the difference in effect sizes
+</p>
+</li>
+<li>
+<p> Row 4 estimates the average effect size
+</p>
+</li>
+</ul>
+<p>Columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - effect size estimate (single study, difference, average)
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> z - z-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2021).
+“Design and analysis of replication studies.”
+<em>Organizational Research Methods</em>, <b>24</b>(3), 513–529.
+ISSN 1094-4281, <a href="https://doi.org/10.1177/1094428120911088">doi:10.1177/1094428120911088</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">replicate.gen(.05, .782, .210, .650, .154)
+
+# Should return: 
+#                      Estimate        SE         z            p         LL        UL
+#  Original:              0.782 0.2100000 3.7238095 1.962390e-04  0.3704076 1.1935924
+#  Follow-up:             0.650 0.1540000 4.2207792 2.434593e-05  0.3481655 0.9518345
+#  Original - Follow-up:  0.132 0.2604151 0.5068831 6.122368e-01 -0.2963446 0.5603446
+#  Average:               0.716 0.1302075 5.4989141 3.821373e-08  0.4607979 0.9712021
+
+</code></pre>
+
+
+</div>

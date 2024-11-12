@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BICvlm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Bayesian Information Criterion </h2>
+
+<h3>Description</h3>
+
+<p>Calculates the Bayesian information criterion (BIC) for
+a fitted model object for which a log-likelihood value
+has been obtained.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BICvlm(object, ..., k = log(nobs(object)))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object, ...</code></td>
+<td>
+
+<p>Same as <code>AICvlm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+
+<p>Numeric, the penalty per parameter to be used;
+the default is <code>log(n)</code> where
+<code>n</code> is the number of observations).
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The so-called BIC or SBC (Schwarz's Bayesian criterion)
+can be computed by calling <code>AICvlm</code> with a
+different <code>k</code> argument.
+See <code>AICvlm</code> for information and caveats.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns a numeric value with the corresponding BIC, or ...,
+depending on <code>k</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Like <code>AICvlm</code>, this code has not been double-checked.
+The general applicability of <code>BIC</code> for the VGLM/VGAM classes
+has not been developed fully.
+In particular, <code>BIC</code> should not be run on some <span class="pkg">VGAM</span> family
+functions because of violation of certain regularity conditions, etc.
+</p>
+<p>Many <span class="pkg">VGAM</span> family functions such as
+<code>cumulative</code> can have the number of
+observations absorbed into the prior weights argument
+(e.g., <code>weights</code> in <code>vglm</code>), either
+before or after fitting.  Almost all <span class="pkg">VGAM</span> family
+functions can have the number of observations defined by
+the <code>weights</code> argument, e.g., as an observed frequency.
+<code>BIC</code> simply uses the number of rows of the model matrix, say,
+as defining <code>n</code>, hence the user must be very careful
+of this possible error.
+Use at your own risk!!
+</p>
+
+
+<h3>Note</h3>
+
+<p>BIC, AIC and other ICs can have have many additive
+constants added to them. The important thing are the
+differences since the minimum value corresponds to the best model.
+
+
+
+
+</p>
+<p>BIC has not been defined for QRR-VGLMs yet.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee. </p>
+
+
+<h3>See Also</h3>
+
+<p><code>AICvlm</code>,
+VGLMs are described in <code>vglm-class</code>;
+VGAMs are described in <code>vgam-class</code>;
+RR-VGLMs are described in <code>rrvglm-class</code>;
+<code>BIC</code>,
+<code>AIC</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pneumo &lt;- transform(pneumo, let = log(exposure.time))
+(fit1 &lt;- vglm(cbind(normal, mild, severe) ~ let,
+              cumulative(parallel = TRUE, reverse = TRUE), data = pneumo))
+coef(fit1, matrix = TRUE)
+BIC(fit1)
+(fit2 &lt;- vglm(cbind(normal, mild, severe) ~ let,
+              cumulative(parallel = FALSE, reverse = TRUE), data = pneumo))
+coef(fit2, matrix = TRUE)
+BIC(fit2)
+</code></pre>
+
+
+</div>

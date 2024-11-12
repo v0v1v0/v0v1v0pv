@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>minque</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>MINQUE estimation of variance components</h2>
+
+<h3>Description</h3>
+
+<p>Estimate variance components by MINQUE method, allowing multiple iterations
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">minque(y, X, Kerns, n.iter = 1, eps = 0.001)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Numeric vector of traits. Only continuous trait currently allowed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Matrix of covariates (columns) for subjects (rows), matching subjects in the trait (y) vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Kerns</code></td>
+<td>
+<p>List of kernel matrices: a kernel matrix for each  variance compenent. The last kernel matrix in the list (an identity matrix) is for the residual variance component.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.iter</code></td>
+<td>
+<p>Number of  minque iterations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>Default small positive value for non-positive vc estimates within iterations.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>List with estimates of variance components (vc), covariate regression coefficients (beta), and residuals of model fit.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>JP Sinnwell, DJ Schaid
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vcexample)
+nvc &lt;- 1+length(unique(doseinfo[,2]))
+id &lt;- 1:nrow(dose)
+## vcs for genetic kernel matrices
+Kerns &lt;- vector("list", length=nvc)
+for(i in 1:(nvc-1)){
+  Kerns[[i]] &lt;- kernel_linear(dose[,grep(i, doseinfo[,2])])
+  rownames(Kerns[[i]]) &lt;- id
+  colnames(Kerns[[i]]) &lt;- id
+}
+## vc for residual variance
+Kerns[[nvc]] &lt;- diag(nrow(dose))
+rownames(Kerns[[nvc]]) &lt;- id
+colnames(Kerns[[nvc]]) &lt;- id
+prefit  &lt;- minque(response, covmat, Kerns, n.iter=2)
+prefit[1]
+prefit[2]
+fit &lt;- vcpen(response, covmat, Kerns, vc_init = prefit$vc)
+
+</code></pre>
+
+
+</div>

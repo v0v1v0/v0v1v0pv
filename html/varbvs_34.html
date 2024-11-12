@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>varbvsindep</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute posterior statistics, ignoring correlations.</h2>
+
+<h3>Description</h3>
+
+<p>Compute the mean and variance of the coefficients, and the
+posterior inclusion probabilities (PIPs), ignoring correlations between
+variables. This is useful for inspecting or visualizing groups of
+correlated variables (e.g., genetic markers in linkage disequilibrium).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  varbvsindep (fit, X, Z, y)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fit</code></td>
+<td>
+<p>Output of function <code>varbvs</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>n x p input matrix, where n is the number of samples,
+and p is the number of variables. X cannot be sparse,
+and cannot have any missing values (NA).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>n x m covariate data matrix, where m is the number of
+covariates. Do not supply an intercept as a covariate
+(i.e., a column of ones), because an intercept is
+automatically included in the regression model. For no
+covariates, set <code>Z = NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Vector of length n containing observations of binary
+(<code>family = "binomial"</code>) or continuous (<code>family =
+          "gaussian"</code>) outcome. For a binary outcome, all entries
+of y must be 0 or 1.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For the ith hyperparameter setting, <code>alpha[,i]</code> is the
+variational estimate of the posterior inclusion probability (PIP) for
+each variable; <code>mu[,i]</code> is the variational estimate of the
+posterior mean coefficient given that it is included in the model; and
+<code>s[,i]</code> is the estimated posterior variance of the coefficient
+given that it is included in the model.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Variational estimates of posterior inclusion
+probabilities for each hyperparameter setting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu</code></td>
+<td>
+<p>Variational estimates of posterior mean coefficients for
+each hyperparameter setting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s</code></td>
+<td>
+<p>Variational estimates of posterior variances for each
+hyperparameter setting.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Peter Carbonetto <a href="mailto:peter.carbonetto@gmail.com">peter.carbonetto@gmail.com</a></p>
+
+
+<h3>References</h3>
+
+<p>P. Carbonetto and M. Stephens (2012). Scalable variational
+inference for Bayesian variable selection in regression, and its
+accuracy in genetic association studies. <em>Bayesian Analysis</em> <b>7</b>, 
+73–108.</p>
+
+
+<h3>See Also</h3>
+
+<p><code>varbvs</code></p>
+
+
+</div>

@@ -1,0 +1,82 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>theme_vlkr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Define a default theme for volker plots</h2>
+
+<h3>Description</h3>
+
+<p>Set ggplot colors, sizes and layout parameters.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">theme_vlkr(
+  base_size = 11,
+  base_color = "black",
+  base_fill = VLKR_FILLDISCRETE,
+  base_gradient = VLKR_FILLGRADIENT
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>base_size</code></td>
+<td>
+<p>Base font size.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>base_color</code></td>
+<td>
+<p>Base font color.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>base_fill</code></td>
+<td>
+<p>A list of fill color sets or at least one fill color set. Example:
+<code>list(c("red"), c("red", "blue", "green"))</code>.
+Each set can contain different numbers of colors.
+Depending on the number of colors needed,
+the set with at least the number of required colors is used.
+The first color is always used for simple bar charts.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>base_gradient</code></td>
+<td>
+<p>A color vector used for creating gradient fill colors, e.g. in stacked bar plots.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+</p>
+
+
+<h3>Value</h3>
+
+<p>A theme function.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(volker)
+library(ggplot2)
+data &lt;- volker::chatgpt
+
+theme_set(theme_vlkr(base_size=15, base_fill = list("red")))
+plot_counts(data, sd_gender)
+</code></pre>
+
+
+</div>

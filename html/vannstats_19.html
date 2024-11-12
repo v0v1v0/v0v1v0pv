@@ -1,0 +1,61 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>stata.plm.margins</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simplified STATA Predictive Margins</h2>
+
+<h3>Description</h3>
+
+<p>This function returns a data frame with interactive margins and standard errors similar to those returned in the STATA margins call. The function can also return a margins plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">stata.plm.margins(mod, plot = FALSE, error = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mod</code></td>
+<td>
+<p>a plm model object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p>logical (default set to <code>FALSE</code>). When set to <code>plot = TRUE</code>, will return a an margins plot of the interaction terms.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>error</code></td>
+<td>
+<p>the number standard deviation units for which the margins will be calculated (default set to 2).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function creates a data frame of predictive margins for the dependent variable, given values of the variables in the interaction.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(plm)
+data &lt;- UCR2015
+summary(mod &lt;- plm(dui_pct ~ pct_poverty*pct_unemp +
+income_inequality, data=data, index=c("state","county"),
+model="within"))
+
+stata.plm.margins(mod)
+</code></pre>
+
+
+</div>

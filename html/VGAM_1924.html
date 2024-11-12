@@ -1,0 +1,120 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>zero</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> The zero Argument in VGAM Family Functions </h2>
+
+<h3>Description</h3>
+
+<p>The <code>zero</code> argument allows users to conveniently
+model certain linear/additive predictors as intercept-only.
+</p>
+
+
+<h3>Details</h3>
+
+<p>Often a certain parameter needs to be modelled simply while other
+parameters in the model may be more complex, for example, the
+<code class="reqn">\lambda</code> parameter in LMS-Box-Cox quantile regression
+should be modelled more simply compared to its <code class="reqn">\mu</code> parameter.
+Another example is the <code class="reqn">\xi</code> parameter in a GEV distribution
+which is should be modelled simpler than its <code class="reqn">\mu</code> parameter.
+Using the <code>zero</code> argument allows this to be fitted conveniently
+without having to input all the constraint matrices explicitly.
+</p>
+<p>The <code>zero</code> argument can be assigned an integer vector from the
+set {<code>1:M</code>} where <code>M</code> is the number of linear/additive
+predictors. Full details about constraint matrices can be found in
+the references.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Nothing is returned.
+It is simply a convenient argument for constraining
+certain linear/additive predictors to be an intercept only.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>The use of other arguments may conflict with the <code>zero</code>
+argument. For example, using <code>constraints</code> to input constraint
+matrices may conflict with the <code>zero</code> argument.
+Another example is the argument <code>parallel</code>.
+In general users
+should not assume any particular order of precedence when
+there is potential conflict of definition.
+Currently no checking for consistency is made.
+</p>
+<p>The argument <code>zero</code> may be renamed in the future to
+something better.
+</p>
+
+
+<h3>Side Effects</h3>
+
+<p>The argument creates the appropriate constraint matrices
+internally.
+</p>
+
+
+<h3>Note</h3>
+
+<p>In all <span class="pkg">VGAM</span> family functions <code>zero = NULL</code> means
+none of the linear/additive predictors are modelled as
+intercepts-only.
+Almost all <span class="pkg">VGAM</span> family function have <code>zero = NULL</code>
+as the default, but there are some exceptions, e.g.,
+<code>binom2.or</code>.
+</p>
+<p>Typing something like <code>coef(fit, matrix = TRUE)</code> is a useful
+way to ensure that the <code>zero</code> argument has worked as expected.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Wild, C. J. (1996).
+Vector generalized additive models.
+<em>Journal of the Royal Statistical Society, Series B, Methodological</em>,
+<b>58</b>, 481–493.
+</p>
+<p>Yee, T. W. and Hastie, T. J. (2003).
+Reduced-rank vector generalized linear models.
+<em>Statistical Modelling</em>,
+<b>3</b>, 15–41.
+</p>
+
+
+
+<h3>See Also</h3>
+
+<p><code>CommonVGAMffArguments</code>,
+<code>constraints</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">args(multinomial)
+args(binom2.or)
+args(gpd)
+
+#LMS quantile regression example
+fit &lt;- vglm(BMI ~ sm.bs(age, df = 4), lms.bcg(zero = c(1, 3)),
+            data = bmi.nz, trace = TRUE)
+coef(fit, matrix = TRUE)
+</code></pre>
+
+
+</div>

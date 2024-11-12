@@ -1,0 +1,114 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>oneRasterPlot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Single raster plot</h2>
+
+<h3>Description</h3>
+
+<p>A convenient wrapper around <code>ggplot</code>
+to generate a formatted plot of a single raster.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">oneRasterPlot(
+  rast,
+  land = NA,
+  landCol = "black",
+  scaleRange = NA,
+  graticule = TRUE,
+  title = "A Raster",
+  verbose = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>rast</code></td>
+<td>
+<p>A single <code>SpatRaster</code> layer on a continuous
+scale.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>land</code></td>
+<td>
+<p>An optional coastline polygon shapefile
+of types <code>sf</code> or <code>SpatRaster</code> to provide geographic
+context for the occurrence points.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>landCol</code></td>
+<td>
+<p>Color for land on map.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scaleRange</code></td>
+<td>
+<p>Optional numeric vector containing
+maximum and minimum values for color scale. Helpful
+when making multiple plots for comparison. Defaults
+to minimum and maximum of input <code>rast</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>graticule</code></td>
+<td>
+<p><code>logical</code>. Do you want a grid of lon/lat lines?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>A title for the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p><code>logical</code>. Switching to <code>FALSE</code> mutes message alerting
+user if input <code>rast</code> values exceed a specified <code>scaleRange</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional optional arguments to pass to
+<code>plot</code> initial plot object or <code>viridis</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A plot of mapping the values of the input raster layer
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>viridis</code> <code>ggplot</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(terra)
+rast &lt;- rast(ncol=10, nrow=10)
+values(rast) &lt;- seq(0,99, 1)
+
+oneRasterPlot(rast = rast)
+
+</code></pre>
+
+
+</div>

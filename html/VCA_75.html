@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Scale</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Automatically Scale Data Calling these Functions: 'anovaVCA', 'anovaMM', 'remlVCA' or 'remlMM'</h2>
+
+<h3>Description</h3>
+
+<p>This function scales data before fitting a linear mixed model aiming to avoid numerical problems
+when numbers of the response variable are either very small or very large. It adds attribute "scale" 
+to the resulting 'VCA'-object, which is used by function <code>reScale</code> to transform back the
+VCA-results of a <code>VCA</code> or <code>VCAinference</code> object that was previously scaled.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Scale(Fun, form, Data, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Fun</code></td>
+<td>
+<p>(expr, function, character) either a complete function call to one of "anovaVCA", "anovaMM", "remlVCA", "remlMM",
+a character string or just the function name without quotes (see example)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>form</code></td>
+<td>
+<p>(formula) specifying the model to fitted by 'Fun'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>(data.frame) with all variables specified via 'Fun'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments applying to one of the four functions <code>anovaVCA</code>,<code>anovaMM</code>,
+<code>remlVCA</code>, <code>remlMM</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>NOTE: Scaling is applied on the complete data set, without checking whether there are incomplete
+observations or not!
+</p>
+
+
+<h3>Value</h3>
+
+<p>(object) of class 'VCA' which can be used as input for function <code>VCAinference</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>reScale</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_3)
+
+# simulate very large numbers of the response
+dat3   &lt;- dataEP05A2_3
+dat3$y &lt;- dat3$y * 1e8
+
+# now try to fit 21-day model to this data
+fit &lt;- anovaVCA(y~day/run, dat3)
+
+# now use 'Scale' function
+fit1 &lt;- Scale("anovaVCA", y~day/run, dat3)
+fit2 &lt;- Scale(anovaVCA, y~day/run, dat3)	# also works
+fit3 &lt;- Scale(anovaVCA(y~day/run, dat3)) # works as well
+
+# back to original scale
+(fit1 &lt;- reScale(fit1))
+(fit2 &lt;- reScale(fit2))
+(fit3 &lt;- reScale(fit3))
+
+# reference values
+fit0 &lt;- anovaVCA(y~day/run, dataEP05A2_3, MME=TRUE)
+inf0 &lt;- VCAinference(fit0, VarVC=TRUE)
+
+fit1 &lt;- Scale(anovaVCA(y~day/run, dataEP05A2_3, MME=TRUE))
+inf1 &lt;- VCAinference(fit1, VarVC=TRUE)
+inf1 &lt;- reScale(inf1)
+
+# compare to reference
+print(inf0, what="VC")
+print(inf1, what="VC")
+print(inf0, what="SD")
+print(inf1, what="SD")
+print(inf0, what="CV")
+print(inf1, what="CV")
+
+# now use REML-based estimation
+fit0 &lt;- remlVCA(y~day/run, dataEP05A2_3)
+inf0 &lt;- VCAinference(fit0)
+
+fit1 &lt;- Scale("remlVCA", y~day/run, dataEP05A2_3)
+inf1 &lt;- VCAinference(fit1)
+inf1 &lt;- reScale(inf1)
+
+# compare to reference
+print(inf0, what="VC")
+print(inf1, what="VC")
+print(inf0, what="SD")
+print(inf1, what="SD")
+print(inf0, what="CV")
+print(inf1, what="CV")
+
+# scaling also works with by-processing
+data(VCAdata1)
+fit &lt;- Scale(anovaVCA(y~(device+lot)/day/run, VCAdata1, by="sample"))
+reScale(fit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

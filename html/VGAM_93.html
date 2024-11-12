@@ -1,0 +1,150 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>biclaytoncop</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Clayton Copula (Bivariate) Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimate the correlation parameter of
+the (bivariate) Clayton copula
+distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">biclaytoncop(lapar = "loglink", iapar = NULL, imethod = 1,
+             parallel = FALSE, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lapar, iapar, imethod</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+See <code>Links</code> for more link function choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel, zero</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+If <code>parallel = TRUE</code> then the constraint is also applied
+to the intercept.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The cumulative distribution function is
+</p>
+<p style="text-align: center;"><code class="reqn">P(u_1, u_2;\alpha) = (u_1^{-\alpha} +
+                            u_2^{-\alpha}-1)^{-1/\alpha}</code>
+</p>
+
+<p>for <code class="reqn">0 \leq \alpha </code>.
+Here, <code class="reqn">\alpha</code> is the association parameter.
+The support of the function is the interior of the unit square;
+however, values of 0 and/or 1 are not allowed (currently).
+The marginal distributions are the standard uniform distributions.
+When <code class="reqn">\alpha = 0</code> the random variables are independent.
+</p>
+<p>This <span class="pkg">VGAM</span> family function can handle multiple responses,
+for example, a six-column matrix where the first 2 columns
+is the first out of three responses,
+the next 2 columns being the next response, etc.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response matrix must have a multiple of two-columns.
+Currently, the fitted
+value is a matrix with the same number of columns
+and values equal to 0.5.
+This is because each marginal distribution
+corresponds to a standard uniform distribution.
+</p>
+<p>This <span class="pkg">VGAM</span> family function is fragile;
+each response must be in the interior of the unit square.
+
+
+
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> R. Feyter and T. W. Yee </p>
+
+
+<h3>References</h3>
+
+
+<p>Clayton, D. (1982).
+A model for association in bivariate survival data.
+<em>Journal of the Royal Statistical Society,
+Series B, Methodological</em>,
+<b>44</b>, 414–422.
+</p>
+<p>Schepsmeier, U. and Stober, J. (2014).
+Derivatives and Fisher information of bivariate copulas.
+<em>Statistical Papers</em>
+<b>55</b>, 525–542.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rbiclaytoncop</code>,
+<code>dbiclaytoncop</code>,
+<code>kendall.tau</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ymat &lt;- rbiclaytoncop(n = (nn &lt;- 1000), apar = exp(2))
+bdata &lt;- data.frame(y1 = ymat[, 1], y2 = ymat[, 2],
+                    y3 = ymat[, 1], y4 = ymat[, 2], x2 = runif(nn))
+summary(bdata)
+## Not run:  plot(ymat, col = "blue") 
+fit1 &lt;-
+  vglm(cbind(y1, y2, y3, y4) ~ 1,  # 2 responses, e.g., (y1,y2) is the 1st
+       biclaytoncop, data = bdata,
+       trace = TRUE, crit = "coef")  # Sometimes a good idea
+coef(fit1, matrix = TRUE)
+Coef(fit1)
+head(fitted(fit1))
+summary(fit1)
+
+# Another example; apar is a function of x2
+bdata &lt;- transform(bdata, apar = exp(-0.5 + x2))
+ymat &lt;- rbiclaytoncop(n = nn, apar = with(bdata, apar))
+bdata &lt;- transform(bdata, y5 = ymat[, 1], y6 = ymat[, 2])
+fit2 &lt;- vgam(cbind(y5, y6) ~ s(x2), data = bdata,
+             biclaytoncop(lapar = "loglink"), trace = TRUE)
+## Not run: plot(fit2, lcol = "blue", scol = "orange", se = TRUE) </code></pre>
+
+
+</div>

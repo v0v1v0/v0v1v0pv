@@ -1,0 +1,98 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>specimen.frequencies</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Specimen Nucleotide Frequencies
+</h2>
+
+<h3>Description</h3>
+
+<p>Converts a matrix of sequences into a matrix of nucleotide frequencies.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">specimen.frequencies(freq, seq.matrix, no.spec, spec.names, seqlength)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>freq</code></td>
+<td>
+
+<p>Frequency matrix for nucleotides.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seq.matrix</code></td>
+<td>
+
+<p>Matrix of specimen sequences, where the sequence starts in the third position of the matrix and the first and second position contain the unique specimen identifier and the species name, respectively.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>no.spec</code></td>
+<td>
+
+<p>The number of specimen in seq.matrix.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spec.names</code></td>
+<td>
+
+<p>A vector containing the names of the specimen in the seq.matrix, in the order they appear in the matrix.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seqlength</code></td>
+<td>
+
+<p>The length of the nucleotide sequence.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The argument freq can be calculated using the function ffrequency.matrix.function.  The number of specimen can be calculated by using the nrow() function on seq.matrix.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix containing the unique specimen identifer in the first position, the species name in the second position, and the frequencies for each nucleotide in the sequences starting at the third position.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: data(birds)
+species.names &lt;- birds[,2]
+specimen.Number &lt;- nrow(birds)
+rownames(birds) &lt;- species.names
+Nuc.count &lt;- count.function(birds, specimen.Number, 648)
+frequency.matrix &lt;- ffrequency.matrix.function(Nuc.count, 648)
+birdSpec.freq &lt;- specimen.frequencies(frequency.matrix, birds, specimen.Number, species.names, 648)
+## End(Not run)
+</code></pre>
+
+
+</div>

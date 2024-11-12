@@ -1,0 +1,234 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>uninormalff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Normal (distribution–specified) quantile regression
+</h2>
+
+<h3>Description</h3>
+
+
+<p>Distribution–specified quantile regression.
+An extension of <code>uninormal</code> from <span class="pkg">VGAM</span>.
+It handles effectively <code>uninormalQlink</code> via the first
+linear predictor.
+</p>
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    
+     uninormalff(link1 = "identitylink", lsd = "loglink",
+                 percentile = 50,
+                 imethod = 1, isd = NULL, parallel = FALSE,
+                 smallno = 1.0e-5, zero = "sd")
+             
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link1</code></td>
+<td>
+
+<p>Link function for the first linear predictor.
+By default
+<code>link1 = "identitylink"</code>,
+same as <code>lmean</code> from
+<code>uninormal</code>.
+Set <code>link1 = "uninormalQlink"</code> for normal
+quantile regression.
+See details below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentile</code></td>
+<td>
+
+<p>Numeric. A vector with the percentiles of interest, between
+0 and 100.
+Used only when <code>link1 = "uninormalQlink"</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lsd, imethod, isd, parallel, smallno, zero</code></td>
+<td>
+
+<p>Same as in
+<code>uninormal</code>, except
+that <code>"sd"</code> is the only accepted value for <code>zero</code>. 
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>An extension of 
+<code>uninormal</code> adapted to handle
+<code>uninormalQlink</code>, 
+for normal quantile regression (QR) via the first
+linear predictor. 
+</p>
+<p>The standard deviation only can be estimated.
+The second linear predictor is fixed to
+<code class="reqn">\eta_2 = \log \sigma</code>, and
+<code>var.arg</code> is set internally to <code>FALSE</code>.
+</p>
+<p>Unlike usual QR where the distribution of <code class="reqn">Y|X</code> is unspecified,
+<code>uninormalff()</code> estimates normal distributions at different
+quantiles (as entered in <code>percentile</code>)
+of the <code class="reqn">Y|X</code>. For this, set
+<code>link1 = uninormaQlink</code>. To mimic
+<code>uninormal</code> set
+<code>link1 = "identitylink"</code> (default).
+</p>
+<p>Initial developments of this work are in 
+<em>Miranda &amp; Yee (2019)</em>.
+See, e.g., 
+<code>weibullRff</code>,
+for another example on distribution specified
+quantile regression with the two–parameter Weibull
+distribution.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglm"</code>.
+See <code>vglm-class</code> for full details.
+</p>
+
+
+<h3>Note</h3>
+
+<p><code>Q.reg</code> must be used in
+the <code>vglm()</code> or <code>vgam()</code> to enter the response.
+See example below.
+</p>
+
+
+
+
+
+
+<p>This <b>VGAM</b> family function does not handle censored data.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>Miranda &amp; Yee (2019) 
+<em>New Link Functions for Distribution–Specific
+Quantile Regression Based on Vector Generalized
+Linear and Additive Models</em>.
+Journal of Probability and Statistics, 
+Article ID 3493628.
+</p>
+<p>Miranda &amp; Yee (2021) 
+<em>Two–Parameter Link Functions,
+With Application to Negative Binomial, Weibull and
+Quantile Regression</em>. In preparation.
+</p>
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>uninormalQlink</code>,
+<code>uninormal</code>,
+<code>Q.reg</code>,
+<code>weibullQlink</code>,
+<code>weibullRff</code>,
+
+
+<code>CommonVGAMffArguments</code>.
+
+
+
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+
+x2 &lt;- seq(0,10,length.out = 100)             # independent variable
+sig &lt;- exp(0.5 + 0.15*x2)                    # non-constant variance
+b_0 &lt;- 10                                    # true intercept
+b_1 &lt;- 0.15                                  # true slope
+set.seed(17221)                              # make the next line reproducible
+e &lt;- rnorm(100,mean = 0, sd = sig)           # normal random error with non-constant variance
+y &lt;- b_0 + b_1*x2 + e                        # dependent variable
+
+## Data
+ndata &lt;- data.frame(y = y, x2 = x2)
+
+## Some percentiles of interest
+percentile &lt;- c(10, 25, 50, 90)
+
+## Normal quantile regression, zero = NULL
+fit1 &lt;- vglm(Q.reg(y, length.arg = 4) ~ x2, 
+             uninormalff(link1 = "uninormalQlink", percentile = percentile, zero = NULL), 
+             data = ndata, trace = TRUE)
+#summary(fit1)
+( my.coef3Q &lt;- coef(fit1, mat = TRUE) )
+
+## Plots - percentile curves.
+plot(y ~ x2, pch = 19, ylim = c(-1, 25), 
+main =" Normal quantile regression")
+abline(h = -3:25, v = 0, col = "gray", lty = "dashed")
+with(ndata, lines(x2, my.coef3Q[1, 1] + my.coef3Q[2, 1] * x2, 
+                  col = "red", lty = "dotted", lwd = 4))
+with(ndata, lines(x2, my.coef3Q[1, 3] + my.coef3Q[2, 3] * x2, 
+                  col = "orange", lty = "dotted", lwd = 4))
+with(ndata, lines(x2, my.coef3Q[1, 5] + my.coef3Q[2, 5] * x2, 
+                  col = "blue", lty = "dotted", lwd = 4))
+with(ndata, lines(x2, my.coef3Q[1, 7] + my.coef3Q[2, 7] * x2, 
+                  col = "brown", lty = "dotted", lwd = 4))
+legend("topleft", c("90th", "50th", "25th", "10th"),
+col = c("brown", "blue", "orange", "red"), lty = rep("dotted", 4), lwd = rep(4, 4))
+
+
+## Mimicking 'VGAM:uninormal'
+fit2 &lt;- vglm(y ~ x2,  uninormalff(link1 = "identitylink", percentile = NULL, zero = NULL), 
+             data = ndata, trace = TRUE)
+
+     
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,138 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_ts</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a ggplot object with a time series and forecast</h2>
+
+<h3>Description</h3>
+
+<p>Create a <code>ggplot</code> object associated with a time series and, optionally, its
+future values, a forecast for its future values and a prediction interval of
+the forecast.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_ts(
+  ts,
+  future = NULL,
+  prediction = NULL,
+  method = NULL,
+  lpi = NULL,
+  upi = NULL,
+  level = NULL,
+  sdp = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ts</code></td>
+<td>
+<p>a time series of class <code>ts</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>future</code></td>
+<td>
+<p>NULL (default) or a time series of class <code>ts</code> or a vector.
+Future values of the time series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prediction</code></td>
+<td>
+<p>NULL (default) or a time series of class <code>ts</code> or a
+vector. Forecast of the future values of the time series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>NULL (default) a character string with the name of the method
+used to forecast the future values of the time series. This name will
+appear in the legend.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lpi</code></td>
+<td>
+<p>NULL (default) or a time series of class <code>ts</code> or a vector.
+Lower limit of a prediction interval for the <code>prediction</code> parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>upi</code></td>
+<td>
+<p>NULL (default) or a time series of class <code>ts</code> or a vector.
+Upper limit of a prediction interval for the <code>prediction</code> parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>NULL (default) a number in the interval (0, 100) indicating the
+level of the prediction interval.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sdp</code></td>
+<td>
+<p>logical. Should data points be shown? (default value <code>TRUE</code>)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If <code>future</code> or <code>prediction</code> are vectors then they are supposed to
+start after the last data of the time series.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The <code>ggplot</code> object representing the time series and its forecast.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(ggplot2)
+plot_ts(USAccDeaths) # plot a time series
+
+# plot a time series, not showing data points
+plot_ts(USAccDeaths, sdp = FALSE)
+
+# plot a time series, its future values and a prediction
+ts &lt;- window(USAccDeaths, end = c(1977, 12))
+f &lt;- window(USAccDeaths, start = c(1978, 1))
+p &lt;- ts(window(USAccDeaths, start = c(1976, 1), end = c(1976, 12)),
+        start = c(1978, 1),
+        frequency = 12
+)
+plot_ts(ts, future = f, prediction = p)
+
+# plot a time series and a prediction
+plot_ts(USAccDeaths, prediction = rep(mean(USAccDeaths), 12),
+        method = "Mean")
+
+# plot a time series, a prediction and a prediction interval
+if (require(forecast)) {
+  timeS &lt;- window(USAccDeaths, end = c(1977, 12))
+  f &lt;- window(USAccDeaths, start = c(1978, 1))
+  ets_fit &lt;- ets(timeS)
+  p &lt;- forecast(ets_fit, h = length(f), level = 90)
+  plot_ts(timeS, future = f, prediction = p$mean, method = "ES",
+          lpi = p$lower, upi = p$upper, level = 90
+  )
+}
+</code></pre>
+
+
+</div>

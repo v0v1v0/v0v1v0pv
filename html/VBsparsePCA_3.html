@@ -1,0 +1,195 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>spca.cavi.mvn</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function for the PX-CAVI algorithm using the multivariate normal slab</h2>
+
+<h3>Description</h3>
+
+<p>This function employs the PX-CAVI algorithm proposed in Ning (2020).
+The <code class="reqn">g</code> in the slab density of the spike and slab prior is chosen to be the multivariate normal distribution, i.e.,
+<code class="reqn">N(0, \sigma^2/\lambda_1 I_r)</code>.
+Details of the model and the prior can be found in the Details section in the description of the 'VBsparsePCA()' function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">spca.cavi.mvn(
+  x,
+  r,
+  lambda = 1,
+  max.iter = 100,
+  eps = 1e-04,
+  jointly.row.sparse = TRUE,
+  sig2.true = NA,
+  threshold = 0.5,
+  theta.int = NA,
+  theta.var.int = NA,
+  kappa.para1 = NA,
+  kappa.para2 = NA,
+  sigma.a = NA,
+  sigma.b = NA
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Data an <code class="reqn">n*p</code> matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r</code></td>
+<td>
+<p>Rank.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda</code></td>
+<td>
+<p>Tuning parameter for the density <code class="reqn">g</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.iter</code></td>
+<td>
+<p>The maximum number of iterations for running the algorithm.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>The convergence threshold; the default is <code class="reqn">10^{-4}</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>jointly.row.sparse</code></td>
+<td>
+<p>The default is true, which means that the jointly row sparsity assumption is used; one could not use this assumptio by changing it to false.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sig2.true</code></td>
+<td>
+<p>The default is false, <code class="reqn">\sigma^2</code> will be estimated; if sig2 is known and its value is given, then <code class="reqn">\sigma^2</code> will not be estimated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threshold</code></td>
+<td>
+<p>The threshold to determine whether <code class="reqn">\gamma_j</code> is 0 or 1; the default value is 0.5.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta.int</code></td>
+<td>
+<p>The initial value of theta mean; if not provided, the algorithm will estimate it using PCA.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta.var.int</code></td>
+<td>
+<p>The initial value of theta.var; if not provided, the algorithm will set it to be 1e-3*diag(r).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kappa.para1</code></td>
+<td>
+<p>The value of <code class="reqn">\alpha_1</code> of <code class="reqn">\pi(\kappa)</code>; default is 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kappa.para2</code></td>
+<td>
+<p>The value of <code class="reqn">\alpha_2</code> of <code class="reqn">\pi(\kappa)</code>; default is <code class="reqn">p+1</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma.a</code></td>
+<td>
+<p>The value of <code class="reqn">\sigma_a</code> of <code class="reqn">\pi(\sigma^2)</code>; default is 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma.b</code></td>
+<td>
+<p>The value of <code class="reqn">\sigma_b</code> of <code class="reqn">\pi(\sigma^2)</code>; default is 2.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>iter</code></td>
+<td>
+<p>The number of iterations to reach convergence.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selection</code></td>
+<td>
+<p>A vector (if <code class="reqn">r = 1</code> or with the jointly row-sparsity assumption) or a matrix (if otherwise) containing the estimated value for <code class="reqn">\boldsymbol \gamma</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta.mean</code></td>
+<td>
+<p>The loadings matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta.var</code></td>
+<td>
+<p>The covariance of each non-zero rows in the loadings matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sig2</code></td>
+<td>
+<p>Variance of the noise.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obj.fn</code></td>
+<td>
+<p>A vector contains the value of the objective function of each iteration. It can be used to check whether the algorithm converges</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">#In this example, the first 20 rows in the loadings matrix are nonzero, the rank is 1
+set.seed(2021)
+library(MASS)
+library(pracma)
+n &lt;- 200
+p &lt;- 1000
+s &lt;- 20
+r &lt;- 1
+sig2 &lt;- 0.1
+# generate eigenvectors
+U.s &lt;- randortho(s, type = c("orthonormal"))
+U &lt;- rep(0, p)
+U[1:s] &lt;- as.vector(U.s[, 1:r])
+s.star &lt;- rep(0, p)
+s.star[1:s] &lt;- 1
+eigenvalue &lt;- seq(20, 10, length.out = r)
+# generate Sigma
+theta.true &lt;- U * sqrt(eigenvalue)
+Sigma &lt;- tcrossprod(theta.true) + sig2*diag(p)
+# generate n*p dataset
+X &lt;- t(mvrnorm(n, mu = rep(0, p), Sigma = Sigma))
+result &lt;- spca.cavi.mvn(x = X, r = 1)
+loadings &lt;- result$theta.mean
+</code></pre>
+
+
+</div>

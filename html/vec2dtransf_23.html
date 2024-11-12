@@ -1,0 +1,92 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotGridTransformation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot grid transformation</h2>
+
+<h3>Description</h3>
+
+<p>Plots a grid transformed to visualize the effects of the 
+transformation on a given extent</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotGridTransformation(object, bbox, numberOfPoints)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Object of the class SimilarityTransformation or 
+AffineTransformation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bbox</code></td>
+<td>
+<p>An SP bbox object, i.e. a 2x2 matrix with coordinates</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numberOfPoints</code></td>
+<td>
+<p>Number of points to represent the grid, perfect squares
+are recommended.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The grid is made out of points over the extent defined by bbox. If 
+numberOfPoints has not an integer square root the grid will contain less 
+points.
+</p>
+<p>The grid is transformed using the transformation parameters and displayed 
+over the source grid to see the effects of the transformation. 
+</p>
+<p>The source grid is drawn in red whereas the transformed one is green.
+</p>
+<p>This code is based on "Case Study: Fixing Bad TIGER Line data with R and 
+PostGIS" (See References).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>German Carrillo</p>
+
+
+<h3>References</h3>
+
+<p>UC Davis Soil Resource Laboratory. Case Study: Fixing Bad TIGER Line data 
+with R and PostGIS. 
+&lt;URL: http://casoilresource.lawr.ucdavis.edu/drupal/node/433&gt;
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>applyTransformation</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># From the sp examples:
+x &lt;- c(1,1,1,2,2,2,3,3,3)
+y &lt;- c(1,2,3,1,2,3,1,2,3)
+xy &lt;- cbind(x,y)
+S &lt;- SpatialPoints(xy)
+
+st=SimilarityTransformation(parameters=c(1,0,0.2,-0.2))
+plotGridTransformation(st, bbox(S), 25)
+</code></pre>
+
+
+</div>

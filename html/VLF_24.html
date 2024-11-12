@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>conservation_first</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+First Modal Conserved
+</h2>
+
+<h3>Description</h3>
+
+<p>Calculates the conservation of the nucleotides that occur most often in a matrix of sequences/
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">conservation_first(modal, p, seqlength)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>modal</code></td>
+<td>
+
+<p>A vector of the frequencies of the nucleotides in the first modal sequences.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+
+<p>A conservation value for the nucleotide frequencies to be compared to.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seqlength</code></td>
+<td>
+
+<p>The length of the nucleotide sequence.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The argument modal can be calculated using the MODE.freq function.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector that contains how many nucleotides from the first modal sequence are conserved at the specified conservation level for each codon position.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: data(birds)
+species.names &lt;- birds[,2]
+specimen.Number &lt;- nrow(birds)
+rownames(birds) &lt;- species.names
+Nuc.count &lt;- count.function(birds, specimen.Number, 648)
+frequency.matrix &lt;- ffrequency.matrix.function(Nuc.count, 648)
+birdSpec.freq &lt;- specimen.frequencies(frequency.matrix, birds, specimen.Number, species.names, 648)
+nucleotide.modalSequence &lt;- MODE(frequency.matrix, 648)
+Bird_first.modal.frequencies &lt;- MODE.freq(frequency.matrix, 648)
+First_conserved_100 &lt;- conservation_first(Bird_first.modal.frequencies, 1, 648)
+First_conserved_99.9 &lt;- conservation_first(Bird_first.modal.frequencies, 0.999, 648)
+## End(Not run)
+</code></pre>
+
+
+</div>

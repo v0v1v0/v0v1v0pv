@@ -1,0 +1,117 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vegalite</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create and (optionally) visualize a Vega-Lite spec</h2>
+
+<h3>Description</h3>
+
+<p>Create and (optionally) visualize a Vega-Lite spec
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vegalite(description = "", renderer = c("svg", "canvas"), export = FALSE,
+  source = FALSE, editor = FALSE, viewport_width = NULL,
+  viewport_height = NULL, background = NULL, time_format = NULL,
+  number_format = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>description</code></td>
+<td>
+<p>a single element character vector that provides a description of
+the plot/spec.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>renderer</code></td>
+<td>
+<p>the renderer to use for the view. One of <code>canvas</code> or
+<code>svg</code> (the default)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>export</code></td>
+<td>
+<p>if <code>TRUE</code> the <em>"Export as..."</em> link will
+be displayed with the chart.(Default: <code>FALSE</code>.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>source</code></td>
+<td>
+<p>if <code>TRUE</code> the <em>"View Source"</em> link will be displayed
+with the chart. (Default: <code>FALSE</code>.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>editor</code></td>
+<td>
+<p>if <code>TRUE</code> the <em>"Open in editor"</em> link will be
+displayed with the cahrt. (Default: <code>FALSE</code>.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>viewport_width, viewport_height</code></td>
+<td>
+<p>height and width of the overall
+visualziation viewport. This is the overall area reserved for the
+plot. You can leave these <code>NULL</code> and use <code>cell_size</code>
+instead but you will want to configure both when making faceted plots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>background</code></td>
+<td>
+<p>plot background color. If <code>NULL</code> the background will be transparent.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time_format</code></td>
+<td>
+<p>the default time format pattern for text and labels of
+axes and legends (in the form of <a href="https://github.com/mbostock/d3/wiki/Time-Formatting">D3 time format pattern</a>).
+Default: <code>%Y-%m-%d</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>number_format</code></td>
+<td>
+<p>the default number format pattern for text and labels of
+axes and legends (in the form of
+<a href="https://github.com/mbostock/d3/wiki/Formatting">D3 number format pattern</a>).
+Default: <code>s</code></p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p><a href="http://vega.github.io/vega-lite/docs/config.html#top-level-config">Vega-Lite top-level config</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dat &lt;- jsonlite::fromJSON('[
+    {"a": "A","b": 28}, {"a": "B","b": 55}, {"a": "C","b": 43},
+    {"a": "D","b": 91}, {"a": "E","b": 81}, {"a": "F","b": 53},
+    {"a": "G","b": 19}, {"a": "H","b": 87}, {"a": "I","b": 52}
+  ]')
+
+vegalite() %&gt;%
+  add_data(dat) %&gt;%
+  encode_x("a", "ordinal") %&gt;%
+  encode_y("b", "quantitative") %&gt;%
+  mark_bar()
+</code></pre>
+
+
+</div>

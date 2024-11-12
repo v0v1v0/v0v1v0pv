@@ -1,0 +1,412 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hdeff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Hauck-Donner Effects: A Detection Test for Wald Tests </h2>
+
+<h3>Description</h3>
+
+<p>A detection test for the
+Hauck-Donner effect on each regression coefficient
+of a VGLM regression or 2 x 2 table.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hdeff(object, ...)
+hdeff.vglm(object, derivative = NULL, se.arg = FALSE,
+           subset = NULL, theta0 = 0, hstep = 0.005,
+           fd.only = FALSE, ...)
+hdeff.numeric(object, byrow = FALSE, ...)
+hdeff.matrix(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>Usually a <code>vglm</code> object.
+Although only a limited number of family functions have
+an analytical solution to
+the HDE detection test 
+(<code>binomialff</code>,
+<code>borel.tanner</code>,
+<code>cumulative</code>,
+<code>erlang</code>,
+<code>felix</code>,
+<code>lindley</code>,
+<code>poissonff</code>,
+<code>topple</code>,
+<code>uninormal</code>,
+<code>zipoissonff</code>,
+and
+<code>zipoisson</code>;
+hopefully some more will be implemented in the short future!)
+the finite-differences (FDs) method can be applied to almost all
+<span class="pkg">VGAM</span> family functions to get a numerical solution.
+</p>
+<p>Alternatively <code>object</code> may represent a 2 x 2 table of
+<em>positive</em> counts.
+If so, then the first row corresponds
+to <code class="reqn">x2=0</code> (baseline group)
+and the second row <code class="reqn">x2=1</code>. The first column
+corresponds to <code class="reqn">y=0</code> (failure) and
+the second column <code class="reqn">y=1</code> (success).
+</p>
+<p>Another alternative is that <code>object</code> is
+a numerical vector
+of length 4, representing a 2 x 2 table
+of <em>positive</em> counts.
+If so then it is fed into <code>hdeff.matrix</code>
+using
+the argument <code>byrow</code>, which matches
+<code>matrix</code>.
+See the examples below.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>derivative</code></td>
+<td>
+
+<p>Numeric. Either 1 or 2.
+Currently only a few models having
+one linear predictor are handled
+analytically for <code>derivative = 2</code>, e.g.,
+<code>binomialff</code>,
+<code>poissonff</code>.
+However, the numerical method can return the first two
+derivatives for almost all models.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se.arg</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> then the derivatives
+of the standard errors
+are returned as well, because usually the derivatives of
+the Wald statistics are of central interest.  Requires
+<code>derivative</code> to be assigned the value 1 or 2 for this
+argument to operate.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subset</code></td>
+<td>
+
+<p>Logical or vector of indices,
+to select the regression coefficients of interest.
+The default is to select all coefficients.
+Recycled if necessary if logical.
+If numeric then they should comprise
+elements from <code>1:length(coef(object))</code>.
+This argument can be useful for computing the derivatives of a
+Cox regression (<code>coxph</code>)
+fitted using artificially
+created Poisson data; then there are many coefficients that
+are effectively nuisance parameters.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta0</code></td>
+<td>
+
+<p>Numeric. Vector recycled to the necessary length which is
+the number of regression coefficients.
+The null hypotheses for the regression coefficients are that
+they equal those respective values, and the alternative
+hypotheses are all two-sided.
+It is not recommended that argument <code>subset</code> be used
+if a vector of values is assigned here because
+<code>theta0[subset]</code> is implied and might not work.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hstep</code></td>
+<td>
+
+<p>Positive numeric and recycled to length 2;
+it is the so-called <em>step size</em> when using
+finite-differences and is often called <code class="reqn">h</code> in
+the calculus literature,
+e.g., <code class="reqn">f'(x)</code> is approximately <code class="reqn">(f(x+h) - f(x)) / h</code>.
+For the 2nd-order partial derivatives, there are two step sizes
+and hence this argument is recycled to length 2.
+The default is to have the same values.
+The 1st-order derivatives use the first value only.
+It is recommended that a few values of this argument be tried
+because values of the first and second derivatives can
+vary accordingly.
+If any values are too large then the derivatives
+may be inaccurate;
+and if too small then the derivatives may be unstable and
+subject to too much round-off/cancellation error
+(in fact it may create an error or a <code>NA</code>).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fd.only</code></td>
+<td>
+
+<p>Logical;
+if <code>TRUE</code> then finite-differences are used to estimate
+the derivatives even if an analytical solution has been
+coded, By default, finite-differences will be used when an
+analytical solution has not been implemented.
+</p>
+
+<p>It is possible that <code>NA</code>s are returned.
+If so, and if <code>fd.only = FALSE</code>, then a warning
+is issued and a recursive
+call is made with <code>fd.only = TRUE</code>—this is more
+likely to return an answer without any <code>NA</code>s.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>byrow</code></td>
+<td>
+
+<p>Logical;
+fed into <code>matrix</code> if <code>object</code> is
+a vector of length 4 so that there are two choices in the
+order of the elements.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>currently unused but may be used in the future for
+further arguments passed into the other methods functions.
+
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Almost all of statistical inference based on the likelihood
+assumes that the parameter estimates are located in the interior
+of the parameter space.  The nonregular case of being located
+on the boundary is not considered very much and leads to
+very different results from the regular case.  Practically,
+an important question is: how close is close to the boundary?
+One might answer this as: the parameter estimates are too close
+to the boundary when the Hauck-Donner effect (HDE) is present,
+whereby the Wald statistic becomes aberrant.
+</p>
+<p>Hauck and Donner (1977) first observed an aberration of the
+Wald test statistic not monotonically increasing as a function
+of increasing distance between the parameter estimate and the
+null value.  This "disturbing" and "undesirable" underappreciated
+effect has since been observed in other regression models by
+various authors.  This function computes the first, and possibly
+second, derivative of the Wald statistic for each regression
+coefficient.  A negative value of the first derivative is
+indicative of the HDE being present.  More information can be
+obtained from <code>hdeffsev</code> regarding HDE severity:
+there may be none, faint, weak, moderate, strong and extreme
+amounts of HDE present.
+</p>
+<p>In general, most models have derivatives that are computed
+numerically using finite-difference
+approximations. The reason is that it takes a lot of work
+to program in the analytical solution
+(this includes a few very common models, such as
+<code>poissonff</code> and
+<code>binomialff</code>,
+where the first two derivatives have been implemented).
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>By default this function returns a labelled logical vector;
+a <code>TRUE</code> means the HDE is affirmative for that coefficient
+(negative slope).
+Hence ideally all values are <code>FALSE</code>.
+Any <code>TRUE</code> values suggests that the MLE is
+too near the boundary of the parameter space,
+and that the p-value for that regression coefficient
+is biased upwards.
+When present
+a highly significant variable might be deemed nonsignificant,
+and thus the HDE can create havoc for variable selection.
+If the HDE is present then more accurate
+p-values can generally be obtained by conducting a
+likelihood ratio test
+(see <code>lrt.stat.vlm</code>)
+or Rao's score test
+(see <code>score.stat.vlm</code>);
+indeed the default of
+<code>wald.stat.vlm</code>
+does not suffer from the HDE.
+</p>
+
+
+<p>Setting <code>deriv = 1</code> returns a numerical vector of first
+derivatives of the Wald statistics.
+Setting <code>deriv = 2</code> returns a 2-column matrix of first
+and second derivatives of the Wald statistics.
+Then setting <code>se.arg = TRUE</code> returns an additional 1 or
+2 columns.
+</p>
+<p>Some 2nd derivatives are <code>NA</code> if only a partial analytic
+solution has been programmed in.
+</p>
+<p>For those <span class="pkg">VGAM</span> family functions whose HDE test has not
+yet been implemented explicitly (the vast majority of them),
+finite-difference approximations to the derivatives will
+be used—see the arguments <code>hstep</code> and <code>fd.only</code>
+for getting some control on them.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The function <code>summaryvglm</code> conducts the HDE
+detection test if possible and prints out a line at the bottom
+if the HDE is detected for some regression coefficients.
+By “if possible”, only a few family functions are exempt and they
+have an <code>infos</code> slot with component <code>hadof = FALSE</code>;
+such as
+<code>normal.vcm</code>,
+<code>rec.normal</code> because it
+uses the BFGS-IRLS method for computing the working weights.
+For these few a <code>NULL</code> is returned by <code>hdeff</code>.
+</p>
+<p>If the second derivatives are of interest then
+it is recommended that <code>crit = "c"</code> be added to the
+fitting so that a slightly more accurate model results
+(usually one more IRLS iteration).
+This is because the FD approximation is very sensitive to
+values of the working weights, so they need to be computed
+accurately.
+Occasionally, if the coefficient is close to 0,
+then its Wald statistic's
+second derivative may be unusually large in magnitude
+(this could be due to something such as roundoff error). 
+</p>
+
+
+
+
+
+
+<p>This function is currently under development
+and may change a little in the short future.
+For HDE severity measures see <code>hdeffsev</code>.
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee.  </p>
+
+
+<h3>References</h3>
+
+<p>Hauck, J. W. W. and A. Donner (1977).
+Wald's test as applied to hypotheses in logit analysis. 
+<em>Journal of the American Statistical Association</em>,
+<b>72</b>, 851–853.
+</p>
+
+
+
+
+
+
+
+
+<p>Yee, T. W. (2022).
+On the Hauck-Donner effect in Wald tests:
+Detection, tipping points and parameter space characterization,
+<em>Journal of the American Statistical Association</em>,
+<b>117</b>, 1763–1774.
+<a href="https://doi.org/10.1080/01621459.2021.1886936">doi:10.1080/01621459.2021.1886936</a>.
+</p>
+
+
+<p>Yee, T. W. (2021).
+Some new results concerning the Hauck-Donner effect.
+<em>Manuscript in preparation</em>.
+</p>
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>summaryvglm</code>,
+<code>hdeffsev</code>,
+<code>alogitlink</code>,
+<code>asinlink</code>,
+<code>vglm</code>,
+<code>lrt.stat</code>,
+<code>score.stat</code>,
+<code>wald.stat</code>,
+<code>confintvglm</code>,
+<code>profilevglm</code>.
+</p>
+
+
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pneumo &lt;- transform(pneumo, let = log(exposure.time))
+fit &lt;- vglm(cbind(normal, mild, severe) ~ let, data = pneumo,
+            trace = TRUE, crit = "c",  # Get some more accuracy
+            cumulative(reverse = TRUE,  parallel = TRUE))
+cumulative()@infos()$hadof  # Analytical solution implemented
+hdeff(fit)
+hdeff(fit, deriv = 1)  # Analytical solution
+hdeff(fit, deriv = 2)  # It is a partial analytical solution
+hdeff(fit, deriv = 2, se.arg = TRUE,
+      fd.only = TRUE)  # All derivatives solved numerically by FDs
+
+# 2 x 2 table of counts
+R0 &lt;- 25; N0 &lt;- 100  # Hauck Donner (1977) data set
+mymat &lt;- c(N0-R0, R0, 8, 92)  # HDE present
+(mymat &lt;- matrix(mymat, 2, 2, byrow = TRUE))
+hdeff(mymat)
+hdeff(c(mymat))  # Input is a vector
+hdeff(c(t(mymat)), byrow = TRUE)  # Reordering of the data
+</code></pre>
+
+
+</div>

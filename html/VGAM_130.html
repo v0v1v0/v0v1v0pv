@@ -1,0 +1,192 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bratt</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Bradley Terry Model With Ties </h2>
+
+<h3>Description</h3>
+
+<p>Fits a Bradley Terry model with ties (intercept-only model)
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bratt(refgp = "last", refvalue = 1, ialpha = 1, i0 = 0.01)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>refgp</code></td>
+<td>
+
+<p>Integer whose value must be from the set {1,...,<code class="reqn">M</code>},
+where there are <code class="reqn">M</code> competitors. The default value
+indicates the last competitor is used—but don't input
+a character string, in general.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>refvalue</code></td>
+<td>
+
+<p>Numeric. A positive value for the reference group.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ialpha</code></td>
+<td>
+
+<p>Initial values for the <code class="reqn">\alpha</code>s.
+These are recycled to the appropriate length.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>i0</code></td>
+<td>
+
+<p>Initial value for <code class="reqn">\alpha_0</code>.
+If convergence fails, try another positive value.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>There are several models that extend the ordinary
+Bradley Terry model to handle ties. This family function
+implements one of these models.  It involves <code class="reqn">M</code>
+competitors who either win or lose or tie against
+each other.  (If there are no draws/ties then use
+<code>brat</code>).  The probability that Competitor
+<code class="reqn">i</code> beats Competitor <code class="reqn">j</code> is <code class="reqn">\alpha_i /
+  (\alpha_i+\alpha_j+\alpha_0)</code>, where all the <code class="reqn">\alpha</code>s
+are positive.  The probability that Competitor <code class="reqn">i</code>
+ties with Competitor <code class="reqn">j</code> is <code class="reqn">\alpha_0 /
+  (\alpha_i+\alpha_j+\alpha_0)</code>.  Loosely, the <code class="reqn">\alpha</code>s
+can be thought of as the competitors' ‘abilities’,
+and <code class="reqn">\alpha_0</code> is an added parameter
+to model ties.  For identifiability, one of the
+<code class="reqn">\alpha_i</code> is set to a known value
+<code>refvalue</code>, e.g., 1.  By default, this function
+chooses the last competitor to have this reference value.
+The data can be represented in the form of a <code class="reqn">M</code>
+by <code class="reqn">M</code> matrix of counts, where winners are the rows
+and losers are the columns.  However, this is not the
+way the data should be inputted (see below).
+</p>
+<p>Excluding the reference value/group, this function
+chooses <code class="reqn">\log(\alpha_j)</code> as the first
+<code class="reqn">M-1</code> linear predictors.  The log link ensures that
+the <code class="reqn">\alpha</code>s are positive.  The last linear
+predictor is <code class="reqn">\log(\alpha_0)</code>.
+</p>
+<p>The Bradley Terry model can be fitted with covariates,
+e.g., a home advantage variable, but unfortunately, this
+lies outside the VGLM theoretical framework and therefore
+cannot be handled with this code.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The function <code>Brat</code> is useful for coercing
+a <code class="reqn">M</code> by <code class="reqn">M</code> matrix of counts into a one-row
+matrix suitable for <code>bratt</code>.  Diagonal elements
+are skipped, and the usual S order of <code>c(a.matrix)</code>
+of elements is used. There should be no missing values
+apart from the diagonal elements of the square matrix.
+The matrix should have winners as the rows, and losers
+as the columns.  In general, the response should be a
+matrix with <code class="reqn">M(M-1)</code> columns.
+</p>
+<p>Also, a symmetric matrix of ties should be passed into
+<code>Brat</code>. The diagonal of this matrix should
+be all <code>NA</code>s.
+</p>
+<p>Only an intercept model is recommended with <code>bratt</code>.
+It doesn't make sense really to include covariates because
+of the limited VGLM framework.
+</p>
+<p>Notationally, note that the <span class="pkg">VGAM</span> family function
+<code>brat</code> has <code class="reqn">M+1</code> contestants, while
+<code>bratt</code> has <code class="reqn">M</code> contestants.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Torsney, B. (2004).
+Fitting Bradley Terry models using a multiplicative algorithm.
+In: Antoch, J. (ed.)
+<em>Proceedings in Computational Statistics COMPSTAT 2004</em>,
+Physica-Verlag: Heidelberg. Pages 513–526.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>brat</code>,
+<code>Brat</code>,
+<code>binomialff</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># citation statistics: being cited is a 'win'; citing is a 'loss'
+journal &lt;- c("Biometrika", "Comm.Statist", "JASA", "JRSS-B")
+mat &lt;- matrix(c( NA, 33, 320, 284,
+                730, NA, 813, 276,
+                498, 68,  NA, 325,
+                221, 17, 142,  NA), 4, 4)
+dimnames(mat) &lt;- list(winner = journal, loser = journal)
+
+# Add some ties. This is fictitional data.
+ties &lt;- 5 + 0 * mat
+ties[2, 1] &lt;- ties[1,2] &lt;- 9
+
+# Now fit the model
+fit &lt;- vglm(Brat(mat, ties) ~ 1, bratt(refgp = 1), trace = TRUE,
+            crit = "coef")
+
+summary(fit)
+c(0, coef(fit))  # Log-abilities (last is log(alpha0))
+c(1, Coef(fit))  #     Abilities (last is alpha0)
+
+fit@misc$alpha   # alpha_1,...,alpha_M
+fit@misc$alpha0  # alpha_0
+
+fitted(fit)  # Probabilities of winning and tying, in awkward form
+predict(fit)
+(check &lt;- InverseBrat(fitted(fit)))    # Probabilities of winning
+qprob &lt;- attr(fitted(fit), "probtie")  # Probabilities of a tie
+qprobmat &lt;- InverseBrat(c(qprob), NCo = nrow(ties))  # Pr(tie)
+check + t(check) + qprobmat  # Should be 1s in the off-diagonals
+</code></pre>
+
+
+</div>

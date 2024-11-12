@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visTree</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualization of subgroups for decision trees</h2>
+
+<h3>Description</h3>
+
+<p>This visualization characterizes subgroups defined by a decision tree structure and identifies the range of covariate values associated with outcome values in each subgroup.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visTree(cond.tree, rng = NULL, interval = FALSE, color.type = 1,
+  alpha = 0.5, add.h.axis = TRUE, add.p.axis = TRUE,
+  text.round = 1, text.main = 1.5, text.bar = 1.5,
+  text.title = 1.5, text.label = 1.5, text.axis = 1.5,
+  text.percentile = 0.7, density.line = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>cond.tree</code></td>
+<td>
+<p>Decision tree generated as a party object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rng</code></td>
+<td>
+<p>Restrict plotting to a particular set of nodes. Default value is set as NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>interval</code></td>
+<td>
+<p>logical. Continuous outcome (interval = FALSE) and Categorical outcome (interval = TRUE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color.type</code></td>
+<td>
+<p>Color palettes (rainbow_hcl = 1; heat_hcl = 2; terrain_hcl = 3; sequential_hcl = 4 ; diverge_hcl = 5)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Transparency for horizontal colored bars in each subplot. Values between 0 to 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add.h.axis</code></td>
+<td>
+<p>logical. Add axis for the outcome distribution (add.h.axis = TRUE), remove axis for the outcome (add.h.axis = FALSE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add.p.axis</code></td>
+<td>
+<p>logical. Add axis for the percentiles (add.p.axis = TRUE) computed over covariate values, remove axis for the percentiles (add.p.axis = FALSE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.round</code></td>
+<td>
+<p>Round the threshold displayed on the horizontal bar</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.main</code></td>
+<td>
+<p>Change the size of the main titles</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.bar</code></td>
+<td>
+<p>Change the size of the text in the horizontal bar</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.title</code></td>
+<td>
+<p>Change the size of the text in the title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.label</code></td>
+<td>
+<p>Change the size of the axis annotation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.axis</code></td>
+<td>
+<p>Change the size of the text of axis labels</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.percentile</code></td>
+<td>
+<p>Change the size of the percentile title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>density.line</code></td>
+<td>
+<p>logical. Draw a density line. (density.line = TRUE).</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Ashwini Venkatasubramaniam and Julian Wolfson
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(blsdata)
+newblsdata&lt;-blsdata[,c(7,21, 22,23, 24, 25, 26)]
+## Continuous response
+ptree1&lt;-partykit::ctree(kcal24h0~., data = newblsdata)
+visTree(ptree1, text.axis = 1.3, text.label = 1.2, text.bar = 1.2, alpha = 0.5)
+
+## Repeated covariates in the splits of the decision tree
+ptree2&lt;-partykit::ctree(kcal24h0~skcal+rrvfood+resteating+age, data = blsdata)
+visTree(ptree2, text.axis = 1.3, text.label = 1.2, text.bar = 1.2, alpha = 0.5)
+
+## Categorical response
+blsdataedit&lt;-blsdata[,-7]
+blsdataedit$bin&lt;-0 
+blsdataedit$bin&lt;-cut(blsdata$kcal24h0, unique(quantile(blsdata$kcal24h0)), 
+include.lowest = TRUE, dig.lab = 4)
+names(blsdataedit)[26]&lt;-"kcal24h0"
+ptree3&lt;-partykit::ctree(kcal24h0~hunger+rrvfood+resteating+liking, data = blsdataedit)
+visTree(ptree3, interval = TRUE,  color.type = 1, alpha = 0.6, 
+text.percentile = 1.2, text.bar = 1.8)
+
+## Other decision trees (e.g., rpart) 
+ptree4&lt;-rpart::rpart(kcal24h0~wanting+liking+rrvfood, data = newblsdata, 
+control = rpart::rpart.control(cp = 0.029))
+visTree(ptree4, text.bar = 1.8, text.label = 1.4, text.round = 1, 
+density.line = TRUE, text.percentile = 1.3)
+
+## Change the color scheme and transparency of the horizontal bars
+ptree1&lt;-partykit::ctree(kcal24h0~., data = newblsdata)
+visTree(ptree1, text.axis = 1.3, text.label = 1.2, text.bar = 1.2, alpha = 0.65, 
+color.type = 3)
+
+## Remove the axes corresponding to the percentiles and the response values.
+ptree1&lt;-partykit::ctree(kcal24h0~., data = newblsdata)
+visTree(ptree1, text.axis = 1.3, text.label = 1.2, text.bar = 1.2, alpha = 0.65, 
+color.type = 3, add.p.axis = FALSE, add.h.axis = FALSE) 
+
+# Remove the density line over the histograms 
+ptree1&lt;-partykit::ctree(kcal24h0~., data = newblsdata)
+visTree(ptree1, text.axis = 1.3, text.label = 1.2, text.bar = 1.2, alpha = 0.65, 
+color.type = 3, density.line = FALSE) 
+</code></pre>
+
+
+</div>

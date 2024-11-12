@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>extract.compared.vectors</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract elements from the output of <code>compare.vectors</code>
+</h2>
+
+<h3>Description</h3>
+
+<p>Straightforwardly extract particular elements from the output of <code>compare.vectors</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">extract.compared.vectors(output_from_compare.vectors, vector_names = NULL,
+  only_match_vector_names = FALSE, degrees_of_comparison = NULL,
+  elements_of_output = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>output_from_compare.vectors</code></td>
+<td>
+<p>The list output of <code>compare.vectors</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vector_names</code></td>
+<td>
+<p>An optional vector of names to extract from the named list (<code>named_list_of_vectors_to_compare</code>) used with <code>compare.vectors</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>only_match_vector_names</code></td>
+<td>
+<p>A logical (TRUE/FALSE) indicator whether to match <strong>only</strong> <code>vector_names</code>. If <code>vector_names</code> is <code>c("a", "b")</code>, for example, and <code>only_match_vector_names</code> is <code>TRUE</code>, this function will output only the comparison between <code>a</code> and <code>b</code>. If <code>only_match_vector_names</code> is <code>FALSE</code>, however, this function will output the comparison between <code>a</code> and <code>b</code>, as well as between <code>a</code>, <code>b</code>, and <code>c</code>, etc.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>degrees_of_comparison</code></td>
+<td>
+<p>An optional number of vector of numbers indicating which degrees of comparison to return (for example, 2 will return only two-way comparisons from <code>output_from_compare.vectors</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>elements_of_output</code></td>
+<td>
+<p>An optional vector of element names from <code>output_from_compare.vectors</code> to return (for example, "elements_involved"). See the <strong>Value</strong> section of <code>compare.vectors</code> for a list of the elements to choose from.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A winnowed version of <code>output_from_compare.vectors</code>. Depending on arguments, either a list, a vector, or a string.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">example &lt;- veccompare::compare.vectors(veccompare::example.vectors.list)
+
+# To extract similar elements across list items:
+veccompare::extract.compared.vectors(
+  example,
+  elements_of_output = "elements_involved"
+)
+
+# To extract all comparisons that involve "vector_a":
+veccompare::extract.compared.vectors(
+  example,
+  vector_names = "vector_a"
+)
+
+# To find all comparisons that were about "vector_a" and "vector_c":
+veccompare::extract.compared.vectors(
+  example,
+  vector_names = c("vector_a", "vector_c"),
+  only_match_vector_names = TRUE
+)
+
+# To get all elements that did a two-way comparison:
+veccompare::extract.compared.vectors(
+  example,
+  degrees_of_comparison = 2
+)
+
+# A more complex / specific example:
+extract.compared.vectors(
+  example,
+  vector_names = c("vector_a", "vector_c"),
+  only_match_vector_names = FALSE,
+  degrees_of_comparison = c(2, 3),
+  elements_of_output = "elements_involved"
+)
+</code></pre>
+
+
+</div>

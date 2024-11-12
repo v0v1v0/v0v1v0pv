@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summarize.VCA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summarize Outcome of a Variance Component Analysis.</h2>
+
+<h3>Description</h3>
+
+<p>If a single 'VCA'-object is passed, the first step is to call 'VCAinference' for CI
+estimation. For each variance component (VC) the result of the VCA is summarized
+and can be configured by arguments 'type', 'tail', 'ends', and 'conf.level'. These
+define which information is returned by this summary function. In case of passing
+a list of 'VCA'- or 'VCAinference'-objects, a matrix will be returned where columns
+correspond to list-elements, usually samples, and rows to estimated values. This is 
+done as the number of estimated values usually exceeds the number of samples.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">summarize.VCA(
+  object,
+  type = c("sd", "cv"),
+  tail = "one-sided",
+  ends = "upper",
+  conf.level = 0.95,
+  DF = TRUE,
+  as.df = FALSE,
+  print = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>(object) of class <code>VCA</code> or <code>VCAinference</code> or a list of
+these objects to be summarized.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>(character) "sd" for standard devation, "cv" for coefficient of 
+variation, and "vc" for variance defining on which scale results
+shall be returned. Multiple can be specified.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tail</code></td>
+<td>
+<p>(character) "one-sided" for one-sided CI, "two-sided" for two-sided CI,
+can be abbreviated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ends</code></td>
+<td>
+<p>(character) "upper" or "lower" bounds of a e.g. 95% CI, can be both</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>conf.level</code></td>
+<td>
+<p>(numeric) confidence level of the CI</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>DF</code></td>
+<td>
+<p>(logical) TRUE to include degrees of freedom, FALSE to omit them</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>as.df</code></td>
+<td>
+<p>(logical) TRUE to transpose the returned object and convert into
+a data.frame, FALSE leve</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>print</code></td>
+<td>
+<p>(logical) TRUE print summary, FALSE omit printing and just return
+matrix or data.frame</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>(matrix, data.frame) with VCA-results either with estimates in rows and sample(s)
+in columns, or vice versa
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(CA19_9)
+fit.all &lt;- anovaVCA(result~site/day, CA19_9, by="sample")
+summarize.VCA(fit.all)
+# complete set of results
+summarize.VCA(	fit.all, type=c("vc", "sd", "cv"), tail=c("one", "two"),
+				ends=c("lower", "upper"))
+# summarizing a single VCA-object
+summarize.VCA(fit.all[[1]])
+
+### summarizing list of 'VCAinference' objects
+infs &lt;- VCAinference(fit.all)
+summarize.VCAinference(infs)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

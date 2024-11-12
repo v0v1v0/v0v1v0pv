@@ -1,0 +1,135 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.ave.odds</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for average odds ratio from 2-group studies</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and confidence interval for a
+geometric average odds ratio from two or more studies.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.ave.odds(alpha, f1, f2, n1, n2, bystudy = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f1</code></td>
+<td>
+<p>vector of group 1 frequency counts</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f2</code></td>
+<td>
+<p>vector of group 2 frequency counts</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>vector of group 1 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>vector of group 2 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bystudy</code></td>
+<td>
+<p>logical to also return each study estimate (TRUE) or not</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is the average estimate across all studies.  If bystudy
+is TRUE, there is 1 additional row for each study.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated effect size
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+<li>
+<p> exp(Estimate) - the exponentiated estimate
+</p>
+</li>
+<li>
+<p> exp(LL) - lower limit of the exponentiated confidence interval
+</p>
+</li>
+<li>
+<p> exp(UL) - upper limit of the exponentiated confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG, Price RM (2015).
+“Varying coefficient meta-analysis methods for odds ratios and risk ratios.”
+<em>Psychological Methods</em>, <b>20</b>(3), 394–406.
+ISSN 1939-1463, <a href="https://doi.org/10.1037/met0000032">doi:10.1037/met0000032</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">n1 &lt;- c(204, 201, 932, 130, 77)
+n2 &lt;- c(106, 103, 415, 132, 83)
+f1 &lt;- c(24, 40, 93, 14, 5)
+f2 &lt;- c(12, 9, 28, 3, 1)
+meta.ave.odds(.05, f1, f2, n1, n2, bystudy = TRUE)
+
+# Should return:
+#           Estimate        SE          LL        UL 
+# Average 0.86211102 0.2512852  0.36960107 1.3546210
+# Study 1 0.02581353 0.3700520 -0.69947512 0.7511022
+# Study 2 0.91410487 0.3830515  0.16333766 1.6648721
+# Study 3 0.41496672 0.2226089 -0.02133877 0.8512722
+# Study 4 1.52717529 0.6090858  0.33338907 2.7209615
+# Study 5 1.42849472 0.9350931 -0.40425414 3.2612436
+#         exp(Estimate)   exp(LL)   exp(UL)
+# Average      2.368155 1.4471572  3.875292
+# Study 1      1.026150 0.4968460  2.119335
+# Study 2      2.494541 1.1774342  5.284997
+# Study 3      1.514320 0.9788873  2.342625
+# Study 4      4.605150 1.3956902 15.194925
+# Study 5      4.172414 0.6674745 26.081952
+
+
+</code></pre>
+
+
+</div>

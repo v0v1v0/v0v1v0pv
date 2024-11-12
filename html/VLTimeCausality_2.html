@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>followingRelation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>followingRelation</h2>
+
+<h3>Description</h3>
+
+<p>followingRelation is a function that infers whether <code>Y</code> follows <code>X</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">followingRelation(Y, X, timeLagWindow, lagWindow = 0.2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>is a numerical time series of a follower</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>is a numerical time series of a leader</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>timeLagWindow</code></td>
+<td>
+<p>is a maximum possible time delay in the term of time steps.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lagWindow</code></td>
+<td>
+<p>is a maximum possible time delay in the term of percentage of length(X).
+If <code>timeLagWindow</code> is missing, then <code>timeLagWindow=ceiling(lagWindow*length(X))</code>. The default is 0.2.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function returns a list of following relation variables below.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>follVal</code></td>
+<td>
+<p> is a following-relation value s.t. if <code>follVal</code> is positive, then <code>Y</code> follows <code>X</code>. If  <code>follVal</code> is negative, then <code>X</code> follows <code>Y</code>.
+Otherwise, if <code>follVal</code> is zero, there is no following relation between <code>X,Y</code>.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nX</code></td>
+<td>
+<p> is a time series that is rearranged from <code>X</code> by applying the lags <code>optIndexVec</code> in order to imitate <code>Y</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optDelay</code></td>
+<td>
+<p> is the optimal time delay inferred by cross-correlation of <code>X,Y</code>. It is positive if <code>Y</code> is simply just a time-shift of <code>X</code> (e.g. <code>Y[t]=X[t-optDelay]</code>). </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optCor</code></td>
+<td>
+<p> is the optimal correlation of <code>Y[t]=X[t-optDelay]</code> for all <code>t</code>.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optIndexVec</code></td>
+<td>
+<p> is a time series of optimal warping-path from DTW that is corrected by cross correlation.
+It is approximately that <code>Y[t]=X[t-optIndexVec[t]]</code>).  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VLval</code></td>
+<td>
+<p> is a percentage of elements in <code>optIndexVec</code> that is not equal to <code>optDelay</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ccfout</code></td>
+<td>
+<p> is an output object of <code>ccf</code> function. </p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Generate simulation data
+TS &lt;- SimpleSimulationVLtimeseries()
+# Run the function
+out&lt;-followingRelation(Y=TS$Y,X=TS$X)
+
+</code></pre>
+
+
+</div>

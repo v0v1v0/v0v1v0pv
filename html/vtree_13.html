@@ -1,0 +1,128 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>use_svgzoom</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Setup for interactive Vtree</h2>
+
+<h3>Description</h3>
+
+<p>This function must be called in the UI, in order to make the <code>vtree</code> interactive.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">use_svgzoom(minheight = "200px", cursor_all = "all-scroll",
+  overflow = "inherit !important", position = "sticky",
+  fill = "transparent", cursor_text = "pointer",
+  init_event = c("mouseenter", "click", "dblclick"),
+  onwindow_resize = TRUE, shortcuts = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>minheight</code></td>
+<td>
+<p>minimum height in <code>"px"</code>. Default is "200px".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cursor_all</code></td>
+<td>
+<p>The cursor symbol for the whole SVG. Default is "all-scroll".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overflow</code></td>
+<td>
+<p>Overflow value for the whole SVG. Default is "inherit".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>position</code></td>
+<td>
+<p>CSS position of the SVG. Default is "sticky".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fill</code></td>
+<td>
+<p>Fill color for the SVG background. Default is "transparent".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cursor_text</code></td>
+<td>
+<p>The cursor symbol for text nodes. Default is "pointer".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>init_event</code></td>
+<td>
+<p>The mouse event to activate zooming and panning.
+Default is <code>mouseenter</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>onwindow_resize</code></td>
+<td>
+<p>Should the SVG be resized when the window size changes?
+Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shortcuts</code></td>
+<td>
+<p>Should Keyboard shortcuts be used to control the SVG?
+Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><code>vtreeOutput</code>, <code>vtree</code>
+</p>
+<p>Other Shiny Functions: 
+<code>init_js()</code>,
+<code>inlineCssSetup()</code>,
+<code>renderVtree()</code>,
+<code>vtreeOutput()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(shiny)
+library(vtree)
+
+ui &lt;- fluidPage(
+  use_svgzoom(),
+  helpText(div(style="font-weight: 800; font-size: large; color: black;",
+               HTML("Zooming and Panning is possible with mouse-drag ",
+                    "and mouse-wheel &lt;br&gt;, or with shortcuts;",
+                    " +,- and arrow-keys and CTRL+Backspace to",
+                    " resize+fit+center the svg.."))),
+  vtreeOutput("vtree", width = "100%", height = "500px")
+)
+
+server &lt;- function(input, output, session) {
+  output$vtree &lt;- renderVtree({
+    vtree(FakeData,"Severity Sex",
+          labelnode=list(Sex=(c("Male"="M","Female"="F"))),
+          pngknit=FALSE)
+  })
+}
+
+shinyApp(ui, server)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

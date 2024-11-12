@@ -1,0 +1,118 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotLayers</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plotting 3D model in 2D</h2>
+
+<h3>Description</h3>
+
+<p>This script plots a semitransparent layer
+of suitable habitat for each depth layer. The redder
+the color, the shallower the layer, the bluer, the
+deeper. The more saturated the color, the more layers
+with suitable habitat.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotLayers(
+  rast,
+  land = NA,
+  landCol = "black",
+  title = NULL,
+  graticule = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>rast</code></td>
+<td>
+<p>A <code>SpatRaster</code> vector with the 3D presence/absence
+distribution of a species (interpreted as 1 = presence,
+0 = absence).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>land</code></td>
+<td>
+<p>An optional coastline polygon shapefile
+of types <code>sf</code> or <code>SpatRaster</code> to provide geographic
+context for the occurrence points.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>landCol</code></td>
+<td>
+<p>Color for land on map.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>A title for the plot. If not title is
+supplied, the title "Suitability from (MINIMUM
+DEPTH) to (MAXIMUM DEPTH)" is inferred from
+names of <code>rast</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>graticule</code></td>
+<td>
+<p>Do you want a grid of lon/lat lines?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional optional arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A plot of class <code>recordedplot</code>
+</p>
+
+
+<h3>Note</h3>
+
+<p>Only include the depth layers that you actually
+want to plot.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>viridis</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(terra)
+
+rast1 &lt;- rast(ncol=10, nrow=10)
+values(rast1) &lt;- rep(0:1, 50)
+
+rast2 &lt;- rast(ncol=10, nrow=10)
+values(rast2) &lt;- c(rep(0, 50), rep(1,50))
+
+rast3 &lt;- rast(ncol=10, nrow=10)
+values(rast3) &lt;- rep(c(1,0,0,1), 25)
+
+distBrick &lt;- c(rast1, rast2, rast3)
+
+plotLayers(distBrick)
+
+</code></pre>
+
+
+</div>

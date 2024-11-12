@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>box_counting</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Computes fractal dimension using the box counting method.</h2>
+
+<h3>Description</h3>
+
+<p>Computes fractal dimension using the box counting method.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">box_counting(data, min_vox_size, store_fit, message)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data.frame or data.table containing the x, y, z, ... coordinates of a point cloud.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min_vox_size</code></td>
+<td>
+<p>numeric. The minimum size of a voxel. Default = 0.01.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>store_fit</code></td>
+<td>
+<p>logical. If TRUE, the parameters linear model's fit are returned. Default = FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>message</code></td>
+<td>
+<p>logical. If FALSE, messages are disabled. Default = TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>If <code>store_fit = FALSE</code> only the fractal dimension is returned. If <code>store_fit = TRUE</code>
+the parameters of the linear model used to estimate the fractal dimension and
+a table containing the number of boxes (i.e. voxels) at any resolution are
+returned in a list in addition to the fractal dimension.
+</p>
+
+
+<h3>References</h3>
+
+<p>Seidel, D. (2018). A holistic approach to determine tree structural complexity based on laser
+scanning data and fractal analysis. Ecology and evolution, 8(1), 128-134.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#- import tls data
+tls=data.table::fread(system.file("extdata", "Tree_t0.asc", package="VoxR"))
+
+#- box counting
+FD = VoxR::box_counting(tls,store_fit = TRUE)
+
+#- fractal dimension
+FD$fractal_dim
+#- linear model fit
+FD$fit_summary
+#- plot fit
+plot(log(FD$fit_table$N)~log(1/FD$fit_table$res))
+abline(FD$fit_summary)
+</code></pre>
+
+
+</div>

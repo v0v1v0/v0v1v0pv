@@ -1,0 +1,211 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>step4</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Choose a model by AIC in a Stepwise Algorithm
+</h2>
+
+<h3>Description</h3>
+
+<p>Select a formula-based model by AIC.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">step4(object, ...)
+step4vglm(object, scope, direction = c("both", "backward", "forward"),
+          trace = 1, keep = NULL, steps = 1000, k = 2, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>an object of class <code>"vglm"</code>.
+This is used as the initial model in the stepwise search.
+</p>
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scope</code></td>
+<td>
+
+<p>See <code>step</code>.
+</p>
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>direction</code></td>
+<td>
+
+<p>See <code>step</code>.
+</p>
+
+
+
+
+
+
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>trace, keep</code></td>
+<td>
+
+<p>See <code>step</code>.
+</p>
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>steps, k</code></td>
+<td>
+
+<p>See <code>step</code>.
+</p>
+
+
+
+</td>
+</tr>
+</table>
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>any additional arguments to
+<code>extractAIC.vglm</code>,
+<code>drop1.vglm</code> and
+<code>add1.vglm</code>.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>This function is a direct adaptation of
+<code>step</code>
+for <code>vglm-class</code> objects.
+Since <code>step</code> is not generic,
+the name <code>step4()</code> was adopted
+and it <em>is</em> generic, as well as being S4 rather than S3.
+It is the intent that this function should work as similar as
+possible to <code>step</code>.
+</p>
+<p>Internally, the methods function for <code>vglm-class</code>
+objects calls <code>add1.vglm</code> and
+<code>drop1.vglm</code>
+repeatedly.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>The results are placed in the <code>post</code> slot of the
+stepwise-selected model that is returned.
+There are up to two additional components.
+There is an <code>"anova"</code>
+component corresponding to the steps taken in the search,
+as well as a <code>"keep"</code> component if the <code>keep=</code> argument
+was supplied in the call.
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Warning</h3>
+
+<p>In general,
+the same warnings in
+<code>drop1.glm</code> and
+<code>drop1.vglm</code>
+apply here.
+</p>
+<p>This function
+</p>
+
+
+
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>add1.vglm</code>,
+<code>drop1.vglm</code>,
+<code>vglm</code>,
+<code>trim.constraints</code>,
+<code>add1.glm</code>,
+<code>drop1.glm</code>,
+<code>backPain2</code>,
+<code>step</code>,
+<code>update</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data("backPain2", package = "VGAM")
+summary(backPain2)
+fit1 &lt;- vglm(pain ~ x2 + x3 + x4 + x2:x3 + x2:x4 + x3:x4,
+             propodds, data = backPain2)
+spom1 &lt;- step4(fit1)
+summary(spom1)
+spom1@post$anova
+</code></pre>
+
+
+</div>

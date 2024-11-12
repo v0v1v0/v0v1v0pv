@@ -1,0 +1,98 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>specials</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Special Values or Quantities in a Fitted Object
+</h2>
+
+<h3>Description</h3>
+
+<p>Return any special values or quantities in a fitted
+object, and in particular in a VGLM fit
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">specials(object, ...)
+specialsvglm(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>an object of class <code>"vglm"</code> whose family function
+begins with <code>"gait"</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>any additional arguments, to future-proof this function.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This extractor function was motivated by GAITD regression
+(Yee and Ma, 2024)
+where the values from three disjoint sets are referred
+to as <em>special</em>.
+More generally, S4 methods functions can be written so that
+<code>specials()</code> will work on any S4 object, where
+what is called special depends on the methodology at hand.
+</p>
+
+
+
+
+<h3>Value</h3>
+
+<p>Returns any ‘special’ values or quantities associated with
+a fitted regression model.
+This is often something simple such as a list or a vector.
+</p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Ma, C. (2024).
+Generally altered, inflated, truncated and deflated regression.
+<em>Statistical Science</em>, <b>39</b> (in press).
+</p>
+
+
+
+<h3>See Also</h3>
+
+<p><code>vglm</code>,
+<code>vglm-class</code>,
+<code>inflated</code>,
+<code>altered</code>,
+<code>truncated</code>,
+<code>Gaitdpois</code>,
+<code>gaitdpoisson</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">abdata &lt;- data.frame(y = 0:7, w = c(182, 41, 12, 2, 2, 0, 0, 1))
+fit1 &lt;- vglm(y ~ 1, gaitdpoisson(a.mix = 0), data = abdata,
+             weight = w, subset = w &gt; 0)
+specials(fit1)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,132 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vMotif</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Generate Signal Weighted Amino Acid Heat Maps by Position
+</h2>
+
+<h3>Description</h3>
+
+<p>Generate signal weighted amino acid composition maps by postion at
+specific length or length/charge combinations. Weights are compared to the global
+distribution of peptides at the particular length or length/charge.
+</p>
+<p>Weights are centered at 1, meaning that there is no change in probability
+or signal from the global set. Weights above 1 indicate higher probability
+at the given position and/or signal while weights below 1 indicate lower
+probability at the given position and/or signal.
+</p>
+<p>When <code>Kd = TRUE</code>, weighting by Kd instead of signal is performed. Weights are
+generated using (1/Kd) since lower Kd values generally indicate higher affinity interactions,
+and would correlate with higher signal.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vMotif.lc(Prot, ProtG, Length, Charge, SigCol, Kd = FALSE)
+
+vMotif.l(Prot, ProtG, Length, SigCol, Kd = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Prot</code></td>
+<td>
+
+<p>An <code>R</code> object, generally a <code>data.frame</code>. Contains peptides that are considered "hits"
+or selected peptides with their length,charge, and signal/Kd attributes.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ProtG</code></td>
+<td>
+
+<p>An <code>R</code> object, generally a <code>data.frame</code>. Contains the set of
+peptides from which the argument <code>Prot</code> were selected with their
+corresponding length, charge, and signal information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Charge</code></td>
+<td>
+
+<p>An <code>integer</code> value, indicating the desired charge to analyze
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Length</code></td>
+<td>
+
+<p>An <code>integer</code> value, indicating the desired peptide length to analyze
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SigCol</code></td>
+<td>
+
+<p>An <code>Integer</code> value, indicating the column that contains the desired signal data
+at a given concentration
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Kd</code></td>
+<td>
+
+<p>An <code>logical</code> value, indicating if weights should be generated using signal or Kd data. Effects
+signal weighting behavior. If <code>Kd = TRUE</code>, weights are generated using 1/<code>SigCol</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a <code>data.frame</code> that shows weights for each amino acid at each position
+within the peptide of the selected length. Also output a positional heatmap using the
+package <span class="pkg">ggplot2</span>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Cody Moore
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vComp</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">protEx.Motif &lt;- data.frame(Peptides = c("PWRGPWARVGSG","GYNRVGQGSG","PNGYRSGVKGSG","GSG"),
+Length = c(12,10,12,3),Charge = c(2,1,2,0),Kd = c(0.2572361,2.8239730,3.3911868,281.3058),
+C_6uM = c(65011.48,47462.24,24778,2613.03),C_6uM2 = c(62637.81,20723.85,21313.67,2300.216))
+
+## vMotif Length/Charge and Length Signal Examples ##
+
+vMotif.lcEx &lt;- vMotif.lc(protEx.Motif,protEx.Motif, 12,2,5,Kd = FALSE)
+
+vMotif.lEx &lt;- vMotif.l(protEx.Motif,protEx.Motif, Length = 12,SigCol = 5,Kd = FALSE)
+
+## vMotif Length/Charge Kd Example ##
+
+vMotif.lcEx &lt;- vMotif.lc(protEx.Motif,protEx.Motif, Length = 12,Charge = 2, SigCol = 5,Kd = TRUE)
+
+</code></pre>
+
+
+</div>

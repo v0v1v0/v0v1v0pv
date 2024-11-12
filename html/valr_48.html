@@ -1,0 +1,58 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>read_bigwig</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Import and convert a bigwig file into a valr compatible tbl</h2>
+
+<h3>Description</h3>
+
+<p>This function will output a 5 column tibble with
+zero-based chrom, start, end, score, and strand columns.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">read_bigwig(path, set_strand = "+")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>path</code></td>
+<td>
+<p>path to bigWig file</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>set_strand</code></td>
+<td>
+<p>strand to add to output (defaults to "+")</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>This functions uses <code>rtracklayer</code> to import bigwigs which
+has unstable support for the windows platform and therefore may error
+for windows users (particularly for 32 bit window users).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+if (.Platform$OS.type != "windows") {
+  bw &lt;- read_bigwig(valr_example("hg19.dnase1.bw"))
+  head(bw)
+}
+
+## End(Not run)
+</code></pre>
+
+
+</div>

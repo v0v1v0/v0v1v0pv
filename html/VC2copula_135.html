@@ -1,0 +1,149 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ddCopula</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Partial Derivatives of Copulas</h2>
+
+<h3>Description</h3>
+
+<p>Similar to <code>dCopula()</code> and <code>pCopula()</code> the function
+<code>dduCopula</code> evaluates the partial derivative
+<code class="reqn">\frac{\partial}{\partial u} C(u,v)</code> and the function
+<code>ddvCopula</code> evaluates the partial derivative
+<code class="reqn">\frac{\partial}{\partial v} C(u,v)</code> of the provided
+copula.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dduCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,normalCopula'
+dduCopula(u, copula)
+
+## S4 method for signature 'numeric,normalCopula'
+dduCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,normalCopula'
+ddvCopula(u, copula)
+
+## S4 method for signature 'numeric,normalCopula'
+ddvCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,tCopula'
+dduCopula(u, copula)
+
+## S4 method for signature 'numeric,tCopula'
+dduCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,tCopula'
+ddvCopula(u, copula)
+
+## S4 method for signature 'numeric,tCopula'
+ddvCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,gumbelCopula'
+dduCopula(u, copula)
+
+## S4 method for signature 'numeric,gumbelCopula'
+dduCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,gumbelCopula'
+ddvCopula(u, copula)
+
+## S4 method for signature 'numeric,gumbelCopula'
+ddvCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,claytonCopula'
+dduCopula(u, copula)
+
+## S4 method for signature 'numeric,claytonCopula'
+dduCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,claytonCopula'
+ddvCopula(u, copula)
+
+## S4 method for signature 'numeric,claytonCopula'
+ddvCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,indepCopula'
+dduCopula(u, copula)
+
+## S4 method for signature 'numeric,indepCopula'
+dduCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,indepCopula'
+ddvCopula(u, copula)
+
+## S4 method for signature 'numeric,indepCopula'
+ddvCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,frankCopula'
+dduCopula(u, copula)
+
+## S4 method for signature 'numeric,frankCopula'
+dduCopula(u, copula, ...)
+
+## S4 method for signature 'matrix,frankCopula'
+ddvCopula(u, copula)
+
+## S4 method for signature 'numeric,frankCopula'
+ddvCopula(u, copula, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>u</code></td>
+<td>
+<p>Pairs of values for which the partial derivative should be
+evaluated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>copula</code></td>
+<td>
+<p>The copula object representing the family member of interest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments can be passed on to the underlying
+functions.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A vector of the evaluated partial derivatives of the same length as
+rows in <code>u</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(copula)
+
+BB1Cop &lt;- BB1Copula()
+BB1CopSmpl &lt;- rCopula(100, BB1Cop)
+
+# conditional probabilities of a Gaussian copula given u
+BB1GivenU &lt;- dduCopula(BB1CopSmpl, BB1Cop)
+
+# vs. conditional probabilities of a Gaussian copula given v
+BB1GivenV &lt;- ddvCopula(BB1CopSmpl[, c(2, 1)], BB1Cop)
+
+plot(BB1GivenU, BB1GivenV)
+abline(0, 1)
+
+</code></pre>
+
+
+</div>

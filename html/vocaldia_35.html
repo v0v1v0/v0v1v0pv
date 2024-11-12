@@ -1,0 +1,92 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>staticMatrix</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>staticMatrix Iterate until transition probabilities converge (or give up).</h2>
+
+<h3>Description</h3>
+
+<p>Compute the stationary distribution for a Markov diagram
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">staticMatrix(matrix, limit = 1000, digits = 4, history = F)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>matrix</code></td>
+<td>
+<p>an adjecency matrix of trnasition probabilities</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>limit</code></td>
+<td>
+<p>maximum number of iterations until we give up on
+convergence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>the number of decimal places to compare</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>history</code></td>
+<td>
+<p>if TRUE, keep track of all matrix products</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Return static matrix (i.e. the stationary distribution) for the
+Markov process represented by the given adjacency matrix. In the
+particular case of vocaldia's, each column should roughly
+correspond to the amount of time a speaker held the floor for).
+Of course, not all Markov chains converge, an example being:
+</p>
+<pre>
+           1
+     /-----&gt;-------\
+    A               B
+     \----&lt;--------/
+           1
+
+which gives
+
+.      | 0  1 |             | 0x0+1x1  0x1+1x0|   | 1  0 |
+.  M = | 1  0 |  and  M^2 = | 1x0+0x1  1x1+1x0| = | 0  1 |
+
+</pre>
+
+
+<h3>Value</h3>
+
+<p>a matrixseries object; that is, a list where each element
+is either the initial matrix or the product of the two
+preceding matrices
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vocdia)
+x2 &lt;- staticMatrix(vocmatrix$ttarray, digits=4, history=TRUE)
+## original matrix
+round(x2[[1]],3)
+## stationary matrix (M^139)
+round(x2[[length(x2)]],3)
+</code></pre>
+
+
+</div>

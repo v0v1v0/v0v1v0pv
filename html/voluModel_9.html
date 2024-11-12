@@ -1,0 +1,143 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>marineBackground</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Marine background shapefile generation</h2>
+
+<h3>Description</h3>
+
+<p>Automatically generates background
+shapefiles for sampling pseudoabsences and/or background
+points for niche modeling or species distribution modeling.
+Delineating background sampling regions can be one of the
+trickiest parts of generating a good model. Automatically
+generated background shapefiles should be inspected
+carefully prior to model use.
+</p>
+<p>Useful references, among others:
+</p>
+
+<ul>
+<li>
+<p> Barve N, Barve V, Jiménez-Valverde A, Lira-Noriega A,
+Maher SP, Peterson AT, Soberón J, Villalobos F. 2011. The
+crucial role of the accessible area in ecological niche
+modeling and species distribution modeling.
+<em>Ecological modelling</em> 222:1810-9.
+</p>
+</li>
+<li>
+<p> Merow, C, Smith MJ, Silander JA. 2013. A practical
+guide to MaxEnt for modeling species’ distributions: what
+it does, and why inputs and settings matter." <em>Ecography</em>
+36: 1058-69.
+</p>
+</li>
+<li>
+<p> Murphy SJ. 2021. Sampling units derived from geopolitical
+boundaries bias biodiversity analyses. <em>Global Ecology
+and Biogeography</em> 30: 1876-88.
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">marineBackground(occs, clipToOcean = TRUE, verbose = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>occs</code></td>
+<td>
+<p>A <code>data.frame</code> with at least two columns
+named "longitude" and "latitude" or that
+can be coerced into this format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clipToOcean</code></td>
+<td>
+<p><code>logical</code>. Clips shapefile to oceans where species
+occurs. Useful in cases where buffers jump over narrow
+peninsulas (e.g. Isthmus of Panama). Can be quite artificial at ocean
+boundaries.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p><code>logical</code>. Switching to <code>FALSE</code> mutes message describing
+which columns in <code>occs</code> are interpreted as x and y coordinates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional optional arguments to pass to
+<code>getDynamicAlphaHull</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The meat of this function is a special-case wrapper
+around <code>getDynamicAlphaHull()</code> from the <code>rangeBuilder</code> package.
+The function documented here is especially useful in cases where
+one wants to automatically generate training regions that overlap
+the international date line. Regions that exceed the line are cut
+and pasted into the appropriate hemisphere instead of being
+deleted.
+</p>
+<p>If the argument <code>buff</code> is not supplied, a buffer is
+calculated by taking the mean between the 10th and 90th percentile
+of horizontal distances between occurrence points.
+</p>
+<p>If <code>getDynamicAlphaHull()</code> cannot satisfy the provided conditions,
+the occurrences are buffered and then a minimum convex hull is
+drawn around the buffer polygons.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>SpatVector</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>getDynamicAlphaHull</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(terra)
+# Create sample raster
+r &lt;- rast(ncol=10, nrow=10)
+values(r) &lt;- 1:100
+
+# Create test occurrences
+set.seed(0)
+longitude &lt;- sample(-50:50,
+                    size = 20, replace = FALSE)
+set.seed(0)
+latitude &lt;- sample(-30:30,
+                   size = 20, replace = FALSE)
+occurrences &lt;- as.data.frame(cbind(longitude,latitude))
+
+# Here's the function
+result &lt;- marineBackground(occs = occurrences, buff = 100000,
+                           fraction = .9, partCount = 2, clipToOcean = FALSE)
+
+
+</code></pre>
+
+
+</div>

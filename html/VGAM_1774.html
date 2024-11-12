@@ -1,0 +1,163 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>TIC</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Takeuchi's Information Criterion </h2>
+
+<h3>Description</h3>
+
+<p>Calculates the Takeuchi information criterion
+for a fitted model object
+for which a log-likelihood value has been obtained.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    TIC(object, ...)
+    TICvlm(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>A <span class="pkg">VGAM</span> object having
+class <code>vglm-class</code>.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Other possible arguments fed into
+<code>logLik</code> in order to compute the log-likelihood.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The following formula is used for VGLMs:
+<code class="reqn">-2 \mbox{log-likelihood} + 2 trace(V K)</code>,
+where <code class="reqn">V</code> is the inverse of the EIM from the fitted model,
+and <code class="reqn">K</code> is the outer product of the score vectors.
+Both <code class="reqn">V</code> and <code class="reqn">K</code> are order-<code class="reqn">p.VLM</code> matrices.
+One has <code class="reqn">V</code> equal to <code>vcov(object)</code>,
+and <code class="reqn">K</code> is computed by taking the outer product of
+the output from the <code>deriv</code> slot multiplied by the
+large VLM matrix and then taking their sum.
+Hence for the huge majority of models,
+the penalty is computed at the MLE and is empirical in nature.
+Theoretically, if the fitted model is the true model then
+AIC equals TIC.
+</p>
+<p>When there are prior weights the score vectors are divided
+by the square root of these,
+because <code class="reqn"> (a_i U_i / \sqrt{a_i})^2 = a_i U_i^2</code>.
+</p>
+
+<p>This code relies on the log-likelihood being defined, and computed,
+for the object.
+When comparing fitted objects, the smaller the TIC, the better the fit.
+The log-likelihood and hence the TIC is only defined up to an additive
+constant.
+</p>
+<p>Currently
+any estimated scale parameter (in GLM parlance) is ignored by
+treating its value as unity.
+Also,
+currently
+this function is written only for <code>vglm</code> objects and
+not <code>vgam</code> or <code>rrvglm</code>, etc., objects.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns a numeric TIC value.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>This code has not been double-checked.
+The general applicability of <code>TIC</code> for the VGLM/VGAM classes
+has not been developed fully.
+In particular, <code>TIC</code> should not be run on some <span class="pkg">VGAM</span> family
+functions because of violation of certain regularity conditions, etc.
+</p>
+<p>Some authors note that quite large sample sizes are needed
+for this IC to work reasonably well.
+</p>
+
+
+
+
+<h3>Note</h3>
+
+<p>TIC has not been defined for RR-VGLMs, QRR-VGLMs, etc., yet.
+</p>
+<p>See <code>AICvlm</code> about models
+such as <code>posbernoulli.tb</code>
+that require <code>posbinomial(omit.constant = TRUE)</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee. </p>
+
+
+<h3>References</h3>
+
+<p>Takeuchi, K. (1976).
+Distribution of informational statistics and a criterion of model
+fitting.  (In Japanese).
+<em>Suri-Kagaku</em> (Mathematic Sciences),
+<b>153</b>, 12–18.
+</p>
+
+
+
+<p>Burnham, K. P. and Anderson, D. R. (2002).
+<em>Model Selection and Multi-Model Inference: A Practical
+Information-Theoretic Approach</em>,
+2nd ed. New York, USA: Springer.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>VGLMs are described in <code>vglm-class</code>;
+<code>AIC</code>,
+<code>AICvlm</code>.
+<code>BICvlm</code>.
+</p>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pneumo &lt;- transform(pneumo, let = log(exposure.time))
+(fit1 &lt;- vglm(cbind(normal, mild, severe) ~ let,
+              cumulative(parallel = TRUE, reverse = TRUE), data = pneumo))
+coef(fit1, matrix = TRUE)
+TIC(fit1)
+(fit2 &lt;- vglm(cbind(normal, mild, severe) ~ let,
+              cumulative(parallel = FALSE, reverse = TRUE), data = pneumo))
+coef(fit2, matrix = TRUE)
+TIC(fit2)
+</code></pre>
+
+
+</div>

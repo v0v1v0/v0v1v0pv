@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>print_pipe_steps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Prints the return objects of all pipe steps to console</h2>
+
+<h3>Description</h3>
+
+<p>Added as last command to a pipe, prints for each pipe step the resulting
+object to the console if unique. Data frames are converted by as_tibble().
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">print_pipe_steps(.data, cmd = print_command, all = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>.data</code></td>
+<td>
+<p>The data, normally handed over from the prior pipe step.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cmd</code></td>
+<td>
+<p>The command to be evaluated for each object. Takes ps
+object of step  
+example.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all</code></td>
+<td>
+<p>Whether you want to print objects even if they are identical. Helpful
+when you want to display changes in grouping.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The unchanged data
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+if (!require(dplyr)) stop("Examples need dplyr to run")
+mtcars %&gt;%
+  filter(am == 1) %&gt;%
+  select(qsec) %&gt;%
+  print_pipe_steps() -&gt; result
+
+my_print_cmd &lt;- c(
+  "message(title);",
+  "skimr::skim_tee(data = ps%d)"
+)
+
+mtcars %&gt;%
+  select(am, hp, mpg) %&gt;%
+  group_by(am) %&gt;%
+  print_pipe_steps(my_print_cmd, all = TRUE) %&gt;%
+  summarize(
+    nobs = n(),
+    mean_hp = mean(hp),
+    mean_mpg = mean(mpg)
+  )
+
+</code></pre>
+
+
+</div>

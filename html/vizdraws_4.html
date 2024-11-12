@@ -1,0 +1,223 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vizdraws</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>vizdraws</h2>
+
+<h3>Description</h3>
+
+<p>Visualize Draws from Prior or Posterior Distributions
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vizdraws(
+  prior = NULL,
+  posterior = NULL,
+  MME = 0,
+  threshold = NULL,
+  units = NULL,
+  quantity = FALSE,
+  tense = c("future", "past"),
+  backgroundColor = "#FFFFFF",
+  backgroundOpacity = 0.9,
+  xlab = NULL,
+  breaks = NULL,
+  break_names = NULL,
+  colors = NULL,
+  width = NULL,
+  height = NULL,
+  xlim = NULL,
+  font_scale = 1,
+  display_mode_name = FALSE,
+  title = "",
+  stop_trans = FALSE,
+  percentage = FALSE,
+  elementId = NULL,
+  logoPath = NULL,
+  logoSize = 100,
+  logoLocation = c("bottom-right", "top-left", "top-right", "bottom-left")
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>prior</code></td>
+<td>
+<p>(optional) Prior distribution or draws from it. Supported distributions: 'Normal', 'uniform', 'beta', and 'gamma'. Provide either this or the posterior.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>posterior</code></td>
+<td>
+<p>(optional) Draws from the posterior distribution. Provide either this or the prior.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>MME</code></td>
+<td>
+<p>Minimum meaningful effect. If not provided, MME is set to zero.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threshold</code></td>
+<td>
+<p>If the probability is greater than this threshold, a decision is considered comfortable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>units</code></td>
+<td>
+<p>Optional argument to specify the units of x (e.g., dollars or applications).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quantity</code></td>
+<td>
+<p>Defaults to <code>FALSE</code>. When set to true, the text will reflect predicting a quantity rather than a treatment effect.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tense</code></td>
+<td>
+<p>Either "future" or "past." This is the tense used in the description if quantity is set to TRUE. <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>backgroundColor</code></td>
+<td>
+<p>Defaults to <code>'#FFFFFF'</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>backgroundOpacity</code></td>
+<td>
+<p>Defaults to <code>0.9</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>Defaults to <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>breaks</code></td>
+<td>
+<p>Defaults to <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>break_names</code></td>
+<td>
+<p>Defaults to <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colors</code></td>
+<td>
+<p>Colors for the left, middle, and right areas. Defaults to c("#e41a1c", "#377eb8", "#4daf4a").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width</code></td>
+<td>
+<p>Width for shiny.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>height</code></td>
+<td>
+<p>Height for shiny.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim</code></td>
+<td>
+<p>Defaults to <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>font_scale</code></td>
+<td>
+<p>Defaults to <code>1</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>display_mode_name</code></td>
+<td>
+<p>Defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>Defaults to <code>''</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stop_trans</code></td>
+<td>
+<p>Defaults to <code>FALSE</code>. When set to true, the initial transition stops at posterior density.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentage</code></td>
+<td>
+<p>Defaults to <code>FALSE</code>. When set to true, the x-axis tick format will be set to percentage.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>elementId</code></td>
+<td>
+<p>Use an explicit element ID for the widget (rather than an automatically generated one). elementID for shiny.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logoPath</code></td>
+<td>
+<p>Logo path. Defaults to <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logoSize</code></td>
+<td>
+<p>Logo size. Defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logoLocation</code></td>
+<td>
+<p>Logo location. <code>c('bottom-right', 'top-left', 'top-right', 'bottom-left')</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A function to visualize draws from either the prior or posterior distribution, facilitating interpretation and decision-making.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A HTML widget object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">if(interactive()){
+  set.seed(9782)
+  library(vizdraws)
+  vizdraws(prior = rnorm(100000))
+}
+</code></pre>
+
+
+</div>

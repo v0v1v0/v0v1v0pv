@@ -1,0 +1,57 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_effects</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot marginal effects of a D-vine regression model</h2>
+
+<h3>Description</h3>
+
+<p>The marginal effects of a variable is the expected effect, where expectation
+is meant with respect to all other variables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_effects(object, alpha = c(0.1, 0.5, 0.9), vars = object$order)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a <code>vinereg</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>vector of quantile levels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vars</code></td>
+<td>
+<p>vector of variable names.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># simulate data
+x &lt;- matrix(rnorm(200), 100, 2)
+y &lt;- x %*% c(1, -2)
+dat &lt;- data.frame(y = y, x = x, z = as.factor(rbinom(100, 2, 0.5)))
+
+# fit vine regression model
+fit &lt;- vinereg(y ~ ., dat)
+plot_effects(fit)
+</code></pre>
+
+
+</div>

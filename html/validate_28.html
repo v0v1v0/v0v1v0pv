@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cells</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Cell counts and differences for a series of datasets</h2>
+
+<h3>Description</h3>
+
+<p>Cell counts and differences for a series of datasets
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cells(..., .list = NULL, compare = c("to_first", "sequential"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>For <code>cells</code>: data frames, comma separated. Names will become
+column names in the output. For <code>plot</code> or <code>barplot</code>: graphical parameters
+(see <code>par</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.list</code></td>
+<td>
+<p>A <code>list</code> of data frames; will be concatenated with 
+objects in <code>...</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>compare</code></td>
+<td>
+<p>How to compare the datasets.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class <code>cellComparison</code>, which is really an array 
+with a few extra attributes. It counts the total number of cells, the number of 
+missings, the number of altered values and changes therein as compared to 
+the reference defined in <code>how</code>.
+</p>
+
+
+<h3>Comparing datasets cell by cell</h3>
+
+<p>When comparing the contents of two data sets, the total number of cells
+in the current data set can be partitioned as in the following figure.
+</p>
+<p><img src="../help/figures/cellsplit.png" width="80%" alt="rulewise splitting"></p>
+<p>This function computes the partition for two or more
+datasets, comparing the current set to the first (default) or to the 
+previous (by setting <code>compare='sequential'</code>).
+</p>
+
+
+<h3>Details</h3>
+
+<p>This function assumes that the datasets have the same dimensions and that both
+rows and columns are ordered similarly.
+</p>
+
+
+<h3>References</h3>
+
+<p>The figure is reproduced from MPJ van der Loo and E. De Jonge (2018)
+<em>Statistical Data Cleaning with applications in R</em> (John Wiley &amp; Sons).
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other comparing: 
+<code>as.data.frame,cellComparison-method</code>,
+<code>as.data.frame,validatorComparison-method</code>,
+<code>barplot,cellComparison-method</code>,
+<code>barplot,validatorComparison-method</code>,
+<code>compare()</code>,
+<code>match_cells()</code>,
+<code>plot,cellComparison-method</code>,
+<code>plot,validatorComparison-method</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(retailers)
+
+# start with raw data
+step0 &lt;- retailers
+
+# impute turnovers
+step1 &lt;- step0
+step1$turnover[is.na(step1$turnover)] &lt;- mean(step1$turnover,na.rm=TRUE)
+
+# flip sign of negative revenues
+step2 &lt;- step1
+step2$other.rev &lt;- abs(step2$other.rev)
+  
+
+# create an overview of differences, comparing to the previous step
+cells(raw = step0, imputed = step1, flipped = step2, compare="sequential")
+
+# create an overview of differences compared to raw data
+out &lt;- cells(raw = step0, imputed = step1, flipped = step2)
+out
+
+# Graphical overview of the changes
+plot(out)
+barplot(out)
+
+# transform data to data.frame (easy for use with ggplot)
+as.data.frame(out)
+
+
+</code></pre>
+
+
+</div>

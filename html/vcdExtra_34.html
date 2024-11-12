@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>expand.dft</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Expand a frequency table to case form</h2>
+
+<h3>Description</h3>
+
+<p>Converts a frequency table, given either as a table object or a data frame in frequency form
+to a data frame representing individual observations in the table.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">expand.dft(x, var.names = NULL, freq = "Freq", ...)
+
+expand.table(x, var.names = NULL, freq = "Freq", ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A table object, or a data frame in frequency form containing factors and one numeric variable
+representing the cell frequency for that combination of factors. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.names</code></td>
+<td>
+<p>A list of variable names for the factors, if you wish to override those already in the table</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>freq</code></td>
+<td>
+<p>The name of the frequency variable in the table</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments passed down to <code>type.convert</code>.  In particular, pay attention to 
+<code>na.strings</code> (default: <code>na.strings=NA</code> if there are missing cells) and <code>as.is</code>
+(default: <code>as.is=FALSE</code>, converting character vectors to factors).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>expand.table</code> is a synonym for <code>expand.dft</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame containing the factors in the table and as many observations as are
+represented by the total of the <code>freq</code> variable.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Mark Schwarz </p>
+
+
+<h3>References</h3>
+
+<p>Originally posted on R-Help, Jan 20, 2009,
+http://tolstoy.newcastle.edu.au/R/e6/help/09/01/1873.html
+</p>
+<p>Friendly, M. and Meyer, D. (2016). 
+<em>Discrete Data Analysis with R: Visualization and Modeling Techniques for Categorical and Count Data</em>. 
+Boca Raton, FL: Chapman &amp; Hall/CRC. <a href="http://ddar.datavis.ca">http://ddar.datavis.ca</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+ <p><code>type.convert</code>, <code>expandCategorical</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(vcd)
+art &lt;- xtabs(~Treatment + Improved, data = Arthritis)
+art
+artdf &lt;- expand.dft(art)
+str(artdf)
+
+# 1D case
+(tab &lt;- table(sample(head(letters), 20, replace=TRUE)))
+expand.table(tab, var.names="letter")
+
+</code></pre>
+
+
+</div>

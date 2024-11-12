@@ -1,0 +1,145 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>loop_lss</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The EM loop for the LSS model</h2>
+
+<h3>Description</h3>
+
+<p><code>loop_lss</code> is the EM loop function for the LSS model to be utilised by various other higher level functions
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">loop_lss(
+  alldat,
+  xiold,
+  omega2old,
+  nuold,
+  mean.ind,
+  var.ind,
+  nu.ind,
+  para.space,
+  maxit,
+  eps,
+  int.maxit,
+  print.it
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alldat</code></td>
+<td>
+<p>Dataframe containing all the data for the models. Outcome in the first column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xiold</code></td>
+<td>
+<p>Vector of initial location parameter estimates to be fit in the location model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>omega2old</code></td>
+<td>
+<p>Vector of initial scale2 parameter estimates to be fit in the scale2 model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nuold</code></td>
+<td>
+<p>Vector of initial nu parameter estimates to be fit in the nu model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean.ind</code></td>
+<td>
+<p>Vector containing the column numbers of the data in 'alldat' to be fit as covariates in the location model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.ind</code></td>
+<td>
+<p>Vector containing the column numbers of the data in 'alldat' to be fit as covariates in the scale2 model. FALSE indicates a constant variance model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nu.ind</code></td>
+<td>
+<p>Vector containing the column numbers of the data in 'alldat' to be fit as covariates in the nu model. NULL indicates constant model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>para.space</code></td>
+<td>
+<p>Parameter space to search for variance parameter estimates. "positive" means only search positive parameter space, "negative" means search only negative parameter space and "all" means search all.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxit</code></td>
+<td>
+<p>Number of maximum iterations for the main EM algorithm.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>Very small number for the convergence criteria.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>int.maxit</code></td>
+<td>
+<p>Number of maximum iterations for the internal EM algorithm for the location and scale.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>print.it</code></td>
+<td>
+<p>Logical to indicate if the estimates for each iteration should be printed.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of the results from the algorithm, including conv, reldiff, it, mean, xi.new, omega2.new, nu.new, fitted.xi
+</p>
+
+<ul>
+<li>
+<p><code>conv</code>: Logical argument indicating if convergence occurred
+</p>
+</li>
+<li>
+<p><code>it</code>: Total iterations performed of the EM algorithm
+</p>
+</li>
+<li>
+<p><code>reldiff</code>: the positive convergence tolerance that occured at the final iteration
+</p>
+</li>
+<li>
+<p><code>xinew</code>: Vector of location parameter estimates
+</p>
+</li>
+<li>
+<p><code>omega2new</code>: Vector of scale squared parameter estimates
+</p>
+</li>
+<li>
+<p><code>nunew</code>: Vector of shape parameter estimates
+</p>
+</li>
+<li>
+<p><code>fitted.xi</code>: Vector of fitted location estimates
+</p>
+</li>
+</ul>
+</div>

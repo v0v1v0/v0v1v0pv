@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>emis_dist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Allocate emissions into spatial objects (street emis to grid)</h2>
+
+<h3>Description</h3>
+
+<p><code>emis_dist</code> allocates emissions proportionally to
+each feature. "Spatial" objects are converter to "sf" objects. Currently,
+'LINESTRING' or 'MULTILINESTRING' supported. The emissions are distributed
+in each street.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">emis_dist(gy, spobj, pro, osm, verbose = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>gy</code></td>
+<td>
+<p>Numeric; a unique total (top-down)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spobj</code></td>
+<td>
+<p>A spatial dataframe of class "sp" or "sf". When class is "sp"
+it is transformed to "sf".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pro</code></td>
+<td>
+<p>Matrix or data-frame profiles, for instance, pc_profile.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>osm</code></td>
+<td>
+<p>Numeric; vector of length 5, for instance, c(5, 3, 2, 1, 1).
+The first element covers 'motorway' and 'motorway_link.
+The second element covers 'trunk' and 'trunk_link'.
+The third element covers 'primary' and 'primary_link'.
+The fourth element covers 'secondary' and 'secondary_link'.
+The fifth element covers 'tertiary' and 'tertiary_link'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical; to show more info.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>When spobj is a 'Spatial' object (class of sp), they are converted
+into 'sf'.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(net)
+data(pc_profile)
+po &lt;- 1000
+t1 &lt;- emis_dist(gy = po, spobj = net)
+head(t1)
+sum(t1$gy)
+#t1 &lt;- emis_dist(gy = po, spobj = net, osm = c(5, 3, 2, 1, 1) )
+t1 &lt;- emis_dist(gy = po, spobj = net, pro = pc_profile)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

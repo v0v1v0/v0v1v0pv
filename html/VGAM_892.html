@@ -1,0 +1,143 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lrt.stat</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Likelihood Ratio Test
+Statistics Evaluated at the Null Values </h2>
+
+<h3>Description</h3>
+
+<p>Generic function that computes
+likelihood ratio test (LRT)
+statistics evaluated at the null values
+(consequently they do not suffer from the Hauck-Donner effect).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lrt.stat(object, ...)
+lrt.stat.vlm(object, values0 = 0, subset = NULL, omit1s = TRUE,
+          all.out = FALSE, trace = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object, values0, subset</code></td>
+<td>
+
+<p>Same as in <code>wald.stat.vlm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>omit1s, all.out, trace</code></td>
+<td>
+
+<p>Same as in <code>wald.stat.vlm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Ignored for now.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>When <code>summary()</code> is applied to a <code>vglm</code> object
+a 4-column Wald table is produced.
+The corresponding p-values are generally viewed as inferior to
+those from a likelihood ratio test (LRT).
+For example, the Hauck and Donner (1977) effect (HDE) produces
+p-values that are biased upwards (see <code>hdeff</code>).
+Other reasons are that the Wald test is often less accurate
+(especially in small samples) and is not invariant to
+parameterization.
+By default, this function returns p-values based on the LRT by
+deleting one column at a time from the big VLM matrix
+and then restarting IRLS to obtain convergence (hopefully).
+Twice the difference between the log-likelihoods
+(or equivalently, the difference in the deviances if they are defined)
+is asymptotically chi-squared with 1 degree of freedom.
+One might expect the p-values from this function
+therefore to be more accurate
+and not suffer from the HDE.
+Thus this function is a recommended
+alternative (if it works) to <code>summaryvglm</code>
+for testing for the significance of a regression coefficient.
+</p>
+
+
+<h3>Value</h3>
+
+<p>By default, a vector of signed square root of the LRT statistics;
+these are asymptotically standard normal under the null hypotheses.
+If <code>all.out = TRUE</code> then a list is returned with the
+following components:
+<code>lrt.stat</code> the signed LRT statistics,
+<code>pvalues</code> the 2-sided p-values,
+<code>Lrt.stat2</code> the usual LRT statistic,
+<code>values0</code> the null values.
+</p>
+
+
+
+
+
+
+
+
+<h3>Warning </h3>
+
+<p>See <code>wald.stat.vlm</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee.  </p>
+
+
+<h3>See Also</h3>
+
+<p><code>score.stat</code>,
+<code>wald.stat</code>,
+<code>summaryvglm</code>,
+<code>anova.vglm</code>,
+<code>vglm</code>,
+<code>lrtest</code>,
+<code>confintvglm</code>,
+<code>pchisq</code>,
+<code>profilevglm</code>,
+<code>hdeff</code>.
+</p>
+
+
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(1)
+pneumo &lt;- transform(pneumo, let = log(exposure.time),
+                            x3 = rnorm(nrow(pneumo)))
+fit &lt;- vglm(cbind(normal, mild, severe) ~ let, propodds, pneumo)
+cbind(coef(summary(fit)),
+      "signed LRT stat" = lrt.stat(fit, omit1s = FALSE))
+summary(fit, lrt0 = TRUE)  # Easy way to get it
+</code></pre>
+
+
+</div>

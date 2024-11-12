@@ -1,0 +1,82 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>show_grid</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plots grid objects for inspection using plotly</h2>
+
+<h3>Description</h3>
+
+<p>This function creates an interactive grids in polar and cylindrical
+coordinates
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">show_grid(grid, plot_height = 700, axis_angle = 0, z_axis_title_offset = 1.2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>grid</code></td>
+<td>
+<p>A grid object produced by <code>polar_grid</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot_height</code></td>
+<td>
+<p>The plot height in px (default=700),</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>axis_angle</code></td>
+<td>
+<p>The angle in radians at which to add axis (default=0).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z_axis_title_offset</code></td>
+<td>
+<p>Offset for z axis title (default=1.2).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a list containing a polar and cylindrical coordinate system.
+</p>
+
+
+<h3>References</h3>
+
+<p>Lewis, Myles J., et al. (2019).
+<a href="https://pubmed.ncbi.nlm.nih.gov/31461658/">
+Molecular portraits of early rheumatoid arthritis identify clinical and
+treatment response phenotypes.</a>
+<em>Cell reports</em>, <strong>28</strong>:9
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(example_data)
+syn_polar &lt;- polar_coords(outcome = syn_example_meta$Pathotype,
+                          data = t(syn_example_rld))
+
+grid &lt;- polar_grid(r_vector=syn_polar@df[[1]]$r,
+        z_vector=syn_polar@df[[1]]$z,
+        r_axis_ticks = NULL,
+        z_axis_ticks = NULL)
+p &lt;- show_grid(grid)
+p$polar
+p$cyl
+</code></pre>
+
+
+</div>

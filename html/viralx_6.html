@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>viralx_knn_glob</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Global Explainers for K-Nearest Neighbor Models</h2>
+
+<h3>Description</h3>
+
+<p>This function calculates global feature importance for a K-Nearest Neighbors
+(KNN) model trained on HIV data with specified hyperparameters.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">viralx_knn_glob(
+  vip_featured,
+  hiv_data,
+  knn_hyperparameters,
+  vip_train,
+  v_train
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vip_featured</code></td>
+<td>
+<p>The name of the response variable to explain.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hiv_data</code></td>
+<td>
+<p>The training dataset containing predictor variables and the response variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knn_hyperparameters</code></td>
+<td>
+<p>A list of hyperparameters for the KNN model, including:
+</p>
+
+<ul>
+<li> <p><code>neighbors</code>: The number of neighbors to consider.
+</p>
+</li>
+<li> <p><code>weight_func</code>: The weight function to use.
+</p>
+</li>
+<li> <p><code>dist_power</code>: The distance power parameter.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vip_train</code></td>
+<td>
+<p>The dataset used for training the KNN model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v_train</code></td>
+<td>
+<p>The response variable used for training the KNN model.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of global feature importance measures for each predictor variable.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(dplyr)
+set.seed(123)
+hiv_data &lt;- train2
+knn_hyperparameters &lt;- list(neighbors = 5, weight_func = "optimal", dist_power = 0.3304783)
+vip_featured &lt;- c("cd_2022")
+vip_features &lt;- c("cd_2019", "vl_2019", "cd_2021", "vl_2021", "vl_2022")
+vip_train &lt;- train2 |&gt;
+dplyr::select(rsample::all_of(vip_features))
+v_train &lt;- train2 |&gt;
+dplyr::select(rsample::all_of(vip_featured))
+viralx_knn_glob(vip_featured, hiv_data, knn_hyperparameters, vip_train, v_train)
+</code></pre>
+
+
+</div>

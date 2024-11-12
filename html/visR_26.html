@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>define_theme</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Provides a simple wrapper for themes</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+This function collects several lists if they are present. If absent, reasonable defaults are used.
+When strata are not defined in the theme, they default to grey50 and will not be presented in the legend.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">define_theme(
+  strata = NULL,
+  fontsizes = NULL,
+  fontfamily = "Helvetica",
+  grid = FALSE,
+  bg = "transparent",
+  legend_position = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>strata</code></td>
+<td>
+<p>named list containing the different strata and name:colour value pairs</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fontsizes</code></td>
+<td>
+<p>named list containing the font sizes for different options</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fontfamily</code></td>
+<td>
+<p>string with the name of a supported font</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grid</code></td>
+<td>
+<p>boolean that specifies whether the major and minor grid should be drawn. The drawing of major and minor
+gridlines can be manipulated separately by using a boolean indicator in a named <code>list</code> with elements <code>major</code>
+and <code>minor</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bg</code></td>
+<td>
+<p>string defining the colour for the background of the plot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend_position</code></td>
+<td>
+<p>string defining the legend position. Valid options are NULL, 'top' 'bottom' 'right' 'left'</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Nested list with styling preferences for a ggplot object
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+theme &lt;- visR::define_theme(
+  strata = list("SEX" = list(
+    "F" = "red",
+    "M" = "blue"
+  )),
+  fontsizes = list(
+    "axis" = 12,
+    "ticks" = 10,
+    "legend_title" = 10,
+    "legend_text" = 8
+  ),
+  fontfamily = "Helvetica",
+  grid = list(
+    "major" = FALSE,
+    "minor" = FALSE
+  ),
+  bg = "transparent",
+  legend_position = "top"
+)
+
+</code></pre>
+
+
+</div>

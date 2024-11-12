@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary.vhicaimage</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Provides a data.frame that nicely displays the information returned by <code>image.vhica</code>. 
+</h2>
+
+<h3>Description</h3>
+
+<p>The <code>image.vhica</code> routine displays visually the statistical support for horizontal transfers, and can return an object of class <code>vhicaimage</code>. The current <code>summary</code> method reorganizes this object into a dataframe that can be displayed or reused in further analysis. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vhicaimage'
+summary(object, divrate=NA, p.thresh=1, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>An object of class <code>vhicaimage</code>, created by <code>image.vhica</code>. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>divrate</code></td>
+<td>
+
+<p>Optional divergence rate (in neutral substitutions per Myr). 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.thresh</code></td>
+<td>
+
+<p>Optional p-value threshold. By default, all data is returned. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Additional options for <code>summary</code> (unused). 
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>	The resulting <code>data.frame</code> has 4 or 5 columns. The two first columns are <code>sp1</code> and <code>sp2</code>, the two species between which the horizontal transfer is tested, in an arbitrary order. The column <code>p.value</code> contains the p-value calculated as in <code>image.vhica</code> (including the possible correction for multiple testing). The <code>dS</code> column is a copy of the corresponding divergence from the original data. The last, optional column <code> Time(Mya)</code> is a molecular clock estimate of the time of divergence between the two sequences, based on the divergence rate (when provided). </p>
+
+
+<h3>Author(s)</h3>
+
+<p>Implementation: Arnaud Le Rouzic &lt;lerouzic@legs.cnrs-gif.fr&gt; and Gabriel Wallau<br>
+Scientists who designed the method: Gabriel Wallau, Aurélie Hua-Van, Arnaud Le~Rouzic.
+</p>
+
+
+<h3>References</h3>
+
+<p>Gabriel Luz Wallau, Arnaud Le Rouzic, Pierre Capy, Elgion Loreto, Aurélie Hua-Van. VHICA: A new method to discriminate between vertical and horizontal transposon transfer: application to the mariner family within Drosophila. Molecular biology and evolution 33 (4), 1094-1109.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>read.vhica</code>, <code>image.vhica</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">file.cb &lt;- system.file("extdata", "mini-cbias.txt", package="vhica")
+file.div &lt;- system.file("extdata", "mini-div.txt", package="vhica")
+file.tree &lt;- if(require("ape")) system.file("extdata", "phylo.nwk", package="vhica") else NULL
+vc &lt;- read.vhica(cb.filename=file.cb, div.filename=file.div)
+plot(vc, "dere", "dana")
+im &lt;- image(vc, "mellifera:6", treefile=file.tree, skip.void=TRUE)
+summary(im)
+</code></pre>
+
+
+</div>

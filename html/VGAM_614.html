@@ -1,0 +1,125 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gammahyperbola</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Gamma Hyperbola Bivariate Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Estimate the parameter of a gamma hyperbola bivariate distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">gammahyperbola(ltheta = "loglink", itheta = NULL, expected = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ltheta</code></td>
+<td>
+
+<p>Link function applied to the (positive) parameter <code class="reqn">\theta</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>itheta</code></td>
+<td>
+
+<p>Initial value for the parameter.
+The default is to estimate it internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>expected</code></td>
+<td>
+
+<p>Logical. <code>FALSE</code> means the Newton-Raphson (using
+the observed information matrix) algorithm, otherwise the expected
+information matrix is used (Fisher scoring algorithm).
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The joint probability density function is given by
+</p>
+<p style="text-align: center;"><code class="reqn">f(y_1,y_2) = \exp( -e^{-\theta} y_1 / \theta - \theta y_2 )</code>
+</p>
+
+<p>for <code class="reqn">\theta &gt; 0</code>, <code class="reqn">y_1 &gt; 0</code>, <code class="reqn">y_2 &gt; 1</code>.
+The random variables <code class="reqn">Y_1</code>  and <code class="reqn">Y_2</code> are independent.
+The marginal distribution of <code class="reqn">Y_1</code> is an exponential distribution
+with rate parameter <code class="reqn">\exp(-\theta)/\theta</code>.
+The marginal distribution of <code class="reqn">Y_2</code> is an exponential distribution
+that has been shifted to the right by 1 and with
+rate parameter <code class="reqn">\theta</code>.
+The fitted values are stored in a two-column matrix with the marginal
+means, which are <code class="reqn">\theta \exp(\theta)</code> and
+<code class="reqn">1 + 1/\theta</code>.
+</p>
+<p>The default algorithm is Newton-Raphson because Fisher scoring tends to
+be much slower for this distribution.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be a two-column matrix.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Reid, N. (2003).
+Asymptotics and the theory of inference.
+<em>Annals of Statistics</em>,
+<b>31</b>, 1695–1731.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>exponential</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">gdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+gdata &lt;- transform(gdata, theta = exp(-2 + x2))
+gdata &lt;- transform(gdata, y1 = rexp(nn, rate = exp(-theta)/theta),
+                          y2 = rexp(nn, rate = theta) + 1)
+fit &lt;- vglm(cbind(y1, y2) ~ x2, gammahyperbola(expected = TRUE), data = gdata)
+coef(fit, matrix = TRUE)
+Coef(fit)
+head(fitted(fit))
+summary(fit)
+</code></pre>
+
+
+</div>

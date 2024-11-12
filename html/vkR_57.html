@@ -1,0 +1,149 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getWallExecute</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Returns a list of posts on a user wall or community wall</h2>
+
+<h3>Description</h3>
+
+<p>Returns a list of posts on a user wall or community wall
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getWallExecute(
+  owner_id = "",
+  domain = "",
+  offset = 0,
+  count = 10,
+  filter = "owner",
+  extended = "",
+  fields = "",
+  use_db = FALSE,
+  db_params = list(),
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>owner_id</code></td>
+<td>
+<p>ID of the user or community that owns the wall. By default, current user ID. Use a negative value to designate a community ID.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>domain</code></td>
+<td>
+<p>User or community short address.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>offset</code></td>
+<td>
+<p>Offset needed to return a specific subset of posts.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>count</code></td>
+<td>
+<p>Number of posts to return (0 for all posts).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filter</code></td>
+<td>
+<p>Filter to apply:
+</p>
+
+<ul>
+<li> <p><strong>owner</strong> - posts by the wall owner;
+</p>
+</li>
+<li> <p><strong>others</strong> - posts by someone else;
+</p>
+</li>
+<li> <p><strong>all</strong> - posts by the wall owner and others (default);
+</p>
+</li>
+<li> <p><strong>postponed</strong> - timed posts (only available for calls with an access_token);
+</p>
+</li>
+<li> <p><strong>suggests</strong> - suggested posts on a community wall.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extended</code></td>
+<td>
+<p>1 - to return wall, profiles, and groups fields, 0 - to return no additional fields (default).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fields</code></td>
+<td>
+<p>List of comma-separated words</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use_db</code></td>
+<td>
+<p>Use database</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>db_params</code></td>
+<td>
+<p>Collection name and suffix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>progress_bar</code></td>
+<td>
+<p>Display progress bar</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>Version of API</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a list of post objects.
+If extended is set to 1, also returns the following:
+</p>
+
+<ul>
+<li> <p><strong>wall</strong> - Contains a list of post objects.
+</p>
+</li>
+<li> <p><strong>profiles</strong> - Contains user objects with additional fields photo and online.
+</p>
+</li>
+<li> <p><strong>groups</strong> - Contains community objects.
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# get all posts from wall
+wall &lt;- getWallExecute(domain='spbrug', count=0, progress_bar=TRUE)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

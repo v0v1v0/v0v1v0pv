@@ -1,0 +1,165 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>calculate_viewmetrics</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>calculate_viewmetrics</h2>
+
+<h3>Description</h3>
+
+<p>The calculate_viewmetrics function is designed to compute a set of
+configuration metrics based on a given viewshed object and optionally, digital surface
+models (DSM) and digital terrain models (DTM) for terrain analysis.
+The function calculates various metrics that describe the visibility characteristics
+of a landscape from a specific viewpoint.The metrics include:
+</p>
+
+<ol>
+<li>
+<p> Extent: The total area of the viewshed, calculated as the number of visible grid
+cells multiplied by the grid resolution
+</p>
+</li>
+<li>
+<p> Depth: The furthest visible distance within the viewshed from the viewpoint
+</p>
+</li>
+<li>
+<p> Vdepth: The standard deviation of distances to visible points,
+providing a measure of the variation in visible distances
+</p>
+</li>
+<li>
+<p> Horizontal: The total visible horizontal or terrestrial area within the viewshed
+</p>
+</li>
+<li>
+<p> Relief: The standard deviation of elevations of the visible ground surface
+</p>
+</li>
+<li>
+<p> Skyline: The standard deviation of the vertical viewscape, including visible
+canopy and buildings, when specified
+</p>
+</li>
+<li>
+<p> Number of patches: Visible fragmentation measured by total visible patches
+with the viewscape
+</p>
+</li>
+<li>
+<p> Mean shape index: Visible patchiness based on average perimeter-to-area ratio
+for all viewscape patches (vegetation and building)
+</p>
+</li>
+<li>
+<p> Edge density: A measure of visible complexity based on the length of
+patch edges per unit area
+</p>
+</li>
+<li>
+<p> Patch size: Total average size of a patches over the entire viewscape area
+</p>
+</li>
+<li>
+<p> Patch density: Visible landscape granularity based on measuring patch density
+</p>
+</li>
+<li>
+<p> Shannon diversity index: The abundance and evenness of land cover/use in a viewshed
+</p>
+</li>
+<li>
+<p> Proportion of object: Proportion of a single type of land use or cover in a viewshed
+</p>
+</li>
+</ol>
+<h3>Usage</h3>
+
+<pre><code class="language-R">calculate_viewmetrics(viewshed, dsm, dtm, masks = list())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>viewshed</code></td>
+<td>
+<p>Viewshed object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dsm</code></td>
+<td>
+<p>Raster, Digital Surface Model for the calculation of</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dtm</code></td>
+<td>
+<p>Raster, Digital Terrain Model</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>masks</code></td>
+<td>
+<p>List, a list including rasters of canopy and building footprints.
+For example of canopy raster, the value for cells without canopy should be 0 and
+the value for cells with canopy can be any number.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>List
+</p>
+
+
+<h3>References</h3>
+
+<p>Tabrizian, P., Baran, P.K., Berkel, D.B., Mitásová, H., &amp; Meentemeyer, R.K. (2020).
+Modeling restorative potential of urban environments by coupling viewscape analysis of lidar
+data with experiments in immersive virtual environments. Landscape and Urban Planning, 195, 103704.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Load in DSM
+test_dsm &lt;- terra::rast(system.file("test_dsm.tif",
+                                    package ="viewscape"))
+# Load DTM
+test_dtm &lt;- terra::rast(system.file("test_dtm.tif",
+                                    package ="viewscape"))
+
+# Load canopy raster
+test_canopy &lt;- terra::rast(system.file("test_canopy.tif",
+                                       package ="viewscape"))
+
+# Load building footprints raster
+test_building &lt;- terra::rast(system.file("test_building.tif",
+                                         package ="viewscape"))
+
+# Load in the viewpoint
+test_viewpoint &lt;- sf::read_sf(system.file("test_viewpoint.shp",
+                                          package = "viewscape"))
+
+# Compute viewshed
+output &lt;- viewscape::compute_viewshed(dsm = test_dsm,
+                                      viewpoints = test_viewpoint,
+                                      offset_viewpoint = 6)
+
+# calculate metrics given the viewshed, canopy, and building footprints
+test_metrics &lt;- viewscape::calculate_viewmetrics(output,
+                                                 test_dsm,
+                                                 test_dtm,
+                                                 list(test_canopy, test_building))
+
+
+</code></pre>
+
+
+</div>

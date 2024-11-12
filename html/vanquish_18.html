@@ -1,0 +1,95 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>read_vcf</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>VCF Data Input</h2>
+
+<h3>Description</h3>
+
+<p>Reads a file in vcf or vcf.gz file and creates a list containing Content, Meta, VCF and file_sample_name
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">read_vcf(fn, vcffor, dbOnly = FALSE, depCut = FALSE, thred = 20,
+  metaline = 200, extnum = 10, keepall = TRUE, filter = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fn</code></td>
+<td>
+<p>Input vcf file name</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vcffor</code></td>
+<td>
+<p>Input vcf data format: 1) GATK; 2) VarPROWL; 3) VarDict; 4) strelka2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dbOnly</code></td>
+<td>
+<p>Use dbSNP as filter, default is FALSE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>depCut</code></td>
+<td>
+<p>Use a threshold for min depth , default is False</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thred</code></td>
+<td>
+<p>Threshold for min depth, default is 20</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metaline</code></td>
+<td>
+<p>Number of head lines to read in (better to be large enough), the lines will be checked if they contain meta information, default is 200</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extnum</code></td>
+<td>
+<p>The column number to be extracted from vcf, default is 10; 0 for not extracting any column; extnum should be between 10 and total column number</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keepall</code></td>
+<td>
+<p>Keep unextracted column in output, default is TRUE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filter</code></td>
+<td>
+<p>Whether to select "PASS" variants for analyses if they contain unfiltered variants, default is FALSE</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing (1) Content: a vector showing what is contained; (2) Meta: a data frame containing meta-information of the file;
+(3) VCF: a data frame, the main part of VCF file; (4) file_sample_name: the file name and sample name,
+in case when multiple samples exist in one file, file and sample names might be different
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">file.name &lt;- system.file("extdata", "example.vcf.gz", package = "vanquish")
+example &lt;- read_vcf(fn=file.name, vcffor="VarPROWL")
+</code></pre>
+
+
+</div>

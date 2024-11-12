@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>shannon_entropy</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>shannon_entropy</h2>
+
+<h3>Description</h3>
+
+<p>Takes a rearranged vcf dataframe and calculates the Shannon entropy
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">shannon_entropy(df, genome_size)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>A rearranged vcf dataframe (arrange_data)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>genome_size</code></td>
+<td>
+<p>Size of whole genome being used</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Shannon entropy is a commonly used metric to describe the amount of genetic
+diversity in sequencing data. It is calculated by considering the frequency
+of the ALT and REF allele at every position and then summing those values
+over 1) a segment or 2) the entire genome. These values can then be
+normalized by sequence length (kb) in order to compare across different
+segments or samples.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A dataframe with Shannon entropy/kb calculations for the chroms and entire genome
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Sample dataframe
+df &lt;- data.frame(sample = c("m1", "m2", "m1", "m2", "m1"),
+                 CHROM = c("PB1", "PB1", "PB2", "PB2", "NP"),
+                 minorfreq = c(0.010, 0.022, 0.043, 0.055, 0.011),
+                 majorfreq = c(0.990, 0.978, 0.957, 0.945, 0.989),
+                 SegmentSize = c(2280, 2280, 2274, 2274, 1809)
+)
+
+df
+
+genome_size = 13133
+
+# MOdify the dataframe to add 5 new columns of shannon entropy data:
+# 1. shannon_ntpos
+# 2. chrom_shannon
+# 3. genome_shannon
+# 4. shannon_chrom_perkb
+# 5. genome_shannon_perkb
+shannon_entropy(df, genome_size)
+
+</code></pre>
+
+
+</div>

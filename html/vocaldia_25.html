@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>makeVocalStatsDataset</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>makeVocalStatsDataset: create a dataset of vocalisation statistics (1 row per patient)</h2>
+
+<h3>Description</h3>
+
+<p>Build a data frame createwith vocalisation statistics
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">makeVocalStatsDataset(
+  dir = c("data/Pitt/Dementia/cookie", "data/Pitt/Control/cookie"),
+  sildir = NULL,
+  silsuffix = "c.mp3.csv",
+  srdir = "data/Pitt/speech_rate/",
+  srsuffix = "sra",
+  sprate = T
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dir</code></td>
+<td>
+<p>a string or vector containing the location (directory path) of the DementiaBank transcript files (.cha files)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sildir</code></td>
+<td>
+<p>directory where silence csv files are stored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>silsuffix</code></td>
+<td>
+<p>the suffix of the silence profile files 'c.mp3.csv'. The format of such files should be the format used by Audacity label files, i.e. 'start time, end time, label' (without header), where 'label' should be 'silence'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>srdir</code></td>
+<td>
+<p>directory where speech rate csv (1 value per utterance) files are stored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>srsuffix</code></td>
+<td>
+<p>the suffix of the speech rate files (default: sre)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sprate</code></td>
+<td>
+<p>compute speech rate? (not in use yet)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a session's vocalisation feature stats
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+makeVocalStatsDataset(dir=c('ADReSS-IS2020-data/train/transcription/cc/',
+                            'ADReSS-IS2020-data/train/transcription/cd/'),
+                     sildir='ADReSS/silence/',
+                     srdir='ADReSS/speech_rate/',
+                     silsuffix='.wav-sil.csv')
+
+## End(Not run)
+</code></pre>
+
+
+</div>

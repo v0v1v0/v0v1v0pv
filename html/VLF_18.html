@@ -1,0 +1,152 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>aminoAcidFun</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Amino Acid VLF Analysis Function
+</h2>
+
+<h3>Description</h3>
+
+<p>Runs the full amino acid VLF analysis for the user and outputs results.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">aminoAcidFun(x, p = 0.001, seqlength = 216, own = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A matrix of amino acid sequences with the first column containing the unique specimen identifier, the second column containing the species name and the remaining columns containing the amino acid sequence.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+
+<p>A VLF designation frequency cut-off to be used within the analysis.  By default p = 0.001.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seqlength</code></td>
+<td>
+
+<p>The length of the amino acid sequence.  By default seqlength = 216.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>own</code></td>
+<td>
+
+<p>If the user wants to compare their own sequences separate from reference sequences, then argument can be used.  Similar to x, this argument is a matrix of amino acid sequences with the first column containing the unique specimen identifier, the second column contains the species name and the remaining columns containing the nucleotide sequence.  By default own = NULL.)
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>modal</code></td>
+<td>
+<p>A vector containing the amino acid sequence that occurs most often in the dataset.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>con100</code></td>
+<td>
+<p>The number of amino acid positions that are 100% conserved in the sequence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>conp</code></td>
+<td>
+<p>The number of amino acid positions that are (1-p)% conserved in the sequence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>combine</code></td>
+<td>
+<p>The number of amino acid positions that are (1-p)% conserved when combining the first and second modal sequences.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>specimen</code></td>
+<td>
+<p>A vector containing the number of VLFs for each specimen in the dataset.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>position</code></td>
+<td>
+<p>A vector containing the number of VLFs for each position in the sequences.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sas</code></td>
+<td>
+<p>A matrix containing vectors of single and shared amino acid VLF counts for each position of the sequence.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VLFmatrix</code></td>
+<td>
+<p>A matrix containing only those specimen that have VLFs as well as the amino acid at the positions that contain VLFs and NAs in all other positions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ownSpecCount</code></td>
+<td>
+<p>A vector containing the number of VLFs for each specimen in the users own specified dataset.  Only appears if own is not NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ownPosCount</code></td>
+<td>
+<p>A vector containing the number of VLFs for each position in the sequences of the users own specified dataset.  Only appears if own is not NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ownVLFMatrix</code></td>
+<td>
+<p>A matrix containing only those amino acids at the positions that contain VLFs and NAs in all other positions of the sequence.  Only appears if own is not NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ownVLFreduced</code></td>
+<td>
+<p>ownVLFMatrix</p>
+</td>
+</tr>
+</table>
+<p>A matrix containing only those specimen that have VLFs as well as the amino acids at the positions that contain VLFs and NAs in all other positions of the sequence.  Only appears if own is not NULL.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: data(birds_aminoAcids)
+bird_aaAnalysis &lt;- aminoAcidFun(birds_aminoAcids)
+## End(Not run)
+</code></pre>
+
+
+</div>

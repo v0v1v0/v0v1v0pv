@@ -1,0 +1,167 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>raupcrick</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Raup-Crick Dissimilarity with Unequal Sampling Densities of Species
+</h2>
+
+<h3>Description</h3>
+
+<p> Function finds the Raup-Crick dissimilarity which is a
+probability of number of co-occurring species with species
+occurrence probabilities proportional to species frequencies.  </p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">raupcrick(comm, null = "r1", nsimul = 999, chase = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>comm</code></td>
+<td>
+<p>Community data which will be treated as presence/absence data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>null</code></td>
+<td>
+<p>Null model used as the <code>method</code> in
+<code>oecosimu</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimul</code></td>
+<td>
+<p>Number of null communities for assessing the
+dissimilarity index.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>chase</code></td>
+<td>
+<p>Use the Chase et al. (2011) method of tie handling (not
+recommended except for comparing the results against the Chase
+script).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other parameters passed to <code>oecosimu</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Raup-Crick index is the probability that compared sampling
+units have non-identical species composition.  This probability can
+be regarded as a dissimilarity, although it is not metric: identical
+sampling units can have dissimilarity slightly above <code class="reqn">0</code>, the
+dissimilarity can be nearly zero over a range of shared species, and
+sampling units with no shared species can have dissimilarity
+slightly below <code class="reqn">1</code>. Moreover, communities sharing rare species
+appear as more similar (lower probability of finding rare species
+together), than communities sharing the same number of common
+species.
+</p>
+<p>The function will always treat the data as binary (presence/
+absence).
+</p>
+<p>The probability is assessed using simulation with
+<code>oecosimu</code> where the test statistic is the observed
+number of shared species between sampling units evaluated against a
+community null model (see Examples).  The default null model is
+<code>"r1"</code> where the probability of selecting species is
+proportional to the species frequencies.
+</p>
+<p>The <code>vegdist</code> function implements a variant of the
+Raup-Crick index with equal sampling probabilities for species using
+exact analytic equations without simulation. This corresponds to
+<code>null</code> model <code>"r0"</code> which also can be used with the
+current function.  All other null model methods of
+<code>oecosimu</code> can be used with the current function, but
+they are new unpublished methods.  </p>
+
+
+<h3>Value</h3>
+
+<p>The function returns an object inheriting from
+<code>dist</code> which can be interpreted as a dissimilarity
+matrix.</p>
+
+
+<h3>Note</h3>
+
+<p> The test statistic is the number of shared species, and this is
+typically tied with a large number of simulation results. The tied
+values are handled differently in the current function and in the
+function published with Chase et al. (2011). In <span class="pkg">vegan</span>, the
+index is the number of simulated values that are smaller <em>or
+equal</em> than the observed value, but smaller than observed value is
+used by Chase et al. (2011) with option <code>split = FALSE</code> in
+their script; this can be achieved with <code>chase = TRUE</code> in
+<span class="pkg">vegan</span>.  Chase et al. (2011) script with <code>split = TRUE</code>
+uses half of tied simulation values to calculate a distance measure,
+and that choice cannot be directly reproduced in vegan (it is the
+average of <span class="pkg">vegan</span> <code>raupcrick</code> results with 
+<code>chase = TRUE</code> and <code>chase = FALSE</code>).</p>
+
+
+<h3>Author(s)</h3>
+
+<p>The function was developed after Brian Inouye contacted us and
+informed us about the method in Chase et al. (2011), and the
+function takes its idea from the code that was published with their
+paper. The current function was written by Jari Oksanen.  </p>
+
+
+<h3>References</h3>
+
+<p>Chase, J.M., Kraft, N.J.B., Smith, K.G., Vellend, M. and Inouye,
+B.D. (2011). Using null models to disentangle variation in community
+dissimilarity from variation in <code class="reqn">\alpha</code>-diversity.
+<em>Ecosphere</em> 2:art24 <a href="https://doi.org/10.1890/ES10-00117.1">doi:10.1890/ES10-00117.1</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>The function is based on <code>oecosimu</code>. Function
+<code>vegdist</code> with <code>method = "raup"</code> implements a related
+index but with equal sampling densities of species, and
+<code>designdist</code> demonstrates its calculation.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## data set with variable species richness
+data(sipoo)
+## default raupcrick
+dr1 &lt;- raupcrick(sipoo)
+## use null model "r0" of oecosimu
+dr0 &lt;- raupcrick(sipoo, null = "r0")
+## vegdist(..., method = "raup") corresponds to 'null = "r0"'
+d &lt;- vegdist(sipoo, "raup")
+op &lt;- par(mfrow=c(2,1), mar=c(4,4,1,1)+.1)
+plot(dr1 ~ d, xlab = "Raup-Crick with Null R1", ylab="vegdist")
+plot(dr0 ~ d, xlab = "Raup-Crick with Null R0", ylab="vegdist")
+par(op)
+
+## The calculation is essentially as in the following oecosimu() call,
+## except that designdist() is replaced with faster code
+## Not run: 
+oecosimu(sipoo, function(x) designdist(x, "J", "binary"), method = "r1")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

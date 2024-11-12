@@ -1,0 +1,160 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>logff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Logarithmic Distribution  </h2>
+
+<h3>Description</h3>
+
+<p>Estimating the (single) parameter of the logarithmic distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">logff(lshape = "logitlink", gshape = -expm1(-7 * ppoints(4)),
+      zero = NULL)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape</code></td>
+<td>
+
+<p>Parameter link function for the parameter <code class="reqn">c</code>,
+which lies between 0 and 1.
+See <code>Links</code> for more choices and information.
+Soon <code>logfflink()</code> will hopefully be available for
+event-rate data.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gshape, zero</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+Practical experience shows that having the initial value
+for <code class="reqn">c</code> being close to the solution is quite important.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The logarithmic distribution is
+a generalized power series distribution that is
+based specifically on the logarithmic series
+(scaled to a probability function).
+Its probability function is
+<code class="reqn">f(y) = a c^y / y</code>, for
+<code class="reqn">y=1,2,3,\ldots</code>,
+where <code class="reqn">0 &lt; c &lt; 1</code> (called <code>shape</code>),
+and <code class="reqn">a = -1 / \log(1-c)</code>.
+The mean is <code class="reqn">a c/(1-c)</code> (returned as the fitted values)
+and variance is <code class="reqn">a c (1-ac) /(1-c)^2</code>.
+When the sample mean is large, the value of <code class="reqn">c</code> tends to
+be very close to 1, hence it could be argued that
+<code>logitlink</code> is not the best choice.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The function <code>log</code> computes the natural
+logarithm.  In the <span class="pkg">VGAM</span> library, a link function with option
+<code>loglink</code> corresponds to this.
+</p>
+<p>Multiple responses are permitted.
+</p>
+<p>The “logarithmic distribution” has various meanings in
+the literature. Sometimes it is also called the
+<em>log-series distribution</em>.
+Some others call some continuous distribution on <code class="reqn">[a, b]</code>
+by the name “logarithmic distribution”.
+</p>
+
+
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Johnson N. L., Kemp, A. W. and Kotz S. (2005).
+<em>Univariate Discrete Distributions</em>,
+3rd edition,
+ch.7.
+Hoboken, New Jersey: Wiley.
+</p>
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011)
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Log</code>,
+<code>gaitdlog</code>,
+<code>oalog</code>,
+<code>oilog</code>,
+<code>otlog</code>,
+<code>log</code>,
+<code>loglink</code>,
+<code>logofflink</code>,
+<code>explogff</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 1000
+ldata &lt;- data.frame(y = rlog(nn, shape = logitlink(0.2, inv = TRUE)))
+fit &lt;- vglm(y ~ 1, logff, data = ldata, trace = TRUE, crit = "c")
+coef(fit, matrix = TRUE)
+Coef(fit)
+## Not run: with(ldata, spikeplot(y, col = "blue", capped = TRUE))
+x &lt;- seq(1, with(ldata, max(y)), by = 1)
+with(ldata, lines(x + 0.1, dlog(x, Coef(fit)[1]), col = "orange",
+        type = "h", lwd = 2)) 
+## End(Not run)
+
+# Example: Corbet (1943) butterfly Malaya data
+corbet &lt;- data.frame(nindiv = 1:24,
+                 ofreq = c(118, 74, 44, 24, 29, 22, 20, 19, 20, 15, 12,
+                           14, 6, 12, 6, 9, 9, 6, 10, 10, 11, 5, 3, 3))
+fit &lt;- vglm(nindiv ~ 1, logff, data = corbet, weights = ofreq)
+coef(fit, matrix = TRUE)
+shapehat &lt;- Coef(fit)["shape"]
+pdf2 &lt;- dlog(x = with(corbet, nindiv), shape = shapehat)
+print(with(corbet, cbind(nindiv, ofreq, fitted = pdf2 * sum(ofreq))),
+      digits = 1)
+</code></pre>
+
+
+</div>

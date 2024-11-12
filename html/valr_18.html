@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_projection</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Projection test for query interval overlap.</h2>
+
+<h3>Description</h3>
+
+<p>Projection test for query interval overlap.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_projection(x, y, genome, by_chrom = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>genome</code></td>
+<td>
+<p>genome_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by_chrom</code></td>
+<td>
+<p>compute test per chromosome</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Interval statistics can be used in combination with
+<code>dplyr::group_by()</code> and <code>dplyr::do()</code> to calculate
+statistics for subsets of data. See <code>vignette('interval-stats')</code> for
+examples.
+</p>
+
+
+<h3>Value</h3>
+
+<p>ivl_df with the following columns:
+</p>
+
+<ul>
+<li> <p><code>chrom</code> the name of chromosome tested if <code>by_chrom = TRUE</code>,
+otherwise has a value of <code>whole_genome</code>
+</p>
+</li>
+<li> <p><code>p.value</code> p-value from a binomial test. p-values &gt; 0.5
+are converted to <code>1 - p-value</code> and <code>lower_tail</code> is <code>FALSE</code>
+</p>
+</li>
+<li> <p><code>obs_exp_ratio</code> ratio of observed to expected overlap frequency
+</p>
+</li>
+<li> <p><code>lower_tail</code> <code>TRUE</code> indicates the observed overlaps are in the lower tail
+of the distribution (e.g., less overlap than expected). <code>FALSE</code> indicates
+that the observed overlaps are in the upper tail of the distribution (e.g.,
+more overlap than expected)
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002529">https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002529</a>
+</p>
+<p>Other interval statistics: 
+<code>bed_absdist()</code>,
+<code>bed_fisher()</code>,
+<code>bed_jaccard()</code>,
+<code>bed_reldist()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">genome &lt;- read_genome(valr_example("hg19.chrom.sizes.gz"))
+
+x &lt;- bed_random(genome, seed = 1010486)
+y &lt;- bed_random(genome, seed = 9203911)
+
+bed_projection(x, y, genome)
+
+bed_projection(x, y, genome, by_chrom = TRUE)
+
+</code></pre>
+
+
+</div>

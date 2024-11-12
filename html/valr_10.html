@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_genomecov</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate coverage across a genome</h2>
+
+<h3>Description</h3>
+
+<p>This function is useful for calculating interval coverage across an entire genome.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_genomecov(x, genome, zero_depth = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>genome</code></td>
+<td>
+<p>genome_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero_depth</code></td>
+<td>
+<p>If TRUE, report intervals with zero depth. Zero depth intervals will
+be reported with respect to groups.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>input tbls are grouped by <code>chrom</code> by default, and additional
+groups can be added using <code>dplyr::group_by()</code>. For example,
+grouping by <code>strand</code> will constrain analyses to the same strand. To
+compare opposing strands across two tbls, strands on the <code>y</code> tbl can
+first be inverted using <code>flip_strands()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>ivl_df with the an additional column:
+</p>
+
+<ul><li> <p><code>.depth</code> depth of interval coverage
+</p>
+</li></ul>
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/genomecov.html">https://bedtools.readthedocs.io/en/latest/content/tools/genomecov.html</a>
+</p>
+<p>Other single set operations: 
+<code>bed_cluster()</code>,
+<code>bed_complement()</code>,
+<code>bed_flank()</code>,
+<code>bed_merge()</code>,
+<code>bed_partition()</code>,
+<code>bed_shift()</code>,
+<code>bed_slop()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end, ~strand,
+  "chr1", 20, 70, "+",
+  "chr1", 50, 100, "-",
+  "chr1", 200, 250, "+",
+  "chr1", 220, 250, "+"
+)
+
+genome &lt;- tibble::tribble(
+  ~chrom, ~size,
+  "chr1", 500,
+  "chr2", 1000
+)
+
+bed_genomecov(x, genome)
+
+bed_genomecov(dplyr::group_by(x, strand), genome)
+
+bed_genomecov(dplyr::group_by(x, strand), genome, zero_depth = TRUE)
+
+</code></pre>
+
+
+</div>

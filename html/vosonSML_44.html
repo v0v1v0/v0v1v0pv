@@ -1,0 +1,192 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Create.semantic.twitter</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create twitter semantic network</h2>
+
+<h3>Description</h3>
+
+<p>Creates a semantic network from tweets returned from the twitter search query. Semantic networks
+describe the semantic relationships between concepts. In this network the concepts are significant words and
+hashtags extracted from the tweet text. Network edges are weighted and represent occurrence of words and hashtags
+in the same tweets.
+</p>
+<p>The creation of twitter semantic networks requires text processing and the tokenization of tweets. As such this
+function requires the additional installation of the <span class="pkg">tidyr</span> and <span class="pkg">tidytext</span> packages to achieve this.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'semantic.twitter'
+Create(
+  datasource,
+  type,
+  removeRetweets = TRUE,
+  removeTermsOrHashtags = NULL,
+  stopwords = TRUE,
+  stopwordsLang = "en",
+  stopwordsSrc = "smart",
+  removeNumbers = TRUE,
+  removeUrls = TRUE,
+  termFreq = 5,
+  hashtagFreq = 50,
+  assoc = "limited",
+  verbose = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>datasource</code></td>
+<td>
+<p>Collected social media data with <code>"datasource"</code> and <code>"twitter"</code> class names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Character string. Type of network to be created, set to <code>"semantic"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>removeRetweets</code></td>
+<td>
+<p>Logical. Removes detected retweets from the tweet data. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>removeTermsOrHashtags</code></td>
+<td>
+<p>Character vector. Words or hashtags to remove from the semantic network. For example,
+this parameter could be used to remove the search term or hashtag that was used to collect the data by removing any
+nodes with matching name. Default is <code>NULL</code> to remove none.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stopwords</code></td>
+<td>
+<p>Logical. Removes stopwords from the tweet data. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stopwordsLang</code></td>
+<td>
+<p>Character string. Language of stopwords to use. Refer to the <span class="pkg">stopwords</span> package for further
+information on supported languages. Default is <code>"en"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stopwordsSrc</code></td>
+<td>
+<p>Character string. Source of stopwords list. Refer to the <span class="pkg">stopwords</span> package for further
+information on supported sources. Default is <code>"smart"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>removeNumbers</code></td>
+<td>
+<p>Logical. Removes whole numerical tokens from the tweet text. For example, a year value such as
+<code>2020</code> will be removed but not mixed values such as <code>G20</code>. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>removeUrls</code></td>
+<td>
+<p>Logical. Removes twitter shortened URL tokens from the tweet text. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>termFreq</code></td>
+<td>
+<p>Numeric integer. Specifies the percentage of most frequent words to include. For example,
+<code>termFreq = 20</code> means that the 20 percent most frequently occurring <code>words</code> will be included in the
+semantic network as nodes. A larger percentage will increase the number of nodes and therefore the size of graph.
+The default value is <code>5</code>, meaning the top 5 percent most frequent words are used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hashtagFreq</code></td>
+<td>
+<p>Numeric integer. Specifies the percentage of most frequent <code>hashtags</code> to include. For
+example, <code>hashtagFreq = 20</code> means that the 20 percent most frequently occurring hashtags will be included in
+the semantic network as nodes. The default value is <code>50</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>assoc</code></td>
+<td>
+<p>Character string. Association of nodes. A value of <code>"limited"</code> includes only edges between most
+frequently occurring hashtags and terms. A value of <code>"full"</code> includes ties between most frequently occurring
+hashtags and terms, hashtags and hashtags, and terms and terms. Default is <code>"limited"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical. Output additional information about the network creation. Default is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional parameters passed to function. Not used in this method.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Network as a named list of two dataframes containing <code>$nodes</code> and <code>$edges</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The words and hashtags passed to the function in the <code>removeTermsOrHashtags</code> parameter are removed before
+word frequencies are calculated and are therefore excluded from top percentage of most frequent terms completely
+rather than simply filtered out of the final network.
+</p>
+<p>The top percentage of frequently occurring hashtags <code>hashtagFreq</code> and words <code>termFreq</code> are calculated to
+a minimum frequency and all terms that have an equal or greater frequency than the minimum are included in the
+network as nodes. For example, of unique hashtags of varying frequencies in a dataset the top 50% of total
+frequency or most common hashtags may calculate to being the first 20 hashtags. The frequency of the 20th hashtag
+is then used as the minimum and all hashtags of equal or greater frequency are included as part of the top 50% most
+frequently occurring hashtags. So the number of top hashtags may end up being greater than 20 if there is more than
+one hashtag that has frequency matching the minimum. The exception to this is if the minimum frequency is 1 and the
+<code>hashtagFreq</code> is set to less than 100, in this case only the first 20 hashtags will be included.
+</p>
+<p>Hashtags and words in the top percentages are included in the network as isolates if there are no instances of them
+occurring in tweet text with other top percentage frequency terms.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# twitter semantic network creation additionally requires the tidytext
+# and stopwords packages for working with text data
+# install.packages(c("tidytext", "stopwords"))
+
+# create a twitter semantic network graph removing the hashtag "#auspol"
+# and using the top 2% frequently occurring words and 10% most frequently
+# occurring hashtags as nodes
+net_semantic &lt;- collect_tw |&gt;
+  Create("semantic", removeTermsOrHashtags = c("#auspol"),
+         termFreq = 2, hashtagFreq = 10, verbose = TRUE)
+
+# network
+# net_semantic$nodes
+# net_semantic$edges
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

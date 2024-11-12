@@ -1,0 +1,277 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>MOStest</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Mitchell-Olds and Shaw Test for the Location of Quadratic Extreme </h2>
+
+<h3>Description</h3>
+
+<p>Mitchell-Olds &amp; Shaw test concerns the location of the highest (hump)
+or lowest (pit) value of a quadratic curve at given points. Typically,
+it is used to study whether the quadratic hump or pit is located
+within a studied interval. The current test is generalized so that it
+applies generalized linear models (<code>glm</code>) with link
+function instead of simple quadratic curve.  The test was popularized
+in ecology for the analysis of humped species richness patterns
+(Mittelbach et al. 2001), but it is more general. With logarithmic
+link function, the quadratic response defines the Gaussian response
+model of ecological gradients (ter Braak &amp; Looman 1986), and the test
+can be used for inspecting the location of Gaussian optimum within a
+given range of the gradient. It can also be used to replace Tokeshi's
+test of “bimodal” species frequency distribution. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">MOStest(x, y, interval, ...)
+## S3 method for class 'MOStest'
+plot(x, which = c(1,2,3,6), ...)
+fieller.MOStest(object, level = 0.95)
+## S3 method for class 'MOStest'
+profile(fitted, alpha = 0.01, maxsteps = 10, del = zmax/5, ...)
+## S3 method for class 'MOStest'
+confint(object, parm = 1, level = 0.95, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>The independent variable or plotting object in <code>plot</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>The dependent variable. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>interval</code></td>
+<td>
+<p>The two points at which the test statistic is
+evaluated. If missing, the extremes of <code>x</code> are used. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>which</code></td>
+<td>
+<p>Subset of plots produced. Values <code>which=1</code> and
+<code>2</code> define plots specific to <code>MOStest</code> (see Details), and
+larger values select graphs of <code>plot.lm</code> (minus 2). </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object, fitted</code></td>
+<td>
+<p>A result object from <code>MOStest</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>The confidence level required.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Maximum significance level allowed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxsteps</code></td>
+<td>
+<p>Maximum number of steps in the profile.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>del</code></td>
+<td>
+<p>A step length parameter for the profile (see code).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parm</code></td>
+<td>
+<p>Ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Other variables passed to functions. Function
+<code>MOStest</code> passes these to <code>glm</code> so that
+these can include <code>family</code>. The other functions pass
+these to underlying graphical functions. </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function fits a quadratic curve <code class="reqn">\mu = b_0 + b_1 x + b_2
+  x^2</code> with given <code>family</code> and link function.  If <code class="reqn">b_2
+  &lt; 0</code>, this defines a unimodal curve with highest point at <code class="reqn">u =
+  -b_1/(2 b_2)</code> (ter Braak &amp; Looman 1986). If <code class="reqn">b_2 &gt; 0</code>, the
+parabola has a minimum at <code class="reqn">u</code> and the response is sometimes
+called “bimodal”.  The null hypothesis is that the extreme
+point <code class="reqn">u</code> is located within the interval given by points
+<code class="reqn">p_1</code> and <code class="reqn">p_2</code>. If the extreme point <code class="reqn">u</code> is exactly at
+<code class="reqn">p_1</code>, then <code class="reqn">b_1 = 0</code> on shifted axis <code class="reqn">x - p_1</code>.  In the
+test, origin of <code>x</code> is shifted to the values <code class="reqn">p_1</code> and
+<code class="reqn">p_2</code>, and the test statistic is based on the differences of
+deviances between the original model and model where the origin is
+forced to the given location using the standard
+<code>anova.glm</code> function (Oksanen et al. 2001).
+Mitchell-Olds &amp; Shaw (1987) used the first degree coefficient with
+its significance as estimated by the <code>summary.glm</code>
+function.  This give identical results with Normal error, but for
+other error distributions it is preferable to use the test based on
+differences in deviances in fitted models.
+</p>
+<p>The test is often presented as a general test for the location of the
+hump, but it really is dependent on the quadratic fitted curve. If the
+hump is of different form than quadratic, the test may be
+insignificant.
+</p>
+<p>Because of strong assumptions in the test, you should use the support
+functions to inspect the fit. Function <code>plot(..., which=1)</code>
+displays the data points, fitted quadratic model, and its approximate
+95% confidence intervals (2 times SE). Function <code>plot</code> with
+<code>which = 2</code> displays the approximate confidence interval of
+the polynomial coefficients, together with two lines indicating the
+combinations of the coefficients that produce the evaluated points of
+<code>x</code>. Moreover, the cross-hair shows the approximate confidence
+intervals for the polynomial coefficients ignoring their
+correlations. Higher values of <code>which</code> produce corresponding
+graphs from <code>plot.lm</code>. That is, you must add 2 to the
+value of <code>which</code> in <code>plot.lm</code>.
+</p>
+<p>Function <code>fieller.MOStest</code> approximates the confidence limits
+of the location of the extreme point (hump or pit) using Fieller's
+theorem following ter Braak &amp; Looman (1986). The test is based on
+quasideviance except if the <code>family</code> is <code>poisson</code>
+or <code>binomial</code>. Function <code>profile</code> evaluates the profile
+deviance of the fitted model, and <code>confint</code> finds the profile
+based confidence limits following Oksanen et al. (2001).
+</p>
+<p>The test is typically used in assessing the significance of diversity
+hump against productivity gradient (Mittelbach et al. 2001). It also
+can be used for the location of the pit (deepest points) instead of
+the Tokeshi test. Further, it can be used to test the location of the
+the Gaussian optimum in ecological gradient analysis (ter Braak &amp;
+Looman 1986, Oksanen et al. 2001).
+</p>
+
+
+<h3>Value</h3>
+
+<p>The function is based on <code>glm</code>, and it returns the result
+of object of <code>glm</code> amended with the result of the test. The new
+items in the <code>MOStest</code> are: 
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>isHump </code></td>
+<td>
+<p><code>TRUE</code> if the response is a
+hump.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>isBracketed</code></td>
+<td>
+<p><code>TRUE</code> if the hump or the pit is bracketed by
+the evaluated points.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hump</code></td>
+<td>
+<p>Sorted vector of location of the hump or the pit and the
+points where the test was evaluated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coefficients</code></td>
+<td>
+<p>Table of test statistics and their significances.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+ 
+<p>Function <code>fieller.MOStest</code> is based on package <span class="pkg">optgrad</span> in
+the Ecological Archives
+(<a href="https://figshare.com/articles/dataset/Full_Archive/3521975">https://figshare.com/articles/dataset/Full_Archive/3521975</a>)
+accompanying Oksanen et al. (2001). The Ecological Archive package
+<span class="pkg">optgrad</span> also contains profile deviance method for the location
+of the hump or pit, but the current implementation of <code>profile</code>
+and <code>confint</code> rather follow the example of
+<code>profile.glm</code> and <code>confint.glm</code> in
+the <span class="pkg">MASS</span> package.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jari Oksanen </p>
+
+
+<h3>References</h3>
+
+<p>Mitchell-Olds, T. &amp; Shaw, R.G. 1987. Regression analysis of natural
+selection: statistical inference and biological
+interpretation. <em>Evolution</em> 41, 1149–1161.
+</p>
+<p>Mittelbach, G.C. Steiner, C.F., Scheiner, S.M., Gross, K.L., Reynolds,
+H.L., Waide, R.B., Willig, R.M., Dodson, S.I. &amp; Gough, L. 2001. What is
+the observed relationship between species richness and productivity?
+<em>Ecology</em> 82, 2381–2396.
+</p>
+<p>Oksanen, J., Läärä, E., Tolonen, K. &amp; Warner, B.G. 2001. Confidence
+intervals for the optimum in the Gaussian response
+function. <em>Ecology</em> 82, 1191–1197.
+</p>
+<p>ter Braak, C.J.F &amp; Looman, C.W.N 1986. Weighted averaging, logistic
+regression and the Gaussian response model. <em>Vegetatio</em> 65,
+3–11. 
+</p>
+
+
+<h3>See Also</h3>
+
+<p>The no-interaction model can be fitted with <code>humpfit</code>. </p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## The Al-Mufti data analysed in humpfit():
+mass &lt;- c(140,230,310,310,400,510,610,670,860,900,1050,1160,1900,2480)
+spno &lt;- c(1,  4,  3,  9, 18, 30, 20, 14,  3,  2,  3,  2,  5,  2)
+mod &lt;- MOStest(mass, spno)
+## Insignificant
+mod
+## ... but inadequate shape of the curve
+op &lt;- par(mfrow=c(2,2), mar=c(4,4,1,1)+.1)
+plot(mod)
+## Looks rather like log-link with Poisson error and logarithmic biomass
+mod &lt;- MOStest(log(mass), spno, family=quasipoisson)
+mod
+plot(mod)
+par(op)
+## Confidence Limits
+fieller.MOStest(mod)
+confint(mod)
+plot(profile(mod))
+</code></pre>
+
+
+</div>

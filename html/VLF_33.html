@@ -1,0 +1,95 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>matched.codon.position</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Codon Position of Matching aa and ntVLFs
+</h2>
+
+<h3>Description</h3>
+
+<p>Counts which codon positions of ntVLFs lead to the concordant aaVLF.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">matched.codon.position(matched)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>matched</code></td>
+<td>
+
+<p>A list of the nucleotide position of concordant ntVLFs and their associated aaVLFs.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The argument matched can be calculated using the function overall.matched.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector containing the number of concordant VLFs caused by ntVLFs in each codon position.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: #Nucleotide VLF analysis
+data(birds)
+species.names &lt;- birds[,2]
+specimen.Number &lt;- nrow(birds)
+rownames(birds) &lt;- species.names
+Nuc.count &lt;- count.function(birds, specimen.Number, 648)
+frequency.matrix &lt;- ffrequency.matrix.function(Nuc.count, 648)
+birdSpec.freq &lt;- specimen.frequencies(frequency.matrix, birds, specimen.Number, species.names, 648)
+Bird_specimen_VLFcount &lt;- VLF.count.spec(birdSpec.freq, 0.001, 648)
+bird_VLFconvert &lt;- VLF.convert.matrix(birds, birdSpec.freq, 0.001, 648)
+bird_VLFnuc &lt;- VLF.nucleotides(bird_VLFconvert, birds, 648)
+bird_VLFreduced &lt;- VLF.reduced(bird_VLFnuc, Bird_specimen_VLFcount, 648)
+bird_species &lt;- separate(bird_VLFreduced)
+birds_singleAndShared &lt;- find.singles(bird_species, 648)
+
+#Amino Acid VLF Analysis
+data(birds_aminoAcids)
+birds_aminoAcid_speciesNames &lt;- birds_aminoAcids[,2]
+aminoAcids_specimenNumber &lt;- nrow(birds_aminoAcids)
+birds_aminoAcid_count &lt;- aa.count.function(birds_aminoAcids, 216)
+aminoAcid_frequency.Matrix &lt;- aa.frequency.matrix.function(birds_aminoAcid_count, 216)
+bird_aminoAcid_frequencies &lt;- aa.specimen.frequencies(aminoAcid_frequency.Matrix, birds_aminoAcids,
+    birds_aminoAcid_speciesNames, 216)
+aminoAcid_Modal &lt;- aa.MODE(aminoAcid_frequency.Matrix, 216)
+birds_aminoAcid_specimenVLFcount &lt;- aa.VLF.count.spec(bird_aminoAcid_frequencies, 0.001, 216)
+birds_aaVLFconvert &lt;- aa.VLF.convert.matrix(birds_aminoAcids, bird_aminoAcid_frequencies, 0.001, 
+    216)
+birds_aminoAcidVLFs &lt;- VLF.aminoAcids(birds_aaVLFconvert, birds_aminoAcids, 216)
+birds_aaVLFreduced &lt;- aa.VLF.reduced(birds_aminoAcidVLFs, birds_aminoAcid_specimenVLFcount, 216)
+birds_aaSpecies &lt;- separate(birds_aaVLFreduced)
+birds_aminoAcid_singleAndShared &lt;- aa.find.singles(birds_aaSpecies, 216)
+
+#Concordance Analysis
+VLF_match &lt;- find.matching(bird_VLFreduced, birds_aaVLFreduced, 648, 216)
+position_matchingNuc &lt;- nucleotide.matching.positions(VLF_match[[2]], 648)
+position_matchingAA &lt;- aminoAcid.matching.positions(VLF_match[[1]], 216)
+matching_comparison &lt;- overall.matched(position_matchingNuc, position_matchingAA, 648, 216)
+matching_codons &lt;- matched.codon.position(matching_comparison)
+## End(Not run)
+</code></pre>
+
+
+</div>

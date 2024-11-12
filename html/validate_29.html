@@ -1,0 +1,89 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>check_that</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simple data validation interface</h2>
+
+<h3>Description</h3>
+
+<p>Simple data validation interface
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">check_that(dat, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dat</code></td>
+<td>
+<p>an R object carrying data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>a comma-separated set of validating expressions.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class <code>validation</code>
+</p>
+
+
+<h3>Details</h3>
+
+<p>Creates an object of class <code>validator</code> and <code>confront</code>s it with the data.
+This function is easy to use in combination with the <span class="pkg">magrittr</span> pipe operator.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other validation-methods: 
+<code>aggregate,validation-method</code>,
+<code>all,validation-method</code>,
+<code>any,validation-method</code>,
+<code>barplot,validation-method</code>,
+<code>compare()</code>,
+<code>confront()</code>,
+<code>event()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>plot,validation-method</code>,
+<code>sort,validation-method</code>,
+<code>summary()</code>,
+<code>validation-class</code>,
+<code>values()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+cf &lt;- check_that(women, height&gt;0, height/weight &lt; 0.5)
+cf
+summary(cf)
+barplot(cf)
+
+
+## Not run: 
+# this works only after loading the 'magrittr' package
+women %&gt;% 
+  check_that(height&gt;0, height/weight &lt; 0.5) %&gt;%
+  summary()
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

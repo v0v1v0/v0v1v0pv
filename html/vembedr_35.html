@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>use_start_time.vembedr_embed_box</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Specify start time</h2>
+
+<h3>Description</h3>
+
+<p>This function provides you a consistent way to specify the start time,
+regardless of the service. Please note that Box does not provide a
+means to specify the start time.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vembedr_embed_box'
+use_start_time(embed, ...)
+
+## S3 method for class 'vembedr_embed_channel9'
+use_start_time(embed, start_time, is_paused = TRUE, ...)
+
+## S3 method for class 'vembedr_embed_msstream'
+use_start_time(embed, start_time, ...)
+
+## S3 method for class 'vembedr_embed_vimeo'
+use_start_time(embed, start_time, ...)
+
+## S3 method for class 'vembedr_embed_youtube'
+use_start_time(embed, start_time, ...)
+
+use_start_time(embed, ...)
+
+## Default S3 method:
+use_start_time(embed, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>embed</code></td>
+<td>
+<p><code>vembedr_embed</code> object, created using an <code>embed()</code> function</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>generic arguments to pass through</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start_time</code></td>
+<td>
+<p><code>numeric</code> (seconds), or <code>character</code> (e.g. <code>"3m15s"</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>is_paused</code></td>
+<td>
+<p><code>logical</code>, for "Channel 9" specifies if the video
+should be paused at this time</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>start_time</code> argument can take a variety of formats; these inputs
+all evaluate to the same value:
+</p>
+
+<ul>
+<li>
+<p><code>"0h1m0s"</code>, <code>"0h01m00s"</code>, <code>"0h1m"</code>
+</p>
+</li>
+<li>
+<p><code>"1m0s"</code>, <code>"1m"</code>
+</p>
+</li>
+<li>
+<p><code>"60s"</code>, <code>60</code>
+</p>
+</li>
+</ul>
+<p>Please note that for Vimeo, you can specify a start time, but you can not
+specify that the video be paused at this time. In other words, it is like
+"autoplay" is set to <code>TRUE</code>, and you cannot unset it.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Object with S3 class <code>vembedr_embed</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  rickroll_youtube() %&gt;%
+    use_start_time("3m32s")
+
+</code></pre>
+
+
+</div>

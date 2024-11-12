@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>coef</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Coefficients from a Variable Length Markov Chain with Exogenous Covariates
+</h2>
+
+<h3>Description</h3>
+
+<p>Extracts the estimated coefficients from a VLMCX object for a specific context (sequence of states in the past used to predict the next state/symbol of the chain).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">coef(fit, context)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fit</code></td>
+<td>
+
+<p>a VLMCX object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>context</code></td>
+<td>
+
+<p>the context whose coefficients are desired.
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p> an object with two items: 
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>a vector with coefficients corresponding to the intercept for the transition into the states in the state space of <code>y</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>a 3 dimensional-array of estimated coefficients corresponding to [steps in the past, number of covariate, symbol (in the state space) to transition into].</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Adriano Zanin Zambom &lt;adriano.zambom@csun.edu&gt; 
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+set.seed(1)
+n = 1000
+d = 2
+
+X = cbind(rnorm(n), rnorm(n))
+
+y = rbinom(n,1,.5)
+fit = maximum.context(y, X)
+
+coef(fit, c(0,0,1,0)) 
+## context in the order: y_{t-1} = 0, y_{t-2} = 0, y_{t-3} = 1, y_{t-4} = 0
+
+</code></pre>
+
+
+</div>

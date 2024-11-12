@@ -1,0 +1,45 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>partial_frame</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Partially specify columns of a data frame</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+</p>
+<p>This special class can be passed to <code>.ptype</code> in order to specify the
+types of only some of the columns in a data frame.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">partial_frame(...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Attributes of subclass</p>
+</td>
+</tr></table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">pf &lt;- partial_frame(x = double())
+pf
+
+vec_rbind(
+  data.frame(x = 1L, y = "a"),
+  data.frame(x = FALSE, z = 10),
+  .ptype = partial_frame(x = double(), a = character())
+)
+</code></pre>
+
+
+</div>

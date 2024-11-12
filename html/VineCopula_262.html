@@ -1,0 +1,100 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineCor2pcor</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>(Partial) Correlations for R-Vine Copula Models</h2>
+
+<h3>Description</h3>
+
+<p>Correlations to partial correlations and vice versa for R-vines with
+independence, Gaussian and t-copulas.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineCor2pcor(RVM, corMat)
+
+RVinePcor2cor(RVM)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p><code>RVineMatrix()</code> defining only the R-vine structure for
+<code>Cor2pcor</code> and providing as well the partial correlations for
+<code>Pcor2cor</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>corMat</code></td>
+<td>
+<p>correlation matrix</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p>RVineMatrix with transformed partial correlations (for
+<code>Cor2pcor</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor</code></td>
+<td>
+<p>correlation matrix (for <code>Pcor2cor</code>)</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>The behavior of <code>RVinePcor2ccor</code> differs from older versions (&lt;=
+1.4). The RVM object is now normalized such that the order of the returned
+correlation matrix conforms with the correlation matrix of the data. If
+<code>RVM$names</code> are non-default, the initial ordering of the variables
+cannot be traced back and the matrix has to be interpreted as indicated by
+the row- and column names.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## create RVineMatrix-object for Gaussian vine
+Matrix &lt;- matrix(c(1, 3, 4, 2,
+                   0, 3, 4, 2,
+                   0, 0, 4, 2,
+                   0, 0, 0, 2), 4, 4)
+family &lt;- matrix(c(0, 1, 1, 1,
+                   0, 0, 1, 1,
+                   0, 0, 0, 1,
+                   0, 0, 0, 0), 4, 4)
+par &lt;- matrix(c(0, 0.2,   0, 0.6,
+                0,   0, 0.2, 0.6,
+                0,   0,   0, 0.6,
+                0,   0,   0,   0), 4, 4)
+RVM &lt;- RVineMatrix(Matrix, family, par)
+
+## calculate correlation matrix corresponding to the R-Vine model
+newcor &lt;- RVinePcor2cor(RVM)
+
+## transform back to partial correlations
+RVineCor2pcor(RVM, newcor)$par
+
+## check if they are equal
+all.equal(RVM$par, RVineCor2pcor(RVM, newcor)$par)
+
+</code></pre>
+
+
+</div>

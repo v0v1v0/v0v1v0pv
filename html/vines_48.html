@@ -1,0 +1,168 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vineFit</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vine Inference</h2>
+
+<h3>Description</h3>
+
+<p>Estimate a vine model from multivariate data in the unit hypercube. Data can be 
+pseudo-observations constructed from empirical or parametric marginal cumulative 
+distribution functions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vineFit(type, data, method = "ml", ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Type of vine. Supported values: <code>"CVine"</code> and <code>"DVine"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Data matrix of pseudo-observations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>Inference method. Supported values: 
+<code>"ml"</code> (Maximum Likelihood).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments for the inference method.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>"ml"</code> (Maximum Likelihood) method starts with the sequential estimation
+procedure described in (Aas et al., 2009) and then executes a numerical
+maximization of the full log-likelihood of the vine. The sequential procedure
+is used to determine the family and the initial values of the parameters of 
+each bivariate copula in the decomposition. Additional arguments for this 
+method are:
+</p>
+
+<dl>
+<dt><code>selectCopula</code></dt>
+<dd>
+<p>Function provided by the user to select the
+copulas in the pair-copula construction. This function should return 
+a <code>copula</code> object and expect the following arguments.
+</p>
+
+<dl>
+<dt><code>vine</code></dt>
+<dd>
+<p>Vine object being constructed.</p>
+</dd>
+<dt><code>j, i</code></dt>
+<dd>
+<p>Indexes of the copula under selection in the matrix of the
+<code>copulas</code> slot of the vine.</p>
+</dd>
+<dt><code>x, y</code></dt>
+<dd>
+<p>Bivariate sample.</p>
+</dd>
+</dl>
+<p>The default value is <code>function (vine, j, i, x, y) indepCopula()</code>
+that assigns the independence copula to all the arcs of the vine.</p>
+</dd>
+<dt><code>trees</code></dt>
+<dd>
+<p>Maximum number of dependence trees of the vine. Independence
+copulas will be used in all the arcs of the following trees. The final number
+of dependence trees could be smaller because of the use of a truncation method. 
+The default value is <code>ncol(data) - 1</code>.</p>
+</dd>
+<dt><code>truncMethod</code></dt>
+<dd>
+<p>Method used to automatically truncate the vine if
+enough dependence is captured in a given number of trees. Supported methods
+are <code>"AIC"</code> and <code>"BIC"</code>. See (Brechmann, 2010; Brechmann et al., 2010)
+for information about these methods. The default value is <code>""</code> that
+means no truncation.</p>
+</dd>
+<dt><code>optimMethod</code></dt>
+<dd>
+<p><code>optim</code> method used in the optimization
+of the log-likelihood function. If <code>""</code> is specified the optimization
+is disabled and the vine calculated using the sequential estimation procedure 
+is returned. The default value is <code>"Nelder-Mead"</code>.</p>
+</dd>
+<dt><code>optimControl</code></dt>
+<dd>
+<p>List of control parameters for <code>optim</code>.
+The default value is <code>list()</code>.</p>
+</dd>
+</dl>
+<h3>Value</h3>
+
+<p>A <code>vineFit</code> object or a subclass with specific 
+information about inference method used. The <code>vine</code> slot of this object 
+contains the fitted <code>Vine</code> object.
+</p>
+
+
+<h3>References</h3>
+
+<p>Aas, K. and Czado, C. and Frigessi, A. and Bakken, H. (2009)
+Pair-copula constructions of multiple dependence.
+<em>Insurance: Mathematics and Economics</em> <b>44</b>, 182–198.
+</p>
+<p>Brechmann, E. C. (2010) Truncated and simplified regular vines 
+and their applications. Diploma thesis. <em>Technische 
+Universitaet Muenchen</em>.
+</p>
+<p>Brechmann, E. C. and Czado, C. and Aas, K. (2010) Truncated regular 
+vines in high dimensions with application to financial data. 
+<em>Norwegian Computing Center, NR</em>. Note SAMBA/60/10.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>CVine</code>,
+<code>DVine</code>,
+<code>vineFit</code>,
+<code>vineFitML</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data &lt;- matrix(runif(5 * 100), ncol = 5, nrow = 100)
+colnames(data) &lt;- c("A", "B", "C", "D", "E")
+
+selectCopula &lt;- function (vine, j, i, x, y) {
+    data &lt;- cbind(x, y)
+    fit &lt;- fitCopula(normalCopula(), data, method = "itau")
+    fit@copula
+}
+fit &lt;- vineFit("DVine", data, method = "ml", 
+               selectCopula = selectCopula, 
+               optimMethod = "")
+
+show(fit)
+show(fit@vine)
+</code></pre>
+
+
+</div>

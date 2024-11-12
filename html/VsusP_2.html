@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>OptimalHbi</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variable selection using shrinkage priors :: OptimalHbi</h2>
+
+<h3>Description</h3>
+
+<p>OptimalHbi function will take b.i and H.b.i as input which comes from the result of TwoMeans function. It will return plot from which you can infer about H: the optimal value of the tuning parameter.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">OptimalHbi(bi, Hbi)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>bi</code></td>
+<td>
+<p>a vector holding the values of the tuning parameter specified by the user</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Hbi</code></td>
+<td>
+<p>The estimated number of signals corresponding to each b.i of numeric data type</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>the optimal value (numeric) of tuning parameter and the associated H value
+</p>
+
+
+<h3>References</h3>
+
+<p>Makalic, E. &amp; Schmidt, D. F.
+High-Dimensional Bayesian Regularised Regression with the BayesReg Package
+arXiv:1611.06649, 2016
+</p>
+<p>Li, H., &amp; Pati, D.
+Variable selection using shrinkage priors
+Computational Statistics &amp; Data Analysis, 107, 107-119.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+n &lt;- 10
+p &lt;- 5
+X &lt;- matrix(rnorm(n * p), n, p)
+beta &lt;- exp(rnorm(p))
+Y &lt;- as.vector(X %*% beta + rnorm(n, 0, 1))
+df &lt;- data.frame(X, Y)
+rv.hs &lt;- bayesreg::bayesreg(Y ~ ., df, "gaussian", "horseshoe+", 110, 100)
+
+Beta &lt;- t(rv.hs$beta)
+lower &lt;- 0
+upper &lt;- 1
+l &lt;- 5
+S2Mbeta &lt;- Sequential2MeansBeta(Beta, lower, upper, l)
+
+bi &lt;- S2Mbeta$b.i
+Hbi &lt;- S2Mbeta$H.b.i
+OptimalHbi(bi, Hbi)
+
+</code></pre>
+
+
+</div>

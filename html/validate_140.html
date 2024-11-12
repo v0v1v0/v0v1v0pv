@@ -1,0 +1,120 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>part_whole_relation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Test whether details combine to a chosen aggregate</h2>
+
+<h3>Description</h3>
+
+<p>Data in 'long' format often contain records representing totals
+(or other aggregates) as well as records that contain details
+that add up to the total. This function facilitates checking the
+part-whole relation in such cases.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">part_whole_relation(
+  values,
+  labels,
+  whole,
+  part = NULL,
+  aggregator = sum,
+  tol = 1e-08,
+  by = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>values</code></td>
+<td>
+<p>A bare (unquoted) variable name holding the values to aggregate</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p>A bare (unquoted) variable name holding the labels indicating
+whether a value is an aggregate or a detail.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>whole</code></td>
+<td>
+<p><code>[character]</code> literal label or pattern recognizing a whole
+in <code>labels</code>. Use <code>glob</code> or <code>rx</code> to label
+as a globbing or regular expression pattern (see examples).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>part</code></td>
+<td>
+<p><code>[character]</code> vector of label values or pattern recognizing
+a part in <code>labels</code>. Use <code>glob</code> or <code>rx</code>
+to label as a globbing or regular expression pattern. When labeled
+with <code>glob</code> or <code>rx</code>, it must be a single string. If 'part' is
+left unspecified, all values not recognized as an aggregate are
+interpreted as details that must be aggregated to the whole.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aggregator</code></td>
+<td>
+<p><code>[function]</code> used to aggregate subsets of <code>x</code>. It should
+accept a <code>numeric</code> vector and return a single number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p><code>[numeric]</code> tolerance for equality checking</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>Name of variable, or <code>list</code> of bare variable names, used to
+split the values and labels before computing the aggregates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Extra arguments passed to aggregator (for example <code>na.rm=TRUE</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>logical</code> vector of size <code>length(value)</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">df &lt;- data.frame(
+   id = 10011:10020
+ , period   = rep(c("2018Q1", "2018Q2", "2018Q3", "2018Q4","2018"),2)
+ , direction = c(rep("import",5), rep("export", 5))
+ , value     = c(1,2,3,4,10, 3,3,3,3,13)
+)
+## use 'rx' to interpret 'whole' as a regular expression.
+rules &lt;- validator(
+  part_whole_relation(value, period, whole=rx("^\\d{4}$")
+  , by=direction)
+)
+
+out &lt;- confront(df, rules, key="id")
+as.data.frame(out)
+</code></pre>
+
+
+</div>

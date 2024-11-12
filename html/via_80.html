@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>XArray-class</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Virtual array of general R objects</h2>
+
+<h3>Description</h3>
+
+<p>Template for construction of virtual arrays ('<code>VirtualArray</code>') and a derived class ('<code>XArray</code>') to instantiate it with general objects.
+</p>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>stack</code></td>
+<td>
+<p>A <code>list</code>-class object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>index</code></td>
+<td>
+<p>A <code>vector</code>, <code>matrix</code> or <code>array</code> type object. Includes the indices of layers in the stack.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dim</code></td>
+<td>
+<p>A <code>numeric</code> vector. Same as for <code>array</code>, creates <code>proxy</code> procedurally.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The '<code>VirtualArray</code>' class implements structures to organize objects of the same class in multidimensional arrays. Subsetting rules were defined using the proxy object in the <code>index</code> slot. The '<code>VirtualArray</code>' is the base class for '<code>XArray</code>' and '<code>RasterArray</code>' classes.
+The '<code>XArray</code>' class derived from <code>VirtualArray</code> allows the instantiation of basic virtual arrays with genearl R objects, which form a single <code>list</code> in the <code>@stack slot</code>. The '<code>SfArray</code>' class is derived from the '<code>XArray</code>' class.
+</p>
+<p>The class has two slots:
+<code>@stack</code>: A list containing objects of the same class (i.e. layers).
+<code>@index</code>: A proxy object that represents the structure of the entities.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An <code>XArray</code>-class object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># 2d XArray of vectors
+  data(exemplar)
+  st &lt;-exemplar@stack
+  ind &lt;- 1:nlayers(st)
+  dim(ind) &lt;- c(3,4)
+  dimnames(ind) &lt;- list(n = c(10, 20, 30), seed = 1:4)
+  xa&lt;- XArray(stack=st, index=ind)
+  
+</code></pre>
+
+
+</div>

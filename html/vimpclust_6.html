@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>info_clust</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Description of a set of partitions</h2>
+
+<h3>Description</h3>
+
+<p>This function computes descriptive statistics of the clustering produced with 
+group-sparse weighted k-means on numerical data, or with sparse weighted k-means on mixed data.
+It displays the average of the numerical variables per cluster, and the relative frequencies 
+of the levels in the categorical variables per cluster.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">info_clust(out, which.lambda, X)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>out</code></td>
+<td>
+<p>an object of class <code>spwkm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>which.lambda</code></td>
+<td>
+<p>an integer or a vector of integers
+selecting the clusterings for which summaries are computed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>a matrix or a data frame. The initial data set.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The values in <code>which.lambda</code> must be integers between 1 and <code>length(out$lambda)</code>. One may
+thus select the clusterings corresponding to specific regularization parameters, or the whole set
+of clusterings
+obtained for the whole grid of <code>out$lambda</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mean.by.clust</code></td>
+<td>
+<p>a list of numerical matrices. Each matrix contains the mean values
+of the numerical variables computed per cluster, for a given value of the regularization parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>freq.by.clust</code></td>
+<td>
+<p>a list of numerical matrices. Each matrix contains the relative 
+frequencies of each level associated to categorical variables, 
+computed per cluster and for a given value of the regularization parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda</code></td>
+<td>
+<p>a scalar or a numerical vector. The selected values of the regularization
+parameter. </p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><code>groupsparsewkm</code>, <code>sparsewkm</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(HDdata)
+out &lt;- sparsewkm(X = HDdata[,-14], centers = 2)
+info_clust(out, which.lambda=c(1,10,20), X = HDdata[,-14])
+</code></pre>
+
+
+</div>

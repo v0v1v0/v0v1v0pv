@@ -1,0 +1,85 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cassettes</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>List cassettes, get current cassette, etc.</h2>
+
+<h3>Description</h3>
+
+<p>List cassettes, get current cassette, etc.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cassettes(on_disk = TRUE, verb = FALSE)
+
+current_cassette()
+
+cassette_path()
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>on_disk</code></td>
+<td>
+<p>(logical) Check for cassettes on disk + cassettes in session
+(<code>TRUE</code>), or check for only cassettes in session (<code>FALSE</code>). Default: <code>TRUE</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verb</code></td>
+<td>
+<p>(logical) verbose messages</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<ul>
+<li> <p><code>cassettes()</code>: returns cassettes found in your R session, you can toggle
+whether we pull from those on disk or not
+</p>
+</li>
+<li> <p><code>current_cassette()</code>: returns an empty list when no cassettes are in use,
+while it returns the current cassette (a <code>Cassette</code> object) when one is
+in use
+</p>
+</li>
+<li> <p><code>cassette_path()</code>: just gives you the current directory path where
+cassettes will be stored
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">vcr_configure(dir = tempdir())
+
+# list all cassettes
+cassettes()
+cassettes(on_disk = FALSE)
+
+# list the currently active cassette
+insert_cassette("stuffthings")
+current_cassette()
+eject_cassette()
+
+cassettes()
+cassettes(on_disk = FALSE)
+
+# list the path to cassettes
+cassette_path()
+vcr_configure(dir = file.path(tempdir(), "foo"))
+cassette_path()
+
+vcr_configure_reset()
+</code></pre>
+
+
+</div>

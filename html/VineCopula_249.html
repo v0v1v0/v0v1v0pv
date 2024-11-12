@@ -1,0 +1,296 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineCopSelect</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Sequential Pair-Copula Selection and Estimation for R-Vine Copula Models</h2>
+
+<h3>Description</h3>
+
+<p>This function fits a R-vine copula model to a d-dimensional copula data set.
+Pair-copula families are selected using <code>BiCopSelect()</code> and
+estimated sequentially.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineCopSelect(
+  data,
+  familyset = NA,
+  Matrix,
+  selectioncrit = "AIC",
+  indeptest = FALSE,
+  level = 0.05,
+  trunclevel = NA,
+  weights = NA,
+  rotations = TRUE,
+  se = FALSE,
+  presel = TRUE,
+  method = "mle",
+  cores = 1
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>N x d data matrix (with uniform margins).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>familyset</code></td>
+<td>
+<p>integer vector of pair-copula families to select from.
+The vector has to include at least one
+pair-copula family that allows for positive and one that allows for negative
+dependence. Not listed copula families might be included to better handle
+limit cases.  If <code>familyset = NA</code> (default), selection among all
+possible families is performed. If a vector of negative numbers is provided,
+selection among all but <code>abs(familyset)</code> is performed. Coding of
+pair copula families is the same as in <code>BiCop()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Matrix</code></td>
+<td>
+<p>lower or upper triangular d x d matrix that defines the R-vine
+tree structure.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selectioncrit</code></td>
+<td>
+<p>Character indicating the criterion for pair-copula
+selection. Possible choices: <code>selectioncrit = "AIC"</code> (default),
+<code>"BIC"</code>, or <code>"logLik"</code> (see <code>BiCopSelect()</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>indeptest</code></td>
+<td>
+<p>Logical; whether a hypothesis test for the independence of
+<code>u1</code> and <code>u2</code> is performed before bivariate copula selection
+(default: <code>indeptest = FALSE</code>; see <code>BiCopIndTest()</code>).  The
+independence copula is chosen for a (conditional) pair if the null
+hypothesis of independence cannot be rejected.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>numeric; significance level of the independence test (default:
+<code>level = 0.05</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trunclevel</code></td>
+<td>
+<p>integer; level of truncation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>Numerical; weights for each observation (optional).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rotations</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, all rotations of the families in
+<code>familyset</code> are included.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se</code></td>
+<td>
+<p>Logical; whether standard errors are estimated (default: <code>se = FALSE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>presel</code></td>
+<td>
+<p>Logical; whether to exclude families before fitting based on
+symmetry properties of the data. Makes the selection about 30\
+(on average), but may yield slightly worse results in few special cases.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>indicates the estimation method: either maximum
+likelihood estimation (<code>method = "mle"</code>; default) or inversion of
+Kendall's tau (<code>method = "itau"</code>). For <code>method = "itau"</code> only
+one parameter families and the Student t copula can be used (<code style="white-space: pre;">⁠family = 1,2,3,4,5,6,13,14,16,23,24,26,33,34⁠</code> or <code>36</code>). For the t-copula,
+<code>par2</code> is found by a crude profile likelihood optimization over the
+interval (2, 10].</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cores</code></td>
+<td>
+<p>integer; if <code>cores &gt; 1</code>, estimation will be parallelized
+within each tree (using <code>parallel::parLapply()</code>). Note that
+parallelization causes substantial overhead and may be slower than
+single-threaded computation when dimension, sample size, or family set are
+small or <code>method = "itau"</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>R-vine copula models with unknown structure can be specified using
+<code>RVineStructureSelect()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An <code>RVineMatrix()</code> object with the selected families
+(<code>RVM$family</code>) as well as sequentially
+estimated parameters stored in <code>RVM$par</code> and <code>RVM$par2</code>. The object
+is augmented by the following information about the fit:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>se, se2</code></td>
+<td>
+<p>standard errors for the parameter estimates  (if
+<code>se = TRUE</code>; note that these are only approximate since they do not
+account for the sequential nature of the estimation,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nobs</code></td>
+<td>
+<p>number of observations,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logLik, pair.logLik</code></td>
+<td>
+<p>log likelihood (overall and pairwise)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>AIC, pair.AIC</code></td>
+<td>
+<p>Aikaike's Informaton Criterion (overall and pairwise),</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BIC, pair.BIC</code></td>
+<td>
+<p>Bayesian's Informaton Criterion (overall and pairwise),</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>emptau</code></td>
+<td>
+<p>matrix of empirical values of Kendall's tau,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value.indeptest</code></td>
+<td>
+<p>matrix of p-values of the independence test.</p>
+</td>
+</tr>
+</table>
+<p>#'
+</p>
+
+
+<h3>Note</h3>
+
+<p>For a comprehensive summary of the vine copula model, use
+<code>summary(object)</code>; to see all its contents, use <code>str(object)</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Eike Brechmann, Thomas Nagler
+</p>
+
+
+<h3>References</h3>
+
+<p>Brechmann, E. C., C. Czado, and K. Aas (2012). Truncated regular
+vines in high dimensions with applications to financial data. Canadian
+Journal of Statistics 40 (1), 68-85.
+</p>
+<p>Dissmann, J. F., E. C. Brechmann, C. Czado, and D. Kurowicka (2013).
+Selecting and estimating regular vine copulae and application to financial
+returns. Computational Statistics &amp; Data Analysis, 59 (1), 52-69.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineMatrix()</code>,
+<code>BiCop()</code>,
+<code>BiCopSelect()</code>,
+<code>plot.RVineMatrix()</code>,
+<code>contour.RVineMatrix()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# define 5-dimensional R-vine tree structure matrix
+Matrix &lt;- c(5, 2, 3, 1, 4,
+            0, 2, 3, 4, 1,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 1)
+Matrix &lt;- matrix(Matrix, 5, 5)
+# define R-vine pair-copula family matrix
+family &lt;- c(0, 1, 3, 4, 4,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 3,
+            0, 0, 0, 0, 0)
+family &lt;- matrix(family, 5, 5)
+# define R-vine pair-copula parameter matrix
+par &lt;- c(0, 0.2, 0.9, 1.5, 3.9,
+         0, 0, 1.1, 1.6, 0.9,
+         0, 0, 0, 1.9, 0.5,
+         0, 0, 0, 0, 4.8,
+         0, 0, 0, 0, 0)
+par &lt;- matrix(par, 5, 5)
+# define second R-vine pair-copula parameter matrix
+par2 &lt;- matrix(0, 5, 5)
+
+## define RVineMatrix object
+RVM &lt;- RVineMatrix(Matrix = Matrix, family = family,
+                   par = par, par2 = par2,
+                   names = c("V1", "V2", "V3", "V4", "V5"))
+
+## simulate a sample of size 500 from the R-vine copula model
+set.seed(123)
+simdata &lt;- RVineSim(500, RVM)
+
+## determine the pair-copula families and parameters
+RVM1 &lt;- RVineCopSelect(simdata, familyset = c(1, 3, 4, 5 ,6), Matrix)
+
+## see the object's content or a summary
+str(RVM1)
+summary(RVM1)
+
+## inspect the fitted model using plots
+## Not run: plot(RVM1)  # tree structure
+
+contour(RVM1)  # contour plots of all pair-copulas
+
+</code></pre>
+
+
+</div>

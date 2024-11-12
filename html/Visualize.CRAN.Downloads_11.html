@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>staticPlots</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>function that generates visual trends of the package downloads logs from CRAN, it will generate 4 plots: two histograms, a pulse plot and the main plot is a plot of the downloads as a function of time</h2>
+
+<h3>Description</h3>
+
+<p>function that generates visual trends of the package downloads logs from CRAN, it will generate 4 plots: two histograms, a pulse plot and the main plot is a plot of the downloads as a function of time
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">staticPlots(
+  pckg.stats.total,
+  device = "PDF",
+  fileName = paste0("DWNLDS_", pckg.stats.total$package[1], ".", tolower(device)),
+  dirSave = NULL,
+  combinePlts = FALSE,
+  noMovAvg = FALSE,
+  noConfBands = FALSE,
+  cutOff.pts = 250,
+  dbg = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>pckg.stats.total</code></td>
+<td>
+<p>total downloads from the package</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>device</code></td>
+<td>
+<p>string to select the output format: 'PDF'/'PNG'/'JPEG' or 'screen'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fileName</code></td>
+<td>
+<p>an optional string argument specifying the name of the file where to save the plots</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dirSave</code></td>
+<td>
+<p>specify a valid directory where to save the plot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>combinePlts</code></td>
+<td>
+<p>a boolean indicating whether the plots generated will be combined into one single figure or not</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>noMovAvg</code></td>
+<td>
+<p>a boolean indicating whether moving statistical estimators, such as, the moving average will be displayed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>noConfBands</code></td>
+<td>
+<p>a boolean indicating whether a confidence band will be displayed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cutOff.pts</code></td>
+<td>
+<p>an integer value indicating the cut-off value to determine whether there would be a subsample for clarity sake in the plots</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dbg</code></td>
+<td>
+<p>internal flag for activating debugging options, i.e. display furhter information in screen</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+packageData &lt;- retrievePckgData("ggplot2")
+totalDownloads &lt;- packageData[[1]]
+#lastmonthDownloads &lt;- packageData[[2]]
+staticPlots(totalDownloads, device="screen")
+staticPlots(totalDownloads,combinePlts=TRUE, device="screen")
+
+
+</code></pre>
+
+
+</div>

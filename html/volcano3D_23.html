@@ -1,0 +1,126 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>voom_polar</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Convert RNA-Seq count data to a volcano3d object using 'limma voom'</h2>
+
+<h3>Description</h3>
+
+<p>This function is used instead of <code>polar_coords</code> if you have raw
+RNA-Seq count data. The function takes a design formula, metadata and raw
+RNA-Seq count data and uses 'limma voom' to analyse the data. The results are
+converted to a 'volc3d' object ready for plotting a 3d volcano plot or polar
+plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">voom_polar(
+  formula,
+  metadata,
+  counts,
+  pcutoff = 0.05,
+  padj.method = "BH",
+  filter_pairwise = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>Design formula which must be of the form <code>~ 0 + outcome + ...</code>. The 3-way outcome variable must be the first variable after the '0',
+and this variable must be a factor with exactly 3 levels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metadata</code></td>
+<td>
+<p>Matrix or dataframe containing metadata as referenced by
+<code>formula</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>counts</code></td>
+<td>
+<p>Matrix containing raw gene expression count data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pcutoff</code></td>
+<td>
+<p>Cut-off for p-value significance</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>padj.method</code></td>
+<td>
+<p>Can be any method available in <code>p.adjust</code> or <code>"qvalue"</code>.
+The option "none" is a pass-through.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filter_pairwise</code></td>
+<td>
+<p>Logical whether adjusted p-value pairwise statistical
+tests are only conducted on genes which reach significant adjusted p-value
+cut-off on the group likelihood ratio test</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Optional arguments passed to <code>polar_coords</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Statistical results for the group and pairwise comparisons are calculated
+using the 'limma voom' pipeline and the results passed to
+<code>polar_coords</code> to generate a 'volc3d' object ready for plotting a
+3d volcano plot or polar plot.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Calls <code>polar_coords</code> to return an S4 'volc3d' object
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>polar_coords</code>, <code>deseq_polar</code>,
+<code>voom</code> in the limma package
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">if (requireNamespace("limma", quietly = TRUE) &amp; 
+    requireNamespace("edgeR", quietly = TRUE)) {
+  library(limma)
+  library(edgeR)
+  
+  counts &lt;- matrix(rnbinom(n=1500, mu=100, size=1/0.5), ncol=15)
+  cond &lt;- factor(rep(1:3, each=5), labels = c('A', 'B', 'C'))
+  cond &lt;- data.frame(cond)
+  
+  polar &lt;- voom_polar(~0 + cond, cond, counts)
+  
+  volcano3D(polar)
+  radial_ggplot(polar)
+}
+
+</code></pre>
+
+
+</div>

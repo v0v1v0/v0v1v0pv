@@ -1,0 +1,263 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineMLE</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Maximum Likelihood Estimation of an R-Vine Copula Model</h2>
+
+<h3>Description</h3>
+
+<p>This function calculates the maximum likelihood estimate (MLE) of the
+R-vine copula model parameters using sequential estimates as initial values
+(if not provided).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineMLE(
+  data,
+  RVM,
+  start = RVM$par,
+  start2 = RVM$par2,
+  maxit = 200,
+  max.df = 30,
+  max.BB = list(BB1 = c(5, 6), BB6 = c(6, 6), BB7 = c(5, 6), BB8 = c(6, 1)),
+  grad = FALSE,
+  hessian = FALSE,
+  se = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>An N x d data matrix (with uniform margins).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p>An <code>RVineMatrix()</code> object including the structure and
+the pair-copula families and parameters (if known).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start</code></td>
+<td>
+<p>Lower triangular d x d matrix with zero diagonal entries with
+starting values for the pair-copula parameters (optional; otherwise they are
+calculated via <br><code>RVineSeqEst()</code>; default: <code>start = RVM$par</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start2</code></td>
+<td>
+<p>Lower triangular d x d matrix with zero diagonal entries with
+starting values for the second parameters of pair-copula families with two
+parameters (optional; otherwise they are calculated via
+<code>RVineSeqEst()</code>; default: <code>start2 = RVM$par2</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxit</code></td>
+<td>
+<p>The maximum number of iteration steps (optional; default:
+<code>maxit = 200</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.df</code></td>
+<td>
+<p>Numeric; upper bound for the estimation of the degrees of
+freedom parameter of the t-copula (default: <code>max.df = 30</code>; for more
+details see <code>BiCopEst()</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.BB</code></td>
+<td>
+<p>List; upper bounds for the estimation of the two parameters
+(in absolute values) of the BB1, BB6, BB7 and BB8 copulas <br> (default:
+<code>max.BB = list(BB1=c(5,6),BB6=c(6,6),BB7=c(5,6),BB8=c(6,1))</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>grad</code></td>
+<td>
+<p>If RVM$family only contains one parameter copula families or the
+t-copula the analytical gradient can be used for maximization of the
+log-likelihood (see <code>RVineGrad()</code>; default: <code>grad = FALSE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hessian</code></td>
+<td>
+<p>Logical; whether the Hessian matrix of parameter estimates is
+estimated (default: <code>hessian = FALSE</code>). Note that this is not the
+Hessian Matrix calculated via <code>RVineHessian()</code> but via finite
+differences.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se</code></td>
+<td>
+<p>Logical; whether standard errors of parameter estimates are
+estimated on the basis of the Hessian matrix (see above; default: <code>se = FALSE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments for <code>optim</code> (e.g. <code>factr</code> controls
+the convergence of the "L-BFGS-B" method, or <code>trace</code>, a non-negative
+integer, determines if tracing information on the progress of the
+optimization is produced.) <br> For more details see the documentation of
+<code>optim()</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p><code>RVineMatrix()</code> object with the calculated
+parameters stored in <code>RVM$par</code> and <code>RVM$par2</code>. Additional
+information about the fit is added (e.g., log-likelihood, AIC, BIC).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>Optimized log-likelihood value corresponding to the estimated
+pair-copula parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>convergence</code></td>
+<td>
+<p>An integer code indicating
+either successful convergence (<code>convergence = 0</code>) or an error:<br><code>1</code> = the iteration limit <code>maxit</code> has been reached <br><code>51</code> =
+a warning from the "L-BFGS-B" method; see component <code>message</code> for
+further details <br><code>52</code> = an error from the "L-BFGS-B" method; see
+component <code>message</code> for further details</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>message</code></td>
+<td>
+<p>A character
+string giving any additional information returned by <code>optim()</code>, or
+<code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>counts</code></td>
+<td>
+<p>A two-element integer vector giving the number
+of calls to <code>fn</code> and <code>gr</code> respectively.  This excludes those calls
+needed to compute the Hessian, if requested, and any calls to <code>fn</code> to
+compute a finite-difference approximation to the gradient.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hessian</code></td>
+<td>
+<p>If <code>hessian = TRUE</code>, the Hessian matrix is returned. Its
+calculation is on the basis of finite differences (output of <code>optim</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p><code>RVineMLE</code> uses the L-BFGS-B method for optimization. <br> If the
+analytical gradient is used for maximization, computations may be up to 10
+times faster than using finite differences.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier, Jeffrey Dissmann
+</p>
+
+
+<h3>References</h3>
+
+<p>Dissmann, J. F., E. C. Brechmann, C. Czado, and D. Kurowicka
+(2013). Selecting and estimating regular vine copulae and application to
+financial returns. Computational Statistics &amp; Data Analysis, 59 (1), 52-69.
+</p>
+<p>Stoeber, J. and U. Schepsmeier (2013). Estimating standard errors in regular
+vine copula models. Computational Statistics, 1-29
+<a href="https://link.springer.com/article/10.1007/s00180-013-0423-8#">https://link.springer.com/article/10.1007/s00180-013-0423-8#</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineSeqEst()</code>,
+<code>RVineStructureSelect()</code>,
+<code>RVineMatrix()</code>,
+<code>RVineGrad()</code>,
+<code>RVineHessian()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# define 5-dimensional R-vine tree structure matrix
+Matrix &lt;- c(5, 2, 3, 1, 4,
+            0, 2, 3, 4, 1,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 1)
+Matrix &lt;- matrix(Matrix, 5, 5)
+
+# define R-vine pair-copula family matrix
+family &lt;- c(0, 1, 3, 4, 4,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 3,
+            0, 0, 0, 0, 0)
+family &lt;- matrix(family, 5, 5)
+
+# define R-vine pair-copula parameter matrix
+par &lt;- c(0, 0.2, 0.9, 1.5, 3.9,
+         0, 0, 1.1, 1.6, 0.9,
+         0, 0, 0, 1.9, 0.5,
+         0, 0, 0, 0, 4.8,
+         0, 0, 0, 0, 0)
+par &lt;- matrix(par, 5, 5)
+
+# define second R-vine pair-copula parameter matrix
+par2 &lt;- matrix(0, 5, 5)
+
+# define RVineMatrix object
+RVM &lt;- RVineMatrix(Matrix = Matrix, family = family,
+                   par = par, par2 = par2,
+                   names = c("V1", "V2", "V3", "V4", "V5"))
+
+# simulate a sample of size 300 from the R-vine copula model
+set.seed(123)
+simdata &lt;- RVineSim(300, RVM)
+
+# compute the MLE
+mle &lt;- RVineMLE(simdata, RVM, grad = TRUE, trace = 0)
+
+# compare parameters
+round(mle$RVM$par - RVM$par, 2)
+
+</code></pre>
+
+
+</div>

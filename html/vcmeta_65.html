@@ -1,0 +1,134 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.sub.semipart</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for a subgroup difference in average
+semipartial correlations</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and confidence interval
+for a difference in average semipartial correlations for two
+subgroups of mutually exclusive studies. Each subgroup can
+have one or more studies.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.sub.semipart(alpha, n, cor, r2, group)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>vector of sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor</code></td>
+<td>
+<p>vector of estimated semi-partial correlations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r2</code></td>
+<td>
+<p>vector of squared multiple correlations for a model that
+includes the IV and all control variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>vector of group indicators:
+</p>
+
+<ul>
+<li>
+<p> 1 for set A
+</p>
+</li>
+<li>
+<p> 2 for set B
+</p>
+</li>
+<li>
+<p> 0 to ignore
+</p>
+</li>
+</ul>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix with three rows:
+</p>
+
+<ul>
+<li>
+<p> Row 1 - estimate for Set A
+</p>
+</li>
+<li>
+<p> Row 2 - estimate for Set B
+</p>
+</li>
+<li>
+<p> Row 3 - estimate for difference, Set A - Set B
+</p>
+</li>
+</ul>
+<p>The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated average correlation or difference
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">n &lt;- c(55, 190, 65, 35)
+cor &lt;- c(.40, .65, .60, .45)
+r2 &lt;- c(.25, .41, .43, .39)
+group &lt;- c(1, 1, 2, 0)	
+meta.sub.semipart(.05, n, cor, r2, group)
+
+# Should return:
+#                Estimate         SE         LL        UL
+# Set A:            0.525 0.05955276  0.3986844 0.6317669
+# Set B:            0.600 0.07931155  0.4221127 0.7333949
+# Set A - Set B:   -0.075 0.09918091 -0.2587113 0.1324682
+
+
+</code></pre>
+
+
+</div>

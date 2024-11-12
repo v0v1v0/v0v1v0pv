@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>long_to_wide</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Transform data.frame from long to wide format</h2>
+
+<h3>Description</h3>
+
+<p><code>long_to_wide</code> transform data.frame from long to
+wide format
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">long_to_wide(
+  df,
+  column_with_new_names = names(df)[1],
+  column_with_data = "emission",
+  column_fixed,
+  net
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>data.frame with three column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>column_with_new_names</code></td>
+<td>
+<p>Character, column that has new column names</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>column_with_data</code></td>
+<td>
+<p>Character column with data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>column_fixed</code></td>
+<td>
+<p>Character,  column that will remain fixed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>To return a sf</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>wide data.frame.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>emis_hot_td</code> <code>emis_cold_td</code> <code>wide_to_long</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+df &lt;- data.frame(pollutant = rep(c("CO", "propadiene", "NO2"), 10),
+                 emission = vein::Emissions(1:30),
+                 region = rep(letters[1:2], 15))
+df
+long_to_wide(df)
+long_to_wide(df, column_fixed = "region")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

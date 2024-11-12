@@ -1,0 +1,66 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>interpolate.mdl_vtl_df</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Interpolate missing values using a vital model</h2>
+
+<h3>Description</h3>
+
+<p>Uses a fitted vital model to interpolate missing values from a dataset.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'mdl_vtl_df'
+interpolate(object, new_data, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>A mable containing a single model column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>new_data</code></td>
+<td>
+<p>A dataset with the same structure as the data used to fit the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments passed to interpolate methods.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A vital object with missing values interpolated.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Rob J Hyndman
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">act_female &lt;- aus_mortality |&gt;
+ dplyr::filter(Code == "ACTOT", Sex == "female")
+act_female |&gt;
+ model(mean = FMEAN(Mortality)) |&gt;
+ interpolate(act_female)
+</code></pre>
+
+
+</div>

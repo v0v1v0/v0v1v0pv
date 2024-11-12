@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>capture_widget</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Capture a static (png) version of a widget (e.g. for use in a PDF knitr document)</h2>
+
+<h3>Description</h3>
+
+<p>Widgets are generally interactive beasts rendered in an HTML DOM with
+javascript. That makes them unusable in PDF documents. However, many widgets
+initial views would work well as static images. This function renders a widget
+to a file and make it usable in a number of contexts.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">capture_widget(wdgt, output = c("path", "markdown", "html", "inline"), height,
+  width, png_render_path = tempfile(fileext = ".png"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>wdgt</code></td>
+<td>
+<p>htmlwidget to capture</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output</code></td>
+<td>
+<p>how to return the results of the capture (see Details section)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>height, width</code></td>
+<td>
+<p>it's important for many widget to be responsive in HTML
+documents. PDFs are static beasts and having a fixed image size works
+better for them. <code>height</code> &amp; <code>width</code> will be passed into the
+rendering process, which means you should probably specify similar
+values in your widget creation process so the captured <code>&lt;div&gt;</code>
+size matches the size you specify here.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>png_render_path</code></td>
+<td>
+<p>by default, this will be a temporary file location but
+a fully qualified filename (with extension) can be specified. It's up to
+the caller to free the storage when finished with the resource.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>What is returned depends on the value of <code>output</code>. By default (<code>"path"</code>),
+the full disk path will be returned. If <code>markdown</code> is specified, a markdown
+string will be returned with a <code>file:///...</code> URL. If <code>html</code> is
+specified, an <code>&lt;img src='file:///...'/&gt;</code> tag will be returned and if
+<code>inline</code> is specified, a base64 encoded <code>&lt;img&gt;</code> tag will be returned
+(just like you'd see in a self-contained HTML file from <code>knitr</code>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>See Details
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(webshot)
+library(vegalite)
+
+dat &lt;- jsonlite::fromJSON('[
+      {"a": "A","b": 28}, {"a": "B","b": 55}, {"a": "C","b": 43},
+      {"a": "D","b": 91}, {"a": "E","b": 81}, {"a": "F","b": 53},
+      {"a": "G","b": 19}, {"a": "H","b": 87}, {"a": "I","b": 52}
+    ]')
+
+vegalite(viewport_width=350, viewport_height=250) %&gt;%
+  add_data(dat) %&gt;%
+  encode_x("a", "ordinal") %&gt;%
+  encode_y("b", "quantitative") %&gt;%
+  mark_bar() -&gt; vl
+
+capture_widget(vl, "inline", 250, 350)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

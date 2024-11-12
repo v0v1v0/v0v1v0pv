@@ -1,0 +1,444 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cao</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Fitting Constrained Additive Ordination (CAO) </h2>
+
+<h3>Description</h3>
+
+<p>A constrained additive ordination (CAO) model is fitted using
+the <em>reduced-rank vector generalized additive model</em>
+(RR-VGAM) framework.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cao(formula, family = stop("argument 'family' needs to be assigned"),
+    data = list(),
+    weights = NULL, subset = NULL, na.action = na.fail,
+    etastart = NULL, mustart = NULL, coefstart = NULL,
+    control = cao.control(...), offset = NULL,
+    method = "cao.fit", model = FALSE, x.arg = TRUE, y.arg = TRUE,
+    contrasts = NULL, constraints = NULL,
+    extra = NULL, qr.arg = FALSE, smart = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+
+<p>a symbolic description of the model to be fit.  The RHS of
+the formula is used to construct the latent variables, upon
+which the smooths are applied.  All the variables in the
+formula are used for the construction of latent variables
+except for those specified by the argument <code>noRRR</code>,
+which is itself a formula.  The LHS of the formula contains
+the response variables, which should be a matrix with each
+column being a response (species).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+
+<p>a function of class <code>"vglmff"</code> (see <code>vglmff-class</code>)
+describing what statistical model is to be fitted. This is called a
+“<span class="pkg">VGAM</span> family function”.  See <code>CommonVGAMffArguments</code>
+for general information about many types of arguments found in this
+type of function.
+See <code>cqo</code> for a list of those presently implemented.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+
+<p>an optional data frame containing the variables in
+the model.  By default the variables are taken from
+<code>environment(formula)</code>, typically the environment
+from which <code>cao</code> is called.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+
+<p>an optional vector or matrix of (prior) weights to be used
+in the fitting process.  For <code>cao</code>, this argument
+currently should not be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subset</code></td>
+<td>
+
+<p>an optional logical vector specifying a subset of
+observations to be used in the fitting process.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.action</code></td>
+<td>
+
+<p>a function which indicates what should happen when
+the data contain <code>NA</code>s.  The default is set by the
+<code>na.action</code> setting of <code>options</code>, and
+is <code>na.fail</code> if that is unset.  The “factory-fresh”
+default is <code>na.omit</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>etastart</code></td>
+<td>
+
+<p>starting values for the linear predictors.  It is a
+<code class="reqn">M</code>-column matrix. If <code class="reqn">M=1</code> then it may be a vector.
+For <code>cao</code>, this argument currently should not be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mustart</code></td>
+<td>
+
+<p>starting values for the fitted values. It can be a vector
+or a matrix.  Some family functions do not make use of
+this argument.  For <code>cao</code>, this argument currently
+should not be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coefstart</code></td>
+<td>
+
+<p>starting values for the coefficient vector.  For <code>cao</code>,
+this argument currently should not be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+
+<p>a list of parameters for controlling the fitting process.
+See <code>cao.control</code> for details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>offset</code></td>
+<td>
+
+<p>a vector or <code class="reqn">M</code>-column matrix of offset values.
+These are <em>a priori</em> known and are added to the linear
+predictors during fitting.  For <code>cao</code>, this argument
+currently should not be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+
+<p>the method to be used in fitting the model.  The default
+(and presently only) method <code>cao.fit</code> uses iteratively
+reweighted least squares (IRLS) within FORTRAN code called
+from <code>optim</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+
+<p>a logical value indicating whether the <em>model frame</em>
+should be assigned in the <code>model</code> slot.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x.arg, y.arg</code></td>
+<td>
+
+<p>logical values indicating whether the model matrix and
+response vector/matrix used in the fitting process should
+be assigned in the <code>x</code> and <code>y</code> slots.  Note the
+model matrix is the linear model (LM) matrix.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>contrasts</code></td>
+<td>
+
+<p>an optional list. See the <code>contrasts.arg</code> of
+<code>model.matrix.default</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constraints</code></td>
+<td>
+
+<p>an optional list  of constraint matrices.  For
+<code>cao</code>, this argument currently should not be used.
+The components of the list must be named with the term it
+corresponds to (and it must match in character format).
+Each constraint matrix must have <code class="reqn">M</code> rows, and be
+of full-column rank. By default, constraint matrices are
+the <code class="reqn">M</code> by <code class="reqn">M</code> identity matrix unless arguments
+in the family function itself override these values.
+If <code>constraints</code> is used it must contain <em>all</em>
+the terms; an incomplete list is not accepted.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extra</code></td>
+<td>
+
+<p>an optional list with any extra information that might
+be needed by the family function.  For <code>cao</code>, this
+argument currently should not be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qr.arg</code></td>
+<td>
+
+<p>For <code>cao</code>, this argument currently should not be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smart</code></td>
+<td>
+
+<p>logical value indicating whether smart prediction
+(<code>smartpred</code>) will be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>further arguments passed into <code>cao.control</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The arguments of <code>cao</code> are a mixture of those from
+<code>vgam</code> and <code>cqo</code>, but with some extras
+in <code>cao.control</code>. Currently, not all of the
+arguments work properly.
+</p>
+<p>CAO can be loosely be thought of as the result of fitting
+generalized additive models (GAMs) to several responses
+(e.g., species) against a very small number of latent
+variables.  Each latent variable is a linear combination of
+the explanatory variables; the coefficients <b>C</b> (called
+<code class="reqn">C</code> below) are called <em>constrained coefficients</em>
+or <em>canonical coefficients</em>, and are interpreted as
+weights or loadings. The <b>C</b> are estimated by maximum
+likelihood estimation.  It is often a good idea to apply
+<code>scale</code> to each explanatory variable first.
+</p>
+<p>For each response (e.g., species), each latent variable
+is smoothed by a cubic smoothing spline, thus CAO is
+data-driven. If each smooth were a quadratic then CAO
+would simplify to <em>constrained quadratic ordination</em>
+(CQO; formerly called <em>canonical Gaussian ordination</em>
+or CGO).  If each smooth were linear then CAO would simplify
+to <em>constrained linear ordination</em> (CLO). CLO can
+theoretically be fitted with <code>cao</code> by specifying
+<code>df1.nl=0</code>, however it is more efficient to use
+<code>rrvglm</code>.
+</p>
+<p>Currently, only <code>Rank=1</code> is implemented, and only
+<code>noRRR = ~1</code> models are handled.
+</p>
+
+
+
+
+
+
+<p>With binomial data, the default formula is
+</p>
+<p style="text-align: center;"><code class="reqn">logit(P[Y_s=1]) = \eta_s = f_s(\nu), \ \ \ s=1,2,\ldots,S</code>
+</p>
+
+<p>where <code class="reqn">x_2</code> is a vector of environmental variables, and
+<code class="reqn">\nu=C^T x_2</code> is a <code class="reqn">R</code>-vector of latent
+variables.  The <code class="reqn">\eta_s</code> is an additive predictor
+for species <code class="reqn">s</code>, and it models the probabilities
+of presence as an additive model on the logit scale.
+The matrix <code class="reqn">C</code> is estimated from the data, as well as
+the smooth functions <code class="reqn">f_s</code>.  The argument <code>noRRR =
+  ~ 1</code> specifies that the vector <code class="reqn">x_1</code>, defined for
+RR-VGLMs and QRR-VGLMs, is simply a 1 for an intercept.  Here,
+the intercept in the model is absorbed into the functions.
+A <code>clogloglink</code> link may be preferable over a
+<code>logitlink</code> link.
+</p>
+<p>With Poisson count data, the formula is
+</p>
+<p style="text-align: center;"><code class="reqn">\log(E[Y_s]) = \eta_s = f_s(\nu)</code>
+</p>
+
+<p>which models the mean response as an additive models on the
+log scale.
+</p>
+<p>The fitted latent variables (site scores) are scaled to have
+unit variance.  The concept of a tolerance is undefined for
+CAO models, but the optimums and maximums are defined. The
+generic functions <code>Max</code> and <code>Opt</code>
+should work for CAO objects, but note that if the maximum
+occurs at the boundary then <code>Max</code> will return a
+<code>NA</code>.  Inference for CAO models is currently undeveloped.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"cao"</code>
+(this may change to <code>"rrvgam"</code> in the future).
+Several generic functions can be applied to the object, e.g.,
+<code>Coef</code>, <code>concoef</code>, <code>lvplot</code>,
+<code>summary</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>CAO is very costly to compute. With version 0.7-8 it took
+28 minutes on a fast machine. I hope to look at ways of
+speeding things up in the future.
+</p>
+<p>Use <code>set.seed</code> just prior to calling
+<code>cao()</code> to make your results reproducible.  The reason
+for this is finding the optimal CAO model presents a difficult
+optimization problem, partly because the log-likelihood
+function contains many local solutions. To obtain the
+(global) solution the user is advised to try <em>many</em>
+initial values.  This can be done by setting <code>Bestof</code>
+some appropriate value (see <code>cao.control</code>). Trying
+many initial values becomes progressively more important as
+the nonlinear degrees of freedom of the smooths increase.
+</p>
+
+
+
+
+
+
+
+<h3>Note</h3>
+
+<p>CAO models are computationally expensive, therefore setting
+<code>trace = TRUE</code> is a good idea, as well as running it
+on a simple random sample of the data set instead.
+</p>
+<p>Sometimes the IRLS algorithm does not converge within
+the FORTRAN code. This results in warnings being issued.
+In particular, if an error code of 3 is issued, then this
+indicates the IRLS algorithm has not converged. One possible
+remedy is to increase or decrease the nonlinear degrees of
+freedom so that the curves become more or less flexible,
+respectively.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee</p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2006).
+Constrained additive ordination.
+<em>Ecology</em>, <b>87</b>, 203–213.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>cao.control</code>,
+<code>Coef.cao</code>,
+<code>cqo</code>,
+<code>latvar</code>,
+<code>Opt</code>,
+<code>Max</code>,
+<code>calibrate.qrrvglm</code>,
+<code>persp.cao</code>,
+<code>poissonff</code>,
+<code>binomialff</code>,
+<code>negbinomial</code>,
+<code>gamma2</code>,
+<code>set.seed</code>,
+<code>gam()</code> in <span class="pkg">gam</span>,
+<code>trapO</code>.
+</p>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+hspider[, 1:6] &lt;- scale(hspider[, 1:6])  # Stdzd environmental vars
+set.seed(149)  # For reproducible results
+ap1 &lt;- cao(cbind(Pardlugu, Pardmont, Pardnigr, Pardpull) ~
+           WaterCon + BareSand + FallTwig + CoveMoss + CoveHerb + ReflLux,
+           family = poissonff, data = hspider, Rank = 1,
+           df1.nl = c(Pardpull= 2.7, 2.5),
+           Bestof = 7, Crow1positive = FALSE)
+sort(deviance(ap1, history = TRUE))  # A history of all the iterations
+
+Coef(ap1)
+concoef(ap1)
+
+par(mfrow = c(2, 2))
+plot(ap1)  # All the curves are unimodal; some quite symmetric
+
+par(mfrow = c(1, 1), las = 1)
+index &lt;- 1:ncol(depvar(ap1))
+lvplot(ap1, lcol = index, pcol = index, y = TRUE)
+
+trplot(ap1, label = TRUE, col = index)
+abline(a = 0, b = 1, lty = 2)
+
+trplot(ap1, label = TRUE, col = "blue", log = "xy", which.sp = c(1, 3))
+abline(a = 0, b = 1, lty = 2)
+
+persp(ap1, col = index, lwd = 2, label = TRUE)
+abline(v = Opt(ap1), lty = 2, col = index)
+abline(h = Max(ap1), lty = 2, col = index)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

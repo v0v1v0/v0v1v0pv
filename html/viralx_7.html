@@ -1,0 +1,105 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>viralx_knn_shap</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Explain K Nearest Neighbor Model using SHAP values</h2>
+
+<h3>Description</h3>
+
+<p>This function calculates SHAP (SHapley Additive exPlanations) values for a
+K-Nearest Neighbors (KNN) model trained on HIV data with specified
+hyperparameters.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">viralx_knn_shap(
+  vip_featured,
+  hiv_data,
+  knn_hyperparameters,
+  vip_train,
+  vip_new,
+  orderings
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vip_featured</code></td>
+<td>
+<p>The name of the response variable to explain.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hiv_data</code></td>
+<td>
+<p>The training dataset containing predictor variables and the response variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knn_hyperparameters</code></td>
+<td>
+<p>A list of hyperparameters for the KNN model, including:
+</p>
+
+<ul>
+<li> <p><code>neighbors</code>: The number of neighbors to consider.
+</p>
+</li>
+<li> <p><code>weight_func</code>: The weight function to use.
+</p>
+</li>
+<li> <p><code>dist_power</code>: The distance power parameter.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vip_train</code></td>
+<td>
+<p>The dataset used for training the KNN model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vip_new</code></td>
+<td>
+<p>The dataset for which SHAP values are calculated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>orderings</code></td>
+<td>
+<p>The number of orderings for SHAP value calculations.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of SHAP values for each observation in <code>vip_new</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+set.seed(123)
+hiv_data &lt;- train2
+knn_hyperparameters &lt;- list(neighbors = 5, weight_func = "optimal", dist_power = 0.3304783)
+vip_featured &lt;- c("cd_2022")
+vip_train &lt;- hiv_data
+vip_new &lt;- vip_train[1, ]
+orderings &lt;- 20
+viralx_knn_shap(vip_featured, hiv_data, knn_hyperparameters, vip_train, vip_new, orderings)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,167 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gensh</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Generalized Secant Hyperbolic Regression
+Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimation of the parameters of the
+generalized secant hyperbolic
+distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">gensh(shape, llocation = "identitylink",
+      lscale = "loglink", zero = "scale",
+      ilocation = NULL, iscale = NULL, imethod = 1,
+      glocation.mux = exp((-4:4)/2),
+      gscale.mux = exp((-4:4)/2),
+      probs.y = 0.3, tol0 = 1e-4)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+<p>Numeric of length 1.
+Shape parameter, called <code class="reqn">t</code> in
+Vaughan (2002).
+Valid values are
+<code class="reqn">-\pi/2 &lt; t</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>llocation, lscale</code></td>
+<td>
+
+<p>Parameter link functions applied to the
+two parameters.
+See <code>Links</code> for more choices.
+See <code>CommonVGAMffArguments</code>
+for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero, imethod</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>
+for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilocation, iscale</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>
+for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>glocation.mux, gscale.mux</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>
+for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>probs.y, tol0</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>
+for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability density function of the
+hyperbolic secant distribution
+is given by
+</p>
+<p style="text-align: center;"><code class="reqn">f(y; a, b, s) =
+[(c_1 / b) \; \exp(c_2 z)] / [
+\exp(2 c_2 z) + 2 C_3 \exp(c_2 z) + 1]</code>
+</p>
+
+<p>for shape
+parameter <code class="reqn">-\pi &lt; s</code>
+and all real <code class="reqn">y</code>.
+The scalars <code class="reqn">c_1</code>, <code class="reqn">c_2</code>,
+<code class="reqn">C_3</code> are functions of <code class="reqn">s</code>.
+The mean of <code class="reqn">Y</code> is
+the location parameter <code class="reqn">a</code>
+(returned as the fitted values).
+All moments of the distribution are finite.
+</p>
+<p>Further details about
+the parameterization can be found
+in Vaughan (2002).
+Fisher scoring is implemented and it has
+a diagonal EIM.
+More details are at
+<code>Gensh</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Vaughan, D. C. (2002).
+The generalized secant hyperbolic
+distribution and its properties.
+<em>Communications in Statistics—Theory
+and Methods</em>,
+<b>31</b>(2): 219–238.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>hypersecant</code>,
+<code>logistic</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">sh &lt;- -pi / 2; loc &lt;- 2
+hdata &lt;- data.frame(x2 = rnorm(nn &lt;- 200))
+hdata &lt;- transform(hdata, y = rgensh(nn, sh, loc))
+fit &lt;- vglm(y ~ x2, gensh(sh), hdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+</code></pre>
+
+
+</div>

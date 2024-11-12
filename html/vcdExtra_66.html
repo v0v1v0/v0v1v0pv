@@ -1,0 +1,55 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Mammograms</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Mammogram Ratings</h2>
+
+<h3>Description</h3>
+
+<p>Kundel &amp; Polansky (2003) give (possibly contrived) data on a 
+set of 110 mammograms rated by two readers.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(Mammograms)</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A frequency table in matrix form.  The format is:
+num [1:4, 1:4] 34 6 2 0 10 8 5 1 2 8 ...
+- attr(*, "dimnames")=List of 2
+..$ Reader2: chr [1:4] "Absent" "Minimal" "Moderate" "Severe"
+..$ Reader1: chr [1:4] "Absent" "Minimal" "Moderate" "Severe"
+</p>
+
+
+<h3>Source</h3>
+
+<p>Kundel, H. L. &amp; Polansky, M. (2003), 
+"Measurement of Observer Agreement", <em>Radiology</em>, <b>228</b>, 303-308, Table A1
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Mammograms)
+B &lt;- agreementplot(Mammograms, main="Mammogram ratings")
+# agreement measures
+B
+Kappa(Mammograms)
+
+## other displays
+mosaic(Mammograms, shade=TRUE)
+
+sieve(Mammograms, pop = FALSE, shade = TRUE)
+labeling_cells(text = Mammograms, 
+  gp_text = gpar(fontface = 2, cex=1.75))(as.table(Mammograms))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>nullify</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Set Element to NULL Without Removing It</h2>
+
+<h3>Description</h3>
+
+<p>This function is required because there is no straightforward way to
+over-write a value in a list with NULL without completely removing the entry
+from the list as well.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">nullify(obj, index)
+
+## Default S3 method:
+nullify(obj, index)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>the R object to NULL a value in</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>index</code></td>
+<td>
+<p>an indexing vectors of values to NULL</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This returns a copy of the object modified with null slots; it does
+not modify the input argument.
+</p>
+<p>Default method will attempt to convert non-list objects to lists
+with <code>as.list</code>, and then back to whatever they were by using a
+function with name <code>paste0("as.", class(obj)[[1L]])</code>
+if it exists and works.  If the object cannot be coerced back
+to its original type the corresponding list will be returned.
+</p>
+<p>If this is not appropriate for your object type you can write an S3 method
+for it.
+</p>
+
+
+<h3>Value</h3>
+
+<p>object with selected values NULLified
+</p>
+
+
+<h3>Note</h3>
+
+<p>attributes are copied from original object and re-applied to final
+object before return, which may
+not make sense in some circumstances.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nullify(list(1, 2, 3), 2)
+nullify(call("fun", 1, 2, 3), 2)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,63 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>is_complete</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Test for completeness of records</h2>
+
+<h3>Description</h3>
+
+<p>Utility function to make common tests easier.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">is_complete(...)
+
+all_complete(...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>When used in a validation rule: a bare (unquoted) list of variable names.
+When used directly, a comma-separated list of vectors of equal length.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>For <code>is_complete</code> A logical vector that is <code>FALSE</code> for each record
+that has at least one missing value.
+</p>
+<p>For <code>all_unique</code> a single <code>TRUE</code> or <code>FALSE</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other cross-record-helpers: 
+<code>contains_exactly()</code>,
+<code>do_by()</code>,
+<code>exists_any()</code>,
+<code>hb()</code>,
+<code>hierarchy()</code>,
+<code>is_linear_sequence()</code>,
+<code>is_unique()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">d &lt;- data.frame(X = c('a','b',NA,'b'), Y = c(NA,'apple','banana','apple'), Z=1:4)
+v &lt;- validator(is_complete(X, Y))
+values(confront(d, v))
+
+</code></pre>
+
+
+</div>

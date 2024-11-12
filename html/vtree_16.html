@@ -1,0 +1,74 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vtreeOutput</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>vtree widget</h2>
+
+<h3>Description</h3>
+
+<p>Shiny bindings for vtree. It is actually a wrapper around <code>grViz</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vtreeOutput(outputId, width = "100%", height = "100%")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>outputId</code></td>
+<td>
+<p>output variable to read from</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width, height</code></td>
+<td>
+<p>must be a valid CSS unit in pixels
+or a number, which will be coerced to a string and have <code>"px"</code> appended.</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><code>renderVtree</code>
+</p>
+<p>Other Shiny Functions: 
+<code>init_js()</code>,
+<code>inlineCssSetup()</code>,
+<code>renderVtree()</code>,
+<code>use_svgzoom()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(shiny)
+library(vtree)
+
+ui &lt;- fluidPage(
+  vtreeOutput("vtree", width = "100%", height = "800px")
+)
+
+server &lt;- function(input, output, session) {
+  output$vtree &lt;- renderVtree({
+    vtree(FakeData,"Severity Sex",
+          labelnode=list(Sex=(c("Male"="M","Female"="F"))),
+          pngknit=FALSE)
+  })
+}
+
+shinyApp(ui, server)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

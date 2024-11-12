@@ -1,0 +1,160 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>laplace</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Laplace Regression Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of
+the 2-parameter classical Laplace distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">laplace(llocation = "identitylink", lscale = "loglink",
+  ilocation = NULL, iscale = NULL, imethod = 1, zero = "scale")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>llocation, lscale</code></td>
+<td>
+<p> Character.
+Parameter link functions for location parameter <code class="reqn">a</code> and
+scale parameter <code class="reqn">b</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilocation, iscale</code></td>
+<td>
+
+<p>Optional initial values.
+If given, it must be numeric and values are recycled to the
+appropriate length.
+The default is to choose the value internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>Initialization method.
+Either the value 1 or 2.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Laplace distribution is often known as the
+<em>double-exponential</em> distribution and,
+for modelling, has heavier tail than the normal distribution.
+The Laplace density function is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \frac{1}{2b} \exp \left( - \frac{|y-a|}{b}
+                    \right) </code>
+</p>
+
+<p>where <code class="reqn">-\infty&lt;y&lt;\infty</code>,
+<code class="reqn">-\infty&lt;a&lt;\infty</code> and
+<code class="reqn">b&gt;0</code>.
+Its mean is <code class="reqn">a</code> and its variance is <code class="reqn">2b^2</code>.
+This parameterization is called the <em>classical Laplace
+distribution</em> by Kotz et al. (2001), and the density is symmetric
+about <code class="reqn">a</code>.
+</p>
+<p>For <code>y ~ 1</code> (where <code>y</code> is the response)
+the maximum likelihood estimate (MLE) for the location
+parameter is the sample median, and the MLE for <code class="reqn">b</code> is
+<code>mean(abs(y-location))</code> (replace location by its MLE
+if unknown).
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>This family function has not been fully tested.
+The MLE regularity conditions do <em>not</em> hold for this
+distribution, therefore misleading inferences may result, e.g.,
+in the <code>summary</code> and <code>vcov</code> of the object.  Hence this
+family function might be withdrawn from <span class="pkg">VGAM</span> in the future.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This family function uses Fisher scoring.
+Convergence may be slow for non-intercept-only models;
+half-stepping is frequently required.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Kotz, S., Kozubowski, T. J. and Podgorski, K. (2001).
+<em>The Laplace distribution and generalizations:
+a revisit with applications to communications,
+economics, engineering, and finance</em>,
+Boston: Birkhauser.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rlaplace</code>,
+<code>alaplace2</code>
+(which differs slightly from this parameterization),
+<code>exponential</code>,
+<code>median</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ldata &lt;- data.frame(y = rlaplace(nn &lt;- 100, 2, scale = exp(1)))
+fit &lt;- vglm(y  ~ 1, laplace, ldata, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+with(ldata, median(y))
+
+ldata &lt;- data.frame(x = runif(nn &lt;- 1001))
+ldata &lt;- transform(ldata, y = rlaplace(nn, 2, scale = exp(-1 + 1*x)))
+coef(vglm(y ~ x, laplace(iloc = 0.2, imethod = 2, zero = 1), ldata,
+          trace = TRUE), matrix = TRUE)
+</code></pre>
+
+
+</div>

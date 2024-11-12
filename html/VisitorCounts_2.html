@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>check_arguments</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check Arguments</h2>
+
+<h3>Description</h3>
+
+<p>Check arguments.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">check_arguments(
+  popularity_proxy,
+  onsite_usage,
+  constant,
+  omit_trend,
+  trend,
+  ref_series,
+  is_input_logged,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>popularity_proxy</code></td>
+<td>
+<p>A vector which stores a time series which may be used as a proxy for the monthly popularity of social media over time. The length of <code>popularity_proxy</code> must be the same as that of <code>onsite_usage</code>. The default option is NULL, in which case, no proxy needs to be supplied. Note that this vector cannot have a value of 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>onsite_usage</code></td>
+<td>
+<p>A vector which stores monthly on-site usage for a particular social media platform and recreational site.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constant</code></td>
+<td>
+<p>A numeric specifying the constant term (beta0) in the model. This constant is understood as the mean log adjusted monthly visitation relative to the base month. The default option is 0, implying that the (logged) <code>onsite_usage</code> does not require any constant shift, which is unusual. If <code>ref_series</code> is supplied, the constant is overwritten by the least squares estimate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>omit_trend</code></td>
+<td>
+<p>This is obsolete and is left only for compatibility. In other words, <code>trend</code> will overwrite any option chosen in <code>omit_trend</code>. If <code>trend</code> is NULL, then <code>trend</code> is overwritten according to <code>omit_trend</code>. It is a Boolean specifying whether or not to consider the trend component to be 0. The default option is TRUE, in which case, the trend component is 0. If it is set to FALSE, then it is estimated using data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trend</code></td>
+<td>
+<p>A character string specifying how the trend is modeled. Can be any of NULL, "linear", "none", and "estimated", where "none" and "estimated" correspond to <code>omit_trend</code> being TRUE and FALSE, respectively. If NULL, then it follows the value specified in <code>omit_trend</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ref_series</code></td>
+<td>
+<p>A numeric vector specifying the original visitation series. The default option is NULL, implying that no such series is available. If such series is available, then its length must be the same as that of <code>onsite_usage</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>is_input_logged</code></td>
+<td>
+<p>A boolean specifying if the input is logged or not</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>No return value, called for extra information.
+</p>
+
+
+</div>

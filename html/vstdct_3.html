@@ -1,0 +1,62 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Data.trafo</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Data Transformation</h2>
+
+<h3>Description</h3>
+
+<p>Applies the Discrete Cosine I transform, data binning and the variance stabilizing transform function to the data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Data.trafo(y, Te, dct.out = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p><code>nxp</code> dimensional data matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Te</code></td>
+<td>
+<p>number of bins for data binning.  <code>Te</code> should be smaller than the vector length <code>p</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dct.out</code></td>
+<td>
+<p>logical. If <code>TRUE</code>, the <code>p</code>-dim. DCT-I matrix is returned. The default is <code>FALSE</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing the following elements:
+</p>
+
+<ul>
+<li>
+<p><code>m</code>:  number of data points per bin, that is <code>m=n*round(p/Te)</code>. If <code>p/Te</code> is not an integer, the first/last bin may contain more than <code>m</code> data points.
+</p>
+</li>
+<li>
+<p><code>y.star</code>:   <code>2Te-2</code> dimensional vector with binned, variance stabilized and mirrowed data. The bin number <code>Te</code> may be modified to guarantee at least two data points per bin. If <code>p/Te</code> is not an integer, the vector dimension is <code>2*floor(p/round(p/Te))-2</code>.
+</p>
+</li>
+<li>
+<p><code>dct.matrix</code>: <code>p</code>-dim. DCT-I matrix (if <code>dct.out</code>=TRUE)
+</p>
+</li>
+</ul>
+</div>

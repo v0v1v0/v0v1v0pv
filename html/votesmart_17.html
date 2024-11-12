@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rating_get_sig_list</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get SIG (Special Interest Group) list by category and state</h2>
+
+<h3>Description</h3>
+
+<p>Get SIG (Special Interest Group) list by category and state
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rating_get_sig_list(category_ids, state_ids = NA, all = TRUE, verbose = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>category_ids</code></td>
+<td>
+<p>Vector of category ids.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>state_ids</code></td>
+<td>
+<p>Vector of state abbreviations. Default <code>NA</code> for national.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all</code></td>
+<td>
+<p>Boolean: should all possible combinations of the variables be searched for, or just the exact combination of them in the order they are supplied?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Should cases when no data is available be messaged?</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A dataframe with the columns <code>sig_id, name, category_id, state_id</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+rating_get_categories() %&gt;%
+  dplyr::pull(category_id) %&gt;%
+  sample(3) %&gt;%
+  rating_get_sig_list()
+
+## End(Not run)
+</code></pre>
+
+
+</div>

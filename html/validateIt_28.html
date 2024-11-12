@@ -1,0 +1,141 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>validateLabel</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create validation tasks for labels assigned to the topics in the topic model of choice.</h2>
+
+<h3>Description</h3>
+
+<p>Create validation tasks for labels assigned to the topics in the topic model of choice.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">validateLabel(
+  type,
+  n,
+  text.predict = NULL,
+  text.name = "text",
+  top1.name = "top1",
+  top2.name = "top2",
+  top3.name = "top3",
+  labels = NULL,
+  labels.index = NULL,
+  labels.add = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Task structures to be specified. Must be one of "LI" (Label Intrusion) 
+and "OL" (Optimal Label).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>The number of desired tasks</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.predict</code></td>
+<td>
+<p>A data frame or matrix containing both the text and the indicator(s)
+of the model predicted topic(s).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text.name</code></td>
+<td>
+<p>variable name in 'text.predict' that indicates the text</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>top1.name</code></td>
+<td>
+<p>variable name in 'text.predict' that indicates the top1 model predicted topic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>top2.name</code></td>
+<td>
+<p>variable name in 'text.predict' that indicates the top2 model predicted topic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>top3.name</code></td>
+<td>
+<p>variable name in 'text.predict' that indicates the top3 model predicted topic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p>The user-defined labels assigned to the topics</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels.index</code></td>
+<td>
+<p>The topic index in correspondence with the labels, e.g., c(10, 12, 15).
+Must be in the same length and order with 'label'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels.add</code></td>
+<td>
+<p>Labels from other broad catagories. Default to NULL. Users could 
+specify them to evaluate how well different broad categories are distinguished from
+one another.
+</p>
+<p>#' value A matrix containing the validation tasks as described in the return section.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Users need to pick a topic model that they deem to be good and label the topics 
+they later would like to use as measures.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix containing the validation tasks. The matrix has six value columns: 
+</p>
+
+<dl>
+<dt>topic</dt>
+<dd>
+<p>The topic index associated with the document.</p>
+</dd>
+<dt>doc</dt>
+<dd>
+<p>The text of the document.</p>
+</dd>
+<dt>opt1</dt>
+<dd>
+<p>The first option label presented to the user.</p>
+</dd>
+<dt>opt2</dt>
+<dd>
+<p>The second option label presented to the user.</p>
+</dd>
+<dt>opt3</dt>
+<dd>
+<p>The third option label presented to the user.</p>
+</dd>
+<dt>optcrt</dt>
+<dd>
+<p>The correct label for the document.</p>
+</dd>
+</dl>
+</div>

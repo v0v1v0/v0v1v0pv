@@ -1,0 +1,160 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>frechet</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Frechet Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the 2-parameter
+Frechet distribution.
+</p>
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">frechet(location = 0, lscale = "loglink",
+  lshape = logofflink(offset = -2),
+  iscale = NULL, ishape = NULL, nsimEIM = 250, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>location</code></td>
+<td>
+
+<p>Numeric. Location parameter.
+It is called <code class="reqn">a</code> below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lscale, lshape</code></td>
+<td>
+
+<p>Link functions for the parameters;
+see <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iscale, ishape, zero, nsimEIM</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The (3-parameter) Frechet distribution has a density function
+that can be written
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \frac{sb}{
+      (y-a)^2} [b/(y-a)]^{s-1} \, \exp[-(b/(y-a))^s] </code>
+</p>
+
+<p>for <code class="reqn">y &gt; a</code> and scale parameter <code class="reqn">b &gt; 0</code>.
+The positive shape parameter is <code class="reqn">s</code>.
+The cumulative distribution function is
+</p>
+<p style="text-align: center;"><code class="reqn">F(y) = \exp[-(b/(y-a))^s]. </code>
+</p>
+
+<p>The mean of <code class="reqn">Y</code>
+is <code class="reqn">a + b \Gamma(1-1/s)</code>
+for <code class="reqn">s &gt; 1</code> (these are returned as the fitted values).
+The variance of <code class="reqn">Y</code> is
+<code class="reqn">b^2 [ \Gamma(1-2/s) - \Gamma^2(1-1/s)]</code>
+for <code class="reqn">s &gt; 2</code>.
+</p>
+<p>Family <code>frechet</code> has <code class="reqn">a</code> known, and
+<code class="reqn">\log(b)</code> and
+<code class="reqn">\log(s - 2)</code> are the default
+linear/additive predictors.
+The working weights are estimated by simulated Fisher scoring.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions such
+as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+
+
+
+
+
+<p>Family function <code>frechet</code> may fail for low values of
+the shape parameter, e.g., near 2 or lower.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Castillo, E., Hadi, A. S.,
+Balakrishnan, N. and Sarabia, J. S. (2005).
+<em>Extreme Value and Related Models with Applications
+in Engineering and Science</em>,
+Hoboken, NJ, USA: Wiley-Interscience.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rfrechet</code>,
+<code>gev</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+set.seed(123)
+fdata &lt;- data.frame(y1 = rfrechet(1000, shape = 2 + exp(1)))
+with(fdata, hist(y1))
+fit2 &lt;- vglm(y1 ~ 1, frechet, data = fdata, trace = TRUE)
+coef(fit2, matrix = TRUE)
+Coef(fit2)
+head(fitted(fit2))
+with(fdata, mean(y1))
+head(weights(fit2, type = "working"))
+vcov(fit2)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

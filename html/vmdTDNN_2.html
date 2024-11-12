@@ -1,0 +1,151 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VMDARIMA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Variational Mode Decomposition Based Autoregressive Integrated Moving Average Model
+</h2>
+
+<h3>Description</h3>
+
+<p>The VMDARIMA function computes forecasted value with different forecasting evaluation criteria for Variational Mode Decomposition (VMD) Based Autoregressive Integrated Moving Average (ARIMA).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">VMDARIMA (data, stepahead=10, nIMF=4, alpha=2000, tau=0, D=FALSE)</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+
+<p>Input univariate time series (ts) data.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stepahead</code></td>
+<td>
+
+<p>The forecast horizon.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nIMF</code></td>
+<td>
+
+<p>The number of IMFs.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+
+<p>The balancing parameter.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tau</code></td>
+<td>
+
+<p>Time-step of the dual ascent.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>D</code></td>
+<td>
+
+<p>a boolean.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In this function, the variational mode decomposition (VMD) used for mining the trend features and detailed features contained in a time series. Moreover, the corresponding autoregressive integrated moving average (ARIMA) models were derived to reflect the different features of the IMFs. The final forecasted values obtained for a given time series.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>AllIMF </code></td>
+<td>
+<p>List of all IMFs with residual for input series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data_test </code></td>
+<td>
+<p>Testing set used to measure the out of sample performance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>AllIMF_forecast </code></td>
+<td>
+<p>Forecasted value of all individual IMF</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>FinalVMDARIMA_forecast </code></td>
+<td>
+<p>Final forecasted value of the VMD based ARIMA model. It is obtained by combining the forecasted value of all individual IMF.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>MAE_VMDARIMA </code></td>
+<td>
+<p>Mean Absolute Error (MAE) for  VMDARIMA model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>MAPE_VMDARIMA </code></td>
+<td>
+<p>Mean Absolute Percentage Error (MAPE) for VMDARIMA model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rmse_VMDARIMA </code></td>
+<td>
+<p>Root Mean Square Error (RMSE) for VMDARIMA model.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Box, G. E., Jenkins, G. M., Reinsel, G. C. and Ljung, G. M. (2015). Time series analysis: forecasting and control. John Wiley and Sons.
+</p>
+<p>Dragomiretskiy, K.and Zosso, D. (2014). Variational mode decomposition. IEEE transactions on signal processing, 62(3), 531–544.
+</p>
+<p>Wang, H., Huang, J., Zhou, H., Zhao, L. and Yuan, Y. (2019). An integrated variational mode decomposition and arima model to forecast air temperature. Sustainability, 11(15), 4018.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>VMDTDNN,VMDELM
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data("Data_Maize")
+VMDARIMA(Data_Maize)
+
+</code></pre>
+
+
+</div>

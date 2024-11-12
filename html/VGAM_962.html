@@ -1,0 +1,116 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>model.framevlm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Construct the Model Frame of a VLM Object</h2>
+
+<h3>Description</h3>
+
+<p>This function returns a <code>data.frame</code> with the
+variables.  It is applied to an object which inherits from
+class <code>"vlm"</code> (e.g., a fitted model of class <code>"vglm"</code>).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">model.framevlm(object, setupsmart = TRUE, wrapupsmart = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a model object from the <span class="pkg">VGAM</span> <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> package
+that inherits from a <em>vector linear model</em> (VLM),
+e.g., a model of class <code>"vglm"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further arguments such as <code>data</code>,
+<code>na.action</code>,
+<code>subset</code>.  See <code>model.frame</code> for more
+information on these.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>setupsmart, wrapupsmart</code></td>
+<td>
+
+<p>Logical.
+Arguments to determine whether to use smart prediction.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Since <code>object</code> is
+an object which inherits from class <code>"vlm"</code> (e.g.,
+a fitted model of class <code>"vglm"</code>),
+the method will either returned the saved model frame
+used when fitting the model (if any, selected by argument
+<code>model = TRUE</code>) or pass the call used when fitting on to
+the default method.
+</p>
+<p>This code implements <em>smart prediction</em>
+(see <code>smartpred</code>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>data.frame</code> containing the variables used in
+the <code>object</code> plus those specified in <code>...</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>Chambers, J. M. (1992).
+<em>Data for models.</em>
+Chapter 3 of <em>Statistical Models in S</em>
+eds J. M. Chambers and T. J. Hastie, Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>model.frame</code>,
+<code>model.matrixvlm</code>,
+<code>predictvglm</code>,
+<code>smartpred</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Illustrates smart prediction
+pneumo &lt;- transform(pneumo, let = log(exposure.time))
+fit &lt;- vglm(cbind(normal,mild, severe) ~ poly(c(scale(let)), 2),
+            multinomial, pneumo, trace = TRUE, x = FALSE)
+class(fit)
+
+check1 &lt;- head(model.frame(fit))
+check1
+check2 &lt;- model.frame(fit, data = head(pneumo))
+check2
+all.equal(unlist(check1), unlist(check2))  # Should be TRUE
+
+q0 &lt;- head(predict(fit))
+q1 &lt;- head(predict(fit, newdata = pneumo))
+q2 &lt;- predict(fit, newdata = head(pneumo))
+all.equal(q0, q1)  # Should be TRUE
+all.equal(q1, q2)  # Should be TRUE
+</code></pre>
+
+
+</div>

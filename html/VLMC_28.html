@@ -1,0 +1,122 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simulate.vlmc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulate a Discrete Time Series from fitted VLMC model</h2>
+
+<h3>Description</h3>
+
+<p>Simulate from fitted VLMC model – basis of the VLMC bootstrap</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vlmc'
+simulate(object, nsim = 1, seed = NULL, n,
+         n.start = 64 * object$size[["context"]],
+         integer.return = FALSE, keep.RSeed = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>typically the result of <code>vlmc(..)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsim, n</code></td>
+<td>
+<p>non-negative integer, giving the length of the result.
+Note that <code>n</code> is deprecated and just there for back compatibility.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>random seed initializer; see <code>simulate</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.start</code></td>
+<td>
+<p>the number of initial values to be
+discarded (because of initial effects).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>integer.return</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, the result will be an
+<code>integer</code> vector with values in <code>0:(k-1)</code>;
+otherwise the resulting vector consists of letters from the alphabet
+<code>x$alpha</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keep.RSeed</code></td>
+<td>
+<p>logical indicating if the seed should be stored with
+the result (as ‘required’ by the generic
+<code>simulate</code>).  Only set this <code>FALSE</code> with good
+reasons (back compatibility).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>(potentially further arguments for other <code>simulate</code>
+methods.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>.Random.seed</code> is used and updated as with other random
+number generation routines such as <code>rbinom</code>.
+</p>
+<p>Note that if you want to simulate from a given start sequence
+<code>x0</code>, you'd use <code>predict.vlmc(x, x0, type= "response")</code>
+— actually not quite yet.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>"simulate.vlmc"</code> object, basically a vector of length
+<code>nsim</code>.  Either <code>integer</code> or <code>character</code>,
+depending on the <code>integer.return</code> argument, see above.  Further,
+if <code>keep.RSeed</code> was true (as by default), a <code>"seed"</code> attribute
+with the random seed at the start of the simulation, for reproducibility.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vlmc</code> and <code>predict.vlmc</code>.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">example(vlmc)
+
+simulate(vlmc.dt1, 100)
+simulate(vlmc.dt1c01, 100, int = TRUE)
+# n.start = 0: 1st few observations will resemble the data
+simulate(vlmc.dt1c01, 20, n.start=0, int = TRUE)
+
+
+</code></pre>
+
+
+</div>

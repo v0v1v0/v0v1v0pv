@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVinePIT</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Probability Integral Transformation for R-Vine Copula Models</h2>
+
+<h3>Description</h3>
+
+<p>This function applies the probability integral transformation (PIT) for
+R-vine copula models to given copula data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVinePIT(data, RVM)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>An N x d data matrix (with uniform margins).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p><code>RVineMatrix()</code> objects of the R-vine model.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The multivariate probability integral transformation (PIT) of Rosenblatt
+(1952) transforms the copula data <code class="reqn">u = (u_1,\ldots,u_d)</code> with a given
+multivariate copula C into independent data in <code class="reqn">[0,1]^d</code>, where d is the
+dimension of the data set. <br></p>
+<p>Let <code class="reqn">u = (u_1,\ldots,u_d)</code> denote copula data of dimension d. Further
+let C be the joint cdf of <code class="reqn">u = (u_1,\ldots,u_d)</code>. Then Rosenblatt's
+transformation of u, denoted as <code class="reqn">y = (y_1,\ldots,y_d)</code>, is defined as
+</p>
+<p style="text-align: center;"><code class="reqn"> y_1 := u_1,\ \ y_2 := C(u_2|u_1), \ldots\ y_d :=
+C(u_d|u_1,\ldots,u_{d-1}), </code>
+</p>
+<p> where <code class="reqn">C(u_k|u_1,\ldots,u_{k-1})</code> is the
+conditional copula of <code class="reqn">U_k</code> given <code class="reqn">U_1 = u_1,\ldots, U_{k-1} =
+u_{k-1}, k = 2,\ldots,d</code>. The data vector <code class="reqn">y = (y_1,\ldots,y_d)</code> is now
+i.i.d. with <code class="reqn">y_i \sim U[0, 1]</code>. The algorithm for the R-vine PIT is
+given in the appendix of Schepsmeier (2015).
+</p>
+
+
+<h3>Value</h3>
+
+<p>An <code>N</code> x d matrix of PIT data from the given R-vine copula
+model.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier
+</p>
+
+
+<h3>References</h3>
+
+<p>Rosenblatt, M. (1952).  Remarks on a Multivariate
+Transformation. The Annals of Mathematical Statistics 23 (3), 470-472.
+</p>
+<p>Schepsmeier, U. (2015) Efficient information based goodness-of-fit tests for
+vine copula models with fixed margins. Journal of Multivariate Analysis 138,
+34-52.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineGofTest()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># load data set
+data(daxreturns)
+
+# select the R-vine structure, families and parameters
+RVM &lt;- RVineStructureSelect(daxreturns[,1:3], c(1:6))
+
+# PIT data
+pit &lt;- RVinePIT(daxreturns[,1:3], RVM)
+
+par(mfrow = c(1,2))
+plot(daxreturns[,1], daxreturns[,2])	# correlated data
+plot(pit[,1], pit[,2])	# i.i.d. data
+
+cor(pit, method = "kendall")
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>effect_counts_one</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Test homogeneity of category shares</h2>
+
+<h3>Description</h3>
+
+<p>Performs a goodness-of-fit test and calculates the Gini coefficient.
+The goodness-of-fit-test is calculated using <code>stats::chisq.test</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">effect_counts_one(data, col, clean = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A tibble.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>The column holding factor values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clean</code></td>
+<td>
+<p>Prepare data by data_clean</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Placeholder to allow calling the method with unused parameters from effect_counts.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A volker tibble.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(volker)
+data &lt;- volker::chatgpt
+data &lt;- data |&gt;
+  filter(sd_gender != "diverse") |&gt;
+  effect_counts_one(sd_gender)
+
+</code></pre>
+
+
+</div>

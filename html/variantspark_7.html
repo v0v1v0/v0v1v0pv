@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vs_read_vcf</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Reading a VCF file</h2>
+
+<h3>Description</h3>
+
+<p>The Variant Call Format (VCF) specifies the format of a text file used in
+bioinformatics for storing gene sequence variations. The format has been developed
+with the advent of large-scale genotyping and DNA sequencing projects, such as
+the 1000 Genomes Project. The <code>vs_read_vcf()</code> reads this format and returns
+a <code>jobj</code> object from <code>VCFFeatureSource</code> scala class.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vs_read_vcf(vsc, path)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vsc</code></td>
+<td>
+<p>A variantspark connection.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path</code></td>
+<td>
+<p>The file's path.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>spark_jobj, shell_jobj
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> 
+## Not run: 
+library(sparklyr)
+
+sc &lt;- spark_connect(master = "local")
+vsc &lt;- vs_context(sc)
+
+hipster_vcf &lt;- vs_read_vcf(vsc, 
+                           system.file("extdata/hipster.vcf.bz2",
+                                       package = "variantspark"))
+
+hipster_vcf 
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>count.votes</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Count Votes
+</h2>
+
+<h3>Description</h3>
+
+<p>Count votes using one of five methods. View valid, invalid and corrected ballots.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">count.votes(votes, method = c("auto", "plurality", "approval", "stv", 
+    "score", "condorcet", "tworound.runoff"), fsep = "\t", ...)
+	
+invalid.votes(object)
+valid.votes(object)
+corrected.votes(object)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>votes</code></td>
+<td>
+<p>Matrix or data frame containing the votes. Rows correspond to the votes, columns correspond to the candidates. If it is a character string it is interpreted as a file name from which the votes are to be read. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>Voting method to use. If “auto”, the input data is passed through a checker for each of the methods and the one with the largest number of valid votes is used. In case of the same number of valid votes, it goes by their ordering in the function definition. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fsep</code></td>
+<td>
+<p>If <code>votes</code> is a file name, this argument gives the column separator in the file.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments passed to the underlying functions, e.g. <code>nseats</code>, <code>max.score</code> etc.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Object returned by one of the functions <code>plurality</code>, <code>approval</code>, <code>stv</code>, <code>score</code>, <code>condorcet</code>, <code>tworound.runoff</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Depending which method is used, <code>count.votes</code> returns an object of class <code>vote.plurality</code>, <code>vote.approval</code>, <code>vote.stv</code>, <code>vote.score</code>,  <code>vote.condorcet</code>, or <code>vote.tworound.runoff</code>.
+</p>
+<p>Functions <code>valid.votes</code> and <code>invalid.votes</code> return a subset of the input data with valid records and invalid records, respectively. 
+</p>
+<p>Function <code>corrected.votes</code> can be used when votes are automatically corrected (as in <code>stv</code> and <code>condorcet</code>). It returns a list with the uncorrected votes (item <code>original</code>), the corrected votes (item <code>new</code>), and its indices within the original votes dataset (item <code>index</code>).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hana Sevcikova, Bernard Silverman
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>stv</code>, <code>approval</code>, <code>score</code>, <code>condorcet</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Example using the IMS Council dataset modified for score voting
+data(ims_score)
+# should recognize that it is a dataset with score voting data
+count.votes(ims_score, max.score = 9, larger.wins = FALSE)
+
+# All records with score larger than 8 are excluded 
+res &lt;- count.votes(ims_score, method = "score", max.score = 8)
+head(invalid.votes(res))
+
+summary(res)
+
+# For a corrected.votes() example see ?stv
+</code></pre>
+
+
+</div>

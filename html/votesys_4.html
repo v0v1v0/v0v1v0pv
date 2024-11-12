@@ -1,0 +1,149 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>borda_method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Borda Count Method</h2>
+
+<h3>Description</h3>
+
+<p>Both ordinary Borda method and modified Borda method are 
+available. In an ordinary Borda system, voters are required to 
+assign score values to candidates. See Details.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">borda_method(x, allow_dup = TRUE, min_valid = 1, modified = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class <code>vote</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allow_dup</code></td>
+<td>
+<p>whether ballots with duplicated score values 
+are taken into account. Default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min_valid</code></td>
+<td>
+<p>default is 1. If the number of valid entries of 
+a ballot is less than this value, the ballot will not be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>modified</code></td>
+<td>
+<p>if the modified Borda is to be used. Default 
+is FALSE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Suppose there are 5 
+candidates. A voter's 1st choice gets 1 point, the 2nd choice 
+gets 2 points... Candidate with the smallest total score wins. 
+The function does not require voters to assign scores to all 
+candidates, for NAs are automatically assigned the 
+highest (worst) score. Duplicated values  (two 
+or more candidates share 
+the same score) are also allowed (note: NAs and ties may 
+not be allowed in real ballots).
+</p>
+<p>In modified Borda, 
+the rule changes. Suppose there are 5 candidates. A voter 
+writes down 5 candidates and his 1st choice gets 5 points. 
+The one who gets the largest total score wins. However, 
+if the voter only write down 2 names, then, his 1st choice 
+gets only 2 points rather than 5 points. Thus the modified 
+Borda encourages voters to write down more names.
+Besides, in modified Borda, only the ranks of true scores, 
+rather than the true scores themselves, are used.
+If the raw data is a list each ballot of which 
+contains candidate names, scores can also be extracted, that 
+is, the 1st position is the 1st choice which gets 1 point, the 
+2nd position, 2 points, and so on.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a list object.
+</p>
+
+<ul>
+<li>
+<p> (1) <code>call</code> the function call.
+</p>
+</li>
+<li>
+<p> (2) <code>method</code> the counting method.
+</p>
+</li>
+<li>
+<p> (3) <code>candidate</code> candidate names.
+</p>
+</li>
+<li>
+<p> (4) <code>candidate_num</code> number of candidate.
+</p>
+</li>
+<li>
+<p> (5) <code>ballot_num</code> number of ballots in x.
+</p>
+</li>
+<li>
+<p> (6) <code>valid_ballot_num</code> number of ballots that are 
+used to compute the result.
+</p>
+</li>
+<li>
+<p> (7) <code>winner</code> the winners.
+</p>
+</li>
+<li>
+<p> (8) <code>modified</code> whether the modified Borda is used.
+</p>
+</li>
+<li>
+<p> (9) <code>other_info</code> a list with 2 elements, if <code>modified</code> 
+is FALSE, then <code>count_min</code> records the total 
+scores, <code>count_max</code> 
+is NULL; if <code>modified</code> is TRUE, the vice versa.
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">raw &lt;- c(
+    rep(c('m', 'n', 'c', 'k'), 42), 
+    rep(c('n', 'c', 'k', 'm'), 26), 
+    rep(c('c', 'k', 'n', 'm'), 15), 
+    rep(c('k', 'c', 'n', 'm'), 17)
+) 
+raw &lt;- matrix(raw, ncol = 4, byrow = TRUE)
+vote &lt;- create_vote(raw, xtype = 2, candidate = c('m', 'n', 'c', 'k'))
+y &lt;- borda_method(vote)
+
+raw &lt;- list(c('a', 'e', 'c', 'd', 'b'), c('b', 'a', 'e'), 
+    c('c', 'd', 'b'), c('d', 'a', 'e')
+)
+vote &lt;- create_vote(raw, xtype = 3, candidate = c('a', 'b', 'c', 'd', 'e'))
+y &lt;- borda_method(vote, modified = TRUE)
+</code></pre>
+
+
+</div>

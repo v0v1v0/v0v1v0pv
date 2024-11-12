@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.lm.prop.ps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Meta-regression analysis for paired-samples proportion differences</h2>
+
+<h3>Description</h3>
+
+<p>This function estimates the intercept and slope coefficients
+in a meta-regression model where the dependent variable is a
+paired-samples proportion difference. The estimates are OLS
+estimates with robust standard errors that accommodate residual
+heteroscedasticity.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.lm.prop.ps(alpha, f11, f12, f21, f22, X)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f11</code></td>
+<td>
+<p>vector of frequency counts in cell 1,1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f12</code></td>
+<td>
+<p>vector of frequency counts in cell 1,2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f21</code></td>
+<td>
+<p>vector of frequency counts in cell 2,1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f22</code></td>
+<td>
+<p>vector of frequency counts in cell 2,2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>matrix of predictor values</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is for the intercept with one additional
+row per predictor.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - OLS estimate
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> z - z-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG, Price RM (2014).
+“Meta-analysis methods for risk differences.”
+<em>British Journal of Mathematical and Statistical Psychology</em>, <b>67</b>(3), 371–387.
+ISSN 00071102, <a href="https://doi.org/10.1111/bmsp.12024">doi:10.1111/bmsp.12024</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">f11 &lt;- c(40, 20, 25, 30)
+f12 &lt;- c(3, 2, 2, 1)
+f21 &lt;- c(7, 6, 8, 6)
+f22 &lt;- c(26, 25, 13, 25)
+x1 &lt;- c(1, 1, 4, 6)
+x2 &lt;- c(1, 1, 0, 0)
+X &lt;- matrix(cbind(x1, x2), 4, 2)
+meta.lm.prop.ps(.05, f11, f12, f21, f22, X)
+
+# Should return: 
+#       Estimate         SE          z     p          LL         UL
+# b0 -0.21113402 0.21119823 -0.9996960 0.317 -0.62507494 0.20280690
+# b1  0.02185567 0.03861947  0.5659236 0.571 -0.05383711 0.09754845
+# b2  0.12575138 0.17655623  0.7122455 0.476 -0.22029248 0.47179524
+
+
+</code></pre>
+
+
+</div>

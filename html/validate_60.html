@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>do_by</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>split-apply-combine for vectors, with equal-length outptu</h2>
+
+<h3>Description</h3>
+
+<p>Group <code>x</code> by one or more categorical variables, compute
+an aggregate, repeat that aggregate to match the size of the
+group, and combine results. The functions <code>sum_by</code> and 
+so on are convenience wrappers that call <code>do_by</code> internally.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">do_by(x, by, fun, ...)
+
+sum_by(x, by, na.rm = FALSE)
+
+mean_by(x, by, na.rm = FALSE)
+
+min_by(x, by, na.rm = FALSE)
+
+max_by(x, by, na.rm = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A bare variable name</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>a bare variable name, or a list of bare variable names, used to
+split <code>x</code> into groups.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fun</code></td>
+<td>
+<p><code>[function]</code> A function that aggregates <code>x</code> to a single value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>passed as extra arguments to <code>fun</code> (e.g. <code>na.rm=TRUE</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>Toggle ignoring <code>NA</code></p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p>Other cross-record-helpers: 
+<code>contains_exactly()</code>,
+<code>exists_any()</code>,
+<code>hb()</code>,
+<code>hierarchy()</code>,
+<code>is_complete()</code>,
+<code>is_linear_sequence()</code>,
+<code>is_unique()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- 1:10
+y &lt;- rep(letters[1:2], 5)
+do_by(x, by=y, fun=max)
+do_by(x, by=y, fun=sum)
+
+</code></pre>
+
+
+</div>

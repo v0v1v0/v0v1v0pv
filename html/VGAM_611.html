@@ -1,0 +1,218 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gamma2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> 2-parameter Gamma Regression Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the 2-parameter gamma distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">gamma2(lmu = "loglink", lshape = "loglink", imethod = 1,  ishape = NULL,
+       parallel = FALSE, deviance.arg = FALSE, zero = "shape")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmu, lshape</code></td>
+<td>
+
+<p>Link functions applied to the (positive) <em>mu</em> and <em>shape</em>
+parameters (called <code class="reqn">\mu</code> and <code class="reqn">a</code> respectively).
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape</code></td>
+<td>
+
+<p>Optional initial value for <em>shape</em>.
+A <code>NULL</code> means a value is computed internally.
+If a failure to converge occurs, try using this argument.
+This argument is ignored if used within <code>cqo</code>; see the
+<code>iShape</code> argument of <code>qrrvglm.control</code> instead.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>An integer with value <code>1</code> or <code>2</code> which
+specifies the initialization method for the <code class="reqn">\mu</code> parameter.
+If failure to converge occurs
+try another value (and/or specify a value for <code>ishape</code>).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>deviance.arg</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, the deviance function
+is attached to the object. Under ordinary circumstances, it should
+be left alone because it really assumes the shape parameter is at
+the maximum likelihood estimate. Consequently, one cannot use that
+criterion to minimize within the IRLS algorithm.
+It should be set <code>TRUE</code> only when used with <code>cqo</code>
+under the fast algorithm.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+If <code>parallel = TRUE</code> then the constraint is not applied to the intercept.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This distribution can model continuous skewed responses.
+The density function is given by
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\mu,a) = \frac{\exp(-a y / \mu) \times
+               (a y / \mu)^{a-1}
+               \times a}{
+               \mu \times \Gamma(a)}</code>
+</p>
+
+<p>for
+<code class="reqn">\mu &gt; 0</code>,
+<code class="reqn">a &gt; 0</code>
+and <code class="reqn">y &gt; 0</code>.
+Here,
+<code class="reqn">\Gamma(\cdot)</code> is the gamma
+function, as in <code>gamma</code>.
+The mean of <em>Y</em> is <code class="reqn">\mu=\mu</code> (returned as the fitted
+values) with variance <code class="reqn">\sigma^2 = \mu^2 / a</code>.  If <code class="reqn">0&lt;a&lt;1</code> then the density has a
+pole at the origin and decreases monotonically as <code class="reqn">y</code> increases.
+If <code class="reqn">a=1</code> then this corresponds to the exponential
+distribution.  If <code class="reqn">a&gt;1</code> then the density is zero at the
+origin and is unimodal with mode at <code class="reqn">y = \mu - \mu / a</code>; this can be achieved with <code>lshape="logloglink"</code>.
+</p>
+<p>By default, the two linear/additive predictors are
+<code class="reqn">\eta_1=\log(\mu)</code> and
+<code class="reqn">\eta_2=\log(a)</code>.
+This family function implements Fisher scoring and the working
+weight matrices are diagonal.
+</p>
+<p>This <span class="pkg">VGAM</span> family function handles <em>multivariate</em> responses,
+so that a matrix can be used as the response. The number of columns is
+the number of species, say, and <code>zero=-2</code> means that <em>all</em>
+species have a shape parameter equalling a (different) intercept only.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be strictly positive.
+A moment estimator for the shape parameter may be implemented in
+the future.
+</p>
+<p>If <code>mu</code> and <code>shape</code> are vectors, then <code>rgamma(n = n,
+  shape = shape, scale = mu/shape)</code> will generate random gamma variates of this
+parameterization, etc.;
+see <code>GammaDist</code>.
+</p>
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>The parameterization of this <span class="pkg">VGAM</span> family function is the
+2-parameter gamma distribution described in the monograph
+</p>
+<p>McCullagh, P. and Nelder, J. A. (1989).
+<em>Generalized Linear Models</em>, 2nd ed. London: Chapman &amp; Hall.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gamma1</code> for the 1-parameter gamma distribution,
+<code>gammaR</code> for another parameterization of
+the 2-parameter gamma distribution that is directly matched
+with <code>rgamma</code>,
+<code>bigamma.mckay</code>
+for <em>a</em> bivariate gamma distribution,
+<code>gammaff.mm</code> for another,
+<code>expexpff</code>,
+<code>GammaDist</code>,
+<code>CommonVGAMffArguments</code>,
+<code>simulate.vlm</code>,
+<code>negloglink</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Essentially a 1-parameter gamma
+gdata &lt;- data.frame(y = rgamma(n = 100, shape = exp(1)))
+fit1 &lt;- vglm(y ~ 1, gamma1, data = gdata)
+fit2 &lt;- vglm(y ~ 1, gamma2, data = gdata, trace = TRUE, crit = "coef")
+coef(fit2, matrix = TRUE)
+c(Coef(fit2), colMeans(gdata))
+
+# Essentially a 2-parameter gamma
+gdata &lt;- data.frame(y = rgamma(n = 500, rate = exp(-1), shape = exp(2)))
+fit2 &lt;- vglm(y ~ 1, gamma2, data = gdata, trace = TRUE, crit = "coef")
+coef(fit2, matrix = TRUE)
+c(Coef(fit2), colMeans(gdata))
+summary(fit2)
+</code></pre>
+
+
+</div>

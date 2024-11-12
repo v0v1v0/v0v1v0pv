@@ -1,0 +1,152 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rankheatplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Components Rank Heat Plot</h2>
+
+<h3>Description</h3>
+
+<p>Rank heat plot summarizes the components' p-scores for multiple outcomes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rankheatplot(
+  model,
+  sep = "+",
+  median = TRUE,
+  random = TRUE,
+  outcomeNames = NULL,
+  cex_components = NULL,
+  cex_values = NULL,
+  cex_outcomes = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>A list of <code>netmeta</code> models.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sep</code></td>
+<td>
+<p>A single character that defines the separator between interventions components.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>median</code></td>
+<td>
+<p><code>logical</code>. If <code>TRUE</code> the median is used as a summary measure instead of the mean.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>random</code></td>
+<td>
+<p>A <code>logical</code> vector that specifies the NMA model for each outcome. If <code>TRUE</code> the random-effects NMA model is used instead of the fixed-effects NMA model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outcomeNames</code></td>
+<td>
+<p>A character vector that specifies the names of the outcomes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex_components</code></td>
+<td>
+<p>Font size of components' names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex_values</code></td>
+<td>
+<p>Font size of p-scores.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex_outcomes</code></td>
+<td>
+<p>Font size of outcomes' names.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function creates a rank heat plot, where the number of circles depend on the number of outcomes.
+Each circle is divided by the total number of components, and each sector is colored according
+the corresponding component p-score. Components' p-scores are summarized by using either the median (<code>median = TRUE</code>)
+or the mean (<code>median = FALSE</code>) of the p-scores obtained from the interventions that include the corresponding component.
+The sector's colors reflect the magnitude of the components p-scores. Red color indicates a low p-score (close to zero),
+while green color indicates values close to 1. Intervention's p-scores are obtained from the network meta-analysis (NMA) model.
+By default the random-effects NMA model is used for each outcome (<code>random = TRUE</code>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns (invisibly) a rank heat plot.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The function can be applied only in network meta-analysis models that contain multi-component interventions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Artificial data set
+
+t1 &lt;- c("A", "B", "C", "A+B", "A+C", "B+C", "A")
+t2 &lt;- c("C", "A", "A+C", "B+C", "A", "B", "B+C")
+
+TE1 &lt;- c(2.12, 3.24, 5.65, -0.60, 0.13, 0.66, 3.28)
+TE2 &lt;- c(4.69, 2.67, 2.73, -3.41, 1.79, 2.93, 2.51)
+
+seTE1 &lt;- rep(0.1, 7)
+seTE2 &lt;- rep(0.2, 7)
+
+study &lt;- paste0("study_", 1:7)
+
+data1 &lt;- data.frame(
+  "TE" = TE1, "seTE" = seTE1, "treat1" = t1, "treat2" = t2, "studlab" = study,
+  stringsAsFactors = FALSE
+)
+
+data2 &lt;- data.frame(
+  "TE" = TE2, "seTE" = seTE2, "treat1" = t1, "treat2" = t2, "studlab" = study,
+  stringsAsFactors = FALSE
+)
+
+# Network meta-analysis models
+
+net1 &lt;- netmeta::netmeta(
+  TE = TE, seTE = seTE, studlab = studlab, treat1 = treat1,
+  treat2 = treat2, data = data1, ref = "A"
+)
+
+net2 &lt;- netmeta::netmeta(
+  TE = TE, seTE = seTE, studlab = studlab, treat1 = treat1,
+  treat2 = treat2, data = data2, ref = "A"
+)
+
+# Rank heat plot
+
+rankheatplot(model = list(net1, net2))
+
+
+</code></pre>
+
+
+</div>

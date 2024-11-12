@@ -1,0 +1,161 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gammaR</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> 2-parameter Gamma Regression Family Function </h2>
+
+<h3>Description</h3>
+
+<p> Estimates the 2-parameter gamma distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">gammaR(lrate = "loglink", lshape = "loglink", irate = NULL,
+       ishape = NULL, lss = TRUE, zero = "shape")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+
+<table><tr style="vertical-align: top;">
+<td><code>lrate, lshape</code></td>
+<td>
+
+<p>Link functions applied to the (positive) <em>rate</em> and <em>shape</em>
+parameters.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr></table>
+<table><tr style="vertical-align: top;">
+<td><code>irate, ishape</code></td>
+<td>
+
+<p>Optional initial values for <em>rate</em> and <em>shape</em>.
+A <code>NULL</code> means a value is computed internally.
+If a failure to converge occurs, try using these arguments.
+</p>
+</td>
+</tr></table>
+<table><tr style="vertical-align: top;">
+<td><code>zero, lss</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The density function is given by
+</p>
+<p style="text-align: center;"><code class="reqn">f(y; rate, shape) = \exp(-rate \times y) \times y^{shape-1} \times rate^{shape}
+               / \Gamma(shape)</code>
+</p>
+
+<p>for <code class="reqn">shape &gt; 0</code>, <code class="reqn">rate &gt; 0</code> and <code class="reqn">y &gt; 0</code>.
+Here, <code class="reqn">\Gamma(shape)</code> is the gamma
+function, as in <code>gamma</code>.
+The mean of <em>Y</em> is <code class="reqn">\mu = shape/rate</code>
+(returned as the fitted values) with variance
+<code class="reqn">\sigma^2 = \mu^2 /shape = shape/rate^2</code>.
+By default, the two linear/additive predictors are
+<code class="reqn">\eta_1 = \log(rate)</code> and
+<code class="reqn">\eta_2 = \log(shape)</code>.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The parameters <code class="reqn">rate</code> and <code class="reqn">shape</code> match with the arguments
+<code>rate</code> and <code>shape</code> of <code>rgamma</code>.
+The order of the arguments agree too.
+Here, <code class="reqn">scale = 1/rate</code> is used, so one can use <code>negloglink</code>.
+Multiple responses are handled.
+</p>
+<p>If <code class="reqn">rate = 1</code> use the family function <code>gamma1</code> to
+estimate <code class="reqn">shape</code>.
+</p>
+<p>The reciprocal of a 2-parameter gamma random variate has an
+<em>inverse gamma</em> distribution.
+One might write a <span class="pkg">VGAM</span> family function called <code>invgammaR()</code>
+to estimate this, but for now, just feed in the reciprocal of the
+response.
+
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Most standard texts on statistical distributions describe
+the 2-parameter gamma distribution, e.g.,
+</p>
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gamma1</code> for the 1-parameter gamma distribution,
+<code>gamma2</code> for another parameterization of
+the 2-parameter gamma distribution,
+<code>bigamma.mckay</code>
+for <em>a</em> bivariate gamma distribution,
+<code>gammaff.mm</code> for another,
+<code>expexpff</code>,
+<code>simulate.vlm</code>,
+<code>rgamma</code>,
+<code>negloglink</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Essentially a 1-parameter gamma
+gdata &lt;- data.frame(y1 = rgamma(n &lt;- 100, shape =  exp(1)))
+fit1 &lt;- vglm(y1 ~ 1, gamma1, data = gdata, trace = TRUE)
+fit2 &lt;- vglm(y1 ~ 1, gammaR, data = gdata, trace = TRUE, crit = "coef")
+coef(fit2, matrix = TRUE)
+Coef(fit2)
+
+# Essentially a 2-parameter gamma
+gdata &lt;- data.frame(y2 = rgamma(n = 500, rate = exp(1), shape = exp(2)))
+fit2 &lt;- vglm(y2 ~ 1, gammaR, data = gdata, trace = TRUE, crit = "coef")
+coef(fit2, matrix = TRUE)
+Coef(fit2)
+summary(fit2)
+</code></pre>
+
+
+</div>

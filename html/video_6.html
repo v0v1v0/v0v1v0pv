@@ -1,0 +1,128 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>includeTextTracks</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add Text Tracks to Video</h2>
+
+<h3>Description</h3>
+
+<p>video.js contains the ability to include tracks with the video, including subtitles,
+captions and descriptions. <code>includeTextTracks</code> will make sure that they are
+included on load, and find the defaults to embed with the video.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">includeTextTracks(
+  video,
+  files,
+  language = "en",
+  label = "English",
+  kind = "subtitles",
+  default = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>video</code></td>
+<td>
+<p>A <code>video()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>files</code></td>
+<td>
+<p>A vector of WebVTT files that contain "cues" of when text should appear,
+hide and what text to display</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>language</code></td>
+<td>
+<p>The valid BCP 47 code for the language of the text track,
+e.g. "en" for English or "es" for Spanish.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label</code></td>
+<td>
+<p>Short descriptive text for the track that will used in the user interface.
+For example, in a menu for selecting a captions language.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kind</code></td>
+<td>
+<p>An optional vector to match the type of text tracks in <code>files</code>:
+</p>
+
+<dl>
+<dt>subtitles</dt>
+<dd>
+<p>(default): Translations of the dialogue in the video for when audio is
+available but not understood. Subtitles are shown over the video.</p>
+</dd>
+<dt>captions</dt>
+<dd>
+<p>Transcription of the dialogue, sound effects, musical cues, and other
+audio information for viewer who are deaf/hard of hearing, or the video is muted.
+Captions are also shown over the video.</p>
+</dd>
+<dt>chapters</dt>
+<dd>
+<p>Chapter titles that are used to create navigation within the video.
+Typically, these are in the form of a list of chapters that the viewer can use to
+navigate the video.</p>
+</dd>
+<dt>descriptions</dt>
+<dd>
+<p>Text descriptions of the action in the content for when the video portion
+isn't available or because the viewer is blind or not using a screen. Descriptions are
+read by a screen reader or turned into a separate audio track.</p>
+</dd>
+<dt>metadata</dt>
+<dd>
+<p>Tracks that have data meant for JavaScript to parse and do something with.
+These aren't shown to the user.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>default</code></td>
+<td>
+<p>The boolean <code>default</code> attribute can be used to indicate that a track's
+mode should start as "showing". Otherwise, the viewer would need to select their language
+from a captions or subtitles menu.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>All vectors must either be the same length as <code>files</code> or of length 1. In the latter,
+they will be applied to all <code>files</code> supplied.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An updated <code>video</code> with text tracks included
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vid &lt;- video("https://vjs.zencdn.net/v/oceans.mp4")
+includeTextTracks(vid, "url/to/subtitles.vtt")
+
+</code></pre>
+
+
+</div>

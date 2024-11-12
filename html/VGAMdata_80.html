@@ -1,0 +1,135 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>oly12</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+2012 Summer Olympics: Individuals Data
+</h2>
+
+<h3>Description</h3>
+
+<p>Individual data for the Summer
+2012 Olympic Games.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(oly12)</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 10384 observations on the following 14 variables.
+</p>
+
+<dl>
+<dt><code>Name</code></dt>
+<dd>
+<p>The individual competitor's name. </p>
+</dd>
+<dt><code>Country</code></dt>
+<dd>
+<p>Country. </p>
+</dd>
+<dt><code>Age</code></dt>
+<dd>
+<p>A numeric vector, age in years. </p>
+</dd>
+<dt><code>Height</code></dt>
+<dd>
+<p>A numeric vector, height in m. </p>
+</dd>
+<dt><code>Weight</code></dt>
+<dd>
+<p>A numeric vector, weight in kg. </p>
+</dd>
+<dt><code>Sex</code></dt>
+<dd>
+<p>A factor with levels <code>F</code> and <code>M</code>. </p>
+</dd>
+<dt><code>DOB</code></dt>
+<dd>
+<p>A Date, date of birth. </p>
+</dd>
+<dt><code>PlaceOB</code></dt>
+<dd>
+<p>Place of birth. </p>
+</dd>
+<dt><code>Gold</code></dt>
+<dd>
+<p>Numeric vector,
+number of such medals won. </p>
+</dd>
+<dt><code>Silver</code></dt>
+<dd>
+<p> Similar to <code>Gold</code>. </p>
+</dd>
+<dt><code>Bronze</code></dt>
+<dd>
+<p> Similar to <code>Gold</code>. </p>
+</dd>
+<dt><code>Total</code></dt>
+<dd>
+<p>A numeric vector, total number of medals. </p>
+</dd>
+<dt><code>Sport</code></dt>
+<dd>
+<p>A factor with levels
+<code>Archery</code>,
+<code>Athletics</code>,
+<code>Athletics</code>,
+<code>Triathlon</code>,
+<code>Badminton</code>, etc.
+</p>
+</dd>
+<dt><code>Event</code></dt>
+<dd>
+<p>The sporting event. </p>
+</dd>
+</dl>
+<h3>Details</h3>
+
+<p>This data set represents a very small modification of a
+<code>.csv</code> spreadsheet from the source below.
+Height has been converted to meters,
+and date of birth is of a <code>"Date"</code> class
+(see <code>as.Date</code>).
+A few non-ASCII characters have been replaced by some ASCII sequence
+(yet to be fixed up properly).
+</p>
+
+<p>Some competitors share the same name.
+Some errors in the data are likely to exist.
+</p>
+
+
+
+<h3>Source</h3>
+
+<p>Downloaded from
+<code>http://www.guardian.co.uk/sport/series/london-2012-olympics-data</code>
+in 2013-03; more recently it has changed to 
+<a href="https://www.theguardian.com/sport/series/london-2012-olympics-data">https://www.theguardian.com/sport/series/london-2012-olympics-data</a>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(oly12)
+mtab &lt;- with(oly12, table(Country, Gold))
+(mtab &lt;- head(sort(mtab[, "1"] + 2 * mtab[, "2"], decreasing = TRUE), 10))
+
+## Not run: 
+barplot(mtab, col = "gold", cex.names = 0.8, names = abbreviate(names(mtab)),
+        beside = TRUE, main = "2012 Summer Olympic Final Gold Medal Count",
+        ylab = "Gold medal count", las = 1, sub = "Top 10 countries")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

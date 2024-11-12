@@ -1,0 +1,146 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>score</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Score Vote Count
+</h2>
+
+<h3>Description</h3>
+
+<p>Count votes using the score (or range) method. Voters give each candidate a score, the scores are added  and the candidate(s) with the highest (or lowest) totals is/are elected.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">score(votes, nseats = 1, max.score = NULL, larger.wins = TRUE, 
+  fsep = "\t", quiet = FALSE, ...)
+
+## S3 method for class 'vote.score'
+summary(object, ...)
+
+## S3 method for class 'vote.score'
+view(object, ...)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>votes</code></td>
+<td>
+<p>Matrix or data frame containing the votes which should be numbers between 0 and <code>max.score</code>. Rows correspond to the votes, columns correspond to the candidates. If it is a character string it is interpreted as a file name from which the votes are to be read. Missing values (<code>NA</code>) are interpreted as zeros.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nseats</code></td>
+<td>
+<p>Number of candidates to be elected.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.score</code></td>
+<td>
+<p>Maximum score allowed. It is used to remove invalid votes. If not given, the maximum value contained in the data is taken and thus, all non-negative votes are valid.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>larger.wins</code></td>
+<td>
+<p>Logical argument indicating whether the winners are the candidates with the highest scores (default) or the lowest scores.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fsep</code></td>
+<td>
+<p>If <code>votes</code> is a file name, this argument gives the column separator in the file.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>If <code>TRUE</code> no output is printed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Object of class <code>vote.score</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Function <code>score</code> returns an object of class <code>vote.score</code> which is a list with the following objects:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>elected</code></td>
+<td>
+<p>Vector of names of the elected candidates in the order in which they were elected.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>totals</code></td>
+<td>
+<p>Vector of total votes in the same order as candidates (columns) in the input data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>larger.wins</code></td>
+<td>
+<p>Input argument of the same name.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Input data with invalid votes removed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>invalid.votes</code></td>
+<td>
+<p>Number of invalid votes that were removed from the original dataset.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Hana Sevcikova, Adrian Raftery
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/Range_voting">https://en.wikipedia.org/wiki/Range_voting</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>count.votes</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Example using the IMS Council dataset modified for score voting
+data(ims_score)
+score.ims &lt;- score(ims_score, max.score = 9)
+summary(score.ims)
+</code></pre>
+
+
+</div>

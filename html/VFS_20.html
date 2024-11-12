@@ -1,0 +1,283 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>wth.param</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Calculate weather parameters from daily data for use in climate simulations
+</h2>
+
+<h3>Description</h3>
+
+<p>The climate generation functions for rainfall and temperature require parameters calculated from GHCN daily weather data, or from any data frame with columns containing year, month, day, precipitation, and minimum and maximum temperature.
+Partial years at the beginning or end of the dataset are removed. Leap days are also removed to standardize day-of-year calculation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">wth.param(dly, llim = 0, method = "poisson", year.col = "YEAR", 
+	month.col = "MONTH", day.col = "DAY", prcp.col = "PRCP.VALUE", 
+	tmin.col = "TMIN.VALUE", tmax.col = "TMAX.VALUE")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dly</code></td>
+<td>
+
+<p>A data frame, such as the output of <code>read.dly()</code>, with days as rows and columns including YEAR, MONTH, DAY, PRCP.VALUE, TMIN.VALUE, TMAX.VALUE (for GHCN data), or with those columns having names specivied by arguments.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>llim</code></td>
+<td>
+
+<p>The minimum daily rainfall for a wet day to be counted.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+
+<p>Choice of model for which to calculate parameters, either "poisson" or "markov".
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>year.col</code></td>
+<td>
+
+<p>Name of the column containing year number.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>month.col</code></td>
+<td>
+
+<p>Name of the column containing month number.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>day.col</code></td>
+<td>
+
+<p>Name of the column containing day number.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prcp.col</code></td>
+<td>
+
+<p>Name of the column containing daily precipitation.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tmin.col</code></td>
+<td>
+
+<p>Name of the column containing daily minimum temperature.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tmax.col</code></td>
+<td>
+
+<p>Name of the column containing daily maximum temperature.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The rainfall simulation currently offers choice of two methods: the simple Poisson model of Rodriguez-Iturbe et al. (1999), and the Markov chain model of Nicks (1974). The latter rainfall calculation is used by the APEX farm model, among others, and is based on monthly statistics.
+NOTE: For reasons of time and space, the example contains only ten years of daily weather data. We suggest using thirty years for estimating parameter values.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>params</code></td>
+<td>
+<p>Parameters for simulating long-term point rainfall. For <code>method = "poisson"</code>, a list of parameters containing:
+</p>
+
+<ul>
+<li>
+<p>lambda: Mean rainfall inter-arrival frequency (d-1).
+</p>
+</li>
+<li>
+<p>depth: Mean rainfall depth (mm).
+</p>
+</li>
+<li>
+<p>A: Mean annual temperature (C).
+</p>
+</li>
+<li>
+<p>B: Temperature half-amplitude (C).
+</p>
+</li>
+<li>
+<p>C: Day of the year with minimum temperature (DOY).
+</p>
+</li>
+<li>
+<p>start: First full year of the weather data.
+</p>
+</li>
+<li>
+<p>end: Last full year of the weather data.
+</p>
+</li>
+</ul>
+<p>For <code>method = "markov"</code>, a data frame with one row per month and columns:
+</p>
+
+<ul>
+<li>
+<p>tmin: Minimum temperature.
+</p>
+</li>
+<li>
+<p>tminsd: Maximum temperature.
+</p>
+</li>
+<li>
+<p>tmax: Minimum temperature standard deviation.
+</p>
+</li>
+<li>
+<p>tmaxsd: Maximum temperature standard deviation.
+</p>
+</li>
+<li>
+<p>prcp: Monthly precipitation.
+</p>
+</li>
+<li>
+<p>prcpmean: Mean size of a precipitation event.
+</p>
+</li>
+<li>
+<p>prcpmax: Maximum size of a precipitation event.
+</p>
+</li>
+<li>
+<p>prcpsd: Standard deviation of precipitation event sizes.
+</p>
+</li>
+<li>
+<p>prcpskew: Skew of precipitation event sizes.
+</p>
+</li>
+<li>
+<p>prcpwet: Number of wet days (greater than <code>llim</code>).
+</p>
+</li>
+<li>
+<p>prcpww: Probability of a wet day following a wet day.
+</p>
+</li>
+<li>
+<p>prcpdw: Probability of a wet day following a dry day.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>temperature</code></td>
+<td>
+<p>Parameters for simulating long-term daily temperature.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>llim</code></td>
+<td>
+<p>Minimum daily rainfall for a wet day.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start</code></td>
+<td>
+<p>First full year of weather data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>end</code></td>
+<td>
+<p>Last full year of weather data</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Sarah Goslee
+</p>
+
+
+<h3>References</h3>
+
+<p>Rodriguez-Iturbe, I., Porporato, A., Ridolfi, L., Isham, V. and Coxi, D. R. (1999) Probabilistic modelling of water balance at a point: the role of climate, soil and vegetation. <em>Proc Royal Soc A</em> <b>455</b>, 269–288.
+</p>
+<p>Nicks, A. D. (1974) Stochastic generation of the occurrence, pattern and location of maximum amount of daily rainfall. Pp. 154–171 in: <em>Proceedings Symposium on Statistical Hydrology.</em> USDA Agricultural Research Service Miscellaneous Publication No. 1275, Washington, DC.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>read.dly</code>,
+<code>rainfall</code>,
+<code>temperature</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# GHCN daily weather file for State College, PA
+# subset of data (2000-2009) for station USC00368449
+#
+data("weather") 
+
+# calculate parameters for the poisson model
+# using 0.3 mm as the lower limit for wet days.
+weather.param.p &lt;- wth.param(weather, method = "poisson", llim = 0.3)
+
+# simulate ten years of rainfall
+rain10.p &lt;- rainfall(365*10, weather.param.p)
+
+# increase per-event rainfall by 5 mm
+weather.param.p5 &lt;- weather.param.p
+weather.param.p5$params$depth &lt;- weather.param.p5$params$depth + 5
+rain10.p5 &lt;- rainfall(365*10, weather.param.p5)
+
+# calculate parameters for the Markov chain model
+# using 0.3 mm as the lower limit for wet days.
+weather.param.m &lt;- wth.param(weather, method = "markov", llim = 0.3)
+
+# rainfall() selects Markov model based on input parameter types
+rain10.m &lt;- rainfall(365*10, weather.param.m)
+
+# simulate 10 years of temperature
+temp10 &lt;- temperature(365*10, weather.param.p)
+
+</code></pre>
+
+
+</div>

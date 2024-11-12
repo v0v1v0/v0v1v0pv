@@ -1,0 +1,202 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>semiVarReg.multi</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Semi parametric mean and variance regression (multivariate)</h2>
+
+<h3>Description</h3>
+
+<p><code>semiVarReg.multi</code> performs semi-parametric mean and variance regression models. This is
+designed for multiple covariates fit in the mean and variance models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">semiVarReg.multi(
+  y,
+  x,
+  mean.model = c("zero", "constant", "linear", "semi"),
+  mean.vars = c(1),
+  knots.m = NULL,
+  var.model = c("constant", "linear", "semi"),
+  var.vars = c(1),
+  knots.v = NULL,
+  degree = 2,
+  control = list(...),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Vector containing outcome data. Must be no missing data and any censored values must
+be set to the limits of detection.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Matrix containing the covariate data. Must be no missing data and same length as <code>y</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean.model</code></td>
+<td>
+<p>Vector to specify the mean model to be fit to the data. The possible inputs are
+<code>"zero"</code>, <code>"constant"</code>, or a vector to indicate if covariates are to be <code>"linear"</code> or <code>"semi"</code>. <code>"semi"</code>
+indicates a semi-parametric spline model, with the number of internal knots specified in
+<code>knots.m</code>. If covariates are fit, each covariate needs an indicator of <code>"linear"</code> or <code>"semi"</code>, where <code>mean.vars</code> specifies each covariate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean.vars</code></td>
+<td>
+<p>Vector to specify column(s) in <code>x</code> referring to covariates to be fit in the mean model,
+eg c(1,2) indicates columns 1 and 2 in <code>x</code>. Must be the same length as <code>mean.model</code> which specifies
+if they are fit as linear/semi. If semi, use <code>knots.m</code> to specify knots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knots.m</code></td>
+<td>
+<p>Vector indicating the number of internal knots to be fit in each of covariate(s) fit in the semi-parametric
+mean model. Must be one entry per <code>"semi"</code> covariate in <code>mean.model</code>. Knots are placed equidistantly over each covariate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.model</code></td>
+<td>
+<p>Vector to specify the variance model to be fit to the data. The possible inputs are
+<code>"constant"</code>, or a vector to indicate if each covariate is to be <code>"linear"</code> or <code>"semi"</code>. <code>"semi"</code> indicates a semi-parametric
+B-spline model, with the number of internal knots specified in <code>knots.v</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.vars</code></td>
+<td>
+<p>Vector to specify column(s) in <code>x</code> referring to covariates to be fit in the variance model,
+eg c(1,2) indicates columns 1 and 2 in <code>x</code>. Must be the same length as <code>var.model</code> which specifies
+if they are fit as linear/semi. If semi, use <code>knots.v</code> to specify knots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>knots.v</code></td>
+<td>
+<p>Vector indicating the number of internal knots to be fit in the semi-parametric
+variance model. Knots are placed equidistantly over the covariate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>degree</code></td>
+<td>
+<p>Integer indicating the degree of the splines fit in the mean and the variance models.
+The default value is <code>2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>list of control parameters. See <code>VarReg.control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be used to form the default control argument if it is not supplied
+directly</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>semiVarReg.multi</code> returns an object of class <code>"VarReg"</code> which inherits some components from the class <code>"glm"</code>. This object of class <code>"VarReg"</code> is a list containing the following components:
+</p>
+
+<ul>
+<li>
+<p><code>modeltype</code>: Text indicating the model that was fit, indicating an uncensored approach was performed.
+</p>
+</li>
+<li>
+<p><code>knots.m</code>, <code>knots.v</code>, <code>degree</code>, <code>meanmodel</code>, <code>varmodel</code>: Returning the input variables as described above
+</p>
+</li>
+<li>
+<p><code>converged</code>: Logical argument indicating if convergence occurred.
+</p>
+</li>
+<li>
+<p><code>iterations</code>: Total iterations performed.
+</p>
+</li>
+<li>
+<p><code>reldiff</code>: the positive convergence tolerance that occurred at the final iteration.
+</p>
+</li>
+<li>
+<p><code>loglik</code>: Numeric variable of the maximised log-likelihood.
+</p>
+</li>
+<li>
+<p><code>boundary</code>: Logical argument indicating if the MLE is on the boundary of the parameter space.
+</p>
+</li>
+<li>
+<p><code>aic.c</code>: Akaike information criterion corrected for small samples
+</p>
+</li>
+<li>
+<p><code>aic</code>: Akaike information criterion
+</p>
+</li>
+<li>
+<p><code>bic</code>: Bayesian information criterion
+</p>
+</li>
+<li>
+<p><code>hqc</code>: Hannan-Quinn information criterion
+</p>
+</li>
+<li>
+<p><code>mean.ind</code>: Vector of integer(s) indicating the column number(s) in the dataframe
+<code>data</code> that were fit in the mean model.
+</p>
+</li>
+<li>
+<p><code>mean</code>: Vector of the maximum likelihood estimates of the mean parameters.
+</p>
+</li>
+<li> <p><code>var.ind</code>: Vector of integer(s) indicating the column(s) in the dataframe
+<code>data</code> that were fit in the variance model.
+</p>
+</li>
+<li>
+<p><code>variance</code>: Vector of the maximum likelihood estimates of the variance parameters.
+</p>
+</li>
+<li>
+<p><code>data</code>: Dataframe containing the variables included in the model.</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(mcycle)
+## run a model with linear mean and linear variance:
+linmodel&lt;-semiVarReg.multi(mcycle$accel, x=mcycle, mean.model="linear",mean.vars=2,
+var.model="linear", var.vars=2,  maxit=10000)
+## run a model with semi-parametric mean (4 internal knots) and semi-parametric variance (2 knots):
+##not run
+##semimodel&lt;-semiVarReg.multi(mcycle$accel, x=mcycle, meanmodel="semi",mean.vars=2, varmodel="semi",
+##var.vars=2,knots.m=4, knots.v=2, maxit=10000)
+</code></pre>
+
+
+</div>

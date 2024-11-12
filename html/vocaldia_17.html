@@ -1,0 +1,120 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getTurnTakingMatrix</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>getSampledVocalCountMatrix: generate vocalisation diagrams</h2>
+
+<h3>Description</h3>
+
+<p>Generate a vocalisation diagram with absolute vocalisation durations.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getTurnTakingMatrix(
+  df,
+  begin = "begin",
+  end = "end",
+  nodecolumn = "role",
+  individual = FALSE,
+  noPauseTypes = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>a data frame consisting, minimally, of a column for
+vocalisation/pause start times, a column for end times, and a
+column identifying the speaker, speaker role or 'Floor' (for
+silences).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>begin</code></td>
+<td>
+<p>the name of the column containing the start time of
+the vocalisation event in a row.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>end</code></td>
+<td>
+<p>the name of the column containing the end time of the
+vocalisation event in the same row.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodecolumn</code></td>
+<td>
+<p>the name of the column containing the node
+(speaker) name (e.g. 'speaker', 'role').</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>individual</code></td>
+<td>
+<p>whether to include individual speakers or group
+them into a single Vocalisation node</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>noPauseTypes</code></td>
+<td>
+<p>if TRUE, ignore distinctions between pauses
+(SwitchingPause, GrpSwitchingPause, etc)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A vocalisation diagram (vocaldia) is a representation of a
+dialogue as a Markov process whose cell &lt;m,n&gt; contains the
+transition probability from node n to node m). Unlike
+<code>getSampledVocalCountMatrix</code> this function
+accummulates event durations directly, therefore resulting in no
+self-transitions (in general).
+</p>
+
+
+<h3>Value</h3>
+
+<p>a vocaldia object, consisting of a vocalisation matrix
+(vocmatrix) where cell &lt;m,n&gt; contains the counts of
+transitions from node n to node m, and a table of absolute
+durations of vocalisation events.
+</p>
+
+
+<h3>References</h3>
+
+<p>S. Luz. Automatic identification of experts and performance
+prediction in the multimodal math data corpus through analysis
+of speech interaction. In <em>Proceedings of the 15th ACM on
+International Conference on Multimodal Interaction, ICMI'13</em>,
+pages 575–582, New York, NY, USA, 2013. ACM.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>(Luz, 2013) and <code>getTurnTakingMatrix</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- subset(atddia, id=='Abbott_Maddock_01')
+getTurnTakingMatrix(x)
+getTurnTakingMatrix(x, individual=TRUE)
+</code></pre>
+
+
+</div>

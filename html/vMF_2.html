@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dvMF</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>PDF of the von Mises - Fisher distribution.</h2>
+
+<h3>Description</h3>
+
+<p><code>dvMF</code> computes the density of the von Mises - Fisher distribution, given a set of spherical coordinates and the distribution parameters.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dvMF(z, theta)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>z</code></td>
+<td>
+<p>as the set of points at which the spherical coordinate will be evaluated. z may be an one row matrix or vector if it contain one spherical coordinates or a
+matrix whose each row is one spherical coordinates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+<p>as the distribution parameter.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability density function of the von Mises - Fisher distribution is defined by :
+</p>
+<p style="text-align: center;"><code class="reqn">f(z|theta) = C_p(|theta|)\exp{(z theta)}</code>
+</p>
+
+<p><code class="reqn">|theta|</code> is the intensity parameter and <code class="reqn">\frac{theta}{|theta|}</code> the mean directional parameter. The normalization constant <code class="reqn">C_p()</code> depends 
+on the Bessel function of the first kind. See more details <a href="https://en.wikipedia.org/wiki/Von_Mises-Fisher_distribution">here</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>the densities computed at each point
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Aristide Houndetoungan &lt;<a href="mailto:ariel92and@gmail.com">ariel92and@gmail.com</a>&gt;
+</p>
+
+
+<h3>References</h3>
+
+<p>Wood, A. T. (1994). Simulation of the von Mises Fisher distribution. <em>Communications in statistics-simulation and computation</em>, 23(1), 157-164. <a href="https://doi.org/10.1080/03610919408813161">doi:10.1080/03610919408813161</a>.
+</p>
+<p>Hornik, K., &amp; Grun, B. (2014). <span class="pkg">movMF</span>: An <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> package for fitting mixtures of von Mises-Fisher distributions. <em>Journal of Statistical Software</em>, 58(10), 1-31. <a href="https://doi.org/10.18637/jss.v058.i10">doi:10.18637/jss.v058.i10</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rvMF</code> and <code>CpvMF</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">{}
+# Draw 1000 vectors from vM-F with parameter 1, (1,0)
+z &lt;- rvMF(1000,c(1,0))
+
+# Compute the density at these points
+dvMF(z,c(1,0))
+
+# Density of (0,1,0,0) with the parameter 3, (0,1,0,0)
+dvMF(c(0,1,0,0),c(0,3,0,0))
+</code></pre>
+
+
+</div>

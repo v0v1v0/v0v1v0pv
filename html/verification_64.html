@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>table.stats.boot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Percentile bootstrap for 2 by 2 table</h2>
+
+<h3>Description</h3>
+
+<p> Performs a bootstrap on data from a 2 by 2 contingency table returning verification statistics.  Potentially useful in creating error bars for performance diagrams.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">table.stats.boot(CT, R = 100, alpha = 0.05, fudge = 0.01)
+       </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>CT</code></td>
+<td>
+<p>Two by two contingency table.  Columns summarize observed values.  Rows summarize forecasted values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R</code></td>
+<td>
+<p>Number of resamples</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Confidence intervals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fudge</code></td>
+<td>
+<p>A numeric fudge factor to be added to each cell of the contingency table in order to avoid division by zero.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>2 row matrix with upper and lower intervals for bias, pod, far, ets.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Matt  Pocernich</p>
+
+
+<h3>See Also</h3>
+
+<p><code>table.stats</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> 	
+### example from Roebber. 	
+RB1 &lt;- matrix(c(95, 55, 42, 141), ncol = 2)
+table.stats.boot(RB1, R = 1000   )
+
+</code></pre>
+
+
+</div>

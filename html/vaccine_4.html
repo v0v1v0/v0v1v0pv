@@ -1,0 +1,177 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>est_ce</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimate controlled effect curves</h2>
+
+<h3>Description</h3>
+
+<p>Estimate controlled risk (CR) curves and/or controlled vaccine
+efficacy (CVE) curves. See references for definitions of these curves.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">est_ce(
+  dat,
+  type = "Cox",
+  t_0,
+  cr = TRUE,
+  cve = FALSE,
+  s_out = seq(from = min(dat$s, na.rm = TRUE), to = max(dat$s, na.rm = TRUE), l = 101),
+  ci_type = "transformed",
+  placebo_risk_method = "KM",
+  return_p_value = FALSE,
+  return_extras = FALSE,
+  params_cox = params_ce_cox(),
+  params_np = params_ce_np()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dat</code></td>
+<td>
+<p>A data object returned by load_data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>One of c("Cox", "NP"). This specifies whether to estimate the
+curve(s) using a marginalized Cox proportional hazards model or using a
+monotone-constrained nonparametric estimator.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t_0</code></td>
+<td>
+<p>Time point of interest</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cr</code></td>
+<td>
+<p>Boolean. If TRUE, the controlled risk (CR) curve is computed and
+returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cve</code></td>
+<td>
+<p>Boolean. If TRUE, the controlled vaccine efficacy (CVE) curve is
+computed and returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s_out</code></td>
+<td>
+<p>A numeric vector of s-values (on the biomarker scale) for which
+cve(s) and/or cr(s) are computed. Defaults to a grid of 101 points
+between the min and max biomarker values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ci_type</code></td>
+<td>
+<p>One of c("transformed", "truncated", "regular", "none"). If
+ci_type="transformed", confidence intervals are computed on the logit(CR)
+and/or log(1-CVE) scale to ensure that confidence limits lie within [0,1]
+for CR and/or lie within (-inf,1] for CVE. If ci_type="truncated",
+confidence limits are constructed on the CR and/or CVE scale but
+truncated to lie within [0,1] for CR and/or lie within (-inf,1] for CVE.
+If ci_type="regular", confidence limits are not transformed or truncated.
+If ci_type="none", confidence intervals are not computed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>placebo_risk_method</code></td>
+<td>
+<p>One of c("KM", "Cox"). Method for estimating
+overall risk in the placebo group. "KM" computes a Kaplan-Meier estimate
+and "Cox" computes an estimate based on a marginalized Cox model survival
+curve. Only relevant if cve=TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>return_p_value</code></td>
+<td>
+<p>Boolean; if TRUE, a P-value corresponding to the null
+hypothesis that the CVE curve is flat is returned. The type of P-value
+corresponds to the <code>type</code> argument.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>return_extras</code></td>
+<td>
+<p>Boolean; if TRUE, objects useful for debugging are
+returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>params_cox</code></td>
+<td>
+<p>A list of options returned by
+<code>params_ce_cox</code> that are relevant if type="Cox".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>params_np</code></td>
+<td>
+<p>A list of options returned by <code>params_ce_np</code>
+that are relevant if type="NP".</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of the form <code>list(cr=list(...), cve=list(...))</code>
+containing CR and/or CVE estimates. Each of the inner lists contains the
+following: </p>
+
+<ul>
+<li>
+<p><code>s</code>: a vector of marker values corresponding to s_out
+</p>
+</li>
+<li>
+<p><code>est</code>: a vector of point estimates
+</p>
+</li>
+<li>
+<p><code>ci_lower</code>: a vector of confidence interval lower limits
+</p>
+</li>
+<li>
+<p><code>ci_upper</code>: a vector of confidence interval upper limits
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Gilbert P, Fong Y, Kenny A, and Carone, M (2022). A Controlled
+Effects Approach to Assessing Immune Correlates of Protection.
+&lt;doi:10.1093/biostatistics/kxac024&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(hvtn505)
+dat &lt;- load_data(time="HIVwk28preunblfu", event="HIVwk28preunbl", vacc="trt",
+                 marker="IgG_V2", covariates=c("age","BMI","bhvrisk"),
+                 weights="wt", ph2="casecontrol", data=hvtn505)
+
+ests_cox &lt;- est_ce(dat=dat, type="Cox", t_0=578)
+ests_np &lt;- est_ce(dat=dat, type="NP", t_0=578)
+
+</code></pre>
+
+
+</div>

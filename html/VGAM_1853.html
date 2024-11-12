@@ -1,0 +1,847 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vglm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fitting Vector Generalized Linear Models </h2>
+
+<h3>Description</h3>
+
+<p><code>vglm</code> fits vector generalized linear models (VGLMs).
+This very large class of models includes
+generalized linear models (GLMs) as a special case.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vglm(formula,
+     family = stop("argument 'family' needs to be assigned"),
+     data = list(), weights = NULL, subset = NULL,
+     na.action, etastart = NULL, mustart = NULL,
+     coefstart = NULL, control = vglm.control(...), offset = NULL,
+     method = "vglm.fit", model = FALSE, x.arg = TRUE, y.arg = TRUE,
+     contrasts = NULL, constraints = NULL, extra = list(),
+     form2 = NULL, qr.arg = TRUE, smart = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+
+<p>a symbolic description of the model to be fit.
+The RHS of the formula is applied to each linear
+predictor.
+The effect of different variables in each linear predictor
+can be controlled by specifying constraint matrices—see
+<code>constraints</code> below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+
+<p>a function of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>)
+describing what statistical model is to be fitted.
+This is called a
+“<span class="pkg">VGAM</span> family function”.
+See <code>CommonVGAMffArguments</code>
+for general information about many types of
+arguments found in this
+type of function.
+The argument name <code>"family"</code> is used loosely and for
+the ease of existing <code>glm</code> users;
+there is no concept of a
+formal “error distribution” for VGLMs.
+Possibly the argument name should be better <code>"model"</code>
+but unfortunately
+that name has already been taken.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+
+<p>an optional data frame containing the variables in the model.
+By default the variables are taken from
+<code>environment(formula)</code>, typically the environment
+from which <code>vglm</code> is called.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+
+<p>an optional vector or matrix of (prior fixed and known) weights
+to be used in the fitting process.
+If the <span class="pkg">VGAM</span> family function handles multiple responses
+(<code class="reqn">Q &gt; 1</code> of them, say) then
+<code>weights</code> can be a matrix with <code class="reqn">Q</code> columns.
+Each column matches the respective response.
+If it is a vector (the usually case) then it is recycled into a
+matrix with <code class="reqn">Q</code> columns.
+The values of <code>weights</code> must be positive; try setting
+a very small value such as <code>1.0e-8</code> to effectively
+delete an observation.
+</p>
+
+<p>Currently the <code>weights</code> argument supports sampling
+weights from complex sampling designs
+via <span class="pkg">svyVGAM</span>.
+Some details can be found at
+<a href="https://CRAN.R-project.org/package=svyVGAM">https://CRAN.R-project.org/package=svyVGAM</a>.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subset</code></td>
+<td>
+
+<p>an optional logical vector specifying a subset of
+observations to
+be used in the fitting process.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.action</code></td>
+<td>
+
+<p>a function which indicates what should happen when
+the data contain <code>NA</code>s.
+The default is set by the <code>na.action</code> setting
+of <code>options</code>,
+and is <code>na.fail</code> if that is unset.
+The “factory-fresh” default is <code>na.omit</code>
+which is known as <em>complete case analysis</em>
+and applied to both sides of the formula.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>etastart</code></td>
+<td>
+
+<p>optional starting values for the linear predictors.
+It is a <code class="reqn">M</code>-column matrix with the same
+number of rows as
+the response.
+If <code class="reqn">M = 1</code> then it may be a vector.
+Note that <code>etastart</code> and the output
+of <code>predict(fit)</code>
+should be comparable.
+Here, <code>fit</code> is the fitted object.
+Almost all <span class="pkg">VGAM</span> family functions are self-starting.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mustart</code></td>
+<td>
+
+<p>optional starting values for the fitted values.
+It can be a vector or a matrix;
+if a matrix, then it has the same number of rows
+as the response.
+Usually <code>mustart</code> and the output of <code>fitted(fit)</code>
+should be comparable.
+Most family functions do not make use of this argument
+because it is not possible to compute all <code class="reqn">M</code> columns of
+<code>eta</code> from <code>mu</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coefstart</code></td>
+<td>
+
+<p>optional starting values for the coefficient vector.
+The length and order must match that of <code>coef(fit)</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+
+<p>a list of parameters for controlling the fitting process.
+See <code>vglm.control</code> for details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>offset</code></td>
+<td>
+
+<p>a vector or <code class="reqn">M</code>-column matrix of offset values.
+These are <em>a priori</em> known and are added to the
+linear/additive predictors during fitting.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+
+<p>the method to be used in fitting the model.
+The default (and
+presently only) method <code>vglm.fit()</code> uses iteratively
+reweighted least squares (IRLS).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+
+<p>a logical value indicating whether the
+<em>model frame</em>
+should be assigned in the <code>model</code> slot.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x.arg, y.arg</code></td>
+<td>
+
+<p>logical values indicating whether
+the LM matrix and response vector/matrix used in the fitting
+process should be assigned in the <code>x</code> and <code>y</code> slots.
+Note that the model matrix is the LM matrix; to get the VGLM
+matrix type <code>model.matrix(vglmfit)</code> where
+<code>vglmfit</code> is a <code>vglm</code> object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>contrasts</code></td>
+<td>
+
+<p>an optional list. See the <code>contrasts.arg</code>
+of <code>model.matrix.default</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constraints</code></td>
+<td>
+
+<p>an optional <code>list</code> of constraint matrices.
+The components of the list must be named (labelled)
+with the term it corresponds to
+(and it must match in
+character format <em>exactly</em>—see below).
+There are two types of input:
+<code>"lm"</code>-type and <code>"vlm"</code>-type.
+The former is a subset of the latter.
+The former has a matrix for each term of the LM matrix.
+The latter has a matrix for each column of the big VLM matrix.
+After fitting, the <code>constraints</code>
+extractor function may be applied; it returns
+the <code>"vlm"</code>-type list of constraint matrices
+by default.  If <code>"lm"</code>-type are returned by
+<code>constraints</code> then these can be fed into this
+argument and it should give the same model as before.
+</p>
+<p>If the <code>constraints</code> argument is used then the
+family function's <code>zero</code> argument (if it exists)
+needs to be set to <code>NULL</code>.
+This avoids what could be a probable contradiction.
+Sometimes setting other arguments related to constraint
+matrices to <code>FALSE</code> is also a good idea, e.g.,
+<code>parallel = FALSE</code>,
+<code>exchangeable = FALSE</code>.
+</p>
+<p>Properties:
+each constraint matrix must have <code class="reqn">M</code> rows, and be of
+full-column rank.  By default, constraint matrices are
+the <code class="reqn">M</code> by <code class="reqn">M</code> identity matrix unless arguments
+in the family function itself override these values, e.g.,
+<code>parallel</code> (see  <code>CommonVGAMffArguments</code>).
+If <code>constraints</code> is used then it
+must contain <em>all</em>
+the terms; an incomplete list is not accepted.
+</p>
+<p>As mentioned above, the labelling of each constraint matrix
+must match exactly, e.g.,
+<code>list("s(x2,df=3)"=diag(2))</code>
+will fail as
+<code>as.character(~ s(x2,df=3))</code> produces white spaces:
+<code>"s(x2, df = 3)"</code>.
+Thus
+<code>list("s(x2, df = 3)" = diag(2))</code>
+is needed.
+See Example 6 below.
+More details are given in Yee (2015; Section 3.3.1.3)
+which is on p.101.
+Note that the label for the intercept is <code>"(Intercept)"</code>.  
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extra</code></td>
+<td>
+
+<p>an optional list with any extra information that
+might be needed by
+the <span class="pkg">VGAM</span> family function.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>form2</code></td>
+<td>
+
+<p>the second (optional) formula.
+If argument <code>xij</code> is used
+(see <code>vglm.control</code>) then
+<code>form2</code> needs to have <em>all</em> terms in the model.
+Also, some <span class="pkg">VGAM</span> family functions
+such as <code>micmen</code>
+use this argument to input the regressor variable.
+If given, the slots <code>@Xm2</code> and <code>@Ym2</code>
+may be assigned.
+Note that smart prediction applies to terms
+in <code>form2</code> too.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qr.arg</code></td>
+<td>
+
+<p>logical value indicating whether the slot <code>qr</code>, which
+returns the QR decomposition of the VLM model matrix,
+is returned on the object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smart</code></td>
+<td>
+
+<p>logical value indicating whether smart prediction
+(<code>smartpred</code>) will be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>further arguments passed into <code>vglm.control</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A vector generalized linear model (VGLM) is loosely defined
+as a statistical model that is a function of <code class="reqn">M</code> linear
+predictors and can be estimated by Fisher scoring.
+The central formula is given by
+</p>
+<p style="text-align: center;"><code class="reqn">\eta_j = \beta_j^T x</code>
+</p>
+
+<p>where <code class="reqn">x</code> is a vector of explanatory variables
+(sometimes just a 1 for an intercept),
+and
+<code class="reqn">\beta_j</code> is a vector of regression coefficients
+to be estimated.
+Here, <code class="reqn">j=1,\ldots,M</code>, where <code class="reqn">M</code> is finite.
+Then one can write
+<code class="reqn">\eta=(\eta_1,\ldots,\eta_M)^T</code>
+as a vector of linear predictors.
+</p>
+<p>Most users will find <code>vglm</code> similar in flavour to
+<code>glm</code>.
+The function <code>vglm.fit</code> actually does the work.
+</p>
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglm"</code>, which has the
+following slots. Some of these may not be assigned to save
+space, and will be recreated if necessary later.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>extra</code></td>
+<td>
+<p>the list <code>extra</code> at the end of fitting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>the family function (of class <code>"vglmff"</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iter</code></td>
+<td>
+<p>the number of IRLS iterations used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>predictors</code></td>
+<td>
+<p>a <code class="reqn">M</code>-column matrix of linear predictors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>assign</code></td>
+<td>
+<p>a named list which matches the columns and the
+(LM) model matrix terms.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p>the matched call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coefficients</code></td>
+<td>
+<p>a named vector of coefficients.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constraints</code></td>
+<td>
+
+<p>a named list of constraint matrices used in the fitting.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>contrasts</code></td>
+<td>
+<p>the contrasts used (if any).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>list of control parameter used in the fitting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>criterion</code></td>
+<td>
+<p>list of convergence criterion evaluated at the
+final IRLS iteration.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df.residual</code></td>
+<td>
+<p>the residual degrees of freedom.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df.total</code></td>
+<td>
+<p>the total degrees of freedom.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dispersion</code></td>
+<td>
+<p>the scaling parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>effects</code></td>
+<td>
+<p>the effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fitted.values</code></td>
+<td>
+
+<p>the fitted values, as a matrix.
+This is often the mean but may be quantiles, or the location
+parameter, e.g., in the Cauchy model.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>misc</code></td>
+<td>
+<p>a list to hold miscellaneous parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>the model frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.action</code></td>
+<td>
+<p>a list holding information
+about missing values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>offset</code></td>
+<td>
+<p>if non-zero, a <code class="reqn">M</code>-column matrix of offsets.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>post</code></td>
+<td>
+<p>a list where post-analysis results may be put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>preplot</code></td>
+<td>
+<p>used by <code>plotvgam</code>,
+the plotting parameters
+may be put here.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prior.weights</code></td>
+<td>
+
+<p>initially supplied weights
+(the <code>weights</code> argument).
+Also see <code>weightsvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qr</code></td>
+<td>
+<p>the QR decomposition used in the fitting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R</code></td>
+<td>
+<p>the <b>R</b> matrix in the QR decomposition
+used in the fitting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rank</code></td>
+<td>
+<p>numerical rank of the fitted model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>residuals</code></td>
+<td>
+<p>the <em>working</em> residuals at the
+final IRLS iteration.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ResSS</code></td>
+<td>
+<p>residual sum of squares at the
+final IRLS iteration with
+the adjusted dependent vectors and weight matrices.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smart.prediction</code></td>
+<td>
+
+<p>a list of data-dependent parameters (if any)
+that are used by smart prediction.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>terms</code></td>
+<td>
+<p>the <code>terms</code> object used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>the working weight matrices at
+the final IRLS iteration.
+This is in matrix-band form.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>the model matrix (linear model LM, not VGLM).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlevels</code></td>
+<td>
+<p>the levels of the factors, if any,
+used in fitting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>the response, in matrix form.</p>
+</td>
+</tr>
+</table>
+<p>This slot information is repeated at <code>vglm-class</code>.
+</p>
+
+
+<h3>WARNING</h3>
+
+<p>See warnings in <code>vglm.control</code>.
+Also, see warnings under <code>weights</code> above regarding
+sampling weights from complex sampling designs.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function can fit a wide variety of
+statistical models. Some of
+these are harder to fit than others because
+of inherent numerical
+difficulties associated with some of them.
+Successful model fitting
+benefits from cumulative experience.
+Varying the values of arguments
+in the <span class="pkg">VGAM</span> family function itself
+is a good first step if
+difficulties arise, especially if initial
+values can be inputted.
+A second, more general step, is to vary the
+values of arguments in
+<code>vglm.control</code>.
+A third step is to make use of arguments such
+as <code>etastart</code>,
+<code>coefstart</code> and <code>mustart</code>.
+</p>
+<p>Some <span class="pkg">VGAM</span> family functions end in <code>"ff"</code> to avoid
+interference with other functions, e.g.,
+<code>binomialff</code>,
+<code>poissonff</code>.
+This is because <span class="pkg">VGAM</span> family
+functions are incompatible with <code>glm</code>
+(and also <code>gam()</code> in <span class="pkg">gam</span> and
+<code>gam</code> in the <span class="pkg">mgcv</span> library).
+</p>
+
+
+<p>The smart prediction (<code>smartpred</code>)
+library is incorporated
+within the <span class="pkg">VGAM</span> library.
+</p>
+<p>The theory behind the scaling parameter is
+currently being made more
+rigorous, but it it should give the same value
+as the scale parameter
+for GLMs.
+</p>
+<p>In Example 5 below, the <code>xij</code> argument to
+illustrate covariates
+that are specific to a linear predictor.
+Here, <code>lop</code>/<code>rop</code>
+are
+the ocular pressures of the left/right eye
+(artificial data).
+Variables <code>leye</code> and <code>reye</code> might be
+the presence/absence of
+a particular disease on the LHS/RHS eye respectively.
+See
+<code>vglm.control</code>
+and
+<code>fill1</code>
+for more details and examples.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2015).
+Vector Generalized Linear and Additive Models:
+With an Implementation in R.
+New York, USA: <em>Springer</em>.
+</p>
+<p>Yee, T. W. and Hastie, T. J. (2003).
+Reduced-rank vector generalized linear models.
+<em>Statistical Modelling</em>,
+<b>3</b>, 15–41.
+</p>
+<p>Yee, T. W. and Wild, C. J. (1996).
+Vector generalized additive models.
+<em>Journal of the Royal Statistical Society,
+Series B, Methodological</em>,
+<b>58</b>, 481–493.
+</p>
+<p>Yee, T. W. (2014).
+Reduced-rank vector generalized linear models
+with two linear predictors.
+<em>Computational Statistics and Data Analysis</em>,
+<b>71</b>, 889–902.
+</p>
+<p>Yee, T. W. (2008).
+The <code>VGAM</code> Package.
+<em>R News</em>, <b>8</b>, 28–39.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>vglm.control</code>,
+<code>vglm-class</code>,
+<code>vglmff-class</code>,
+<code>smartpred</code>,
+<code>vglm.fit</code>,
+<code>fill1</code>,
+<code>rrvglm</code>,
+<code>vgam</code>.
+Methods functions include
+<code>add1.vglm</code>,
+<code>anova.vglm</code>,
+<code>AICvlm</code>,
+<code>coefvlm</code>,
+<code>confintvglm</code>,
+<code>constraints.vlm</code>,
+<code>drop1.vglm</code>,
+<code>fittedvlm</code>,
+<code>hatvaluesvlm</code>,
+<code>hdeff.vglm</code>,
+<code>Influence.vglm</code>,
+<code>linkfunvlm</code>,
+<code>lrt.stat.vlm</code>,
+<code>score.stat.vlm</code>,
+<code>wald.stat.vlm</code>,
+<code>nobs.vlm</code>,
+<code>npred.vlm</code>,
+<code>plotvglm</code>,
+<code>predictvglm</code>,
+<code>residualsvglm</code>,
+<code>step4vglm</code>,
+<code>summaryvglm</code>,
+<code>lrtest_vglm</code>,
+<code>update</code>,
+<code>TypicalVGAMfamilyFunction</code>,
+etc.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Example 1. See help(glm)
+(d.AD &lt;- data.frame(treatment = gl(3, 3),
+                    outcome = gl(3, 1, 9),
+                    counts = c(18,17,15,20,10,20,25,13,12)))
+vglm.D93 &lt;- vglm(counts ~ outcome + treatment, poissonff,
+                 data = d.AD, trace = TRUE)
+summary(vglm.D93)
+
+
+# Example 2. Multinomial logit model
+pneumo &lt;- transform(pneumo, let = log(exposure.time))
+vglm(cbind(normal, mild, severe) ~ let, multinomial, pneumo)
+
+
+# Example 3. Proportional odds model
+fit3 &lt;- vglm(cbind(normal, mild, severe) ~ let, propodds, pneumo)
+coef(fit3, matrix = TRUE)
+constraints(fit3)
+model.matrix(fit3, type = "lm")  # LM model matrix
+model.matrix(fit3)               # Larger VGLM (or VLM) matrix
+
+
+# Example 4. Bivariate logistic model
+fit4 &lt;- vglm(cbind(nBnW, nBW, BnW, BW) ~ age, binom2.or, coalminers)
+coef(fit4, matrix = TRUE)
+depvar(fit4)  # Response are proportions
+weights(fit4, type = "prior")
+
+
+# Example 5. The use of the xij argument (simple case).
+# The constraint matrix for 'op' has one column.
+nn &lt;- 1000
+eyesdat &lt;- round(data.frame(lop = runif(nn),
+                            rop = runif(nn),
+                             op = runif(nn)), digits = 2)
+eyesdat &lt;- transform(eyesdat, eta1 = -1 + 2 * lop,
+                              eta2 = -1 + 2 * lop)
+eyesdat &lt;- transform(eyesdat,
+           leye = rbinom(nn, 1, prob = logitlink(eta1, inv = TRUE)),
+           reye = rbinom(nn, 1, prob = logitlink(eta2, inv = TRUE)))
+head(eyesdat)
+fit5 &lt;- vglm(cbind(leye, reye) ~ op,
+             binom2.or(exchangeable = TRUE, zero = 3),
+             data = eyesdat, trace = TRUE,
+             xij = list(op ~ lop + rop + fill1(lop)),
+             form2 = ~  op + lop + rop + fill1(lop))
+coef(fit5)
+coef(fit5, matrix = TRUE)
+constraints(fit5)
+fit5@control$xij
+head(model.matrix(fit5))
+
+
+# Example 6. The use of the 'constraints' argument.
+as.character(~ bs(year,df=3))  # Get the white spaces right
+clist &lt;- list("(Intercept)"      = diag(3),
+              "bs(year, df = 3)" = rbind(1, 0, 0))
+fit1 &lt;- vglm(r1 ~ bs(year,df=3), gev(zero = NULL),
+             data = venice, constraints = clist, trace = TRUE)
+coef(fit1, matrix = TRUE)  # Check
+</code></pre>
+
+
+</div>

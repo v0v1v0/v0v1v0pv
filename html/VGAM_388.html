@@ -1,0 +1,144 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gengammaUC</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generalized Gamma Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random
+generation for the generalized  gamma distribution with
+scale parameter <code>scale</code>,
+and parameters <code>d</code> and <code>k</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dgengamma.stacy(x, scale = 1, d, k, log = FALSE)
+pgengamma.stacy(q, scale = 1, d, k,
+                lower.tail = TRUE, log.p = FALSE)
+qgengamma.stacy(p, scale = 1, d, k,
+                lower.tail = TRUE, log.p = FALSE)
+rgengamma.stacy(n, scale = 1, d, k)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+<p>vector of quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>vector of probabilities.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Same as in <code>runif</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>the (positive) scale parameter <code class="reqn">b</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>d, k</code></td>
+<td>
+<p>the (positive) parameters <code class="reqn">d</code> and <code class="reqn">k</code>.
+Both can be thought of as shape parameters, where
+<code class="reqn">d</code> is of the Weibull-type and
+<code class="reqn">k</code> is of the gamma-type.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical.
+If <code>log = TRUE</code> then the logarithm of the density is returned.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail, log.p</code></td>
+<td>
+
+<p>Same meaning as in <code>pnorm</code>
+or <code>qnorm</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See <code>gengamma.stacy</code>, the <span class="pkg">VGAM</span> family function
+for estimating the generalized gamma distribution
+by maximum likelihood estimation,
+for formulae and other details.
+Apart from <code>n</code>, all the above arguments may be vectors and
+are recyled to the appropriate length if necessary.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dgengamma.stacy</code> gives the density,
+<code>pgengamma.stacy</code> gives the distribution function,
+<code>qgengamma.stacy</code> gives the quantile function, and
+<code>rgengamma.stacy</code> generates random deviates.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee and Kai Huang </p>
+
+
+<h3>References</h3>
+
+<p>Stacy, E. W. and Mihram, G. A. (1965).
+Parameter estimation for a generalized gamma distribution.
+<em>Technometrics</em>, <b>7</b>, 349–358.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gengamma.stacy</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  x &lt;- seq(0, 14, by = 0.01); d &lt;- 1.5; Scale &lt;- 2; k &lt;- 6
+plot(x, dgengamma.stacy(x, Scale, d = d, k = k), type = "l",
+     col = "blue", ylim = 0:1,
+     main = "Blue is density, orange is the CDF",
+     sub = "Purple are 5,10,...,95 percentiles", las = 1, ylab = "")
+abline(h = 0, col = "blue", lty = 2)
+lines(qgengamma.stacy(seq(0.05, 0.95, by = 0.05), Scale, d = d, k = k),
+      dgengamma.stacy(qgengamma.stacy(seq(0.05, 0.95, by = 0.05),
+                                      Scale, d = d, k = k),
+            Scale, d = d, k = k), col = "purple", lty = 3, type = "h")
+lines(x, pgengamma.stacy(x, Scale, d = d, k = k), col = "orange")
+abline(h = 0, lty = 2) 
+## End(Not run)
+</code></pre>
+
+
+</div>

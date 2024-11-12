@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>checklist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Is a formula a check formula?</h2>
+
+<h3>Description</h3>
+
+<p><code>is_check_formula(x)</code> checks whether <code>x</code> is a check formula, while
+<code>is_checklist(x)</code> checks whether <code>x</code> is a <em>checklist</em>, i.e., a
+list of check formulae. (Neither function verifies logical consistency of the
+implied checks.)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">is_check_formula(x)
+
+is_checklist(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object to test.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p><code>is_check_formula</code>, resp. <code>is_checklist</code>, returns
+<code>TRUE</code> or <code>FALSE</code>, according to whether <code>x</code> is or is not a
+check formula, resp. checklist.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>firmly (on the specification and use of check formulae)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">is_check_formula(list(~x, ~y) ~ is.numeric)  # [1] TRUE
+is_check_formula("Not positive" ~ {. &gt; 0})   # [1] TRUE
+
+is_checklist(list(list(~x, ~y) ~ is.numeric, "Not positive" ~ {. &gt; 0}))
+# [1] TRUE
+
+# Invalid checklists
+is_checklist("Not positive" ~ {. &gt; 0})            # [1] FALSE (not a list)
+is_checklist(list(is.numeric ~ list(~ x)))        # [1] FALSE (backwards)
+is_checklist(list(list(log ~ x) ~ is.character))  # [1] FALSE (invalid check item)
+
+</code></pre>
+
+
+</div>

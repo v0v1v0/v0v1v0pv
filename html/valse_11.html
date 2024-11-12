@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>selectVariables</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>selectVariables</h2>
+
+<h3>Description</h3>
+
+<p>For a given lambda, construct the sets of relevant variables for each cluster.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">selectVariables(
+  phiInit,
+  rhoInit,
+  piInit,
+  gamInit,
+  mini,
+  maxi,
+  gamma,
+  glambda,
+  X,
+  Y,
+  thresh = 1e-08,
+  eps,
+  ncores = 3,
+  fast
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>phiInit</code></td>
+<td>
+<p>an initial estimator for phi (size: p*m*k)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rhoInit</code></td>
+<td>
+<p>an initial estimator for rho (size: m*m*k)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>piInit</code></td>
+<td>
+<p>an initial estimator for pi (size : k)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamInit</code></td>
+<td>
+<p>an initial estimator for gamma</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mini</code></td>
+<td>
+<p>minimum number of iterations in EM algorithm</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxi</code></td>
+<td>
+<p>maximum number of iterations in EM algorithm</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>power in the penalty</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>glambda</code></td>
+<td>
+<p>grid of regularization parameters</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>matrix of regressors</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>matrix of responses</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thresh</code></td>
+<td>
+<p>real, threshold to say a variable is relevant, by default = 1e-8</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>threshold to say that EM algorithm has converged</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncores</code></td>
+<td>
+<p>Number or cores for parallel execution (1 to disable)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fast</code></td>
+<td>
+<p>boolean to enable or not the C function call</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list, varying lambda in a grid, with selected (the indices of variables that are selected),
+Rho (the covariance parameter, reparametrized), Pi (the proportion parameter)
+</p>
+
+
+</div>

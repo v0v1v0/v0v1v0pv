@@ -1,0 +1,85 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cov.W</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Within-group covariance matrix</h2>
+
+<h3>Description</h3>
+
+<p>Computes the pooled within-group covariance matrix.
+The effect of sexual dimorphism can be removed by using, for each group,
+the average of the covariance matrix of males and the covariance matrix of females.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cov.W(X, groups, sex = NULL, weighted = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>a data matrix with variables in columns and group names as row names</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groups</code></td>
+<td>
+<p>a character / factor vector containing grouping variable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sex</code></td>
+<td>
+<p>NULL (default). A character / factor vector containing sex variable,
+to remove sexual dimorphism by averaging males and females in each group</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weighted</code></td>
+<td>
+<p>logical. If FALSE (default), the average of all the within-group covariance matrices is used.
+If TRUE, the within-group covariance matrices are weighted by their sample size.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The pooled within-group covariance matrix
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>cov</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Data matrix of 2D landmark coordinates
+data("Tropheus.IK.coord")
+coords &lt;- which(names(Tropheus.IK.coord) == "X1"):which(names(Tropheus.IK.coord) == "Y19")
+proc.coord &lt;- as.matrix(Tropheus.IK.coord[coords])
+
+# Pooled within-group covariance matrix for all populations (weighted by sample size)
+W &lt;- cov.W(proc.coord, groups = Tropheus.IK.coord$POP.ID, weighted = TRUE)
+
+# Pooled within-group covariance matrix for all populations (unweighted)
+W &lt;- cov.W(proc.coord, groups = Tropheus.IK.coord$POP.ID)
+
+# Within-group covariance matrix for all populations, pooled by sex
+W.mf &lt;- cov.W(proc.coord, groups = Tropheus.IK.coord$POP.ID, sex = Tropheus.IK.coord$Sex)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>satisfying</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Select records (not) satisfying rules</h2>
+
+<h3>Description</h3>
+
+<p>Apply validation rules or validation results to a data set and select only
+those that satisfy all or violate at least one rule.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">satisfying(x, y, include_missing = FALSE, ...)
+
+violating(x, y, include_missing = FALSE, ...)
+
+## Default S3 method:
+violating(x, y, include_missing = FALSE, ...)
+
+lacking(x, y, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A <code>data.frame</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>a <code>validator</code> object or a <code>validation</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>include_missing</code></td>
+<td>
+<p>Toggle: also select records that have <code>NA</code> output for a rule?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>options passed to <code>confront</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>For <code>satisfying</code>, the records in <code>x</code> satisfying all rules or
+validation outcomes in <code>y</code>. For <code>violating</code> the records in
+<code>x</code> violating at least one of the rules or validation outcomes
+in <code>y</code>
+</p>
+
+
+<h3>Note</h3>
+
+<p>An error is thrown if the rules or validation results in <code>y</code> can not be
+interpreted record-by record (e.g. when one of the rules is of the form
+<code>mean(foo)&gt;0</code>).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rules &lt;- validator(speed &gt;= 12, dist &lt; 100)
+satisfying(cars, rules)
+violating(cars, rules)
+
+out &lt;- confront(cars, rules)
+summary(out)
+satisfying(cars, out)
+violating(cars, out)
+
+</code></pre>
+
+
+</div>

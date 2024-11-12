@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gamRandomise</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate FSL Randomise call for a GAM Model</h2>
+
+<h3>Description</h3>
+
+<p>This function is able to generate all the necessary files to run randomise with a GAM Model
+This script will write out all design and contrast files 
+This function will run a f-test to compare a full and reduced model (a model with and without spline)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">gamRandomise(image, maskPath = NULL, formulaFull, formulaRed, subjData,
+  outDir, nsim = 500, thresh = 0.01, run = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>image</code></td>
+<td>
+<p>Input path of 'nifti' image or vector of path(s) to images. If multiple paths, the script will all mergeNiftis() and merge across time.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maskPath</code></td>
+<td>
+<p>to mask. Must be a binary mask</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formulaFull</code></td>
+<td>
+<p>Must be the formula of the full model (i.e. "~s(age,k=5)+sex+mprage_antsCT_vol_TBV")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formulaRed</code></td>
+<td>
+<p>Must be the formula of the reduced model (i.e. "~sex+mprage_antsCT_vol_TBV")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subjData</code></td>
+<td>
+<p>Dataframe containing all the covariates used for the analysis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outDir</code></td>
+<td>
+<p>output directory for randomise</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsim</code></td>
+<td>
+<p>Number of simulations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thresh</code></td>
+<td>
+<p>significance threshold</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>run</code></td>
+<td>
+<p>FALSE will only print randomise command but won't it</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Return randomise command
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+
+subjData = mgcv::gamSim(1,n=400,dist="normal",scale=2)
+OutDirRoot="Output Directory"
+maskName="Path to mask"
+imagePath="Path to output"
+covsFormula="~s(age,k=5)+sex+mprage_antsCT_vol_TBV"
+redFormula="~sex+mprage_antsCT_vol_TBV"
+
+gamRandomise(image = imagePath, maskPath = maskName, formulaFull = covsFormula, 
+           formulaRed = redFormula, subjData = subjData, outDir = OutDirRoot)
+
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

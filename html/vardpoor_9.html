@@ -1,0 +1,174 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lingpg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Linearization of the gender pay (wage) gap.</h2>
+
+<h3>Description</h3>
+
+<p>Estimation of gender pay (wage) gap and computation of linearized variables for variance estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lingpg(
+  Y,
+  gender = NULL,
+  id = NULL,
+  weight = NULL,
+  sort = NULL,
+  Dom = NULL,
+  period = NULL,
+  dataset = NULL,
+  var_name = "lin_gpg",
+  checking = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Study variable (for example the gross hourly earning). One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gender</code></td>
+<td>
+<p>Numerical variable for gender, where 1 is for males, but 2 is for females. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>Optional variable for unit ID codes. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weight</code></td>
+<td>
+<p>Optional weight variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sort</code></td>
+<td>
+<p>Optional variable to be used as tie-breaker for sorting. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dom</code></td>
+<td>
+<p>Optional variables used to define population domains. If supplied, estimation and linearization of gender pay (wage) gap is done for each domain. An object convertible to <code>data.table</code> or variable names as character vector, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>Optional variable for survey period. If supplied, estimation and linearization of gender pay (wage) gap is done for each time period. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>Optional survey data object convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var_name</code></td>
+<td>
+<p>A character specifying the name of the linearized variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>checking</code></td>
+<td>
+<p>Optional variable if this variable is TRUE, then function checks data preparation errors, otherwise not checked. This variable by default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with two objects are returned:
+</p>
+
+<ul>
+<li> <p><code>value</code> - a <code>data.table</code> containing the estimated gender pay (wage) gap (in percentage).
+</p>
+</li>
+<li> <p><code>lin</code> - a <code>data.table</code> containing the linearized variables of the gender pay (wage) gap (in percentage) for variance estimation.
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Working group on Statistics on Income and Living Conditions (2004) Common cross-sectional EU indicators based on EU-SILC; the gender pay gap. <em>EU-SILC 131-rev/04</em>, Eurostat.  <br>
+Guillaume Osier (2009). Variance estimation for complex indicators of poverty and inequality. <em>Journal of the European Survey Research Association</em>, Vol.3, No.3, pp. 167-195, ISSN 1864-3361, URL <a href="https://ojs.ub.uni-konstanz.de/srm/article/view/369">https://ojs.ub.uni-konstanz.de/srm/article/view/369</a>.  <br>
+Jean-Claude Deville (1999). Variance estimation for complex statistics and estimators: linearization and residual techniques. Survey Methodology, 25, 193-203, URL <a href="https://www150.statcan.gc.ca/n1/pub/12-001-x/1999002/article/4882-eng.pdf">https://www150.statcan.gc.ca/n1/pub/12-001-x/1999002/article/4882-eng.pdf</a>.  <br></p>
+
+
+<h3>See Also</h3>
+
+<p><code>linqsr</code>, <code>lingini</code>,
+<code>varpoord</code> , <code>vardcrospoor</code>,
+<code>vardchangespoor</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library("data.table")
+library("laeken")
+data("ses")
+dataset1 &lt;- data.table(ID = paste0("V", 1 : nrow(ses)), ses)
+
+dataset1[, IDnum := .I]
+
+setnames(dataset1, "sex", "sexf")
+dataset1[sexf == "male", sex:= 1]
+dataset1[sexf == "female", sex:= 2]
+  
+# Full population
+gpgs1 &lt;- lingpg(Y = "earningsHour", gender = "sex",
+                id = "IDnum", weight = "weights",
+                dataset = dataset1)
+gpgs1$value
+  
+## Not run: 
+# Domains by education
+gpgs2 &lt;- lingpg(Y = "earningsHour", gender = "sex",
+                id = "IDnum", weight = "weights",
+                Dom = "education", dataset = dataset1)
+gpgs2$value
+    
+# Sort variable
+gpgs3 &lt;- lingpg(Y = "earningsHour", gender = "sex",
+                id = "IDnum", weight = "weights",
+                sort = "IDnum", Dom = "education",
+                dataset = dataset1)
+gpgs3$value
+    
+# Two survey periods
+dataset1[, year := 2010]
+dataset2 &lt;- copy(dataset1)
+dataset2[, year := 2011]
+dataset1 &lt;- rbind(dataset1, dataset2)
+
+gpgs4 &lt;- lingpg(Y = "earningsHour", gender = "sex",
+                id = "IDnum", weight = "weights", 
+                sort = "IDnum", Dom = "education",
+                period = "year", dataset = dataset1)
+gpgs4$value
+names(gpgs4$lin)
+## End(Not run)
+  
+</code></pre>
+
+
+</div>

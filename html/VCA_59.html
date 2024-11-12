@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.VCA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Standard 'plot' Method for 'VCA' S3-Objects.</h2>
+
+<h3>Description</h3>
+
+<p>Create a variability chart from a 'VCA'-object, i.e. from a fitted model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VCA'
+plot(x, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>(VCA) object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments to be passed to or from methods.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function extracts the data and the model-formula from a fitted 'VCA'-object and calls function <code>varPlot</code>
+accepting all its arguments. Please see the documention of function <code>varPlot</code> for a detailed description.
+</p>
+<p>It will not be differentiated between fixed and random effects when calling this function on a fitted linear mixed model.
+</p>
+
+
+<h3>Value</h3>
+
+<p>nothing, instead a plot is generated
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>varPlot</code>, <code>anovaVCA</code>,<code>remlVCA</code>, <code>anovaMM</code>,<code>remlMM</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+fit &lt;- anovaVCA(y~day/run, dataEP05A2_1)
+
+# standard plot without any extras
+plot(fit)
+
+# plot with some additional features
+plot(fit, MeanLine=list(var=c("int", "day"), col=c("cyan", "blue"), lwd=c(2,2)))
+
+# more complex model
+data(realData)
+Data &lt;- realData[realData$PID == 1,]
+fit2 &lt;- anovaVCA(y~(calibration+lot)/day/run, Data)
+plot(fit2, 
+		BG=list(var="calibration",
+				col=c("#f7fcfd","#e5f5f9","#ccece6","#99d8c9",
+				      "#66c2a4","#41ae76","#238b45","#006d2c","#00441b"),
+				col.table=TRUE),
+	VLine=list(var=c("calibration", "lot"),
+				   col=c("black", "darkgray"), lwd=c(2,1), col.table=TRUE),
+		JoinLevels=list(var="lot", col=c("#ffffb2","orangered","#feb24c"),
+				        lwd=c(2,2,2)),
+		MeanLine=list(var="lot", col="blue", lwd=2))
+
+
+## End(Not run)
+</code></pre>
+
+
+</div>

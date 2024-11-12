@@ -1,0 +1,85 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simulateVCM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulate a dataset for testing the performance of screenVCM</h2>
+
+<h3>Description</h3>
+
+<p>Simulates a dataset that can be used to test the screenVCM
+function, and to test the performance of the proposed method under different
+scenarios. The simulated dataset has a single U-covariate and p X-predictors,
+only a few of which have nonzero effect.
+</p>
+<p>Jingyuan Liu for providing some of the code upon which this function is based.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">simulateVCM(
+  n = 200,
+  rho = 0.4,
+  p = 1000,
+  trueIdx = c(2, 100, 400, 600, 1000),
+  betaFun = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>Number of subjects in the simulated dataset</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rho</code></td>
+<td>
+<p>The correlation matrix of columns of X.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>The total number of features to be screened from</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trueIdx</code></td>
+<td>
+<p>The indexes for the active features in the simulated X matrix.
+This should be a vector, and the values should be a subset of 1:p.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>betaFun</code></td>
+<td>
+<p>A list of functions of U, one function for each entry in trueIdx,
+giving the varying effects of each active predictor in the simulated
+X matrix.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with following components:
+X Matrix of predictors to be screened. It will have n rows and p columns.
+Y Vector of responses.  It will have length of n.
+U A vector representing a covariate with which the coefficient functions vary.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(12345678)
+results &lt;- simulateVCM(p=1000)
+</code></pre>
+
+
+</div>

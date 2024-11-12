@@ -1,0 +1,89 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>as.matrix.VCAinference</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Standard 'as.matrix' Method for 'VCAinference' S3-Objects</h2>
+
+<h3>Description</h3>
+
+<p>This function makes use of the hidden feature of function <code>print.VCAinference</code> which invisibly returns character 
+matrices of estimated variance components expressed as "VC" (variance component), "SD" (standard deviation) or "CV" (coefficient
+of variation). If argument "what" is not specified, a named list will be returned with all three matrices.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VCAinference'
+as.matrix(x, what = c("VC", "SD", "CV"), digits = 6, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>(VCAinference) object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>what</code></td>
+<td>
+<p>(character) one or multiple choices from "VC" (variance component), "SD" (standard deviation) or
+"CV" (coefficient of variation)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>(integer) number of decimal digits to be used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments to be passed to or from methods.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>(matrix) with point estimates, one- and two-sided confidence intervals and variances
+of the estimated variance components
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>print.VCAinference</code>, <code>as.matrix.VCA</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+fit &lt;- anovaVCA(y~day/run, dataEP05A2_1)
+inf &lt;- VCAinference(fit, VarVC=TRUE)
+as.matrix(inf, what="VC", digits=6)
+as.matrix(inf, what="SD", digits=6)
+as.matrix(inf, what="CV", digits=2)
+
+# request list of matrices
+as.matrix(inf)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

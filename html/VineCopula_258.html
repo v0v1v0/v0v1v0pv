@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineMatrixSample</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Random sampling of R-Vine matrices</h2>
+
+<h3>Description</h3>
+
+<p>Sample R-Vine matrices based on the algorithm of Joe et al. (2011).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineMatrixSample(d, size = 1, naturalOrder = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+<p>Dimension of the R-Vine matrices.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size</code></td>
+<td>
+<p>Number of matrices to sample.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>naturalOrder</code></td>
+<td>
+<p>Should the matrices be in the natural order
+(default: <code>naturalOrder = FALSE</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of length <code>size</code> with each element containing one
+R-Vine matrix.
+</p>
+
+
+<h3>Note</h3>
+
+<p>For some reason, our implementation of Joe et al.'s algorithm always
+returns a star in the first tree. To fix this, we sample a vine matrix of
+dimension d + 1 and remove the first tree afterwards
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Thibault Vatter
+</p>
+
+
+<h3>References</h3>
+
+<p>Joe H, Cooke RM and Kurowicka D (2011). Regular vines:
+generation algorithm and number of equivalence classes. In Dependence
+Modeling: Vine Copula Handbook, pp 219–231. World Scientific, Singapore.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineMatrix()</code>, <code>RVineMatrixCheck()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Matrix and sample sizes
+d &lt;- 10
+size &lt;- 5
+
+# Sample R-vine matrices
+RVM &lt;- RVineMatrixSample(d, size)
+sapply(RVM, RVineMatrixCheck)
+
+# Sample R-vine matrices in the natural order
+RVM &lt;- RVineMatrixSample(d, size, naturalOrder = TRUE)
+sapply(RVM, RVineMatrixCheck)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,89 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>temperature</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Generate simulated mean temperature
+</h2>
+
+<h3>Description</h3>
+
+<p>Generates simulated daily temperature minimum and maximum based on parameters derived from daily weather data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">	temperature(ndays, thiswth)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ndays</code></td>
+<td>
+
+<p>number of days to simulate
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thiswth</code></td>
+<td>
+
+<p>list output of <code>wth.param</code>. 
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a very simple temperature simulation, using three parameters derived from daily weather data and the day of year to calculate a smooth annual temperature change derived from the first harmonic of a Fourier function.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns a vector of daily mean temperature (X).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Heather Gall and Sarah Goslee
+</p>
+
+
+<h3>References</h3>
+
+<p>Grimenes, A. and Nissen, O. (2004) Mathematical modeling of the annual temperature wave based on monthly mean temperatures, and comparisons between local climate trends at seven Norwegian stations. <em>Theor Appl Climatol</em> <b>78</b>, 229–246. doi: <a href="http://doi.org/10.1007/s00704-004-0036-9">10.1007/s00704-004-0036-9</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>wth.param</code>,
+<code>rainfall</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># A sample GHCN daily weather file for State College, PA, is included with this package.
+# This file contains a subset of data (1980-2009) for station USC00368449
+data("weather") 
+
+# calculate parameters for the poisson model, using 0.3 mm as the lower limit for wet days.
+weather.param.p &lt;- wth.param(weather, method = "poisson", llim = 0.3)
+
+# simulate 10 years of temperature
+temp10 &lt;- temperature(365*10, weather.param.p)
+
+</code></pre>
+
+
+</div>

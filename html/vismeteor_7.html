@@ -1,0 +1,428 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>load_vmdb</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Loading visual meteor observations from the data base</h2>
+
+<h3>Description</h3>
+
+<p>Loads the data of visual meteor observations from a data base created with
+<a href="https://pypi.org/project/imo-vmdb/">imo-vmdb</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">load_vmdb_rates(
+  dbcon,
+  shower = NULL,
+  period = NULL,
+  sl = NULL,
+  lim.magn = NULL,
+  sun.alt.max = NULL,
+  moon.alt.max = NULL,
+  session.id = NULL,
+  rate.id = NULL,
+  withSessions = FALSE,
+  withMagnitudes = FALSE
+)
+
+load_vmdb_magnitudes(
+  dbcon,
+  shower = NULL,
+  period = NULL,
+  sl = NULL,
+  lim.magn = NULL,
+  session.id = NULL,
+  magn.id = NULL,
+  withSessions = FALSE,
+  withMagnitudes = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dbcon</code></td>
+<td>
+<p>database connection.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shower</code></td>
+<td>
+<p>character; selects by meteor shower codes.
+<code>NA</code> loads sporadic meteors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>time; selects a time range by minimum/maximum.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sl</code></td>
+<td>
+<p>numeric; selects a range of solar longitudes by minimum/maximum.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lim.magn</code></td>
+<td>
+<p>numeric; selects a range of limiting magnitudes by minimum/maximum.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sun.alt.max</code></td>
+<td>
+<p>numeric; selects the maximum altitude of the sun.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>moon.alt.max</code></td>
+<td>
+<p>numeric; selects the maximum altitude of the moon.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>session.id</code></td>
+<td>
+<p>integer; selects by session ids.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rate.id</code></td>
+<td>
+<p>integer; selects rate observations by ids.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>withSessions</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, also load the corresponding session data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>withMagnitudes</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, also load the corresponding magnitude observations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>magn.id</code></td>
+<td>
+<p>integer; selects magnitude observations by ids.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>sl</code>, <code>period</code> and <code>lim.magn</code> expect a vector with successive minimum and maximum values.
+<code>sun.alt.max</code> and <code>moon.alt.max</code> are expected to be scalar values.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Both functions return a list, with
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+<code>observations</code> </td>
+<td style="text-align: left;"> data frame, rate or magnitude observations,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>sessions</code> </td>
+<td style="text-align: left;"> data frame; session data of observations,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>magnitudes</code> </td>
+<td style="text-align: left;"> table; contingency table of meteor magnitude frequencies.
+</td>
+</tr>
+</table>
+<p><code>observations</code> depends on the function call. <code>load_vmdb_rates</code> returns a data frame, with
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+<code>rate.id</code> </td>
+<td style="text-align: left;"> unique identifier of the rate observation,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>shower.code</code> </td>
+<td style="text-align: left;"> IAU code of the shower. It is <code>NA</code> in case of sporadic meteors.</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>period.start</code> </td>
+<td style="text-align: left;"> start of observation,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>period.end</code> </td>
+<td style="text-align: left;"> end of observation,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>sl.start</code> </td>
+<td style="text-align: left;"> solarlong at start of observation,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>sl.end</code> </td>
+<td style="text-align: left;"> solarlong at start of observation,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>session.id</code> </td>
+<td style="text-align: left;"> reference to the session,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>freq</code> </td>
+<td style="text-align: left;"> count of observed meteors,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>lim.magn</code> </td>
+<td style="text-align: left;"> limiting magnitude,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>t.eff</code> </td>
+<td style="text-align: left;"> net observed time in hours,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>f</code> </td>
+<td style="text-align: left;"> correction factor of cloud cover,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>time.sidereal</code> </td>
+<td style="text-align: left;"> sidereal time,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>sun.alt</code> </td>
+<td style="text-align: left;"> altitude of the sun,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>sun.az</code> </td>
+<td style="text-align: left;"> azimuth of the sun,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>moon.alt</code> </td>
+<td style="text-align: left;"> altitude of the moon,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>moon.az</code> </td>
+<td style="text-align: left;"> azimuth of the moon,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>moon.illum</code> </td>
+<td style="text-align: left;"> illumination of the moon (<code style="white-space: pre;">⁠0.0 .. 1.0⁠</code>),</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>field.alt</code> </td>
+<td style="text-align: left;"> altitude of the field of view (optional),</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>field.az</code> </td>
+<td style="text-align: left;"> azimuth of the field of view (optional),</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>radiant.alt</code> </td>
+<td style="text-align: left;"> altitude of the radiant (optional). The zenith attraction is already applied.</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>radiant.az</code> </td>
+<td style="text-align: left;"> azimuth of the radiant (optional),</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>magn.id</code> </td>
+<td style="text-align: left;"> reference to the magnitude observations (optional).
+</td>
+</tr>
+</table>
+<p><code>load_vmdb_magnitudes</code> returns a <code>observations</code> data frame, with
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+<code>magn.id</code> </td>
+<td style="text-align: left;"> unique identifier of the magnitude observation,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>shower.code</code> </td>
+<td style="text-align: left;"> IAU code of the shower. It is <code>NA</code> in case of sporadic meteors.</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>period.start</code> </td>
+<td style="text-align: left;"> start of observation,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>period.end</code> </td>
+<td style="text-align: left;"> end of observation,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>sl.start</code> </td>
+<td style="text-align: left;"> solarlong at start of observation,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>sl.end</code> </td>
+<td style="text-align: left;"> solarlong at start of observation,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>session.id</code> </td>
+<td style="text-align: left;"> reference to the session,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>freq</code> </td>
+<td style="text-align: left;"> count of observed meteors,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>magn.mean</code> </td>
+<td style="text-align: left;"> mean of magnitudes,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>lim.magn</code> </td>
+<td style="text-align: left;"> limiting magnitude (optional).
+</td>
+</tr>
+</table>
+<p>The <code>sessions</code> data frame contains
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+<code>session.id</code> </td>
+<td style="text-align: left;"> unique identifier of the session,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>longitude</code> </td>
+<td style="text-align: left;"> location’s longitude,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>latitude</code> </td>
+<td style="text-align: left;"> location’s latitude,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>elevation</code> </td>
+<td style="text-align: left;"> height above mean sea level in km,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>country</code> </td>
+<td style="text-align: left;"> country name,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>location.name</code> </td>
+<td style="text-align: left;"> location name,</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>observer.id</code> </td>
+<td style="text-align: left;"> observer id (optional),</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>observer.name</code> </td>
+<td style="text-align: left;"> observer name (optional).
+</td>
+</tr>
+</table>
+<p><code>magnitudes</code> is a contingency table of meteor magnitude frequencies.
+The row names refer to the id of magnitude observations.
+The column names refer to the magnitude.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Angle values are expected and returned in degrees.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://pypi.org/project/imo-vmdb/">https://pypi.org/project/imo-vmdb/</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# create a connection to the data base
+con &lt;- dbConnect(
+    PostgreSQL(),
+    dbname = "vmdb",
+    host = "localhost",
+    user = "vmdb"
+)
+
+# load rate observations including
+# session data and magnitude observations
+data &lt;- load_vmdb_rates(
+    con,
+    shower = 'PER',
+    sl = c(135.5, 145.5),
+    period = c('2015-08-01', '2015-08-31'),
+    lim.magn = c(5.3, 6.7),
+    withMagnitudes = TRUE,
+    withSessions = TRUE
+)
+
+# load magnitude observations including
+# session data and magnitude observations
+data &lt;- load_vmdb_magnitudes(
+    con,
+    shower = 'PER',
+    sl = c(135.5, 145.5),
+    period = c('2015-08-01', '2015-08-31'),
+    lim.magn = c(5.3, 6.7),
+    withMagnitudes = TRUE,
+    withSessions = TRUE
+)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

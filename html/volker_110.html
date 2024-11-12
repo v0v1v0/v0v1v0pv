@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>report_metrics</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create table and plot for metric variables</h2>
+
+<h3>Description</h3>
+
+<p>Depending on your column selection, different types of plots and tables are generated.
+See plot_metrics and tab_metrics.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">report_metrics(
+  data,
+  cols,
+  cross = NULL,
+  metric = FALSE,
+  ...,
+  index = FALSE,
+  effect = FALSE,
+  title = TRUE,
+  close = TRUE,
+  clean = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>A tidy column selection,
+e.g. a single column (without quotes)
+or multiple columns selected by methods such as starts_with().</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross</code></td>
+<td>
+<p>Optional, a grouping or correlation column (without quotes).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metric</code></td>
+<td>
+<p>When crossing variables, the cross column parameter can contain categorical or metric values.
+By default, the cross column selection is treated as categorical data.
+Set metric to TRUE, to treat it as metric and calculate correlations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Parameters passed to the plot_metrics and tab_metrics and effect_metrics functions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>index</code></td>
+<td>
+<p>When the cols contain items on a metric scale
+(as determined by get_direction),
+an index will be calculated using the 'psych' package.
+Set to FALSE to suppress index generation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>effect</code></td>
+<td>
+<p>Whether to report statistical tests and effect sizes. See effect_counts for further parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>A character providing the heading or TRUE (default) to output a heading.
+Classes for tabset pills will be added.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>close</code></td>
+<td>
+<p>Whether to close the last tab (default value TRUE) or to keep it open.
+Keep it open to add further custom tabs by adding headers on the fifth level
+in Markdown (e.g. ##### Method).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clean</code></td>
+<td>
+<p>Prepare data by data_clean.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For item batteries, an index is calculated and reported.
+When used in combination with the Markdown-template "html_report",
+the different parts of the report are grouped under a tabsheet selector.
+</p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+</p>
+
+
+<h3>Value</h3>
+
+<p>A volker report object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(volker)
+data &lt;- volker::chatgpt
+
+report_metrics(data, sd_age)
+
+</code></pre>
+
+
+</div>

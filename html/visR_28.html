@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>estimate_KM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Wrapper for Kaplan-Meier Time-to-Event analysis</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a>
+</p>
+<p>This function is a wrapper around <code>survival::survfit.formula()</code>
+to perform a Kaplan-Meier analysis, assuming right-censored data.
+The result is an object of class <code>survfit</code> which can be used in
+downstream functions and methods that rely on the <code>survfit</code> class.
+</p>
+<p>The function can leverage the conventions and controlled vocabulary from
+<a href="https://www.cdisc.org/standards/foundational/adam/adam-basic-data-structure-bds-time-event-tte-analyses-v1-0">CDISC ADaM ADTTE data model</a>,
+and also works with standard, non-CDISC datasets through the <code>formula</code> argument.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">estimate_KM(
+  data = NULL,
+  strata = NULL,
+  CNSR = "CNSR",
+  AVAL = "AVAL",
+  formula = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data frame. The dataset is expected to have
+one record per subject per analysis parameter. Rows with missing observations included in the analysis are removed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>AVAL, CNSR, strata</code></td>
+<td>
+<p>These arguments are used to construct a formula to be passed to
+<code>survival::survfit(formula=Surv(AVAL, 1-CNSR)~strata)</code>. These arguments' default values follow the naming conventions in CDISC.
+</p>
+
+<ul>
+<li> <p><code>AVAL</code> Analysis value for Time-to-Event analysis. Default is <code>"AVAL"</code>, as per CDISC ADaM guiding principles.
+</p>
+</li>
+<li> <p><code>CNSR</code> Censor for Time-to-Event analysis. Default is <code>"CNSR"</code>, as per CDISC ADaM guiding principles. It is expected that CNSR = 1
+for censoring and CNSR = 0 for the event of interest.
+</p>
+</li>
+<li> <p><code>strata</code> Character vector, representing the strata for Time-to-Event analysis. When NULL, an overall analysis is performed.
+Default is <code>NULL</code>.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a> formula with <code>Surv()</code> on RHS and stratifying variables on the LHS. Use
+<code>~1</code> on the LHS for unstratified estimates. This argument will be passed to <code>survival::survfit(formula=)</code>. When this argument is
+used, arguments AVAL, CNSR, and strata are ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments passed on to the ellipsis of the call <code>survival::survfit.formula(...)</code>.
+Use <code>?survival::survfit.formula</code> and <code>?survival::survfitCI</code> for more information.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>survfit object ready for downstream processing in estimation or visualization functions and methods.
+</p>
+
+
+<h3>Estimation of 'survfit' object</h3>
+
+<p>The <code>estimate_KM()</code> function utilizes the defaults in <code>survival::survfit()</code>:
+</p>
+
+<ul>
+<li>
+<p>The Kaplan Meier estimate is estimated directly (stype = 1).
+</p>
+</li>
+<li>
+<p>The cumulative hazard is estimated using the Nelson-Aalen estimator (ctype = 1): H.tilde = cumsum(x$n.event/x$n.risk).
+The MLE (H.hat(t) = -log(S.hat(t))) can't be requested.
+</p>
+</li>
+<li>
+<p>A two-sided pointwise 0.95 confidence interval is estimated using a log transformation (conf.type = "log").
+</p>
+</li>
+</ul>
+<p>When strata are present, the returned survfit object is supplemented with
+the a named list of the stratum and associated label.
+To support full traceability, the data set name is captured in the named
+list and the call is captured within its corresponding environment.
+</p>
+
+
+<h3>PARAM/PARAMCD and CDISC</h3>
+
+<p>If the data frame includes columns PARAM/PARAMCD (part of the CDISC format),
+the function expects the data has been filtered on the parameter of interest.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://github.com/therneau/survival">https://github.com/therneau/survival</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>survfit.formula survfitCI</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## No stratification
+visR::estimate_KM(data = adtte)
+
+## Stratified Kaplan-Meier analysis by `TRTP`
+visR::estimate_KM(data = adtte, strata = "TRTP")
+
+## Stratified Kaplan-Meier analysis by `TRTP` and `SEX`
+visR::estimate_KM(data = adtte, strata = c("TRTP", "SEX"))
+
+## Stratification with one level
+visR::estimate_KM(data = adtte, strata = "PARAMCD")
+
+## Analysis on subset of adtte
+visR::estimate_KM(data = adtte[adtte$SEX == "F", ])
+
+## Modify the default analysis by using the ellipsis
+visR::estimate_KM(
+  data = adtte, strata = NULL,
+  type = "kaplan-meier", conf.int = FALSE, timefix = TRUE
+)
+
+## Example working with non CDISC data
+head(survival::veteran[c("time", "status", "trt")])
+
+# Using non-CDSIC data
+visR::estimate_KM(data = survival::veteran, formula = Surv(time, status) ~ trt)
+
+</code></pre>
+
+
+</div>

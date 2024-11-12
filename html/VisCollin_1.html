@@ -1,0 +1,130 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>biomass</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Biomass Production in the Cape Fear Estuary</h2>
+
+<h3>Description</h3>
+
+<p>Data collected by Rick Linthurst (1979) at North Carolina State University for the
+purpose of identifying the important soil characteristics influencing aerial
+biomass production of the marsh grass <em>Spartina alterniflora</em> in the
+Cape Fear Estuary of North Carolina. Three types of Spartina vegetation areas
+(devegetated “dead” areas, “short” Spartina areas, and “tall” Spartina areas)
+were sampled in each of three locations (Oak Island, Smith Island, and Snows
+Marsh)
+</p>
+<p>Samples of the soil substrate from 5 random sites within
+each location–vegetation type (giving 45 total samples) were analyzed for
+14 soil physico-chemical characteristics each month for several months.
+</p>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 45 observations on the following 17 variables.
+</p>
+
+<dl>
+<dt><code>loc</code></dt>
+<dd>
+<p>location, a factor with levels <code>OI</code> <code>SI</code> <code>SM</code></p>
+</dd>
+<dt><code>type</code></dt>
+<dd>
+<p>area type, a factor with levels <code>DVEG</code> <code>SHRT</code> <code>TALL</code></p>
+</dd>
+<dt><code>biomass</code></dt>
+<dd>
+<p>aerial biomass in <code class="reqn">gm^{-2}</code>, a numeric vector</p>
+</dd>
+<dt><code>H2S</code></dt>
+<dd>
+<p>hydrogen sulfide ppm, a numeric vector</p>
+</dd>
+<dt><code>sal</code></dt>
+<dd>
+<p>percent salinity, a numeric vector</p>
+</dd>
+<dt><code>Eh7</code></dt>
+<dd>
+<p>ester-hydrolase, a numeric vector</p>
+</dd>
+<dt><code>pH</code></dt>
+<dd>
+<p>acidity as measured in water, a numeric vector</p>
+</dd>
+<dt><code>buf</code></dt>
+<dd>
+<p>a numeric vector</p>
+</dd>
+<dt><code>P</code></dt>
+<dd>
+<p>phosphorus ppm, a numeric vector</p>
+</dd>
+<dt><code>K</code></dt>
+<dd>
+<p>potassium ppm, a numeric vector</p>
+</dd>
+<dt><code>Ca</code></dt>
+<dd>
+<p>calcium ppm, a numeric vector</p>
+</dd>
+<dt><code>Mg</code></dt>
+<dd>
+<p>magnesium ppm, a numeric vector</p>
+</dd>
+<dt><code>Na</code></dt>
+<dd>
+<p>sodium ppm, a numeric vector</p>
+</dd>
+<dt><code>Mn</code></dt>
+<dd>
+<p>manganese ppm, a numeric vector</p>
+</dd>
+<dt><code>Zn</code></dt>
+<dd>
+<p>zinc ppm, a numeric vector</p>
+</dd>
+<dt><code>Cu</code></dt>
+<dd>
+<p>copper ppm, a numeric vector</p>
+</dd>
+<dt><code>NH4</code></dt>
+<dd>
+<p>ammonium ion ppm, a numeric vector</p>
+</dd>
+</dl>
+<h3>Source</h3>
+
+<p>Rawlings, J. O., Pantula, S. G., &amp; Dickey, D. A. (2001).
+<em>Applied Regression Analysis: A Research Tool</em>, 2nd Ed., Springer New York.
+Table 5.1.
+</p>
+
+
+<h3>References</h3>
+
+<p>R. A. Linthurst. Aeration, nitrogen, pH and salinity as factors affecting <em>Spartina Alterniflora</em> growth and dieback.
+PhD thesis, North Carolina State University, 1979.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(biomass)
+str(biomass)
+biomass.mod &lt;- lm (biomass ~ H2S + sal + Eh7 + pH + buf + P + K + Ca + Mg + Na +
+                           Mn + Zn + Cu + NH4,
+                 data=biomass)
+car::vif(biomass.mod)
+
+(cd &lt;- colldiag(biomass.mod, add.intercept=FALSE, center=TRUE))
+# simplified display
+print(cd, fuzz=.3)
+</code></pre>
+
+
+</div>

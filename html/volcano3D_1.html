@@ -1,0 +1,123 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>add_animation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add mode bar button to rotate the plot</h2>
+
+<h3>Description</h3>
+
+<p>Add mode bar button to rotate the plot
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">add_animation(
+  p,
+  rotate_icon_path = NULL,
+  stop_icon_path = NULL,
+  rotate_colour = "#c7c7c7",
+  stop_colour = "#ff6347",
+  scale = "scale(0.4) translate(-4, -4)",
+  speed = 320,
+  shiny_event_names = c()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>The <code>volcano3D</code> plot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rotate_icon_path</code></td>
+<td>
+<p>The svg icon path for rotation. If <code>NULL</code> a play
+button is used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stop_icon_path</code></td>
+<td>
+<p>The svg icon path for stop button. If <code>NULL</code> a pause
+button is used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rotate_colour</code></td>
+<td>
+<p>The colour for the rotate button (default="#c7c7c7")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stop_colour</code></td>
+<td>
+<p>The colour for the stop button (default='#ff6347',
+a.k.a 'tomato')</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>Scaling for rotation button</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>speed</code></td>
+<td>
+<p>The rotation speed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shiny_event_names</code></td>
+<td>
+<p>If using shiny, pass in any shiny event names which
+should stop rotation when triggered (e.g. shiny_event_names = c('replot'))</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a rotating cylindrical 3D plotly plot featuring variables on
+a tri-axis radial graph with the -log10(multi-group test p-value) on the
+z-axis
+</p>
+
+
+<h3>References</h3>
+
+<p>Lewis, Myles J., et al. (2019).
+<a href="https://pubmed.ncbi.nlm.nih.gov/31461658/">
+Molecular portraits of early rheumatoid arthritis identify clinical and
+treatment response phenotypes.</a>
+<em>Cell reports</em>, <strong>28</strong>:9
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>volcano3D</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(example_data)
+syn_polar &lt;- polar_coords(outcome = syn_example_meta$Pathotype,
+                          data = t(syn_example_rld))
+
+p &lt;- volcano3D(syn_polar, 
+    label_rows = c("COBL", "TREX2"))
+add_animation(p)
+
+</code></pre>
+
+
+</div>

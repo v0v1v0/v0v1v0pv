@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_surf3d</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>3D Surface plotter</h2>
+
+<h3>Description</h3>
+
+<p>Plots 3D cortical surfaces
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_surf3d(
+  surf_data,
+  surf_color = "grey",
+  cmap,
+  limits,
+  atlas = 1,
+  hemi = "b",
+  medial_gap = 0,
+  orientation_labels = TRUE,
+  VWR_check = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>surf_data</code></td>
+<td>
+<p>A numeric vector (length of V)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>surf_color</code></td>
+<td>
+<p>color of the cortical surface. Set to <code>'grey'</code> by default</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cmap</code></td>
+<td>
+<p>A string vector containing 2 to 4 color names/codes specifying the colors to be used for the color scale. If none are specified, appropriate colors will be automatically selected according to <code>range(surf_data)</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>limits</code></td>
+<td>
+<p>A combined pair of numeric vector composed of the lower and upper color scale limits of the plot. When left unspecified, the symmetrical limits <code style="white-space: pre;">⁠c(-max(abs(surf_dat),max(abs(surf_dat)))⁠</code> will be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>atlas</code></td>
+<td>
+<p>atlas used for identifying region labels. 1=Desikan, 2=Destrieux-148, 3=Glasser-360, 4=Schaefer-100, 5=Schaefer-200, 6=Schaefer-400. Set to <code>1</code> by default. This argument is ignored for hippocampal surfaces.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hemi</code></td>
+<td>
+<p>A string specifying the hemisphere to plot. Possible values are <code>l</code> (left), <code>r</code> (right) or <code>b</code> (both).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>medial_gap</code></td>
+<td>
+<p>A numeric value specifying the amount of gap (in MNI coordinate units) to separate the left and right hemispheres. Set to <code>0</code> (no gap between hemispheres) by default. In order to view the medial surfaces clearly, it is recommended that this value is set to <code>20</code>. This argument is ignored if <code>hemi!='b'</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>orientation_labels</code></td>
+<td>
+<p>A boolean object specifying if orientation labels are to be displayed. Set to <code>TRUE</code> by default</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VWR_check</code></td>
+<td>
+<p>A boolean object specifying whether to check and validate system requirements. Default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a plot_ly object
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">surf_data = runif(20484);
+plot_surf3d(surf_data = surf_data, VWR_check=FALSE)
+</code></pre>
+
+
+</div>

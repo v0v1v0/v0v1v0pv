@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_profile</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Logarithm of <em>P</em>-value (LOP) profile plots. Modified version of QTLpoly function.</h2>
+
+<h3>Description</h3>
+
+<p>Plots profiled logarithm of score-based <em>P</em>-values (LOP) from individual or combined traits.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_profile(
+  profile,
+  qtl_info,
+  selected_mks,
+  pheno.col = NULL,
+  lgs.id = NULL,
+  by_range = TRUE,
+  range.min = NULL,
+  range.max = NULL,
+  plot = TRUE,
+  software = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>profile</code></td>
+<td>
+<p>data.frame with: pheno - phenotype ID; LOP - significance value for the QTL. 
+It can be LOP, LOD or DIC depending of the software used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qtl_info</code></td>
+<td>
+<p>data.frame with: LG - linkage group ID; Pos - position in linkage map (cM); 
+Pheno - phenotype ID; Pos_lower - lower position of confidence interval; 
+Pos_upper - upper position of the confidence interval; Pval - QTL p-value; h2 - herdability</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selected_mks</code></td>
+<td>
+<p>data.frame with: LG - linkage group ID; mk - marker ID; pos - position in linkage map (cM)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pheno.col</code></td>
+<td>
+<p>integer identifying phenotype</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lgs.id</code></td>
+<td>
+<p>integer identifying linkage group</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by_range</code></td>
+<td>
+<p>logical TRUE/FALSE. If TRUE range.min and range.max will set a colored window in the plot and the other positions will be gray.
+If FALSE, range.min and range.max is ignored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>range.min</code></td>
+<td>
+<p>position in centimorgan defining the start of the colored window</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>range.max</code></td>
+<td>
+<p>position in centimorgan defining the end of the colored window</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p>logical TRUE/FALSE. If FALSE the function return a data.frame with information for <code>only_plot_profile</code> function. 
+If TRUE, it returns a ggplot graphic.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>software</code></td>
+<td>
+<p>character defining which software was used for QTL analysis. Currently support for: QTLpoly, diaQTL and polyqtlR.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>ggplot graphic (if plot == TRUE) or data.frame (if plot == FALSE) with information 
+from QTL significance profile
+</p>
+
+
+</div>

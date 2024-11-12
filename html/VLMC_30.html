@@ -1,0 +1,105 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary.vlmc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summary of Fitted Variable Length Markov Chain (VLMC)</h2>
+
+<h3>Description</h3>
+
+<p>Compute (and print) a summary of a <code>vlmc</code> object which is
+typically the result of <code>vlmc(..)</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vlmc'
+summary(object, ...)
+## S3 method for class 'summary.vlmc'
+print(x, digits = getOption("digits"),
+         vvec.printing = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object of class <code>vlmc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object of class <code>summary.vlmc</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>integer giving the number of significant digits for
+printing numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vvec.printing</code></td>
+<td>
+<p>logical indicating if the <code>vvec</code> component
+should be printed recursively via <code>prt.vvec()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>potentially further arguments [Generic].</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>summary.vlmc()</code> returns an object of class <code>"summary.vlmc"</code>
+for which there's a print method. It is basically a list containing
+all of <code>object</code>, plus additionally
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>confusion.table</code></td>
+<td>
+<p>the symmetric contingency table of data vs fitted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>depth.stats</code></td>
+<td>
+<p>statistics of Markov chain depth along the data;
+currently just <code>summary(predict(object, type="depth"))</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R2</code></td>
+<td>
+<p>the <code class="reqn">R^2</code> statistic, i.e. the percentage (in [0,1]) of
+correctly predicted data.</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><code>vlmc</code>, <code>draw.vlmc</code>.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(bnrf1)
+vb &lt;- vlmc(bnrf1EB)
+svb &lt;- summary(vb)
+svb
+
+</code></pre>
+
+
+</div>

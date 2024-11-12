@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>emis_det</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Determine deterioration factors for urban conditions</h2>
+
+<h3>Description</h3>
+
+<p><code>emis_det</code> returns deterioration factors. The emission
+factors comes from the guidelines for developing emission factors of the
+EMEP/EEA air pollutant emission inventory guidebook
+http://www.eea.europa.eu/themes/air/emep-eea-air-pollutant-emission-inventory-guidebook
+This function subset an internal database of emission factors with each argument
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">emis_det(
+  po,
+  cc,
+  eu,
+  speed = Speed(18.9),
+  km,
+  verbose = FALSE,
+  show.equation = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>po</code></td>
+<td>
+<p>Character; Pollutant "CO", "NOx" or "HC"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cc</code></td>
+<td>
+<p>Character; Size of engine in cc covering "&lt;=1400", "1400_2000" or "&gt;2000"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eu</code></td>
+<td>
+<p>Character; Euro standard:  "I", "II", "III", "III", "IV", "V", "VI", "VIc"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>speed</code></td>
+<td>
+<p>Numeric; Speed to return Number of emission factor and not a function.
+It needs units in km/h</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>km</code></td>
+<td>
+<p>Numeric; accumulated mileage in km.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical; To show more information</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.equation</code></td>
+<td>
+<p>Option to see or not the equation parameters</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>It returns a numeric vector representing the increase in emissions due to normal deterioring
+</p>
+
+
+<h3>Note</h3>
+
+<p>The deterioration factors functions are available for technologies
+euro "II", "III" and "IV". In order to cover all euro technologies, this
+function assumes that the deterioration function of "III" and "IV" applies
+for "V", "VI" and "VIc". However, as these technologies are relative
+new,  accumulated milage is low and hence, deteerioration factors small.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(fkm)
+pckm &lt;- fkm[[1]](1:24); pckma &lt;- cumsum(pckm)
+km &lt;- units::set_units(pckma[1:11], km)
+# length eu = length km = 1
+emis_det(po = "CO", cc = "&lt;=1400", eu = "III", km = km[5], show.equation = TRUE)
+# length eu = length km = 1, length speed &gt; 1
+emis_det(po = "CO", cc = "&lt;=1400", eu = "III", km = km[5], speed = Speed(1:10))
+# length km != length eu error
+# (cod1 &lt;- emis_det(po = "CO", cc = "&lt;=1400", eu = c("III", "IV"), speed = Speed(30),
+# km = km[4]))
+# length eu = 1 length km &gt; 1
+emis_det(po = "CO", cc = "&lt;=1400", eu = "III", km = km)
+# length eu = 2, length km = 2 (if different length, error!)
+(cod1 &lt;- emis_det(po = "CO", cc = "&lt;=1400", eu = c("III", "IV"), km = km[4:5]))
+# length eu = 2, length km = 2, length speed &gt; 1
+(cod1 &lt;- emis_det(po = "CO", cc = "&lt;=1400", eu = c("III", "IV"), speed = Speed(0:130),
+km = km[4:5]))
+euros &lt;- c("V","V","V", "IV", "IV", "IV", "III", "III", "III", "III")
+# length eu = 2, length km = 2, length speed &gt; 1
+(cod1 &lt;- emis_det(po = "CO", cc = "&lt;=1400", eu = euros, speed = Speed(1:100),
+km = km[1:10]))
+cod1 &lt;- as.matrix(cod1[, 1:11])
+filled.contour(cod1, col = cptcity::cpt(6277, n = 20))
+filled.contour(cod1, col = cptcity::lucky(n = 19))
+euro &lt;- c(rep("V", 5), rep("IV", 5), "III")
+euros &lt;- rbind(euro, euro)
+(cod1 &lt;- emis_det(po = "CO", cc = "&lt;=1400", eu = euros, km = km))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

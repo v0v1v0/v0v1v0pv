@@ -1,0 +1,200 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopLambda</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Lambda-Function (Plot) for Bivariate Copula Data</h2>
+
+<h3>Description</h3>
+
+<p>This function plots/returns the lambda-function of given bivariate copula
+data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopLambda(
+  u1 = NULL,
+  u2 = NULL,
+  family = "emp",
+  par = 0,
+  par2 = 0,
+  PLOT = TRUE,
+  obj = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>u1, u2</code></td>
+<td>
+<p>Data vectors of equal length with values in <code class="reqn">[0,1]</code> (default:
+<code>u1</code> and <code>u2 = NULL</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>An integer defining the bivariate copula family or indicating
+the empirical lambda-function: <br><code>"emp"</code> = empirical lambda-function
+(default) <br><code>1</code> = Gaussian copula; the theoretical lambda-function is simulated
+(no closed formula available) <br><code>2</code> = Student-t copula; the theoretical lambda-function is simulated
+(no closed formula available) <br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>7</code> = BB1 copula <br><code>8</code> = BB6 copula <br><code>9</code> = BB7 copula <br><code>10</code> = BB8
+copula</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>Copula parameter; if the empirical lambda-function is chosen,
+<code>par = NULL</code> or <code>0</code> (default).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>Second copula parameter for t-, BB1, BB6, BB7 and BB8 copulas
+(default: <code>par2 = 0</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PLOT</code></td>
+<td>
+<p>Logical; whether the results are plotted. If <code>PLOT = FALSE</code>, the values <br><code>empLambda</code> and/or <code>theoLambda</code> are
+returned (see below; default: <code>PLOT = TRUE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p><code>BiCop</code> object containing the family and parameter
+specification.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional plot arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If the family and parameter specification is stored in a <code>BiCop()</code>
+object <code>obj</code>, the alternative versions <br></p>
+<pre>BiCopLambda(obj, PLOT = TRUE, ...)</pre>
+<p>and
+</p>
+<pre>BiCopLambda((u1, u2, obj, PLOT = TRUE, ...)</pre>
+<p>can be used.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>empLambda</code></td>
+<td>
+<p>If the empirical lambda-function is chosen and
+<code>PLOT = FALSE</code>, a vector of the empirical lambda's is returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theoLambda</code></td>
+<td>
+<p>If the theoretical lambda-function is chosen and
+<code>PLOT = FALSE</code>, a vector of the theoretical lambda's is returned.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>The <code class="reqn">\lambda</code>-function is characteristic for each bivariate copula
+family and defined by Kendall's distribution function <code class="reqn">K</code>:
+</p>
+<p style="text-align: center;"><code class="reqn"> \lambda(v,\theta) := v - K(v,\theta) </code>
+</p>
+<p> with
+</p>
+<p style="text-align: center;"><code class="reqn">K(v,\theta) := P(C_{\theta}(U_1,U_2) \leq v),\ \ v\in [0,1]. </code>
+</p>
+
+<p>For Archimedean copulas one has the following closed form expression
+in terms of the generator function <code class="reqn">\varphi</code> of the copula
+<code class="reqn">C_{\theta}</code>:
+</p>
+<p style="text-align: center;"><code class="reqn">\lambda(v,\theta) = \frac{\varphi(v)}{\varphi '(v)}, </code>
+</p>
+
+<p>where <code class="reqn">\varphi '</code> is the derivative of <code class="reqn">\varphi</code>. For
+more details see Genest and Rivest (1993) or Schepsmeier (2010).
+</p>
+<p>For the bivariate Gaussian and Student-t copula no closed form expression for
+the theoretical <code class="reqn">\lambda</code>-function exists. Therefore it is simulated based
+on samples of size 1000. For all other implemented copula families there are
+closed form expressions available.
+</p>
+<p>The plot of the theoretical <code class="reqn">\lambda</code>-function also shows the limits of
+the <code class="reqn">\lambda</code>-function corresponding to Kendall's tau <code class="reqn">=0</code> and
+Kendall's tau <code class="reqn">=1</code> (<code class="reqn">\lambda=0</code>).
+</p>
+<p>For rotated bivariate copulas one has to transform the input arguments
+<code>u1</code> and/or <code>u2</code>. In particular, for copulas rotated by 90 degrees
+<code>u1</code> has to be set to <code>1-u1</code>, for 270 degrees <code>u2</code> to
+<code>1-u2</code> and for survival copulas <code>u1</code> and <code>u2</code> to <code>1-u1</code>
+and <code>1-u2</code>, respectively. Then <code class="reqn">\lambda</code>-functions for the
+corresponding non-rotated copula families can be considered.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier
+</p>
+
+
+<h3>References</h3>
+
+<p>Genest, C. and L.-P. Rivest (1993). Statistical inference
+procedures for bivariate Archimedean copulas. Journal of the American
+Statistical Association, 88 (423), 1034-1043.
+</p>
+<p>Schepsmeier, U. (2010). Maximum likelihood estimation of C-vine pair-copula
+constructions based on bivariate copulas from different families. Diploma
+thesis, Technische Universitaet Muenchen.<br><a href="https://mediatum.ub.tum.de/?id=1079296">https://mediatum.ub.tum.de/?id=1079296</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopMetaContour()</code>, <code>BiCopKPlot()</code>,
+<code>BiCopChiPlot()</code>, <code>BiCop()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# simulate from Clayton copula
+cop &lt;- BiCop(3, tau = 0.5)
+dat &lt;- BiCopSim(1000, cop)
+
+# create lambda-function plots
+op &lt;- par(mfrow = c(1, 3))
+BiCopLambda(dat[, 1], dat[, 2])  # empirical lambda-function
+BiCopLambda(cop)	# theoretical lambda-function
+BiCopLambda(dat[, 1], dat[, 2], cop)	# both
+par(op)
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ts_info</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create an object with information about a time series</h2>
+
+<h3>Description</h3>
+
+<p>The information about the time series is compounded of the time series and,
+optionally, its future values and forecasts for those future values (and
+prediction intervals for those forecasts).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ts_info(historical, ..., future = NULL, name = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>historical</code></td>
+<td>
+<p>a time series of class <code>ts</code> with the historical values
+of the series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>forecasts for the future values of the time series. A forecast
+must have been built with the <code>prediction_info()</code> function. See the
+examples section.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>future</code></td>
+<td>
+<p>NULL (default) or a time series of class <code>ts</code> or a vector.
+The future values of the time series (possibly to be forecast).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>NULL (default) or a character string with information about the
+time series. Typically, its name.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class <code>ts_info</code>. It is a list containing all the
+information supplied to the function.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>prediction_info()</code> for how to create forecasts.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># only information about a time series
+info &lt;- ts_info(USAccDeaths)
+
+# Information about a time series and its future values
+info2 &lt;- ts_info(ts(rnorm(50)), future = rnorm(10))
+
+# Information about a time series, its future values and a forecast
+if (require("forecast")) {
+  t &lt;- ts(rnorm(50))
+  f &lt;- rnorm(10)
+  mf &lt;- meanf(t, level = 95)
+  info3 &lt;- ts_info(t, future = f,
+                   prediction_info("mean", mf$mean,
+                                   pi_info(95, mf$lower, mf$upper)
+                   )
+  )
+}
+</code></pre>
+
+
+</div>

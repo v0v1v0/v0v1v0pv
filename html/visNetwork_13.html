@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visConfigure</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Network visualization configure options</h2>
+
+<h3>Description</h3>
+
+<p>Network visualization configure options. For full documentation, have a look at visDocumentation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visConfigure(
+  graph,
+  enabled = NULL,
+  filter = NULL,
+  container = NULL,
+  showButton = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>graph</code></td>
+<td>
+<p>: a visNetwork object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>enabled</code></td>
+<td>
+<p>: Boolean. Default to true. Toggle the configuration interface on or off. This is an optional parameter. If left undefined and any of the other properties of this object are defined, this will be set to true.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filter</code></td>
+<td>
+<p>: String, Array, Boolean, Function. Default to true. When a boolean, true gives you all options, false will not show any. If a string is supplied, any combination of the following is allowed: nodes, edges, layout, interaction, manipulation, physics, selection, renderer. Feel free to come up with a fun seperating character. Finally, when supplied an array of strings, any of the previously mentioned fields are accepted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>container</code></td>
+<td>
+<p>: DOM element. This allows you to put the configure list in another HTML container than below the network.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showButton</code></td>
+<td>
+<p>: Boolean. Default to true. Show the generate options button at the bottom of the configurator.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>See online documentation <a href="https://datastorm-open.github.io/visNetwork/">https://datastorm-open.github.io/visNetwork/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>visConfigure, visTree, visNetworkEditor
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Not run: 
+
+nodes &lt;- data.frame(id = 1:3, title = paste0("&lt;p&gt;", 1:3,"&lt;br&gt; tooltip&lt;/p&gt;"))
+edges &lt;- data.frame(from = c(1,2), to = c(1,3))
+
+visNetwork(nodes, edges) %&gt;%
+ visConfigure(enabled = TRUE, filter = "interaction")
+ 
+# using visNetworkEditor
+network &lt;- visNetwork(nodes, edges)
+custom_network &lt;- visNetworkEditor(object = network)
+custom_network
+
+custom_network &lt;- visNetworkEditor(object = network, filter = "nodes,edges")
+custom_network
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

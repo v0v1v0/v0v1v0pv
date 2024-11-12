@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>multipleVLGrangerFunc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>multipleVLGrangerFunc</h2>
+
+<h3>Description</h3>
+
+<p>multipleVLGrangerFunc is a function that infers Variable-lag Granger Causality of all pairwises of <code>m</code> time series <code>TS[,1],...TS[,m]</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">multipleVLGrangerFunc(
+  TS,
+  maxLag,
+  alpha = 0.05,
+  gamma = 0.3,
+  autoLagflag = TRUE,
+  causalFlag = 0,
+  VLflag = TRUE,
+  family = gaussian
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>TS</code></td>
+<td>
+<p>is a numerical time series of effect where <code>TS[t,k]</code> is an element at time <code>t</code> of <code>k</code>th time series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxLag</code></td>
+<td>
+<p>is a maximum possible time delay. The default is 0.2*length(Y).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>is a significance level of F-test to determine whether <code>X</code> Granger-causes <code>Y</code>.  The default is 0.05.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>is a parameter to determine whether <code>X</code> Granger-causes <code>Y</code> using BIC difference ratio. The default is  0.3.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>autoLagflag</code></td>
+<td>
+<p>is a flag for enabling the automatic lag inference function. The default is true.
+If it is set to be true, then maxLag is set automatically using cross-correlation.
+Otherwise, if it is set to be false, then the function takes the maxLag value to infer Granger causality.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>causalFlag</code></td>
+<td>
+<p>is a choice of criterion for inferring causality:
+<code>causalFlag=0</code> for BIC difference ratio, <code>causalFlag=1</code> for f-test, or <code>causalFlag=2</code> for BIC.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VLflag</code></td>
+<td>
+<p>is a flag of Granger causality choice: either <code>VLflag=TRUE</code> for VL-Granger or <code>VLflag=FALSE</code> for Granger causality.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>is a parameter of family of function for Generalized Linear Models function (glm). The default is <code>gaussian</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function returns of a list of an adjacency matrix of causality where <code>adjMat[i,j]</code> is true if <code>TS[,i]</code> causes <code>TS[,j]</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Generate simulation data
+#TS &lt;- MultipleSimulationVLtimeseries()
+## Run the function
+#out&lt;-multipleVLGrangerFunc(TS)
+
+
+</code></pre>
+
+
+</div>

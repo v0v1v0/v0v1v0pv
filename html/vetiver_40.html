@@ -1,0 +1,54 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>map_request_body</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Identify data types for each column in an input data prototype</h2>
+
+<h3>Description</h3>
+
+<p>The OpenAPI specification of a Plumber API created via <code>plumber::pr()</code> can
+be modified via <code>plumber::pr_set_api_spec()</code>, and this helper function will
+identify data types of predictors and create a list to use in this
+specification. These are <em>not</em> R data types, but instead basic JSON data
+types. For example, factors in R will be documented as strings in the
+OpenAPI specification.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">map_request_body(prototype)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>prototype</code></td>
+<td>
+<p>An input data prototype from a model</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>This is a developer-facing function, useful for supporting new model types.
+It is called by <code>api_spec()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list to be used within <code>plumber::pr_set_api_spec()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">map_request_body(vctrs::vec_slice(chickwts, 0))
+
+</code></pre>
+
+
+</div>

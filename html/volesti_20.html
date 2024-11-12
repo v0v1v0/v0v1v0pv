@@ -1,0 +1,82 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rotate_polytope</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Apply a random rotation to a convex polytope (H-polytope, V-polytope, zonotope or intersection of two V-polytopes)</h2>
+
+<h3>Description</h3>
+
+<p>Given a convex H- or V- polytope or a zonotope or an intersection of two V-polytopes as input, this function applies (a) a random rotation or (b) a given rotation by an input matrix <code class="reqn">T</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rotate_polytope(P, rotation = list())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>P</code></td>
+<td>
+<p>A convex polytope. It is an object from class (a) Hpolytope, (b) Vpolytope, (c) Zonotope, (d) intersection of two V-polytopes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rotation</code></td>
+<td>
+<p>A list that contains (a) the rotation matrix T and (b) the 'seed' to set a spesific seed for the number generator.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Let <code class="reqn">P</code> be the given polytope and <code class="reqn">Q</code> the rotated one and <code class="reqn">T</code> be the matrix of the linear transformation.
+</p>
+
+<ul>
+<li>
+<p> If <code class="reqn">P</code> is in H-representation and <code class="reqn">A</code> is the matrix that contains the normal vectors of the facets of <code class="reqn">Q</code> then <code class="reqn">AT</code> contains the normal vactors of the facets of <code class="reqn">P</code>.
+</p>
+</li>
+<li>
+<p> If <code class="reqn">P</code> is in V-representation and <code class="reqn">V</code> is the matrix that contains column-wise the vertices of <code class="reqn">Q</code> then <code class="reqn">T^TV</code> contains the vertices of <code class="reqn">P</code>.
+</p>
+</li>
+<li>
+<p> If <code class="reqn">P</code> is a zonotope and <code class="reqn">G</code> is the matrix that contains column-wise the generators of <code class="reqn">Q</code> then <code class="reqn">T^TG</code> contains the generators of <code class="reqn">P</code>.
+</p>
+</li>
+<li>
+<p> If <code class="reqn">M</code> is a matrix that contains column-wise points in <code class="reqn">Q</code> then <code class="reqn">T^TM</code> contains points in <code class="reqn">P</code>.
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>A list that contains the rotated polytope and the matrix <code class="reqn">T</code> of the linear transformation.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># rotate a H-polytope (2d unit simplex)
+P = gen_simplex(2, 'H')
+poly_matrix_list = rotate_polytope(P)
+
+# rotate a V-polytope (3d cube)
+P = gen_cube(3, 'V')
+poly_matrix_list = rotate_polytope(P)
+
+# rotate a 5-dimensional zonotope defined by the Minkowski sum of 15 segments
+Z = gen_rand_zonotope(3, 6)
+poly_matrix_list = rotate_polytope(Z)
+</code></pre>
+
+
+</div>

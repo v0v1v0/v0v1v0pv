@@ -1,0 +1,95 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>viviHeatmap</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>viviHeatmap</h2>
+
+<h3>Description</h3>
+
+<p>Plots a Heatmap showing variable importance on the diagonal
+and variable interaction on the off-diagonal.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">viviHeatmap(
+  mat,
+  intPal = rev(colorspace::sequential_hcl(palette = "Purples 3", n = 100)),
+  impPal = rev(colorspace::sequential_hcl(palette = "Greens 3", n = 100)),
+  intLims = NULL,
+  impLims = NULL,
+  border = FALSE,
+  angle = 0
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mat</code></td>
+<td>
+<p>A matrix, such as that returned by vivi, of values to be plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>intPal</code></td>
+<td>
+<p>A vector of colours to show interactions, for use with scale_fill_gradientn.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>impPal</code></td>
+<td>
+<p>A vector of colours to show importance, for use with scale_fill_gradientn.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>intLims</code></td>
+<td>
+<p>Specifies the fit range for the color map for interaction strength.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>impLims</code></td>
+<td>
+<p>Specifies the fit range for the color map for importance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>border</code></td>
+<td>
+<p>Logical. If TRUE then draw a black border around the diagonal elements.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>angle</code></td>
+<td>
+<p>The angle to rotate the x-axis labels. Defaults to zero.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A heatmap plot showing variable importance on the diagonal
+and variable interaction on the off-diagonal.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(ranger)
+aq &lt;- na.omit(airquality)
+rF &lt;- ranger(Ozone ~ ., data = aq, importance = "permutation")
+myMat &lt;- vivi(fit = rF, data = aq, response = "Ozone")
+viviHeatmap(myMat)
+
+</code></pre>
+
+
+</div>

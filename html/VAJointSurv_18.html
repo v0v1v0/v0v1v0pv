@@ -1,0 +1,144 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>surv_term</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Creates Data for One Type of Survival Outcome</h2>
+
+<h3>Description</h3>
+
+<p>Creates Data for One Type of Survival Outcome
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">surv_term(formula, id, data, time_fixef, with_frailty = FALSE, delayed = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>a two-sided <code>formula</code> with the survival outcome
+on the left-hand side and fixed effect covariates on the right-hand
+side. The left-hand side needs to be a <code>Surv</code> object and can
+be either right-censored and left-truncated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>the variable for the id of each individual.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p><code>data.frame</code> with at least the time variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time_fixef</code></td>
+<td>
+<p>the time-varying fixed effects. See .e.g.
+<code>poly_term</code>. This is for the baseline hazard. Note that many
+basis expansions have boundary knots. It is important that these are set
+to cover the full range of survival times including time zero for some
+expansions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>with_frailty</code></td>
+<td>
+<p><code>TRUE</code> if there should be a frailty term.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delayed</code></td>
+<td>
+<p>a vector with an entry which is <code>TRUE</code> if the
+left-truncation time from the survival outcome is from a delayed entry.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>time_fixef</code> should likely not include an intercept as this is
+often included in <code>formula</code>.
+</p>
+<p>The <code>delayed</code> argument is to account for delayed entry with terminal
+events when observations are sampled in a way such that they must not have
+had the event prior to their left-truncation time. In this case, the proper
+complete data likelihood is
+</p>
+<p style="text-align: center;"><code class="reqn">\frac{a(u)h(t_{ij}\mid u)^{d_{ij}}S(t_{ij} \mid u)g(u)}{\int a(u) S(v_{ij} \mid u) du}</code>
+</p>
+
+<p>and not
+</p>
+<p style="text-align: center;"><code class="reqn">a(u)h(t_{ij} \mid u)^{d_{ij}}\frac{S(t_{ij} \mid u)}{S(v_{ij} \mid u)}g(u)</code>
+</p>
+
+<p>where <code class="reqn">h</code> is conditional hazard, <code class="reqn">S</code> is the conditional survival
+function, <code class="reqn">g</code> is additional conditional likelihood factors from other
+outcomes, <code class="reqn">a</code> is the random effect distribution, <code class="reqn">t_{ij}</code> is the
+observed time, <code class="reqn">d_{ij}</code> is an event indicator, and <code class="reqn">v_{ij}</code> is the
+left truncation time.
+</p>
+<p>The denominator in the proper complete likelihood becomes the expectation
+over all delayed entries when a cluster has more than one delayed entry. See
+van den Berg and Drepper (2016) and Crowther et al. (2016) for further
+details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>surv_term</code> with data required for survival outcome.
+</p>
+
+
+<h3>References</h3>
+
+<p>Crowther MJ, Andersson TM, Lambert PC, Abrams KR &amp; Humphreys K (2016).
+<em>Joint
+modelling of longitudinal and survival data: incorporating delayed entry and
+an assessment of model misspecification</em>. Stat Med,
+35(7):1193-1209. doi:10.1002/sim.6779
+</p>
+<p>van den Berg GJ &amp; Drepper B (2016). <em>Inference for Shared-Frailty
+Survival Models with Left-Truncated Data</em>. Econometric Reviews, 35:6,
+1075-1098, doi: 10.1080/07474938.2014.975640
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># load in the data
+library(survival)
+data(pbc, package = "survival")
+
+# re-scale by year
+pbcseq &lt;- transform(pbcseq, day_use = day / 365.25)
+pbc &lt;- transform(pbc, time_use = time / 365.25)
+
+# base knots on observed event times
+bs_term_knots &lt;-
+  with(pbc, quantile(time_use[status == 2], probs = seq(0, 1, by = .2)))
+
+boundary &lt;- c(bs_term_knots[ c(1, length(bs_term_knots))])
+interior &lt;- c(bs_term_knots[-c(1, length(bs_term_knots))])
+
+# create the survival term
+s_term &lt;- surv_term(
+  Surv(time_use, status == 2) ~ 1, id = id, data = pbc,
+  time_fixef = bs_term(time_use, Boundary.knots = boundary, knots = interior))
+</code></pre>
+
+
+</div>

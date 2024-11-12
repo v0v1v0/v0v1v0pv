@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bistudentt</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Bivariate Student-t Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimate the degrees of freedom and correlation parameters of
+the (bivariate) Student-t distribution by maximum likelihood
+estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bistudentt(ldf = "logloglink", lrho = "rhobitlink",
+           idf = NULL, irho = NULL, imethod = 1,
+           parallel = FALSE, zero = "rho")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ldf, lrho, idf, irho, imethod</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+See <code>Links</code> for more link function choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel, zero</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The density function is
+</p>
+<p style="text-align: center;"><code class="reqn">f(y_1, y_2; \nu, \rho) =
+        \frac{1}{2\pi\sqrt{1-\rho^2}}
+        (1 + (y_1^2 + y_2^2 -
+        2\rho y_1 y_2) / (\nu (1-\rho^2)))^{-(\nu+2)/2} </code>
+</p>
+
+<p>for <code class="reqn">-1 &lt; \rho &lt; 1</code>,
+and real <code class="reqn">y_1</code> and <code class="reqn">y_2</code>.
+</p>
+
+
+
+
+
+
+<p>This <span class="pkg">VGAM</span> family function can handle multiple responses,
+for example, a six-column matrix where the first 2 columns
+is the first out of three responses,
+the next 2 columns being the next response, etc.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>The working weight matrices have not been fully checked.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response matrix must have a multiple of two-columns.
+Currently, the fitted
+value is a matrix with the same number of columns and values
+equal to 0.0.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee,
+with help from Thibault Vatter.
+</p>
+
+
+<h3>References</h3>
+
+<p>Schepsmeier, U. and Stober, J. (2014).
+Derivatives and Fisher information of bivariate copulas.
+<em>Statistical Papers</em>
+<b>55</b>, 525–542.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>dbistudentt</code>,
+<code>binormal</code>,
+<code>pt</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 1000
+mydof &lt;- logloglink(1, inverse = TRUE)
+ymat &lt;- cbind(rt(nn, df = mydof), rt(nn, df = mydof))
+bdata &lt;- data.frame(y1 = ymat[, 1], y2 = ymat[, 2],
+                    y3 = ymat[, 1], y4 = ymat[, 2],
+                    x2 = runif(nn))
+summary(bdata)
+## Not run:  plot(ymat, col = "blue") 
+fit1 &lt;-    # 2 responses, e.g., (y1,y2) is the 1st
+  vglm(cbind(y1, y2, y3, y4) ~ 1,
+       bistudentt,  # crit = "coef",  # Sometimes a good idea
+       data = bdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+Coef(fit1)
+head(fitted(fit1))
+summary(fit1)
+</code></pre>
+
+
+</div>

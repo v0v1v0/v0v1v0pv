@@ -1,0 +1,769 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>UnhandledHTTPRequestError</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>UnhandledHTTPRequestError</h2>
+
+<h3>Description</h3>
+
+<p>Handle http request errors
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vcr_last_error()
+</code></pre>
+
+
+<h3>Details</h3>
+
+<p>How this error class is used:
+If <code>record="once"</code> we trigger this.
+</p>
+<p>Users can use vcr in the context of both <code>use_cassette()</code>
+and <code>insert_cassette()</code>
+</p>
+<p>For the former, all requests go through the call_block
+But for the latter, requests go through webmockr.
+</p>
+<p>Where is one place where we can put UnhandledHTTPRequestError
+that will handle both use_cassette and insert_cassette?
+</p>
+
+
+<h3>Error situations where this is invoked</h3>
+
+
+<ul>
+<li> <p><code>record=once</code> AND there's a new request that doesn't match
+the one in the cassette on disk
+</p>
+
+<ul><li>
+<p> in webmockr: if no stub found and there are recorded
+interactions on the cassette, and record = once, then
+error with UnhandledHTTPRequestError
+</p>
+
+<ul><li>
+<p> but if record != once, then allow it, unless record == none
+</p>
+</li></ul>
+</li></ul>
+</li>
+<li>
+<p> others?
+</p>
+</li>
+</ul>
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>request</code></dt>
+<dd>
+<p>a Request object</p>
+</dd>
+<dt><code>cassette</code></dt>
+<dd>
+<p>a cassette name</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-UnhandledHTTPRequestError-new"><code>UnhandledHTTPRequestError$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-run"><code>UnhandledHTTPRequestError$run()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-construct_message"><code>UnhandledHTTPRequestError$construct_message()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-request_description"><code>UnhandledHTTPRequestError$request_description()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-current_matchers"><code>UnhandledHTTPRequestError$current_matchers()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-match_request_on_headers"><code>UnhandledHTTPRequestError$match_request_on_headers()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-match_request_on_body"><code>UnhandledHTTPRequestError$match_request_on_body()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-formatted_headers"><code>UnhandledHTTPRequestError$formatted_headers()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-cassettes_description"><code>UnhandledHTTPRequestError$cassettes_description()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-cassettes_list"><code>UnhandledHTTPRequestError$cassettes_list()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-get_help"><code>UnhandledHTTPRequestError$get_help()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-formatted_suggestions"><code>UnhandledHTTPRequestError$formatted_suggestions()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-format_bullet_point"><code>UnhandledHTTPRequestError$format_bullet_point()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-format_foot_note"><code>UnhandledHTTPRequestError$format_foot_note()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-suggestion_for"><code>UnhandledHTTPRequestError$suggestion_for()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-suggestions"><code>UnhandledHTTPRequestError$suggestions()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-no_cassette_suggestions"><code>UnhandledHTTPRequestError$no_cassette_suggestions()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-record_mode_suggestion"><code>UnhandledHTTPRequestError$record_mode_suggestion()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-has_used_interaction_matching"><code>UnhandledHTTPRequestError$has_used_interaction_matching()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-match_requests_on_suggestion"><code>UnhandledHTTPRequestError$match_requests_on_suggestion()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-UnhandledHTTPRequestError-clone"><code>UnhandledHTTPRequestError$clone()</code></a>
+</p>
+</li>
+</ul>
+<hr>
+<a id="method-UnhandledHTTPRequestError-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a new <code>UnhandledHTTPRequestError</code> object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$new(request)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>request</code></dt>
+<dd>
+<p>(Request) a Request object</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>A new <code>UnhandledHTTPRequestError</code> object
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-run"></a>
+
+
+
+<h4>Method <code>run()</code>
+</h4>
+
+<p>Run unhandled request handling
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$run()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>various
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-construct_message"></a>
+
+
+
+<h4>Method <code>construct_message()</code>
+</h4>
+
+<p>Construct and execute stop message for why request failed
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$construct_message()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>a stop message
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-request_description"></a>
+
+
+
+<h4>Method <code>request_description()</code>
+</h4>
+
+<p>construct request description
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$request_description()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-current_matchers"></a>
+
+
+
+<h4>Method <code>current_matchers()</code>
+</h4>
+
+<p>get current request matchers
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$current_matchers()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-match_request_on_headers"></a>
+
+
+
+<h4>Method <code>match_request_on_headers()</code>
+</h4>
+
+<p>are headers included in current matchers?
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$match_request_on_headers()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>logical
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-match_request_on_body"></a>
+
+
+
+<h4>Method <code>match_request_on_body()</code>
+</h4>
+
+<p>is body includled in current matchers?
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$match_request_on_body()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>logical
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-formatted_headers"></a>
+
+
+
+<h4>Method <code>formatted_headers()</code>
+</h4>
+
+<p>get request headers
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$formatted_headers()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-cassettes_description"></a>
+
+
+
+<h4>Method <code>cassettes_description()</code>
+</h4>
+
+<p>construct description of current or lack thereof cassettes
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$cassettes_description()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-cassettes_list"></a>
+
+
+
+<h4>Method <code>cassettes_list()</code>
+</h4>
+
+<p>cassette details
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$cassettes_list()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-get_help"></a>
+
+
+
+<h4>Method <code>get_help()</code>
+</h4>
+
+<p>get help message for non-verbose error
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$get_help()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-formatted_suggestions"></a>
+
+
+
+<h4>Method <code>formatted_suggestions()</code>
+</h4>
+
+<p>make suggestions for what to do
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$formatted_suggestions()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-format_bullet_point"></a>
+
+
+
+<h4>Method <code>format_bullet_point()</code>
+</h4>
+
+<p>add bullet point to beginning of a line
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$format_bullet_point(lines, index)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>lines</code></dt>
+<dd>
+<p>(character) vector of strings</p>
+</dd>
+<dt><code>index</code></dt>
+<dd>
+<p>(integer) a number</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-format_foot_note"></a>
+
+
+
+<h4>Method <code>format_foot_note()</code>
+</h4>
+
+<p>make a foot note
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$format_foot_note(url, index)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>url</code></dt>
+<dd>
+<p>(character) a url</p>
+</dd>
+<dt><code>index</code></dt>
+<dd>
+<p>(integer) a number</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-suggestion_for"></a>
+
+
+
+<h4>Method <code>suggestion_for()</code>
+</h4>
+
+<p>get a suggestion by key
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$suggestion_for(key)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>key</code></dt>
+<dd>
+<p>(character) a character string</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-suggestions"></a>
+
+
+
+<h4>Method <code>suggestions()</code>
+</h4>
+
+<p>get all suggestions
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$suggestions()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>list
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-no_cassette_suggestions"></a>
+
+
+
+<h4>Method <code>no_cassette_suggestions()</code>
+</h4>
+
+<p>get all no cassette suggestions
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$no_cassette_suggestions()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>list
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-record_mode_suggestion"></a>
+
+
+
+<h4>Method <code>record_mode_suggestion()</code>
+</h4>
+
+<p>get the appropriate record mode suggestion
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$record_mode_suggestion()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-has_used_interaction_matching"></a>
+
+
+
+<h4>Method <code>has_used_interaction_matching()</code>
+</h4>
+
+<p>are there any used interactions
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$has_used_interaction_matching()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>logical
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-match_requests_on_suggestion"></a>
+
+
+
+<h4>Method <code>match_requests_on_suggestion()</code>
+</h4>
+
+<p>match requests on suggestion
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$match_requests_on_suggestion()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>list
+</p>
+
+
+<hr>
+<a id="method-UnhandledHTTPRequestError-clone"></a>
+
+
+
+<h4>Method <code>clone()</code>
+</h4>
+
+<p>The objects of this class are cloneable with this method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>UnhandledHTTPRequestError$clone(deep = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>deep</code></dt>
+<dd>
+<p>Whether to make a deep clone.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+vcr_configure(dir = tempdir())
+cassettes()
+insert_cassette("turtle")
+request &lt;- Request$new("post", 'https://hb.opencpu.org/post?a=5',
+  "", list(foo = "bar"))
+
+err &lt;- UnhandledHTTPRequestError$new(request)
+err$request_description()
+err$current_matchers()
+err$match_request_on_headers()
+err$match_request_on_body()
+err$formatted_headers()
+cat(err$formatted_headers(), "\n")
+cat(err$cassettes_description(), "\n")
+cat(err$cassettes_list(), "\n")
+err$formatted_suggestions()
+cat(err$format_bullet_point('foo bar', 1), "\n")
+err$suggestion_for("use_new_episodes")
+err$suggestions()
+err$no_cassette_suggestions()
+err$record_mode_suggestion()
+err$has_used_interaction_matching()
+err$match_requests_on_suggestion()
+
+# err$construct_message()
+
+# cleanup
+eject_cassette("turtle")
+unlink(tempdir())
+
+## End(Not run)
+## Not run: 
+# vcr_last_error()
+
+## End(Not run)
+</code></pre>
+
+
+</div>

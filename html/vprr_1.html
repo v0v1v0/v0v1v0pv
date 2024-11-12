@@ -1,0 +1,78 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bin_calculate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get bin averages for VPR and CTD data</h2>
+
+<h3>Description</h3>
+
+<p>Bins CTD data for an individual cast to avoid depth averaging across tow-yo's
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bin_calculate(data, binSize = 1, imageVolume, rev = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>ctd data frame object including scan, salinity, temperature,
+depth, conductivity, time, fluor_ref, turbidity_ref, turbidity_mv,
+altitude, cast_id, n_roi</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>binSize</code></td>
+<td>
+<p>the height of bins over which to average, default is 1 metre</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imageVolume</code></td>
+<td>
+<p>the volume of VPR images used for calculating concentrations (mm^3)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rev</code></td>
+<td>
+<p>logical value, if TRUE, binning will begin at bottom of each cast,
+this controls data loss due to uneven binning over depth. If bins begin at
+bottom, small amounts of data may be lost at the surface of each cast, if
+binning begins at surface (rev = FALSE), small amounts of data may be lost
+at bottom of each cast</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Image volume calculations can change based on optical setting of VPR as well as autodeck setting used to process images
+For IML2018051 (S2) image volume was calculated as 108155 mm^3 by seascan (6.6 cubic inches)
+For COR2019002 S2 image volume was calculated as 83663 mm^3 and S3 image volume was calculated as 366082 mm^3.
+Used internally ( <code>bin_cast</code> ) after <code>ctd_cast</code> on a single ascending or descending section of VPR cast
+</p>
+
+
+<h3>Note</h3>
+
+<p>binSize should be carefully considered for best results
+</p>
+<p>Depth is used for calculations! Please ensure depth is included in data frame using swDepth
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>E. Chisholm, K. Sorochan
+</p>
+
+
+</div>

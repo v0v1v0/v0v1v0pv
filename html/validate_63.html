@@ -1,0 +1,130 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sdmx_codelist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get code list from an SDMX REST API endpoint.</h2>
+
+<h3>Description</h3>
+
+<p><code>sdmx_codelist</code> constructs an URL for <code>rsdmx::readSDMX</code> and
+extracts the code IDs.  Code lists are downloaded once and cached for the
+duration of the R session.
+</p>
+<p><code>estat_codelist</code> gets a code list from the REST API provided at
+<code>ec.europa.eu/tools/cspa_services_global/sdmxregistry</code>. It is a
+convenience wrapper that calls <code>sdmx_codelist</code>.
+</p>
+<p><code>global_codelist</code> gets a code list from the REST API provided at
+<code>https://registry.sdmx.org/webservice/data.html</code>.  It is a convenience
+wrapper that calls <code>sdmx_codelist</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sdmx_codelist(
+  endpoint,
+  agency_id,
+  resource_id,
+  version = "latest",
+  what = c("id", "all")
+)
+
+estat_codelist(resource_id, agency_id = "ESTAT", version = "latest")
+
+global_codelist(resource_id, agency_id = "SDMX", version = "latest")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>endpoint</code></td>
+<td>
+<p><code>[character]</code> REST API endpoint of the SDMX registry</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>agency_id</code></td>
+<td>
+<p><code>[character]</code> Agency ID (e.g. <code>"ESTAT"</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>resource_id</code></td>
+<td>
+<p><code>[character]</code> Resource ID (e.g. <code>"CL_ACTIVITY"</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>version</code></td>
+<td>
+<p><code>[character]</code> Version of the code list.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>what</code></td>
+<td>
+<p><code>[character]</code> Return a <code>character</code> with code id's, or
+a data frame with all information.</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p>Other sdmx: 
+<code>sdmx_endpoint()</code>,
+<code>validator_from_dsd()</code>
+</p>
+<p>Other sdmx: 
+<code>sdmx_endpoint()</code>,
+<code>validator_from_dsd()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> 
+
+ # here we download the CL_ACTIVITY codelist from the  ESTAT registry.
+## Not run: 
+ codelist &lt;- sdmx_codelist(
+   endpoint = "https://registry.sdmx.org/ws/public/sdmxapi/rest/"
+   , agency_id = "ESTAT"
+   , resource_id = "CL_ACTIVITY" 
+
+## End(Not run)
+
+## Not run: 
+  estat_codelist("CL_ACTIVITY")
+
+## End(Not run)
+## Not run: 
+  global_codelist("CL_AGE") )
+  global_codelist("CL_CONF_STATUS")
+  global_codelist("CL_SEX")
+
+## End(Not run)
+# An example of using SDMX information, downloaded from the SDMX global
+# registry
+## Not run: 
+ # economic data from the country of Samplonia
+ data(samplonomy)
+ head(samplonomy)
+
+ rules &lt;- validator(
+   , freq %in% global_codelist("CL_FREQ")
+   , value &gt;= 0
+ )
+ cf &lt;- confront(samplonomy, rules) 
+ summary(cf)
+
+
+## End(Not run)
+</code></pre>
+
+
+</div>

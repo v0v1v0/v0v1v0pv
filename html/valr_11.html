@@ -1,0 +1,73 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_glyph</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create example glyphs for valr functions.</h2>
+
+<h3>Description</h3>
+
+<p>Used to illustrate the output of valr functions with small examples.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_glyph(expr, label = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>expr</code></td>
+<td>
+<p>expression to evaluate</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label</code></td>
+<td>
+<p>column name to use for label values. should be present in the
+result of the call.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>ggplot2::ggplot()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 25,     50,
+  "chr1", 100,    125
+)
+
+y &lt;- tibble::tribble(
+  ~chrom, ~start, ~end, ~value,
+  "chr1", 30, 75, 50
+)
+
+bed_glyph(bed_intersect(x, y))
+
+x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 30,     75,
+  "chr1", 50,     90,
+  "chr1", 91,     120
+)
+
+bed_glyph(bed_merge(x))
+
+bed_glyph(bed_cluster(x), label = ".id")
+
+</code></pre>
+
+
+</div>

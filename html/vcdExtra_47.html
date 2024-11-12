@@ -1,0 +1,176 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>HLtest</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Hosmer-Lemeshow Goodness of Fit Test
+</h2>
+
+<h3>Description</h3>
+
+<p>The <code>HLtest</code> function computes the classical Hosmer-Lemeshow (1980) goodness of fit test
+for a binomial <code>glm</code> object in logistic regression
+</p>
+<p>The general idea is to assesses whether or not the observed event rates match expected event rates in subgroups of the 
+model population. The Hosmer-Lemeshow test specifically identifies subgroups as the deciles of fitted event values,
+or other quantiles as determined by the <code>g</code> argument.
+Given these subgroups, a simple chisquare test on <code>g-2</code> df is used.
+</p>
+<p>In addition to <code>print</code> and <code>summary</code> methods, a <code>plot</code> method is
+supplied to visualize the discrepancies between observed and fitted frequencies.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">
+HosmerLemeshow(model, g = 10)
+
+HLtest(model, g = 10)
+
+## S3 method for class 'HLtest'
+print(x, ...)
+## S3 method for class 'HLtest'
+summary(object, ...)
+## S3 method for class 'HLtest'
+plot(x, ...)
+## S3 method for class 'HLtest'
+rootogram(x, ...)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>A <code>glm</code> model object in the <code>binomial</code> family</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>Number of groups used to partition the fitted values for the GOF test.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x, object</code></td>
+<td>
+<p>A <code>HLtest</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments passed down to methods</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A class <code>HLtest</code> object  with the following components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>table</code></td>
+<td>
+<p>A data.frame describing the results of partitioning the data into <code>g</code>
+groups with the following columns: <code>cut</code>, <code>total</code>, <code>obs</code>, <code>exp</code>, <code>chi</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>chisq</code></td>
+<td>
+<p>The chisquare statistics</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>Degrees of freedom</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value</code></td>
+<td>
+<p>p value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groups</code></td>
+<td>
+<p>Number of groups</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>call</code></td>
+<td>
+<p><code>model</code> call</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Michael Friendly
+</p>
+
+
+<h3>References</h3>
+
+<p>Hosmer, David W., Lemeshow, Stanley (1980). 
+A goodness-of-fit test for multiple logistic regression model.
+<em>Communications in Statistics, Series A</em>, 9, 1043-1069.
+</p>
+<p>Hosmer, David W., Lemeshow, Stanley (2000). 
+<em>Applied Logistic Regression</em>, New York: Wiley, ISBN 0-471-61553-6
+</p>
+<p>Lemeshow, S. and Hosmer, D.W.  (1982). 
+A review of goodness of fit statistics for use in the development of logistic regression models. 
+<em>American Journal of Epidemiology</em>, 115(1), 92-106.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rootogram</code>, ~~~
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data(birthwt, package="MASS")
+# how to do this without attach?
+attach(birthwt)
+	race = factor(race, labels = c("white", "black", "other"))
+	ptd = factor(ptl &gt; 0)
+	ftv = factor(ftv)
+	levels(ftv)[-(1:2)] = "2+"
+	bwt &lt;- data.frame(low = factor(low), age, lwt, race,
+    	smoke = (smoke &gt; 0), ptd, ht = (ht &gt; 0), ui = (ui &gt; 0), ftv)
+detach(birthwt)
+
+options(contrasts = c("contr.treatment", "contr.poly"))
+BWmod &lt;- glm(low ~ ., family=binomial, data=bwt)
+
+(hlt &lt;- HLtest(BWmod))
+str(hlt)
+summary(hlt)
+plot(hlt)
+
+# basic model
+BWmod0 &lt;- glm(low ~ age, family=binomial, data=bwt)
+(hlt0 &lt;- HLtest(BWmod0))
+str(hlt0)
+summary(hlt0)
+plot(hlt0)
+
+
+</code></pre>
+
+
+</div>

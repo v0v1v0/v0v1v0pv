@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>number_format</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check the layouts of numbers.</h2>
+
+<h3>Description</h3>
+
+<p>Convenience function to check layout of numbers stored as
+a character vector.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">number_format(x, format = NULL, min_dig = NULL, max_dig = NULL, dec = ".")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>[character]</code> vector. If <code>x</code> is not of type
+<code>character</code> it will be converted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>format</code></td>
+<td>
+<p><code>[character]</code> denoting the number format (see below).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min_dig</code></td>
+<td>
+<p><code>[numeric]</code> minimal number of digits after decimal separator.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_dig</code></td>
+<td>
+<p><code>[numeric]</code> maximum number of digits after decimal separator.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dec</code></td>
+<td>
+<p><code>[character]</code> decimal seperator.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If <code>format</code> is specified, then <code>min_dig</code>, <code>max_dig</code> and <code>dec</code>
+are ignored.
+</p>
+<p>Numerical formats can be specified as a sequence of characters. There are a few 
+special characters:
+</p>
+
+<ul>
+<li>
+<p><code>d</code> Stands for digit.
+</p>
+</li>
+<li>
+<p><code>*</code> (digit globbing) zero or more digits
+</p>
+</li>
+</ul>
+<p>Here are some examples.
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+<code>"d.dd"</code>   </td>
+<td style="text-align: left;"> One digit, a decimal point followed by two digits.</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>"d.ddddddddEdd"</code>
+</td>
+<td style="text-align: left;"> Scientific notation with eight digits behind the decimal point.</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>"0.ddddddddEdd"</code>
+</td>
+<td style="text-align: left;"> Same, but starting with a zero.</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>"d,dd*"</code> </td>
+<td style="text-align: left;"> one digit before the comma and at least two behind it.</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p>Other format-checkers: 
+<code>field_format()</code>,
+<code>field_length()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">df &lt;- data.frame(number = c("12.34","0.23E55","0.98765E12"))
+rules &lt;- validator(
+   number_format(number, format="dd.dd")
+   , number_format(number, "0.ddEdd")
+   , number_format(number, "0.*Edd")
+)
+
+out &lt;- confront(df, rules)
+values(out)
+
+# a few examples, without 'validator'
+number_format("12.345", min_dig=2) # TRUE
+number_format("12.345", min_dig=4) # FALSE
+number_format("12.345", max_dig=2) # FALSE
+number_format("12.345", max_dig=5) # TRUE
+number_format("12,345", min_dig=2, max_dig=3, dec=",") # TRUE
+
+</code></pre>
+
+
+</div>

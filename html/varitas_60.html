@@ -1,0 +1,112 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>run.alignment</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Run alignment</h2>
+
+<h3>Description</h3>
+
+<p>Run alignment
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">run.alignment(fastq.specification, output.directory, paired.end = FALSE,
+  sample.directories = TRUE, output.subdirectory = FALSE,
+  job.name.prefix = NULL, job.group = "alignment", quiet = FALSE,
+  verify.options = !quiet)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fastq.specification</code></td>
+<td>
+<p>Data frame detailing FASTQ files to be processed, typically from prepare.fastq.specification</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output.directory</code></td>
+<td>
+<p>Path to project directory</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>paired.end</code></td>
+<td>
+<p>Logical indicating whether paired-end sequencing was performed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample.directories</code></td>
+<td>
+<p>Logical indicating whether all sample files should be saved to sample-specific subdirectories (will be created)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output.subdirectory</code></td>
+<td>
+<p>If further nesting is required, name of subdirectory. If no further nesting, set to FALSE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>job.name.prefix</code></td>
+<td>
+<p>Prefix for job names on the cluster</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>job.group</code></td>
+<td>
+<p>Group job should be associated with on cluster</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>Logical indicating whether to print commands to screen rather than submit them</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verify.options</code></td>
+<td>
+<p>Logical indicating whether to run verify.varitas.options</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Runs alignment (and related processing steps) on each sample.
+</p>
+
+
+<h3>Value</h3>
+
+<p>None
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">run.alignment(
+  fastq.specification = data.frame(
+    sample.id = c('1', '2'),
+    reads = c('1-R1.fastq.gz', '2-R1.fastq.gz'),
+    mates = c('1-R2.fastq.gz', '2-R2.fastq.gz'),
+    patient.id = c('P1', 'P1'),
+    tissue = c('tumour', 'normal')
+  ),
+  output.directory = '.',
+  quiet = TRUE,
+  paired.end = TRUE
+)
+
+</code></pre>
+
+
+</div>

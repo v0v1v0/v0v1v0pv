@@ -1,0 +1,77 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dinuc.codon</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Statistical dinucleotide over- and underrepresentation (codon model).</h2>
+
+<h3>Description</h3>
+
+<p>A measure of statistical dinucleotide over- and underrepresentation; by allows for random sequence generation by shuffling (with/without replacement) of codons.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dinuc.codon(df.virus,permutations=500,exact_numbers = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df.virus</code></td>
+<td>
+<p>data frame with seq_name and its DNA sequence.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>permutations</code></td>
+<td>
+<p>the number of permutations for the z-score computation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>exact_numbers</code></td>
+<td>
+<p>if TRUE exact analytical calculation will be used.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For more information <a href="https://www.rdocumentation.org/packages/seqinr/versions/3.6-1/topics/dinucleotides">seqinr</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data.frame containing the computed statistic for each dinucleotide in all DNA sequences within df.virus.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ali Mostafa Anwar <a href="mailto:ali.mo.anwar@std.agr.cu.edu.eg">ali.mo.anwar@std.agr.cu.edu.eg</a> and Mohmed Soudy <a href="mailto:MohmedSoudy2009@gmail.com">MohmedSoudy2009@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+# read DNA from fasta file
+fasta &lt;- fasta.read("virus.fasta", "host.fasta")
+fasta.v &lt;- fasta[[1]]
+fasta.h &lt;- fasta[[2]]
+
+
+# Calculate zscore using (codon model)
+codon &lt;- dinuc.codon(fasta.v, permutations = 10)
+
+</code></pre>
+
+
+</div>

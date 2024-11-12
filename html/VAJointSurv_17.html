@@ -1,0 +1,61 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>stacked_term</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Term for a Basis Matrix for of Different Types of Terms</h2>
+
+<h3>Description</h3>
+
+<p>Creates a basis matrix consisting of different types of terms.
+E.g. to create a varying-coefficient.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">stacked_term(...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>term objects from the package.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>A list with an element called <code>eval</code>
+to evaluate the basis. See <code>VAJointSurv-terms</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>poly_term</code>, <code>bs_term</code>, <code>ns_term</code>, and
+<code>weighted_term</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vals &lt;- c(0.41, 0.29, 0.44, 0.1, 0.18, 0.65, 0.29, 0.85, 0.36, 0.47)
+
+spline_basis1 &lt;- ns_term(vals, df = 3)
+spline_basis2 &lt;- bs_term(vals, df = 3)
+
+# create stacked term from two spline bases
+stacked_basis &lt;- stacked_term(spline_basis1, spline_basis2)
+
+# evaluate stacked basis at 0.5
+stacked_basis$eval(0.5)
+# evaluate first derivative of stacked basis at 0.5
+stacked_basis$eval(0.5, der = 1)
+</code></pre>
+
+
+</div>

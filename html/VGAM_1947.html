@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>zoabetaR</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Zero- and One-Inflated Beta Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimation of the shape parameters of the two-parameter beta
+distribution plus the probabilities of a 0 and/or a 1.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">zoabetaR(lshape1 = "loglink", lshape2 = "loglink", lpobs0 = "logitlink",
+   lpobs1 = "logitlink", ishape1 = NULL, ishape2 = NULL, trim = 0.05,
+   type.fitted = c("mean", "pobs0", "pobs1", "beta.mean"),
+   parallel.shape = FALSE, parallel.pobs = FALSE, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape1, lshape2, lpobs0, lpobs1</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape1, ishape2</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trim, zero</code></td>
+<td>
+
+<p>Same as <code>betaR</code>.
+See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel.shape, parallel.pobs</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.fitted</code></td>
+<td>
+
+<p>The choice <code>"beta.mean"</code> mean to return the mean of
+the beta distribution; the 0s and 1s are ignored.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The standard 2-parameter beta distribution has a support on (0,1),
+however, many datasets have 0 and/or 1 values too.
+This family function handles 0s and 1s (at least one of
+them must be present) in
+the data set by modelling the probability of a 0 by a
+logistic regression (default link is the logit), and similarly
+for the probability of a 1. The remaining proportion,
+<code>1-pobs0-pobs1</code>,
+of the data comes from a standard beta distribution.
+This family function therefore extends <code>betaR</code>.
+One has <code class="reqn">M=3</code> or <code class="reqn">M=4</code> per response.
+Multiple responses are allowed.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Similar to <code>betaR</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee and Xiangjie Xue. </p>
+
+
+<h3>See Also</h3>
+
+<p><code>Zoabeta</code>,
+<code>betaR</code>,
+<code>betaff</code>,
+<code>Beta</code>,
+<code>zipoisson</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 1000; set.seed(1)
+bdata &lt;- data.frame(x2 = runif(nn))
+bdata &lt;- transform(bdata,
+  pobs0 = logitlink(-2 + x2, inverse = TRUE),
+  pobs1 = logitlink(-2 + x2, inverse = TRUE))
+bdata &lt;- transform(bdata,
+  y1 = rzoabeta(nn, shape1 = exp(1 + x2), shape2 = exp(2 - x2),
+                pobs0 = pobs0, pobs1 = pobs1))
+summary(bdata)
+fit1 &lt;- vglm(y1 ~ x2, zoabetaR(parallel.pobs = TRUE),
+             data = bdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+summary(fit1)
+</code></pre>
+
+
+</div>

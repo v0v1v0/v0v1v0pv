@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>blaschkeProd</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate Blaschke products</h2>
+
+<h3>Description</h3>
+
+<p>This function calculates Blaschke products
+(<a href="https://en.wikipedia.org/wiki/Blaschke_product">https://en.wikipedia.org/wiki/Blaschke_product</a>) for a complex number
+<code>z</code> given a sequence <code>a</code> of complex numbers inside the unit disk,
+which are the zeroes of the Blaschke product.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">blaschkeProd(z, a)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>z</code></td>
+<td>
+<p>Complex number; the point in the complex plane to which the output
+of the function is mapped</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a</code></td>
+<td>
+<p>Vector of complex numbers located inside the unit disk. At each
+<code>a</code>, the Blaschke product will have a zero.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A sequence of points <code>a[n]</code> located inside the unit disk satisfies the
+Blaschke condition, if <code>sum[1:n] (1 - abs(a[n])) &lt; Inf</code>. For each
+element <code>a != 0</code> of such a sequence, <code>B(a, z) = abs(a)/a * (a -
+z)/(1 - conj(a) * z)</code> can be calculated. For <code>a = 0</code>, <code>B(a, z) =
+z</code>. The Blaschke product <code>B(z)</code> results as <code>B(z) = prod[1:n]
+(B(a[n], z))</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The value of the Blaschke product at <code>z</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other maths: 
+<code>jacobiTheta()</code>,
+<code>juliaNormal()</code>,
+<code>mandelbrot()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Generate random vector of 17 zeroes inside the unit disk
+n &lt;- 17
+a &lt;- complex(modulus = runif(n, 0, 1), argument = runif(n, 0, 2*pi))
+
+# Portrait the Blaschke product
+phasePortrait(blaschkeProd, moreArgs = list(a = a),
+  xlim = c(-1.2, 1.2), ylim = c(-1.2, 1.2),
+  nCores = 1) # Max. two cores on CRAN, not a limit for your use
+  
+
+
+</code></pre>
+
+
+</div>

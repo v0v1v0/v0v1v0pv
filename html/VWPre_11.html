@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>create_binomial</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Creates a success/failure column for each IA based on counts.</h2>
+
+<h3>Description</h3>
+
+<p><code>create_binomial</code> uses interest area count columns to create 
+a success/failure column for each IA which is suitable for logistic regression. 
+N.B.: This function will work for data with a maximum of 8 interest areas.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">create_binomial(
+  data,
+  NoIA = NULL,
+  ObsPerBin = NULL,
+  ObsOverride = FALSE,
+  CustomBinom = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data table object output by either <code>bin_prop</code> or
+<code>transform_to_elogit</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NoIA</code></td>
+<td>
+<p>A positive integer indicating the number of interest areas defined 
+when creating the study.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ObsPerBin</code></td>
+<td>
+<p>A positive integer indicating the number of observations to
+use in the calculation. Typically, this will be the number of samples per 
+bin, which can be determined with <code>check_samples_per_bin</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ObsOverride</code></td>
+<td>
+<p>A logical value controlling restrictions on the value
+provided to ObsPerBin. Default value is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CustomBinom</code></td>
+<td>
+<p>An optional parameter specifying a vector containing two 
+integers corresponding to the interest area IDs to be combined.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data table with additional columns (the number of which depends on 
+the number of interest areas specified) added to <code>data</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(VWPre)
+# Create binomial (success/failure) column...
+df &lt;- create_binomial(data = dat, NoIA = 4, ObsPerBin = 20)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

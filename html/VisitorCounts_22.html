@@ -1,0 +1,105 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predict.decomposition</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Predict Decomposition</h2>
+
+<h3>Description</h3>
+
+<p>Methods for generating predictions from objects of the class "decomposition".
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'decomposition'
+predict(object, n_ahead, only_new = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object of class "decomposition".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_ahead</code></td>
+<td>
+<p>An integer describing the number of forecasts to make.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>only_new</code></td>
+<td>
+<p>A Boolean describing whether or not to include past values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>forecasts</code></td>
+<td>
+<p>A vector with overall forecast values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trend_forecasts</code></td>
+<td>
+<p>A vector with trend forecast values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seasonality_forecasts</code></td>
+<td>
+<p>A vector with seasonality forecast values.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data("park_visitation")
+suspected_periods &lt;- c(12,6,4,3)
+proportion_of_variance_type = "leave_out_first"
+max_proportion_of_variance &lt;- 0.995
+log_ratio_cutoff &lt;- 0.2
+
+park &lt;- "DEVA"
+
+nps_ts &lt;- ts(park_visitation[park_visitation$park == park,]$nps, start = 2005, freq = 12)
+nps_ts &lt;- log(nps_ts)
+
+pud_ts &lt;- ts(park_visitation[park_visitation$park == park,]$pud, start = 2005, freq = 12)
+pud_ts &lt;- log(pud_ts)
+
+nps_ts &lt;- ts(park_visitation[park_visitation$park == park,]$nps, start = 2005, freq = 12)
+nps_ts &lt;- log(nps_ts)
+
+decomp_pud &lt;- auto_decompose(pud_ts,
+                                     suspected_periods,
+                                     proportion_of_variance_type = proportion_of_variance_type,
+                                     max_proportion_of_variance,
+                                    log_ratio_cutoff)
+n_ahead = 36
+pud_predictions &lt;- predict(decomp_pud,n_ahead = n_ahead, only_new = FALSE)
+
+
+
+</code></pre>
+
+
+</div>

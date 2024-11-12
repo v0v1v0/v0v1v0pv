@@ -1,0 +1,172 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vega_embed</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vega embed options</h2>
+
+<h3>Description</h3>
+
+<p>Helper-function to specify the <code>embed</code> argument to <code>vegawidget()</code>.
+These arguments reflect the options to the
+<a href="https://github.com/vega/vega-embed/#options">vega-embed</a>
+library, which ultimately renders the chart specification as HTML.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vega_embed(
+  renderer = c("canvas", "svg"),
+  actions = NULL,
+  defaultStyle = TRUE,
+  config = NULL,
+  patch = NULL,
+  bind = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>renderer</code></td>
+<td>
+<p><code>character</code> the renderer to use for the view.
+One of <code>"canvas"</code> (default) or <code>"svg"</code>.
+See <a href="https://vega.github.io/vega/docs/api/view/#view_renderer">Vega docs</a>
+for details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>actions</code></td>
+<td>
+<p><code>logical</code> or named vector of logicals, determines if action links
+("Export as PNG/SVG", "View Source", "Open in Vega Editor")
+are included with the embedded view.
+If the value is <code>TRUE</code> (default), all action links will be shown
+and none if the value is <code>FALSE</code>. This property can be a named vector of
+logicals that maps
+keys (<code>export</code>, <code>source</code>, <code>compiled</code>, <code>editor</code>) to logical values for determining
+if each action link should be shown. By default, <code>export</code>, <code>source</code>,
+and <code>editor</code> are <code>TRUE</code> and <code>compiled</code> is <code>FALSE</code>, but these defaults
+can be overridden. For example, if <code>actions</code> is
+<code>list(export =  FALSE, source = TRUE)</code>, the embedded visualization will
+have two links – "View Source" and "Open in Vega Editor".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>defaultStyle</code></td>
+<td>
+<p><code>logical</code> or <code>character</code>
+default stylesheet for embed actions. If set to <code>TRUE</code> (default),
+the embed actions are shown in a menu. Set to <code>FALSE</code> to use simple links.
+Provide a <code>character</code> string to set the style sheet.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>config</code></td>
+<td>
+<p><code>character</code> or <code>list</code>, a URL string from which to load
+a Vega/Vega-Lite or Vega-Lite configuration file, or a <code>list</code> of
+Vega/Vega-Lite configurations to override the default configuration
+options. If <code>config</code> is a URL, it will be subject to standard browser
+security restrictions. Typically this URL will point to a file on the same
+host and port number as the web page itself.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>patch</code></td>
+<td>
+<p><code>JS</code> function, <code>list</code> or <code>character</code>, A function to modify the
+Vega specification before it is parsed. Alternatively, an <code>list</code> that,
+when compiled to JSON, will meet
+<a href="https://www.rfc-editor.org/rfc/rfc6902">JSON-Patch RFC6902</a>.
+If you use Vega-Lite, the compiled Vega will be patched.
+Alternatively to the function or the <code>list</code>, a URL string from which to
+load the patch can be provided. This URL will be subject to standard
+browser security restrictions. Typically this URL will point to a file
+on the same host and port number as the web page itself.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bind</code></td>
+<td>
+<p><code>character</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other named items, outlined in
+<a href="https://github.com/vega/vega-embed">vega-embed</a> options.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The most important arguments are <code>renderer</code>, <code>actions</code>, and <code>defaultStyle</code>:
+</p>
+
+<ul>
+<li>
+<p> The default <code>renderer</code> is <code>"canvas"</code>.
+</p>
+</li>
+<li>
+<p> The default for <code>actions</code> is <code>NULL</code>, which means that the <code>export</code>,
+<code>source</code>, and <code>editor</code> links are shown, but the <code>compiled</code> link is
+not shown.
+</p>
+
+<ul>
+<li>
+<p> To suppress all action links, call with <code>actions = FALSE</code>.
+</p>
+</li>
+<li>
+<p> To change from the default for a given action link, call with a list:
+<code>actions = list(editor = FALSE)</code>.
+</p>
+</li>
+</ul>
+</li>
+<li>
+<p> The default for <code>defaultStyle</code> is <code>TRUE</code>, which means that action-links
+are rendered in a widget at the upper-right corner of the rendered chart.
+</p>
+</li>
+</ul>
+<p>The <a href="https://github.com/vega/vega-embed/#options">vega-embed</a> library has a lot
+more options, you can supply these as names arguments using <code>...</code>.
+</p>
+<p>For example, it is ineffective to set the <code>width</code> and <code>height</code> parameters
+here when embedding a Vega-Lite specification, as they will be overridden
+by the value in the chart specification.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>list</code> to to be used with vega-embed JavaScript library
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://github.com/vega/vega-embed">vega-embed library</a>,
+<code>vegawidget()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vega_embed(renderer = "svg")
+
+</code></pre>
+
+
+</div>

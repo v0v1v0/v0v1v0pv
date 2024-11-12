@@ -1,0 +1,167 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopHfuncDeriv</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Derivatives of the h-Function of a Bivariate Copula</h2>
+
+<h3>Description</h3>
+
+<p>This function evaluates the derivative of a given conditional parametric
+bivariate copula (h-function) with respect to its parameter(s) or one of its
+arguments.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopHfuncDeriv(
+  u1,
+  u2,
+  family,
+  par,
+  par2 = 0,
+  deriv = "par",
+  obj = NULL,
+  check.pars = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>u1, u2</code></td>
+<td>
+<p>numeric vectors of equal length with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>integer; single number or vector of size <code>length(u1)</code>;
+defines the bivariate copula family: \ <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula) <br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; “survival Joe”) <br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>numeric; single number or vector of size <code>length(u1)</code>;
+copula parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>integer; single number or vector of size <code>length(u1)</code>;
+second parameter for the t-Copula; default is <code>par2 = 0</code>, should be an
+positive integer for the Students's t copula <code>family = 2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>deriv</code></td>
+<td>
+<p>Derivative argument <br><code>"par"</code> = derivative with respect to the first parameter (default)<br><code>"par2"</code> = derivative with respect to the second parameter
+(only available for the t-copula) <br><code>"u2"</code> = derivative with respect to the second argument <code>u2</code> <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p><code>BiCop</code> object containing the family and parameter
+specification.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.pars</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>; if <code>FALSE</code>, checks
+for family/parameter-consistency are omitted (should only be used with
+care).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If the family and parameter specification is stored in a <code>BiCop()</code>
+object <code>obj</code>, the alternative version <br></p>
+<pre>BiCopHfuncDeriv(u1, u2, obj, deriv = "par")</pre>
+<p>can be used.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A numeric vector of the conditional bivariate copula derivative
+</p>
+
+<ul>
+<li>
+<p> of the copula <code>family</code>,
+</p>
+</li>
+<li>
+<p> with parameter(s) <code>par</code>, <code>par2</code>,
+</p>
+</li>
+<li>
+<p> with respect to <code>deriv</code>,
+</p>
+</li>
+<li>
+<p> evaluated at <code>u1</code> and <code>u2</code>.
+</p>
+</li>
+</ul>
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier
+</p>
+
+
+<h3>References</h3>
+
+<p>Schepsmeier, U. and J. Stoeber (2014). Derivatives and Fisher
+information of bivariate copulas. Statistical Papers, 55 (2), 525-542. <br><a href="https://link.springer.com/article/10.1007/s00362-013-0498-x">https://link.springer.com/article/10.1007/s00362-013-0498-x</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineGrad()</code>, <code>RVineHessian()</code>,
+<code>BiCopDeriv2()</code>, <code>BiCopDeriv2()</code>,
+<code>BiCopHfuncDeriv()</code>, <code>BiCop()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## simulate from a bivariate Student-t copula
+set.seed(123)
+cop &lt;- BiCop(family = 2, par = -0.7, par2 = 4)
+simdata &lt;- BiCopSim(100, cop)
+
+## derivative of the conditional Student-t copula
+## with respect to the first parameter
+u1 &lt;- simdata[,1]
+u2 &lt;- simdata[,2]
+BiCopHfuncDeriv(u1, u2, cop, deriv = "par")
+
+## estimate a Student-t copula for the simulated data
+cop &lt;- BiCopEst(u1, u2, family = 2)
+## and evaluate the derivative of the conditional copula
+## w.r.t. the second argument u2
+BiCopHfuncDeriv(u1, u2, cop, deriv = "u2")
+
+</code></pre>
+
+
+</div>

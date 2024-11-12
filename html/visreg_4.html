@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>subset.visreg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Subset a visreg object</h2>
+
+<h3>Description</h3>
+
+<p>Subset a visreg object so that only a portion of the full
+model is plotted.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'visreg'
+subset(x, sub, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A <code>visreg</code> object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sub</code></td>
+<td>
+
+<p>Logical expression indicating elements to keep, as in
+<code>subset</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Not used.
+</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Fit a model and construct a visreg object
+airquality$Heat &lt;- cut(airquality$Temp,3,labels=c("Cool","Mild","Hot"))
+fit &lt;- lm(Ozone~ Solar.R + Wind*Heat,data=airquality)
+v &lt;- visreg(fit, "Wind", by="Heat", plot=FALSE)
+
+# Plot only certain levels
+vv &lt;- subset(v, Heat %in% c("Cool", "Hot"))
+plot(vv)
+
+# Plot only up to wind 15 mph
+vv &lt;- subset(v, Wind &lt; 15)
+plot(vv)
+</code></pre>
+
+
+</div>

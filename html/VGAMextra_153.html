@@ -1,0 +1,242 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>weibullQlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Weibull Quantile regression:
+Link function for the quantiles of the Weibull distribution.
+</h2>
+
+<h3>Description</h3>
+
+
+<p>Computes the <code>weibullQlink</code> transformation, its inverse and
+the first two derivatives.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">       weibullQlink(theta, percentile = stop("Enter percentiles."),
+                    shape = NULL, wrt.param = NULL,
+                    bvalue = NULL, inverse = FALSE,
+                    deriv = 0, short = TRUE, tag = FALSE)
+                       
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character. Same as
+<code>uninormalQlink</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentile</code></td>
+<td>
+
+<p>Same as <code>uninormalQlink</code>.
+Denoted below as <code>perc</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+
+<p>Numeric, positive. The shape parameter, required. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wrt.param</code></td>
+<td>
+
+<p>Same as in <code>uninormalQlink</code> 
+
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue, inverse, deriv, short, tag</code></td>
+<td>
+
+<p>See <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The ordinary 
+scale–shape Weibull quantiles are directly modelled by this link,
+aka <code>weibullQlink</code> transformation.
+It can only be used within
+<code>weibullRff</code>
+as the first linear predictor, <code class="reqn">\eta_1</code>,
+and is defined as
+
+
+
+
+
+</p>
+<p style="text-align: center;"><code class="reqn"> \tt{weibullQlink}(\beta; \alpha) = \eta_1(\beta; \alpha) = 
+                \log \{\beta \cdot [(-\log(1 - perc))^{(1/\alpha)}]\},</code>
+</p>
+
+
+<p>for <em>given</em> <code class="reqn">\alpha</code> ('shape' parameter) where
+<code class="reqn">\beta &gt; 0</code> is the <em>scale</em> parameter.
+
+
+
+<code>weibullQlink</code> is expressly a function of <code class="reqn">\beta</code>, i.e.
+<code class="reqn">\theta</code>, therefore <code class="reqn">\alpha</code> (<em>shape</em>)
+must be entered at every call.
+</p>
+<p>Numerical values of <code class="reqn">\alpha</code> or <code class="reqn">\beta</code> out of range may 
+result in <code>Inf</code>, <code>-Inf</code>, <code>NA</code> or <code>NaN</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the <code>weibullQlink</code> transformation of
+<code>theta</code>, i.e. <code class="reqn">\beta</code>, when <code>inverse = FALSE</code>.
+If <code>inverse = TRUE</code>, then <code class="reqn">\theta</code> becomes <code class="reqn">\eta</code>,
+and the inverse, <code>exp[theta</code> - 
+<code class="reqn">(1 / \alpha) log(-log(1 - perc))</code><code>]</code>,
+<em>for given</em> <code class="reqn">\alpha</code>, is
+returned.
+</p>
+<p>When <code>deriv = 1</code> <code>theta</code> becomes 
+<code class="reqn">\theta = (\beta, \alpha)= (\theta_1, \theta_2)</code>, and
+<code class="reqn">\eta = (\eta_1, \eta_2)</code> with 
+<code class="reqn">\eta_2 = \log~\alpha</code>,
+and the argument <code>wrt.param</code> must be
+considered:
+</p>
+<p>A) If <code>inverse = FALSE</code>, then 
+<code class="reqn">d</code> <code>eta1</code> / <code class="reqn">d</code> <code class="reqn">\beta</code> is returned when 
+<code>wrt.param = 1</code>, and
+<code class="reqn">d</code> <code>eta1</code> / <code class="reqn">d</code> <code class="reqn">\alpha</code> if
+<code>wrt.param = 2</code>.
+</p>
+<p>B) For <code>inverse = TRUE</code>, this link returns
+<code class="reqn">d</code> <code class="reqn">\beta</code> / <code class="reqn">d</code> <code>eta1</code> and
+<code class="reqn">d</code> <code class="reqn">\alpha</code> / <code class="reqn">d</code> <code>eta1</code> conformably arranged
+in a matrix, if <code>wrt.param = 1</code>,
+as a function of <code class="reqn">\theta_i</code>, <code class="reqn">i = 1, 2</code>.
+When <code>wrt.param = 2</code>, a matrix with columns
+<code class="reqn">d\beta</code> / <code class="reqn">d</code> <code>eta2</code> and 
+<code class="reqn">d\alpha</code> / <code class="reqn">d</code> <code>eta2</code>
+is returned.  
+
+
+
+
+
+
+
+
+
+
+
+</p>
+<p>For <code>deriv = 2</code>, the second derivatives in
+terms of <code>theta</code> are similarly returned.
+</p>
+
+
+
+
+
+
+<h3>Note</h3>
+
+<p>See <code>weibullMlink</code>.
+
+
+
+
+</p>
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>Miranda &amp; Yee (2021) 
+<em>Two–Parameter Link Functions,
+With Application to Negative Binomial, Weibull and
+Quantile Regression</em>. In preparation.
+</p>
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>weibullRff</code>,
+<code>Q.reg</code>,
+<code>weibullR</code>,
+<code>weibmeanlink</code>,
+<code>Links</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    eta &lt;- seq(-3, 3, by = 0.1) # this is eta = log(Weibull-quantiles).
+    shape  &lt;- exp(1)    # 'shape' argument.
+    percentile &lt;- c(25, 50, 75, 95)  # some percentiles of interest.
+ 
+ ## E1. Get 'scale' values. Gives a warning (not of the same length) !
+   theta &lt;- weibullQlink(theta = eta, percentile = percentile,
+                         shape = shape, inverse = TRUE)  # Scale
+   
+ ## Not run: 
+ ## E2. Plot theta vs. eta, 'shape' fixed, for different percentiles.
+plot(theta[, 1], eta, type = "l", lwd = 3,
+     ylim = c(-4, 4), 
+     main = paste0("weibullQlink(theta; shape = ", round(shape, 3), ")"), 
+     xlab = "Theta (scale)", ylab = "weibullQlink")
+abline(h = -3:3, v = 0, col = "gray", lty = "dashed")
+lines(theta[, 2], eta, lwd = 3, col = "blue")
+lines(theta[, 3], eta, lwd = 3, col = "orange")
+lines(theta[, 4], eta, lwd = 3, col = "red")
+legend("bottomright", c("25th Perc", "50th Perc", "75th Perc", "95th Perc"),
+      col = c("black", "blue", "orange", "red"),
+      lwd = rep(3, 4))
+ 
+## End(Not run)
+ 
+ ## E3. weibullQlink() and its inverse ##
+    etabis  &lt;- weibullQlink(theta = theta, percentile = percentile,
+                            shape = shape, inverse = FALSE)
+    summary(eta - etabis)     # Should be 0 for each colum (percentile)
+</code></pre>
+
+
+</div>

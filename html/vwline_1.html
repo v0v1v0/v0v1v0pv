@@ -1,0 +1,155 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>widthSpec</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Specify the width of a variable-width line
+</h2>
+
+<h3>Description</h3>
+
+<p>Specify the width of a variable-width line.  The
+<code>widthSpline</code> and <code>BezierWidth</code> functions are for use with
+<code>grid.brushXspline</code> or <code>grid.offsetXspline</code> or
+<code>grid.offsetBezier</code>.
+The <code>widthSpec</code> function is for use with
+<code>grid.vwline</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">widthSpec(x, default.units = "npc")
+widthSpline(w=unit(1, "cm"), default.units="in", d=NULL, shape=-1, rep=FALSE)
+BezierWidth(w=unit(1, "cm"), default.units="in", d=NULL, rep=FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A numeric vector or a unit specifying the width,
+or a list of such with components
+<code>left</code> and <code>right</code> specifying the width to either side.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>default.units</code></td>
+<td>
+
+<p>The units to use if <code>x</code> or <code>w</code> is specified as a
+numeric vector.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w</code></td>
+<td>
+<p>A numeric vector or a unit specifying the width.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+<p>A numeric vector or a unit specifying the distance along
+the line for each width value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+<p>The shape parameter for the width spline.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rep</code></td>
+<td>
+<p>A logical indicating whether to repeat the widths
+along the full length of the line.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>All variable-width functions accept width as just a numeric vector
+or a unit; the former is automatically converted to the latter.
+</p>
+<p>For <code>grid.vwcurve</code> and <code>grid.vwXspline</code>, each width
+is associated with an x/y location on the main curve.
+The <code>grid.vwline</code> function is similar except that,
+via <code>widthSpec</code>, it
+also allows the width to be different on either side of the
+main curve.
+</p>
+<p>For <code>grid.brushXspline</code> and <code>grid.offsetXspline</code>,
+the width is independent of the x/y locations that specify the main
+curve.  The width is itself a spline, with each width associated
+with a distance along the length of the main curve.  By default,
+the specified widths are spaced evenly along the main curve, but
+the <code>widthSpec</code> function allows fine control over the
+spacing of the widths.
+</p>
+<p>For <code>BezierWidth</code>, <code>w</code> must contain 4 (or 7 or 10)
+values to provide an appropriate number of control points, although
+a single value is automatically replicated four times.
+If <code>d</code> is specified, the same rules apply.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>widthSpec</code> creates a <code>"widthSpec"</code> object.
+</p>
+<p><code>widthSpline</code> creates a <code>"widthSpline"</code> object.
+</p>
+<p><code>BezierWidth</code> creates a <code>"BezierWidth"</code> object.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Paul Murrell
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>grid.xspline</code>,
+<code>grid.curve</code>,
+<code>grid.vwline</code>,
+<code>grid.vwcurve</code>,
+<code>grid.brushXspline</code>,
+<code>grid.vwXspline</code>,
+<code>grid.offsetXspline</code>,
+<code>grid.offsetBezier</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">grid.newpage()
+x &lt;- c(.2, .4, .6, .8)
+y &lt;- c(-.05, .05, -.05, .05)
+grid.vwcurve(x, y + .8, w=c(0, .1, 0, .1))
+grid.lines(x, y + .8, gp=gpar(col="white"))
+grid.vwline(x, y + .6, w=widthSpec(list(left=c(0, .1, 0, .1),
+                                        right=c(.1, 0, .1, 0))))
+grid.lines(x, y + .6, gp=gpar(col="white"))
+grid.brushXspline(verticalBrush, x, y + .4,
+                  w=widthSpline(c(0, .1, 0, .1), "npc", shape=1))
+grid.xspline(x, y + .4, shape=1, gp=gpar(col="white"))
+grid.offsetXspline(x, y + .2, 
+                  w=widthSpline(c(0, .1, 0, .1, 0), "npc",
+                                d=0:4/8, shape=1, rep=TRUE))
+grid.xspline(x, y + .2, shape=1, gp=gpar(col="white"))
+</code></pre>
+
+
+</div>

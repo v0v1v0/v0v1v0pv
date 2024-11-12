@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Examp2.5.4.1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Examp2.5.4.1 from Duchateau, L. and Janssen, P. and Rowlands, G. J. (1998).<em>Linear Mixed Models. An Introduction with applications in Veterinary Research</em>. International Livestock Research Institute.</h2>
+
+<h3>Description</h3>
+
+<p>Examp2.5.4.1 is used for inspecting probability distribution and to define a plausible process through
+linear models and generalized linear models.
+</p>
+
+
+<h3>Author(s)</h3>
+
+
+<ol><li>
+<p>  Muhammad Yaseen (<a href="mailto:myaseen208@gmail.com">myaseen208@gmail.com</a>)
+</p>
+</li></ol>
+<h3>References</h3>
+
+
+<ol><li>
+<p> Duchateau, L. and Janssen, P. and Rowlands, G. J. (1998).<em>Linear Mixed Models. An Introduction with applications in Veterinary Research</em>.
+International Livestock Research Institute.
+</p>
+</li></ol>
+<h3>See Also</h3>
+
+<p><code>ex124</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#-------------------------------------------------------------
+## Example 2.5.4.1 p-74
+#-------------------------------------------------------------
+ # PROC MIXED DATA=ex125;
+ # CLASS drug dose region;
+ # MODEL pcv=drug dose drug*dose / ddfm=satterth;
+ # RANDOM region drug*region;
+ # ESTIMATE 'Samorin mean' INTERCEPT 1 drug 0 1 dose 0.5 0.5
+ #                             drug*dose 0 0 0.5 0.5;
+ # RUN;
+ 
+ # PROC GLM DATA=ex125;
+ # CLASS drug dose region;
+ # MODEL pcv=region drug region*drug dose drug*dose;
+ # ESTIMATE 'Samorin mean' INTERCEPT 1 drug 0 1 dose 0.5 0.5
+ #                             drug*dose 0 0 0.5 0.5;
+ # RUN;
+  
+ library(lme4)
+ str(ex125)
+ ex125$Region1 &lt;- factor(ex125$Region)
+  fm2.13 &lt;- 
+  lmerTest::lmer(
+         formula    = Pcv ~ dose*Drug + (1|Region/Drug)
+       , data       = ex125
+       , REML       = TRUE
+       , control    = lmerControl()
+       , start      = NULL
+       , verbose    = 0L
+    #  , subset
+    #  , weights
+    #  , na.action
+    #  , offset
+       , contrasts  = list(dose = "contr.SAS", Drug = "contr.SAS")
+       , devFunOnly = FALSE
+    #  , ...
+       )                       
+  summary(fm2.13)
+ 
+ library(multcomp)
+ Contrasts2 &lt;-
+           matrix(c(
+                   1, 0.5, 0, 0
+                 )
+                , ncol = 4
+                , byrow = TRUE
+                , dimnames = list(
+                   c("C5")
+                 , rownames(summary(fm2.13)$coef)
+                )
+               )
+ 
+ Contrasts2
+ summary(glht(fm2.13, linfct=Contrasts2))
+ 
+</code></pre>
+
+
+</div>

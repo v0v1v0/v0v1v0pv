@@ -1,0 +1,56 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>surf_to_vol</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Surface to volume</h2>
+
+<h3>Description</h3>
+
+<p>Converts surface data to volumetric data (.nii file)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">surf_to_vol(surf_data, filename, VWR_check = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>surf_data</code></td>
+<td>
+<p>A numeric vector or object containing the surface data, either in fsaverage5 (1 x 20484 vertices) or fsaverage6 (1 x 81924 vertices) space. It can only be one row of vertices (not a cohort surface data matrix).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filename</code></td>
+<td>
+<p>A string object containing the desired name of the output .nii file (default is 'output.nii' in the R temporary directory (tempdir())).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VWR_check</code></td>
+<td>
+<p>A boolean object specifying whether to check and validate system requirements. Default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A .nii volume file
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">CTv = runif(20484,min=0, max=100);
+surf_to_vol(CTv, filename = paste0(tempdir(),'/volume.nii'), VWR_check=FALSE)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>marker_term</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Creates Data for One Type of Marker</h2>
+
+<h3>Description</h3>
+
+<p>Creates Data for One Type of Marker
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">marker_term(formula, id, data, time_fixef, time_rng)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>a two-sided <code>formula</code> with the marker outcome
+on the left-hand side and fixed effect covariates on the right-hand
+side.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>the variable for the id of each individual.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a <code>data.frame</code> or environment to look at up the
+variables in.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time_fixef</code></td>
+<td>
+<p>the time-varying fixed effects. See .e.g.
+<code>poly_term</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time_rng</code></td>
+<td>
+<p>the time-varying random effects. See .e.g.
+<code>poly_term</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>time_fixef</code> should likely not include an intercept as this is
+often included in <code>formula</code>. Use
+<code>poly_term(degree = 0, raw = TRUE, intercept = TRUE)</code> if you want only
+a random intercept.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>marker_term</code> containing longitudinal data.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># load in the data
+library(survival)
+data(pbc, package = "survival")
+
+# re-scale by year
+pbcseq &lt;- transform(pbcseq, day_use = day / 365.25)
+pbc &lt;- transform(pbc, time_use = time / 365.25)
+
+# create the marker terms
+m1 &lt;- marker_term(
+  log(bili) ~ 1, id = id, data = pbcseq,
+  time_fixef = bs_term(day_use, df = 5L),
+  time_rng = poly_term(day_use, degree = 1L, raw = TRUE, intercept = TRUE))
+m2 &lt;- marker_term(
+  albumin ~ 1, id = id, data = pbcseq,
+  time_fixef = bs_term(day_use, df = 5L),
+  time_rng = poly_term(day_use, degree = 1L, raw = TRUE, intercept = TRUE))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,68 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>add_polid</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add polygon id to lines road network</h2>
+
+<h3>Description</h3>
+
+<p>Sometimes you need to add polygon id into your streets road network.
+<code>add_polid</code> add add_polid id into your road network cropping your
+network by.
+</p>
+<p>For instance, you have open street maps road network the you have the
+polygon of your regions. This function adds the id of your polygon
+as a new column in the streets network.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">add_polid(polyg, street, by)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>polyg</code></td>
+<td>
+<p>sf object POLYGON or sp</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>street</code></td>
+<td>
+<p>streets road network class sf or sp</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>Character indicating the column with the id in polyg</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><code>emis_to_streets</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(net)
+nets &lt;- sf::st_as_sf(net)
+bb &lt;- sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(nets)))
+bb$id &lt;- "a"
+a &lt;- add_polid(polyg = bb, street = nets, by = "id")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

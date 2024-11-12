@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ef_im</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Emission factors deoending on accumulated mileage</h2>
+
+<h3>Description</h3>
+
+<p><code>ef_im</code> calculate the theoretical emission factors of vehicles.
+The approache is different from including deterioration factors
+(<code>emis_det</code>)  but similar, because they represent how much emits
+a vehicle with a normal deterioration, but that it will pass the
+Inspection and Manteinance program.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ef_im(ef, tc, amileage, max_amileage, max_ef, verbose = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ef</code></td>
+<td>
+<p>Numeric; emission factors of vehicles with <strong>0 mileage</strong>
+(new vehicles).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tc</code></td>
+<td>
+<p>Numeric; rate of growth of emissions by year of use.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>amileage</code></td>
+<td>
+<p>Numeric; Accumulated mileage by age of use.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_amileage</code></td>
+<td>
+<p>Numeric; Max accumulated mileage. This means that after
+this value, mileage is constant.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_ef</code></td>
+<td>
+<p>Numeric; Max ef. This means that after this value, ef is constant.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical; if you want detailed description.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An emission factor of a deteriorated vehicle under normal conditions
+which would be approved in a inspection and mantainence program.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Do not run
+# Passenger Cars PC
+data(fkm)
+# cumulative mileage from 1 to 50 years of use, 40:50
+mil &lt;- cumsum(fkm$KM_PC_E25(1:10))
+ef_im(ef = seq(0.1, 2, 0.2), seq(0.1, 1, 0.1), mil)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

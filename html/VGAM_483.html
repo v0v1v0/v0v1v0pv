@@ -1,0 +1,95 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>eCDF</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Empirical Cumulative Distribution Function</h2>
+
+<h3>Description</h3>
+
+<p>Returns the desired quantiles of quantile regression object such
+as an extlogF1() or lms.bcn() VGLM object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">eCDF.vglm(object, all = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>an object such as
+a <code>vglm</code> object with
+family function <code>extlogF1</code> or
+<code>lms.bcn</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all</code></td>
+<td>
+
+<p>Logical. Return all other information?
+If true, the empirical CDF is returned.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>additional optional arguments.
+Currently unused.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function was specifically written for
+a <code>vglm</code> object
+with family function <code>extlogF1</code>
+or <code>lms.bcn</code>.
+It returns the proportion of data lying below each of
+the fitted quantiles, and optionally
+the desired quantiles (arguments <code>tau</code> or
+<code>percentiles / 100</code> in the family function).
+The output is coerced to be comparable between
+family functions by calling the columns by
+the same names.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector with each value lying in (0, 1).
+If <code>all = TRUE</code> then a 2-column matrix with the
+second column being the <code>tau</code> values or equivalent.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>extlogF1</code>,
+<code>lms.bcn</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fit1 &lt;- vglm(BMI ~ ns(age, 4), extlogF1, data = bmi.nz)  # trace = TRUE
+eCDF(fit1)
+eCDF(fit1, all = TRUE)
+</code></pre>
+
+
+</div>

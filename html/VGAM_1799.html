@@ -1,0 +1,168 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>geometric</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Geometric (Truncated and Untruncated) Distributions </h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation for the geometric
+and truncated geometric distributions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">geometric(link = "logitlink", expected = TRUE, imethod = 1,
+          iprob = NULL, zero = NULL)
+truncgeometric(upper.limit = Inf,
+               link = "logitlink", expected = TRUE, imethod = 1,
+               iprob = NULL, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Parameter link function applied to the
+probability parameter <code class="reqn">p</code>, which lies in the unit interval.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>expected</code></td>
+<td>
+
+<p>Logical.
+Fisher scoring is used if <code>expected = TRUE</code>, else Newton-Raphson.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iprob, imethod, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>upper.limit</code></td>
+<td>
+
+<p>Numeric.
+Upper values.
+As a vector, it is recycled across responses first.
+The default value means both family functions should give the same result.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A random variable <code class="reqn">Y</code> has a 1-parameter geometric distribution
+if <code class="reqn">P(Y=y) = p (1-p)^y</code>
+for <code class="reqn">y=0,1,2,\ldots</code>.
+Here, <code class="reqn">p</code> is the probability of success,
+and <code class="reqn">Y</code> is the number of (independent) trials that are fails
+until a success occurs.
+Thus the response <code class="reqn">Y</code> should be a non-negative integer.
+The mean of <code class="reqn">Y</code> is <code class="reqn">E(Y) = (1-p)/p</code>
+and its variance is <code class="reqn">Var(Y) = (1-p)/p^2</code>.
+The geometric distribution is a special case of the
+negative binomial distribution (see <code>negbinomial</code>).
+The geometric distribution is also a special case of the
+Borel distribution, which is a Lagrangian distribution.
+If <code class="reqn">Y</code> has a geometric distribution with parameter <code class="reqn">p</code> then
+<code class="reqn">Y+1</code> has a positive-geometric distribution with the same parameter.
+Multiple responses are permitted.
+</p>
+<p>For <code>truncgeometric()</code>,
+the (upper) truncated geometric distribution can have response integer
+values from 0 to <code>upper.limit</code>.
+It has density <code>prob * (1 - prob)^y / [1-(1-prob)^(1+upper.limit)]</code>.
+</p>
+<p>For a generalized truncated geometric distribution with
+integer values <code class="reqn">L</code> to <code class="reqn">U</code>, say, subtract <code class="reqn">L</code>
+from the response and feed in <code class="reqn">U-L</code> as the upper limit.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee.
+Help from Viet Hoang Quoc is gratefully acknowledged.
+</p>
+
+
+<h3>References</h3>
+
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>negbinomial</code>,
+<code>Geometric</code>,
+<code>betageometric</code>,
+<code>expgeometric</code>,
+<code>zageometric</code>,
+<code>zigeometric</code>,
+<code>rbetageom</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">gdata &lt;- data.frame(x2 = runif(nn &lt;- 1000) - 0.5)
+gdata &lt;- transform(gdata, x3 = runif(nn) - 0.5,
+                          x4 = runif(nn) - 0.5)
+gdata &lt;- transform(gdata, eta  = -1.0 - 1.0 * x2 + 2.0 * x3)
+gdata &lt;- transform(gdata, prob = logitlink(eta, inverse = TRUE))
+gdata &lt;- transform(gdata, y1 = rgeom(nn, prob))
+with(gdata, table(y1))
+fit1 &lt;- vglm(y1 ~ x2 + x3 + x4, geometric, data = gdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+summary(fit1)
+
+# Truncated geometric (between 0 and upper.limit)
+upper.limit &lt;- 5
+tdata &lt;- subset(gdata, y1 &lt;= upper.limit)
+nrow(tdata)  # Less than nn
+fit2 &lt;- vglm(y1 ~ x2 + x3 + x4, truncgeometric(upper.limit),
+             data = tdata, trace = TRUE)
+coef(fit2, matrix = TRUE)
+
+# Generalized truncated geometric (between lower.limit and upper.limit)
+lower.limit &lt;- 1
+upper.limit &lt;- 8
+gtdata &lt;- subset(gdata, lower.limit &lt;= y1 &amp; y1 &lt;= upper.limit)
+with(gtdata, table(y1))
+nrow(gtdata)  # Less than nn
+fit3 &lt;- vglm(y1 - lower.limit ~ x2 + x3 + x4,
+             truncgeometric(upper.limit - lower.limit),
+             data = gtdata, trace = TRUE)
+coef(fit3, matrix = TRUE)
+</code></pre>
+
+
+</div>

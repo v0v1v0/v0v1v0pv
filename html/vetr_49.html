@@ -1,0 +1,124 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Verify Function Arguments Meet Structural Requirements</h2>
+
+<h3>Description</h3>
+
+<p>Use vetting expressions to enforce structural requirements for function
+arguments.  Works just like <code>vet()</code>, except that the formals of the
+enclosing function automatically matched to the vetting expressions provided
+in <code>...</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetr(..., .VETR_SETTINGS = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>vetting expressions, each will be matched to the enclosing
+function formals as with <code>match.call()</code> and will be used to validate the
+value of the matching formal.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.VETR_SETTINGS</code></td>
+<td>
+<p>a settings list as produced by <code>vetr_settings()</code>, or
+NULL to use the default settings.  Note that this means you cannot use
+<code>vetr</code> with a function that takes a <code>.VETR_SETTINGS</code> argument</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Only named arguments may be vetted; in other words it is not possible to vet
+arguments passed via <code>...</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>TRUE if validation succeeds, otherwise <code>stop</code> with error message
+detailing nature of failure.
+</p>
+
+
+<h3>Vetting Expressions</h3>
+
+<p>Vetting expressions can be template tokens, standard tokens, or any
+combination of template and standard tokens combined with <code>&amp;&amp;</code> and/or
+<code>||</code>.  Template tokens are R objects that define the required structure,
+much like the <code>FUN.VALUE</code> argument to <code>vapply()</code>.  Standard tokens are tokens
+that contain the <code>.</code> symbol and are used to vet values.
+</p>
+<p>If you do use the <code>.</code> symbol in your vetting expressions in your
+packages, you will need to include <code>utils::globalVariables(".")</code> as a
+top-level call to avoid the "no visible binding for global variable '.'"'
+R CMD check NOTE.
+</p>
+<p>See <code>vignette('vetr', package='vetr')</code> and examples for details on how
+to craft vetting expressions.
+</p>
+
+
+<h3>Note</h3>
+
+<p><code>vetr</code> will force evaluation of any arguments that are being
+checked (you may omit arguments that should not be evaluate from
+<code>vetr</code>)
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vet()</code>, in particular <code>example(vet)</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fun1 &lt;- function(x, y) {
+  vetr(integer(), LGL.1)
+  TRUE   # do some work
+}
+fun1(1:10, TRUE)
+try(fun1(1:10, 1:10))
+
+## only vet the second argument
+fun2 &lt;- function(x, y) {
+  vetr(y=LGL.1)
+  TRUE   # do some work
+}
+try(fun2(letters, 1:10))
+
+## Nested templates; note, in packages you should consider
+## defining templates outside of `vet` or `vetr` so that
+## they are computed on load rather that at runtime
+tpl &lt;- list(numeric(1L), matrix(integer(), 3))
+val.1 &lt;- list(runif(1), rbind(1:10, 1:10, 1:10))
+val.2 &lt;- list(runif(1), cbind(1:10, 1:10, 1:10))
+fun3 &lt;- function(x, y) {
+  vetr(x=tpl, y=tpl &amp;&amp; ncol(.[[2]]) == ncol(x[[2]]))
+  TRUE   # do some work
+}
+fun3(val.1, val.1)
+try(fun3(val.1, val.2))
+val.1.a &lt;- val.1
+val.1.a[[2]] &lt;- val.1.a[[2]][, 1:8]
+try(fun3(val.1, val.1.a))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,106 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predict.statespace</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Predict using a statespace object</h2>
+
+<h3>Description</h3>
+
+<p><code>predict.statespace</code> makes a prediction for a statespace object, in the offline or online
+setting.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'statespace'
+predict(
+  object,
+  newX,
+  newy = NULL,
+  online = TRUE,
+  compute_smooth = FALSE,
+  type = c("mean", "proba", "model"),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>the statespace object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newX</code></td>
+<td>
+<p>the design matrix in the prediction set</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newy</code></td>
+<td>
+<p>(default <code>NULL</code>) the variable of interest in the prediction set. If specified
+it allows to use the state-space model in the online setting. Otherwise the prediction is
+offline.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>online</code></td>
+<td>
+<p>(default <code>TRUE</code>) specifies if the prediction is made online, that is if
+the observation at time t-1 is used to update the model before predicting at time t.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>compute_smooth</code></td>
+<td>
+<p>(default <code>FALSE</code>) specifies if Kalman Smoothing is also computed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>type of prediction. Can be either
+</p>
+
+<dl>
+<dt>mean</dt>
+<dd>
+<p>return the mean forecast.</p>
+</dd>
+<dt>proba</dt>
+<dd>
+<p>return a probabilistic forecast (list containing estimation of the mean and
+standard deviation).</p>
+</dd>
+<dt>model</dt>
+<dd>
+<p>return the updated statespace object (containing also the forecasts).</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Depending on the type specified, the result is <br>
+- a vector of mean forecast if <code>type='mean'</code>
+- a list of two vectors, mean forecast and standard deviations if <code>type='proba'</code>
+- a statespace object if <code>type='model'</code>
+</p>
+
+
+</div>

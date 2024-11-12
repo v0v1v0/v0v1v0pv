@@ -1,0 +1,203 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>normal1sdff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Estimation and Inference for Conditional Quantiles of
+a 1–parameter Univariate Normal Distribution.
+</h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the standard deviation, including 
+inference for conditional quantiles, of a univariate normal 
+distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">            normal1sdff(zero = NULL, link = "loglink",
+                        fixed.mean = 0, p.quant = NULL,
+                        var.arg = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Allows to model the single linear predictor in this family function
+as intercept–only. See below for important details about this.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>This is the link function applied to the standard deviation.
+If <code>var.arg</code> is <code>TRUE</code>, then <code>link</code> is applied
+to the variance.
+The default is <code>loglink</code>. For 
+inference on conditional quantiles entered at <code>p.quant</code>,
+however, it must be manually changed to
+<code>normal1sdQlink</code>.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fixed.mean</code></td>
+<td>
+
+<p>Numeric, a vector or a matrix. It allocates the (fixed) mean of the 
+response in the fitting process. See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.quant</code></td>
+<td>
+
+<p>Numeric. A prototype vector of probabilities indicating the quantiles 
+of interest, when quantile regression is to be performed.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.arg</code></td>
+<td>
+
+<p>If <code>TRUE</code>, then the variance is estimated, else the
+standard deviation is used.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This family function is a variant of 
+<code>uninormal</code> 
+to estimate the standard deviation of a Normal distribution 
+with <em>known</em> mean. The estimated values are returned as
+the fitted values, unlike some other family functions where the mean
+is returned as <em>fitted values</em>. However, here the mean is 
+assumed to be known.
+</p>
+<p>By default, the response is supposedly <em>centered</em> on its mean, 
+that is, <code>fixed.mean</code><code class="reqn"> = 0</code>. Change this accordingly:
+For a single response or multiple responses, <code>fixed.mean</code> must
+be a numeric vector where each entry is the mean of each response, 
+only <em>if</em> the mean is <em>fixed</em>. When the mean is not constant, 
+<code>fixed.mean</code> must be matrix with the number of columns matching 
+the number of responses.
+</p>
+<p><em>Quantile regression:</em>
+The (single) linear/additive predictor by default is the <code>log</code> 
+of the standard deviation. However, if quantile regression is of 
+primary interest, then the response must be entered using the function
+<code>Q.reg</code>, and the corresponding 
+<code class="reqn">p</code>–quantiles through <code>p.quant</code> in the
+<code>vglm</code> or <code>vgam</code> call.
+Additionally, set <code>normalsdQlink</code> 
+as the link function via the argument <code>link</code>. 
+</p>
+<p>This family <span class="pkg">VGAM</span> function handles multiple responses.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>.
+See <code>vglmff-class</code> for further details.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>Be aware of the argument <code>zero</code>:
+by default, the single linear/additive predictor in this family 
+function, say <code class="reqn">\eta</code>, can be modeled in terms of covariates, 
+i.e., <code>zero = NULL</code>. 
+To model <code class="reqn">\eta</code>  as intercept–only, set <code>zero = "sd"</code>.
+</p>
+<p>See <code>zero</code> for more details about this.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>normal1sdQlink</code>,
+<code>loglink</code>,
+<code>uninormal</code>,
+<code>CommonVGAMffArguments</code>,
+<code>zero</code>,
+<code>vgam</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">   set.seed(121216)
+   my.mean &lt;- -1      #  Mean (CONSTANT)
+   my.sd   &lt;- 2.5
+   y &lt;- rnorm(100, mean = my.mean, sd = 2.0)      # Generate some data.
+   normdat &lt;- data.frame(y = y)                   # Setting up our data.
+ 
+    
+   # Plotting the data
+     plot(y, main = c("Y ~ Normal ( mean(known), sd = 2.5 ). "),
+          ylab = "The data", pch = 20, 
+          xlim = c(0, 100), ylim = c(-7, 7), col = "blue")
+     abline(h = 0, v = 0, lwd = 2, col = "black")
+   
+
+   ### EXAMPLE 1. Estimate the SD with two responses. The mean is fixed. ###
+   
+   fit1 &lt;- vglm(cbind(y, y) ~ 1, family = normal1sdff(fixed.mean = my.mean), 
+               data = normdat, trace = TRUE, crit = "coef")
+   Coef(fit1) 
+   summary(fit1)
+    
+    
+   ### EXAMPLE 2. Quantile regression. The link normal1sdQlink() is used. ###
+  
+   my.p &lt;- c(25, 50, 75) / 100  # Quantiles 25%, 50% and 75% are of interest.
+   
+   fit2 &lt;- vglm(Q.reg(y, length.arg = 3) ~ 1, 
+                family = normal1sdff(fixed.mean = my.mean, p.quant = my.p,
+                                   link = normal1sdQlink), 
+                data = normdat, trace = TRUE, crit = "coef")
+    summary(fit2)
+    head(predict(fit2))
+    constraints(fit2)
+
+
+   ### EXAMPLE 3. Complete the plot. Quantiles matching. ###
+   
+   
+   ( my.c3Q &lt;- coef(fit2, matrix = TRUE) )
+   with(normdat, lines(rep(my.c3Q[1], 100), col = "tan"   , lty = "dotted", lwd = 2))
+   with(normdat, lines(rep(my.c3Q[2], 100), col = "orange", lty = "dotted", lwd = 2))
+   with(normdat, lines(rep(my.c3Q[3], 100), col = "brown1", lty = "dotted", lwd = 2))
+   legend(20, 7.0, c("Percentil 75", "Percentil 50", "Percentil 25"),
+          col = c("brown1", "orange", "tan"),
+          lty = rep("dotted", 3), lwd = rep(2, 3), cex = 0.75)
+   
+</code></pre>
+
+
+</div>

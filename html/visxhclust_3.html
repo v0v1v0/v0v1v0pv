@@ -1,0 +1,55 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cluster_boxplots</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot boxplots with clusters</h2>
+
+<h3>Description</h3>
+
+<p>This is a convenience wrapper function for <code>facet_boxplot()</code>.
+Combined with <code>annotate_clusters()</code>, it
+doesn't require specifying axes in <code>facet_boxplot()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cluster_boxplots(annotated_data, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>annotated_data</code></td>
+<td>
+<p>data frame returned by <code>annotate_clusters()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments passed to <code>facet_boxplot()</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>boxplots faceted by clusters
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dmat &lt;- compute_dmat(iris, "euclidean", TRUE, c("Petal.Length", "Sepal.Length"))
+clusters &lt;- compute_clusters(dmat, "complete")
+cluster_labels &lt;- cut_clusters(clusters, 2)
+annotated_data &lt;- annotate_clusters(iris[, c("Petal.Length", "Sepal.Length")], cluster_labels)
+cluster_boxplots(annotated_data, boxplot_colors = visxhclust::cluster_colors)
+</code></pre>
+
+
+</div>

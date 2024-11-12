@@ -1,0 +1,106 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>C2RVine</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Transform C-Vine to R-Vine Structure</h2>
+
+<h3>Description</h3>
+
+<p>This function transforms a C-vine structure from the package CDVine to the
+corresponding R-vine structure.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">C2RVine(order, family, par, par2 = rep(0, length(family)))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>order</code></td>
+<td>
+<p>A d-dimensional vector specifying the order of the root nodes
+in the C-vine.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>A d*(d-1)/2 vector of pair-copula families with values<br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> =
+Student t copula (t-copula) <br><code>3</code> = Clayton copula <br><code>4</code> =
+Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>7</code> = BB1 copula <br><code>8</code> = BB6 copula <br><code>9</code> = BB7 copula
+<br><code>10</code> = BB8 copula <br><code>13</code> = rotated Clayton copula (180
+degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180
+degrees; <code style="white-space: pre;">⁠survival Joe'') \cr `17` = rotated BB1 copula (180 degrees; ⁠</code>survival BB1”)<br><code>18</code> = rotated BB6 copula (180 degrees; <code style="white-space: pre;">⁠survival BB6'')\cr `19` = rotated BB7 copula (180 degrees; ⁠</code>survival BB7”)<br><code>20</code> = rotated BB8 copula (180 degrees; “survival BB8”)<br><code>23</code>
+= rotated Clayton copula (90 degrees) <br> '24' = rotated Gumbel copula
+(90 degrees) <br> '26' = rotated Joe copula (90 degrees) <br> '27' =
+rotated BB1 copula (90 degrees) <br> '28' = rotated BB6 copula (90
+degrees) <br> '29' = rotated BB7 copula (90 degrees) <br> '30' =
+rotated BB8 copula (90 degrees) <br> '33' = rotated Clayton copula (270
+degrees) <br> '34' = rotated Gumbel copula (270 degrees) <br> '36' =
+rotated Joe copula (270 degrees) <br> '37' = rotated BB1 copula (270
+degrees) <br> '38' = rotated BB6 copula (270 degrees) <br> '39' =
+rotated BB7 copula (270 degrees) <br> '40' = rotated BB8 copula (270
+degrees) <br> '104' = Tawn type 1 copula <br> '114' = rotated Tawn
+type 1 copula (180 degrees) <br> '124' = rotated Tawn type 1 copula (90
+degrees) <br> '134' = rotated Tawn type 1 copula (270 degrees) <br>
+'204' = Tawn type 2 copula <br> '214' = rotated Tawn type 2 copula
+(180 degrees) <br> '224' = rotated Tawn type 2 copula (90 degrees) <br>
+'234' = rotated Tawn type 2 copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>A d*(d-1)/2 vector of pair-copula parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>A d*(d-1)/2 vector of second pair-copula parameters (optional;
+default:<br><code>par2 = rep(0,length(family))</code>), necessary for the t-, BB1,
+BB6, BB7, BB8, Tawn type 1 and type 2 copulas.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An <code>RVineMatrix()</code> object.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier, Eike Brechmann
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineMatrix()</code>, <code>D2RVine()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># set up C-vine copula model with mixed pair-copulas
+d &lt;- 4
+dd &lt;- d*(d-1)/2
+order &lt;- 1:d
+family &lt;- c(1, 2, 3, 4, 7, 3)
+par &lt;- c(0.5, 0.4, 2, 1.5, 1.2, 1.5)
+par2 &lt;- c(0, 5, 0, 0, 2, 0)
+
+# transform to R-vine matrix notation
+RVM &lt;- C2RVine(order, family, par, par2)
+</code></pre>
+
+
+</div>

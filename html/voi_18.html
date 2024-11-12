@@ -1,0 +1,95 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>enbs_opt</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Determine the optimum sample size in an analysis of the expected net benefit
+of sampling</h2>
+
+<h3>Description</h3>
+
+<p>The optimum sample size for a given willingness to pay is determined either
+by a simple search over the supplied ENBS estimates for different sample
+sizes, or by a regression and interpolation method.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">enbs_opt(x, pcut = 0.05, smooth = FALSE, smooth_df = NULL, keep_preds = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Data frame containing a set of ENBS estimates for
+different sample sizes, which will be optimised over.  Usually
+this is for a common willingness-to-pay. The required components
+are <code>enbs</code> and <code>n</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pcut</code></td>
+<td>
+<p>Cut-off probability which defines a "near-optimal" sample size.
+The minimum and maximum sample size for which the ENBS is within
+<code>pcut</code> (by default 5%) of its maximum value will be determined.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smooth</code></td>
+<td>
+<p>If <code>TRUE</code>, then the maximum ENBS is determined after
+fitting a nonparametric regression to the data frame <code>x</code>, which
+estimates and smooths the ENBS for every integer sample size in the range
+of <code>x$n</code>.  The regression is done using the default settings of
+<code>gam</code> from the <span class="pkg">mgcv</span> package.
+</p>
+<p>If this is <code>FALSE</code>, then no smoothing or interpolation is done, and
+the maximum is determined by searching over the values supplied in
+<code>x</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smooth_df</code></td>
+<td>
+<p>Basis dimension for the smooth regression. Passed as the
+<code>k</code> argument to the <code>s()</code> term in <code>gam</code>.   Defaults to
+6, or the number of unique sample sizes minus 1 if this is lower.  Set
+to a higher number if you think the smoother does not capture the
+relation of ENBS to sample size accurately enough.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keep_preds</code></td>
+<td>
+<p>If <code>TRUE</code> and <code>smooth=TRUE</code> then the data frame of
+predictions from the smooth regression model is stored in the <code>"preds"</code>
+attribute of the result.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame with one row, and the following columns:
+</p>
+<p><code>ind</code>: An integer index identifying, e.g. the willingness to pay and other common characteristics of the ENBS estimates (e.g. incident population size, decision time horizon). This is copied from <code>x$ind</code>.
+</p>
+<p><code>enbsmax</code>: the maximum ENBS
+</p>
+<p><code>nmax</code>: the sample size at which this maximum is achieved
+</p>
+<p><code>nlower</code>: the lowest sample size for which the ENBS is within
+</p>
+<p><code>pcut</code> (default 5%) of its maximum value
+</p>
+<p><code>nupper</code>: the corresponding highest ENBS
+</p>
+
+
+</div>

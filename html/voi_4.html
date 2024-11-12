@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>check_regression</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check the fit of a regression model used to estimate EVPPI or EVSI</h2>
+
+<h3>Description</h3>
+
+<p>Produces diagnostic plots and summaries of regression models used to estimate EVPPI or EVSI,
+mainly in order to check that the residuals have mean zero.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">check_regression(
+  x,
+  pars = NULL,
+  n = NULL,
+  comparison = 1,
+  outcome = "costs",
+  plot = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Output from <code>evppi</code> or <code>evsi</code>. The argument <code>check=TRUE</code>
+must have been used when calling <code>evppi</code> or <code>evsi</code>, to allow the regression model
+objects from <code>gam</code> or <code>earth</code> to be preserved.  (This is not done by
+default, since these objects can be large.).   <code>attr(x, "models")</code> contains these objects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pars</code></td>
+<td>
+<p>Parameter (or parameter group) whose EVPPI calculation is to be checked.
+This should be in the <code>pars</code> component of the object returned by <code>evppi</code>.
+Only relevant if <code>x</code> is the result of an <code>evppi</code> calculation.  By default,
+the first calculation shown in <code>x</code> is checked.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>Sample size whose EVSI calculation is to be checked.
+This should be in the <code>n</code> component of the object returned by <code>evsi</code>.
+Only relevant if <code>x</code> is the result of an <code>evsi</code> calculation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>comparison</code></td>
+<td>
+<p>Only relevant if there are more than two treatments in the decision model.
+Different regression models are then used for the comparisons of different treatments
+with the baseline treatment.
+<code>comparison</code> is an integer identifying which of these models is checked.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outcome</code></td>
+<td>
+<p><code>"costs"</code> or <code>"effects"</code>.  Only relevant if <code>outputs</code> was
+in cost-effectiveness format when
+calling <code>evppi</code> or <code>evsi</code>, hence different regressions are used for costs and
+effects.  By default, <code>outcome="costs"</code> is used, so that the regression
+for costs is checked.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p>If <code>FALSE</code>, only numerical statistics are returned, and a plot is not made.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For VoI estimation, the key thing we are looking for is that the residuals
+have mean zero, hence that the mean of the model output is represented well by the
+regression function of the model input parameters.  It should not matter if the
+variance of the residuals is non-constant, or if the residuals are non-normally distributed.
+</p>
+<p>Models produced with <code>method="gam"</code> are summarised using <code>gam.check</code>.
+</p>
+<p>Models produced <code>method="earth"</code> are summarised using <code>plot.earth</code>.
+</p>
+<p>For any regression model, if <code>fitted()</code> and <code>residuals()</code> methods are defined for those models,
+then a histogram of the residuals and a scatterplot of residuals against fitted values is produced.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Where possible, an appropriate statistic is returned that allows the regression
+model to be compared with other regression models implemented using the same <code>method</code>
+but with different assumptions.   For <code>method="gam"</code>,
+this is Akaike's information criterion (AIC).
+For <code>method="earth"</code>, this is the generalised cross-validation statistic
+<code>gcv</code>.    Currently not implemented for other methods.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pars &lt;- c("p_side_effects_t1", "p_side_effects_t2")
+evtest &lt;- evppi(chemo_nb, chemo_pars, pars=pars, check=TRUE)
+evtest
+check_regression(evtest)
+
+## with no interaction term 
+evtest2 &lt;- evppi(chemo_nb, chemo_pars, pars=pars, 
+                gam_formula="s(p_side_effects_t1)+s(p_side_effects_t2)",
+                check=TRUE)
+evtest2
+check_regression(evtest2)
+
+## doesn't make much difference to the estimate
+## fit is OK in either case
+
+</code></pre>
+
+
+</div>

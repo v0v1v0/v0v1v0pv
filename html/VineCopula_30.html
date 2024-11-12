@@ -1,0 +1,188 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopHfunc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Conditional Distribution Function of a Bivariate Copula</h2>
+
+<h3>Description</h3>
+
+<p>Evaluate the conditional distribution function (h-function)
+of a given parametric bivariate copula.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopHfunc(u1, u2, family, par, par2 = 0, obj = NULL, check.pars = TRUE)
+
+BiCopHfunc1(u1, u2, family, par, par2 = 0, obj = NULL, check.pars = TRUE)
+
+BiCopHfunc2(u1, u2, family, par, par2 = 0, obj = NULL, check.pars = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>u1, u2</code></td>
+<td>
+<p>numeric vectors of equal length with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>integer; single number or vector of size <code>length(u1)</code>;
+defines the bivariate copula family: <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula) <br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>7</code> = BB1 copula <br><code>8</code> = BB6 copula <br><code>9</code> = BB7 copula <br><code>10</code> = BB8 copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; <code style="white-space: pre;">⁠survival Joe'') \cr `17` = rotated BB1 copula (180 degrees; ⁠</code>survival BB1”)<br><code>18</code> = rotated BB6 copula (180 degrees; <code style="white-space: pre;">⁠survival BB6'')\cr `19` = rotated BB7 copula (180 degrees; ⁠</code>survival BB7”)<br><code>20</code> = rotated BB8 copula (180 degrees; “survival BB8”)<br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'27' = rotated BB1 copula (90 degrees) <br>
+'28' = rotated BB6 copula (90 degrees) <br>
+'29' = rotated BB7 copula (90 degrees) <br>
+'30' = rotated BB8 copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br>
+'37' = rotated BB1 copula (270 degrees) <br>
+'38' = rotated BB6 copula (270 degrees) <br>
+'39' = rotated BB7 copula (270 degrees) <br>
+'40' = rotated BB8 copula (270 degrees) <br>
+'104' = Tawn type 1 copula <br>
+'114' = rotated Tawn type 1 copula (180 degrees) <br>
+'124' = rotated Tawn type 1 copula (90 degrees) <br>
+'134' = rotated Tawn type 1 copula (270 degrees) <br>
+'204' = Tawn type 2 copula <br>
+'214' = rotated Tawn type 2 copula (180 degrees) <br>
+'224' = rotated Tawn type 2 copula (90 degrees) <br>
+'234' = rotated Tawn type 2 copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>numeric; single number or vector of size <code>length(u1)</code>;
+copula parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>numeric; single number or vector of size <code>length(u1)</code>;
+second parameter for bivariate copulas with two parameters (t, BB1, BB6,
+BB7, BB8, Tawn type 1 and type 2; default: <code>par2 = 0</code>). <code>par2</code>
+should be an positive integer for the Students's t copula <code>family = 2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p><code>BiCop</code> object containing the family and parameter
+specification.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.pars</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>; if <code>FALSE</code>, checks
+for family/parameter-consistency are omitted (should only be used with
+care).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The h-function is defined as the conditional distribution function of a
+bivariate copula, i.e.,
+</p>
+<p style="text-align: center;"><code class="reqn">h_1(u_2|u_1;\boldsymbol{\theta}) := P(U_2 \le u_2 | U_1 = u_1)
+= \frac{\partial C(u_1, u_2; \boldsymbol{\theta})}{\partial u_1}, </code>
+</p>
+
+<p style="text-align: center;"><code class="reqn">h_2(u_1|u_2;\boldsymbol{\theta}) := P(U_1 \le u_1 | U_2 = u_2)
+ = \frac{\partial C(u_1, u_2; \boldsymbol{\theta})}{\partial u_2}, </code>
+</p>
+
+<p>where <code class="reqn">(U_1, U_2) \sim C</code>, and <code class="reqn">C</code> is a bivariate copula distribution
+function with parameter(s) <code class="reqn">\boldsymbol{\theta}</code>.
+For more details see Aas et al. (2009). <br><br></p>
+<p>If the family and parameter specification is stored in a <code>BiCop()</code>
+object <code>obj</code>, the alternative versions
+</p>
+<pre>BiCopHfunc(u1, u2, obj)
+BiCopHfunc1(u1, u2, obj)
+BiCopHfunc2(u1, u2, obj)</pre>
+<p>can be used.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>BiCopHfunc</code> returns a list with
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>hfunc1</code></td>
+<td>
+<p>Numeric vector of the conditional distribution
+function (h-function) of the copula <code>family</code> with parameter(s)
+<code>par</code>, <code>par2</code> evaluated at <code>u2</code> given <code>u1</code>, i.e.,
+<code class="reqn">h_1(u_2|u_1;\boldsymbol{\theta})</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hfunc2</code></td>
+<td>
+<p>Numeric vector of the conditional distribution function
+(h-function) of the copula <code>family</code> with parameter(s) <code>par</code>,
+<code>par2</code> evaluated at <code>u1</code> given <code>u2</code>, i.e.,
+<code class="reqn">h_2(u_1|u_2;\boldsymbol{\theta})</code>.</p>
+</td>
+</tr>
+</table>
+<p><code>BiCopHfunc1</code> is a faster version that only calculates <code>hfunc1</code>;
+<code>BiCopHfunc2</code> only calculates <code>hfunc2</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier
+</p>
+
+
+<h3>References</h3>
+
+<p>Aas, K., C. Czado, A. Frigessi, and H. Bakken (2009).
+Pair-copula constructions of multiple dependence. Insurance: Mathematics and
+Economics 44 (2), 182-198.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopHinv()</code>, <code>BiCopPDF()</code>, <code>BiCopCDF()</code>,
+<code>RVineLogLik()</code>, <code>RVineSeqEst()</code>, <code>BiCop()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(daxreturns)
+
+# h-functions of the Gaussian copula
+cop &lt;- BiCop(family = 1, par = 0.5)
+h &lt;- BiCopHfunc(daxreturns[, 2], daxreturns[, 1], cop)
+
+# or using the fast versions
+h1 &lt;- BiCopHfunc1(daxreturns[, 2], daxreturns[, 1], cop)
+h2 &lt;- BiCopHfunc2(daxreturns[, 2], daxreturns[, 1], cop)
+all.equal(h$hfunc1, h1)
+all.equal(h$hfunc2, h2)
+
+</code></pre>
+
+
+</div>

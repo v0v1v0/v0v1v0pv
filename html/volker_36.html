@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>data_clean_sosci</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Prepare data originating from SoSci Survey</h2>
+
+<h3>Description</h3>
+
+<p>Prepares SoSci Survey data:
+</p>
+
+<ul>
+<li>
+<p> Remove the avector class from all columns
+(comes from SoSci and prevents combining vectors)
+</p>
+</li>
+<li>
+<p> Recode residual factor values to NA (e.g. "NA nicht beantwortet")
+</p>
+</li>
+<li>
+<p> Recode residual numeric values to NA (e.g. -9)
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">data_clean_sosci(data, remove.na.levels = TRUE, remove.na.numbers = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>remove.na.levels</code></td>
+<td>
+<p>Remove residual values from factor columns.
+Either a character vector with residual values or TRUE to use defaults in VLKR_NA_LEVELS.
+You can also define or disable residual levels by setting the global option vlkr.na.levels
+(e.g. <code>options(vlkr.na.levels=c("Not answered"))</code> or to disable <code>options(vlkr.na.levels=FALSE)</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>remove.na.numbers</code></td>
+<td>
+<p>Remove residual values from numeric columns.
+Either a numeric vector with residual values or TRUE to use defaults in VLKR_NA_NUMBERS.
+You can also define or disable residual values by setting the global option vlkr.na.numbers
+(e.g. <code>options(vlkr.na.numbers=c(-2,-9))</code> or to disable <code>options(vlkr.na.numbers=FALSE)</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The tibble remembers whether it was already prepared and
+the operations are only performed once in the first call.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Data frame with vlkr_df class (the class is used to prevent double preparation).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ds &lt;- volker::chatgpt
+ds &lt;- data_clean_sosci(ds)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,463 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rrvglm.control</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Control Function for rrvglm() </h2>
+
+<h3>Description</h3>
+
+<p>Algorithmic constants and parameters for
+running <code>rrvglm</code> are set using this
+function.
+Doubly constrained RR-VGLMs (DRR-VGLMs) are
+also catered for.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rrvglm.control(Rank = 1, Corner = TRUE,
+    Index.corner = head(setdiff(seq(length(str0) +
+    Rank), str0), Rank), noRRR = ~ 1, str0 = NULL,
+    Crow1positive = NULL, trace = FALSE, Bestof = 1,
+    H.A.thy = list(), H.C = list(),
+    Ainit = NULL, Cinit = NULL, sd.Cinit = 0.02,
+    Algorithm = "alternating", Etamat.colmax = 10,
+    noWarning = FALSE, Use.Init.Poisson.QO = FALSE,
+    checkwz = TRUE, Check.rank = TRUE, Check.cm.rank = TRUE,
+    wzepsilon = .Machine$double.eps^0.75, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Rank</code></td>
+<td>
+
+<p>The numerical rank <code class="reqn">R</code> of the
+model.  Must be an element from the set
+{1,2,...,min(<code class="reqn">M</code>,<em>p2</em>)}.
+Here, the vector of explanatory
+variables <b>x</b> is partitioned into
+(<b>x1</b>, <b>x2</b>), which is of dimension
+<em>p1</em>+<em>p2</em>.  The variables making
+up <b>x1</b> are given by the terms in
+<code>noRRR</code> argument, and the rest of the
+terms comprise <b>x2</b>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Corner</code></td>
+<td>
+
+<p>Logical indicating whether corner
+constraints are to be used.
+Strongly recommended as the <em>only</em>
+method for fitting RR-VGLMs and
+DRR-VGLMs.
+This is one
+method for ensuring a unique solution
+and the availability of standard errors.
+If <code>TRUE</code> then <code>Index.corner</code>
+specifies the position of the corner
+constraints.
+Also used by DRR-VGLMs, and this is
+known as RCCs (see below).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Index.corner</code></td>
+<td>
+
+<p>Specifies the <code class="reqn">R</code> rows of
+the corner constraints, e.g., they hold an
+order-<code class="reqn">R</code> identity matrix for RR-VGLMs.
+The default are the first <code class="reqn">R</code> positive
+integers that exclude <code>str0</code>.
+</p>
+
+<p>For DRR-VGLMs one needs
+to have (restricted) corner constraints.
+Then argument <code>str0</code> will be ignored.
+If there are structural zeros then they
+should be built into the constraint matrices
+(see <code>H.A.thy</code>).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>noRRR</code></td>
+<td>
+
+<p>Formula giving terms that are <em>not</em>
+to be included in the reduced-rank
+regression.  That is, <code>noRRR</code>
+specifes which explanatory variables
+are in the <b>x1</b> vector of
+<code>rrvglm</code>, and the rest go into
+<b>x2</b>.
+I will write <b>x1</b> as <code class="reqn">x_1</code>
+and <b>x2</b> as <code class="reqn">x_2</code> hereafter.
+The <code class="reqn">x_1</code> variables
+constitute the <code class="reqn">\bold{B}_1</code>
+matrix in Yee and Hastie (2003).  Those
+<code class="reqn">x_2</code> variables which are subject
+to the reduced-rank regression correspond
+to the <code class="reqn">\bold{B}_2</code>
+matrix.  Set <code>noRRR = NULL</code> for the
+reduced-rank regression to be applied to
+every explanatory variable including the
+intercept.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>str0</code></td>
+<td>
+
+<p>Integer vector specifying which rows of the
+estimated constraint matrices (<b>A</b>)
+are to be all zeros.  These are called
+<em>structural zeros</em>.  Must not have
+any common value with <code>Index.corner</code>,
+and be a subset of the vector <code>1:M</code>.
+The default, <code>str0 = NULL</code>, means no
+structural zero rows at all.
+This argument is ignored by DRR-VGLMs.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Crow1positive</code></td>
+<td>
+
+<p>Currently this argument has no effect.
+In the future, it may be a
+logical vector of length <code>Rank</code>
+(recycled if necessary): are
+the elements of the first
+row of <code class="reqn">C</code> positive?
+Because of corner constraints (<code>diag(Rank)</code>)
+this argument currently must be <code>NULL</code>.
+Having a logical vector would mean some of the diagonals
+might be <code class="reqn">1</code> and others <code class="reqn">-1</code>. 
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trace</code></td>
+<td>
+
+<p>Logical indicating if output should be
+produced for each iteration.
+</p>
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Bestof</code></td>
+<td>
+
+<p>Integer. The best of <code>Bestof</code>
+models fitted is returned. This argument
+helps guard against local solutions by
+(hopefully) finding the global solution
+from many fits. The argument works only
+when the function generates its own initial
+value for <b>C</b>, i.e., when <b>C</b>
+is <em>not</em> passed in as initial values.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H.A.thy, H.C</code></td>
+<td>
+
+<p>Lists.
+DRR-VGLMs are <em>Doubly constrained</em>
+RR-VGLMs where <b>A</b> has
+<code>Rank</code>
+constraint matrices
+(one for each column)
+in a list called <code>H.A.thy</code>,
+and <b>C</b> has a
+constraint matrix for each row,
+i.e., for each explanatory
+variable making up it.
+The class
+<code>"drrvglm"</code> may arise for such models.
+So <code>H.C</code>
+should be a named list of <code class="reqn">p_2</code>
+constraint matrices,
+each one for a different row of <b>C</b>,
+i.e., <code class="reqn">p_2</code> is the number of variables
+making up the latent variable.
+Note that if <code>H.C</code> has
+<code>names</code> then
+matching is done with that,
+and the components of <code>H.C</code>
+are reordered if they are not sorted
+according to the terms in <code>formula</code>.
+If they are not named, then
+their <em>order</em> is used,
+for example, <code>H.C[[1]]</code>
+and <code>H.C[[2]]</code> are taken as
+the constraint matrices for the first two
+variables of the latent variable(s).
+</p>
+
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Algorithm</code></td>
+<td>
+
+<p>Character string indicating what algorithm is
+to be used. The default is the first one.
+The choice <code>"derivative"</code> has been
+withdrawn in <span class="pkg">VGAM</span> 1.1-10.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Ainit, Cinit</code></td>
+<td>
+
+<p>Initial <b>A</b> and <b>C</b> matrices which
+may speed up convergence.  They must be of
+the correct dimension.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd.Cinit</code></td>
+<td>
+
+<p>Standard deviation of the initial values
+for the elements of <b>C</b>.
+These are normally distributed with
+mean zero.  This argument is used only if
+<code>Use.Init.Poisson.QO = FALSE</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Etamat.colmax</code></td>
+<td>
+
+<p>Positive integer, no smaller than
+<code>Rank</code>.  Controls the amount of
+memory used by <code>.Init.Poisson.QO()</code>.
+It is the maximum number of columns allowed
+for the pseudo-response and its weights.
+In general, the larger the value, the
+better the initial value.  Used only if
+<code>Use.Init.Poisson.QO = TRUE</code>.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>Use.Init.Poisson.QO</code></td>
+<td>
+
+<p>Logical indicating whether the
+<code>.Init.Poisson.QO()</code> should be used
+to obtain initial values for the <b>C</b>.
+The function uses a new method that can
+work well if the data are Poisson counts
+coming from an equal-tolerances QRR-VGLM
+(CQO).  This option is less realistic for
+RR-VGLMs compared to QRR-VGLMs.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>checkwz</code></td>
+<td>
+
+<p>logical indicating whether the diagonal
+elements of the working weight matrices
+should be checked whether they are
+sufficiently positive, i.e., greater than
+<code>wzepsilon</code>. If not, any values less
+than <code>wzepsilon</code> are replaced with
+this value.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>noWarning, Check.rank, Check.cm.rank</code></td>
+<td>
+
+<p>Same as <code>vglm.control</code>.
+Ignored for <span class="pkg">VGAM</span> 0.9-7 and higher.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wzepsilon</code></td>
+<td>
+
+<p>Small positive number used to test whether
+the diagonals of the working weight matrices
+are sufficiently positive.
+</p>
+</td>
+</tr>
+</table>
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Variables in ... are passed into
+<code>vglm.control</code>.
+If the derivative algorithm is used
+then ... are also passed into
+<code>rrvglm.optim.control</code>;
+and if the alternating algorithm is
+used then ... are also passed into
+<code>valt0.control</code>.
+</p>
+</td>
+</tr></table>
+<p>In the above, <code class="reqn">R</code> is the <code>Rank</code> and
+<code class="reqn">M</code> is the number of linear predictors.
+</p>
+
+
+<h3>Details</h3>
+
+
+
+
+
+
+
+
+
+
+<p><span class="pkg">VGAM</span> supported three normalizations
+to ensure a unique solution.
+But currently,
+only corner constraints will work with
+<code>summary</code> of RR-VGLM
+and DRR-VGLM objects.
+<b>Update during late-2023/early-2024:</b>
+with ongoing work implementing
+the <code>"drrvglm"</code> class, there may
+be disruption and changes to other
+normalizations. However, corner
+constraints should be fully supported
+and have the greatest priority.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with components matching the input
+names.  Some error checking is done, but
+not much.
+</p>
+
+
+<h3>Note</h3>
+
+
+
+
+<p>In <span class="pkg">VGAM</span> 1.1-11 and higher,
+the following arguments are no longer supported:
+<code>Wmat</code>, <code>Norrr</code>, <code>Svd.arg</code>,
+<code>Uncorrelated.latvar</code>, <code>scaleA</code>.
+Users should use corner constraints only.
+</p>
+<p>The arguments in this function begin with an
+upper case letter to help avoid interference
+with those of <code>vglm.control</code>.
+</p>
+<p>In the example below a rank-1
+<em>stereotype</em> model (Anderson, 1984)
+is fitted,
+however, the intercepts are completely
+unconstrained rather than sorted.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Hastie, T. J. (2003).
+Reduced-rank vector generalized linear models.
+<em>Statistical Modelling</em>,
+<b>3</b>, 15–41.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rrvglm</code>,
+<code>rrvglm-class</code>,
+<code>summary.drrvglm</code>,
+<code>rrvglm.optim.control</code>,
+<code>vglm</code>,
+<code>vglm.control</code>,
+<code>TypicalVGAMfamilyFunction</code>,
+<code>CM.qnorm</code>,
+<code>cqo</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+set.seed(111)
+pneumo &lt;- transform(pneumo, let = log(exposure.time),
+                            x3 = runif(nrow(pneumo)))  # Unrelated
+fit &lt;- rrvglm(cbind(normal, mild, severe) ~ let + x3,
+              multinomial, pneumo, Rank = 1, Index.corner = 2)
+constraints(fit)
+vcov(fit)
+summary(fit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

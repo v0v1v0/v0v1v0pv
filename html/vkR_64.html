@@ -1,0 +1,94 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>likesGetListForObjects</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Returns a list of IDs of users who added the specified objects to their Likes list</h2>
+
+<h3>Description</h3>
+
+<p>Returns a list of IDs of users who added the specified objects to their Likes list
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">likesGetListForObjects(
+  objects,
+  type = "post",
+  filter = "likes",
+  friends_only = 0,
+  extended = 0,
+  skip_own = 0,
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>objects</code></td>
+<td>
+<p>List of objects (objects must contain fields owner_id and id)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Object type (post or comment)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filter</code></td>
+<td>
+<p>Filters to apply: likes - returns information about all users who liked the object (default); copies - returns information only about users who told their friends about the object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>friends_only</code></td>
+<td>
+<p>Specifies which users are returned: 1 - to return only the current user's friends; 0 - to return all users (default)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extended</code></td>
+<td>
+<p>Specifies whether extended information will be returned. 1 - to return extended information about users and communities from the Likes list; 0 - to return no additional information (default)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>skip_own</code></td>
+<td>
+<p>flag, either 1 or 0</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>progress_bar</code></td>
+<td>
+<p>Display progress bar</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>Version of API</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+wall &lt;- getWallExecute(domain = 'privivkanet', count = 10, progress_bar = TRUE)
+post_likers &lt;- likesGetListForObjects(wall, type = 'post', progress_bar = TRUE)
+post_likers_extended &lt;- likesGetListForObjects(wall, type = 'post',
+   extended = 1, progress_bar = TRUE)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

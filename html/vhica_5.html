@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.vhica</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Plots a VHICA regression between two species. 
+</h2>
+
+<h3>Description</h3>
+
+<p>The VHICA method is based on a contrast between gene divergence and codon usage bias. A regression between divergence and codon usage provides a reference, and sequences of interest (typically, transposable elements) will be compared to the reference genes. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vhica'
+plot(x, sp1 = NULL, sp2 = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>An object of class <code>vhica</code>, created by <code>read.vhica</code>. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sp1</code></td>
+<td>
+
+<p>Name of the first species, as in the data files. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sp2</code></td>
+<td>
+
+<p>Name of the second species, as in the data files. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Additional options for <code>plot</code>. 
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The resulting figure displays genes as circles, and transposable elements as symbols. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Implementation: Arnaud Le Rouzic &lt;lerouzic@legs.cnrs-gif.fr&gt;<br>
+Scientists who designed the method: Gabriel Wallau, Aurélie Hua-Van, Arnaud Le~Rouzic.
+</p>
+
+
+<h3>References</h3>
+
+<p>Gabriel Luz Wallau, Arnaud Le Rouzic, Pierre Capy, Elgion Loreto, Aurélie Hua-Van. VHICA: A new method to discriminate between vertical and horizontal transposon transfer: application to the mariner family within Drosophila. Molecular biology and evolution 33 (4), 1094-1109. 
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>read.vhica</code>, <code>image.vhica</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">file.cb &lt;- system.file("extdata", "mini-cbias.txt", package="vhica")
+file.div &lt;- system.file("extdata", "mini-div.txt", package="vhica")
+file.tree &lt;- if(require("ape")) system.file("extdata", "phylo.nwk", package="vhica") else NULL
+vc &lt;- read.vhica(cb.filename=file.cb, div.filename=file.div)
+plot(vc, "dere", "dana")
+image(vc, "mellifera:6", treefile=file.tree, skip.void=TRUE)
+</code></pre>
+
+
+</div>

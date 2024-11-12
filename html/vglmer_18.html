@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>MAVB</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Perform MAVB after fitting vglmer</h2>
+
+<h3>Description</h3>
+
+<p>Given a model estimated using <code>vglmer</code>, this function
+performs marginally augmented variational Bayes (MAVB) to improve the
+approximation quality.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">MAVB(object, samples, verbose = FALSE, var_px = Inf)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Model fit using <code>vglmer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>samples</code></td>
+<td>
+<p>Number of samples to draw.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Show progress in drawing samples.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var_px</code></td>
+<td>
+<p>Variance of working prior for marginal augmentation. Default
+(<code>Inf</code>) is a flat, improper, prior.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function returns the improved estimates of the
+<em>parameters</em>. To use MAVB when generating predictions, one should use
+predict_MAVB. At present, MAVB is only enabled for binomial models.
+</p>
+
+
+<h3>Value</h3>
+
+<p>This function returns a matrix with <code>samples</code> rows and columns
+for each fixed and random effect.
+</p>
+
+
+<h3>References</h3>
+
+<p>Goplerud, Max. 2022a. "Fast and Accurate Estimation of Non-Nested Binomial
+Hierarchical Models Using Variational Inference." <em>Bayesian Analysis</em>. 17(2):
+623-650.
+</p>
+
+
+</div>

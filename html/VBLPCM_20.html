@@ -1,0 +1,121 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vblpcmfit</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>fit the variational model through EM type iterations
+</h2>
+
+<h3>Description</h3>
+
+<p>Perform optimisation of the variational parameters of the variational approximation to
+the posterior for the latent position cluster model for network data. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vblpcmfit(variational.start, STEPS = 50, maxiter = 100, tol=1e-6, NC=NULL, 
+           seed=NaN, d_vector=rep(TRUE,9))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>variational.start</code></td>
+<td>
+<p>The starting configuration; use vblpcmstart() to generate this. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>STEPS</code></td>
+<td>
+<p>Maximum number of iterations in the main VBEM loop. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxiter</code></td>
+<td>
+<p>Maximum number of iterations for the internal univariate optimisation loops. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>tolerance of change in variational parameter updates below which the algorithm is deemed 
+to have converged for that parameter. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NC</code></td>
+<td>
+<p>Number of non-links sampled in the case-control type sampler. 
+Results in a speedup but loss of accuracy. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>Optional seed for the random number generator. Supplying NaN is equivalent to
+not supplying it. Supply a value so that results may be replicated. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>d_vector</code></td>
+<td>
+<p>Optional logical vector specifying which sets of variational parameters are to be
+updated. See Details for more information. 
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>d_vector is a logical vector of length 9 that can be used to select which variational
+parameters are held fixed and which are updated. The parameters are in the following order:
+z (latent positions), sigma2 (variance of latent positions), lambda (membership probability 
+matrix), eta (cluster centres), omega2 (cluster variances), alpha (cluster specific variance of
+nodes), nu (Dirichlet parameter for marginal cluster probabilities), xi (likelihood intercept term 
+mean), psi2 (likelihood intercept term variance). 
+</p>
+
+
+<h3>Value</h3>
+
+<p>A v.params list containing the fitted variational parameters for the 
+latent positions, clustering membership probabilities, etc. 
+conv indicated whether convergence was obtained within the specified number of iterations. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Salter-Townshend
+</p>
+
+
+<h3>References</h3>
+
+<p>Michael Salter-Townshend and Thomas Brendan Murphy (2009).
+"Variational Bayesian Inference for the Latent Position Cluster Model."
+Workshop on Analyzing Networks and Learning with Graphs.
+Neural Information Processing Systems.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>vblpcmstart, latentnet::ergmm
+</p>
+
+
+</div>

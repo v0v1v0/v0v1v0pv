@@ -1,0 +1,155 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>polar_grid</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Grid required for 3D volcano plot and 2D radial plots</h2>
+
+<h3>Description</h3>
+
+<p>Generates a cylindrical grid of the appropriate dimensions for a 3D volcano
+plot
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">polar_grid(
+  r_vector = NULL,
+  z_vector = NULL,
+  r_axis_ticks = NULL,
+  z_axis_ticks = NULL,
+  axis_angle = 5/6,
+  n_spokes = 12,
+  axes_from_origin = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>r_vector</code></td>
+<td>
+<p>An optional numerical vector for the  radial coordinates.
+This is used to calculate breaks on the r axis using
+<code>pretty</code>. If this is NULL the r_axis_ticks are used as
+breaks.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z_vector</code></td>
+<td>
+<p>An optional numerical vector for the z coordinates.
+This is used to calculate breaks on the z axis using <code>pretty</code>. If this
+is NULL the z_axis_ticks are used as breaks.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r_axis_ticks</code></td>
+<td>
+<p>A numerical vector of breaks for the radial axis (used
+if r_vector is NULL).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z_axis_ticks</code></td>
+<td>
+<p>A numerical vector of breaks for the z axis (used
+if z_vector is NULL).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>axis_angle</code></td>
+<td>
+<p>angle in radians to position the radial axis
+(default = 5/6)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_spokes</code></td>
+<td>
+<p>the number of outward spokes to be plotted (default = 12)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>axes_from_origin</code></td>
+<td>
+<p>Whether the axis should start at 0 or the first
+break (default = TRUE)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>optional parameters for <code>pretty</code> on the r axis</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns an S4 grid object containing:
+</p>
+
+<ul>
+<li>
+<p>'polar_grid' The coordinates for a radial grid
+</p>
+</li>
+<li>
+<p>'axes' The axes features for 'plotly'
+</p>
+</li>
+<li>
+<p>'axis_labels' The axis labels
+</p>
+</li>
+<li>
+<p>'r' The grid radius
+</p>
+</li>
+<li>
+<p>'z' The grid height
+</p>
+</li>
+<li>
+<p>'text_coords' The coordinates for text labels
+</p>
+</li>
+<li>
+<p>'n_r_breaks' The number of ticks on the r axis
+</p>
+</li>
+<li>
+<p>'n_r_breaks' The number of ticks on the z axis
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Lewis, Myles J., et al. (2019).
+<a href="https://pubmed.ncbi.nlm.nih.gov/31461658/">
+Molecular portraits of early rheumatoid arthritis identify clinical and
+treatment response phenotypes.</a>
+<em>Cell reports</em>, <strong>28</strong>:9
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(example_data)
+syn_polar &lt;- polar_coords(outcome = syn_example_meta$Pathotype,
+                          data = t(syn_example_rld))
+
+grid &lt;- polar_grid(r_vector=syn_polar@df[[1]]$r,
+           z_vector=NULL,
+           r_axis_ticks = NULL,
+           z_axis_ticks = c(0, 8, 16, 32),
+           n_spokes = 4)
+</code></pre>
+
+
+</div>

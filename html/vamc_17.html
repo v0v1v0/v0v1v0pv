@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>valuateOnePolicy</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Valuate One Policy</h2>
+
+<h3>Description</h3>
+
+<p>Valuate a VA policy specified in inPolicy based on the simulated fund
+scenarios fundScen. The time step length is specified in dT and the
+discount rate for each period is specified in df.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">valuateOnePolicy(inPolicy, mortTable, fundScen, dT = 1/12, df)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>inPolicy</code></td>
+<td>
+<p>A vector containing 45 attributes of a VA policy,
+usually a row of a VA portfolio dataframe.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mortTable</code></td>
+<td>
+<p>A dataframe with three columns of doubles representing the
+mortality table.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fundScen</code></td>
+<td>
+<p>A numScen-by-numStep-by-numFund array of doubles of
+return factors (i.e., exp(mu_t dt)) in each period.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dT</code></td>
+<td>
+<p>A double of stepsize in years; dT = 1 / 12 would be monthly.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>A vector of doubles of risk-free discount rates of different tenor
+(not forward rates), should have length being numStep.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Outputs a list of doubles of policyValue, the average discounted
+payoff of the VA, and riskCharge, the average discounted risk charges.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fundScen &lt;- genFundScen(fundMap, indexScen)[1, , ]
+exPolicy &lt;- VAPort[1, ]
+valuateOnePolicy(exPolicy, mortTable, fundScen, 1 / 12, cForwardCurve)
+</code></pre>
+
+
+</div>

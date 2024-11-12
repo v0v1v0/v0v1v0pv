@@ -1,0 +1,111 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>request-matching</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>vcr request matching</h2>
+
+<h3>Description</h3>
+
+<p>There are a number of options, some of which are on by default, some of
+which can be used together, and some alone.
+</p>
+
+
+<h3>Details</h3>
+
+<p>To match previously recorded requests, <code>vcr</code> has to try to match new
+HTTP requests to a previously recorded one. By default, we match on HTTP
+method (e.g., <code>GET</code>) and URI (e.g., <code style="white-space: pre;">⁠http://foo.com⁠</code>), following Ruby’s
+VCR gem.
+</p>
+<p>You can customize how we match requests with one or more of the
+following options, some of which are on by default, some of which can be
+used together, and some alone.
+</p>
+
+<ul>
+<li> <p><code>method</code>: Use the <strong>method</strong> request matcher to match requests on the
+HTTP method (i.e. GET, POST, PUT, DELETE, etc). You will generally
+want to use this matcher. The <strong>method</strong> matcher is used (along with
+the <strong>uri</strong> matcher) by default if you do not specify how requests
+should match.
+</p>
+</li>
+<li> <p><code>uri</code>: Use the <strong>uri</strong> request matcher to match requests on the
+request URI. The <strong>uri</strong> matcher is used (along with the <strong>method</strong>
+matcher) by default if you do not specify how requests should match.
+</p>
+</li>
+<li> <p><code>host</code>: Use the <strong>host</strong> request matcher to match requests on the
+request host. You can use this (alone, or in combination with
+<strong>path</strong>) as an alternative to <strong>uri</strong> so that non-deterministic
+portions of the URI are not considered as part of the request
+matching.
+</p>
+</li>
+<li> <p><code>path</code>: Use the <strong>path</strong> request matcher to match requests on the path
+portion of the request URI. You can use this (alone, or in combination
+with <strong>host</strong>) as an alternative to <strong>uri</strong> so that non-deterministic
+portions of the URI
+</p>
+</li>
+<li> <p><code>query</code>: Use the <strong>query</strong> request matcher to match requests on the
+query string portion of the request URI. You can use this (alone, or
+in combination with others) as an alternative to <strong>uri</strong> so that
+non-deterministic portions of the URI are not considered as part of
+the request matching.
+</p>
+</li>
+<li> <p><code>body</code>: Use the <strong>body</strong> request matcher to match requests on the
+request body.
+</p>
+</li>
+<li> <p><code>headers</code>: Use the <strong>headers</strong> request matcher to match requests on
+the request headers.
+</p>
+</li>
+</ul>
+<p>You can set your own options by tweaking the <code>match_requests_on</code>
+parameter in <code>use_cassette()</code>:
+</p>
+<div class="sourceCode r"><pre>library(vcr)
+</pre></div>
+<div class="sourceCode r"><pre>use_cassette(name = "foo_bar", {
+    cli$post("post", body = list(a = 5))
+  }, 
+  match_requests_on = c('method', 'headers', 'body')
+)
+</pre></div>
+
+
+<h4>Matching</h4>
+
+
+
+<h5>headers</h5>
+
+<div class="sourceCode r"><pre>library(crul)
+library(vcr)
+cli &lt;- crul::HttpClient$new("https://httpbin.org/get", 
+  headers = list(foo = "bar"))
+use_cassette(name = "nothing_new", {
+    one &lt;- cli$get()
+  }, 
+  match_requests_on = 'headers'
+)
+cli$headers$foo &lt;- "stuff"
+use_cassette(name = "nothing_new", {
+    two &lt;- cli$get()
+  }, 
+  match_requests_on = 'headers'
+)
+one$request_headers
+two$request_headers
+</pre></div>
+
+
+
+
+</div>

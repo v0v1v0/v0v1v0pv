@@ -1,0 +1,244 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ordistep</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Choose a Model by Permutation Tests in Constrained Ordination
+</h2>
+
+<h3>Description</h3>
+
+<p>Automatic stepwise model building for constrained ordination methods
+(<code>cca</code>, <code>rda</code>, <code>dbrda</code>,
+<code>capscale</code>).  The function <code>ordistep</code> is modelled
+after <code>step</code> and can do forward, backward and stepwise
+model selection using permutation tests.  Function <code>ordiR2step</code>
+performs forward model choice solely on adjusted <code class="reqn">R^2</code> and
+<code class="reqn">P</code>-value.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ordistep(object, scope, direction = c("both", "backward", "forward"),
+   Pin = 0.05, Pout = 0.1, permutations = how(nperm = 199), steps = 50,
+   trace = TRUE, ...)
+ordiR2step(object, scope, Pin = 0.05, R2scope = TRUE,
+   permutations = how(nperm = 499), trace = TRUE, R2permutations = 1000, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>In <code>ordistep</code>, an ordination object inheriting from
+<code>cca</code> or <code>rda</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scope</code></td>
+<td>
+<p> Defines the range of models examined in the stepwise
+search.  This can be a list containing components <code>upper</code> and
+<code>lower</code>, both formulae. If it is a single item, it is interpreted
+the target scope, depending on the <code>direction</code>. If
+<code>direction</code> is <code>"forward"</code>, a single item is interpreted as
+the <code>upper</code> scope and the formula of the input <code>object</code> as
+the <code>lower</code> scope.  See <code>step</code> for details. In
+<code>ordiR2step</code>, this defines the upper scope; it can also be an
+ordination object from with the model is extracted.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>direction</code></td>
+<td>
+
+<p>The mode of stepwise search, can be one of <code>"both"</code>,
+<code>"backward"</code>, or <code>"forward"</code>, with a default of
+<code>"both"</code>.  If the <code>scope</code> argument is missing, the default
+for <code>direction</code> is <code>"backward"</code> in <code>ordistep</code> (and
+<code>ordiR2step</code> does not have this argument, but only works
+forward).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Pin, Pout</code></td>
+<td>
+
+<p>Limits of permutation <code class="reqn">P</code>-values for adding (<code>Pin</code>) a term to
+the model, or dropping (<code>Pout</code>) from the model. Term is added if
+<code class="reqn">P \le</code> <code>Pin</code>, and removed if <code class="reqn">P &gt;</code> <code>Pout</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R2scope</code></td>
+<td>
+
+<p>Use adjusted <code class="reqn">R^2</code> as the stopping criterion: only models with
+lower adjusted <code class="reqn">R^2</code> than scope are accepted.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>permutations</code></td>
+<td>
+<p>a list of control values for the permutations as
+returned by the function <code>how</code>, or the number
+of permutations required, or a permutation matrix where each row
+gives the permuted indices. This is passed to
+<code>anova.cca</code>: see there for details.  </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>steps</code></td>
+<td>
+
+<p>Maximum number of iteration steps of dropping and adding terms.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trace</code></td>
+<td>
+
+<p>If positive, information is printed during the model building. Larger
+values may give more information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R2permutations</code></td>
+<td>
+<p>Number of permutations used in the estimation of
+adjusted <code class="reqn">R^2</code> for <code>cca</code> using
+<code>RsquareAdj</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Any additional arguments to <code>add1.cca</code> and
+<code>drop1.cca</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The basic functions for model choice in constrained ordination are
+<code>add1.cca</code> and <code>drop1.cca</code>. With these functions,
+ordination models can be chosen with standard <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> function
+<code>step</code> which bases the term choice on AIC. AIC-like
+statistics for ordination are provided by functions
+<code>deviance.cca</code> and <code>extractAIC.cca</code> (with
+similar functions for <code>rda</code>). Actually, constrained
+ordination methods do not have AIC, and therefore the <code>step</code>
+may not be trusted. This function provides an alternative using
+permutation <code class="reqn">P</code>-values.
+</p>
+<p>Function <code>ordistep</code> defines the model, <code>scope</code> of models
+considered, and <code>direction</code> of the procedure similarly as
+<code>step</code>. The function alternates with <code>drop</code> and
+<code>add</code> steps and stops when the model was not changed during one
+step. The <code>-</code> and <code>+</code> signs in the summary table indicate
+which stage is performed.  It is often sensible to have <code>Pout</code>
+<code class="reqn">&gt;</code> <code>Pin</code> in stepwise models to avoid cyclic adds and drops
+of single terms.
+</p>
+<p>Function <code>ordiR2step</code> builds model forward so that it maximizes
+adjusted <code class="reqn">R^2</code> (function <code>RsquareAdj</code>) at every
+step, and stopping when the adjusted <code class="reqn">R^2</code> starts to decrease,
+or the adjusted <code class="reqn">R^2</code> of the <code>scope</code> is exceeded, or the
+selected permutation <code class="reqn">P</code>-value is exceeded (Blanchet et
+al. 2008). The second criterion is ignored with option <code>R2scope =
+  FALSE</code>, and the third criterion can be ignored setting <code>Pin = 1</code>
+(or higher).  The function cannot be used if adjusted <code class="reqn">R^2</code>
+cannot be calculated. If the number of predictors is higher than the
+number of observations, adjusted <code class="reqn">R^2</code> is also unavailable.
+Such models can be analysed with <code>R2scope = FALSE</code>, but the
+variable selection will stop if models become overfitted and adjusted
+<code class="reqn">R^2</code> cannot be calculated, and the adjusted <code class="reqn">R^2</code>
+will be reported as zero. The <code class="reqn">R^2</code> of <code>cca</code> is
+based on simulations (see <code>RsquareAdj</code>) and different runs
+of <code>ordiR2step</code> can give different results.
+</p>
+<p>Functions <code>ordistep</code> (based on <code class="reqn">P</code> values) and <code>ordiR2step</code>
+(based on adjusted <code class="reqn">R^2</code> and hence on eigenvalues) can select
+variables in different order.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Functions return the selected model with one additional
+component, <code>anova</code>, which contains brief information of steps
+taken. You can suppress voluminous output during model building by
+setting <code>trace = FALSE</code>, and find the summary of model history
+in the <code>anova</code> item.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jari Oksanen
+</p>
+
+
+<h3>References</h3>
+
+<p>Blanchet, F. G., Legendre, P. &amp; Borcard, D. (2008) Forward selection
+of explanatory variables. <em>Ecology</em> 89, 2623–2632.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>The function handles constrained ordination methods
+<code>cca</code>, <code>rda</code>, <code>dbrda</code> and
+<code>capscale</code>. The underlying functions are
+<code>add1.cca</code> and <code>drop1.cca</code>, and the function
+is modelled after standard <code>step</code> (which also can be
+used directly but uses AIC for model choice, see
+<code>extractAIC.cca</code>). Function <code>ordiR2step</code> builds
+upon <code>RsquareAdj</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## See add1.cca for another example
+
+### Dune data
+data(dune)
+data(dune.env)
+mod0 &lt;- rda(dune ~ 1, dune.env)  # Model with intercept only
+mod1 &lt;- rda(dune ~ ., dune.env)  # Model with all explanatory variables
+
+## With scope present, the default direction is "both"
+mod &lt;- ordistep(mod0, scope = formula(mod1))
+mod
+## summary table of steps
+mod$anova
+
+## Example of ordistep, forward
+ordistep(mod0, scope = formula(mod1), direction="forward")
+
+## Example of ordiR2step (always forward)
+## stops because R2 of 'mod1' exceeded
+ordiR2step(mod0, mod1)
+</code></pre>
+
+
+</div>

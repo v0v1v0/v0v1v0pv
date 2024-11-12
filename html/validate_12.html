@@ -1,0 +1,63 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>add_indicators</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add indicator values as columns to a data frame</h2>
+
+<h3>Description</h3>
+
+<p>Compute and add externally defined indicators to data frame.
+If necessary, values are recycled over records.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">add_indicators(dat, x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dat</code></td>
+<td>
+<p><code>[data.frame]</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>[indicator]</code> or <code>[indication]</code> object. See examples.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>dat</code> with extra columns defined by <code>x</code> attached.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ii &lt;- indicator(
+ hihi = 2*sqrt(height)
+ , haha = log10(weight)
+ , lulz = mean(height)
+ , wo0t = median(weight)
+)
+
+# note: mean and median are repeated
+add_indicators(women, ii)
+
+# compute indicators first, then add
+out &lt;- confront(women, ii)
+add_indicators(women, out)
+
+</code></pre>
+
+
+</div>

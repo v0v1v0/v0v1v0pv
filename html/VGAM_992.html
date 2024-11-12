@@ -1,0 +1,236 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>N1poisson</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Linear Model and Poisson
+Mixed Data Type
+Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimate the four parameters of
+the (bivariate) <code class="reqn">N_1</code>–Poisson copula
+mixed data type model
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">N1poisson(lmean = "identitylink", lsd = "loglink",
+    lvar = "loglink", llambda = "loglink", lapar = "rhobitlink",
+    zero = c(if (var.arg) "var" else "sd", "apar"),
+    doff = 5, nnodes = 20, copula = "gaussian",
+    var.arg = FALSE, imethod = 1, isd = NULL,
+    ilambda = NULL, iapar = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmean, lsd, lvar, llambda, lapar</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+See <code>Links</code> for more link function choices.
+The second response is primarily controlled by
+the parameter <code class="reqn">\lambda_2</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod, isd, ilambda, iapar</code></td>
+<td>
+
+<p>Initial values.
+Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>doff</code></td>
+<td>
+
+<p>Numeric of unit length, the denominator offset
+<code class="reqn">\delta&gt;0</code>.
+A monotonic transformation
+<code class="reqn">\Delta^* = \lambda_2^{2/3} /
+    (|\delta| + \lambda_2^{2/3})</code>
+is taken to map the Poisson mean onto the
+unit interval.
+This argument is <code class="reqn">\delta</code>.
+The default reflects the property that the normal
+approximation to the Poisson work wells for
+<code class="reqn">\lambda_2 \geq 10</code> or thereabouts, hence
+that value is mapped to the origin by
+<code>qnorm</code>.
+That's because <code>10**(2/3)</code> is approximately 5.
+It is known that the <code class="reqn">\lambda_2</code> rate
+parameter raised to
+the power of <code class="reqn">2/3</code> is a transformation
+that approximates the normal density more
+closely.
+</p>
+<p>Alternatively,
+<code>delta</code> may be assigned a single
+negative value. If so, then
+<code class="reqn">\Delta^* = \log(1 + \lambda_2)
+    / [|\delta| + \log(1 + \lambda_2)]</code>
+is used.
+For this, <code>doff = -log1p(10)</code> is
+suggested.
+</p>
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nnodes, copula</code></td>
+<td>
+
+<p>Details at <code>N1binomial</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.arg</code></td>
+<td>
+
+<p>See <code>uninormal</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The bivariate response comprises
+<code class="reqn">Y_1</code> from a linear model
+having parameters
+<code>mean</code> and <code>sd</code> for
+<code class="reqn">\mu_1</code> and <code class="reqn">\sigma_1</code>,
+and the Poisson count
+<code class="reqn">Y_2</code> having parameter
+<code>lambda</code> for its mean <code class="reqn">\lambda_2</code>.
+The
+joint probability density/mass function is
+<code class="reqn">P(y_1, Y_2 = y_2) = \phi_1(y_1; \mu_1, \sigma_1)
+       \exp(-h^{-1}(\Delta))
+       [h^{-1}(\Delta)]^{y_2} / y_2!</code>
+where <code class="reqn">\Delta</code> adjusts <code class="reqn">\lambda_2</code>
+according to the <em>association parameter</em>
+<code class="reqn">\alpha</code>.
+The quantity <code class="reqn">\Delta</code> is
+<code class="reqn">\Phi((\Phi^{-1}(h(\lambda_2)) -
+  \alpha Z_1) / \sqrt{1 - \alpha^2})</code>
+where <code class="reqn">h</code> maps
+<code class="reqn">\lambda_2</code> onto the unit interval.
+The quantity <code class="reqn">Z_1</code> is <code class="reqn">(Y_1-\mu_1) / \sigma_1</code>.
+Thus there is an underlying bivariate normal
+distribution, and a copula is used to bring the
+two marginal distributions together.
+Here,
+<code class="reqn">-1 &lt; \alpha &lt; 1</code>, and
+<code class="reqn">\Phi</code> is the
+cumulative distribution function
+<code>pnorm</code>
+of a standard univariate normal.
+</p>
+<p>The first marginal
+distribution is a normal distribution
+for the linear model.
+The second column of the response must
+have nonnegative integer values.
+When <code class="reqn">\alpha = 0</code>
+then <code class="reqn">\Delta=\Delta^*</code>.
+Together, this family function combines
+<code>uninormal</code> and
+<code>poissonff</code>.
+If the response are correlated then
+a more efficient joint analysis
+should result.
+</p>
+<p>The second marginal distribution allows
+for overdispersion relative to an ordinary
+Poisson distribution—a property due to
+<code class="reqn">\alpha</code>.
+</p>
+<p>This <span class="pkg">VGAM</span> family function cannot handle
+multiple responses.
+Only a two-column matrix is allowed.
+The two-column fitted
+value matrix has columns <code class="reqn">\mu_1</code>
+and <code class="reqn">\lambda_2</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This <span class="pkg">VGAM</span> family function is based on
+<code>N1binomial</code> and shares many
+properties with it.
+It pays to set <code>trace = TRUE</code> to
+monitor convergence, especially when
+<code>abs(apar)</code> is high.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>rN1pois</code>,
+<code>N1binomial</code>,
+<code>binormalcop</code>,
+<code>uninormal</code>,
+<code>poissonff</code>,
+<code>dpois</code>.
+</p>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">apar &lt;- rhobitlink(0.3, inverse = TRUE)
+nn &lt;- 1000; mymu &lt;- 1; sdev &lt;- exp(1)
+lambda &lt;- loglink(1, inverse = TRUE)
+mat &lt;- rN1pois(nn, mymu, sdev, lambda, apar)
+npdata &lt;- data.frame(y1 = mat[, 1], y2 = mat[, 2])
+with(npdata, var(y2) / mean(y2))  # Overdispersion
+fit1 &lt;- vglm(cbind(y1, y2) ~ 1, N1poisson,
+             npdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+Coef(fit1)
+head(fitted(fit1))
+summary(fit1)
+confint(fit1)
+</code></pre>
+
+
+</div>

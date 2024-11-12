@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>components</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Decompose a firmly applied function</h2>
+
+<h3>Description</h3>
+
+<p>Decompose a firmly applied function (i.e., a function created by
+<code>firmly</code>):
+</p>
+
+<ul>
+<li> <p><code>firm_core</code> extracts the underlying “core”
+function—the function that is called when all arguments are valid.
+</p>
+</li>
+<li> <p><code>firm_checks</code> extracts the checks.
+</p>
+</li>
+<li> <p><code>firm_error</code> extracts the subclass of the error condition that
+is signaled when an input validation error occurs.
+</p>
+</li>
+<li> <p><code>firm_args</code> extracts the names of arguments whose presence is to
+be checked, i.e., those specified by the <code>.warn_missing</code> switch of
+<code>firmly</code>.
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">firm_core(x)
+
+firm_checks(x)
+
+firm_error(x)
+
+firm_args(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object to decompose.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>If <code>x</code> is a firmly applied function:
+</p>
+
+<ul>
+<li> <p><code>firm_core</code> returns a function.
+</p>
+</li>
+<li> <p><code>firm_checks</code> returns a data frame with components <code>expr</code>
+(language), <code>env</code> (environment), <code>string</code> (character),
+<code>msg</code> (character).
+</p>
+</li>
+<li> <p><code>firm_error</code> returns a character vector.
+</p>
+</li>
+<li> <p><code>firm_args</code> returns a character vector.
+</p>
+</li>
+</ul>
+<p>In the absence of the component to be extracted, these functions return
+<code>NULL</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>firmly</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">f &lt;- function(x, y, ...) NULL
+f_fm &lt;- firmly(f, ~is.numeric, list(~x, ~y - x) ~ {. &gt; 0})
+
+identical(firm_core(f_fm), f)                  # [1] TRUE
+firm_checks(f_fm)                              # 4 x 4 data frame
+firm_error(f_fm)                               # [1] "simpleError"
+firm_args(f_fm)                                # NULL
+firm_args(firmly(f_fm, .warn_missing = "y"))   # [1] "y"
+
+</code></pre>
+
+
+</div>

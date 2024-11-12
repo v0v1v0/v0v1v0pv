@@ -1,0 +1,192 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visualize_c_map</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualization for Estimating c Bias + Estimates</h2>
+
+<h3>Description</h3>
+
+<p>This function displays a visualization of the possible
+bias c that allows for a non-zero effect in sensitivity.
+This function includes the ability to add values of
+effect size and correlation to see how they map onto
+the proposed c value.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visualize_c_map(
+  dlow,
+  r_values,
+  d_values = NULL,
+  f_values = NULL,
+  f2_values = NULL,
+  nnt_values = NULL,
+  prob_values = NULL,
+  prop_u1_values = NULL,
+  prop_u2_values = NULL,
+  prop_u3_values = NULL,
+  prop_overlap_values = NULL,
+  point_colors = c("red", "green", "blue"),
+  size = 2,
+  shape_1 = 2,
+  shape_2 = 3,
+  ribbon_color = "lightblue",
+  lower = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dlow</code></td>
+<td>
+<p>The lower limit of the possible effect size (required).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r_values</code></td>
+<td>
+<p>A vector of correlation values that are
+possible (required).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>d_values</code></td>
+<td>
+<p>A vector of effect size values that are
+possible.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f_values</code></td>
+<td>
+<p>A vector of f effect size values that are
+possible.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f2_values</code></td>
+<td>
+<p>A vector of f2 effect size values that are
+possible.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nnt_values</code></td>
+<td>
+<p>A vector of number needed to treat
+effect size values that are possible.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prob_values</code></td>
+<td>
+<p>A vector of probability of superiority
+effect size values that are possible.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prop_u1_values</code></td>
+<td>
+<p>A vector of proportion of overlap u1
+effect size values that are possible.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prop_u2_values</code></td>
+<td>
+<p>A vector of proportion of overlap u2
+effect size values that are possible.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prop_u3_values</code></td>
+<td>
+<p>A vector of proportion of overlap u3
+effect size values that are possible.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prop_overlap_values</code></td>
+<td>
+<p>A vector of proportion of
+distribution overlap effect size values that are possible.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>point_colors</code></td>
+<td>
+<p>A vector of color names or codes to plot
+the effect sizes on the graph. You should use as many color
+names/codes as you have max of an effect size (i.e, if r has 4, d has 3,
+and prob has 5, then use 5 as the max number of colors).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size</code></td>
+<td>
+<p>The size of the symbols on the chart.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape_1</code></td>
+<td>
+<p>a numeric value of one of the ggplot2 shapes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape_2</code></td>
+<td>
+<p>a numeric value of one of the ggplot2 shapes -
+if you use different numbers, the two shapes are overlaid, as
+we found this effect made it easier to read with many effect sizes
+plotted on the same graph.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ribbon_color</code></td>
+<td>
+<p>a color name or code to shade the area that
+shows a non-zero effect in sensitivity.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower</code></td>
+<td>
+<p>Use this to indicate if you want the lower or upper bound
+of d for one sided confidence intervals. If d is positive, you generally
+want <code>lower = TRUE</code>, while negative d values should enter
+<code>lower = FALSE</code> for the upper bound that is closer to zero (required).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a pretty graph of the possible effect size
+and correlation combinations with the region of effect colored in.
+Note that all effect sizes are converted to d for the graph.
+</p>
+<table><tr style="vertical-align: top;">
+<td><code>graph</code></td>
+<td>
+<p>The graph of possible values for c</p>
+</td>
+</tr></table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+visualize_c_map(dlow = .25,
+  d_values = c(.2, .3, .8),
+  r_values = c(.1, .4, .3),
+  lower = TRUE)
+
+</code></pre>
+
+
+</div>

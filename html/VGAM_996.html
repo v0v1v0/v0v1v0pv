@@ -1,0 +1,221 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>nbcanlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Negative Binomial Canonical Link Function </h2>
+
+<h3>Description</h3>
+
+<p>Computes the negative binomial canonical
+link transformation,
+including its inverse and the first two
+derivatives.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">nbcanlink(theta, size = NULL, wrt.param = NULL, bvalue = NULL,
+          inverse = FALSE, deriv = 0, short = TRUE, tag = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character.
+Typically the mean of a negative binomial
+distribution (NBD).
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size, wrt.param</code></td>
+<td>
+
+<p><code>size</code> contains the <code class="reqn">k</code> matrix which
+must be of a conformable dimension
+as <code>theta</code>.
+Also, if <code>deriv &gt; 0</code> then <code>wrt.param</code>
+is either 1 or 2 (1 for with respect to the
+first parameter, and 2 for with respect
+to the second parameter (<code>size</code>)).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue</code></td>
+<td>
+
+<p>Details at <code>Links</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inverse, deriv, short, tag</code></td>
+<td>
+
+<p>Details at <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The NBD canonical link is
+<code class="reqn">\log(\theta/(\theta + k))</code>
+where <code class="reqn">\theta</code> is the NBD mean.
+The canonical link is used for theoretically
+relating the NBD to GLM class.
+</p>
+<p>This link function was specifically written for
+<code>negbinomial</code> and
+<code>negbinomial.size</code>,
+and should not be used elsewhere
+(these <span class="pkg">VGAM</span> family functions have
+code that
+specifically handles <code>nbcanlink()</code>.)
+</p>
+<p>Estimation with the NB canonical link
+has a somewhat interesting history.
+If we take the problem as beginning with the admission of
+McCullagh and Nelder (1983; first edition, p.195)
+[see also McCullagh and Nelder (1989, p.374)]
+that the NB is little used in
+applications and has a “problematical” canonical link
+then it appears
+only one other publicized attempt was made to
+solve the problem seriously.
+This was Hilbe, who produced a defective solution.
+However, Miranda and Yee (2023) solve
+this four-decade old problem using
+total derivatives and
+it is implemented by using
+<code>nbcanlink</code> with
+<code>negbinomial</code>.
+Note that early versions of <span class="pkg">VGAM</span> had
+a defective solution.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the above equation
+when <code>inverse = FALSE</code>, and
+if <code>inverse = TRUE</code> then
+<code>kmatrix / expm1(-theta)</code> where <code>theta</code>
+is really <code>eta</code>.
+For <code>deriv = 1</code>, then the function
+returns
+<em>d</em> <code>eta</code> / <em>d</em> <code>theta</code>
+as a function of <code>theta</code>
+if <code>inverse = FALSE</code>,
+else if <code>inverse = TRUE</code> then it
+returns the reciprocal.
+</p>
+
+
+<h3>Note</h3>
+
+<p>While theoretically nice, this function is not recommended
+in general since its value is always negative
+(linear predictors
+ought to be unbounded in general). A <code>loglink</code>
+link for argument <code>lmu</code> is recommended instead.
+</p>
+<p>Numerical instability may occur when <code>theta</code>
+is close to 0 or 1.
+Values of <code>theta</code> which are less than or
+equal to 0 can be
+replaced by <code>bvalue</code>
+before computing the link function value.
+See <code>Links</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Victor Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>Hilbe, J. M. (2011).
+<em>Negative Binomial Regression</em>,
+2nd Edition.
+Cambridge: Cambridge University Press.
+</p>
+<p>McCullagh, P. and Nelder, J. A. (1989).
+<em>Generalized Linear Models</em>, 2nd ed.
+London: Chapman &amp; Hall.
+</p>
+<p>Miranda-Soberanis, V. F. and Yee, T. W. (2023).
+Two-parameter link functions, with
+applications to negative binomial, Weibull and
+quantile regression.
+<em>Computational Statistics</em>,
+<b>38</b>, 1463–1485.
+</p>
+<p>Yee, T. W. (2014).
+Reduced-rank vector generalized linear
+models with
+two linear predictors.
+<em>Computational Statistics and Data Analysis</em>,
+<b>71</b>, 889–902.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>negbinomial</code>,
+<code>negbinomial.size</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nbcanlink("mu", short = FALSE)
+
+mymu &lt;- 1:10  # Test some basic operations:
+kmatrix &lt;- cbind(runif(length(mymu)))
+eta1 &lt;- nbcanlink(mymu, size = kmatrix)
+ans2 &lt;- nbcanlink(eta1, size = kmatrix, inverse = TRUE)
+max(abs(ans2 - mymu))  # Should be 0
+
+## Not run:  mymu &lt;- seq(0.5, 10, length = 101)
+kmatrix &lt;- matrix(10, length(mymu), 1)
+plot(nbcanlink(mymu, size = kmatrix) ~ mymu, las = 1,
+     type = "l", col = "blue", xlab = expression({mu}))
+
+## End(Not run)
+
+# Estimate the parameters from some simulated data
+ndata &lt;- data.frame(x2 = runif(nn &lt;- 500))
+ndata &lt;- transform(ndata, eta1 = -1 - 1 * x2,  # eta1 &lt; 0
+                          size1 = exp(1),
+                          size2 = exp(2))
+ndata &lt;- transform(ndata,
+            mu1 = nbcanlink(eta1, size = size1, inverse = TRUE),
+            mu2 = nbcanlink(eta1, size = size2, inverse = TRUE))
+ndata &lt;- transform(ndata, y1 = rnbinom(nn, mu = mu1, size1),
+                          y2 = rnbinom(nn, mu = mu2, size2))
+summary(ndata)
+
+nbcfit &lt;-
+  vglm(cbind(y1, y2) ~ x2,  #  crit = "c",
+       negbinomial(lmu = "nbcanlink"),
+       data = ndata, trace = TRUE)
+coef(nbcfit, matrix = TRUE)
+summary(nbcfit)
+</code></pre>
+
+
+</div>

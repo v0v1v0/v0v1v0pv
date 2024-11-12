@@ -1,0 +1,56 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vsk_Rho</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimating Vasicek Rho parameter by assuming the know P parameter</h2>
+
+<h3>Description</h3>
+
+<p>The function <code>vsk_Rho</code> estimates Rho parameter in the Vasicek
+distribution by using maximum likelihood estimator, assuming the
+known P parameter.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vsk_Rho(x, p)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A numeric vector in the (0, 1) interval that is supposed to
+follow the Vasicek distribution</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>A numeric vector in the (0, 1) interval. p has the same length
+as x. Each value of p can be a constant or varying.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A scalar representing the Rho parameter in the Vasicek distribution.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- vsk_rvs(1000, Rho = 0.2, P = 0.1)
+p &lt;- rep(mean(x), length(x))
+vsk_Rho(x, p)
+# 0.2110976
+</code></pre>
+
+
+</div>

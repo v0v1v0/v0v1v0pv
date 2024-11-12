@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Brat</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Inputting Data to fit a Bradley Terry Model </h2>
+
+<h3>Description</h3>
+
+<p>Takes in a square matrix of counts and outputs
+them in a form that is accessible to the <code>brat</code>
+and <code>bratt</code> family functions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Brat(mat, ties = 0 * mat, string = c("&gt;", "=="), whitespace = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>mat</code></td>
+<td>
+
+<p>Matrix of counts, which is considered <code class="reqn">M</code> by <code class="reqn">M</code> in
+dimension when there are ties, and <code class="reqn">M+1</code> by <code class="reqn">M+1</code>
+when there are no ties.  The rows are winners and the
+columns are losers, e.g., the 2-1 element is now many
+times Competitor 2 has beaten Competitor 1.  The matrices
+are best labelled with the competitors' names.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ties</code></td>
+<td>
+
+<p>Matrix of counts.
+This should be the same dimension as <code>mat</code>. By
+default, there are no ties.  The matrix must be symmetric,
+and the diagonal should contain <code>NA</code>s.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>string</code></td>
+<td>
+
+<p>Character.
+The matrices are labelled with the first value of the
+descriptor, e.g., <code>"NZ &gt; Oz"</code> ‘means’ NZ beats
+Australia in rugby.  Suggested alternatives include
+<code>" beats "</code> or <code>" wins against "</code>.  The second value
+is used to handle ties.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>whitespace</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> then a white space is added before
+and after <code>string</code>; it generally enhances readability.
+See <code>CommonVGAMffArguments</code> for some similar-type
+information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In the <span class="pkg">VGAM</span> package it is necessary for each
+matrix to be represented as a single row of data by
+<code>brat</code> and <code>bratt</code>.  Hence the
+non-diagonal elements of the <code class="reqn">M+1</code> by <code class="reqn">M+1</code>
+matrix are concatenated into <code class="reqn">M(M+1)</code> values (no
+ties), while if there are ties, the non-diagonal elements
+of the <code class="reqn">M</code> by <code class="reqn">M</code> matrix are concatenated into
+<code class="reqn">M(M-1)</code> values.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix with 1 row and either <code class="reqn">M(M+1)</code> or <code class="reqn">M(M-1)</code>
+columns.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This is a data preprocessing function for
+<code>brat</code> and <code>bratt</code>.
+</p>
+<p>Yet to do: merge <code>InverseBrat</code> into <code>brat</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Agresti, A. (2013).
+<em>Categorical Data Analysis</em>,
+3rd ed. Hoboken, NJ, USA: Wiley.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>brat</code>,
+<code>bratt</code>,
+<code>InverseBrat</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">journal &lt;- c("Biometrika", "Comm Statist", "JASA", "JRSS-B")
+mat &lt;- matrix(c( NA, 33, 320, 284,   730, NA, 813, 276,
+                498, 68,  NA, 325,   221, 17, 142, NA), 4, 4)
+dimnames(mat) &lt;- list(winner = journal, loser = journal)
+Brat(mat)  # Less readable
+Brat(mat, whitespace = TRUE)  # More readable
+vglm(Brat(mat, whitespace = TRUE) ~ 1, brat, trace = TRUE)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vs_read_csv</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Reading a CSV file</h2>
+
+<h3>Description</h3>
+
+<p>The <code>vs_read_csv()</code> reads a CSV file format and returns a <code>jobj</code>
+object from <code>CsvFeatureSource</code> scala class.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vs_read_csv(vsc, path)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vsc</code></td>
+<td>
+<p>A variantspark connection.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path</code></td>
+<td>
+<p>The file's path.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>spark_jobj, shell_jobj
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> 
+## Not run: 
+library(sparklyr)
+
+sc &lt;- spark_connect(master = "local")
+vsc &lt;- vs_context(sc)
+
+hipster_labels &lt;- vs_read_csv(vsc, 
+                              system.file("extdata/hipster_labels.txt",
+                                          package = "variantspark"))
+
+hipster_labels 
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

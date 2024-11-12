@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vcr_logging</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>vcr log file setup</h2>
+
+<h3>Description</h3>
+
+<p>vcr log file setup
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vcr_log_file(file, overwrite = TRUE)
+
+vcr_log_info(message, include_date = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>file</code></td>
+<td>
+<p>(character) a file path, required</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overwrite</code></td>
+<td>
+<p>(logical) whether or not to overwrite the file at
+'file' if it already exists. Default: <code>TRUE</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>message</code></td>
+<td>
+<p>(character) a message to log</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>include_date</code></td>
+<td>
+<p>(logical) include date and time in each log entry.
+Default: <code>FALSE</code></p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># user workflow
+vcr_configuration()
+logfile &lt;- file.path(tempdir(), "vcr.log")
+vcr_configure(dir = tempdir(), log = TRUE, log_opts = list(file = logfile))
+
+readLines(logfile) # empty
+
+# log messages
+vcr_log_info("hello world!")
+readLines(logfile)
+vcr_log_info("foo bar")
+readLines(logfile)
+## many messages
+vcr_log_info(c("brown cow", "blue horse"))
+readLines(logfile)
+vcr_log_info(c("brown cow", "blue horse", "green goat"))
+readLines(logfile)
+
+# standalone workflow
+# set a file to log to
+vcr_log_file((f &lt;- tempfile()))
+readLines(f) # empty
+
+# log messages
+vcr_log_info("hello world!")
+readLines(logfile)
+vcr_log_info("foo bar")
+readLines(logfile)
+
+# cleanup
+unlink(f)
+unlink(logfile)
+</code></pre>
+
+
+</div>

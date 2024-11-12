@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>misclassification</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Computes misclassification rate</h2>
+
+<h3>Description</h3>
+
+<p>Missclasification is a commonly used performance measure in subspace
+clustering. It allows to compare two partitions with the same number of
+clusters.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">misclassification(group, true_group, M, K)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>A vector, first partition.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>true_group</code></td>
+<td>
+<p>A vector, second (reference) partition.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>M</code></td>
+<td>
+<p>An integer, maximal number of elements in one class.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>K</code></td>
+<td>
+<p>An integer, number of classes.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>As getting exact value of misclassification requires checking all
+permutations and is therefore intrackable even for modest number of clusters,
+a heuristic approach is proposed. It is assumed that there are K classes of
+maximum M elements. Additional requirement is that classes labels are from
+range [1, K].
+</p>
+
+
+<h3>Value</h3>
+
+<p>Misclassification rate.
+</p>
+
+
+<h3>References</h3>
+
+<p>R. Vidal. Subspace clustering. Signal Processing Magazine, IEEE,
+28(2):52-68,2011
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+sim.data &lt;- data.simulation(n = 100, SNR = 1, K = 5, numb.vars = 30, max.dim = 2)
+mlcc.fit &lt;- mlcc.reps(sim.data$X, numb.clusters = 5, numb.runs = 20, max.dim = 2, numb.cores=1)
+misclassification(mlcc.fit$segmentation,sim.data$s, 30, 5)
+
+
+#one can use this function not only for clusters
+partition1 &lt;- sample(10, 300, replace = TRUE)
+partition2 &lt;- sample(10, 300, replace = TRUE)
+misclassification(partition1, partition1, max(table(partition1)), 10)
+misclassification(partition1, partition2, max(table(partition2)), 10)
+</code></pre>
+
+
+</div>

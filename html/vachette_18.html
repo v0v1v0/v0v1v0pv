@@ -1,0 +1,202 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vachette_data</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Initialize vachette object with required data</h2>
+
+<h3>Description</h3>
+
+<p>Initialize vachette object with required data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vachette_data(
+  obs.data,
+  typ.data,
+  sim.data = NULL,
+  covariates,
+  ref.dosenr,
+  log.x = FALSE,
+  iiv.correction = FALSE,
+  error.model = c("proportional", "additive"),
+  model.name = NULL,
+  mappings = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obs.data</code></td>
+<td>
+<p>data.frame; Observed data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>typ.data</code></td>
+<td>
+<p>data.frame; Typical (population) curves</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sim.data</code></td>
+<td>
+<p>data.frame; Simulated (VPC) data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>covariates</code></td>
+<td>
+<p>named character vector; Covariate names with reference values in vachette transformation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ref.dosenr</code></td>
+<td>
+<p>integer; Dose number to use as the reference dose, corresponding to value in "dosenr" column in input data</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log.x</code></td>
+<td>
+<p>logical; Apply log(x) conversion. Default <code>FALSE</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iiv.correction</code></td>
+<td>
+<p>logical; Apply inter-individual variability correction. Default <code>FALSE</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>error.model</code></td>
+<td>
+<p>character; Applied error model, <code>"proportional"</code> or <code>"additive"</code>. Default <code>"proportional"</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model.name</code></td>
+<td>
+<p>character; Optional model name for plot output</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mappings</code></td>
+<td>
+<p>named character vector;  Optional mappings to be included if column names in input <code>data.frame</code> differ from required column names.
+See Required Columns section:</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If "dosenr" column is missing it will be automatically calculated using the priority of available columns:
+</p>
+
+<ul>
+<li>
+<p> "EVID": If available in data, "dosenr" will be calculated using <code>cumsum(EVID==1)</code>
+</p>
+</li>
+<li>
+<p> "ADDL"/"II": If "ADDL" and "II" are available in data, "dosenr" will be calculated given additional dose number and interval
+</p>
+</li>
+<li>
+<p> "AMT": If only "AMT" column exists in data, "dosenr" will be calculated using <code>cumsum(AMT!=0)</code>
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p><code>vachette_data</code>
+</p>
+
+
+<h3>Required columns <code>obs.data</code>
+</h3>
+
+
+<ul>
+<li> <p><code>"ID"</code> - Subject ID
+</p>
+</li>
+<li> <p><code>"x"</code> - Typically time
+</p>
+</li>
+<li> <p><code>"PRED"</code> - Population prediction, required if <code>iiv.correction = TRUE</code>
+</p>
+</li>
+<li> <p><code>"IPRED"</code> - Individual prediction, required if <code>iiv.correction = TRUE</code>
+</p>
+</li>
+<li> <p><code>"OBS"</code> - DV
+</p>
+</li>
+<li> <p><code>"dosenr"</code> - Dose number; unique dose number for ID/time point
+</p>
+</li>
+</ul>
+<h3>Required columns <code>typ.data</code>
+</h3>
+
+
+<ul>
+<li> <p><code>"ID"</code> - Subject ID
+</p>
+</li>
+<li> <p><code>"x"</code> - Typically time
+</p>
+</li>
+<li> <p><code>"PRED"</code> - Population prediction
+</p>
+</li>
+<li> <p><code>"dosenr"</code> - Dose number; unique dose number for ID/time point
+</p>
+</li>
+</ul>
+<h3>Required columns <code>sim.data</code>
+</h3>
+
+
+<ul>
+<li> <p><code>"ID"</code> - Subject ID
+</p>
+</li>
+<li> <p><code>"x"</code> - Typically time
+</p>
+</li>
+<li> <p><code>"PRED"</code> - Population prediction, required if <code>iiv.correction = TRUE</code>
+</p>
+</li>
+<li> <p><code>"IPRED"</code> - Individual prediction, required if <code>iiv.correction = TRUE</code>
+</p>
+</li>
+<li> <p><code>"REP"</code> - Replicate number
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">obs &lt;- read.csv(system.file(package = "vachette", "examples", "iv-obs.csv"))
+typ &lt;- read.csv(system.file(package = "vachette", "examples", "iv-typ-minmax.csv"))
+
+vd &lt;- vachette_data(
+  obs.data = obs,
+  typ.data = typ,
+  covariates = c(WT = 70),
+  mappings = c(OBS = "DV", x = "time"),
+  model.name  = "IV"
+  )
+
+
+</code></pre>
+
+
+</div>

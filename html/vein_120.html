@@ -1,0 +1,175 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Speed</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Construction function for class "Speed"</h2>
+
+<h3>Description</h3>
+
+<p><code>Speed</code> returns a transformed object with class "Speed" and units
+km/h. This function includes two arguments, distance and time. Therefore,
+it is possible to change the units of the speed to "m" to "s" for example.
+This function returns a data.frame with units for speed. When this function
+is applied to numeric vectors it adds class "units".
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Speed(x, ..., dist = "km", time = "h")
+
+## S3 method for class 'Speed'
+print(x, ...)
+
+## S3 method for class 'Speed'
+summary(object, ...)
+
+## S3 method for class 'Speed'
+plot(
+  x,
+  pal = "mpl_inferno",
+  rev = FALSE,
+  fig1 = c(0, 0.8, 0, 0.8),
+  fig2 = c(0, 0.8, 0.55, 1),
+  fig3 = c(0.7, 1, 0, 0.8),
+  mai1 = c(1, 0.82, 0.82, 0.42),
+  mai2 = c(1.8, 0.82, 0.5, 0.42),
+  mai3 = c(1, 1, 0.82, 0.2),
+  bias = 1.5,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object with class "data.frame", "matrix" or "numeric"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>ignored
+Default is units is "km"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dist</code></td>
+<td>
+<p>String indicating the units of the resulting distance in speed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time</code></td>
+<td>
+<p>Character to be the time units as denominator, default is "h"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Object with class "Speed"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pal</code></td>
+<td>
+<p>Palette of colors available or the number of the position</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rev</code></td>
+<td>
+<p>Logical; to internally revert order of rgb color vectors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fig1</code></td>
+<td>
+<p>par parameters for fig, <code>par</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fig2</code></td>
+<td>
+<p>par parameters for fig, <code>par</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fig3</code></td>
+<td>
+<p>par parameters for fig, <code>par</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mai1</code></td>
+<td>
+<p>par parameters for mai, <code>par</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mai2</code></td>
+<td>
+<p>par parameters for mai, <code>par</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mai3</code></td>
+<td>
+<p>par parameters for mai, <code>par</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bias</code></td>
+<td>
+<p>positive number. Higher values give more widely spaced colors at the high end.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Constructor for class "Speed" or "units"
+</p>
+
+
+<h3>Note</h3>
+
+<p>default time unit for speed is hour
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>units</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">{
+data(net)
+data(pc_profile)
+speed &lt;- Speed(net$ps)
+class(speed)
+plot(speed, type = "l")
+pc_week &lt;- temp_fact(net$ldv+net$hdv, pc_profile)
+df &lt;- netspeed(pc_week, net$ps, net$ffs, net$capacity, net$lkm)
+summary(df)
+plot(df)
+# changing to miles
+net$ps &lt;- units::set_units(net$ps, "miles/h")
+net$ffs &lt;- units::set_units(net$ffs, "miles/h")
+net$lkm &lt;- units::set_units(net$lkm, "miles")
+df &lt;- netspeed(pc_week, net$ps, net$ffs, net$capacity, net$lkm, dist = "miles")
+plot(df)
+}
+</code></pre>
+
+
+</div>

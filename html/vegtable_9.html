@@ -1,0 +1,143 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>add_releves</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Merge relevés from data frames into vegtable objects</h2>
+
+<h3>Description</h3>
+
+<p>Addition of plot observations into existing data sets may implicate merging
+data frames with vegtable objects.
+</p>
+<p>Since this function will only update slots <strong>samples</strong> and <strong>header</strong>,
+consistency with slots <strong>layers</strong>, <strong>relations</strong> and <strong>species</strong> have to be
+checked and accordingly updated in advance.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">add_releves(vegtable, releves, ...)
+
+## S4 method for signature 'vegtable,data.frame'
+add_releves(
+  vegtable,
+  releves,
+  header,
+  abundance,
+  split_string,
+  usage_ids = FALSE,
+  layers = FALSE,
+  layers_var,
+  format = "crosstable",
+  preserve_ids = FALSE,
+  ...
+)
+
+add_releves(vegtable, ...) &lt;- value
+
+## S4 replacement method for signature 'vegtable,data.frame'
+add_releves(vegtable, ...) &lt;- value
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vegtable</code></td>
+<td>
+<p>An object of class vegtable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>releves</code></td>
+<td>
+<p>A data frame including plot observations to be added into
+<code>vegtable</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments passed to function <code>cross2db()</code> (i.e.
+<code>na_strings</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>header</code></td>
+<td>
+<p>A data frame (optional) including header information for plots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>abundance</code></td>
+<td>
+<p>A character value (or vector of length 2) indicating the
+names of abundance variable in <code>vegtable</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>split_string</code></td>
+<td>
+<p>Character value used to split mixed abundance codes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>usage_ids</code></td>
+<td>
+<p>Logical value indicating whether species are as taxon usage
+ids (integers) or names in <code>releves</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>layers</code></td>
+<td>
+<p>Logical value indicating whether layers are included in
+<code>releves</code> or not.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>layers_var</code></td>
+<td>
+<p>Name of the layer variable in <code>vegtable</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>format</code></td>
+<td>
+<p>Character value indicating input format of <code>releves</code> (either
+<code>"crosstable"</code> or <code>"databaselist"</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>preserve_ids</code></td>
+<td>
+<p>A logical value, whether IDs in input data set should
+used as <code>ReleveID</code> or not. Those IDs have to be integers and if one
+of those already exists in <code>vegtable</code>, an error will be retrieved.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>A data frame containing new plot observations. I is passed to
+parameter 'releves' by the replace method.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Miguel Alvarez <a href="mailto:kamapu78@gmail.com">kamapu78@gmail.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>cross2db()</code>
+</p>
+
+
+</div>

@@ -1,0 +1,98 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>coefvgam</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Extract Model Coefficients of a vgam() Object</h2>
+
+<h3>Description</h3>
+
+<p>Extracts the estimated
+coefficients from vgam() objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">coefvgam(object, type = c("linear", "nonlinear"), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p> A
+<code>vgam</code> object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p> Character.
+The default is the first choice.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Optional arguments fed into
+<code>coefvlm</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For VGAMs, because modified backfitting is performed,
+each fitted function is decomposed into a linear and nonlinear
+(smooth) part.
+The argument <code>type</code> is used to return which one is wanted.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector if <code>type = "linear"</code>.
+A list if <code>type = "nonlinear"</code>, and each component of
+this list corresponds to an <code>s</code> term;
+the component contains an S4 object with slot names such as
+<code>"Bcoefficients"</code>,
+<code>"knots"</code>,
+<code>"xmin"</code>,
+<code>"xmax"</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>vgam</code>,
+<code>coefvlm</code>,
+<code>coef</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fit &lt;- vgam(agaaus ~ s(altitude, df = 2), binomialff, data = hunua)
+coef(fit)  # Same as coef(fit, type = "linear")
+(ii &lt;- coef(fit, type = "nonlinear"))
+is.list(ii)
+names(ii)
+slotNames(ii[[1]])
+</code></pre>
+
+
+</div>

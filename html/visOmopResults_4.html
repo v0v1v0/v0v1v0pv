@@ -1,0 +1,78 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>barPlot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a bar plot visualisation from a <code style="white-space: pre;">⁠&lt;summarised_result&gt;⁠</code> object</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">barPlot(result, x, y, facet = NULL, colour = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>result</code></td>
+<td>
+<p>A <code style="white-space: pre;">⁠&lt;summarised_result&gt;⁠</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Column or estimate name that is used as x variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Column or estimate name that is used as y variable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>facet</code></td>
+<td>
+<p>Variables to facet by, a formula can be provided to specify
+which variables should be used as rows and which ones as columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colour</code></td>
+<td>
+<p>Columns to use to determine the colors.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A plot object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+result &lt;- mockSummarisedResult() |&gt; dplyr::filter(variable_name == "age")
+
+barPlot(
+  result = result,
+  x = "cohort_name",
+  y = "mean",
+  facet = c("age_group", "sex"),
+  colour = "sex")
+
+
+</code></pre>
+
+
+</div>

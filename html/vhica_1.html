@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vhica-package</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Vertical and Horizontal Inheritance Consistence Analysis
+</h2>
+
+<h3>Description</h3>
+
+<p>The package implements the VHICA method described in Wallau et al. (in prep). The purpose of the method is to detect horizontal transfers of transposable elements, by contrasting the divergence of transposable element sequences with that of regular genes. Two files should be provided, for both a set of reference genes and transposable element sequences: (i) pairwise divergence across species (e.g., dS), (ii) codon usage bias for all genes and elements in all species.
+</p>
+
+
+<h3>Details</h3>
+
+
+<table>
+<tr>
+<td style="text-align: left;">
+Package: </td>
+<td style="text-align: left;"> vhica</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+Type: </td>
+<td style="text-align: left;"> Package</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+License: </td>
+<td style="text-align: left;"> GPL-v2</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+</td>
+</tr>
+</table>
+<p>This package contains three main functions.
+</p>
+
+<ul>
+<li> <p><code>read.vhica</code>:  reads sequence files and generates an object of class <code>vhica</code> that will be used for further analysis.
+</p>
+</li>
+<li> <p><code>plot.vhica</code>:  plots the VHICA regression between two species, and displays how far transposable elements (or any kind of other sequences) are from the reference genes.
+</p>
+</li>
+<li> <p><code>image.vhica</code>:  plots the consistency of a specific element across all species, which makes it possible to build evolutionary scenarios.
+</p>
+</li>
+</ul>
+<p>In addition, it provides tools to calculate divergence (<code>div</code>) and codon usage bias (<code>CUB</code>), which are necessary to apply the VHICA method.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Implementation: Arnaud Le Rouzic &lt;arnaud.le-rouzic@universite-paris-saclay.fr&gt; <br>
+Scientists who designed the method: Gabriel Wallau, Aurélie Hua-Van, Arnaud Le~Rouzic.
+</p>
+<p>Maintainer: Arnaud Le Rouzic &lt;arnaud.le-rouzic@universite-paris-saclay.fr&gt;
+</p>
+<p>Repository: https://github.com/lerouzic/vhica
+</p>
+
+
+<h3>References</h3>
+
+<p>Gabriel Luz Wallau, Arnaud Le Rouzic, Pierre Capy, Elgion Loreto, Aurélie Hua-Van. VHICA: A new method to discriminate between vertical and horizontal transposon transfer: application to the mariner family within Drosophila. Molecular biology and evolution 33 (4), 1094-1109.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">file.cb &lt;- system.file("extdata", "mini-cbias.txt", package="vhica")
+file.div &lt;- system.file("extdata", "mini-div.txt", package="vhica")
+file.tree &lt;- if(require("ape")) system.file("extdata", "phylo.nwk", package="vhica") else NULL
+vc &lt;- read.vhica(cb.filename=file.cb, div.filename=file.div)
+plot(vc, "dere", "dana")
+im &lt;- image(vc, "mellifera:6", treefile=file.tree, skip.void=TRUE)
+summary(im)
+</code></pre>
+
+
+</div>

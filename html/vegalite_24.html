@@ -1,0 +1,94 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>encode_shape</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Encode shape "channel"</h2>
+
+<h3>Description</h3>
+
+<p>Encode shape "channel"
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">encode_shape(vl, field = NULL, type, value = NULL, aggregate = NULL,
+  sort = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vl</code></td>
+<td>
+<p>Vega-Lite object created by <code>vegalite</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>field</code></td>
+<td>
+<p>single element character vector naming the column</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>the encoded field’s type of measurement. This can be either a full type
+name (<code>quantitative</code>, <code>temporal</code>, <code>ordinal</code>, and <code>nominal</code>)
+or an initial character of the type name (<code>Q</code>, <code>T</code>, <code>O</code>, <code>N</code>).
+This property is case insensitive. If <code>auto</code> is used, the type will
+be guessed (so you may want to actually specify it if you want consistency).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>scale value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aggregate</code></td>
+<td>
+<p>perform aggregaton on <code>field</code>. See
+<a href="http://vega.github.io/vega-lite/docs/aggregate.html">Supported Aggregation Options</a> for
+more info on valid operations. Leave <code>NULL</code> for no aggregation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sort</code></td>
+<td>
+<p>either one of <code>ascending</code>, <code>descending</code> or (for ordinal scales)
+the result of a call to <code>sort_def</code></p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>right now, <code>type</code> == "<code>auto</code>" just assume "<code>quantitative</code>". It
+will eventually get smarter, but you are better off specifying it.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="http://vega.github.io/vega-lite/docs/encoding.html">Vega-Lite Encoding spec</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vegalite() %&gt;%
+  add_data("https://vega.github.io/vega-editor/app/data/cars.json") %&gt;%
+  encode_x("Horsepower", "quantitative") %&gt;%
+  encode_y("Miles_per_Gallon", "quantitative") %&gt;%
+  encode_color("Origin", "nominal") %&gt;%
+  encode_shape("Origin", "nominal") %&gt;%
+  mark_point()
+</code></pre>
+
+
+</div>

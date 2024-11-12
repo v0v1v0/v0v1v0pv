@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>roll_call</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get Voting Record for House or Senate By Number, Session &amp; Roll Call Number</h2>
+
+<h3>Description</h3>
+
+<p>Get Voting Record for House or Senate By Number, Session &amp; Roll Call Number
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">roll_call(critter = c("house", "senate"), number, session = c(1L, 2L), rcall)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>critter</code></td>
+<td>
+<p>one of 'house' or 'senate'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>number</code></td>
+<td>
+<p>valid congress number. ProPublica seems to have data going back to the 101st
+Congress, so valid values are '101'-present Congress number ('115' as of the creation
+date of the package).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>session</code></td>
+<td>
+<p>a valid session numbner (i.e. '1' or '2' and valid for current year)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rcall</code></td>
+<td>
+<p>roll call vote number</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a 'list', one component of which is a 'votes' 'data.frame'
+</p>
+
+
+<h3>Note</h3>
+
+<p>Try to cache this data if at all possible. ProPublica is a non-profit organization
+and this data comes from their Amazon S3 buckets. Every access in a given month
+ticks down the "free" counter.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# these make API calls so they aren't run in the examples
+rep &lt;- roll_call("house", 115, 1, 256)
+sen &lt;- roll_call("senate", 115, 1, 110)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

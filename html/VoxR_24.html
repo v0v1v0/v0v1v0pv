@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>substract_point_clouds</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Point clouds substraction: identification of changes between two measuring times.</h2>
+
+<h3>Description</h3>
+
+<p>Identify the point that are unique to one of two point clouds
+to detect the changes that occured between two measuring times (e.g. growth,
+branches losses, branch motion). Two methods are available (see details).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">substract_point_clouds(t0, t1, method, dist, message)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>t0</code></td>
+<td>
+<p>a data.frame or data.table containing the x, y, z, ... coordinates of a point cloud or voxel cloud
+acquired at time 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>t1</code></td>
+<td>
+<p>a data.frame or data.table containing the x, y, z, ... coordinates of a point cloud or voxel cloud
+acquired at time 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>character. The method to use to identify the difference between t0 and t1. Can be either "hull" or
+"distance", see details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dist</code></td>
+<td>
+<p>numeric. The threshold distance to consider a point is unique to t1 if <code>method = "distance"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>message</code></td>
+<td>
+<p>logical. If FALSE, messages are disabled. Default = TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If <code>method = "hull"</code>, the convex hull that wraps t0 is constructed and the difference between t1 and t0 are
+the points outside the convex hull. If <code>method = "distance"</code>, the points in t1 that are distant (i.e. further than
+<code>dist</code>) from the points in t0 are returned.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a data.frame or data.table containing the x, y, z, ... coordinates of points that are unique to t1.
+</p>
+
+
+<h3>Note</h3>
+
+<p><code>t0</code> and <code>t1</code> must be registered in the same coordinates system.
+</p>
+<p>@references Lecigne, B., Delagrange, S., &amp; Messier, C. (2018). Exploring trees in three dimensions: VoxR, a novel voxel-based R package dedicated to
+analysing the complex arrangement of tree crowns. Annals of botany, 121(4), 589-601.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#- import datasets
+t0=data.table::fread(system.file("extdata", "Tree_t0.asc", package="VoxR"))
+t1=data.table::fread(system.file("extdata", "Tree_t1.asc", package="VoxR"))
+
+#- keep only the tree crown
+t0 = t0[z&gt;=0,]
+t1 = t1[z&gt;=0,]
+
+####- substract t0 to t1 with the hull method
+diff = VoxR::substract_point_clouds(t0 = t0,t1 = t1, method = "hull")
+#- plot the result (t0 in black, the difference between t1 and t0 in red)
+rgl::open3d()
+rgl::plot3d(t0,add=TRUE)
+rgl::plot3d(diff,col="red",add=TRUE)
+
+####- substract t0 to t1 with the distance based method
+diff = substract_point_clouds(t0 = t0,t1 = t1, method = "distance",dist = 0.1)
+#- plot the result (t0 in black, the difference between t1 and t0 in red)
+rgl::open3d()
+rgl::plot3d(t0,add=TRUE)
+rgl::plot3d(diff,col="red",add=TRUE)
+</code></pre>
+
+
+</div>

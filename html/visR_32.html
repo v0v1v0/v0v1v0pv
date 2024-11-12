@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>get_pvalue</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summarize the test for equality across strata from a survival object using S3 method</h2>
+
+<h3>Description</h3>
+
+<p>Wrapper around survival::survdiff that tests the null hypothesis of equality across strata.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">get_pvalue(
+  survfit_object,
+  ptype = "All",
+  rho = NULL,
+  statlist = c("test", "Chisq", "df", "pvalue"),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>survfit_object</code></td>
+<td>
+<p>An object of class <code>survfit</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ptype</code></td>
+<td>
+<p>Character vector containing the type of p-value desired. Current options are "Log-Rank" "Wilcoxon" "Tarone-Ware" "Custom" "All".
+"Custom" allows the user to specify the weights on the Kaplan-Meier estimates using the argument <code>rho</code>.
+The default is "All" displaying all types possible. When <code>rho</code> is specified in context of "All", also a custom p-value is displayed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rho</code></td>
+<td>
+
+<p>a scalar parameter that controls the type of test.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>statlist</code></td>
+<td>
+<p>Character vector containing the desired information to be displayed. The order of the arguments determines the order in which
+they are displayed in the final result. Default is the test name ("test"), Chi-squared test statistic ("Chisq"), degrees of freedom ("df") and
+p-value ("pvalue").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments passed on to the method</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame with summary measures for the Test of Equality Across Strata
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>survdiff</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## general examples
+survfit_object &lt;- visR::estimate_KM(data = adtte, strata = "TRTP")
+visR::get_pvalue(survfit_object)
+visR::get_pvalue(survfit_object, ptype = "All")
+
+## examples to obtain specific tests
+visR::get_pvalue(survfit_object, ptype = "Log-Rank")
+visR::get_pvalue(survfit_object, ptype = "Wilcoxon")
+visR::get_pvalue(survfit_object, ptype = "Tarone-Ware")
+
+## Custom example - obtain Harrington and Fleming test
+visR::get_pvalue(survfit_object, ptype = "Custom", rho = 1)
+
+## Get specific information and statistics
+visR::get_pvalue(survfit_object, ptype = "Log-Rank", statlist = c("test", "Chisq", "df", "pvalue"))
+visR::get_pvalue(survfit_object, ptype = "Wilcoxon", statlist = c("pvalue"))
+
+</code></pre>
+
+
+</div>

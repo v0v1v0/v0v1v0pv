@@ -1,0 +1,398 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vardcrospoor</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variance estimation for cross-sectional, longitudinal measures for indicators on social exclusion and poverty</h2>
+
+<h3>Description</h3>
+
+<p>Computes the variance estimation for cross-sectional and longitudinal measures for indicators on social exclusion and poverty.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vardcrospoor(
+  Y,
+  age = NULL,
+  pl085 = NULL,
+  month_at_work = NULL,
+  Y_den = NULL,
+  Y_thres = NULL,
+  wght_thres = NULL,
+  H,
+  PSU,
+  w_final,
+  ID_level1,
+  ID_level2,
+  Dom = NULL,
+  country = NULL,
+  period,
+  sort = NULL,
+  gender = NULL,
+  dataset = NULL,
+  X = NULL,
+  countryX = NULL,
+  periodX = NULL,
+  X_ID_level1 = NULL,
+  ind_gr = NULL,
+  g = NULL,
+  q = NULL,
+  datasetX = NULL,
+  percentage = 60,
+  order_quant = 50,
+  alpha = 20,
+  use.estVar = FALSE,
+  withperiod = TRUE,
+  netchanges = TRUE,
+  confidence = 0.95,
+  outp_lin = FALSE,
+  outp_res = FALSE,
+  type = "linrmpg",
+  checking = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Variables of interest. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>age</code></td>
+<td>
+<p>Age variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pl085</code></td>
+<td>
+<p>Retirement variable (Number of months spent in retirement or early retirement). One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>month_at_work</code></td>
+<td>
+<p>Variable for total number of month at work (sum of the number of months spent at full-time work as employee, number of months spent at part-time work as employee, number of months spent at full-time work as self-employed (including family worker), number of months spent at part-time work as self-employed (including family worker)).  One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Y_den</code></td>
+<td>
+<p>Denominator variable (for example gross individual earnings). One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Y_thres</code></td>
+<td>
+<p>Variable (for example equalized disposable income) used for computation and linearization of poverty threshold. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number or logical vector with only one <code>TRUE</code> value (length of the vector has to be the same as the column count of <code>dataset</code>). Variable specified for <code>inc</code> is used as <code>income_thres</code> if <code>income_thres</code> is  not defined.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wght_thres</code></td>
+<td>
+<p>Weight variable used for computation and linearization of poverty threshold. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number. Variable specified for <code>weight</code> is used as <code>wght_thres</code> if <code>wght_thres</code> is not defined.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H</code></td>
+<td>
+<p>The unit stratum variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PSU</code></td>
+<td>
+<p>Primary sampling unit variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_final</code></td>
+<td>
+<p>Weight variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ID_level1</code></td>
+<td>
+<p>Variable for level1 ID codes. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ID_level2</code></td>
+<td>
+<p>Optional variable for unit ID codes. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dom</code></td>
+<td>
+<p>Optional variables used to define population domains. If supplied, variables are calculated for each domain. An object convertible to <code>data.table</code> or variable names as character vector, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>country</code></td>
+<td>
+<p>Variable for the survey countries. The values for each country are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>Variable for the survey periods. The values for each period are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sort</code></td>
+<td>
+<p>Optional variable to be used as tie-breaker for sorting. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gender</code></td>
+<td>
+<p>Numerical variable for gender, where 1 is for males, but 2 is for females. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>Optional survey data object convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Optional matrix of the auxiliary variables for the calibration estimator. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>countryX</code></td>
+<td>
+<p>Optional variable for the survey countries. The values for each country are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>periodX</code></td>
+<td>
+<p>Optional variable of the survey periods and countries. If supplied, residual estimation of calibration is done independently for each time period. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X_ID_level1</code></td>
+<td>
+<p>Variable for level1 ID codes. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>Optional variable of the g weights. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>Variable of the positive values accounting for heteroscedasticity. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>datasetX</code></td>
+<td>
+<p>Optional survey data object in household level convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentage</code></td>
+<td>
+<p>A numeric value in range <code class="reqn">[0,100]</code> for <code class="reqn">p</code> in the formula for poverty threshold computation:
+</p>
+<p style="text-align: center;"><code class="reqn">\frac{p}{100} \cdot Z_{\frac{\alpha}{100}}.</code>
+</p>
+
+<p>For example, to compute poverty threshold equal to 60% of some income quantile, <code class="reqn">p</code> should be set equal to 60.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order_quant</code></td>
+<td>
+<p>A numeric value in range <code class="reqn">[0,100]</code> for <code class="reqn">\alpha</code> in the formula for poverty threshold computation:
+</p>
+<p style="text-align: center;"><code class="reqn">\frac{p}{100} \cdot Z_{\frac{\alpha}{100}}.</code>
+</p>
+
+<p>For example, to compute poverty threshold equal to some percentage of median income, <code class="reqn">\alpha</code> should be set equal to 50.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>a numeric value in range <code class="reqn">[0,100]</code> for the order of the income quantile share ratio (in percentage).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>withperiod</code></td>
+<td>
+<p>Logical value. If <code>TRUE</code> is value, the results is with period, if <code>FALSE</code>, without period.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>netchanges</code></td>
+<td>
+<p>Logical value. If value is TRUE, then produce two objects: the first object is aggregation of weighted data by period (if available), country, strata and PSU, the second object is an estimation for Y, the variance, gradient for numerator and denominator by country and period (if available). If value is FALSE, then both objects containing <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>confidence</code></td>
+<td>
+<p>Optional positive value for confidence interval. This variable by default is 0.95.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outp_lin</code></td>
+<td>
+<p>Logical value. If <code>TRUE</code> linearized values of the ratio estimator will be printed out.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outp_res</code></td>
+<td>
+<p>Logical value. If <code>TRUE</code> estimated residuals of calibration will be printed out.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>a character vector (of length one unless several.ok is TRUE), example "linarpr","linarpt", "lingpg", "linpoormed", "linrmpg", "lingini", "lingini2", "linqsr", "linarr", "linrmir".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>checking</code></td>
+<td>
+<p>Optional variable if this variable is TRUE, then function checks data preparation errors, otherwise not checked. This variable by default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ind_gr</code></td>
+<td>
+<p>Optional</p>
+</td>
+</tr>
+</table>
+<p>variable by which divided independently X matrix of the auxiliary variables for the calibration. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.
+</p>
+<table><tr style="vertical-align: top;">
+<td><code>use.estVar</code></td>
+<td>
+<p>Logical</p>
+</td>
+</tr></table>
+<p>value. If value is <code>TRUE</code>, then <code>R</code> function <code>estVar</code> is used for the  estimation of covariance matrix of the residuals. If value is <code>FALSE</code>, then <code>R</code> function <code>estVar</code> is not used for the estimation of covariance matrix of the residuals.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with objects are returned by the function:
+</p>
+
+<ul>
+<li> <p><code>lin_out</code> - a <code>data.table</code> containing the linearized values of the ratio estimator with ID_level2 and PSU.
+</p>
+</li>
+<li> <p><code>res_out</code> - a <code>data.table</code> containing the estimated residuals of calibration with ID_level1 and PSU.
+</p>
+</li>
+<li> <p><code>data_net_changes</code> - a <code>data.table</code> containing aggregation of weighted data by period (if available), country, strata, PSU.
+</p>
+</li>
+<li> <p><code>results</code> - a <code>data.table</code> containing: <br><code>period</code> -  survey periods, <br><code>country</code> - survey countries, <br><code>Dom</code> - optional variable of the population domains, <br><code>type</code> - type variable, <br><code>count_respondents</code> - the count of respondents, <br><code>pop_size</code> - the population size (in numbers of individuals), <br><code>estim</code> - the estimated value, <br><code>se</code> - the estimated standard error, <br><code>var</code> - the estimated variance, <br><code>rse</code> - the estimated relative standard error (coefficient of variation), <br><code>cv</code> - the estimated relative standard error (coefficient of variation) in percentage.</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Guillaume Osier,  Yves Berger,  Tim Goedeme, (2013), Standard error estimation for the EU-SILC indicators of poverty and social exclusion,  Eurostat Methodologies and Working papers, URL <a href="http://ec.europa.eu/eurostat/documents/3888793/5855973/KS-RA-13-024-EN.PDF">http://ec.europa.eu/eurostat/documents/3888793/5855973/KS-RA-13-024-EN.PDF</a>.
+Yves G. Berger, Tim Goedeme, Guillame Osier (2013). Handbook on standard error estimation and other related sampling issues in EU-SILC, URL <a href="https://ec.europa.eu/eurostat/cros/content/handbook-standard-error-estimation-and-other-related-sampling-issues-ver-29072013_en">https://ec.europa.eu/eurostat/cros/content/handbook-standard-error-estimation-and-other-related-sampling-issues-ver-29072013_en</a>
+Eurostat Methodologies and Working papers, Handbook on precision requirements and variance estimation for ESS household surveys, 2013, URL <a href="http://ec.europa.eu/eurostat/documents/3859598/5927001/KS-RA-13-029-EN.PDF">http://ec.europa.eu/eurostat/documents/3859598/5927001/KS-RA-13-029-EN.PDF</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>linrmir</code>,
+<code>linarr</code>,
+<code>vardchanges</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library("data.table")
+library("laeken")
+data(eusilc)
+set.seed(1)
+dataset1 &lt;- data.table(rbind(eusilc, eusilc),
+                       year = c(rep(2010, nrow(eusilc)),
+                                rep(2011, nrow(eusilc))))
+dataset1[age &lt; 0, age := 0]
+PSU &lt;- dataset1[, .N, keyby = "db030"][, N := NULL]
+PSU[, PSU := trunc(runif(nrow(PSU), 0, 100))]
+PSU$inc &lt;- runif(nrow(PSU), 20, 100000)
+dataset1 &lt;- merge(dataset1, PSU, all = TRUE, by = "db030")
+PSU &lt;- eusilc &lt;- NULL
+dataset1[, strata := "XXXX"]
+dataset1[, strata := as.character(strata)]
+dataset1$pl085 &lt;- 12 * trunc(runif(nrow(dataset1), 0, 2))
+dataset1$month_at_work &lt;- 12 * trunc(runif(nrow(dataset1), 0, 2))
+dataset1[, id_l2 := paste0("V", .I)]
+
+result &lt;- vardcrospoor(Y = "inc", age = "age",
+                       pl085 = "pl085", 
+                       month_at_work = "month_at_work",
+                       Y_den = "inc", Y_thres = "inc",
+                       wght_thres = "rb050",
+                       H = "strata", PSU = "PSU", 
+                       w_final = "rb050", ID_level1 = "db030",
+                       ID_level2 = "id_l2",
+                       Dom = c("rb090", "db040"),
+                       country = NULL, period = "year",
+                       sort = NULL, gender = NULL,
+                       dataset = dataset1,
+                       percentage = 60,
+                       order_quant = 50L,
+                       alpha = 20,
+                       confidence = 0.95,
+                       type = "linrmpg")
+ 
+ ## Not run: 
+ result2 &lt;- vardcrospoor(Y = "inc", age = "age",
+                         pl085 = "pl085", 
+                         month_at_work = "month_at_work",
+                         Y_den = "inc", Y_thres = "inc",
+                         wght_thres = "rb050",
+                         H = "strata", PSU = "PSU", 
+                         w_final = "rb050", ID_level1 = "db030",
+                         ID_level2 = "id_l2",
+                         Dom = c("rb090", "db040"),
+                         period = "year", sort = NULL,
+                         gender = NULL, dataset = dataset1,
+                         percentage = 60,
+                         order_quant = 50L,
+                         alpha = 20,
+                         confidence = 0.95,
+                         type = "linrmpg")
+result2
+## End(Not run)
+  
+</code></pre>
+
+
+</div>

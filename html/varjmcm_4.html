@@ -1,0 +1,61 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>covjmcm_hpc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate the estimation of the covariance of estimated parameters in a HPC model, via the explicit formula.</h2>
+
+<h3>Description</h3>
+
+<p><code>covjmcm_hpc</code> gives the estimation of the covariance of estimated parameters in a HPC model using
+the explicit formula, which is the inverse of the estimated Fisher's information matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">covjmcm_hpc(object)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a fitted joint mean-covariance model of class "jmcmMod", returned by the function <code>jmcm</code>.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>an estimated covariance matrix of the estimated parameters in a HPC model.
+</p>
+
+
+<h3>References</h3>
+
+<p>[1] W. Zhang, C. Leng, and C. Y. Tang(2015), "A joint modelling approach for longitudinal studies,"
+Journal of the Royal Statistical Society. Series B. 77, 219-238.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>covjmcm</code>, <code>covjmcm_mcd</code>, and <code>covjmcm_acd</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">##This may take more than 1 min.
+
+cattleA &lt;- cattle[cattle$group=='A', ]
+fit.hpc &lt;- jmcm(weight|id|I(ceiling(day/14+1))~1|1,
+               data = cattleA, cov.method = "hpc",
+               triple = c(8,3,4))
+cov.hpc &lt;- covjmcm_hpc(fit.hpc)
+</code></pre>
+
+
+</div>

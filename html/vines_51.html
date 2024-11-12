@@ -1,0 +1,134 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vineGoF</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vine Goodness-of-fit Tests</h2>
+
+<h3>Description</h3>
+
+<p>Goodness-of-fit tests to verify whether the dependence structure of a sample
+is appropriately modeled by vine model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vineGoF(vine, data, method = "PIT", ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vine</code></td>
+<td>
+<p>A <code>Vine</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Data matrix of pseudo-observations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>Goodness-of-fit method. Supported values: 
+<code>"PIT"</code> (Probability Integral Transform).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments for the goodness-of-fit method.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>"PIT"</code> (Probability Integral Transform) method uses the 
+<code>vinePIT</code> function to transform the data into variables which 
+are independent and Uniform(0,1) and then use a hypothesis 
+test to verify whether the resulting variables are independent and 
+Uniform(0,1). The additional parameter <code>statistic</code> specifies 
+the test to be applied for this purpose.
+</p>
+
+<dl>
+<dt><code>statistic</code></dt>
+<dd>
+<p>Statistic used to verify if the transformed variables
+are independent and Uniform(0,1). The default value is <code>"Breymann"</code> 
+and supported methods are:
+</p>
+
+<dl>
+<dt><code>"Breymann"</code></dt>
+<dd>
+<p>Test proposed in the Section 7.1 of 
+(Aas et al., 2009). See (Breymann et al., 2003) for more information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<h3>Value</h3>
+
+<p>A <code>vineGoF</code> or a subclass with specific information about 
+the goodness-of-fit method used. The <code>statistic</code> slot of this object 
+contains the value of the statistic and <code>pvalue</code> the p-value.
+</p>
+
+
+<h3>References</h3>
+
+<p>Aas, K. and Czado, C. and Frigessi, A. and Bakken, H. (2009)
+Pair-copula constructions of multiple dependence.
+<em>Insurance: Mathematics and Economics</em> <b>44</b>, 182–198.
+</p>
+<p>Breymann, W. and Dias, A. and Embrechts, P. (2003) Dependence 
+structures for multivariate high-frequency data in finance. 
+<em>Quantitative Finance</em> <b>1</b>, 1–14.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vineGoF</code>,
+<code>vinePIT</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">copula &lt;- normalCopula(c(-0.25, -0.21, 0.34, 0.51, -0.07, -0.18), 
+                       dispstr = "un", dim = 4)
+data &lt;- rCopula(100, copula)
+
+selectCopula &lt;- function (vine, j, i, x, y) {
+    data &lt;- cbind(x, y)
+    fit &lt;- fitCopula(normalCopula(), data, method = "itau")
+    fit@copula
+}
+normalCVine &lt;- vineFit("CVine", data, method = "ml",
+                       selectCopula = selectCopula,
+                       optimMethod = "")@vine
+normalDVine &lt;- vineFit("DVine", data, method = "ml",
+                       selectCopula = selectCopula,
+                       optimMethod = "")@vine
+show(normalCVine)
+show(normalDVine)
+
+normalCVineGof &lt;- vineGoF(normalCVine, data, method = "PIT",
+                          statistic = "Breymann")
+normalDVineGof &lt;- vineGoF(normalDVine, data, method = "PIT",
+                          statistic = "Breymann")
+show(normalCVineGof)
+show(normalDVineGof)
+</code></pre>
+
+
+</div>

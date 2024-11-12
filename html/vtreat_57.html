@@ -1,0 +1,73 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>track_values</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Track unique character values for variables.</h2>
+
+<h3>Description</h3>
+
+<p>Builds lists of observed unique character values of varlist variables from the data frame.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">track_values(dframe, varlist)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dframe</code></td>
+<td>
+<p>Data frame to learn treatments from (training data), must have at least 1 row.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varlist</code></td>
+<td>
+<p>Names of columns to treat (effective variables).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>named list of values seen.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>prepare.treatmentplan</code>, <code>novel_value_summary</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+set.seed(23525)
+zip &lt;- c(NA, paste('z', 1:100, sep = "_"))
+N &lt;- 500
+d &lt;- data.frame(zip = sample(zip, N, replace=TRUE),
+                zip2 = sample(zip, N, replace=TRUE),
+                y = runif(N))
+dSample &lt;- d[1:300, , drop = FALSE]
+tplan &lt;- designTreatmentsN(dSample, 
+                           c("zip", "zip2"), "y", 
+                           verbose = FALSE)
+trackedValues &lt;- track_values(dSample, c("zip", "zip2"))
+# don't normally want to catch warnings,
+# doing it here as this is an example 
+# and must not have unhandled warnings.
+tryCatch(
+  prepare(tplan, d, trackedValues = trackedValues),
+  warning = function(w) { cat(paste(w, collapse = "\n")) })
+
+</code></pre>
+
+
+</div>

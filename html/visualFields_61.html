@@ -1,0 +1,176 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vfaggregate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Statistical analyses for visual fields data</h2>
+
+<h3>Description</h3>
+
+
+<ul>
+<li>
+<p><code>vfaggregate</code> computes summary statistics of visual field data
+</p>
+</li>
+<li>
+<p><code>vfmean</code> computes the mean statistics of visual field data. It is
+a wrapper for vfaggregate but only to compute means
+</p>
+</li>
+<li>
+<p><code>vfretestdist</code> computes the conditional distribution from test-retest data
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">vfaggregate(vf, by = "date", fun = mean, ...)
+
+vfmean(vf, by = "date", ...)
+
+vfretestdist(vf, nbase = 1, nfollow = 1, alpha = 0.1, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vf</code></td>
+<td>
+<p>a table with visual fields data. Data is rounded, which leaves
+sensitivity data unchanged, but it is necessary for the nature of the
+algorithm if the data passed are TD or PD values or summary stats such as
+averages. Beware of the locations in the blind spot, which very likely need
+to be removed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>aggregate by <code>date</code>, that is by id, eye, and date (default) or by
+<code>eye</code>, that is by id and eye</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fun</code></td>
+<td>
+<p>a function to compute the summary statistics which can be applied to
+all data subsets. The default is '<code>mean</code>'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be passed to or from methods. A useful one to try
+is type of quantile calculation '<code>type</code>' use in <code>quantile</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nbase</code></td>
+<td>
+<p>number of visual fields to be used as baseline</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nfollow</code></td>
+<td>
+<p>number of visual fields to be used as follow up</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>significance level to derive the conditional retest intervals.
+Default value is <code>0.1</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<ul><li>
+<p><code>vfaggregate</code> this is a restricted version of <code>aggregate</code>
+that only allows to use part of the key hierarchically, and operates on all
+data frames of the <code>VisualField</code> object. The restriction is that only
+aggregates that are allowed are '<code>newkey = c("id", "eye")</code>' and
+'<code>newkey = c("id", "eye", "date")</code>'. It returns the aggregated value for all
+numeric columns grouped and ordered by the new key (id and eye, or id, eye,
+and date). If the aggregate grouping is by <code>eye</code> and the function, then
+the <code>date</code> returned is the average.
+</p>
+</li></ul>
+<h3>Value</h3>
+
+<p><code>vfaggregate</code> and <code>vfmean</code> return a vf data frame with aggregate values
+</p>
+<p><code>vfretestdist</code> returns a list with the following elements:
+</p>
+
+<ul>
+<li>
+<p><code>x</code> with all the test values (x-axis)
+</p>
+</li>
+<li>
+<p><code>y</code> the distribution of retest dB values conditional to each
+test value in <code>x</code>. It is a list with as many entries as <code>x</code>
+</p>
+</li>
+<li>
+<p><code>n</code> number of retest values conditional to each value in <code>x</code>.
+It is a list with as many entries as <code>x</code>
+</p>
+</li>
+<li>
+<p><code>ymed</code> median for each value in <code>x</code>. It is a list with as
+many entries as <code>x</code>
+</p>
+</li>
+<li>
+<p><code>ylow</code> quantile value for significance <code>1 - alpha / 2</code>
+for each value in <code>x</code>. It is a list with as many entries as <code>x</code>
+</p>
+</li>
+<li>
+<p><code>yup</code> quantile value for significance <code>alpha / 2</code>
+for each value in <code>x</code>. It is a list with as many entries as <code>x</code>
+</p>
+</li>
+</ul>
+<p>Together <code>ylow</code> and <code>yup</code> represent the lower and upper limit of the
+<code>(1 - alpha)%</code> confidence intervals at each value <code>x</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># aggregate by date
+vfaggregate(vfpwgRetest24d2, by = "date")           # compute the mean
+vfaggregate(vfpwgRetest24d2, by = "date", fun = sd) # compute standard deviation
+# aggregate by eye
+vfaggregate(vfpwgRetest24d2, by = "eye")           # compute the mean
+vfaggregate(vfpwgRetest24d2, by = "eye", fun = sd) # compute standard deviation
+# mean by date
+vfmean(vfpwgRetest24d2, by = "date")
+# mean by eye
+vfmean(vfpwgRetest24d2, by = "eye")
+# get the retest sensitivity data after removing the blind spot
+retest &lt;- vfretestdist(vfpwgRetest24d2, nbase = 1, nfollow = 1)
+
+plot(0, 0, typ = "n", xlim = c(0, 40), ylim = c(0,40),
+     xlab = "test in dB", ylab = "retest in dB", asp = 1)
+for(i in 1:length(retest$x)) {
+  points(rep(retest$x[i], length(retest$y[[i]])), retest$y[[i]],
+         pch = 20, col = "lightgray", cex = 0.75)
+}
+lines(c(0,40), c(0,40), col = "black")
+lines(retest$x, retest$ymed, col = "red")
+lines(retest$x, retest$ylow, col = "red", lty = 2)
+lines(retest$x, retest$yup, col = "red", lty = 2)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>familyname</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Family Function Name </h2>
+
+<h3>Description</h3>
+
+<p>Extractor function for the name of the family function of an object
+in the <span class="pkg">VGAM</span> package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">familyname(object, ...)
+familyname.vlm(object, all = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>Some <span class="pkg">VGAM</span> object, for example, having
+class <code>vglmff-class</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all</code></td>
+<td>
+
+<p>If <code>all = TRUE</code> then all of the <code>vfamily</code> slot is returned;
+this contains subclasses the object might have.
+The default is the return the first value only.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Other possible arguments for the future.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Currently <span class="pkg">VGAM</span> implements over 150 family functions.
+This function returns the name of the function assigned
+to the <code>family</code> argument, for modelling
+functions such as <code>vglm</code>
+and <code>vgam</code>.
+Sometimes a slightly different answer is returned, e.g.,
+<code>propodds</code> really calls <code>cumulative</code>
+with some arguments set, hence the output returned by
+this function is <code>"cumulative"</code> (note that one day
+this might change, however).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A character string or vector.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Arguments used in the invocation are not included.
+Possibly this is something to be done in the future.
+</p>
+
+
+
+<h3>See Also</h3>
+
+<p><code>vglmff-class</code>,
+<code>vglm-class</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pneumo &lt;- transform(pneumo, let = log(exposure.time))
+fit1 &lt;- vglm(cbind(normal, mild, severe) ~ let,
+              cumulative(parallel = TRUE, reverse = TRUE), data = pneumo)
+familyname(fit1)
+familyname(fit1, all = TRUE)
+familyname(propodds())  # "cumulative"
+</code></pre>
+
+
+</div>

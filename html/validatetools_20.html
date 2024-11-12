@@ -1,0 +1,85 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simplify_rules</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simplify a rule set</h2>
+
+<h3>Description</h3>
+
+<p>Simplifies a rule set set by applying different simplification methods. This is a convenience function that 
+works in common cases. The following simplification methods are executed:
+</p>
+
+<ul>
+<li> <p><code>substitute_values</code>: filling in any parameters that are supplied via <code>.values</code> or <code>...</code>.
+</p>
+</li>
+<li> <p><code>simplify_fixed_variables</code>: find out if there are fixed values. If this is the case, they are substituted.
+</p>
+</li>
+<li> <p><code>simplify_conditional</code>: Simplify conditional statements, by removing clauses that are superfluous.
+</p>
+</li>
+<li> <p><code>remove_redundancy</code>: remove redundant rules.
+</p>
+</li>
+</ul>
+<p>For more control, these methods can be called separately.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">simplify_rules(.x, .values = list(...), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>.x</code></td>
+<td>
+<p><code>validator</code> object with the rules to be simplified.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.values</code></td>
+<td>
+<p>optional named list with values that will be substituted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>parameters that will be used to substitute values.</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p>Other redundancy: 
+<code>detect_fixed_variables()</code>,
+<code>detect_redundancy()</code>,
+<code>is_implied_by()</code>,
+<code>remove_redundancy()</code>,
+<code>simplify_fixed_variables()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rules &lt;- validator( x &gt; 0
+                  , if (x &gt; 0) y == 1
+                  , A %in% c("a1", "a2")
+                  , if (A == "a1") y &gt; 1
+                  )
+
+simplify_rules(rules)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,81 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vblpcmbic</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>calculate the BIC for the fitted VBLPCM object
+</h2>
+
+<h3>Description</h3>
+
+<p>calculate the BIC for the fitted VBLPCM object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vblpcmbic(v.params)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>v.params</code></td>
+<td>
+<p>The fitted values; output from vblpcmfit()
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>BIC = BIC(edges | positions) + BIC(positions | clusters)
+w/ BIC(edges | positions) = -2 loglikelihood + (P+1)log(number of edges) 
+and BIC(positions | clusters) as per mclust
+</p>
+
+
+<h3>Value</h3>
+
+<p>The scalar value of the BIC 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Salter-Townshend
+</p>
+
+
+<h3>References</h3>
+
+<p>Mark S. Handcock, Adrian E. Raftery and Jeremy Tantrum (2007).
+"Model-Based Clustering for Social Networks."
+Journal of the Royal Statistical Society: Series A (Statistics in Society), 170(2), 301-354.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>latentnet::summary.ergmm
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(sampson)
+set.seed(1)
+### plot the BIC for G=2,3,4 groups 
+gbic&lt;-list(groups=NULL,bic=NULL)
+for (g in 2:4)
+  {
+  v.fit&lt;-vblpcmfit(vblpcmstart(samplike,G=g,LSTEPS=1e3),STEPS=20)
+  gbic$groups[g]=v.fit$G
+  gbic$bic[g]=v.fit$BIC$overall
+  }
+plot(gbic$groups, gbic$bic, main="BIC results", xlab="# groups", ylab="BIC", t='b')
+</code></pre>
+
+
+</div>

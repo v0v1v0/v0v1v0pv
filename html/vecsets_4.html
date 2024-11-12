@@ -1,0 +1,91 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vperm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Calculate all permutations of all combinations of a specified size from a data object.
+</h2>
+
+<h3>Description</h3>
+
+<p>This function first uses <code>combn</code> to generate combinations of the desired size, then calculates all permutations of all said combinations. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vperm(x, m, FUN = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>vector source for combinations, or integer n for x &lt;- seq_len(n)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+
+<p>number of elements to choose in making the combinations
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>FUN</code></td>
+<td>
+
+<p>function to be applied to each combination; default NULL means the identity, i.e., to return the combination (vector of length m) 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+ 
+<p>Additional arguments, if any, required for the function <code>FUN</code> . See Details.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>NA values are considered as valid elements and will be processed just as they are in <code>combn</code>
+The input arguments are passed directly to <code>combn</code> but with one important exception.  <code>combn</code>'s argument "simplify" is forced to "TRUE" inside this function so as to allow the permutations to be more easily generated.  If the user includes <code>simplify = FALSE</code> in the <code>...</code> input, it will be overwritten. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>An array within which each row contains one of the permutations. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Carl Witthoft, with some code taken from Sven Hohenstein via Stack Overflow
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>intersect</code>, the CRAN package <code>sets</code>, <code>perms</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- c(1:5,3,3,3,2,NA,NA)
+xp &lt;- vperm(x,4) #large array
+</code></pre>
+
+
+</div>

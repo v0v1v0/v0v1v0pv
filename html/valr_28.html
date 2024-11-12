@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ivl_df</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Bed-like data.frame requirements for valr functions</h2>
+
+<h3>Description</h3>
+
+<p>Required column names for interval dataframes are
+<code>chrom</code>, <code>start</code> and <code>end</code>. Internally interval dataframes are
+validated using <code>check_interval()</code>
+</p>
+<p>Required column names for genome dataframes are
+<code>chrom</code> and <code>size</code>. Internally genome dataframes are
+validated using <code>check_genome()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">check_interval(x)
+
+check_genome(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A <code>data.frame</code> or <code>tibble::tibble</code></p>
+</td>
+</tr></table>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># using tibble
+x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 1, 50,
+  "chr1", 10, 75,
+  "chr1", 100, 120
+)
+
+check_interval(x)
+
+# using base R data.frame
+x &lt;- data.frame(
+  chrom = "chr1",
+  start = 0,
+  end = 100,
+  stringsAsFactors = FALSE
+)
+
+check_interval(x)
+
+# example genome input
+
+x &lt;- tibble::tribble(
+  ~chrom, ~size,
+  "chr1", 1e6
+)
+
+check_genome(x)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,122 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>01. Basics</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Very Large Integers Basics</h2>
+
+<h3>Description</h3>
+
+<p>vli is a S3 class that allows to store and operate with arbitrarily large integers. Each object of class vli has 3 attributes (<code>sign</code>, <code>length</code> and <code>value</code>) that can be accessed as shown in the examples. The (absolute) value of the number is stored in a numeric vector to avoid truncation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">as.vli(n)
+
+## Default S3 method:
+as.vli(n)
+
+## S3 method for class 'vli'
+as.vli(n)
+
+## S3 method for class 'character'
+as.vli(n)
+
+## S3 method for class 'numeric'
+as.vli(n)
+
+asnumeric(x)
+
+## Default S3 method:
+asnumeric(x)
+
+## S3 method for class 'vli'
+asnumeric(x)
+
+## S3 method for class 'vli'
+as.integer(x, ...)
+
+## S3 method for class 'vli'
+as.integer(x, ...)
+
+vli(m)
+
+## S3 method for class 'vli'
+print(x, ...)
+
+is.vli(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>value for the vli object being created; character or numeric</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>object of class vli</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>number of vli objects being initialized; numeric</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In <code>as.vli(n)</code>, if <code>n</code> is numeric, it must be a 32 bits integer to avoid the loss of precision. The idea is to use numeric objects only for small numbers. In other case, character objects are prefered.
+The function <code>as.integer(x)</code>, where <code>x</code> a vli object, only works when the absolute value of <code>x</code> is up to 2.147.483.648 (32 bits). In other case it returns an error.
+The function <code>asnumeric(x)</code> could cause loss of precision if the value of <code>x</code> is big.
+The function <code>vli(m)</code> initialize a list of <code>m</code> objects of class vli.
+Punctuation signs are ignored in the creation of vli objects (see the last example).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Javier Leiva Cuadrado
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Creating a new vli object
+x &lt;- as.vli("-89027148538375418689123052")
+
+## Printing a vli object
+print(x)
+
+## Testing the class
+is.vli(x)
+
+## Coercing into a character object
+as.character(x)
+
+## Accessing to the attributes of the vli object
+x$sign
+x$value
+x$length
+
+## Punctuation signs are ignored
+as.vli("2345.25")
+</code></pre>
+
+
+</div>

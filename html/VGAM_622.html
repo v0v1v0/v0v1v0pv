@@ -1,0 +1,193 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gengamma.stacy</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Generalized Gamma distribution family function </h2>
+
+<h3>Description</h3>
+
+<p>Estimation of the 3-parameter generalized gamma distribution proposed by
+Stacy (1962).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">gengamma.stacy(lscale = "loglink", ld = "loglink", lk = "loglink",
+    iscale = NULL, id = NULL, ik = NULL, imethod = 1,
+    gscale.mux = exp((-4:4)/2), gshape1.d = exp((-5:5)/2),
+    gshape2.k = exp((-5:5)/2), probs.y = 0.3, zero = c("d", "k"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lscale, ld, lk</code></td>
+<td>
+
+<p>Parameter link function applied to each of the positive parameters
+<code class="reqn">b</code>, <code class="reqn">d</code> and <code class="reqn">k</code>, respectively.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iscale, id, ik</code></td>
+<td>
+
+<p>Initial value for <code class="reqn">b</code>, <code class="reqn">d</code> and <code class="reqn">k</code>, respectively.
+The defaults mean an initial value is determined internally for each.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gscale.mux, gshape1.d, gshape2.k</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+Replaced by <code>iscale</code>, <code>id</code> etc. if given.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod, probs.y, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+
+
+
+
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability density function can be written
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;b,d,k) = d   b^{-d k}   y^{d k-1}  \exp[-(y/b)^d] / \Gamma(k)</code>
+</p>
+
+<p>for scale parameter <code class="reqn">b &gt; 0</code>,
+and Weibull-type shape parameter <code class="reqn">d &gt; 0</code>,
+gamma-type shape parameter <code class="reqn">k &gt; 0</code>,
+and <code class="reqn">y &gt; 0</code>.
+The mean of <code class="reqn">Y</code>
+is <code class="reqn">b \times \Gamma(k+1/d) / \Gamma(k)</code>
+(returned as the fitted values),
+which equals <code class="reqn">bk</code> if <code class="reqn">d=1</code>.
+</p>
+<p>There are many special cases, as given in Table 1 of Stacey and Mihram (1965).
+In the following, the parameters are in the order <code class="reqn">b,d,k</code>.
+The special cases are:
+Exponential       <code class="reqn">f(y;b,1,1)</code>,
+Gamma             <code class="reqn">f(y;b,1,k)</code>,
+Weibull           <code class="reqn">f(y;b,d,1)</code>,
+Chi Squared       <code class="reqn">f(y;2,1,a/2)</code> with <code class="reqn">a</code> degrees of freedom,
+Chi               <code class="reqn">f(y;\sqrt{2},2,a/2)</code> with <code class="reqn">a</code> degrees of freedom,
+Half-normal       <code class="reqn">f(y;\sqrt{2},2,1/2)</code>,
+Circular normal   <code class="reqn">f(y;\sqrt{2},2,1)</code>,
+Spherical normal  <code class="reqn">f(y;\sqrt{2},2,3/2)</code>,
+Rayleigh          <code class="reqn">f(y;c\sqrt{2},2,1)</code> where <code class="reqn">c&gt;0</code>.
+Also the log-normal distribution corresponds to when <code>k = Inf</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Several authors have considered maximum likelihood estimation for the
+generalized gamma distribution and have found that the Newton-Raphson
+algorithm does not work very well and that the existence of solutions
+to the log-likelihood equations is sometimes in doubt.
+Although Fisher scoring is used here, it is likely that the same
+problems will be encountered.
+It appears that large samples
+are required, for example, the estimator of <code class="reqn">k</code> became asymptotically
+normal only with 400 or more observations.
+It is not uncommon for maximum likelihood estimates to fail to converge
+even with two or three hundred observations.
+With covariates, even more observations are needed to increase the
+chances of convergence.
+Using covariates is not advised unless the sample size is at least
+a few thousand, and even if so,
+modelling 1 or 2 parameters as intercept-only is a very good idea
+(e.g., <code>zero = 2:3</code>).
+Monitoring convergence is also a very good idea
+(e.g., set <code>trace = TRUE</code>).
+Half-stepping is not uncommon, and if this occurs, then the
+results should be viewed with more suspicion.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The notation used here differs from Stacy (1962) and Prentice (1974).
+Poor initial values may result in failure to converge so
+if there are covariates and there are convergence problems,
+try using or checking the <code>zero</code> argument (e.g., <code>zero = 2:3</code>)
+or the <code>ik</code> argument
+or the <code>imethod</code> argument, etc.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Stacy, E. W. (1962).
+A generalization of the gamma distribution.
+<em>Annals of Mathematical Statistics</em>, <b>33</b>(3), 1187–1192.
+</p>
+<p>Stacy, E. W. and Mihram, G. A. (1965).
+Parameter estimation for a generalized gamma distribution.
+<em>Technometrics</em>, <b>7</b>, 349–358.
+</p>
+<p>Prentice, R. L. (1974).
+A log gamma model and its maximum likelihood estimation.
+<em>Biometrika</em>, <b>61</b>, 539–544.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rgengamma.stacy</code>,
+<code>gamma1</code>,
+<code>gamma2</code>,
+<code>prentice74</code>,
+<code>simulate.vlm</code>,
+<code>chisq</code>,
+<code>lognormal</code>,
+<code>rayleigh</code>,
+<code>weibullR</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+k &lt;- exp(-1); Scale &lt;- exp(1); dd &lt;- exp(0.5); set.seed(1)
+gdata &lt;- data.frame(y = rgamma(2000, shape = k, scale = Scale))
+gfit &lt;- vglm(y ~ 1, gengamma.stacy, data = gdata, trace = TRUE)
+coef(gfit, matrix = TRUE)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

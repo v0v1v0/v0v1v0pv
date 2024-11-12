@@ -1,0 +1,113 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_vpc</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>VPC plotting function</h2>
+
+<h3>Description</h3>
+
+<p>This function performs no parsing of data, it just plots the already calculated statistics generated using one of the 
+'vpc' functions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_vpc(
+  db,
+  show = NULL,
+  vpc_theme = NULL,
+  smooth = TRUE,
+  log_x = FALSE,
+  log_y = FALSE,
+  xlab = NULL,
+  ylab = NULL,
+  title = NULL,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>db</code></td>
+<td>
+<p>object created using the 'vpc' function</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show</code></td>
+<td>
+<p>what to show in VPC (obs_dv, obs_ci, pi, pi_as_area, pi_ci, obs_median, sim_median, sim_median_ci)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vpc_theme</code></td>
+<td>
+<p>theme to be used in VPC. Expects list of class vpc_theme created with function vpc_theme()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smooth</code></td>
+<td>
+<p>"smooth" the VPC (connect bin midpoints) or show bins as rectangular boxes. Default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log_x</code></td>
+<td>
+<p>Boolean indicting whether x-axis should be shown as logarithmic. Default is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log_y</code></td>
+<td>
+<p>Boolean indicting whether y-axis should be shown as logarithmic. Default is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>label for x axis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>label for y axis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>verbosity (T/F)</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p>sim_data, vpc_cens, vpc_tte, vpc_cat
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## See vpc.ronkeizer.com for more documentation and examples
+
+library(vpc)
+vpc_db &lt;- vpc(sim = simple_data$sim, obs = simple_data$obs, vpcdb = TRUE)
+plot_vpc(vpc_db, title = "My new vpc", x = "Custom x label")
+</code></pre>
+
+
+</div>

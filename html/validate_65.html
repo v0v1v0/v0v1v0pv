@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>event</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get or set event information metadata from a 'confrontation' object.</h2>
+
+<h3>Description</h3>
+
+<p>The purpose of event information is to store information that allows for
+identification of the confronting event.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">event(x)
+
+event(x) &lt;- value
+
+## S4 method for signature 'confrontation'
+event(x)
+
+## S4 replacement method for signature 'confrontation'
+event(x) &lt;- value
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class <code>confrontation</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p><code>[character]</code> vector of length 4 with event identifiers.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A a character vector with elements
+<code>"agent"</code>, which defaults to the R version and platform returned by
+<code>R.version</code>, a timestamp (<code>"time"</code>)  in ISO 8601 format and a
+<code>"actor"</code> which is the user name returned by <code>Sys.info()</code>. The
+last element is called <code>"trigger"</code> (default <code>NA_character_</code>), which
+can be used to administrate the event that triggered the confrontation.
+</p>
+
+
+<h3>References</h3>
+
+<p>Mark van der Loo and Olav ten Bosch (2017) 
+<a href="https://markvanderloo.eu/files/share/loo2017design.pdf">Design of a generic machine-readable validation report structure</a>, 
+version 1.0.0.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other confrontation-methods: 
+<code>[,expressionset-method</code>,
+<code>as.data.frame,confrontation-method</code>,
+<code>confront()</code>,
+<code>confrontation-class</code>,
+<code>errors()</code>,
+<code>keyset()</code>,
+<code>length,expressionset-method</code>,
+<code>values()</code>
+</p>
+<p>Other validation-methods: 
+<code>aggregate,validation-method</code>,
+<code>all,validation-method</code>,
+<code>any,validation-method</code>,
+<code>barplot,validation-method</code>,
+<code>check_that()</code>,
+<code>compare()</code>,
+<code>confront()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>plot,validation-method</code>,
+<code>sort,validation-method</code>,
+<code>summary()</code>,
+<code>validation-class</code>,
+<code>values()</code>
+</p>
+<p>Other indication-methods: 
+<code>confront()</code>,
+<code>indication-class</code>,
+<code>summary()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(retailers)
+rules &lt;- validator(turnover &gt;= 0, staff &gt;=0)
+cf &lt;- confront(retailers, rules)
+event(cf)
+
+# adapt event information
+u &lt;- event(cf)
+u["trigger"] &lt;- "spontaneous validation"
+event(cf) &lt;- u
+event(cf)
+
+</code></pre>
+
+
+</div>

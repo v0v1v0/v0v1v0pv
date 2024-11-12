@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>EMGrank</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>EMGrank</h2>
+
+<h3>Description</h3>
+
+<p>Run an generalized EM algorithm developped for mixture of Gaussian regression
+models with variable selection by an extension of the low rank estimator.
+Reparametrization is done to ensure invariance by homothetic transformation.
+It returns a collection of models, varying the number of clusters and the rank of the regression mean.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">EMGrank(Pi, Rho, mini, maxi, X, Y, eps, rank, fast)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Pi</code></td>
+<td>
+<p>An initialization for pi</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Rho</code></td>
+<td>
+<p>An initialization for rho, the variance parameter</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mini</code></td>
+<td>
+<p>integer, minimum number of iterations in the EM algorithm, by default = 10</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxi</code></td>
+<td>
+<p>integer, maximum number of iterations in the EM algorithm, by default = 100</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>matrix of covariates (of size n*p)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>matrix of responses (of size n*m)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>real, threshold to say the EM algorithm converges, by default = 1e-4</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rank</code></td>
+<td>
+<p>vector of possible ranks</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fast</code></td>
+<td>
+<p>boolean to enable or not the C function call</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list (corresponding to the model collection) defined by (phi,LLF):
+phi : regression mean for each cluster, an array of size p*m*k
+LLF : log likelihood with respect to the training set
+</p>
+
+
+</div>

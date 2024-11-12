@@ -1,0 +1,148 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>measure_accuracy</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimate the classification accuracy</h2>
+
+<h3>Description</h3>
+
+<p>Compute nonparametric estimate of classification accuracy.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">measure_accuracy(
+  fitted_values,
+  y,
+  full_y = NULL,
+  C = rep(1, length(y)),
+  Z = NULL,
+  ipc_weights = rep(1, length(y)),
+  ipc_fit_type = "external",
+  ipc_eif_preds = rep(1, length(y)),
+  ipc_est_type = "aipw",
+  scale = "logit",
+  na.rm = FALSE,
+  nuisance_estimators = NULL,
+  a = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fitted_values</code></td>
+<td>
+<p>fitted values from a regression function using the
+observed data (may be within a specified fold, for cross-fitted estimates).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>the observed outcome (may be within a specified fold, for
+cross-fitted estimates).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>full_y</code></td>
+<td>
+<p>the observed outcome (not used, defaults to <code>NULL</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>the indicator of coarsening (1 denotes observed, 0 denotes
+unobserved).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>either <code>NULL</code> (if no coarsening) or a matrix-like object
+containing the fully observed data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_weights</code></td>
+<td>
+<p>weights for inverse probability of coarsening (IPC)
+(e.g., inverse weights from a two-phase sample) weighted estimation.
+Assumed to be already inverted.
+(i.e., ipc_weights = 1 / [estimated probability weights]).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_fit_type</code></td>
+<td>
+<p>if "external", then use <code>ipc_eif_preds</code>; if "SL",
+fit a SuperLearner to determine the IPC correction to the efficient
+influence function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_eif_preds</code></td>
+<td>
+<p>if <code>ipc_fit_type = "external"</code>, the fitted values
+from a regression of the full-data EIF on the fully observed
+covariates/outcome; otherwise, not used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_est_type</code></td>
+<td>
+<p>IPC correction, either <code>"ipw"</code> (for classical
+inverse probability weighting) or <code>"aipw"</code> (for augmented inverse
+probability weighting; the default).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>if doing an IPC correction, then the scale that the correction
+should be computed on (e.g., "identity"; or "logit" to logit-transform,
+apply the correction, and back-transform).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>logical; should <code>NA</code>s be removed in computation?
+(defaults to <code>FALSE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nuisance_estimators</code></td>
+<td>
+<p>not used; for compatibility with <code>measure_average_value</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a</code></td>
+<td>
+<p>not used; for compatibility with <code>measure_average_value</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments to SuperLearner, if <code>ipc_fit_type = "SL"</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A named list of: (1) the estimated classification accuracy of the
+fitted regression function; (2) the estimated influence function; and
+(3) the IPC EIF predictions.
+</p>
+
+
+</div>

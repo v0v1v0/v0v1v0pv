@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>halfT</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Half Student's t distribution</h2>
+
+<h3>Description</h3>
+
+<p>Computes the pdf, cdf, value at risk and expected shortfall for the half Student's <code class="reqn">t</code> distribution given by
+</p>
+<p style="text-align: center;"><code class="reqn">\begin{array}{ll}
+&amp;\displaystyle
+f (x) = \frac {2 \Gamma \left( \frac {n + 1}{2} \right)}{\sqrt{n \pi} \Gamma \left( \frac {n}{2} \right)}
+\left( 1 + \frac {x^2}{n} \right)^{-\frac {n + 1}{2}},
+\\
+&amp;\displaystyle
+F (x) =  I_{\frac {x^2}{x^2 + n}} \left( \frac {1}{2}, \frac {n}{2} \right),
+\\
+&amp;\displaystyle
+{\rm VaR}_p (X) = \sqrt{\frac {n I_p^{-1} \left( \frac {1}{2}, \frac {n}{2} \right)}
+{1 - I_p^{-1} \left( \frac {1}{2}, \frac {n}{2} \right)}},
+\\
+&amp;\displaystyle
+{\rm ES}_p (X) = \frac {\sqrt{n}}{p} \int_0^p
+\sqrt{\frac {I_v^{-1} \left( \frac {1}{2}, \frac {n}{2} \right)}
+{1 - I_v^{-1} \left( \frac {1}{2}, \frac {n}{2} \right)}} dv
+\end{array}</code>
+</p>
+
+<p>for <code class="reqn">-\infty &lt; x &lt; \infty</code>, <code class="reqn">0 &lt; p &lt; 1</code>, and <code class="reqn">n &gt; 0</code>, the degree of freedom parameter.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dhalfT(x, n=1, log=FALSE)
+phalfT(x, n=1, log.p=FALSE, lower.tail=TRUE)
+varhalfT(p, n=1, log.p=FALSE, lower.tail=TRUE)
+eshalfT(p, n=1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>scaler or vector of values at which the pdf or cdf needs to be computed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>scaler or vector of values at which the value at risk or expected shortfall needs to be computed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>the value of the degree of freedom parameter, must be positive, the default is 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+<p>if TRUE then log(pdf) are returned</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log.p</code></td>
+<td>
+<p>if TRUE then log(cdf) are returned and quantiles are computed for exp(p)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail</code></td>
+<td>
+<p>if FALSE then 1-cdf are returned and quantiles are computed for 1-p</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of the same length as <code>x</code>, giving the pdf or cdf values computed at <code>x</code> or an object of the same length as <code>p</code>, giving the values at risk or expected shortfall computed at <code>p</code>.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Saralees Nadarajah</p>
+
+
+<h3>References</h3>
+
+<p>Stephen Chan, Saralees Nadarajah &amp; Emmanuel Afuecheta (2016). An R Package for Value at Risk and Expected Shortfall, Communications in Statistics - Simulation and Computation, 45:9, 3416-3434, <a href="https://doi.org/10.1080/03610918.2014.944658">doi:10.1080/03610918.2014.944658</a></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x=runif(10,min=0,max=1)
+dhalfT(x)
+phalfT(x)
+varhalfT(x)
+eshalfT(x)</code></pre>
+
+
+</div>

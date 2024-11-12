@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>advbtinq</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Using double list to visit vector binary tree</h2>
+
+<h3>Description</h3>
+
+<p>Advanced visiting for the vector binary tree. Return a double list by specific assigment determined by
+the argument <code>inq</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">advbtinq(x, inq)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>The vector binary tree to be visited. Traversal is acheivable through invalid assignment in desired layer.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inq</code></td>
+<td>
+<p>An integer double list to determine the location to be visited. The length of <code>inq</code> should be the same
+as the layers of visited vector binary tree, while all elements in vector in each layer of <code>inq</code> should not over
+the intrinsic length of visited vector binary tree layer, otherwise all elements will be returned in this layer.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Return a double list according to the argument <code>inq</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vbtinq</code>, <code>vbtsub</code>, <code>advbtsub</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#Make vector binary tree:
+colnamevbt &lt;- dl2vbt(chrvec2dl(colnames(datatest)))
+
+#Visit by specific assignment:
+visit &lt;- list(c(2), c(3:6), c(2,4), 1)
+advbtinq(colnamevbt, visit)
+
+#Traversal of the second layers:
+visit &lt;- list(c(2), colnamevbt$dims[2]+1, c(2,4), 1)
+advbtinq(colnamevbt, visit)
+
+#Invalid assignments in 1st and 3rd layers:
+visit &lt;- list(c(3), c(3:6), c(5), 1)
+advbtinq(colnamevbt, visit)
+</code></pre>
+
+
+</div>

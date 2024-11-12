@@ -1,0 +1,98 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>famdcontourlabel</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Outliers in Contour plots and FAMD function for classification modeling</h2>
+
+<h3>Description</h3>
+
+<p>This function adds outlier marks to famdcontour using ggrepel package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">famdcontourlabel(
+  dataf = dataf,
+  Idt = "",
+  inf = 0.1,
+  sup = 0.9,
+  cutprob = 0.5,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dataf</code></td>
+<td>
+<p>data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Idt</code></td>
+<td>
+<p>Identification variable, default "", row number</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inf, sup</code></td>
+<td>
+<p>Quantiles for x,y outliers</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cutprob</code></td>
+<td>
+<p>cut point for outliers based on prob.estimation error</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>options to be passed from famdcontour</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>An identification variable can be set in Idt parameter. By default, number of row is used.
+There are two source of outliers: i) outliers in the two FAMD dimension space, where the cutpoints are set
+as quantiles given (inf=0.1 and sup=0.9 in both dimensions by default) and ii) outliers with respect
+to the fitted probability. The dependent variable is set to 1 for the mimority class, and 0 for the majority class.
+Points considered outliers are those for which abs(vardep-fittedprob) excede parameter cutprob.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with the following objects:</p>
+
+<dl>
+<dt>graph1_graph6</dt>
+<dd>
+<p>plots for dimension outliers</p>
+</dd>
+<dt>graph7_graph12</dt>
+<dd>
+<p>plots for fit outliers</p>
+</dd>
+</dl>
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(breastwisconsin1)
+dataf&lt;-breastwisconsin1
+listconti=c( "clump_thickness","uniformity_of_cell_shape","mitosis")
+listclass=c("")
+vardep="classes"
+result&lt;-famdcontourlabel(dataf=dataf,listconti=listconti,
+listclass=listclass,vardep=vardep)
+</code></pre>
+
+
+</div>

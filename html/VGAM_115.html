@@ -1,0 +1,146 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>biplackettcop</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Plackett's Bivariate Copula Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimate the association parameter of Plackett's bivariate
+distribution (copula)
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">biplackettcop(link = "loglink", ioratio = NULL, imethod = 1,
+              nsimEIM = 200)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to the (positive) odds ratio <code class="reqn">\psi</code>.
+See <code>Links</code> for more choices
+and information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ioratio</code></td>
+<td>
+
+<p>Numeric. Optional initial value for <code class="reqn">\psi</code>.
+If a convergence failure occurs try assigning a value or a
+different value.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod, nsimEIM</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The defining equation is
+</p>
+<p style="text-align: center;"><code class="reqn">\psi = H \times (1-y_1-y_2+H) / ((y_1-H) \times (y_2-H))</code>
+</p>
+
+<p>where
+<code class="reqn">P(Y_1 \leq y_1, Y_2 \leq y_2) = H_{\psi}(y_1,y_2)</code>
+is the cumulative distribution function.
+The density function is <code class="reqn">h_{\psi}(y_1,y_2) =</code>
+</p>
+<p style="text-align: center;"><code class="reqn">\psi [1 + (\psi-1)(y_1 + y_2 - 2 y_1 y_2) ] / \left(
+                     [1 + (\psi-1)(y_1 + y_2) ]^2 - 4 \psi
+              (\psi-1) y_1 y_2 \right)^{3/2}</code>
+</p>
+
+<p>for <code class="reqn">\psi &gt; 0</code>.
+Some writers call <code class="reqn">\psi</code> the <em>cross product ratio</em>
+but it is called the <em>odds ratio</em> here.
+The support of the function is the unit square.
+The marginal distributions here are the standard uniform although
+it is commonly generalized to other distributions.
+</p>
+<p>If <code class="reqn">\psi = 1</code> then
+<code class="reqn">h_{\psi}(y_1,y_2) = y_1 y_2</code>,
+i.e., independence.
+As the odds ratio tends to infinity one has <code class="reqn">y_1=y_2</code>.
+As the odds ratio tends to 0 one has <code class="reqn">y_2=1-y_1</code>.
+</p>
+<p>Fisher scoring is implemented using <code>rbiplackcop</code>.
+Convergence is often quite slow.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be a two-column matrix.  Currently, the fitted
+value is a 2-column matrix with 0.5 values because the marginal
+distributions correspond to a standard uniform distribution.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Plackett, R. L. (1965).
+A class of bivariate distributions.
+<em>Journal of the American Statistical Association</em>,
+<b>60</b>, 516–522.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>rbiplackcop</code>,
+<code>bifrankcop</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+ymat &lt;- rbiplackcop(n = 2000, oratio = exp(2))
+plot(ymat, col = "blue")
+fit &lt;- vglm(ymat ~ 1, fam = biplackettcop, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+vcov(fit)
+head(fitted(fit))
+summary(fit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

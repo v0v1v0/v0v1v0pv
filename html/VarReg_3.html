@@ -1,0 +1,132 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>censloop_em</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Censored data EM loop</h2>
+
+<h3>Description</h3>
+
+<p><code>censloop_em</code> is an EM loop function for censored data to be utilised by various other higher level functions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">censloop_em(
+  meanmodel,
+  theta.old,
+  beta.old,
+  p.old,
+  x.0,
+  X,
+  censor.ind,
+  mean.intercept,
+  maxit,
+  eps
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>meanmodel</code></td>
+<td>
+<p>Dataframe containing only the covariates to be fit in the mean model. NULL for zero mean model and FALSE for constant mean model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta.old</code></td>
+<td>
+<p>Vector containing the initial variance parameter estimates to be fit in the variance model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta.old</code></td>
+<td>
+<p>Vector containing the initial mean parameter estimates to be fit in the mean model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.old</code></td>
+<td>
+<p>Vector of length n containing the initial variance estimate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x.0</code></td>
+<td>
+<p>Matrix of covariates (length n) to be fit in the variance model. All have been rescaled so zero is the minimum. If NULL, then its a constant variance model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Vector of length n of the outcome variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>censor.ind</code></td>
+<td>
+<p>Vector of length n of the censoring indicator. 0=uncensored, -1=left censored and 1 is right censored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean.intercept</code></td>
+<td>
+<p>Logical to indicate if mean intercept is to be included in the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxit</code></td>
+<td>
+<p>Number of maximum iterations for the EM algorithm.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>Very small number for the convergence criteria.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of the results from the EM algorithm, including:
+</p>
+
+<ul>
+<li>
+<p><code>conv</code>: Logical argument indicating if convergence occurred
+</p>
+</li>
+<li>
+<p><code>it</code>: Total iterations performed of the EM algorithm
+</p>
+</li>
+<li>
+<p><code>reldiff</code>: the positive convergence tolerance that occured at the final iteration.
+</p>
+</li>
+<li>
+<p><code>theta.new</code>: Vector of variance parameter estimates. Note that these are not yet
+transformed back to the appropriate scale
+</p>
+</li>
+<li>
+<p><code>mean</code>: Vector of mean parameter estimates
+</p>
+</li>
+<li>
+<p><code>fittedmean</code>: Vector of fitted mean estimates
+</p>
+</li>
+<li>
+<p><code>p.old</code>: Vector of fitted variance estimates
+</p>
+</li>
+</ul>
+</div>

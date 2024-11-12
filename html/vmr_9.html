@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vmrConfigSSH</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Configure ssh</h2>
+
+<h3>Description</h3>
+
+<p>Configure ssh credential.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vmrConfigSSH(
+  vmr,
+  ssh_user = "vagrant",
+  ssh_pwd = "vagrant",
+  port = "",
+  ssh_private_key_path = ""
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vmr</code></td>
+<td>
+<p>a <strong>vmr</strong> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ssh_user</code></td>
+<td>
+<p>the ssh user (default 'vagrant')</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ssh_pwd</code></td>
+<td>
+<p>the ssh pwd if any (default 'vagrant')</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>port</code></td>
+<td>
+<p>the ssh port (default empty)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ssh_private_key_path</code></td>
+<td>
+<p>path to the private ssh key to use (default empty, use insecure vagrant key)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>by default <strong>vmr</strong> use vagrant as user/password and insecure key
+for ssh connection. This behavior can be change here, by setting an another
+user and/or ssh keys. Calling with no arguments will disable this option.
+Be careful, ssh using only password may result of <em>vmr</em> functions bugs.
+</p>
+
+
+<h3>Value</h3>
+
+<p>an updated <strong>vmr</strong> object
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+vmr &lt;- vmrConfigSSH(ssh_user = "John", ssh_pwd = "d0e", port = "22")
+vmr &lt;- vmrConfigSSH(ssh_user = "John", private_key_path = "/path/to/private/key/")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

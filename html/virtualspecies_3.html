@@ -1,0 +1,421 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>convertToPA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Convert a virtual species distribution (or a suitability raster) 
+into presence-absence</h2>
+
+<h3>Description</h3>
+
+<p>This functions converts the probabilities of presence from the output of
+<code>generateSpFromFun</code>, <code>generateSpFromPCA</code>, 
+<code>generateRandomSp</code>
+or a suitability raster into
+a presence-absence raster. The conversion can be threshold-based, or based
+on a probability of conversion (see details).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">convertToPA(
+  x,
+  PA.method = "probability",
+  prob.method = "logistic",
+  beta = "random",
+  alpha = -0.05,
+  a = NULL,
+  b = NULL,
+  species.prevalence = NULL,
+  plot = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>the output from functions 
+<code>generateSpFromFun</code>, <code>generateSpFromPCA</code> 
+or <code>generateRandomSp</code>, or a suitability SpatRaster</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PA.method</code></td>
+<td>
+<p><code>"threshold"</code> or <code>"probability"</code>. If 
+<code>"threshold"</code>, then occurrence probabilities are simply converted into
+presence-absence according to the threshold <code>beta</code>. If 
+<code>"probability"</code>, then
+probabilities are converted according to a logistic function of threshold 
+<code>beta</code> and slope <code>alpha</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prob.method</code></td>
+<td>
+<p><code>"logistic"</code> or <code>"linear"</code>. Defines how 
+the initial environmental suitability is translated into probabilities of 
+presence/absence.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p><code>"random"</code>, a numeric value in the range of your 
+probabilities or <code>NULL</code>. This is the threshold of conversion into 
+presence-absence (if <code>PA.method = "probability"</code> and 
+<code>prob.method = "logistic"</code>, then beta = the inflexion point).
+If <code>"random"</code>, a numeric value will be randomly generated within the range
+of <code>x</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p><code>NULL</code> or a negative numeric value. Only useful if 
+<code>PA.method = "probability"</code> and  <code>proba.method = "logistic"</code>. 
+The value of <code>alpha</code> will
+shape the logistic function transforming occurrences into presence-absences.
+See <code>logisticFun</code> and examples therein for the choice of 
+<code>alpha</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a</code></td>
+<td>
+<p><code>NULL</code> or a  numeric value. Only useful if 
+<code>PA.method = "probability"</code> and  <code>proba.method = "linear"</code>. 
+Slope of the linear conversion of environmental suitability.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b</code></td>
+<td>
+<p><code>NULL</code> or a  numeric value. Only useful if 
+<code>PA.method = "probability"</code> and  <code>proba.method = "linear"</code>. 
+Intercept of the linear conversion of environmental suitability.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species.prevalence</code></td>
+<td>
+<p><code>NULL</code> or a numeric value between 0 and 1.
+The species prevalence is the proportion of sites actually occupied by the
+species.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, maps of 
+probabilities
+of occurrence and presence-absence will be plotted.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><a href="http://borisleroy.com/virtualspecies_tutorial/04-presenceabsence.html">
+Online tutorial for this function</a>
+</p>
+<p>The conversion of environmental suitability into presence - absence used to 
+be
+performed by selecting a threshold above which presence always occurs,
+and never below. However, this approach may is unrealistic because
+species may sometime be present in areas with a low probability of 
+occurrence,
+or be absent from areas with a high probability of occurrence. In addition,
+when using a threshold you erase the previously generated response shapes: 
+it all becomes threshold. Thus, this threshold approach should be avoided.
+</p>
+<p>A more
+realistic conversion consists in converting environmental suitability into
+presence -
+absence with a probability function (see references). Such a probability 
+conversion can be performed with two different methods here:
+</p>
+
+<ol>
+<li>
+<p>Using a logistic transformation of  environmental suitability
+(see <code>logisticFun</code>). A logistic function on the other hand, will 
+ensure that the simulated probability is within the 0-1 range and allow easy 
+control of species prevalence. However, the 
+logistic function will also flatten out the relationship at the extreme 
+suitability values, and narrow or broaden the intermediate probability values
+depending on the slope of the logistic curve 
+</p>
+</li>
+<li>
+<p>Using a linear transformation of environmental suitability. A linear 
+transformation will preserve the shape of the originally simulated 
+occurrence-environment relationships, uniformly increasing or decreasing the
+probabilities of occurrence across the landscape.</p>
+</li>
+</ol>
+<p>— note —
+</p>
+<p>If the Virtual Species study aims at comparing simulated and predicted 
+probability values, it is important to recover the correct simulated 
+probability instead of directly using the initial suitability function. 
+</p>
+<p>Therefore, the function stores the probability of occurrence in the 
+output list, under the object <code>probability.of.occurrence</code>.
+The initial suitability function (before logistic or linear conversion)
+will still be stored in the output list as <code>suitab.raster</code>. 
+</p>
+<p>————————————————————————–
+</p>
+<p><b>PROBABILISTIC CONVERSION - LOGISTIC METHOD</b>
+</p>
+<p>To perform the logistic transformation of environmental suitability
+you have to define two of the
+three following parameters:
+</p>
+
+<ul>
+<li>
+<p><code>beta</code>: the 'threshold' of the logistic function (i.e. the 
+inflexion point. It should normaly be in the range of values of your 
+environmental suitability.)
+</p>
+</li>
+<li>
+<p><code>alpha</code>: the slope of the logistic function. It should generally
+be in value equal to something like 1/20 or 1/10 of your environmental 
+suitability range
+</p>
+</li>
+<li>
+<p><code>species.prevalence</code>: the proportion of sites in which the species
+occur
+</p>
+</li>
+</ul>
+<p>If you provide <code>beta</code> and <code>alpha</code>, the <code>species.prevalence</code>
+is calculated immediately calculated after conversion into presence-absence.
+</p>
+<p>On the other hand, if you provide <code>species.prevalence</code> and either
+<code>beta</code> or <code>alpha</code>, the function will try to determine <code>alpha</code>
+(if you provided <code>beta</code>) or <code>beta</code> (if you provided <code>alpha</code>).
+</p>
+<p>The relationship between species prevalence, alpha and beta is dependent
+on the available range of environmental conditions (see Meynard and Kaplan,
+2011 and especially the Supporting Information). As a consequence, the 
+desired species prevalence may not be available for the defined <code>alpha</code> 
+or <code>beta</code>. In these conditions, the function will retain the 
+<code>alpha</code> or
+<code>beta</code> which provides the closest prevalence to your 
+<code>species.prevalence</code>,
+but you may also provide another value of <code>alpha</code> or <code>beta</code> to 
+obtain
+a closer prevalence. 
+</p>
+<p>————————————————————————–
+</p>
+<p><b>PROBABILISTIC CONVERSION - LINEAR METHOD </b>
+</p>
+<p>To perform the linear transformation of environmental suitability
+you have to define *one* of the following:
+</p>
+
+<ul>
+<li>
+<p>nothing - in which case your input environmental suitability will be
+used as the probability of occurrence for the Bernoulli trial (it is 
+equivalent to defining a slope <code>a</code> of 1 and intercept <code>b</code> of  0.)
+</p>
+</li>
+<li>
+<p>the coefficients of the linear regression: slope <code>a</code> and 
+intercept <code>b</code>. The transformed environmental suitability will
+be used as the probability of occurrence for the Bernoulli trial.
+</p>
+</li>
+<li>
+<p><code>species.prevalence</code>: the proportion of sites in which the 
+species occur. In this case, the function will try to find coefficients
+of a linear regression which results in the requested 
+<code>species.prevalence</code>
+(see below).
+</p>
+</li>
+</ul>
+<p>Method used to find coefficients of a linear regression which results in the
+requested <code>species.prevalence</code>:
+</p>
+
+<ol>
+<li>
+<p>The simplest linear transformation of habitat suitability would
+be to just multiply the raw suitability by a constant. For example, if the 
+raw average suitability in the area is 0.04, it means an expected prevalence
+of 0.40. To to go from this expected prevalence of 0.04 to an expected
+prevalence of 0.4, we can just multiply the raw suitability by 10. It is the
+default choice, unless it results in probabilities superior to 1 or raw
+suitability have values below 0, in which case the function proceeds to
+method 2.
+</p>
+</li>
+<li>
+<p>If it does not work, then we look at the line that passes through 
+(min suitability, 0) and (mean suitability, desired prevalence). For this 
+line, we only need to ensure that the maximum probability of occurence is 
+lower than 1. Otherwise, the function proceeds to method 3.
+</p>
+</li>
+<li>
+<p>If method 2 fails, then we test the line going through (mean 
+suitability, desired prevalence) and (max suitability, 1). If the minimum
+probability resulting from this line is greater than 0, then this method is 
+correct.
+
+</p>
+</li>
+</ol>
+<p>One of these 3 lines should always work. In fact, one of the last two has to 
+work, and it does not hurt to try the first one which is simpler.
+</p>
+<p>————————————————————————–
+</p>
+<p>In all cases, the <code>species.prevalence</code> indicated in the output is the
+prevalence measured on the output presence-absence map.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a <code>list</code> containing 6 elements:
+</p>
+
+<ul>
+<li>
+<p><code>approach</code>: the approach used to generate the species, 
+<em>i.e.</em>, <code>"response"</code>
+</p>
+</li>
+<li>
+<p><code>details</code>: the details and parameters used to generate the 
+species
+</p>
+</li>
+<li>
+<p><code>suitab.raster</code>: the environmental suitability of your virtual 
+species, as a Raster object 
+</p>
+</li>
+<li>
+<p><code>probability.of.occurrence</code>: the probability of occurrence of your 
+species, based on the chosen transformation of environmental suitability,
+as a Raster object 
+</p>
+</li>
+<li>
+<p><code>PA.conversion</code>: the parameters used to convert the suitability 
+into presence-absence
+</p>
+</li>
+<li>
+<p><code>pa.raster</code>: the presence-absence map, as a Raster object 
+containing 0 (absence) / 1 (presence) / NA
+</p>
+</li>
+</ul>
+<p>The structure of the virtualspecies object can be seen using <code>str()</code>
+</p>
+
+
+<h3>Note</h3>
+
+<p>The approximation of <code>alpha</code> or <code>beta</code> to the chosen 
+<code>species.prevalence</code> may take time if you work on very large rasters.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+</p>
+<p>with help from C. N. Meynard, D.M. Kaplan, C. Bellard &amp; F. Courchamp
+</p>
+
+
+<h3>References</h3>
+
+<p>Meynard C.N. &amp; Kaplan D.M. 2013. Using virtual species to study species 
+distributions and model performance. 
+<em>Journal of Biogeography</em> <b>40</b>:1-8
+</p>
+<p>Meynard C.N. &amp; Kaplan D.M. 2011. The effect of a gradual response to the 
+environment on species distribution model performance.
+<em>Ecography</em> <b>35</b>:499-509
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Create an example stack with two environmental variables
+a &lt;- matrix(rep(dnorm(1:100, 50, sd = 25)), 
+            nrow = 100, ncol = 100, byrow = TRUE)
+env &lt;- c(rast(a * dnorm(1:100, 50, sd = 25)),
+         rast(a * 1:100))
+names(env) &lt;- c("variable1", "variable2")
+
+# Creation of the parameter list
+parameters &lt;- formatFunctions(variable1 = c(fun = 'dnorm', mean = 0.00012,
+                                            sd = 0.0001),
+                              variable2 = c(fun = 'linearFun', a = 1, b = 0))
+sp1 &lt;- generateSpFromFun(env, parameters, plot = FALSE)
+
+# Conversion into presence-absence with a threshold-based approach
+convertToPA(sp1, PA.method = "threshold", beta = 0.2,  plot = TRUE)
+convertToPA(sp1, PA.method = "threshold", beta = "random", plot = TRUE)
+
+# Conversion into presence-absence with a probability approach using logistic
+# method
+convertToPA(sp1, PA.method = "probability", beta = 0.4, 
+              alpha = -0.05, plot = TRUE)
+convertToPA(sp1, PA.method = "probability", beta = "random", 
+              alpha = -0.1, plot = TRUE)
+              
+# Conversion into presence-absence with a probability approach using linear 
+# method
+convertToPA(sp1, PA.method = "probability", prob.method = "linear",
+            a = 1, b = 0, plot = TRUE)         
+              
+              
+# Conversion into presence-absence by choosing the prevalence
+# Threshold method
+convertToPA(sp1, PA.method = "threshold",
+              species.prevalence = 0.3, plot = TRUE)
+# Logistic method, with alpha provided              
+convertToPA(sp1, PA.method = "probability", alpha = -0.1, 
+              species.prevalence = 0.2, plot = TRUE)        
+# Logistic method, with beta provided              
+convertToPA(sp1, PA.method = "probability", beta = 0.5, 
+              species.prevalence = 0.2, alpha = NULL, 
+              plot = TRUE)    
+# Linear method
+convertToPA(sp1, PA.method = "probability", prob.method = "linear",
+            species.prevalence = 0.2,
+            plot = TRUE)              
+convertToPA(sp1, PA.method = "probability", prob.method = "linear",
+            species.prevalence = 0.5,
+            plot = TRUE) 
+convertToPA(sp1, PA.method = "probability", prob.method = "linear",
+            species.prevalence = 0.8,
+            plot = TRUE)                
+ 
+# Plot the output Presence-Absence raster only             
+sp1 &lt;- convertToPA(sp1, plot = FALSE)
+plot(sp1$pa.raster)
+</code></pre>
+
+
+</div>

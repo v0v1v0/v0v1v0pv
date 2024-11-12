@@ -1,0 +1,153 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vegclass</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Classifies vegetation communities 
+</h2>
+
+<h3>Description</h3>
+
+<p>Classifies vegetation communities into a previous fuzzy or hard classification.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vegclass(y, x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+
+<p>An object of class <code>vegclust</code> that represents a previous knowledge.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>Community data to be classified, in form of a site by species matrix (if the vegclust object is in <code>raw</code> mode) or a data frame containing the distances between the new sites in rows and the old sites in columns (if the vegclust object is in <code>distance</code> mode).
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function uses the classification model specified in <code>y</code> to classify the communities (rows) in <code>x</code>. When vegclust is in <code>raw</code> mode, the function calls first to <code>conformveg</code> in order to cope with different sets of species. See the help of <code>as.vegclust</code> to see an example of <code>vegclass</code> with distance matrices.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns an object of type <code>vegclass</code> with the following items:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>The clustering model used in <code>y</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>The fuzziness exponent in <code>y</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dnoise</code></td>
+<td>
+<p>The distance to the noise cluster used for noise clustering (models NC, NCdd, HNC, HNCdd). This is set to <code>NULL</code> for other models.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eta</code></td>
+<td>
+<p> The reference distance vector used for possibilistic clustering (models PCM and PCMdd). This is set to <code>NULL</code> for other models.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>memb</code></td>
+<td>
+<p>The fuzzy membership matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dist2clusters</code></td>
+<td>
+<p>The matrix of object distances to cluster centers.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, CREAF.
+</p>
+
+
+<h3>References</h3>
+
+<p>Davé, R. N. and R. Krishnapuram (1997) Robust clustering methods: a unified view. IEEE Transactions on Fuzzy Systems 5, 270-293.
+</p>
+<p>Bezdek, J. C. (1981) Pattern recognition with fuzzy objective functions. Plenum Press, New York.
+</p>
+<p>Krishnapuram, R. and J. M. Keller. (1993) A possibilistic approach to clustering. IEEE transactions on fuzzy systems 1, 98-110.
+</p>
+<p>De Cáceres, M., Font, X, Oliva, F. (2010) The management of numerical vegetation classifications with fuzzy clustering methods [Related software]. Journal of Vegetation Science 21 (6): 1138-1151.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vegclust</code>, <code>as.vegclust</code>, <code>kmeans</code>, <code>conformveg</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Loads data (38 columns and 33 species)
+data(wetland)
+dim(wetland)
+  
+## This equals the chord transformation 
+## (see also  \code{\link{decostand}} in package vegan)
+wetland.chord = as.data.frame(sweep(as.matrix(wetland), 1, 
+                              sqrt(rowSums(as.matrix(wetland)^2)), "/"))
+
+## Splits wetland data into two matrices of 30x27 and 11x22
+wetland.30 = wetland.chord[1:30,]
+wetland.30 = wetland.30[,colSums(wetland.30)&gt;0]
+dim(wetland.30)
+wetland.11 = wetland.chord[31:41,]
+wetland.11 = wetland.11[,colSums(wetland.11)&gt;0] 
+dim(wetland.11)
+
+## Create noise clustering with 3 clusters from the data set with 30 sites. 
+wetland.30.nc = vegclust(wetland.30, mobileCenters=3, m = 1.2, dnoise=0.75,
+                         method="NC", nstart=10)
+
+## Cardinality of fuzzy clusters (i.e., the number of objects belonging to)
+wetland.30.nc$size
+
+## Classifies the second set of sites according to the clustering of the first set
+wetland.11.nc = vegclass(wetland.30.nc, wetland.11)
+
+## Fuzzy membership matrix
+wetland.11.nc$memb
+
+## Obtains hard membership vector, with 'N' for objects that are unclassified
+defuzzify(wetland.11.nc$memb)$cluster
+
+</code></pre>
+
+
+</div>

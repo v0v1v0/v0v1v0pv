@@ -1,0 +1,141 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vw_serialize_data</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Serialize data-frame time-columns</h2>
+
+<h3>Description</h3>
+
+<p><strong>Please think of this as an experimental function</strong>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vw_serialize_data(data, iso_dttm = FALSE, iso_date = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p><code>data.frame</code>, data to be serialized</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iso_dttm</code></td>
+<td>
+<p><code>logical</code>, indicates if datetimes (<code>POSIXct</code>) are to be
+formatted using ISO-8601</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iso_date</code></td>
+<td>
+<p><code>logical</code>, indicates if dates (<code>Date</code>) are to be
+formatted using ISO-8601</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In Vega, for now, there are only two time-zones available: the local
+time-zone of the browser where the spec is rendered, and UTC. This differs
+from R, where a time-zone attribute is available to <code>POSIXct</code> vectors.
+Accordingly, when designing a vegaspec that uses time, you have to make some
+some compromises. This function helps you to implement your compromise in
+a principled way, as explained in the opinions below.
+</p>
+<p>Let's assume that your <code>POSIXct</code> data has a time-zone attached.
+There are three different scenarios for rendering this data:
+</p>
+
+<ul>
+<li>
+<p> using the time-zone of the browser
+</p>
+</li>
+<li>
+<p> using UTC
+</p>
+</li>
+<li>
+<p> using the time-zone of the data
+</p>
+</li>
+</ul>
+<p>If you intend to display the data using the <strong>time-zone of the browser</strong>,
+or using <strong>UTC</strong>, you should serialize datetimes using ISO-8601, i.e.
+<code>iso_dttm = TRUE</code>. In the rest of your vegaspec, you should choose
+local or UTC time-scales accordingly. However, in either case, you should
+use local time-units. No compromise is necessary.
+</p>
+<p>If you intend to display the data using the <strong>time-zone of the browser</strong>,
+this is where you will have to compromise. In this case, you should
+serialize using <code>iso_dttm = FALSE</code>. By doing this, your datetimes will be
+serialized using a non-ISO-8601 format, and notably, <strong>using the time-zone</strong>
+of the datetime. When you design your vegaspec, you should treat this as
+if it were a UTC time. You should direct Vega to parse this data as UTC,
+i.e. <code>{"foo": "utc:'%Y-%m-%d %H:%M:%S'"}</code>. In other words, Vega should
+interpret your local timestamp as if it were a UTC timestamp.
+As in the first UTC case, you should use UTC time-scales and local
+time-units.
+</p>
+<p>The compromise you are making is this: the internal representation of
+the instants in time will be different in Vega than it will be in R.
+You are losing information because you are converting from a <code>POSIXct</code>
+object with a time-zone to a timestamp without a time-zone. It is also
+worth noting that the time information in your Vega plot should not
+be used anywhere else - this should be the last place this serialized
+data should be used because it is no longer trustworthy. For this,
+you will gain the ability to show the data in the context of its
+time-zone.
+</p>
+<p>Dates can be different creatures than datetimes. I think that can be
+"common currency" for dates. I think this is because it is more common to
+compare across different locations using dates as a common index. For
+example, you might compare daily stock-market data from NYSE, CAC-40, and
+Hang Seng. To maintain a common time-index, you might choose UTC to
+represent the dates in all three locations, despite the time-zone
+differences.
+</p>
+<p>This is why the default for <code>iso_date</code> is <code>TRUE</code>. In this scenario,
+you need not specify to Vega how to parse the date; because of its
+ISO-8601 format, it will parse to UTC. As with the other UTC cases,
+you should use UTC time-scales and local time-units.
+</p>
+
+
+<h3>Value</h3>
+
+<p>object with the same type as <code>data</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://vega.github.io/vega-lite/docs/timeunit.html#utc">Vega-Lite Time Unit (UTC)</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  # datetimes
+  data_seattle_hourly %&gt;% head()
+  data_seattle_hourly %&gt;% head() %&gt;% vw_serialize_data(iso_dttm = TRUE)
+  data_seattle_hourly %&gt;% head() %&gt;% vw_serialize_data(iso_dttm = FALSE)
+
+  # dates
+  data_seattle_daily %&gt;% head()
+  data_seattle_daily %&gt;% head() %&gt;% vw_serialize_data(iso_date = TRUE)
+  data_seattle_daily %&gt;% head() %&gt;% vw_serialize_data(iso_date = FALSE)
+
+</code></pre>
+
+
+</div>

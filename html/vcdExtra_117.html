@@ -1,0 +1,116 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>zero.test</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Score test for zero inflation in Poisson data
+</h2>
+
+<h3>Description</h3>
+
+<p>Carries out a simple score test (van den Broek, 1995) for excess zeros in 
+an otherwise Poisson distribution of counts.  It gives a <code class="reqn">\chi^2_1</code>
+statistic on one degree of freedom.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">zero.test(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A vector of non-negative counts, or a one-way frequency table
+of such counts.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The test first calculates the rate estimate from the mean,
+<code class="reqn">\hat{\lambda} = \bar{x}</code>.
+The number of observed zeros, <code class="reqn">n_0</code> is then compared with the expected
+number, <code class="reqn">n \hat{p_0}</code>, where <code class="reqn">\hat{p}_0=\exp[-\hat{\lambda}]</code>.
+Then the test statistic is calculated by the formula: 
+</p>
+<p style="text-align: center;"><code class="reqn">\frac{(n_0 - n\hat{p}_0)^2}{n\hat{p}_0(1-\hat{p}_0) - n\bar{x}\hat{p}_0^2}</code>
+</p>
+ 
+<p>This test statistic
+has a <code class="reqn">\chi^2_1</code> distribution.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns invisibly a list of three elements:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>statistic</code></td>
+<td>
+<p>Description of 'comp1'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>Description of 'comp2'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pvalue</code></td>
+<td>
+<p>Upper tail p-value</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Michael Friendly
+</p>
+
+
+<h3>References</h3>
+
+<p>The original R code came from a Stackexchange question,
+<a href="https://stats.stackexchange.com/questions/118322/how-to-test-for-zero-inflation-in-a-dataset">https://stats.stackexchange.com/questions/118322/how-to-test-for-zero-inflation-in-a-dataset</a>
+</p>
+<p>Van den Broek, J. (1995). 
+A Score Test for Zero Inflation in a Poisson Distribution. 
+<em>Biometrics</em>, <b>51</b>(2), 738-743. https://www.jstor.org/stable/2532959
+</p>
+<p>Yang, Zhao, James W. Hardin, and Cheryl L. Addy (2010). 
+Score Tests for Zero-Inflation in Overdispersed Count Data. 
+<em>Communications in Statistics - Theory and Methods</em> <b>39</b> (11) 2008-2030. 
+<a href="https://doi.org/10.1080/03610920902948228">doi:10.1080/03610920902948228</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># synthetic tests
+zero.test(rpois(100, 1))
+zero.test(rpois(100, 5))
+# add some extra zeros
+zero.test(c(rep(0, 20), rpois(100, 5)))
+
+# Articles by Phd candidates
+data(PhdPubs, package="vcdExtra")
+zero.test(PhdPubs$articles)
+
+phd.tab &lt;- table(PhdPubs$articles)
+zero.test(phd.tab)
+
+</code></pre>
+
+
+</div>

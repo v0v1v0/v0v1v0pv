@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>otpospoisson</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> One-truncated Poisson Distribution  </h2>
+
+<h3>Description</h3>
+
+<p>Estimating the (single) parameter of the 1-truncated
+positive Poisson distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R"> otpospoisson(llambda = "loglink",
+    type.fitted = c("mean", "lambda", "prob0", "prob1"),
+    ilambda = NULL, imethod = 1, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>llambda, type.fitted, ilambda</code></td>
+<td>
+
+<p>Same as <code>pospoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod, zero</code></td>
+<td>
+
+<p>Same as <code>pospoisson</code>.
+See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The 1-truncated positive Poisson distribution has support on 2, 3,
+....
+It is a Poisson distribution but with
+the probability of a one  or zero being 0. The other
+probabilities are scaled to add to unity.
+Some more details can be found at <code>pospoisson</code>.
+Multiple responses are permitted.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>Otpospois</code>,
+<code>oipospoisson</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+odata &lt;- data.frame(y1 = rotpospois(1000, lambda = loglink(1, inv = TRUE)))
+ofit &lt;- vglm(y1 ~ 1, otpospoisson, data = odata, trace = TRUE, crit = "c")
+coef(ofit, matrix = TRUE)
+Coef(ofit)
+with(odata,
+    hist(y1, prob = TRUE, breaks = seq(0.5, max(y1) + 0.5, by = 1),
+         border = "blue"))
+x &lt;- seq(1, with(odata, max(y1)), by = 1)
+with(odata, lines(x, dotpospois(x, Coef(ofit)[1]), col = "orange",
+                  type = "h", lwd = 2)) 
+## End(Not run)
+</code></pre>
+
+
+</div>

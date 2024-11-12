@@ -1,0 +1,59 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>coef.VCA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract Fixed Effects from 'VCA' Object</h2>
+
+<h3>Description</h3>
+
+<p>For conveniently using objects of class 'VCA' with other packages expecting this
+function, e.g. the 'multcomp' package for general linear hypotheses for parametric
+models (currently not fully implemented).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VCA'
+coef(object, quiet = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>(VCA) object where fixed effects shall be extracted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = will suppress any warning, which will be issued otherwise</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+fit1 &lt;- anovaMM(y~day/(run), dataEP05A2_1)
+coef(fit1)
+fit2 &lt;- anovaVCA(y~day/run, dataEP05A2_1)
+coef(fit2)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

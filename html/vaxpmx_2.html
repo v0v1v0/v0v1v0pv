@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>EfficacyCI</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Efficacy summary (mean, median, confidence intervals)</h2>
+
+<h3>Description</h3>
+
+<p>Function summarizes efficacy statistics (mean, median, confidence intervals) based on the set of estimated efficacy values and chosen condfidence interval.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">EfficacyCI(efficacySet, ci = 0.95)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>efficacySet</code></td>
+<td>
+<p>numeric vector - vector of estimated efficacy values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ci</code></td>
+<td>
+<p>numeric - required confidence level</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Confidence intervals are calculated using quantiles of estimated efficacy values.
+</p>
+
+
+<h3>Value</h3>
+
+<p>named list - mean, median, CILow, CIHigh
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Load required packages
+library(dplyr)
+
+# Load an example dataset
+data(data_temp)
+Data.vaccinated &lt;- filter(data_temp, vaccine == 1)
+Data.control &lt;- filter(data_temp, vaccine == 0)
+
+# Fit logistic model relating neutralizing titer to disease status, specific to serotype 2
+logisticFit &lt;- glm(disease_any ~ nAb1, data = data_temp, family = binomial())
+
+# Estimate 95\% confidence interval of vaccine efficacy based on the fitted model
+efficacySet &lt;- glmParametricSampling(logisticFit, nboot = 500, Data.vaccinated, Data.control)
+EfficacyCI(efficacySet)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>aaVLFs.to.modalchanges</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Amino Acid Changes
+</h2>
+
+<h3>Description</h3>
+
+<p>Determines how many aaVLFs have changed “type” of amino acid from the modal amino acid sequence.  Amino acid types are polar charged, polar uncharged, non-polar, and those with a unique side group.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">aaVLFs.to.modalchanges(modal, AminoAcidList, aalength)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>modal</code></td>
+<td>
+
+<p>The modal amino acid sequence (i.e., the amino acid sequence that occurs most often based on the amino acid frequency matrix)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>AminoAcidList</code></td>
+<td>
+
+<p>Matrix of VLF amino acid sequences containing only aaVLFs and NAs anywhere else</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>aalength</code></td>
+<td>
+
+<p>Amino Acid sequence length.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The argument modal can be created using the MODE function.  The argument AminoAcidList can be created using the aa.VLF.convert.matrix, VLF.aminoAcids, and aa.VLF.reduced functions.</p>
+
+
+<h3>Value</h3>
+
+<p>A sameAll value representative of the number of amino acids that were the same type as the modal, a changedAll value representative of the number of amino acids that changed amino acid type from the modal.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: data(birds_aminoAcids)
+birds_aminoAcid_speciesNames &lt;- birds_aminoAcids[,2]
+aminoAcids_specimenNumber &lt;- nrow(birds_aminoAcids)
+birds_aminoAcid_count &lt;- aa.count.function(birds_aminoAcids, 216)
+aminoAcid_frequency.Matrix &lt;- aa.frequency.matrix.function(birds_aminoAcid_count, 216)
+bird_aminoAcid_frequencies &lt;- aa.specimen.frequencies(aminoAcid_frequency.Matrix, birds_aminoAcids,
+    birds_aminoAcid_speciesNames, 216)
+aminoAcid_Modal &lt;- aa.MODE(aminoAcid_frequency.Matrix, 216)
+birds_aminoAcid_specimenVLFcount &lt;- aa.VLF.count.spec(bird_aminoAcid_frequencies, 0.001, 216)
+birds_aaVLFconvert &lt;- aa.VLF.convert.matrix(birds_aminoAcids, bird_aminoAcid_frequencies, 0.001, 
+    216)
+birds_aminoAcidVLFs &lt;- VLF.aminoAcids(birds_aaVLFconvert, birds_aminoAcids, 216)
+birds_aaVLFreduced &lt;- aa.VLF.reduced(birds_aminoAcidVLFs, birds_aminoAcid_specimenVLFcount, 216)
+All_aaType_change &lt;- aaVLFs.to.modalchanges(aminoAcid_Modal, birds_aaVLFreduced, 216)
+## End(Not run)
+</code></pre>
+
+
+</div>

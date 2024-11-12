@@ -1,0 +1,66 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vcovFixed</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate Variance-Covariance Matrix and Standard Errors of Fixed Effects for an 'VCA' Object</h2>
+
+<h3>Description</h3>
+
+<p>The variance-covariance matrix of fixed effects for the linear mixed model in 'obj' is calculated.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vcovFixed(obj, quiet = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(VCA) object for which the variance-covariance matrix of
+fixed effects shall be calculated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = will suppress any warning, which will be issued otherwise</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The variance-covariance matrix of fixed effects for a linear mixed model corresponds to matrix
+<code class="reqn">(X^{T}V^{-1}X)^{-}</code>, where &gt;<code class="reqn">^{T}</code>&lt; denotes the transpose operator, &gt;<code class="reqn">^{-1}</code>&lt; 
+the regular matrix inverse, and &gt;<code class="reqn">^{-}</code>&lt; the generalized (Moore-Penrose) inverse of a matrix.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(matrix) corresponding to the variance-covariance matrix of fixed effects
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_1)
+fit1 &lt;- anovaMM(y~day/(run), dataEP05A2_1)
+vcov(fit1)
+
+fit2 &lt;- anovaVCA(y~day/run, dataEP05A2_1)
+vcov(fit2)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

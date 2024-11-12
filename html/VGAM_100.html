@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bigumbelIexp</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Gumbel's Type I Bivariate Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimate the association parameter of Gumbel's Type I bivariate
+distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bigumbelIexp(lapar = "identitylink", iapar = NULL, imethod = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lapar</code></td>
+<td>
+
+<p>Link function applied to the association parameter
+<code class="reqn">\alpha</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iapar</code></td>
+<td>
+
+<p>Numeric. Optional initial value for <code class="reqn">\alpha</code>.
+By default, an initial value is chosen internally.
+If a convergence failure occurs try assigning a different value.
+Assigning a value will override the argument <code>imethod</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>An integer with value <code>1</code> or <code>2</code> which
+specifies the initialization method. If failure to converge occurs
+try the other value, or else specify a value for <code>ia</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The cumulative distribution function is
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y_1 \leq y_1, Y_2 \leq y_2) = e^{-y_1-y_2+\alpha y_1 y_2}
+      + 1  - e^{-y_1} - e^{-y_2} </code>
+</p>
+
+<p>for real <code class="reqn">\alpha</code>.
+The support of the function is for <code class="reqn">y_1&gt;0</code> and
+<code class="reqn">y_2&gt;0</code>.
+The marginal distributions are an exponential distribution with
+unit mean.
+</p>
+<p>A variant of Newton-Raphson is used, which only seems
+to work for an intercept model.
+It is a very good idea to set <code>trace=TRUE</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be a two-column matrix.  Currently, the fitted
+value is a matrix with two columns and values equal to 1.
+This is because each marginal distribution corresponds to a
+exponential distribution with unit mean.
+</p>
+<p>This <span class="pkg">VGAM</span> family function should be used with caution.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+
+
+
+
+
+<p>Gumbel, E. J. (1960).
+Bivariate Exponential Distributions.
+<em>Journal of the American Statistical Association</em>,
+<b>55</b>, 698–707.
+</p>
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>bifgmexp</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 1000
+gdata &lt;- data.frame(y1 = rexp(nn), y2 = rexp(nn))
+## Not run:  with(gdata, plot(cbind(y1, y2))) 
+fit &lt;- vglm(cbind(y1, y2) ~ 1, bigumbelIexp, gdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+head(fitted(fit))
+</code></pre>
+
+
+</div>

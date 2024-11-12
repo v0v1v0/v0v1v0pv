@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Solve</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Solve System of Linear Equations using Inverse of Cholesky-Root</h2>
+
+<h3>Description</h3>
+
+<p>Function solves a system of linear equations, respectively, inverts a matrix
+by means of the inverse Cholesky-root.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Solve(X, quiet = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>(matrix, Matrix) object to be inverted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = will suppress any warning, which will be issued otherwise</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is intended to reduce the computational time in function
+<code>solveMME</code> which computes the inverse of the square variance-
+covariance Matrix of observations. It is considerably faster than function
+<code>solve</code> (see example).
+Whenever an error occurs, which is the case for non positive definite matrices
+'X', function <code>MPinv</code> is called automatically yielding a generalized
+inverse (Moore-Penrose inverse) of 'X'.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(matrix, Matrix) corresponding to the inverse of X
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# following complex (nonsense) model takes pretty long to fit
+system.time(res.sw &lt;- anovaVCA(y~(sample+lot+device)/day/run, VCAdata1))
+# solve mixed model equations (not automatically done to be more efficient)
+system.time(res.sw &lt;- solveMME(res.sw))
+# extract covariance matrix of observations V
+V1 &lt;- getMat(res.sw, "V")
+V2 &lt;- as.matrix(V1)
+system.time(V2i &lt;- solve(V2))
+system.time(V1i &lt;- VCA:::Solve(V1))
+V1i &lt;- as.matrix(V1i)
+dimnames(V1i) &lt;- NULL
+dimnames(V2i) &lt;- NULL
+all.equal(V1i, V2i)
+
+## End(Not run) 
+</code></pre>
+
+
+</div>

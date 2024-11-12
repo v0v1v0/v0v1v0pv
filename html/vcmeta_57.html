@@ -1,0 +1,113 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.lm.semipart</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Meta-regression analysis for semipartial correlations</h2>
+
+<h3>Description</h3>
+
+<p>This function estimates the intercept and slope coefficients in a
+meta-regression model where the dependent variable is a Fisher-transformed
+semipartial correlation. The estimates are OLS estimates with robust
+standard errors that accommodate residual heteroscedasticity.  The
+correlations are Fisher-transformed and hence the parameter estimates
+do not have a simple interpretation. However, the hypothesis test results
+can be used to decide if a population slope is either positive or negative.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.lm.semipart(alpha, n, cor, r2, X)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>vector of sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor</code></td>
+<td>
+<p>vector of estimated semipartial correlations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r2</code></td>
+<td>
+<p>vector of squared multiple correlations for a model that
+includes the IV and all control variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>matrix of predictor values</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is for the intercept with one additional
+row per predictor.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - OLS estimate
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> z - z-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+n &lt;- c(128, 97, 210, 217)
+cor &lt;- c(.35, .41, .44, .39)
+r2 &lt;- c(.29, .33, .36, .39)
+x1 &lt;- c(18, 25, 23, 19)
+X &lt;- matrix(x1, 4, 1)
+meta.lm.semipart(.05, n, cor, r2, X)
+
+# Should return: 
+#      Estimate        SE         z     p          LL         UL
+# b0 0.19695988 0.3061757 0.6432905 0.520 -0.40313339 0.79705315
+# b1 0.01055584 0.0145696 0.7245114 0.469 -0.01800004 0.03911172
+
+
+</code></pre>
+
+
+</div>

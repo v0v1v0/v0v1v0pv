@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mle_coerce</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Basic discretisation of numerical features</h2>
+
+<h3>Description</h3>
+
+<p>One can use this function for a quick, ad hoc discretisation of numerical features in a data frame, so that it could be passed to <code>vistla</code> using the maximal likelihood estimation (mle, the default).
+This can be used to simulate legacy behaviour of vistla, which was to automatically perform such conversion with 10 equal-width bins.
+The non-numeric columns are left as they were, hence this function is idempotent and does nothing when given fully discrete data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mle_coerce(x, bins = 3, equal = c("size", "width"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Data frame to be converted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bins</code></td>
+<td>
+<p>Number of bins to cut each numerical column into.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>equal</code></td>
+<td>
+<p>If given <code>"width"</code>, function performs cuts into bins of an equal width, which may thus contain substantially different number of objects.
+One the other hand, when given <code>"size"</code> (default), cuts are done according to quantiles, hence provide bins with approximately the same number of objects, yet with different widths.
+Both options are asymptotically equivalent when the distribution of a given column is uniform.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A copy of <code>x</code>, in which numerical columns have been discretised.
+</p>
+
+
+<h3>Note</h3>
+
+<p>While convenient, this function does not necessary provide optimal quantisation of the data (in terms of future vistla performance); especially the bins parameter should be adjusted to the input data, either via optimisation or based on the known properties of the input or mechanisms behind it.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(cchain)
+vistla(Y~.,data=mle_coerce(cchain,3,"size")) 
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,247 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vardom_othstr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variance estimation for sample surveys in domain by the two stratification</h2>
+
+<h3>Description</h3>
+
+<p>Computes the variance estimation for sample surveys in domain by the two stratification.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vardom_othstr(
+  Y,
+  H,
+  H2,
+  PSU,
+  w_final,
+  id = NULL,
+  Dom = NULL,
+  period = NULL,
+  N_h = NULL,
+  N_h2 = NULL,
+  Z = NULL,
+  X = NULL,
+  ind_gr = NULL,
+  g = NULL,
+  q = NULL,
+  dataset = NULL,
+  confidence = 0.95,
+  percentratio = 1,
+  outp_lin = FALSE,
+  outp_res = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Variables of interest. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H</code></td>
+<td>
+<p>The unit stratum variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H2</code></td>
+<td>
+<p>The unit new stratum variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PSU</code></td>
+<td>
+<p>Primary sampling unit variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_final</code></td>
+<td>
+<p>Weight variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>Optional variable for unit ID codes. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dom</code></td>
+<td>
+<p>Optional variables used to define population domains. If supplied, linearization of the at-risk-of-poverty rate is done for each domain. An object convertible to <code>data.table</code> or variable names as character vector, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>period</code></td>
+<td>
+<p>Optional variable for survey period. If supplied, residual estimation of calibration is done independently for each time period. One dimensional object convertible to one-column <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>N_h</code></td>
+<td>
+<p>optional data object convertible to <code>data.table</code>. If period is supplied, the time period is at the beginning of the object and after time period in the object is stratum. If period is not supplied, the first column in the object is stratum. In the last column is the total of the population in each stratum.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>N_h2</code></td>
+<td>
+<p>optional data object convertible to <code>data.table</code>. If period is supplied, the time period is at the beginning of the object and after time period in the object is new stratum. If period is not supplied, the first column in the object is new stratum. In the last column is the total of the population in each stratum.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>optional variables of denominator for ratio estimation. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Optional matrix of the auxiliary variables for the calibration estimator. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ind_gr</code></td>
+<td>
+<p>Optional variable by which divided independently X matrix of the auxiliary variables for the calibration. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>Optional variable of the g weights. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>Variable of the positive values accounting for heteroscedasticity. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>Optional survey data object convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>confidence</code></td>
+<td>
+<p>Optional positive value for confidence interval. This variable by default is 0.95.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outp_lin</code></td>
+<td>
+<p>Logical value. If <code>TRUE</code> linearized values of the ratio estimator will be printed out.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outp_res</code></td>
+<td>
+<p>Logical value. If <code>TRUE</code> estimated residuals of calibration will be printed out.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentratio</code></td>
+<td>
+<p>Positive</p>
+</td>
+</tr>
+</table>
+<p>numeric value. All linearized variables are multiplied with <code>percentratio</code> value, by default - 1.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with objects are returned by the function:
+</p>
+
+<ul>
+<li> <p><code>lin_out</code> - a <code>data.table</code> containing the linearized values of the ratio estimator with id and PSU.
+</p>
+</li>
+<li> <p><code>res_out</code> - a <code>data.table</code> containing the estimated residuals of calibration with id and PSU.
+</p>
+</li>
+<li> <p><code>betas</code> - a numeric <code>data.table</code> containing the estimated coefficients of calibration.
+</p>
+</li>
+<li> <p><code>s2g</code> - a <code>data.table</code> containing the s^2g value.
+</p>
+</li>
+<li> <p><code>all_result</code> - a <code>data.table</code>, which containing variables: <br><code>respondent_count</code> - the count of respondents, <br><code>pop_size</code> - the estimated size of population, <br><code>n_nonzero</code> - the count of respondents, who answers are larger than zero, <br><code>estim</code> - the estimated value, <br><code>var</code> - the estimated variance, <br><code>se</code> - the estimated standard error, <br><code>rse</code> - the estimated relative standard error (coefficient of variation), <br><code>cv</code> - the estimated relative standard error (coefficient of variation) in percentage, <br><code>absolute_margin_of_error</code> - the estimated absolute margin of error, <br><code>relative_margin_of_error</code> - the estimated relative margin of error in percentage, <br><code>CI_lower</code> - the estimated confidence interval lower bound, <br><code>CI_upper</code> - the estimated confidence interval upper bound, <br><code>confidence_level</code> - the positive value for confidence interval, <br><code>var_srs_HT</code> - the estimated variance of the HT estimator under SRS, <br><code>var_cur_HT</code> - the estimated variance of the HT estimator under current design, <br><code>var_srs_ca</code> - the estimated variance of the calibrated estimator under SRS, <br><code>deff_sam</code> - the estimated design effect of sample design, <br><code>deff_est</code> - the estimated design effect of estimator, <br><code>deff</code> - the overall estimated design effect of sample design and estimator. <br></p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Jean-Claude Deville (1999). Variance estimation for complex statistics and estimators: linearization and residual techniques. Survey Methodology, 25, 193-203, URL <a href="https://www150.statcan.gc.ca/n1/pub/12-001-x/1999002/article/4882-eng.pdf">https://www150.statcan.gc.ca/n1/pub/12-001-x/1999002/article/4882-eng.pdf</a>. <br>
+M. Liberts. (2004) Non-response Analysis and Bias Estimation in a Survey on Transportation of Goods by Road. <br></p>
+
+
+<h3>See Also</h3>
+
+<p><code>domain</code>,
+<code>lin.ratio</code>,
+<code>residual_est</code>,
+<code>vardomh</code>,
+<code>var_srs</code>,
+<code>variance_est</code>,
+<code>variance_othstr</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library("laeken")
+library("data.table")
+data("eusilc")
+  
+# Example 1
+eusilc1 &lt;- eusilc[1:1000, ]
+dataset1 &lt;- data.table(IDd = paste0("V", 1:nrow(eusilc1)), eusilc1)
+dataset1[, db040_2 := get("db040")]
+N_h2 &lt;- dataset1[, sum(rb050, na.rm = FALSE), keyby = "db040_2"]
+  
+aa &lt;- vardom_othstr(Y = "eqIncome", H = "db040", H2 = "db040_2",  
+                    PSU = "db030", w_final = "rb050", id = "rb030",
+                    Dom = "db040", period = NULL, N_h = NULL,
+                    N_h2 = N_h2, Z = NULL, X = NULL, g = NULL,
+                    q = NULL, dataset = dataset1, confidence = .95,           
+                    outp_lin = TRUE, outp_res = TRUE)
+  
+## Not run: 
+# Example 2
+dataset1 &lt;- data.table(IDd = 1:nrow(eusilc), eusilc)
+dataset1[, db040_2 := get("db040")]
+N_h2 &lt;- dataset1[, sum(rb050, na.rm = FALSE), keyby = "db040_2"]
+    
+aa &lt;- vardom_othstr(Y = "eqIncome", H = "db040", H2 = "db040_2",
+                    PSU = "db030", w_final = "rb050", id = "rb030",
+                    Dom = "db040", period = NULL, N_h2 = N_h2,
+                    Z = NULL, X = NULL, g = NULL, dataset = dataset1,
+                    q = NULL, confidence = .95, outp_lin = TRUE,
+                    outp_res = TRUE)
+ aa
+## End(Not run)
+
+
+</code></pre>
+
+
+</div>

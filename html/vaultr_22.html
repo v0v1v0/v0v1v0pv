@@ -1,0 +1,119 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vault_resolve_secrets</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Resolve secrets from R objects</h2>
+
+<h3>Description</h3>
+
+<p>Use vault to resolve secrets.  This is a convenience function that
+wraps a pattern that we have used in a few applications of vault.
+The idea is to allow replacement of data in configuration with
+special strings that indicate that the string refers to a vault
+secret.  This function resolves those secrets.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vault_resolve_secrets(x, ..., login = TRUE, vault_args = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>List of values, some of which may refer to vault secrets
+(see Details for pattern).  Any values that are not strings or
+do not match the pattern of a secret are left as-is.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Args to be passed to vault_client call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>login</code></td>
+<td>
+<p>Login method to be passed to call to
+vault_client.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vault_args</code></td>
+<td>
+<p>As an alternative to using <code>login</code> and <code>...</code>, a
+list of (named) arguments can be provided here, equivalent to
+the full set of arguments that you might pass to
+vault_client.  If provided, then <code>login</code> is ignored
+and if additional arguments are provided through <code>...</code> an error
+will be thrown.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For each element of the data, if a string matches the form:
+</p>
+<div class="sourceCode"><pre>  VAULT:&lt;path to secret&gt;:&lt;field&gt;
+</pre></div>
+<p>then it will be treated as a vault secret and resolved.  The
+<code style="white-space: pre;">⁠&lt;path to get&gt;⁠</code> will be something like
+<code style="white-space: pre;">⁠/secret/path/password⁠</code> and the <code style="white-space: pre;">⁠&lt;field&gt;⁠</code> the name of a
+field in the key/value data stored at that path.  For example,
+suppose you have the data <code>list(username = "alice", password = "s3cret!")</code> stored at <code style="white-space: pre;">⁠/secret/database/user⁠</code>, then the
+string
+</p>
+<div class="sourceCode"><pre>  VAULT:/secret/database/user:password
+</pre></div>
+<p>would refer to the value <code style="white-space: pre;">⁠s3cret!⁠</code>
+</p>
+
+
+<h3>Value</h3>
+
+<p>List of properties with any vault secrets resolved.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+server &lt;- vaultr::vault_test_server(if_disabled = message)
+
+if (!is.null(server)) {
+  client &lt;- server$client()
+  # The example from above:
+  client$write("/secret/database/user",
+               list(username = "alice", password = "s3cret!"))
+
+  # A list of data that contains a mix of secrets to be resolved
+  # and other data:
+  x &lt;- list(user = "alice",
+            password = "VAULT:/secret/database/user:password",
+            port = 5678)
+
+  # Explicitly pass in the login details and resolve the secrets:
+  vaultr::vault_resolve_secrets(x, login = "token", token = server$token,
+                                addr = server$addr)
+
+  # Alternatively, if appropriate environment variables are set
+  # then this can be done more easily:
+  if (requireNamespace("withr", quietly = TRUE)) {
+    env &lt;- c(VAULTR_AUTH_METHOD = "token",
+             VAULT_TOKEN = server$token,
+             VAULT_ADDR = server$addr)
+    withr::with_envvar(env, vault_resolve_secrets(x))
+  }
+}
+</code></pre>
+
+
+</div>

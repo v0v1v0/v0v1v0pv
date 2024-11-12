@@ -1,0 +1,172 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compare.vectors</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compare all combinations of vectors using set operations</h2>
+
+<h3>Description</h3>
+
+<p>Compare all combinations of vectors using set operations
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compare.vectors(named_list_of_vectors_to_compare,
+  degrees_of_comparison_to_include = NULL, draw_venn_diagrams = FALSE,
+  vector_colors_for_venn_diagrams = NULL, save_venn_diagram_files = FALSE,
+  location_for_venn_diagram_files = "", prefix_for_venn_diagram_files = "",
+  saved_venn_diagram_resolution_ppi = 300,
+  saved_venn_diagram_dimension_units = "in", saved_venn_diagram_width = 8,
+  saved_venn_diagram_height = 6, viewport_npc_width_height_for_images = 1,
+  suppress_messages = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>named_list_of_vectors_to_compare</code></td>
+<td>
+<p>A named list of vectors to compare (see, for example, <code>example.vectors.list</code>). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>degrees_of_comparison_to_include</code></td>
+<td>
+<p>A number or vector of numbers of which degrees of comparison to print (for example, 'c(2, 5)' would print only 2- and 5-way vector comparisons).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>draw_venn_diagrams</code></td>
+<td>
+<p>A logical (TRUE/FALSE) indicator whether to draw Venn diagrams for all 2- through 5-way comparisons of vectors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vector_colors_for_venn_diagrams</code></td>
+<td>
+<p>An optional vector of color names for Venn diagrams (if <code>draw_venn_diagrams</code> is <code>TRUE</code>). Color names are applied to the named vectors in <code>named_list_of_vectors_to_compare</code> in their order in <code>named_list_of_vectors_to_compare</code>. If this is blank, a random color will be selected for each vector. Either way, each vector will have a consistent color across the Venn diagrams in which it appears.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>save_venn_diagram_files</code></td>
+<td>
+<p>A logical (TRUE/FALSE) indicator whether to save Venn diagrams as PNG files.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>location_for_venn_diagram_files</code></td>
+<td>
+<p>An optional string giving a directory into which to save Venn diagram PNG files (if <code>save_venn_diagram_files</code> is <code>TRUE</code>). This location must already exist on the filesystem.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prefix_for_venn_diagram_files</code></td>
+<td>
+<p>An optional string giving a prefix to prepend to saved Venn diagram PNG files (if <code>save_venn_diagram_files</code> is <code>TRUE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>saved_venn_diagram_resolution_ppi</code></td>
+<td>
+<p>An optional number giving a resolution (PPI) for saved Venn diagrams (if <code>save_venn_diagram_files</code> is <code>TRUE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>saved_venn_diagram_dimension_units</code></td>
+<td>
+<p>An optional string giving units for specifying <code>saved_venn_diagram_width</code> and <code>saved_venn_diagram_height</code> (if <code>save_venn_diagram_files</code> is <code>TRUE</code>). Can be <code>px</code> (pixels), <code>in</code> (inches, the default), <code>cm</code>, or <code>mm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>saved_venn_diagram_width</code></td>
+<td>
+<p>The width (in <code>saved_venn_diagram_dimension_units</code> units) for saved Venn diagrams (if <code>save_venn_diagram_files</code> is <code>TRUE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>saved_venn_diagram_height</code></td>
+<td>
+<p>The height (in <code>saved_venn_diagram_dimension_units</code> units) for saved Venn diagrams (if <code>save_venn_diagram_files</code> is <code>TRUE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>viewport_npc_width_height_for_images</code></td>
+<td>
+<p>The scale at which to print an image. If the image is cut off at its edges, for example, this can be set lower than 1.0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>suppress_messages</code></td>
+<td>
+<p>A logical (TRUE/FALSE) indicator whether to suppress messages. Even if this is <code>TRUE</code>, warnings will still be printed.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list, with one object for each comparison of vectors. The list contains the following elements:
+</p>
+
+<dl>
+<dt>elements_involved</dt>
+<dd>
+<p>The vector names involved in the comparison.</p>
+</dd>
+<dt>union_of_elements</dt>
+<dd>
+<p>A vector of all (deduplicated) items involved in the comparison, across all of the vectors.</p>
+</dd>
+<dt>overlap_of_elements</dt>
+<dd>
+<p>A vector of the deduplicated elements that occurred in all of the compared vectors.</p>
+</dd>
+<dt>elements_unique_to_first_element</dt>
+<dd>
+<p>This element will have a sub-element named for each vector being compared (i.e., for each of the names in <code>$elements_involved</code>). The (deduplicated) items that were unique to that vector (i.e., not overlapping with any other vector in the comparison).</p>
+</dd>
+<dt>venn_diagram</dt>
+<dd>
+<p>If <code>save_venn_diagram_files</code> is <code>TRUE</code>, and the comparison is of 2 through 5 vectors, a Venn diagram object produced using the <span class="pkg">VennDiagram</span> package. This diagram can be rendered using <code>render.venn.diagram</code>.</p>
+</dd>
+</dl>
+<p>To compile this list object into a Markdown report, use <code>compare.vectors.and.return.text.analysis.of.overlap</code>. For an example of this usage, see the <code>Veccompare Overlap Report</code> RMarkdown template for RStudio that is installed as part of the <span class="pkg">veccompare</span> package.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">example &lt;- veccompare::compare.vectors(veccompare::example.vectors.list)
+
+# To extract similar elements across list items:
+veccompare::extract.compared.vectors(
+  example,
+  elements_of_output = "elements_involved"
+)
+
+# To extract all comparisons that involve "vector_a":
+veccompare::extract.compared.vectors(
+  example,
+  vector_names = "vector_a"
+)
+
+# To find all comparisons that were about "vector_a" and "vector_c":
+veccompare::extract.compared.vectors(
+  example,
+  vector_names = c("vector_a", "vector_c"),
+  only_match_vector_names = TRUE
+)
+
+# To get all elements that did a two-way comparison:
+veccompare::extract.compared.vectors(
+  example,
+  degrees_of_comparison = 2
+)
+</code></pre>
+
+
+</div>

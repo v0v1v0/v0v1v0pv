@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>R2latvar</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> R-squared for Latent Variable Models </h2>
+
+<h3>Description</h3>
+
+<p>R-squared goodness of fit for latent variable models,
+such as cumulative link models.
+Some software such as Stata call the quantity
+the McKelvey–Zavoina R-squared, which was proposed
+in their 1975 paper for cumulative probit models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">R2latvar(object)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>A <code>cumulative</code> or
+<code>binomialff</code> fit using
+<code>vglm</code>.
+Only a few selected link functions are currently permitted:
+<code>logitlink</code>,
+<code>probitlink</code>,
+<code>clogloglink</code>.
+For models with more than one linear predictor,
+a parallelism assumption is needed also, i.e.,
+the constraint matrices must be a 1-column matrix of 1s
+(except for the intercept).
+The model is assumed to have an intercept term.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>Models such as the proportional odds model have
+a latent variable interpretation
+(see, e.g., Section 6.2.6 of Agresti (2018),
+Section 14.4.1.1 of Yee (2015),
+Section 5.2.2 of McCullagh and Nelder (1989)).
+It is possible to summarize the predictive power of
+the model by computing <code class="reqn">R^2</code> on the transformed
+scale, e.g., on a standard normal distribution for
+a <code>probitlink</code> link.
+For more details see Section 6.3.7 of Agresti (2018).
+</p>
+
+
+<h3>Value</h3>
+
+<p>The <code class="reqn">R^2</code> value.
+Approximately, that amount is the variability in the
+latent variable of the model explained by all the explanatory
+variables.
+Then taking the positive square-root gives an approximate
+multiple correlation <code class="reqn">R</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+
+
+
+
+<p>Agresti, A. (2018).
+<em>An Introduction to Categorical Data Analysis, 3rd ed.</em>,
+New York: John Wiley &amp; Sons.
+</p>
+<p>McKelvey, R. D. and W. Zavoina (1975).
+A statistical model for the analysis of
+ordinal level dependent variables.
+<em>The Journal of Mathematical Sociology</em>, <b>4</b>,
+103–120.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vglm</code>,
+<code>cumulative</code>,
+<code>propodds</code>,
+<code>logitlink</code>,
+<code>probitlink</code>,
+<code>clogloglink</code>,
+<code>summary.lm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pneumo &lt;- transform(pneumo, let = log(exposure.time))
+(fit &lt;- vglm(cbind(normal, mild, severe) ~ let, propodds, data = pneumo))
+R2latvar(fit)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,141 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>relate.levels</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Relates two clustering level results.
+</h2>
+
+<h3>Description</h3>
+
+<p>Analyzes how lower level clusters are assigned into upper level ones. The analysis is made for several number of clusters.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">relate.levels(lower, upper, defuzzify = FALSE, excludeFixed = FALSE, verbose=FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lower</code></td>
+<td>
+<p> A list of objects of type <code>vegclust</code> or <code>vegclass</code> that represent classifications at a finer level of resolution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>upper</code></td>
+<td>
+<p> A list of objects of type <code>vegclust</code> or <code>vegclass</code> that represent classifications at an broader level of resolution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>defuzzify</code></td>
+<td>
+<p> A logical flag used to indicate whether the result of calling <code>crossmemb</code> should be deffuzified.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>excludeFixed</code></td>
+<td>
+<p>A logical used to indicate whether fixed clusters should be excluded from the comparison of levels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p> A flag used to ask for extra screen output.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Additional parameters for function <code>defuzzify</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For each pair of <code>vegclust</code> (or <code>vegclass</code>) objects in <code>upper</code> and <code>lower</code>, the function calls function <code>crossmemb</code> and then, if asked, deffuzifies the resulting memberships (by calling function <code>defuzzify</code>) and several quantities are calculated (see 'value' section).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with several data frames (see below). In each of them, the rows are items of <code>upper</code> and columns are items of <code>lower</code>. The names of rows and columns are the number of clusters of each <code>vegclust</code> (or <code>vegclass</code>) object.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>nnoise</code></td>
+<td>
+<p>The number of low level clusters that are assigned to the Noise class (for <code>upper</code> objects using Noise clustering). </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxnoise</code></td>
+<td>
+<p>The maximum membership value of low level clusters to the Noise class (for <code>upper</code> objects using Noise clustering). </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minmaxall</code></td>
+<td>
+<p>The minimum value (across upper level clusters) of the maximum membership value observed among the lower level clusters. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minallsize</code></td>
+<td>
+<p>The minimum value (across upper level clusters) of the sum of membership values across lower level clusters. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>empty</code></td>
+<td>
+<p>The number of upper level clusters (mobile or fixed) that do not have any member among the lower level clusters. </p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, CREAF
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vegclust</code>, <code>vegclass</code>, <code>defuzzify</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Loads data  
+data(wetland)
+  
+## This equals the chord transformation 
+## (see also  \code{\link{decostand}} in package vegan)
+wetland.chord = as.data.frame(sweep(as.matrix(wetland), 1,
+                              sqrt(rowSums(as.matrix(wetland)^2)), "/"))
+
+## Create noise clustering from hierarchical clustering at different number of cluster
+wetland.hc = hclust(dist(wetland.chord),method="ward") 
+wetland.nc1 = hier.vegclust(wetland.chord, wetland.hc, cmin=2, cmax=6, m = 1.2, 
+                            dnoise=0.75, method="NC")
+wetland.nc2 = hier.vegclust(wetland.chord, wetland.hc, cmin=2, cmax=4, m = 1.2, 
+                            dnoise=0.85, method="NC")
+
+## Studies the assignment of levels
+relate.levels(wetland.nc1, wetland.nc2, method="cut")
+</code></pre>
+
+
+</div>

@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cluster_heatmaps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot heatmap with cluster results and dendrogram</h2>
+
+<h3>Description</h3>
+
+<p>Plot heatmap with cluster results and dendrogram
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cluster_heatmaps(
+  scaled_selected_data,
+  clusters,
+  k,
+  cluster_colors,
+  scaled_unselected_data = NULL,
+  annotation = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>scaled_selected_data</code></td>
+<td>
+<p>scaled matrix or data frame with variables used for clustering</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clusters</code></td>
+<td>
+<p>hierarchical cluster results produced by <code>fastcluster::hclust()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>targeted number of clusters</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cluster_colors</code></td>
+<td>
+<p>list of cluster colors to match with boxplots</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scaled_unselected_data</code></td>
+<td>
+<p>(optional) scaled matrix or data frame with variables not used for clustering</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>annotation</code></td>
+<td>
+<p>(optional) ComplexHeatmap::columnAnnotation object</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a ComplexHeatmap::Heatmap
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dmat &lt;- compute_dmat(iris, "euclidean", TRUE, c("Petal.Length", "Sepal.Length"))
+clusters &lt;- compute_clusters(dmat, "complete")
+species_annotation &lt;- create_annotations(iris, "Species")
+cluster_heatmaps(scale(iris[c("Petal.Length", "Sepal.Length")]),
+                 clusters,
+                 3,
+                 visxhclust::cluster_colors,
+                 annotation = species_annotation)
+</code></pre>
+
+
+</div>

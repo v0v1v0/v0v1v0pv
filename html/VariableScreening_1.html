@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>screenIID</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Feature Selection for Ultrahigh-Dimensional Datasets with Independent Subjects,</h2>
+
+<h3>Description</h3>
+
+<p>Implements one of three screening procedures: Sure Independent Ranking and
+Screening (SIRS), Distance Correlation Sure Independence Screening (DC-SIS), or
+MV Sure Independence Screening (MV-SIS).  In general they are extensions of the sure
+independence screening concept proposed by Fan and Lv (2008), but without a parametric
+assumption (e.g., linear or logistic) on the relationship between the predictor variables X
+and outcome Y.
+</p>
+<p>Screening methods each rank the predictors based on some measure
+of their estimated strength of relationship with Y.  The assumption is that only a few
+among the top-ranked variables are likely to be truly significant predictors.
+</p>
+<p>The original version of SIS involved ranking the predictors by their correlation
+with Y, implying a linear relationship.  The SIRS method is an extension proposed
+by Zhu, Li, Li, &amp; Zhu (2011), which involved ranking the predictors by their
+correlation with the rank-ordered Y instead, thereby not assuming a linear
+correlation, and potentially outperforming SIS.
+</p>
+<p>DC-SIS was then proposed by Li, Zhong and Zhu (2012) and its relationship measure is
+the distance correlation (DC) between a covariate and the outcome, a nonparametric
+generalization of the correlation coefficient (Szekely, Rizzo, &amp; Bakirov, 2007).
+The function uses the dcor function from the R package energy in order to
+calculate this correlation.  Simulations showed that DC-SIS could sometimes provide a further
+advantage over SIRS.
+</p>
+<p>The above measures were primarily intended for a numerical Y.  Cui, Li, and Zhong (2015)
+proposed MV-SIS, which was developed for categorical Y (including binary Y) as in
+discriminant analysis, and which is also robust to heavy-tailed predictor distributions.
+The measure used by MV-SIS for the association strength between a particular Xk and Y is a
+mean conditional variance measure called MV for short,  namely the expectation in X of
+the variance in Y of the conditional cumulative distribution function F(x|Y)=P(X&lt;=x|Y);
+note that like the correlation or distance correlation, this is zero if X and Y are
+independent because F(x) does not depend on Y in that case.  Cui, Li, and Zhong (2015)
+also point out that the MV-SIS can alternatively be used with categorical X variables
+and numerical Y, instead of numerical X and categorical Y.  This function supports that
+option as "MV-SIS-NY."
+</p>
+<p>Whichever option is chosen, the function returns the ranking of the predictors according
+to the appropriate association measure.
+</p>
+<p>The function code is adapted from the relevant authors' code.  Special thanks are due to
+Wei Zhong for providing some of the code upon which this function is based.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">screenIID(X, Y, method = "DC-SIS")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Matrix of predictors to be screened. There should be one row for each
+observation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Vector of responses.  It should have the same length as the number of
+rows of X.  The responses should be numerical if SIRS or DC-SIS is used.
+The responses should be integers representing response categories if MV-SIS is used.
+Binary responses can be used for any method.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>Screening method.  The options are "SIRS", "DC-SIS", "MV-SIS" and "MV-SIS-NY", as
+described above.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with following components:
+</p>
+<p>measurement A vector of length equal to the number of columns in the input matrix X.
+It contains estimated strength of relationship with Y
+rank The rank of the error measures.  This will have length equal to the number
+of columns in the input matrix X, and will consist of a permutation of the integers
+1 through that length.  A rank of 1 indicates the feature which appears to have
+the best predictive performance, 2 represents the second best and so on.
+</p>
+
+
+<h3>References</h3>
+
+<p>Cui, H., Li, R., &amp; Zhong, W. (2015). Model-free feature screening for
+ultrahigh dimensional discriminant analysis. Journal of the American
+Statistical Association, 110: 630-641. &lt;DOI:10.1080/01621459.2014.920256&gt;
+</p>
+<p>Fan, J., &amp; Lv, J. (2008). Sure independence screening for ultrahigh
+dimensional feature space. Journal of the Royal Statistical Society, B,
+70: 849-911. &lt;DOI:10.1111/j.1467-9868.2008.00674.x&gt;
+</p>
+<p>Li, R., zhong, W., &amp; Zhu, L. (2012). Feature screening via distance
+correlation learning. Journal of the American Statistical Association,
+107: 1129-1139. &lt;DOI:10.1080/01621459.2012.695654&gt;
+</p>
+<p>Szekely, G. J., Rizzo, M. L., &amp; Bakirov, N. K. (2007). Measuring and
+Testing Dependence by Correlation of Distances. Annals of Statistics,
+35, 2769-2794. &lt;DOI: 10.1214/009053607000000505&gt;
+</p>
+<p>Zhu, L.-P., Li, L., Li, R., &amp; Zhu, L.-X. (2011) Model-free feature
+screening for ultrahigh-dimensional data. Journal of the American
+Statistical Association, 106: 1464-1475. &lt;DOI:10.1198/jasa.2011.tm10563&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(12345678)
+results &lt;- simulateDCSIS(n=100,p=500)
+rank&lt;- screenIID(X = results$X, Y = results$Y, method="DC-SIS")
+</code></pre>
+
+
+</div>

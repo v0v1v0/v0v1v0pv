@@ -1,0 +1,125 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lognormal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Lognormal Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the (univariate)
+lognormal distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lognormal(lmeanlog = "identitylink", lsdlog = "loglink", zero = "sdlog")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>lmeanlog, lsdlog</code></td>
+<td>
+
+<p>Parameter link functions applied to the mean and (positive)
+<code class="reqn">\sigma</code> (standard deviation) parameter.
+Both of these are on the log scale.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr></table>
+<table><tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Specifies which
+linear/additive predictor is modelled as intercept-only.
+For <code>lognormal()</code>,
+the values can be from the set {1,2} which correspond to
+<code>mu</code>, <code>sigma</code>, respectively.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+
+
+
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>A random variable <code class="reqn">Y</code> has a 2-parameter lognormal distribution
+if <code class="reqn">\log(Y)</code>
+is distributed <code class="reqn">N(\mu, \sigma^2)</code>.
+The expected value of <code class="reqn">Y</code>, which is
+</p>
+<p style="text-align: center;"><code class="reqn">E(Y) = \exp(\mu + 0.5 \sigma^2)</code>
+</p>
+
+<p>and not <code class="reqn">\mu</code>, make up the fitted values.
+The variance of <code class="reqn">Y</code> is
+</p>
+<p style="text-align: center;"><code class="reqn">Var(Y) = [\exp(\sigma^2) -1] \exp(2\mu + \sigma^2).</code>
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Kleiber, C. and Kotz, S. (2003).
+<em>Statistical Size Distributions in Economics and
+Actuarial Sciences</em>,
+Hoboken, NJ, USA: Wiley-Interscience.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Lognormal</code>,
+<code>uninormal</code>,
+<code>CommonVGAMffArguments</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ldata2 &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+ldata2 &lt;- transform(ldata2, y1 = rlnorm(nn, 1 + 2 * x2, sd = exp(-1)),
+                            y2 = rlnorm(nn, 1, sd = exp(-1 + x2)))
+fit1 &lt;- vglm(y1 ~ x2, lognormal(zero = 2), data = ldata2, trace = TRUE)
+fit2 &lt;- vglm(y2 ~ x2, lognormal(zero = 1), data = ldata2, trace = TRUE)
+coef(fit1, matrix = TRUE)
+coef(fit2, matrix = TRUE)
+</code></pre>
+
+
+</div>

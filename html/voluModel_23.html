@@ -1,0 +1,106 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>xyzSample</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Sampling from a <code>SpatRaster</code> vector using 3D coordinates</h2>
+
+<h3>Description</h3>
+
+<p>Gets values at x,y,z occurrences from a
+given 3D environmental variable brick
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">xyzSample(occs, envBrick, verbose = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>occs</code></td>
+<td>
+<p>A <code>data.frame</code> with at least three columns
+named "longitude", "latitude", and "depth", or that
+can be coerced into this format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>envBrick</code></td>
+<td>
+<p>A <code>SpatRaster</code> vector object with
+one environmental variable. Each layer represents
+a depth slice. See Details for more information.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p><code>logical</code>. Switching to <code>FALSE</code> mutes message
+describing which columns in <code>occs1</code> and <code>occs2</code> are interpreted
+as x, y, and z coordinates.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>SpatRaster</code> vector object should
+have numeric names that correspond with the beginning
+depth of a particular depth slice. For example, one
+might have three layers, one from 0 to 10m, one from
+10 to 30m, and one from 30 to 100m. You would name the
+layers in this brick <code style="white-space: pre;">⁠names(envBrick) &lt;- c(0, 10, 30⁠</code>.
+<code>xyzSample</code> identifies the layer name that is closest
+to the depth layer value at a particular X, Y
+coordinate, and samples the environmental value at that
+3D coordinate.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Vector of environmental values equal in length
+to number of rows of input <code>occs</code> <code>data.frame</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(terra)
+
+# Create test raster
+r1 &lt;- rast(ncol=10, nrow=10)
+values(r1) &lt;- 1:100
+r2 &lt;- rast(ncol=10, nrow=10)
+values(r2) &lt;- c(rep(20, times = 50), rep(60, times = 50))
+r3 &lt;- rast(ncol=10, nrow=10)
+values(r3) &lt;- 8
+envBrick &lt;- c(r1, r2, r3)
+names(envBrick) &lt;- c(0, 10, 30)
+
+# Create test occurrences
+set.seed(0)
+longitude &lt;- sample(ext(envBrick)[1]:ext(envBrick)[2],
+                    size = 10, replace = FALSE)
+set.seed(0)
+latitude &lt;- sample(ext(envBrick)[3]:ext(envBrick)[4],
+                   size = 10, replace = FALSE)
+set.seed(0)
+depth &lt;- sample(0:35, size = 10, replace = TRUE)
+occurrences &lt;- as.data.frame(cbind(longitude,latitude,depth))
+
+# Test function
+occSample3d &lt;- xyzSample(occurrences, envBrick)
+
+# How to use
+occurrences$envtValue &lt;- occSample3d
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,168 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mix2exp</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Mixture of Two Exponential Distributions </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the three parameters of a mixture of two exponential
+distributions by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mix2exp(lphi = "logitlink", llambda = "loglink", iphi = 0.5,
+    il1 = NULL, il2 = NULL, qmu = c(0.8, 0.2), nsimEIM = 100,
+    zero = "phi")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lphi, llambda</code></td>
+<td>
+
+<p>Link functions for the parameters <code class="reqn">\phi</code>
+and <code class="reqn">\lambda</code>. The latter is the rate parameter
+and note that the mean of an ordinary exponential distribution is
+<code class="reqn">1 / \lambda</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iphi, il1, il2</code></td>
+<td>
+
+<p>Initial value for <code class="reqn">\phi</code>, and
+optional initial value for <code class="reqn">\lambda_1</code> and
+<code class="reqn">\lambda_2</code>.
+The last two have values that must be positive.
+The default is to compute initial values internally using
+the argument <code>qmu</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qmu</code></td>
+<td>
+
+<p>Vector with two values giving the probabilities relating to the
+sample quantiles for obtaining initial values for
+<code class="reqn">\lambda_1</code> and <code class="reqn">\lambda_2</code>.  The two
+values are fed in as the <code>probs</code> argument into
+<code>quantile</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability density function can be loosely written as
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \phi\,Exponential(\lambda_1) +
+              (1-\phi)\,Exponential(\lambda_2)</code>
+</p>
+
+<p>where <code class="reqn">\phi</code> is the probability an observation belongs
+to the first group, and <code class="reqn">y&gt;0</code>.
+The parameter <code class="reqn">\phi</code> satisfies
+<code class="reqn">0 &lt; \phi &lt; 1</code>.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">\phi / \lambda_1 + (1-\phi) / \lambda_2</code>
+and this is returned as the fitted values.
+By default, the three linear/additive predictors are
+<code class="reqn">(logit(\phi), \log(\lambda_1), \log(\lambda_2))^T</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>This <span class="pkg">VGAM</span> family function requires care for a successful
+application.
+In particular, good initial values are required because
+of the presence of local solutions. Therefore running
+this function with several different combinations of
+arguments such as <code>iphi</code>, <code>il1</code>, <code>il2</code>,
+<code>qmu</code> is highly recommended. Graphical methods such
+as <code>hist</code> can be used as an aid.
+</p>
+<p>This <span class="pkg">VGAM</span> family function is experimental and
+should be used with care.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Fitting this model successfully to data can be
+difficult due to local solutions, uniqueness problems
+and ill-conditioned data. It pays to fit the model
+several times with different initial values and check
+that the best fit looks reasonable. Plotting the
+results is recommended. This function works better as
+<code class="reqn">\lambda_1</code> and <code class="reqn">\lambda_2</code>
+become more different. The default control argument
+<code>trace = TRUE</code> is to encourage monitoring convergence.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>rexp</code>,
+<code>exponential</code>,
+<code>mix2poisson</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  lambda1 &lt;- exp(1); lambda2 &lt;- exp(3)
+(phi &lt;- logitlink(-1, inverse = TRUE))
+mdata &lt;- data.frame(y1 = rexp(nn &lt;- 1000, lambda1))
+mdata &lt;- transform(mdata, y2 = rexp(nn, lambda2))
+mdata &lt;- transform(mdata, Y  = ifelse(runif(nn) &lt; phi, y1, y2))
+fit &lt;- vglm(Y ~ 1, mix2exp, data = mdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+
+# Compare the results with the truth
+round(rbind('Estimated' = Coef(fit),
+            'Truth' = c(phi, lambda1, lambda2)), digits = 2)
+
+with(mdata, hist(Y, prob = TRUE, main = "Orange=estimate, blue=truth"))
+abline(v = 1 / Coef(fit)[c(2, 3)],  lty = 2, col = "orange", lwd = 2)
+abline(v = 1 / c(lambda1, lambda2), lty = 2, col = "blue", lwd = 2)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

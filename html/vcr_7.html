@@ -1,0 +1,117 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>check_cassette_names</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check cassette names</h2>
+
+<h3>Description</h3>
+
+<p>Check cassette names
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">check_cassette_names(
+  pattern = "test-",
+  behavior = "stop",
+  allowed_duplicates = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>pattern</code></td>
+<td>
+<p>(character) regex pattern for file paths to check.
+this is done inside of <code style="white-space: pre;">⁠tests/testthat/⁠</code>. default: "test-"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>behavior</code></td>
+<td>
+<p>(character) "stop" (default) or "warning". if "warning",
+we use <code>immediate.=TRUE</code> so the warning happens at the top of your
+tests rather than you seeing it after tests have run (as would happen
+by default)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allowed_duplicates</code></td>
+<td>
+<p>(character) cassette names that can be duplicated</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Cassette names:
+</p>
+
+<ul>
+<li>
+<p> Should be meaningful so that it is obvious to you what test/function
+they relate to. Meaningful names are important so that you can quickly
+determine to what test file or test block a cassette belongs. Note
+that vcr cannot check that your cassette names are meaningful.
+</p>
+</li>
+<li>
+<p> Should not be duplicated. Duplicated cassette names would lead to a
+test using the wrong cassette.
+</p>
+</li>
+<li>
+<p> Should not have spaces. Spaces can lead to problems in using file
+paths.
+</p>
+</li>
+<li>
+<p> Should not include a file extension. vcr handles file extensions for
+the user.
+</p>
+</li>
+<li>
+<p> Should not have illegal characters that can lead to problems in using
+file paths: <code>/</code>, <code style="white-space: pre;">⁠?⁠</code>, <code>&lt;</code>, <code>&gt;</code>, <code style="white-space: pre;">⁠\⁠</code>, <code>:</code>, <code>*</code>, <code>|</code>, and <code style="white-space: pre;">⁠\"⁠</code>
+</p>
+</li>
+<li>
+<p> Should not have control characters, e.g., <code style="white-space: pre;">⁠\n⁠</code>
+</p>
+</li>
+<li>
+<p> Should not have just dots, e.g., <code>.</code> or <code>..</code>
+</p>
+</li>
+<li>
+<p> Should not have Windows reserved words, e.g., <code>com1</code>
+</p>
+</li>
+<li>
+<p> Should not have trailing dots
+</p>
+</li>
+<li>
+<p> Should not be longer than 255 characters
+</p>
+</li>
+</ul>
+<p><code>vcr::check_cassette_names()</code> is meant to be run during your tests, from
+a <a href="https://testthat.r-lib.org/reference/test_dir.html#special-files"><code style="white-space: pre;">⁠helper-*.R⁠</code> file</a>
+inside the <code>tests/testthat</code> directory. It only checks that cassette
+names are not duplicated. Note that if you do need to have duplicated
+cassette names you can do so by using the <code>allowed_duplicates</code> parameter
+in <code>check_cassette_names()</code>. A helper function <code>check_cassette_names()</code>
+runs inside <code>insert_cassette()</code> that checks that
+cassettes do not have: spaces, file extensions, unaccepted characters
+(slashes).
+</p>
+
+
+</div>

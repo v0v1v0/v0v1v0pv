@@ -1,0 +1,78 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>build.data.frame</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Build a data frame to display with vtree</h2>
+
+<h3>Description</h3>
+
+<p>Build a data frame by specifying variable names and patterns of values together with frequencies.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">build.data.frame(varnames, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>varnames</code></td>
+<td>
+<p>A vector of variable names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Lists of patterns and the frequency of each pattern.
+When a pattern is shorter than the list of variable names
+(for example, 3 variable names but only 2 values in the pattern),
+<code>NA</code>'s are substituted for the missing variable names.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Suppose <code>varnames=c("animal","size","hair")</code>,
+then one pattern would be <code>list("dog","small","short",4)</code>,
+which specifies 4 dogs that are small and short-haired.
+Another pattern could be <code>list("cat","large","long",101)</code>,
+specifying 101 large cats.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Nick Barrowman &lt;nbarrowman@cheo.on.ca&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Number of countries in Africa, whether population is over 30 million or not,
+# and whether landlocked or not.
+# https://www.worldometers.info/geography/how-many-countries-in-africa/
+#
+df &lt;- build.data.frame(
+ c("continent","population","landlocked"),
+ list("Africa","Over 30 million","landlocked",2),
+ list("Africa","Over 30 million","not landlocked",12),
+ list("Africa","Under 30 million","landlocked",14),
+ list("Africa","Under 30 million","not landlocked",26))
+
+</code></pre>
+
+
+</div>

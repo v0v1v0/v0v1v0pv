@@ -1,0 +1,165 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tv.veg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Tabulates vegetation tables from Turboveg database</h2>
+
+<h3>Description</h3>
+
+<p>Tabulates vegetation tables from Turboveg resp. VegetWeb database, including taxonomic emendation and layer combination. Using various default parameters for the included functions.
+It is a wrapper for *tv.obs*, *taxval*, *tv.coverperc* and creating a vegetation matrix
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tv.veg(db, taxval=TRUE,tv_home,convcode=TRUE,
+lc = c("layer","mean","max","sum","first"),
+pseudo, values='COVER_PERC', spcnames=c('shortletters','ScientificNames','Numbers'),
+dec = 0, cover.transform = c('no', 'pa', 'sqrt'), obs, site, refl, RelScale, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>db</code></td>
+<td>
+<p>Name of your Turboveg database. Directory name containing tvabund.dbf, tvhabita.dbf and tvwin.set. Please specify pathnames below (if you sorted your databases in subfolders) but not above Turbowin/Data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>taxval</code></td>
+<td>
+<p>Should taxonomic valuation (see <code>taxval</code>) be performed?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tv_home</code></td>
+<td>
+<p>Turbowin installation path.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>convcode</code></td>
+<td>
+<p>Should cover code be converted to percentage values?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lc</code></td>
+<td>
+<p>Layer combination type. Possible values: layer (default), sum, mean or max, see details</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pseudo</code></td>
+<td>
+<p>List used for layer combinations, see details</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>values</code></td>
+<td>
+<p>Name of the variable which should be used for the vegetations matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spcnames</code></td>
+<td>
+<p>Should species numbers be replaced by shortletters or ScientificNames? Layer information is appended with dot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dec</code></td>
+<td>
+<p>Number of decimals for cover values in the resulting vegetation matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cover.transform</code></td>
+<td>
+<p>If you want to transform the abundancce values within your samples
+you can choose 'pa' for presence-absence or 'sqrt' for the <code>dec</code> rounded square root.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>Observations, optional</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>site</code></td>
+<td>
+<p>plot header data, see <code>tv.site</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>refl</code></td>
+<td>
+<p>Taxonomic reference list, optional</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RelScale</code></td>
+<td>
+<p>Vector with Cover Scale code per Releve.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments for included functions</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>layer</code> means, the different layers are combined assuming there independence (a species occurring in two layers with a cover of 50% will result in a overall cover of 75%. <code>sum</code> will sum up cover values of all layers With option <code>pseudo</code> you can decide, which layers should be combined. Give a list with a combination data.frame and second the name of the column for combination. The default is <code>pseudo = list(lc.1, c('LAYER'))</code>, where lc.1 is a data.frame <code>data(lc.1)</code>, which will combine all tree layers, all shrub layers and all layers below shrubs. An alternative would be data(lc.all), combining all layers. With option pseudo=NULL there will be no layer aggregation.
+</p>
+
+
+<h3>Value</h3>
+
+<p>an object of class matrix with (combined) cover values.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Florian Jansen <a href="mailto:florian.jansen@uni-rostock.de">florian.jansen@uni-rostock.de</a>
+</p>
+
+
+<h3>See Also</h3>
+
+
+<p><code>taxval</code>, <code>tv.coverperc</code>, <code>tv.obs</code>, <code>tv.site</code>
+
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  ## Not run: 
+    vignette("vegdata")
+    #' If you have Turboveg installed on your computer try for a beginning
+    #' tv.veg('databasename', tax=FALSE).
+    args(tv.veg)
+    help('taxval')
+
+    veg &lt;- tv.veg('taxatest')
+    names(veg)
+    tv.veg('taxatest', uncertain=list('DET_CERT', data.frame(0:2,c('pres','agg','agg'))),
+           pseudo=list(lc.0,'LAYER'), genus = 'delete')
+  
+## End(Not run)
+
+</code></pre>
+
+
+</div>

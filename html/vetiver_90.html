@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_plot_metrics</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot model metrics over time for monitoring</h2>
+
+<h3>Description</h3>
+
+<p>These three functions can be used for model monitoring (such as in a
+monitoring dashboard):
+</p>
+
+<ul>
+<li> <p><code>vetiver_compute_metrics()</code> computes metrics (such as accuracy for a
+classification model or RMSE for a regression model) at a chosen time
+aggregation <code>period</code>
+</p>
+</li>
+<li> <p><code>vetiver_pin_metrics()</code> updates an existing pin storing model metrics
+over time
+</p>
+</li>
+<li> <p><code>vetiver_plot_metrics()</code> creates a plot of metrics over time
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetiver_plot_metrics(
+  df_metrics,
+  .index = .index,
+  .estimate = .estimate,
+  .metric = .metric,
+  .n = .n
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df_metrics</code></td>
+<td>
+<p>A tidy dataframe of metrics over time, such as created by
+<code>vetiver_compute_metrics()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.index</code></td>
+<td>
+<p>The variable in <code>df_metrics</code> containing the aggregated dates
+or date-times (from <code>time_var</code> in <code>data</code>). Defaults to <code>.index</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.estimate</code></td>
+<td>
+<p>The variable in <code>df_metrics</code> containing the metric estimate.
+Defaults to <code>.estimate</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.metric</code></td>
+<td>
+<p>The variable in <code>df_metrics</code> containing the metric type.
+Defaults to <code>.metric</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>.n</code></td>
+<td>
+<p>The variable in <code>df_metrics</code> containing the number of observations
+used for estimating the metric.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>ggplot2</code> object.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vetiver_compute_metrics()</code>, <code>vetiver_pin_metrics()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(dplyr)
+library(parsnip)
+data(Chicago, package = "modeldata")
+Chicago &lt;- Chicago %&gt;% select(ridership, date, all_of(stations))
+training_data &lt;- Chicago %&gt;% filter(date &lt; "2009-01-01")
+testing_data &lt;- Chicago %&gt;% filter(date &gt;= "2009-01-01", date &lt; "2011-01-01")
+monitoring &lt;- Chicago %&gt;% filter(date &gt;= "2011-01-01", date &lt; "2012-12-31")
+lm_fit &lt;- linear_reg() %&gt;% fit(ridership ~ ., data = training_data)
+
+library(pins)
+b &lt;- board_temp()
+
+## before starting monitoring, initiate the metrics and pin
+## (for example, with the testing data):
+original_metrics &lt;-
+    augment(lm_fit, new_data = testing_data) %&gt;%
+    vetiver_compute_metrics(date, "week", ridership, .pred, every = 4L)
+pin_write(b, original_metrics, "lm_fit_metrics", type = "arrow")
+
+## to continue monitoring with new data, compute metrics and update pin:
+new_metrics &lt;-
+    augment(lm_fit, new_data = monitoring) %&gt;%
+    vetiver_compute_metrics(date, "week", ridership, .pred, every = 4L)
+vetiver_pin_metrics(b, new_metrics, "lm_fit_metrics")
+
+library(ggplot2)
+vetiver_plot_metrics(new_metrics) +
+    scale_size(range = c(2, 4))
+
+</code></pre>
+
+
+</div>

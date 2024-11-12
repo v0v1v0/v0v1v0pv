@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>is_implied_by</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Find which rule(s) make rule_name redundant</h2>
+
+<h3>Description</h3>
+
+<p>Find out which rules are causing rule_name(s) to be redundant.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">is_implied_by(x, rule_name, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>validator</code> object with rule</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rule_name</code></td>
+<td>
+<p><code>character</code> with the names of the rules to be checked</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>not used</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>character</code> with the names of the rule that cause the implication.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other redundancy: 
+<code>detect_fixed_variables()</code>,
+<code>detect_redundancy()</code>,
+<code>remove_redundancy()</code>,
+<code>simplify_fixed_variables()</code>,
+<code>simplify_rules()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rules &lt;- validator( rule1 = x &gt; 1
+                  , rule2 = x &gt; 2
+                  )
+
+# rule1 is superfluous
+remove_redundancy(rules)
+
+# rule 1 is implied by rule 2
+is_implied_by(rules, "rule1")
+
+rules &lt;- validator( rule1 = x &gt; 2
+                  , rule2 = x &gt; 2
+)
+
+# standout: rule1 and rule2, oldest rules wins
+remove_redundancy(rules)
+
+# Note that detection signifies both rules!
+detect_redundancy(rules)
+
+
+</code></pre>
+
+
+</div>

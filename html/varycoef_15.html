@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>init_bounds_optim</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Setting of Optimization Bounds and Initial Values</h2>
+
+<h3>Description</h3>
+
+<p>Sets bounds and initial values for <code>optim</code> by
+extracting potentially given values from <code>SVC_mle_control</code> and
+checking them, or calculating them from given data. See Details.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">init_bounds_optim(control, p, q, id_obj, med_dist, y_var, OLS_mu)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>(<code>SVC_mle_control</code> output, i.e. <code>list</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>(<code>numeric(1)</code>) <br> Number of fixed effects</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>(<code>numeric(1)</code>) <br> Number of SVCs</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id_obj</code></td>
+<td>
+<p>(<code>numeric(2*q+1+q)</code>) <br> Index vector to identify the
+arguments of objective function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>med_dist</code></td>
+<td>
+<p>(<code>numeric(1)</code>) <br> Median distance between observations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_var</code></td>
+<td>
+<p>(<code>numeric(1)</code>) <br> Variance of response <code>y</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>OLS_mu</code></td>
+<td>
+<p>(<code>numeric(p)</code>) <br> Coefficient estimates of ordinary
+least squares (OLS).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If values are not provided, then they are set in the following way.
+Let <code class="reqn">d</code> be the median distance <code>med_dist</code>, let <code class="reqn">s^2_y</code> be
+the variance of the response <code>y_var</code>, and let <code class="reqn">b_j</code> be the OLS
+coefficients of the linear model. The computed values are given in the
+table below.</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+   Parameter </td>
+<td style="text-align: right;"> Lower bound </td>
+<td style="text-align: right;"> Initial Value </td>
+<td style="text-align: right;"> Upper Bound </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Range </td>
+<td style="text-align: right;"> <code class="reqn">d/1000</code> </td>
+<td style="text-align: right;"> <code class="reqn">d/4</code> </td>
+<td style="text-align: right;"> <code class="reqn">10 d</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Variance </td>
+<td style="text-align: right;"> <code class="reqn">0</code> </td>
+<td style="text-align: right;"> <code class="reqn">s^2_y/(q+1)</code> </td>
+<td style="text-align: right;"> <code class="reqn">10s^2_y</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Nugget </td>
+<td style="text-align: right;"> <code class="reqn">10^{-6}</code> </td>
+<td style="text-align: right;"> <code class="reqn">s^2_y/(q+1)</code> </td>
+<td style="text-align: right;"> <code class="reqn">10s^2_y</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Mean <code class="reqn">j</code> </td>
+<td style="text-align: right;"> <code>-Inf</code> </td>
+<td style="text-align: right;"> <code class="reqn">b_j</code> </td>
+<td style="text-align: right;"> <code>Inf</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>list</code> with three entries: <code>lower</code>, <code>init</code>,
+and <code>upper</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jakob Dambon
+</p>
+
+
+</div>

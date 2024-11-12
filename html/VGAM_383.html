@@ -1,0 +1,474 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dgaitdplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Plotting the GAITD Combo Density
+</h2>
+
+<h3>Description</h3>
+
+<p>Plots a 1- or 2-parameter GAITD combo
+probability mass function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dgaitdplot(theta.p, fam = "pois", a.mix = NULL, i.mix = NULL,
+    d.mix = NULL, a.mlm = NULL, i.mlm = NULL,
+    d.mlm = NULL, truncate = NULL, max.support = Inf,
+    pobs.mix = 0, pobs.mlm = 0,
+    pstr.mix = 0, pstr.mlm = 0,
+    pdip.mix = 0, pdip.mlm = 0, byrow.aid = FALSE,
+    theta.a = theta.p, theta.i = theta.p, theta.d = theta.p,
+    deflation = FALSE, plot.it = TRUE, new.plot = TRUE,
+    offset.x = ifelse(new.plot, 0, 0.25), type.plot = "h",
+    xlim = c(0, min(100, max.support + 2)),
+    ylim = NULL, xlab = "", ylab = "Probability", main = "",
+    cex.main = 1.2, posn.main = NULL,
+    all.col = NULL, all.lty = NULL, all.lwd = NULL, 
+    lty.p = "solid", lty.a.mix = "longdash", lty.a.mlm = "longdash",
+    lty.i.mix = "dashed", lty.i.mlm = "dashed",
+    lty.d.mix = "solid", lty.d.mlm = "solid", lty.d.dip = "dashed",
+    col.p = "pink2",
+    col.a.mix = artichoke.col, col.a.mlm = asparagus.col,
+    col.i.mix = indigo.col, col.i.mlm = iris.col,
+    col.d.mix = deer.col, col.d.mlm = dirt.col, col.d.dip = desire.col,
+    col.t = turquoise.col, cex.p = 1, lwd.p = NULL, lwd.a = NULL,
+    lwd.i = NULL, lwd.d = NULL, iontop = TRUE, dontop = TRUE,
+    las = 0, lend = "round", axes.x = TRUE, axes.y = TRUE,
+    Plot.trunc = TRUE, cex.t = 1, pch.t = 1,
+    baseparams.argnames = NULL, nparams = 1, flip.args = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta.p</code></td>
+<td>
+
+<p>Numeric, usually scalar but may have length 2.
+This matches with, e.g., <code>lambda.p</code> for
+<code>Gaitdpois</code>.
+A length 2 example is <code>c(size.p, munb.p)</code> for
+<code>Gaitdnbinom</code>,
+in which case <code>fam = "nbinom"</code>.
+Another length 2 example is
+<code>c(mean.p, dispind.p)</code> for <code>Gaitgenpois1</code>,
+in which case <code>fam = "genpois1"</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fam</code></td>
+<td>
+
+<p>Character, <code>paste0("dgait", fam)</code>
+should be a <code>d</code>-type function returning
+the PMF.  The default is for the GAITD
+Poisson combo.
+</p>
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a.mix, i.mix, a.mlm, i.mlm</code></td>
+<td>
+
+<p>See <code>Gaitdpois</code> and <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>d.mix, d.mlm</code></td>
+<td>
+
+<p>See <code>Gaitdpois</code> and <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>truncate, max.support</code></td>
+<td>
+
+<p>See <code>Gaitdpois</code> and <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pobs.mix, pobs.mlm, byrow.aid</code></td>
+<td>
+
+<p>See <code>Gaitdpois</code> and <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pstr.mix, pstr.mlm, pdip.mix, pdip.mlm</code></td>
+<td>
+
+<p>See <code>Gaitdpois</code> and <code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>theta.a, theta.i, theta.d</code></td>
+<td>
+
+<p>Similar to <code>theta.p</code>, and they should
+have the same length too.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>deflation</code></td>
+<td>
+
+<p>Logical.
+Plot the deflation (dip) probabilities?
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.it</code></td>
+<td>
+
+<p>Logical. Plot the PMF?
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>new.plot, offset.x</code></td>
+<td>
+
+<p>If <code>new.plot</code> then
+<code>plot</code> is called.
+If multiple plots are desired then use
+<code>offset.x</code> to shift the lines.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim, ylim, xlab, ylab</code></td>
+<td>
+
+<p>See <code>par</code> and
+<code>plot.default</code>.
+Argument <code>xlim</code> should be integer-valued.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main, cex.main, posn.main</code></td>
+<td>
+
+<p>Character, size and position of <code>main</code> for the title.
+See <code>title</code>,
+<code>par</code> and
+<code>plot.default</code>.
+The position is used if it is a 2-vector.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.col, all.lty, all.lwd</code></td>
+<td>
+
+<p>These arguments allow all the colours,
+line types and line widths arguments to be
+assigned to these values, i.e., so that they
+are the same for all values of the support.
+For example, if <code>all.lwd = 2</code> then this
+sets <code>lwd.p</code>, <code>lwd.a</code>, <code>lwd.i</code>
+and <code>lwd.d</code> all equal to 2.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lty.p, lty.a.mix, lty.a.mlm, lty.i.mix, lty.i.mlm</code></td>
+<td>
+
+<p>Line type for parent, altered and inflated.
+See <code>par</code> and
+<code>plot.default</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.p, col.a.mix, col.a.mlm, col.i.mix, col.i.mlm</code></td>
+<td>
+
+<p>Line colour for parent (nonspecial), altered, inflated,
+truncated and deflated values.
+See <code>par</code> and
+<code>plot.default</code>.
+Roughly, by default and currently,
+the parent is pink-like,
+the altered are greenish,
+the inflated are purplish/violet,
+the truncated are light blue,
+and the deflated are brownish with the dip
+probabilities being reddish.
+The proper colour names are similar to
+being acrostic.  For each operator, the
+colours of <code>"mix"</code> vs <code>"mlm"</code> are
+similar but different—this is intentional.
+Warning: the default colours might change,
+depending on style!
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lty.d.mix, lty.d.mlm, lty.d.dip</code></td>
+<td>
+
+<p>Similar to above.
+Used when <code>deflation = TRUE</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.d.mix, col.d.mlm, col.d.dip</code></td>
+<td>
+
+<p>Similar to above.
+Used when <code>deflation = TRUE</code>.
+The website <a href="https://www.spycolor.com">https://www.spycolor.com</a> was used to
+choose some of the default colours;
+the first two are also called <code>"dirt"</code>
+and <code>"deer"</code> respectively, which are
+both brownish.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.t</code></td>
+<td>
+
+<p>Point colour for truncated values, the default is
+<code>"tan"</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.plot, cex.p</code></td>
+<td>
+
+<p>The former matches 'type' argument in
+<code>plot.default</code>.
+The latter is the size of the point if
+<code>type.plot = "p"</code> or <code>type.plot = "b"</code>,
+etc.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwd.p, lwd.a, lwd.i, lwd.d</code></td>
+<td>
+
+<p>Line width for parent, altered and inflated.
+See <code>par</code> and
+<code>plot.default</code>.
+By default <code>par()\$lwd</code> is used for all of them.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>las, lend</code></td>
+<td>
+
+<p>See <code>par</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iontop, dontop</code></td>
+<td>
+
+<p>Logicals.
+Draw the inflated and deflated bars on top?
+The default is to draw the spikes on top, but if
+<code>FALSE</code> then the spikes are drawn
+from the bottom—this makes it easier
+to see their distribution.  Likewise, if
+<code>deflation = TRUE</code> then <code>dontop</code>
+is used to position the deflation (dip)
+probabilities.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>axes.x, axes.y</code></td>
+<td>
+
+<p>Logical. Plot axes?
+See <code>par</code> and
+<code>plot.default</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Plot.trunc, cex.t, pch.t</code></td>
+<td>
+
+<p>Logical. Plot the truncated values?
+If so, then specify the size and plotting character.
+See <code>par</code> and
+<code>plot.default</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>baseparams.argnames</code></td>
+<td>
+
+<p>Character string specifying the argument name for the generic
+parameter <code>theta</code>, e.g.,
+<code>"lambda"</code> for <code>gaitdpoisson</code>, 
+By appending <code>.p</code>, there is an argument called
+<code>lambda.p</code> in <code>dgaitdpois</code>.
+Another example is for <code>gaitdlog</code>:
+<code>"shape"</code> appended with <code>.p</code> means that
+<code>dgaitdlog</code> should have an argument
+called <code>shape.p</code>.
+This argument is optional and increases the reliability of the
+<code>do.call</code> call internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nparams, flip.args</code></td>
+<td>
+
+<p>Not for use by the user. It is used
+internally to handle the NBD.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Currently unused but there is provision for
+passing graphical arguments in in the future;
+see <code>par</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is meant to be a crude function to
+plot the PMF of the GAITD combo model.
+Some flexibility is offered via many
+graphical arguments, but there are still many
+improvements that could be done.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list is returned invisibly. The components
+are:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>The integer values between the values
+of <code>xlim</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pmf.z</code></td>
+<td>
+<p>The value of the PMF, by
+calling the <code>d</code>-type function with all
+the arguments fed in.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sc.parent</code></td>
+<td>
+
+<p>The same level as the scaled parent
+distribution.  Thus for inflated values,
+the value where the spikes begin.  And for
+deflated values, the value at the top of
+the dips.  This is a convenient way to obtain
+them as it is quite cumbersome to compute
+them manually.  For any nonspecial value,
+such as non-inflated and non-deflated values,
+they are equal to <code>pmf.z</code>.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>unsc.parent</code></td>
+<td>
+
+<p>Unscaled parent distribution.
+If there is no alteration, inflation,
+deflation and truncation then this is
+the basic PMF stipulated by the parent
+distribution only.  Usually this is FYI only.
+</p>
+
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>This utility function may change a lot in the future.
+Because this function is called by a <span class="pkg">shiny</span> app,
+if any parameter values lie outside the 
+parameter space then <code>stop</code>
+will be called.
+For example, too much deflation results in
+<code>NaN</code> values returned by
+<code>dgaitdnbinom</code>.
+</p>
+
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>plotdgaitd</code>,
+<code>spikeplot</code>,
+<code>meangaitd</code>,
+<code>Gaitdpois</code>,
+<code>gaitdpoisson</code>,
+<code>Gaitdnbinom</code>,
+<code>multilogitlink</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:   i.mix &lt;- seq(0, 25, by = 5)
+mean.p &lt;- 10; size.p &lt;- 8
+dgaitdplot(c(size.p, mean.p), fam = "nbinom", xlim = c(0, 25),
+     a.mix = i.mix + 1, i.mix = i.mix, pobs.mix = 0.1,
+     pstr.mix = 0.1, lwd.i = 2,lwd.p = 2, lwd.a = 2)
+
+## End(Not run)</code></pre>
+
+
+</div>

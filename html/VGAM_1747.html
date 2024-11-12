@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summaryvgam</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summarizing Vector Generalized Additive Model Fits</h2>
+
+<h3>Description</h3>
+
+<p>These functions are all <code>methods</code> for class <code>vgam</code> or
+<code>summary.vgam</code> objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">summaryvgam(object, dispersion = NULL, digits = options()$digits - 2,
+            presid = TRUE, nopredictors = FALSE)
+## S3 method for class 'summary.vgam'
+show(x, quote = TRUE, prefix = "",
+                            digits = options()$digits-2, nopredictors = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>an object of class <code>"vgam"</code>,
+which is the result of a
+call to <code>vgam</code> with at least one <code>s</code> term.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class <code>"summary.vgam"</code>,
+which is the result of a call to <code>summaryvgam()</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dispersion, digits, presid</code></td>
+<td>
+
+<p>See <code>summaryvglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quote, prefix, nopredictors</code></td>
+<td>
+
+<p>See <code>summaryvglm</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This methods function reports a summary more similar to
+<code>summary.gam()</code> from <span class="pkg">gam</span> than
+<code>summary.gam</code> from <span class="pkg">mgcv</span>.
+It applies to G1-VGAMs using <code>s</code> and vector backfitting.
+In particular, an approximate score test for <em>linearity</em> is conducted
+for each <code>s</code> term—see Section 4.3.4 of Yee (2015) for details.
+The p-values from this type of test tend to be biased upwards (too large).
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>summaryvgam</code> returns an object of class <code>"summary.vgam"</code>;
+see <code>summary.vgam-class</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vgam</code>,
+<code>summary.glm</code>,
+<code>summary.lm</code>,
+<code>summary.gam</code> from <span class="pkg">mgcv</span>,  
+<code>summarypvgam</code> for P-VGAMs.
+
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">hfit &lt;- vgam(agaaus ~ s(altitude, df = 2), binomialff, data = hunua)
+summary(hfit)
+summary(hfit)@anova  # Table for (approximate) testing of linearity
+</code></pre>
+
+
+</div>

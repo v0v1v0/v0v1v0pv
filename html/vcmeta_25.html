@@ -1,0 +1,156 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.ave.stdmean2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for an average standardized mean difference
+from 2-group studies</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and confidence interval for an
+average standardized mean difference from two or more 2-group studies.
+Square root unweighted variances, square root weighted variances, and
+single group standard deviation are options for the standardizer.
+Equality of variances within or across studies is not assumed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.ave.stdmean2(alpha, m1, m2, sd1, sd2, n1, n2, stdzr, bystudy = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m1</code></td>
+<td>
+<p>vector of estimated means for group 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m2</code></td>
+<td>
+<p>vector of estimated means for group 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd1</code></td>
+<td>
+<p>vector of estimated SDs for group 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd2</code></td>
+<td>
+<p>vector of estimated SDs for group 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n1</code></td>
+<td>
+<p>vector of group 1 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n2</code></td>
+<td>
+<p>vector of group 2 sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stdzr</code></td>
+<td>
+
+<ul>
+<li>
+<p> set to 0 for square root unweighted average variance standardizer
+</p>
+</li>
+<li>
+<p> set to 1 for group 1 SD standardizer
+</p>
+</li>
+<li>
+<p> set to 2 for group 2 SD standardizer
+</p>
+</li>
+<li>
+<p> set to 3 for square root weighted average variance standardizer
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bystudy</code></td>
+<td>
+<p>logical to also return each study estimate (TRUE) or not</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a matrix.  The first row is the average estimate across all studies.  If bystudy
+is TRUE, there is 1 additional row for each study.  The matrix has the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated effect size
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2009).
+“Meta-analytic interval estimation for standardized and unstandardized mean differences.”
+<em>Psychological Methods</em>, <b>14</b>(3), 225–238.
+ISSN 1939-1463, <a href="https://doi.org/10.1037/a0016619">doi:10.1037/a0016619</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">m1 &lt;- c(21.9, 23.1, 19.8)
+m2 &lt;- c(16.1, 17.4, 15.0)
+sd1 &lt;- c(3.82, 3.95, 3.67)
+sd2 &lt;- c(3.21, 3.30, 3.02)
+n1 &lt;- c(40, 30, 24)
+n2 &lt;- c(40, 28, 25)
+meta.ave.stdmean2(.05, m1, m2, sd1, sd2, n1, n2, 0, bystudy = TRUE)
+
+# Should return: 
+#         Estimate        SE        LL       UL
+# Average 1.526146 0.1734341 1.1862217 1.866071
+# Study 1 1.643894 0.2629049 1.1286100 2.159178
+# Study 2 1.566132 0.3056278 0.9671126 2.165152
+# Study 3 1.428252 0.3289179 0.7835848 2.072919
+
+
+</code></pre>
+
+
+</div>

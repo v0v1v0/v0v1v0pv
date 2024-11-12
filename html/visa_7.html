@@ -1,0 +1,94 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cm.nsr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Selecting the best 2-Band combinations for Normalized Simple Ratio (NSR)</h2>
+
+<h3>Description</h3>
+
+<p>This function develops a optimization algorithm based on correlation analysis between spectral matrix 'spectra' and the
+vegetation variable of interest x, which
+determines the best spectral band combinations of the full spectrum that are most predictive for 'x'.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cm.nsr(S, x, w = wavelength(S), w.unit = NULL, cm.plot = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>S</code></td>
+<td>
+<p>A matrix of spectral data, a row is a spectrum across all spectral bands.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w</code></td>
+<td>
+<p>A vector of wavelength.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w.unit</code></td>
+<td>
+<p>Character string, default = NULL,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cm.plot</code></td>
+<td>
+<p>A logic value for whether plotting the coefficient matrix or not, default FALSE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function runs a calculation of </p>
+<p style="text-align: center;"><code class="reqn"> NDVI = (\lambda_i - \lambda_j)/(\lambda_i + \lambda_j) </code>
+</p>
+<p> using all the possible pairs/combinations of any two bands (i,j)
+within the full spectrum range thoroughly. A correlation analysis is then performed between the x and all possible NDVIs, and it calculates
+the correlation coefficients (r) which indicates the predictive performance of each NDVI and its corresponding two-band combination. The
+output is the wavelength (nm) indicating the best two bands that produce the highest value of r.
+</p>
+
+
+<h3>Value</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>cm</code></td>
+<td>
+<p>Returns a correlation coefficients matrix.</p>
+</td>
+</tr></table>
+<h3>See Also</h3>
+
+<p><code>cor</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(visa)
+data(NSpec.DF)
+x &lt;- NSpec.DF$N # nitrogen
+S &lt;- NSpec.DF$spectra[, seq(1, ncol(NSpec.DF$spectra), 5)] # resampled to 5 nm steps
+cm &lt;- cm.nsr(S, x, cm.plot = TRUE)
+
+</code></pre>
+
+
+</div>

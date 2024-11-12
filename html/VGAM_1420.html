@@ -1,0 +1,201 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rayleigh</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Rayleigh Regression Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimating the parameter of the Rayleigh distribution by maximum
+likelihood estimation. Right-censoring is allowed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">   rayleigh(lscale = "loglink", nrfs = 1/3 + 0.01,
+            oim.mean = TRUE, zero = NULL, parallel = FALSE,
+            type.fitted = c("mean", "percentiles", "Qlink"),
+            percentiles = 50)
+cens.rayleigh(lscale = "loglink", oim = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lscale</code></td>
+<td>
+
+<p>Parameter link function applied to the scale parameter <code class="reqn">b</code>.
+See <code>Links</code> for more choices.
+A log link is the default because <code class="reqn">b</code> is positive.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nrfs</code></td>
+<td>
+
+<p>Numeric, of length one, with value in <code class="reqn">[0,1]</code>.
+Weighting factor between Newton-Raphson and Fisher scoring.
+The value 0 means pure Newton-Raphson,
+while 1 means pure Fisher scoring.
+The default value uses a mixture of the two algorithms, and retaining
+positive-definite working weights.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>oim.mean</code></td>
+<td>
+
+<p>Logical, used only for intercept-only models.
+<code>TRUE</code> means the mean of the OIM elements are used as
+working weights.
+If <code>TRUE</code> then this argument has top priority for working
+out the working weights.
+<code>FALSE</code> means use another algorithm.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>oim</code></td>
+<td>
+
+<p>Logical.
+For censored data only,
+<code>TRUE</code> means the Newton-Raphson algorithm, and
+<code>FALSE</code> means Fisher scoring.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero, parallel</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.fitted, percentiles</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+Using <code>"Qlink"</code> is for quantile-links in <span class="pkg">VGAMextra</span>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Rayleigh distribution, which is used in physics,
+has a probability density function that can be written
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = y \exp(-0.5 (y/b)^2)/b^2</code>
+</p>
+
+<p>for <code class="reqn">y &gt; 0</code> and <code class="reqn">b &gt; 0</code>.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">b \sqrt{\pi / 2}</code>
+(returned as the fitted values)
+and its variance is
+<code class="reqn">b^2 (4-\pi)/2</code>.
+</p>
+<p>The <span class="pkg">VGAM</span> family function <code>cens.rayleigh</code> handles
+right-censored data (the true value is greater than the observed
+value). To indicate which type of censoring, input <code>extra =
+  list(rightcensored = vec2)</code> where <code>vec2</code> is a logical vector the
+same length as the response.  If the component of this list is missing
+then the logical values are taken to be <code>FALSE</code>.  The fitted
+object has this component stored in the <code>extra</code> slot.
+</p>
+<p>The <span class="pkg">VGAM</span> family function <code>rayleigh</code> handles multiple
+responses.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>The theory behind the argument <code>oim</code> is not fully complete.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The  <code>poisson.points</code> family function is
+more general so that if <code>ostatistic = 1</code> and <code>dimension = 2</code>
+then it coincides with <code>rayleigh</code>.
+Other related distributions are the Maxwell
+and Weibull distributions.
+</p>
+
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Rayleigh</code>,
+<code>genrayleigh</code>,
+<code>riceff</code>,
+<code>maxwell</code>,
+<code>weibullR</code>,
+<code>poisson.points</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">nn &lt;- 1000; Scale &lt;- exp(2)
+rdata &lt;- data.frame(ystar = rrayleigh(nn, scale = Scale))
+fit &lt;- vglm(ystar ~ 1, rayleigh, data = rdata, trace = TRUE)
+head(fitted(fit))
+with(rdata, mean(ystar))
+coef(fit, matrix = TRUE)
+Coef(fit)
+
+# Censored data
+rdata &lt;- transform(rdata, U = runif(nn, 5, 15))
+rdata &lt;- transform(rdata, y = pmin(U, ystar))
+## Not run:  par(mfrow = c(1, 2))
+hist(with(rdata, ystar)); hist(with(rdata, y)) 
+## End(Not run)
+extra &lt;- with(rdata, list(rightcensored = ystar &gt; U))
+fit &lt;- vglm(y ~ 1, cens.rayleigh, data = rdata, trace = TRUE,
+            extra = extra, crit = "coef")
+table(fit@extra$rightcen)
+coef(fit, matrix = TRUE)
+head(fitted(fit))
+</code></pre>
+
+
+</div>

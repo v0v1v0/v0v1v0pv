@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>exam1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Examination data
+
+</h2>
+
+<h3>Description</h3>
+
+<p>Exam results of 35 students on 18 questions.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(exam1)</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 35 observations on the following 18 variables.
+</p>
+
+
+<dl>
+<dt>q01, q02, q03, q04, q05, q06</dt>
+<dd>
+<p>binary response</p>
+</dd>
+<dt>q07, q08, q09, q10, q11, q12</dt>
+<dd>
+<p>binary response</p>
+</dd>
+<dt>q13, q14, q15, q16, q17, q18</dt>
+<dd>
+<p>binary response</p>
+</dd>
+</dl>
+<h3>Details</h3>
+
+<p>For each question, a 1 means correct, a 0 means incorrect.
+A simple Rasch model may be fitted to this dataframe using
+<code>rcim</code> and <code>binomialff</code>.
+</p>
+
+
+<h3>Source</h3>
+
+<p>Taken from William Revelle's <em>Short Guide to R</em>,
+<code>http://www.unt.edu/rss/rasch_models.htm</code>,
+<a href="http://www.personality-project.org/r/">http://www.personality-project.org/r/</a>.
+Downloaded in October 2013.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">summary(exam1)  # The names of the students are the row names
+
+# Fit a simple Rasch model.
+# First, remove all questions and people who were totally correct or wrong
+exam1.1 &lt;- exam1  [, colMeans(exam1  ) &gt; 0]
+exam1.1 &lt;- exam1.1[, colMeans(exam1.1) &lt; 1]
+exam1.1 &lt;- exam1.1[rowMeans(exam1.1) &gt; 0, ]
+exam1.1 &lt;- exam1.1[rowMeans(exam1.1) &lt; 1, ]
+Y.matrix &lt;- rdata &lt;- exam1.1
+
+## Not run:  # The following needs: library(VGAM)
+rfit &lt;- rcim(Y.matrix, family = binomialff(multiple.responses = TRUE),
+             trace = TRUE)
+
+coef(rfit)  # Row and column effects
+constraints(rfit, matrix = TRUE)  # Constraint matrices side-by-side
+dim(model.matrix(rfit, type = "vlm"))  # 'Big' VLM matrix
+
+## End(Not run)
+
+## Not run:  # This plot shows the (main) row and column effects
+par(mfrow = c(1, 2), las = 1, mar = c(4.5, 4.4, 2, 0.9) + 0.1)
+saved &lt;- plot(rfit, rcol = "blue", ccol = "orange",
+              cylab = "Item effects", rylab = "Person effects",
+              rxlab = "", cxlab = "")
+
+names(saved@post)  # Some useful output put here
+cbind(saved@post$row.effects)
+cbind(saved@post$raw.row.effects)
+round(cbind(-saved@post$col.effects), dig = 3)
+round(cbind(-saved@post$raw.col.effects), dig = 3)
+round(matrix(-saved@post$raw.col.effects, ncol = 1,  # Rename for humans
+             dimnames = list(colnames(Y.matrix), NULL)), dig = 3)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

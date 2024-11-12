@@ -1,0 +1,112 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lin.ratio</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Linearization of the ratio estimator</h2>
+
+<h3>Description</h3>
+
+<p>Computes linearized variable for the ratio estimator.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lin.ratio(
+  Y,
+  Z,
+  weight,
+  Dom = NULL,
+  dataset = NULL,
+  percentratio = 1,
+  checking = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Matrix of numerator variables. Any object convertible to <code>data.table</code> with numeric values, <code>NA</code> values are not allowed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>Matrix of denominator variables. Any object convertible to <code>data.table</code> with numeric values, <code>NA</code> values are not allowed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weight</code></td>
+<td>
+<p>Weight variable. One dimensional object convertible to one-column <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dom</code></td>
+<td>
+<p>Optional variables used to define population domains. If supplied, the linearized variables are computed for each domain. An object convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>Optional survey data object convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentratio</code></td>
+<td>
+<p>Positive integer value. All linearized variables are multiplied with <code>percentratio</code> value, by default - 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>checking</code></td>
+<td>
+<p>Optional variable if this variable is TRUE, then function checks data preparation errors, otherwise not checked. This variable by default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The function returns the <code>data.table</code> of the linearized variables for the ratio estimator.
+</p>
+
+
+<h3>References</h3>
+
+<p>Carl-Erik Sarndal, Bengt Swensson, Jan Wretman. Model Assisted Survey Sampling. Springer-Verlag, 1992, p.178.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>domain</code>, 
+<code>vardom</code>,
+<code>vardomh</code>,
+<code>vardcros</code>,
+<code>vardchanges</code>,
+<code>vardannual</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library("data.table")
+Y &lt;- data.table(Y = rchisq(10, 3))
+Z &lt;- data.table(Z = rchisq(10, 3))
+weights &lt;- rep(2, 10)
+data.table(Y, Z, weights,
+           V1 = lin.ratio(Y, Z, weights, percentratio = 1),
+           V10 = lin.ratio(Y, Z, weights, percentratio = 10),
+           V100 = lin.ratio(Y, Z, weights, percentratio = 100))
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,362 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vardannual</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variance estimation for measures of annual net change or annual for single and multistage stage cluster sampling designs</h2>
+
+<h3>Description</h3>
+
+<p>Computes the variance estimation for measures of annual net change or annual for single and multistage stage cluster sampling designs.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vardannual(
+  Y,
+  H,
+  PSU,
+  w_final,
+  ID_level1,
+  ID_level2,
+  Dom = NULL,
+  Z = NULL,
+  gender = NULL,
+  country = NULL,
+  years,
+  subperiods,
+  dataset = NULL,
+  year1 = NULL,
+  year2 = NULL,
+  X = NULL,
+  countryX = NULL,
+  yearsX = NULL,
+  subperiodsX = NULL,
+  X_ID_level1 = NULL,
+  ind_gr = NULL,
+  g = NULL,
+  q = NULL,
+  datasetX = NULL,
+  frate = 0,
+  percentratio = 1,
+  use.estVar = FALSE,
+  use.gender = FALSE,
+  confidence = 0.95,
+  method = "cros"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Variables of interest. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H</code></td>
+<td>
+<p>The unit stratum variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PSU</code></td>
+<td>
+<p>Primary sampling unit variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_final</code></td>
+<td>
+<p>Weight variable. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ID_level1</code></td>
+<td>
+<p>Variable for level1 ID codes. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dom</code></td>
+<td>
+<p>Optional variables used to define population domains. If supplied, variables are calculated for each domain. An object convertible to <code>data.table</code> or variable names as character vector, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>Optional variables of denominator for ratio estimation. If supplied, the ratio estimation is computed. Object convertible to <code>data.table</code> or variable names as character, column numbers. This variable is <code>NULL</code> by default.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gender</code></td>
+<td>
+<p>Numerical variable for gender, where 1 is for males, but 2 is for females. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>country</code></td>
+<td>
+<p>Variable for the survey countries. The values for each country are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>years</code></td>
+<td>
+<p>Variable for the all survey years. The values for each year are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subperiods</code></td>
+<td>
+<p>Variable for the all survey sub-periods. The values for each sub-period are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>year1</code></td>
+<td>
+<p>The vector of years from variable <code>years</code> describes the first year for measures of annual net change.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>year2</code></td>
+<td>
+<p>The vector of years from variable <code>periods</code> describes the second year for measures of annual net change.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Optional matrix of the auxiliary variables for the calibration estimator. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>countryX</code></td>
+<td>
+<p>Optional variable for the survey countries. The values for each country are computed independently. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>yearsX</code></td>
+<td>
+<p>Variable of the all survey years. If supplied, residual estimation of calibration is done independently for each time period. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subperiodsX</code></td>
+<td>
+<p>Variable for the all survey sub-periods. If supplied, residual estimation of calibration is done independently for each time period. Object convertible to <code>data.table</code> or variable names as character, column numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X_ID_level1</code></td>
+<td>
+<p>Variable for level1 ID codes. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ind_gr</code></td>
+<td>
+<p>Optional variable by which divided independently X matrix of the auxiliary variables for the calibration. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>Optional variable of the g weights. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>Variable of the positive values accounting for heteroscedasticity. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>datasetX</code></td>
+<td>
+<p>Optional survey data object in household level convertible to <code>data.table</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>frate</code></td>
+<td>
+<p>Positive numeric value. Sampling rate in percentage, by default - 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentratio</code></td>
+<td>
+<p>Positive numeric value. All linearized variables are multiplied with <code>percentratio</code> value, by default - 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use.estVar</code></td>
+<td>
+<p>Logical value. If value is <code>TRUE</code>, then <code>R</code> function <code>estVar</code> is used for the  estimation of covariance matrix of the residuals. If value is <code>FALSE</code>, then <code>R</code> function <code>estVar</code> is not used for the estimation of covariance matrix of the residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use.gender</code></td>
+<td>
+<p>Logical value. If value is <code>TRUE</code>, then <code>subperiods</code> is defined together with <code>gender</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>confidence</code></td>
+<td>
+<p>optional; either a positive value for confidence interval. This variable by default is 0.95.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>character value; value 'cros' is for measures of annual or value 'netchanges' is for measures of annual net change. This variable by default is netchanges.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ID_level2</code></td>
+<td>
+<p>Optional</p>
+</td>
+</tr>
+</table>
+<p>variable for unit ID codes. One dimensional object convertible to one-column <code>data.table</code> or variable name as character, column number.
+</p>
+<table><tr style="vertical-align: top;">
+<td><code>dataset</code></td>
+<td>
+<p>Optional</p>
+</td>
+</tr></table>
+<p>survey data object convertible to <code>data.table</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with objects are returned by the function:
+</p>
+
+<ul>
+<li> <p><code>crossectional_results</code> -  a <code>data.table</code> containing: <br><code>year</code> -  survey years, <br><code>subperiods</code> -  survey sub-periods, <br><code>country</code> - survey countries, <br><code>Dom</code> - optional variable of the population domains, <br><code>namesY</code> - variable with names of variables of interest, <br><code>namesZ</code> - optional variable with names of denominator for ratio estimation, <br><code>sample_size</code> - the sample size (in numbers of individuals), <br><code>pop_size</code> - the population size (in numbers of individuals), <br><code>total</code> - the estimated totals, <br><code>variance</code> - the estimated variance of cross-sectional or longitudinal measures, <br><code>sd_w</code> - the estimated weighted variance of simple random sample, <br><code>sd_nw</code> - the estimated variance estimation of simple random sample, <br><code>pop</code> - the population size (in numbers of households), <br><code>sampl_siz</code> - the sample size (in numbers of households), <br><code>stderr_w</code> - the estimated weighted standard error of simple random sample, <br><code>stderr_nw</code> - the estimated standard error of simple random sample, <br><code>se</code> - the estimated standard error of cross-sectional or longitudinal, <br><code>rse</code> - the estimated relative standard error (coefficient of variation), <br><code>cv</code> - the estimated relative standard error (coefficient of variation) in percentage, <br><code>absolute_margin_of_error</code> - the estimated absolute margin of error, <br><code>relative_margin_of_error</code> - the estimated relative margin of error, <br><code>CI_lower</code> - the estimated confidence interval lower bound, <br><code>CI_upper</code> - the estimated confidence interval upper bound, <br><code>confidence_level</code> - the positive value for confidence interval. 
+</p>
+</li>
+<li> <p><code>crossectional_var_grad</code> - a <code>data.table</code> containing: <br><code>year</code> -  survey years, <br><code>subperiods</code> -  survey sub-periods, <br><code>country</code> - survey countries, <br><code>Dom</code> - optional variable of the population domains, <br><code>namesY</code> - variable with names of variables of interest, <br><code>namesZ</code> - optional variable with names of denominator for ratio estimation, <br><code>grad</code> - the estimated gradient, <br><code>var</code> - the estimated a design-based variance.
+</p>
+</li>
+<li> <p><code>vardchanges_grad_var</code> - a <code>data.table</code> containing: <br><code>year_1</code> -  survey years of <code>years1</code>, <br><code>subperiods_1</code> -  survey sub-periods of <code>years1</code>, <br><code>year_2</code> -  survey years of <code>years2</code>, <br><code>subperiods_2</code> -  survey sub-periods of <code>years2</code>, <br><code>country</code> - survey countries, <br><code>Dom</code> - optional variable of the population domains, <br><code>namesY</code> - variable with names of variables of interest, <br><code>namesZ</code> - optional variable with names of denominator for ratio estimation, <br><code>nams</code> - gradient names, numerator (num) and denominator (den), for each year, <br><code>grad</code> - the estimated gradient, <br><code>cros_var</code> - the estimated a design-based variance.
+</p>
+</li>
+<li> <p><code>vardchanges_rho</code> - a <code>data.table</code> containing: <br><code>year</code> -  survey years of <code>years</code> for cross-sectional estimates, <br><code>subperiods</code> -  survey sub-periods of <code>years</code> for cross-sectional estimates, <br><code>year_1</code> -  survey years of <code>years1</code>, <br><code>subperiods_1</code> -  survey sub-periods of <code>years1</code>, <br><code>year_2</code> -  survey years of <code>years2</code>, <br><code>subperiods_2</code> -  survey sub-periods of <code>years2</code>, <br><code>country</code> - survey countries, <br><code>Dom</code> - optional variable of the population domains, <br><code>namesY</code> - variable with names of variables of interest, <br><code>namesZ</code> - optional variable with names of denominator for ratio estimation, <br><code>nams</code> - gradient names, numerator (num) and denominator (den), for each year, <br><code>rho</code> - the estimated correlation matrix.
+</p>
+</li>
+<li> <p><code>vardchanges_var_tau</code> - a <code>data.table</code> containing: <br><code>year_1</code> -  survey years of <code>years1</code>, <br><code>subperiods_1</code> -  survey sub-periods of <code>years1</code>, <br><code>year_2</code> -  survey years of <code>years2</code>, <br><code>subperiods_2</code> -  survey sub-periods of <code>years2</code>, <br><code>country</code> - survey countries, <br><code>Dom</code> - optional variable of the population domains, <br><code>namesY</code> - variable with names of variables of interest, <br><code>namesZ</code> - optional variable with names of denominator for ratio estimation, <br><code>nams</code> - gradient names, numerator (num) and denominator (den), for each year, <br><code>var_tau</code> - the estimated covariance matrix.
+</p>
+</li>
+<li> <p><code>vardchanges_results</code> - a <code>data.table</code> containing: <br><code>year</code> -  survey years of <code>years</code> for measures of annual, <br><code>subperiods</code> -  survey sub-periods of <code>years</code> for measures of annual, <br><code>year_1</code> -  survey years of <code>years1</code> for measures of annual net change, <br><code>subperiods_1</code> -  survey sub-periods of <code>years1</code> for measures of annual net change, <br><code>year_2</code> -  survey years of <code>years2</code> for measures of annual net change, <br><code>subperiods_2</code> -  survey sub-periods of <code>years2</code> for measures of annual net change, <br><code>country</code> - survey countries, <br><code>Dom</code> - optional variable of the population domains, <br><code>namesY</code> - variable with names of variables of interest, <br><code>namesZ</code> - optional variable with names of denominator for ratio estimation, <br><code>estim_1</code> - the estimated value for period1, <br><code>estim_2</code> - the estimated value for period2, <br><code>estim</code> - the estimated value, <br><code>var</code> - the estimated variance, <br><code>se</code> - the estimated standard error, <br><code>CI_lower</code> - the estimated confidence interval lower bound, <br><code>CI_upper</code> - the estimated confidence interval upper bound, <br><code>confidence_level</code> - the positive value for confidence interval, <br><code>significant</code> - is the the difference significant
+</p>
+</li>
+<li> <p><code>X_annual</code> - a <code>data.table</code> containing: <br><code>year</code> -  survey years of <code>years</code> for measures of annual, <br><code>year_1</code> -  survey years of <code>years1</code> for measures of annual net change, <br><code>year_2</code> -  survey years of <code>years2</code> for measures of annual net change, <br><code>period</code> - period1 and period2 together, <br><code>country</code> - survey countries, <br><code>Dom</code> - optional variable of the population domains, <br><code>namesY</code> - variable with names of variables of interest, <br><code>namesZ</code> - optional variable with names of denominator for ratio estimation, <br><code>cros_se</code> - the estimated cross-sectional standard error.
+</p>
+</li>
+<li> <p><code>A_matrix</code> - a <code>data.table</code> containing: <br><code>year</code> -  survey years of <code>years1</code> for measures of annual, <br><code>year_1</code> -  survey years of <code>years1</code> for measures of annual net change, <br><code>year_2</code> -  survey years of <code>years2</code> for measures of annual net change, <br><code>country</code> - survey countries, <br><code>Dom</code> - optional variable of the population domains, <br><code>namesY</code> - variable with names of variables of interest, <br><code>namesZ</code> - optional variable with names of denominator for ratio estimation, <br><code>cols</code> - the estimated matrix_A columns, <br><code>matrix_A</code> - the estimated matrix A.
+</p>
+</li>
+<li> <p><code>annual_sum</code> - a <code>data.table</code> containing: <br><code>year</code> - survey years, <br><code>country</code> - survey countries, <br><code>Dom</code> - optional variable of the population domains, <br><code>namesY</code> - variable with names of variables of interest, <br><code>namesZ</code> - optional variable with names of denominator for ratio estimation, <br><code>totalY</code> - the estimated value of variables of interest for period1, <br><code>totalZ</code> - optional the estimated value of denominator for period2, <br><code>estim</code> - the estimated value for year.
+</p>
+</li>
+<li> <p><code>annual_results</code> - a <code>data.table</code> containing: <br><code>year</code> -  survey years of <code>years</code> for measures of annual, <br><code>year_1</code> -  survey years of <code>years1</code> for measures of annual net change, <br><code>year_2</code> -  survey years of <code>years2</code> for measures of annual net change, <br><code>country</code> - survey countries, <br><code>Dom</code> - optional variable of the population domains, <br><code>namesY</code> - variable with names of variables of interest, <br><code>namesZ</code> - optional variable with names of denominator for ratio estimation, <br><code>estim_1</code> - the estimated value for period1 for measures of annual net change, <br><code>estim_2</code> - the estimated value for period2 for measures of annual net change, <br><code>estim</code> - the estimated value, <br><code>var</code> - the estimated variance, <br><code>se</code> - the estimated standard error, <br><code>rse</code> - the estimated relative standard error (coefficient of variation), <br><code>cv</code> - the estimated relative standard error (coefficient of variation) in percentage, <br><code>absolute_margin_of_error</code> - the estimated absolute margin of error for period1 for measures of annual, <br><code>relative_margin_of_error</code> - the estimated relative margin of error in percentage for measures of annual, <br><code>CI_lower</code> - the estimated confidence interval lower bound, <br><code>CI_upper</code> - the estimated confidence interval upper bound, <br><code>confidence_level</code> - the positive value for confidence interval, <br><code>significant</code> - is the the difference significant
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Guillaume Osier, Virginie Raymond, (2015), Development of methodology for the estimate of variance of annual net changes for LFS-based indicators. Deliverable 1 - Short document with derivation of the methodology. <br>
+Guillaume Osier, Yves Berger,  Tim Goedeme, (2013), Standard error estimation for the EU-SILC indicators of poverty and social exclusion,  Eurostat Methodologies and Working papers, URL <a href="http://ec.europa.eu/eurostat/documents/3888793/5855973/KS-RA-13-024-EN.PDF">http://ec.europa.eu/eurostat/documents/3888793/5855973/KS-RA-13-024-EN.PDF</a>. <br>
+Eurostat Methodologies and Working papers, Handbook on precision requirements and variance estimation for ESS household surveys, 2013, URL <a href="http://ec.europa.eu/eurostat/documents/3859598/5927001/KS-RA-13-029-EN.PDF">http://ec.europa.eu/eurostat/documents/3859598/5927001/KS-RA-13-029-EN.PDF</a>. <br>
+Yves G. Berger, Tim Goedeme, Guillame Osier (2013). Handbook on standard error estimation and other related sampling issues in EU-SILC, URL <a href="https://ec.europa.eu/eurostat/cros/content/handbook-standard-error-estimation-and-other-related-sampling-issues-ver-29072013_en">https://ec.europa.eu/eurostat/cros/content/handbook-standard-error-estimation-and-other-related-sampling-issues-ver-29072013_en</a> <br></p>
+
+
+<h3>See Also</h3>
+
+<p><code>domain</code>,
+<code>vardcros</code>,
+<code>vardchanges</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> 
+### Example
+library("data.table")
+
+set.seed(1)
+
+data("eusilc", package = "laeken")
+eusilc1 &lt;- eusilc[1:20, ]
+rm(eusilc)
+
+dataset1 &lt;- data.table(rbind(eusilc1, eusilc1),
+                       year = c(rep(2010, nrow(eusilc1)),
+                                rep(2011, nrow(eusilc1))))
+rm(eusilc1)
+
+dataset1[, country := "AT"]
+dataset1[, half := .I - 2 * trunc((.I - 1) / 2)]
+dataset1[, quarter := .I - 4 * trunc((.I - 1) / 4)]
+dataset1[age &lt; 0, age := 0]
+
+PSU &lt;- dataset1[, .N, keyby = "db030"][, N := NULL][]
+PSU[, PSU := trunc(runif(.N, 0, 5))]
+
+dataset1 &lt;- merge(dataset1, PSU, all = TRUE, by = "db030")
+rm(PSU)
+
+dataset1[, strata := "XXXX"]
+dataset1[, employed := trunc(runif(.N, 0, 2))]
+dataset1[, unemployed := trunc(runif(.N, 0, 2))]
+dataset1[, labour_force := employed + unemployed]
+dataset1[, id_lv2 := paste0("V", .I)]
+
+vardannual(Y = "employed", H = "strata",
+           PSU = "PSU", w_final = "rb050",
+           ID_level1 = "db030", ID_level2 = "id_lv2",
+           Dom = NULL, Z = NULL, years = "year",
+           subperiods = "half", dataset = dataset1,
+           percentratio = 100, confidence = 0.95,
+           method = "cros")
+  
+## Not run: 
+vardannual(Y = "employed", H = "strata",
+           PSU = "PSU", w_final = "rb050",
+           ID_level1 = "db030", ID_level2 = "id_lv2",
+           Dom = NULL, Z = NULL, country = "country",
+           years = "year", subperiods = "quarter",
+           dataset = dataset1, year1 = 2010, year2 = 2011,
+           percentratio = 100, confidence = 0.95,
+           method = "netchanges")
+    
+vardannual(Y = "unemployed", H = "strata",
+           PSU = "PSU", w_final = "rb050",
+           ID_level1 = "db030", ID_level2 = "id_lv2", 
+           Dom = NULL, Z = "labour_force",
+           country = "country", years = "year",
+           subperiods = "quarter", dataset = dataset1,
+           year1 = 2010, year2 = 2011,
+           percentratio = 100, confidence = 0.95,
+           method = "netchanges")
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

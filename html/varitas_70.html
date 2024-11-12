@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>run.post.processing</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>run.post.processing</h2>
+
+<h3>Description</h3>
+
+<p>Submit post-processing job to the cluster with appropriate job dependencies
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">run.post.processing(variant.specification, output.directory,
+  code.directory = NULL, log.directory = NULL, config.file = NULL,
+  job.name.prefix = NULL, quiet = FALSE, email = NULL,
+  verify.options = !quiet)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>variant.specification</code></td>
+<td>
+<p>Data frame specifying files to be processed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output.directory</code></td>
+<td>
+<p>Path to directory where output should be saved</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>code.directory</code></td>
+<td>
+<p>Directory where code should be saved</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log.directory</code></td>
+<td>
+<p>Directory where log files should be saved</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>config.file</code></td>
+<td>
+<p>Path to config file</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>job.name.prefix</code></td>
+<td>
+<p>Prefix for job names on the cluster</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>Logical indicating whether to print commands to screen rather than submit the job</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>email</code></td>
+<td>
+<p>Email address that should be notified when job finishes. If NULL or FALSE, no email is sent</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verify.options</code></td>
+<td>
+<p>Logical indicating whether <code>verify.varitas.options()</code> should be run.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>None
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">run.post.processing(
+  variant.specification = data.frame(
+    sample.id = c('a', 'b'),
+    vcf = c('a.vcf', 'b.vcf'),
+    caller = c('mutect', 'mutect'),
+    job.dependency = c('example1', 'example2')
+  ),
+  output.directory = '.',
+  quiet = TRUE
+)
+
+</code></pre>
+
+
+</div>

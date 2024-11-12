@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Coef.rrvglm-class</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Class “Coef.rrvglm” </h2>
+
+<h3>Description</h3>
+
+<p>  The most pertinent matrices and other quantities
+pertaining to a RR-VGLM. </p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form
+<code>Coef(object, ...)</code> where <code>object</code> is an object
+of class <code>rrvglm</code> (see <code>rrvglm-class</code>).
+</p>
+<p>In this document, <code class="reqn">M</code> is the number of linear predictors
+and <code class="reqn">n</code> is the number of observations.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt>
+<code>A</code>:</dt>
+<dd>
+<p>Of class <code>"matrix"</code>, <b>A</b>. </p>
+</dd>
+<dt>
+<code>B1</code>:</dt>
+<dd>
+<p>Of class <code>"matrix"</code>, <b>B1</b>. </p>
+</dd>
+<dt>
+<code>C</code>:</dt>
+<dd>
+<p>Of class <code>"matrix"</code>, <b>C</b>. </p>
+</dd>
+<dt>
+<code>Rank</code>:</dt>
+<dd>
+<p>The rank of the RR-VGLM. </p>
+</dd>
+<dt>
+<code>colx1.index</code>:</dt>
+<dd>
+<p>Index of the columns of the
+<code>"vlm"</code>-type model matrix corresponding to the variables
+in <b>x1</b>. These correspond to <b>B1</b>.
+</p>
+</dd>
+<dt>
+<code>colx2.index</code>:</dt>
+<dd>
+<p>Index of the columns of the
+<code>"vlm"</code>-type model matrix corresponding to the variables
+in <b>x2</b>. These correspond to the reduced-rank regression.
+</p>
+</dd>
+<dt>
+<code>Atilde</code>:</dt>
+<dd>
+<p>Object of class <code>"matrix"</code>, the
+<b>A</b> matrix with the corner rows removed. Thus each of the
+elements have been estimated. This matrix is returned only
+if corner constraints were used.
+</p>
+</dd>
+</dl>
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Hastie, T. J. (2003).
+Reduced-rank vector generalized linear models.
+<em>Statistical Modelling</em>,
+<b>3</b>, 15–41.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Coef.rrvglm</code>,
+<code>rrvglm</code>,
+<code>rrvglm-class</code>,
+<code>print.Coef.rrvglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Rank-1 stereotype model of Anderson (1984)
+pneumo &lt;- transform(pneumo, let = log(exposure.time), x3 = runif(nrow(pneumo)))
+fit &lt;- rrvglm(cbind(normal, mild, severe) ~ let + x3, multinomial, data = pneumo)
+coef(fit, matrix = TRUE)
+Coef(fit)
+# print(Coef(fit), digits = 3)
+</code></pre>
+
+
+</div>

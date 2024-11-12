@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineVuongTest</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vuong Test Comparing Two R-Vine Copula Models</h2>
+
+<h3>Description</h3>
+
+<p>This function performs a Vuong test between two d-dimensional R-vine copula
+models as specified by their <code>RVineMatrix()</code> objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineVuongTest(data, RVM1, RVM2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>An N x d data matrix (with uniform margins).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RVM1, RVM2</code></td>
+<td>
+<p><code>RVineMatrix()</code> objects of models 1 and 2.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The likelihood-ratio based test proposed by Vuong (1989) can be used for
+comparing non-nested models. For this let <code class="reqn">c_1</code> and <code class="reqn">c_2</code> be two
+competing vine copulas in terms of their densities and with estimated
+parameter sets <code class="reqn">\hat{\boldsymbol{\theta}}_1</code> and
+<code class="reqn">\hat{\boldsymbol{\theta}}_2</code>. We then compute the
+standardized sum, <code class="reqn">\nu</code>, of the log differences of their pointwise
+likelihoods
+<code class="reqn">m_i:=\log\left[\frac{c_1(\boldsymbol{u}_i|\hat{\boldsymbol{\theta}}_1)}{c_2(\boldsymbol{u}_i|\hat{\boldsymbol{\theta}}_2)}\right]</code> for observations <code class="reqn">\boldsymbol{u}_i\in[0,1],\
+i=1,...,N</code> , i.e.,
+</p>
+<p style="text-align: center;"><code class="reqn">\texttt{statistic} := \nu = \frac{\frac{1}{n}\sum_{i=1}^N
+m_i}{\sqrt{\sum_{i=1}^N\left(m_i - \bar{m} \right)^2}}. </code>
+</p>
+<p> Vuong
+(1989) shows that <code class="reqn">\nu</code> is asymptotically standard normal. According to
+the null-hypothesis </p>
+<p style="text-align: center;"><code class="reqn">H_0:
+E[m_i] = 0\ \forall i=1,...,N, </code>
+</p>
+<p> we
+hence prefer vine model 1 to vine model 2 at level <code class="reqn">\alpha</code> if
+</p>
+<p style="text-align: center;"><code class="reqn">\nu&gt;\Phi^{-1}\left(1-\frac{\alpha}{2}\right), </code>
+</p>
+<p> where <code class="reqn">\Phi^{-1}</code> denotes the inverse of the
+standard normal distribution function. If
+<code class="reqn">\nu&lt;-\Phi^{-1}\left(1-\frac{\alpha}{2}\right)</code>
+we choose model 2.  If, however,
+<code class="reqn">|\nu|\leq\Phi^{-1}\left(1-\frac{\alpha}{2}\right)</code>, no decision among the models is possible.
+</p>
+<p>Like AIC and BIC, the Vuong test statistic may be corrected for the number
+of parameters used in the models. There are two possible corrections; the
+Akaike and the Schwarz corrections, which correspond to the penalty terms in
+the AIC and the BIC, respectively.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>statistic, statistic.Akaike, statistic.Schwarz</code></td>
+<td>
+<p>Test
+statistics without correction, with Akaike correction and with Schwarz
+correction.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value, p.value.Akaike, p.value.Schwarz</code></td>
+<td>
+<p>P-values of
+tests without correction, with Akaike correction and with Schwarz
+correction.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Jeffrey Dissmann, Eike Brechmann
+</p>
+
+
+<h3>References</h3>
+
+<p>Vuong, Q. H. (1989). Ratio tests for model selection and
+non-nested hypotheses. Econometrica 57 (2), 307-333.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineClarkeTest()</code>, <code>RVineAIC()</code>,
+<code>RVineBIC()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# vine structure selection time-consuming (~ 20 sec)
+
+# load data set
+data(daxreturns)
+
+# select the R-vine structure, families and parameters
+RVM &lt;- RVineStructureSelect(daxreturns[,1:5], c(1:6))
+
+# select the C-vine structure, families and parameters
+CVM &lt;- RVineStructureSelect(daxreturns[,1:5], c(1:6), type = "CVine")
+
+# compare the two models based on the data
+vuong &lt;- RVineVuongTest(daxreturns[,1:5], RVM, CVM)
+vuong$statistic
+vuong$statistic.Schwarz
+vuong$p.value
+vuong$p.value.Schwarz
+
+
+</code></pre>
+
+
+</div>

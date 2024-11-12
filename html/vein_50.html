@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>emis_chem2</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Aggregate emissions by lumped groups in chemical mechanism</h2>
+
+<h3>Description</h3>
+
+<p><code>emis_chem2</code> aggregates VOC emissions by chemical mechanism
+and convert grams to mol.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">emis_chem2(df, mech, nx, na.rm = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>data.frame with emissions including columns "id" and "pol".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mech</code></td>
+<td>
+<p>Character, "CB4", "CB05", "S99", "S7","CS7", "S7T", "S11",
+"S11D","S16C","S18B","RADM2", "RACM2","MOZT1", "CBMZ", "CB05opt2"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nx</code></td>
+<td>
+<p>Character, colnames for emissions data, for instance "V1", "V2"...</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>Logical, to remove lines with NA from group</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>data.frame with lumped groups by chemical mechanism.
+</p>
+
+
+<h3>Note</h3>
+
+
+<ul>
+<li> <p><strong>CB05</strong>: "ALD"  "ALDX" "ETH"  "HC3"  "HC5"  "HC8"  "HCHO" "KET"
+"OL2"  "OLI"  "OLT"  "TOL"  "XYL"
+</p>
+</li>
+<li> <p><strong>CB05opt2</strong>:  "ALD2" "ALDX" "BENZENE" "ETH" "ETHA" "FORM"
+"IOLE" "OLE" "PAR" "TOL" "XYL"
+</p>
+</li>
+<li> <p><strong>RADM2</strong>:  "ALD"  "ETH"  "HC3"  "HC5"  "HC8"  "HCHO" "KET"
+"MACR" "OL2"  "OLI"  "OLT"  "TOL" "XYL"
+</p>
+</li>
+<li> <p><strong>RACM2</strong>:  ACD"  "ACE"  "ACT"  "ALD"  "BALD" "BEN"  "DIEN"
+"ETE"  "ETH"  "HC3"  "HC5"  "HC8"  "HCHO" "MACR" "MEK"  "OLI"  "OLT"
+"TOL"  "UALD" "XYM"  "XYO"  "XYP"
+</p>
+</li>
+<li> <p><strong>CB4</strong>:  "ALD2" "ETH"  "FORM" "OLE"  "PAR"  "TOL"  "XYL"
+</p>
+</li>
+<li> <p><strong>S99</strong>:  "ACET" "ALK1" "ALK2" "ALK3" "ALK4" "ALK5" "ARO1NBZ"
+"ARO2" "BALD" "BENZENE" "CCHO" "ETHENE" "HCHO" "IPROD" "MACR" "MEK"
+"OLE1" "OLE2" "RCHO"
+</p>
+</li>
+<li> <p><strong>CB4</strong>: "ACET" "ACYE" "ALK1" "ALK2" "ALK3" "ALK4" "ALK5"
+"ARO1" "ARO2" "BALD" "BENZ" "CCHO" "ETHE" "HCHO" "IPRD" "MACR" "MEK"
+"OLE1" "OLE2" "RCHO"
+</p>
+</li>
+<li> <p><strong>CS7</strong>: "ALK3" "ALK4" "ARO1" "ARO2" "CCHO" "ETHE" "HCHO"
+"IPRD" "NROG" "OLE1" "OLE2" "PRD2" "RCHO"
+</p>
+</li>
+<li> <p><strong>S7</strong>: "ACET" "ACYE" "ALK1" "ALK2" "ALK3" "ALK4" "ALK5"
+"ARO1" "ARO2" "BALD" "BENZ" "CCHO" "ETHE" "HCHO" "IPRD" "MACR"
+"MEK"  "OLE1" "OLE2" "RCHO"
+</p>
+</li>
+<li> <p><strong>S7T</strong>: "13BDE" "ACET"  "ACRO"  "ACYE"  "ALK1"  "ALK2"
+"ALK3"  "ALK4"  "ALK5"  "ARO1"  "ARO2"  "B124" "BALD"  "BENZ"  "CCHO"
+"ETHE"  "HCHO"  "IPRD"  "MACR"  "MEK"   "MXYL"  "OLE1"  "OLE2"  "OXYL"
+"PRPE"  "PXYL"  "RCHO"  "TOLU"
+</p>
+</li>
+<li> <p><strong>S11</strong>: "ACET" "ACYL" "ALK1" "ALK2" "ALK3" "ALK4" "ALK5"
+"ARO1" "ARO2" "BALD" "BENZ" "CCHO" "ETHE" "HCHO" "IPRD" "MACR"
+"MEK"  "OLE1" "OLE2" "RCHO"
+</p>
+</li>
+<li> <p><strong>S11D</strong>: "ACET" "ACRO" "ACYL" "ALLENE" "BALD" "BENZ"
+"BUTDE13" "BUTENE1"  "C2BENZ" "C2BUTE" "C2PENT" "C4RCHO1" "CCHO"
+"CROTALD" "ETACTYL"  "ETHANE" "ETHE"  "HCHO" "HEXENE1" "ISOBUTEN" "M2C3"
+"M2C4" "M2C6" "M2C7" "M3C6" "M3C7" "MACR" "MEACTYL" "MEK" "MXYLENE"
+"NC1" "NC4" NC5" "NC6" "NC7" "NC8" "NC9" "OLE2" "OTH2" "OTH4"
+"OTH5" "OXYLENE" "PENTEN1" "PROPALD" "PROPANE" "PROPENE" "PXYLENE" "RCHO"
+"STYRENE"  "TMB123"   "TMB124"   "TMB135"   "TOLUENE"
+</p>
+</li>
+<li> <p><strong>S16C</strong>:"ACET"  "ACETL" "ACRO"  "ACYLS" "ALK3"
+"ALK4"  "ALK5"  "BALD"  "BENZ"  "BUT13" "BZ123" "BZ124"
+"BZ135" "C2BEN" "ETCHO" "ETHAN" "ETHEN" "HCHO"  "MACR"
+"MECHO" "MEK"   "MXYL"  "NC4"   "OLE1"
+"OLE2"  "OLE3"  "OLE4"  "OLEA1" "OTH1"  "OTH3"  "OTH4"
+"OXYL"  "PROP"  "PROPE" "PXYL"  "RCHO" "STYRS" "TOLU"
+</p>
+</li>
+<li> <p><strong>S18B</strong>:"ACET"  "ACETL" "ACRO"  "ACYLS" "ALK3"
+"ALK4"  "ALK5"  "BALD"  "BENZ"  "BUT13" "BZ123" "BZ124"
+"BZ135" "C2BEN" "ETCHO" "ETHAN" "ETHEN" "HCHO"
+"MACR"  "MECHO" "MEK"   "MXYL"  "NC4"   "OLE1"
+"OLE2"  "OLE3"  "OLE4"  "OLEA1" "OTH1"  "OTH3"  "OTH4"  "OXYL"
+"PROP"  "PROPE" "PXYL"  "RCHO" "STYRS" "TOLU"
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Carter, W. P. (2015). Development of a database for
+chemical mechanism assignments for volatile organic emissions.
+Journal of the Air &amp; Waste Management Association, 65(10), 1171-1184.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>speciate</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">{
+id &lt;-1:2
+df &lt;- data.frame(V1 = 1:2, V2 = 1:2)
+dx &lt;- speciate(x = df,
+               spec = "nmhc",
+               fuel = "E25",
+               veh = "LDV",
+               eu = "Exhaust")
+dx$id &lt;- rep(id, length(unique(dx$pol)))
+names(dx)
+vocE25EX &lt;- emis_chem2(df = dx,
+                       mech = "CB05",
+                       nx = c("V1", "V2"))
+}
+</code></pre>
+
+
+</div>

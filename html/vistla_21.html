@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>prune</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Prune the vistla tree</h2>
+
+<h3>Description</h3>
+
+<p>This function allows to filter out suboptimal branches, as well as weak ones or these not in particular paths of interest.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">prune(x, targets, iomin, score)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>vistla object or a vistla_hierarchy object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>targets</code></td>
+<td>
+<p>a character vector of features.
+When not missing, all branches not on lying paths to these targets are pruned.
+Unreachable targets are ignored, while names not present in the analysed set cause an error.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iomin</code></td>
+<td>
+<p>a legacy name for score, valid only for vistla objects; passing a value to either of them works the same, but giving some values for both is an error.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>score</code></td>
+<td>
+<p>a score threshold below which branches should be removed.
+When given, it effectively overrides the value of <code>iomin</code> or <code>ensemble(prune,...)</code> given to the <code>vistla</code> invocation; to this end, it can only be higher then the original value, since prune only modifies the output and cannot re-run the pathfinding.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Pruned <code>x</code>; if both arguments are missing, this function still removes suboptimal branches.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+ data(chain)
+ v&lt;-vistla(Y~.,data=chain)
+ print(v)
+ print(prune(v,targets="M3"))
+ print(prune(v,score=0.3))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

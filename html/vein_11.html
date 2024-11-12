@@ -1,0 +1,166 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>aw</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Average Weight for hourly traffic data.</h2>
+
+<h3>Description</h3>
+
+<p><code>aw</code> average weight form traffic.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">aw(
+  pc,
+  lcv,
+  hgv,
+  bus,
+  mc,
+  p_pc,
+  p_lcv,
+  p_hgv,
+  p_bus,
+  p_mc,
+  w_pc = 1,
+  w_lcv = 3.5,
+  w_hgv = 20,
+  w_bus = 20,
+  w_mc = 0.5,
+  net
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>pc</code></td>
+<td>
+<p>numeric vector for passenger cars</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lcv</code></td>
+<td>
+<p>numeric vector for light commercial vehicles</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hgv</code></td>
+<td>
+<p>numeric vector for heavy good vehicles or trucks</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bus</code></td>
+<td>
+<p>numeric vector for bus</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mc</code></td>
+<td>
+<p>numeric vector for motorcycles</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p_pc</code></td>
+<td>
+<p>data-frame profile for passenger cars, 24 hours only.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p_lcv</code></td>
+<td>
+<p>data-frame profile for light commercial vehicles, 24 hours only.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p_hgv</code></td>
+<td>
+<p>data-frame profile for heavy good vehicles or trucks, 24 hours only.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p_bus</code></td>
+<td>
+<p>data-frame profile for bus, 24 hours only.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p_mc</code></td>
+<td>
+<p>data-frame profile for motorcycles, 24 hours only.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_pc</code></td>
+<td>
+<p>Numeric, factor equivalence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_lcv</code></td>
+<td>
+<p>Numeric, factor equivalence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_hgv</code></td>
+<td>
+<p>Numeric, factor equivalence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_bus</code></td>
+<td>
+<p>Numeric, factor equivalence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w_mc</code></td>
+<td>
+<p>Numeric, factor equivalence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>SpatialLinesDataFrame or Spatial Feature of "LINESTRING"</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>data.frame with with average weight
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(net)
+data(pc_profile)
+p1 &lt;- pc_profile[, 1]
+aw1 &lt;- aw(pc = net$ldv*0.75,
+            lcv = net$ldv*0.1,
+            hgv = net$hdv,
+            bus = net$hdv*0.1,
+            mc = net$ldv*0.15,
+            p_pc = p1,
+            p_lcv = p1,
+            p_hgv = p1,
+            p_bus = p1,
+            p_mc = p1)
+head(aw1)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

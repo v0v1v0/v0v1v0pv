@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VLTransferEntropy</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>VLTransferEntropy</h2>
+
+<h3>Description</h3>
+
+<p>VLTransferEntropy is a Variable-lag Transfer Entropy function. It tests whether <code>X</code> VL-Transfer-Entropy-causes <code>Y</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">VLTransferEntropy(
+  Y,
+  X,
+  maxLag,
+  nboot = 0,
+  lx = 1,
+  ly = 1,
+  VLflag = TRUE,
+  autoLagflag = TRUE,
+  alpha = 0.05
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>is a numerical time series of effect</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>is a numerical time series of cause</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxLag</code></td>
+<td>
+<p>is a maximum possible time delay. The default is 0.2*length(Y).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nboot</code></td>
+<td>
+<p>is a number of times of bootstrapping for RTransferEntropy::transfer_entropy() function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lx, ly</code></td>
+<td>
+<p>are lag parameters of RTransferEntropy::transfer_entropy().</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VLflag</code></td>
+<td>
+<p>is a flag of Transfer Entropy choice: either <code>VLflag=TRUE</code> for VL-Transfer Entropy or <code>VLflag=FALSE</code> for Transfer Entropy.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>autoLagflag</code></td>
+<td>
+<p>is a flag for enabling the automatic lag inference function. The default is true.
+If it is set to be true, then maxLag is set automatically using cross-correlation.
+Otherwise, if it is set to be false, then the function takes the maxLag value to infer Granger causality.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>is a significant-level threshold for TE bootstrapping by Dimpfl and Peter (2013).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>This function returns of  whether <code>X</code> (VL-)Transfer-Entropy-causes <code>Y</code>.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>TEratio</code></td>
+<td>
+<p> is a Transfer Entropy ratio. If it is greater than one , then <code>X</code> causes <code>Y</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>res</code></td>
+<td>
+<p> is an object of output from RTransferEntropy::transfer_entropy() </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>follOut</code></td>
+<td>
+<p> is a list of variables from function <code>followingRelation</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>XgCsY_trns</code></td>
+<td>
+<p>The flag is true if <code>X</code> (VL-)Transfer-Entropy-causes <code>Y</code> using Transfer Entropy ratio ratio where <code>TEratio &gt;1</code>
+if <code>X</code> causes <code>Y</code>. Additionally, if <code>nboot&gt;1</code>, the flag is true only when <code>pval&lt;=alpha</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pval</code></td>
+<td>
+<p> It is a p-value for TE bootstrapping by Dimpfl and Peter (2013).</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Generate simulation data
+TS &lt;- SimpleSimulationVLtimeseries()
+# Run the function
+out&lt;-VLTransferEntropy(Y=TS$Y,X=TS$X)
+
+
+</code></pre>
+
+
+</div>

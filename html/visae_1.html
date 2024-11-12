@@ -1,0 +1,158 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ca_ae</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Correspondence Analysis of Adverse Events</h2>
+
+<h3>Description</h3>
+
+<p>Correspondence Analysis of Adverse Events
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ca_ae(
+  data,
+  id,
+  group,
+  ae_class,
+  label = "AE",
+  contr_indicator = TRUE,
+  mass_indicator = TRUE,
+  contr_threshold = NULL,
+  mass_threshold = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>data.frame or tibble object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>unquoted expression indicating the
+variable name in <code>data</code> that corresponds to the id variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>unquoted expression indicating the
+variable name in <code>data</code> that corresponds to the group variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ae_class</code></td>
+<td>
+<p>unquoted expression indicating the
+variable name in <code>data</code> that corresponds to AE class.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label</code></td>
+<td>
+<p>character value indicating the
+column name of AE class in resulting tables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>contr_indicator</code></td>
+<td>
+<p>logical value indicating the
+use of color intensity to represent the maximum contribution of each <code>ae_class</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mass_indicator</code></td>
+<td>
+<p>logical value indicating the
+use of dot size to represent the overall relative frequency of each <code>ae_class</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>contr_threshold</code></td>
+<td>
+<p>numerical value between 0 an 1 filtering
+<code>ae_class</code> with contribution greater than <code>contr_threshold</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mass_threshold</code></td>
+<td>
+<p>numerical value between 0 an 1 filtering
+<code>ae_class</code> with mass greater than <code>mass_threshold</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list of
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>tab_abs</code></td>
+<td>
+<p>a tibble showing absolute frequency of <code>ae_class</code> by <code>group</code>;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tab_rel</code></td>
+<td>
+<p>a tibble showing percent of <code>ae_class</code> by <code>group</code>;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>total_inertia</code></td>
+<td>
+<p>a numerical value indicating the total inertia;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tab_inertia</code></td>
+<td>
+<p>a tibble showing inertia broken down by dimension and the percent relative to the total inertia;</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>asymmetric_plot</code></td>
+<td>
+<p>a contribution biplot.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Levine RA, Sampson E, Lee TC. Journal of Computational and Graphical Statistics. Wiley Interdisciplinary Reviews: Computational Statistics. 2014 Jul;6(4):233-9.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(magrittr)
+library(dplyr)
+
+id &lt;- rep(1:50, each = 2)
+group &lt;- c(rep("A", 50), rep("B", 50))
+ae_grade &lt;- sample(1:5, size = 100, replace = TRUE)
+ae_domain &lt;- sample(c("D", "E"), size = 100, replace = TRUE)
+ae_term &lt;- sample(c("F", "G", "H", "I"), size = 100, replace = TRUE)
+df &lt;- tibble(id = id, trt = group,
+            ae_g = ae_grade, ae_d = ae_domain, ae_t = ae_term)
+test &lt;- df %&gt;% ca_ae(., id = id, group = trt, ae = ae_g, label = "AE",
+                    contr_indicator = TRUE, mass_indicator = TRUE,
+                    contr_threshold = 0.01, mass_threshold = 0.01)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>norm.nearey</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Normalize Vowels with Nearey Method(s) </h2>
+
+<h3>Description</h3>
+
+<p>Normalizes acoustic vowel formant data using Nearey Methods.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">norm.nearey(vowels, formant.int=FALSE, use.f3=FALSE, 
+all.mean=NA, all.mean.f2=NA, all.mean.f3=NA)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vowels</code></td>
+<td>
+<p> a required data frame of the format: speaker_id, vowel_id, context, F1, F2, F3, F1_glide, F2_glide, F3_glide.  The context column and glide columns must exist but can be empty. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formant.int</code></td>
+<td>
+<p> if TRUE, uses formant intrinsic Nearey1 procedure, calculating a separate grand mean for each formant.  If FALSE, uses formant extrinisc Nearey2, calculating a combined grand mean from all formants. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use.f3</code></td>
+<td>
+<p> if TRUE, the normalization procedure includes F3 values in the process.  This both generates normalization F3 values AND impacts the values obtained for F1 and F2.  Default is FALSE. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.mean</code></td>
+<td>
+<p> while it is not recommended that you supply values for all.mean (the f1 all.mean), all.mean.f2, and all.mean.f3, doing so will override the speaker intrinsic generation of the mean formant values for the current speaker. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.mean.f2</code></td>
+<td>
+<p> see above. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.mean.f3</code></td>
+<td>
+<p> see above. </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This implements two versions of the method that Terrance Nearey developed in his 1977 dissertation. The Nearey methods are vowel-extrinsic and in general rather similar to the Lobanov formula, though their formulae differ in that they normalize using log mean values. Following Adank et al. (2004) the major branches of the Nearey method are named here Nearey1 and Nearey2.
+</p>
+
+
+<h3>Value</h3>
+
+<p> A data frame in one of two formats: 
+If use.f3 is TRUE: speaker_id, vowel_id, F*1, F*2, F*3, F*1gl, F*2gl, F*3gl
+If use.f3 is FALSE: speaker_id, vowel_id, F*1, F*2, F*1gl, F*2gl, with the attribute "no.f3s" == TRUE
+In both cases, the data frame also has the attributes "norm.method" == "Nearey" and "norm.variant" == "Nearey1" or "Nearey2", depending on whether formant.int is FALSE or TRUE </p>
+
+
+<h3>Warning </h3>
+
+<p>The development of the library and this function are ongoing.  The arguments to the function may change in future version.</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Kendall, Tyler &lt;tsk@uoregon.edu&gt; </p>
+
+
+<h3>References</h3>
+
+<p> Thomas, Erik R. and Tyler Kendall. 2007. NORM: The vowel normalization and plotting suite. [ Online Resource: http://lingtools.uoregon.edu/norm/ ]
+</p>
+<p>Nearey, Terrance M. 1977. Phonetic Feature Systems for Vowels. Dissertation, University of Alberta. Reprinted 1978 by the Indiana University Linguistics Club.
+</p>
+<p>Adank, Patti, Smits, Roel, and van Hout, Roeland. 2004. A comparison of vowel normalization procedures for language variation research. Journal of the Acoustical Society of America 116:3099-107.
+</p>
+<p>Labov, William, Ash, Sharon, and Boberg, Charles. 2006. The Atlas of North American English: Phonology, Phonetics, and Sound Change. A Multimedia Reference Tool. Berlin: Mouton de Gruyter.
+Lobanov, B. M. 1971. Classification of Russian vowels spoken by different listeners. Journal of the Acoustical Society of America 49:606-08. 
+</p>
+
+
+<h3>See Also</h3>
+
+ <p><code>norm.bark</code>, <code>norm.labov</code>, <code>norm.lobanov</code>, <code>norm.wattfabricius</code> </p>
+
+
+</div>

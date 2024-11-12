@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot Analysis Results</h2>
+
+<h3>Description</h3>
+
+<p>Plot the Estimated Vaccine Efficacy
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VEwaning'
+plot(x, y, ..., xlim)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class VEwaning. The object returned by a call to
+veWaning()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Ignored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Ignored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim</code></td>
+<td>
+<p>A numeric vector object. The minimum and maximum tau values
+to include in the plot.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>No return value, called to produce graphical elements.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(veWaningData)
+
+set.seed(1234)
+
+ind &lt;- sample(1:nrow(x = veWaningData), 2500, FALSE)
+
+# NOTE: This sample size is chosen for example only -- larger data sets
+# should be used.
+
+res &lt;- veWaning(data = veWaningData[ind,], 
+                L = 52,  
+                lag = 6,  
+                modelGam1 = ~ X1+X2+A+A:X1+A:X2, 
+                modelGam2 = ~ X1+X2, 
+                modelEntry = ~ X1+X2, 
+                modelPsiGam1 = ~ X1+X2, 
+                modelPsiGam2 = ~ X1+X2, 
+                gFunc = 'piece', 
+                v = c(15,30))
+
+plot(x = res)
+</code></pre>
+
+
+</div>

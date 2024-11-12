@@ -1,0 +1,82 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>prep_data</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check the classes of specific columns and re-assigns as necessary.</h2>
+
+<h3>Description</h3>
+
+<p><code>prep_data</code> converts the data frame to a data table and examines the 
+required columns (RECORDING_SESSION_LABEL, LEFT_INTEREST_AREA_ID, 
+RIGHT_INTEREST_AREA_ID, LEFT_INTEREST_AREA_LABEL, RIGHT_INTEREST_AREA_LABEL, 
+TIMESTAMP, and TRIAL_INDEX) and optional columns (SAMPLE_MESSAGE, LEFT_GAZE_X,
+LEFT_GAZE_Y, RIGHT_GAZE_X, and RIGHT_GAZE_Y). It renames the subject and item 
+columns, ensures required/optional columns are of the appropriate data class, 
+and creates a new column called Event which indexes each unique 
+series of samples corresponding to the combination of Subject and 
+TRIAL_INDEX (can be changed), necessary for performing subsequent operations.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">prep_data(
+  data,
+  Subject = NULL,
+  Item = NA,
+  EventColumns = c("Subject", "TRIAL_INDEX")
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data frame object created from an Eyelink Sample Report.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Subject</code></td>
+<td>
+<p>An obligatory string containing the column name corresponding to the subject identifier.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Item</code></td>
+<td>
+<p>An optional string containing the column name corresponding to the item identifier; by default, NA.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>EventColumns</code></td>
+<td>
+<p>A vector specifying the columns which will be used for creating 
+the Event variable; by default, Subject and TRIAL_INDEX.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of type data table as described in tibble.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Typical DataViewer output contains a column called "RECORDING_SESSION_LABEL"
+# corresponding to the subject.
+# To prepare the data...
+library(VWPre)
+df &lt;- prep_data(data = dat, Subject = "RECORDING_SESSION_LABEL", Item = "ItemCol")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,111 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotfield.normalized</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Single plotting function for one 24-2 or 30-2 visual field measurement:</h2>
+
+<h3>Description</h3>
+
+<p><code>plotfield.normalized</code> plots the following 24-2 or 30-2 visual field measurement: sensitivity, TD, TD prob, PD, and PD prob:
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotfield.normalized(eigenfields, component = 1,
+  zmin = -max(abs(c(min(eigenfields), max(eigenfields)))),
+  zmax = max(abs(c(min(eigenfields), max(eigenfields)))),
+  color.pal = colorRampPalette(c("red", "white", "blue"), space =
+  "Lab")(256), show.colorbar = TRUE, topleftannotation = NULL,
+  bottomleftannotation = NULL, labelcex = 2, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>eigenfields</code></td>
+<td>
+<p>a vector contains Sensitivity/TD/PD measurement. For 24-2 VF <code>eigenfields</code> should have 52 or 54 elements. For 30-2 VF, <code>eigenfields</code> should have 74 or 76 elements.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>component</code></td>
+<td>
+<p>Number of components to be plotted (default: 1).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zmin</code></td>
+<td>
+<p>minimum value of the color scale (default: auto defined).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zmax</code></td>
+<td>
+<p>maximum value of the color scale (default: auto defined).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color.pal</code></td>
+<td>
+<p>an object that defines color scale theme (default: colorRampPalette(c("red", "white", "blue"), space = "Lab")(256)).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.colorbar</code></td>
+<td>
+<p>a logic value to show colorbar (default: TRUE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>topleftannotation</code></td>
+<td>
+<p>a string annotation shown on the top left side of the plot (default: NULL).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bottomleftannotation</code></td>
+<td>
+<p>a string annotation shown on the bottom left side of the plot (default: NULL).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labelcex</code></td>
+<td>
+<p>a numeric variable for label size (default: 2).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other variables to be added.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>heatmap for sensitivity, TD and PD input
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vfseries)
+eigenfields = t(vfseries[1, grepl('^s[0-9]+', colnames(vfseries))])
+plotfield.normalized(eigenfields)
+title(main = "Sensitivity", line = 3)
+eigenfields = t(vfseries[1, grepl('^td[0-9]+', colnames(vfseries))])
+plotfield.normalized(eigenfields)
+title(main = "Total Deviation", line = 3)
+eigenfields = t(vfseries[1, grepl('^pd[0-9]+', colnames(vfseries))])
+plotfield.normalized(eigenfields)
+title(main = "Pattern Deviation", line = 3)
+</code></pre>
+
+
+</div>

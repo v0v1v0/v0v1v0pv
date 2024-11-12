@@ -1,0 +1,164 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vistla</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Influence path identification with the Vistla algorithm</h2>
+
+<h3>Description</h3>
+
+<p>Detects influence paths.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vistla(x, ...)
+
+## S3 method for class 'formula'
+vistla(formula, data, ..., yn)
+
+## S3 method for class 'data.frame'
+vistla(
+  x,
+  y,
+  ...,
+  flow,
+  iomin,
+  targets,
+  estimator = c("mle", "kt"),
+  verbose = FALSE,
+  yn = "Y",
+  ensemble,
+  threads
+)
+
+## Default S3 method:
+vistla(x, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>data frame of predictors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>pass-through arguments, ignored.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>alternatively, formula describing the task, in a form <code>root~predictors</code>, which adheres to standard R behaviours.
+Accepts <code>+</code> to add a predictor, <code>-</code> to omit one, and <code>.</code> to import whole <code>data</code>.
+Use <code>I</code> to calculate new predictors.
+When present in <code>data</code>, response is getting omitted from predictors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p><code>data.frame</code> in context of which the formula will be executed; can be omitted when not using <code>.</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>yn</code></td>
+<td>
+<p>name of the root (<code>Y</code> value), used in result pretty-printing and plots. 
+Must be a single-element character vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>vistla tree root, a feature from which influence paths will be traced.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>flow</code></td>
+<td>
+<p>algorithm mode, specifying the iota function which gives local score to an edge of an edge graph. 
+If in doubt, use the default, <code>"fromdown"</code>.
+Consult the documentation of the <code>flow</code> function for more information.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iomin</code></td>
+<td>
+<p>score threshold below which path is not considered further. 
+The higher value the less paths are generated, which also lowers the time taken by the function.
+The default value of 0 turns of this filtering.
+The same effect can be later achieved with the <code>prune</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>targets</code></td>
+<td>
+<p>a vector of target feature names.
+If given, the algorithm will stop just after reaching the last of them, rather than after tracing all paths from the root.
+The same effect can be later achieved with the <code>prune</code> function.
+This is a simple method to remove irrelevant paths, yet it comes with a substantial increase in computational burden.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estimator</code></td>
+<td>
+<p>mutual information estimator to use.
+<code>"mle"</code> — maximal likelihood, requires all features to be discrete (factors or booleans).
+<code>"kt"</code> — Kendall transformation, requires all features to be either ordinal (numeric, integer or ordered factor) or bi-valued (two-level factors or booleans).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>when set to <code>TRUE</code>, turns on reporting of the algorithm progress.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ensemble</code></td>
+<td>
+<p>used to switch vistla to the ensemble mode, in which a number of vistla models are built over permuted realisations of the input, and merged into a single consensus tree.
+Should be given an output of the <code>ensemble</code> function; as a short-cut, one can pass a single number, which will be interpreted as the number of replications with other ensemble parameter default.
+That is, <code>ensemble=30</code> is equivalent to <code>ensemble=ensemble(n=30)</code>.
+Permutations are applied before estimators.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threads</code></td>
+<td>
+<p>number of threads to use. 
+When missing or set to 0, vistla uses all available cores.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Normally, the tracing results represented as an object of a class <code>vistla</code>.
+Use <code>paths</code> and <code>path_to</code> functions to extract individual paths,
+<code>branches</code> to get the whole tree and <code>mi_scores</code> to get the basic score matrix.
+</p>
+<p>When <code>ensemble</code> argument is given, a hierarchy object with the scored being counts of times certain path was present among the replicated ensemble, possibly pruned.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The ensemble mode is both faster and makes better use of multithreading than replicating vistla manually.
+</p>
+
+
+<h3>References</h3>
+
+<p>"Kendall transformation brings a robust categorical representation of ordinal data" M.B. Kursa. SciRep 12, 8341 (2022).
+</p>
+
+
+</div>

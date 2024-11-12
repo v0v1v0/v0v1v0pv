@@ -1,0 +1,130 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>stripPnL</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculates per share Profit and Loss (PnL) at expiration for Strip Option Strategy and draws its Bar Plot displaying PnL in the Plots tab.</h2>
+
+<h3>Description</h3>
+
+<p>This Strategy consists of a long call position (in an at the money call option) and a long position in two put options (at the money) with a strike price X. The Strip is a simple adjustment to the Straddle to make it more biased toward the downside. In buying a second put, the strategy retains its preference for high volatility but now with a more bearish slant (Cohen, 2016).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">stripPnL(
+  ST,
+  X,
+  C,
+  P1,
+  P2,
+  hl = 0,
+  hu = 2,
+  spot = spot,
+  pl = pl,
+  myData = myData,
+  myTibble = myTibble,
+  PnL = PnL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ST</code></td>
+<td>
+<p>Spot Price at time T.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Strike Price or eXercise price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>Call Premium or Call Price paid for bought Call.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>P1</code></td>
+<td>
+<p>Put Premium paid for the first bought put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>P2</code></td>
+<td>
+<p>Put Premium paid for the second bought put.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hl</code></td>
+<td>
+<p>lower bound value for setting lower-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hu</code></td>
+<td>
+<p>upper bound value for setting upper-limit of x-axis displaying spot price.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spot</code></td>
+<td>
+<p>Spot Price</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pl</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myData</code></td>
+<td>
+<p>Data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>myTibble</code></td>
+<td>
+<p>tibble</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>PnL</code></td>
+<td>
+<p>Profit and Loss</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>According to conceptual details given by Cohen (2015), and a closed form solution provided by Kakushadze and Serur (2018), this method is developed, and the given examples are created, to compute per share Profit and Loss at expiration for Strip Option Strategy and draw its graph in the Plots tab. EXAMPLE, Buy HypoVola December 9 call at $1.40 (outflow) and Buy two HypoVola December 9 Puts at $0.80 (outflow). This is a net debit trade and involves three cash outflows. The Bar Plot gets displayed in Plots tab.
+</p>
+
+
+<h3>Value</h3>
+
+<p>graph of the strategy
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">stripPnL(9,9,1.4,0.80,0.80)
+stripPnL(40,40,2.00,1.25,1.25,hl=0.85,hu=1.25)
+stripPnL(1000,1000,8,5.50,6.50,hl=0.985,hu=1.035)
+</code></pre>
+
+
+</div>

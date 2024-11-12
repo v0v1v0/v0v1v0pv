@@ -1,0 +1,252 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>village</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Village</h2>
+
+<h3>Description</h3>
+
+<p>This is an object that represents the state of a village at a particular time.
+</p>
+
+
+<h3>Details</h3>
+
+<p>This class acts as a type of record that holds the values of the
+different village variables. This class can be subclassed to include more variables that aren't present.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt><code>initialize()</code></dt>
+<dd>
+<p>Creates a new village</p>
+</dd>
+<dt><code>propagate()</code></dt>
+<dd>
+<p>Advances the village a single time step</p>
+</dd>
+<dt><code>set_initial_state()</code></dt>
+<dd>
+<p>Initializes the initial state of the village</p>
+</dd>
+</dl>
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>name</code></dt>
+<dd>
+<p>An optional name for the village</p>
+</dd>
+<dt><code>initial_condition</code></dt>
+<dd>
+<p>A function that sets the initial state of the village</p>
+</dd>
+<dt><code>current_state</code></dt>
+<dd>
+<p>The village's current state</p>
+</dd>
+<dt><code>previous_state</code></dt>
+<dd>
+<p>The village's previous state</p>
+</dd>
+<dt><code>models</code></dt>
+<dd>
+<p>A list of functions or a single function that should be run at each timestep</p>
+</dd>
+<dt><code>model_data</code></dt>
+<dd>
+<p>Optional data that models may need</p>
+</dd>
+<dt><code>agent_mgr</code></dt>
+<dd>
+<p>The manager that handles all of the agents</p>
+</dd>
+<dt><code>resource_mgr</code></dt>
+<dd>
+<p>The manager that handles all of the resources
+Initializes a village</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-village-new"><code>village$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-village-propagate"><code>village$propagate()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-village-set_initial_state"><code>village$set_initial_state()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-village-clone"><code>village$clone()</code></a>
+</p>
+</li>
+</ul>
+<hr>
+<a id="method-village-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>This method is meant to set the variables that are needed for a village to propagate through
+time.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>village$new(
+  name,
+  initial_condition,
+  models = list(),
+  agent_class = villager::agent,
+  resource_class = villager::resource
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>name</code></dt>
+<dd>
+<p>An optional name for the village</p>
+</dd>
+<dt><code>initial_condition</code></dt>
+<dd>
+<p>A function that gets called on the first time step</p>
+</dd>
+<dt><code>models</code></dt>
+<dd>
+<p>A list of functions or a single function that should be run at each time step</p>
+</dd>
+<dt><code>agent_class</code></dt>
+<dd>
+<p>The class that's being used to represent agents</p>
+</dd>
+<dt><code>resource_class</code></dt>
+<dd>
+<p>The class being used to describe the resources
+Propagates the village a single time step</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-village-propagate"></a>
+
+
+
+<h4>Method <code>propagate()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>village$propagate(current_step)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>current_step</code></dt>
+<dd>
+<p>The current time step</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Details</h5>
+
+<p>This method is used to advance the village a single time step. It should NOT be used
+to set initial conditions. See the set_initial_state method.
+</p>
+
+
+
+<h5>Returns</h5>
+
+<p>None
+Runs the user defined function that sets the initial state of the village
+</p>
+
+
+<hr>
+<a id="method-village-set_initial_state"></a>
+
+
+
+<h4>Method <code>set_initial_state()</code>
+</h4>
+
+<p>Runs the initial condition model
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>village$set_initial_state()</pre></div>
+
+
+<hr>
+<a id="method-village-clone"></a>
+
+
+
+<h4>Method <code>clone()</code>
+</h4>
+
+<p>The objects of this class are cloneable with this method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>village$clone(deep = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>deep</code></dt>
+<dd>
+<p>Whether to make a deep clone.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+</div>

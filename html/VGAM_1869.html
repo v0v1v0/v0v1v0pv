@@ -1,0 +1,185 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vonmises</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> von Mises Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the location and scale parameters of the
+von Mises distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vonmises(llocation = extlogitlink(min = 0, max = 2*pi),
+         lscale = "loglink", ilocation = NULL, iscale = NULL,
+         imethod = 1, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>llocation, lscale</code></td>
+<td>
+
+<p>Parameter link functions applied to the
+location <code class="reqn">a</code> parameter
+and scale parameter <code class="reqn">k</code>, respectively.
+See <code>Links</code> for more choices.
+For <code class="reqn">k</code>, a log link is the default
+because the parameter is positive.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilocation</code></td>
+<td>
+
+<p>Initial value for the location <code class="reqn">a</code> parameter.
+By default, an initial value is chosen internally using
+<code>imethod</code>. Assigning a value will override
+the argument <code>imethod</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iscale</code></td>
+<td>
+
+<p>Initial value for the scale <code class="reqn">k</code> parameter.
+By default, an initial value is chosen internally using
+<code>imethod</code>. Assigning a value will override
+the argument <code>imethod</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>An integer with value <code>1</code> or <code>2</code> which
+specifies the initialization method. If failure
+to converge occurs
+try the other value, or else specify a value for
+<code>ilocation</code> and <code>iscale</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>An integer-valued vector specifying which
+linear/additive predictors are modelled as intercepts only.
+The default is none of them.
+If used, one can choose one value from the set {1,2}.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The (two-parameter) von Mises
+is the most commonly used distribution in practice
+for circular data.
+It has a density that can be written as
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;a,k) = \frac{\exp[k\cos(y-a)]}{
+      2\pi I_0(k)}</code>
+</p>
+
+<p>where <code class="reqn">0 \leq y &lt; 2\pi</code>,
+<code class="reqn">k&gt;0</code> is the scale parameter,
+<code class="reqn">a</code> is the location parameter, and
+<code class="reqn">I_0(k)</code> is the modified Bessel
+function of order 0 evaluated at <code class="reqn">k</code>.
+The mean of <code class="reqn">Y</code> (which is the fitted value) is <code class="reqn">a</code>
+and the circular variance is
+<code class="reqn">1 - I_1(k) / I_0(k)</code>
+where <code class="reqn">I_1(k)</code> is the modified Bessel
+function of order 1.
+By default,
+<code class="reqn">\eta_1=\log(a/(2\pi-a))</code>
+and
+<code class="reqn">\eta_2=\log(k)</code> for this family function.
+</p>
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Numerically, the von Mises can be difficult to fit because of a
+log-likelihood having multiple maximums.
+The user is therefore encouraged to try different starting values,
+i.e., make use of <code>ilocation</code> and <code>iscale</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response and the fitted values are scaled so that
+<code class="reqn">0\leq y&lt; 2\pi</code>.
+The linear/additive predictors are left alone.
+Fisher scoring is used.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Bessel</code>,
+<code>cardioid</code>.
+</p>
+<p><span class="pkg">CircStats</span> and <span class="pkg">circular</span> currently have a lot more
+R functions for circular data than the <span class="pkg">VGAM</span> package.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+vdata &lt;- transform(vdata,
+                   y = rnorm(nn, 2+x2, exp(0.2)))  # Bad data!!
+fit &lt;- vglm(y  ~ x2, vonmises(zero = 2), vdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+with(vdata, range(y))  # Original data
+range(depvar(fit))     # Processed data is in [0,2*pi)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,65 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>find_nn_corr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Find ordered nearest neighbors based on a correlation Matrix. Assuming the
+absolute value of the correlation is monotonically decreasing with distance.
+Returns an n X (m + 1) matrix similar to 'GpGp::find_ordered_nn'.</h2>
+
+<h3>Description</h3>
+
+<p>Find ordered nearest neighbors based on a correlation Matrix. Assuming the
+absolute value of the correlation is monotonically decreasing with distance.
+Returns an n X (m + 1) matrix similar to 'GpGp::find_ordered_nn'.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">find_nn_corr(corrMat, m)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>corrMat</code></td>
+<td>
+<p>the correlation matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>the number of nearest neighbors</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>an n X (m + 1) matrix
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(GpGp)
+library(VeccTMVN)
+set.seed(123)
+d &lt;- 3
+n &lt;- 100
+locs &lt;- matrix(runif(d * n), n, d)
+covparms &lt;- c(2, 0.01, 0)
+cov_mat &lt;- GpGp::matern15_isotropic(covparms, locs)
+m &lt;- 10
+NNarray_test &lt;- GpGp::find_ordered_nn(locs, m = m)
+NNarray &lt;- find_nn_corr(cov_mat, m)
+cat("Number of mismatch is", sum(NNarray != NNarray_test, na.rm = TRUE))
+
+</code></pre>
+
+
+</div>

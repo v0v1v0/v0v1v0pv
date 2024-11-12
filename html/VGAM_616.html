@@ -1,0 +1,216 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>garma</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>GARMA (Generalized Autoregressive Moving-Average) Models</h2>
+
+<h3>Description</h3>
+
+<p>Fits GARMA models to time series data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">garma(link = "identitylink", p.ar.lag = 1, q.ma.lag = 0,
+      coefstart = NULL, step = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to the mean response.
+The default is suitable for continuous responses.
+The link <code>loglink</code> should be chosen if the data
+are counts.
+The link <code>reciprocal</code> can be chosen if the data
+are counts
+and the variance assumed for this is <code class="reqn">\mu^2</code>.
+The links <code>logitlink</code>, <code>probitlink</code>,
+<code>clogloglink</code>, and
+<code>cauchitlink</code> are supported and suitable for
+binary responses.
+</p>
+<p>Note that when the log or logit link is chosen:
+for log and logit,
+zero values can be replaced by <code>bvalue</code>.
+See <code>loglink</code> and <code>logitlink</code> etc. for
+specific information about each link function.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.ar.lag</code></td>
+<td>
+
+<p>A positive integer,
+the lag for the autoregressive component.
+Called <code class="reqn">p</code> below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q.ma.lag</code></td>
+<td>
+
+<p>A non-negative integer,
+the lag for the moving-average component.
+Called <code class="reqn">q</code> below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coefstart</code></td>
+<td>
+
+<p>Starting values for the coefficients.
+Assigning this argument is highly recommended.
+For technical reasons, the
+argument <code>coefstart</code> in <code>vglm</code> cannot be used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>step</code></td>
+<td>
+
+<p>Numeric. Step length, e.g., <code>0.5</code> means half-stepsizing.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function draws heavily on Benjamin <em>et al.</em> (1998).
+See also Benjamin <em>et al.</em> (2003).
+GARMA models extend the ARMA time series model to generalized
+responses in the exponential family, e.g., Poisson counts,
+binary responses. Currently, this function is rudimentary and
+can handle only certain continuous, count and binary responses only.
+The user must choose an appropriate link for the <code>link</code> argument.
+</p>
+<p>The GARMA(<code class="reqn">p, q</code>) model is defined by firstly
+having a response belonging to the exponential family
+</p>
+<p style="text-align: center;"><code class="reqn">f(y_t|D_t) = \exp
+        \left\{ \frac{y_t \theta_t - b(\theta_t)}{\phi / A_t} +
+        c(y_t, \phi / A_t)
+        \right\}</code>
+</p>
+
+<p>where <code class="reqn">\theta_t</code> and <code class="reqn">\phi</code> are the
+canonical and scale parameters
+respectively, and <code class="reqn">A_t</code> are known prior weights.
+The mean
+<code class="reqn">\mu_t=E(Y_t|D_t)=b'(\theta_t)</code>
+is related to
+the linear predictor  <code class="reqn">\eta_t</code>  by the link
+function <code class="reqn">g</code>.
+Here,
+<code class="reqn">D_t=\{x_t,\ldots,x_1,y_{t-1},\ldots,y_1,\mu_{t-1},\ldots,\mu_1\}</code>
+is the previous information set.
+Secondly, the GARMA(<code class="reqn">p, q</code>) model is defined by
+</p>
+<p style="text-align: center;"><code class="reqn">g(\mu_t) = \eta_t = x_t^T \beta +
+    \sum_{k=1}^p \phi_k (g(y_{t-k}) - x_{t-k}^T \beta) +
+    \sum_{k=1}^q \theta_k (g(y_{t-k}) - \eta_{t-k}).</code>
+</p>
+
+<p>Parameter vectors <code class="reqn">\beta</code>, <code class="reqn">\phi</code> and <code class="reqn">\theta</code>
+are estimated by maximum likelihood.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>This <span class="pkg">VGAM</span> family function is 'non-standard' in that the
+model does need some coercing to get it into the VGLM framework.
+Special code is required to get it running. A consequence is
+that some methods functions may give wrong results when applied
+to the fitted object.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is unpolished and is requires <em>lots</em> of improvements.
+In particular, initialization is <em>very poor</em>.
+Results appear <em>very</em> sensitive to quality of initial values.
+A limited amount of experience has shown that half-stepsizing is
+often needed for convergence, therefore choosing <code>crit = "coef"</code>
+is not recommended.
+</p>
+<p>Overdispersion is not handled.
+For binomial responses it is currently best to input a vector
+of 1s and 0s rather than the <code>cbind(successes, failures)</code>
+because the initialize slot is rudimentary.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Benjamin, M. A., Rigby, R. A. and Stasinopoulos, M. D. (1998).
+Fitting Non-Gaussian Time Series Models. Pages 191–196 in:
+<em>Proceedings in Computational Statistics COMPSTAT 1998</em> by
+Payne, R. and P. J. Green. Physica-Verlag.
+</p>
+<p>Benjamin, M. A., Rigby, R. A. and Stasinopoulos, M. D. (2003).
+Generalized Autoregressive Moving Average Models.
+<em>Journal of the American Statistical Association</em>,
+<b>98</b>: 214–223.
+</p>
+<p>Zeger, S. L. and Qaqish, B. (1988).
+Markov regression models for time series: a quasi-likelihood approach.
+<em>Biometrics</em>,
+<b>44</b>: 1019–1031.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">gdata &lt;- data.frame(interspike = c(68, 41, 82, 66, 101, 66, 57,  41,  27, 78,
+59, 73,  6, 44,  72, 66, 59,  60,  39, 52,
+50, 29, 30, 56,  76, 55, 73, 104, 104, 52,
+25, 33, 20, 60,  47,  6, 47,  22,  35, 30,
+29, 58, 24, 34,  36, 34,  6,  19,  28, 16,
+36, 33, 12, 26,  36, 39, 24,  14,  28, 13,
+ 2, 30, 18, 17,  28,  9, 28,  20,  17, 12,
+19, 18, 14, 23,  18, 22, 18,  19,  26, 27,
+23, 24, 35, 22,  29, 28, 17,  30,  34, 17,
+20, 49, 29, 35,  49, 25, 55,  42,  29, 16))  # See Zeger and Qaqish (1988)
+gdata &lt;- transform(gdata, spikenum = seq(interspike))
+bvalue &lt;- 0.1  # .Machine$double.xmin # Boundary value
+fit &lt;- vglm(interspike ~ 1, trace = TRUE, data = gdata,
+            garma(loglink(bvalue = bvalue),
+                  p = 2, coefstart = c(4, 0.3, 0.4)))
+summary(fit)
+coef(fit, matrix = TRUE)
+Coef(fit)  # A bug here
+## Not run:  with(gdata, plot(interspike, ylim = c(0, 120), las = 1,
+     xlab = "Spike Number", ylab = "Inter-Spike Time (ms)", col = "blue"))
+with(gdata, lines(spikenum[-(1:fit@misc$plag)], fitted(fit), col = "orange"))
+abline(h = mean(with(gdata, interspike)), lty = "dashed", col = "gray") 
+## End(Not run)
+</code></pre>
+
+
+</div>

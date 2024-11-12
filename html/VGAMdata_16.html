@@ -1,0 +1,171 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bigamma.mckay</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Bivariate Gamma: McKay's Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Estimate the three parameters of McKay's bivariate gamma
+distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bigamma.mckay(lscale = "loglink", lshape1 = "loglink",
+              lshape2 = "loglink", iscale = NULL, ishape1 = NULL,
+              ishape2 = NULL, imethod = 1, zero = "shape")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lscale, lshape1, lshape2</code></td>
+<td>
+
+<p>Link functions applied to the (positive)
+parameters <code class="reqn">a</code>, <code class="reqn">p</code> and <code class="reqn">q</code> respectively.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iscale, ishape1, ishape2</code></td>
+<td>
+
+<p>Optional initial values for <code class="reqn">a</code>, <code class="reqn">p</code> and <code class="reqn">q</code>
+respectively.  The default is to compute them internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>One of the earliest forms of the
+bivariate gamma distribution has
+a joint probability density function given by
+</p>
+<p style="text-align: center;"><code class="reqn">f(y_1,y_2;a,p,q) =
+    (1/a)^{p+q} y_1^{p-1} (y_2-y_1)^{q-1}
+    \exp(-y_2 / a) / [\Gamma(p) \Gamma(q)]</code>
+</p>
+
+<p>for <code class="reqn">a &gt; 0</code>, <code class="reqn">p &gt; 0</code>, <code class="reqn">q &gt; 0</code> and
+<code class="reqn">0 &lt; y_1 &lt; y_2</code>
+(Mckay, 1934).
+Here, <code class="reqn">\Gamma</code> is the gamma
+function, as in <code>gamma</code>.
+By default, the linear/additive predictors are
+<code class="reqn">\eta_1=\log(a)</code>,
+<code class="reqn">\eta_2=\log(p)</code>,
+<code class="reqn">\eta_3=\log(q)</code>.
+</p>
+<p>The marginal distributions are gamma,
+with shape parameters <code class="reqn">p</code> and <code class="reqn">p+q</code>
+respectively, but they have a
+common scale parameter <code class="reqn">a</code>.
+Pearson's product-moment correlation coefficient
+of <code class="reqn">y_1</code> and <code class="reqn">y_2</code> is
+<code class="reqn">\sqrt{p/(p+q)}</code>.
+This distribution is also
+known as the bivariate Pearson type III distribution.
+Also,
+<code class="reqn">Y_2 - y_1</code>,
+conditional on <code class="reqn">Y_1=y_1</code>,
+has a gamma distribution with shape parameter <code class="reqn">q</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be a two column matrix where
+the first column is <code class="reqn">y_1</code> and the
+second <code class="reqn">y_2</code>.
+It is necessary that each element of the
+vectors <code class="reqn">y_1</code> and
+<code class="reqn">y_2-y_1</code> be positive.
+Currently, the fitted value is a matrix with
+two columns;
+the first column has values <code class="reqn">ap</code> for the
+marginal mean of <code class="reqn">y_1</code>,
+while the second column
+has values <code class="reqn">a(p+q)</code> for the marginal mean of
+<code class="reqn">y_2</code> (all evaluated at the final iteration).
+</p>
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>McKay, A. T. (1934).
+Sampling from batches.
+<em>Journal of the Royal Statistical Society—Supplement</em>,
+<b>1</b>, 207–216.
+</p>
+<p>Kotz, S. and Balakrishnan, N. and Johnson, N. L. (2000).
+<em>Continuous Multivariate Distributions Volume 1:
+Models and Applications</em>,
+2nd edition,
+New York: Wiley.
+</p>
+<p>Balakrishnan, N. and Lai, C.-D. (2009).
+<em>Continuous Bivariate Distributions</em>,
+2nd edition.
+New York: Springer.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gammaff.mm</code>,
+<code>gamma2</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">shape1 &lt;- exp(1); shape2 &lt;- exp(2); scalepar &lt;- exp(3)
+nn &lt;- 1000
+mdata &lt;- data.frame(y1 = rgamma(nn, shape1, scale = scalepar),
+                    z2 = rgamma(nn, shape2, scale = scalepar))
+mdata &lt;- transform(mdata, y2 = y1 + z2)  # z2 \equiv Y2-y1|Y1=y1
+fit &lt;- vglm(cbind(y1, y2) ~ 1, bigamma.mckay, mdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+vcov(fit)
+
+colMeans(depvar(fit))  # Check moments
+head(fitted(fit), 1)
+</code></pre>
+
+
+</div>

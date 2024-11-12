@@ -1,0 +1,260 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mkCrossFrameMExperiment</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Function to build multi-outcome vtreat cross frame and treatment plan.</h2>
+
+<h3>Description</h3>
+
+<p>Please see <code>vignette("MultiClassVtreat", package = "vtreat")</code> <a href="https://winvector.github.io/vtreat/articles/MultiClassVtreat.html">https://winvector.github.io/vtreat/articles/MultiClassVtreat.html</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mkCrossFrameMExperiment(
+  dframe,
+  varlist,
+  outcomename,
+  ...,
+  weights = c(),
+  minFraction = 0.02,
+  smFactor = 0,
+  rareCount = 0,
+  rareSig = 1,
+  collarProb = 0,
+  codeRestriction = NULL,
+  customCoders = NULL,
+  scale = FALSE,
+  doCollar = FALSE,
+  splitFunction = vtreat::kWayCrossValidation,
+  ncross = 3,
+  forceSplit = FALSE,
+  catScaling = FALSE,
+  y_dependent_treatments = c("catB"),
+  verbose = FALSE,
+  parallelCluster = NULL,
+  use_parallel = TRUE,
+  missingness_imputation = NULL,
+  imputation_map = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dframe</code></td>
+<td>
+<p>data to learn from</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varlist</code></td>
+<td>
+<p>character, vector of indpendent variable column names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outcomename</code></td>
+<td>
+<p>character, name of outcome column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>not used, declared to forced named binding of later arguments</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>optional training weights for each row</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minFraction</code></td>
+<td>
+<p>optional minimum frequency a categorical level must have to be converted to an indicator column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smFactor</code></td>
+<td>
+<p>optional smoothing factor for impact coding models.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rareCount</code></td>
+<td>
+<p>optional integer, allow levels with this count or below to be pooled into a shared rare-level.  Defaults to 0 or off.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rareSig</code></td>
+<td>
+<p>optional numeric, suppress levels from pooling at this significance value greater.  Defaults to NULL or off.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>collarProb</code></td>
+<td>
+<p>what fraction of the data (pseudo-probability) to collar data at if doCollar is set during <code>prepare.multinomial_plan</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>codeRestriction</code></td>
+<td>
+<p>what types of variables to produce (character array of level codes, NULL means no restriction).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>customCoders</code></td>
+<td>
+<p>map from code names to custom categorical variable encoding functions (please see <a href="https://github.com/WinVector/vtreat/blob/main/extras/CustomLevelCoders.md">https://github.com/WinVector/vtreat/blob/main/extras/CustomLevelCoders.md</a>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>optional if TRUE replace numeric variables with regression ("move to outcome-scale").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>doCollar</code></td>
+<td>
+<p>optional if TRUE collar numeric variables by cutting off after a tail-probability specified by collarProb during treatment design.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>splitFunction</code></td>
+<td>
+<p>(optional) see vtreat::buildEvalSets .</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncross</code></td>
+<td>
+<p>optional scalar&gt;=2 number of cross-validation rounds to design.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>forceSplit</code></td>
+<td>
+<p>logical, if TRUE force cross-validated significance calculations on all variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>catScaling</code></td>
+<td>
+<p>optional, if TRUE use glm() linkspace, if FALSE use lm() for scaling.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_dependent_treatments</code></td>
+<td>
+<p>character what treatment types to build per-outcome level.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>if TRUE print progress.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallelCluster</code></td>
+<td>
+<p>(optional) a cluster object created by package parallel or package snow.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use_parallel</code></td>
+<td>
+<p>logical, if TRUE use parallel methods.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>missingness_imputation</code></td>
+<td>
+<p>function of signature f(values: numeric, weights: numeric), simple missing value imputer.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imputation_map</code></td>
+<td>
+<p>map from column names to functions of signature f(values: numeric, weights: numeric), simple missing value imputers.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a names list containing cross_frame, treat_m, score_frame, and fit_obj_id
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>prepare.multinomial_plan</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# numeric example
+set.seed(23525)
+
+# we set up our raw training and application data
+dTrainM &lt;- data.frame(
+  x = c('a', 'a', 'a', 'a', 'b', 'b', NA, NA),
+  z = c(1, 2, 3, 4, 5, NA, 7, NA), 
+  y = c(0, 0, 0, 1, 0, 1, 2, 1))
+
+dTestM &lt;- data.frame(
+  x = c('a', 'b', 'c', NA), 
+  z = c(10, 20, 30, NA))
+
+# we perform a vtreat cross frame experiment
+# and unpack the results into treatmentsM,
+# dTrainMTreated, and score_frame
+unpack[
+  treatmentsM = treat_m,
+  dTrainMTreated = cross_frame,
+  score_frame = score_frame
+  ] &lt;- mkCrossFrameMExperiment(
+    dframe = dTrainM,
+    varlist = setdiff(colnames(dTrainM), 'y'),
+    outcomename = 'y',
+    verbose = FALSE)
+
+# the score_frame relates new
+# derived variables to original columns
+score_frame[, c('origName', 'varName', 'code', 'rsq', 'sig', 'outcome_level')] %.&gt;%
+  print(.)
+
+# the treated frame is a "cross frame" which
+# is a transform of the training data built 
+# as if the treatment were learned on a different
+# disjoint training set to avoid nested model
+# bias and over-fit.
+dTrainMTreated %.&gt;%
+  head(.) %.&gt;%
+  print(.)
+
+# Any future application data is prepared with
+# the prepare method.
+dTestMTreated &lt;- prepare(treatmentsM, dTestM, pruneSig=NULL)
+
+dTestMTreated %.&gt;%
+  head(.) %.&gt;%
+  print(.)
+
+</code></pre>
+
+
+</div>

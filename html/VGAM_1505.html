@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rigff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Reciprocal Inverse Gaussian distribution </h2>
+
+<h3>Description</h3>
+
+<p>Estimation of the parameters of a
+reciprocal inverse Gaussian distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rigff(lmu = "identitylink", llambda = "loglink", imu = NULL,
+      ilambda = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmu, llambda</code></td>
+<td>
+
+<p>Link functions  for <code>mu</code> and <code>lambda</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imu, ilambda</code></td>
+<td>
+
+<p>Initial values for <code>mu</code> and <code>lambda</code>.
+A <code>NULL</code> means a value is computed internally.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See Jorgensen (1997) for details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This distribution is potentially useful for
+dispersion modelling.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Jorgensen, B. (1997).
+<em>The Theory of Dispersion Models</em>.
+London: Chapman &amp; Hall
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>simplex</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rdata &lt;- data.frame(y = rchisq(100, df = 14))  # Not 'proper' data!!
+fit &lt;- vglm(y ~ 1, rigff, rdata, trace = TRUE)
+fit &lt;- vglm(y ~ 1, rigff, rdata, trace = TRUE, crit = "c")
+summary(fit)
+</code></pre>
+
+
+</div>

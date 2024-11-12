@@ -1,0 +1,109 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>request_response</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>request and response summary methods</h2>
+
+<h3>Description</h3>
+
+<p>request and response summary methods
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">request_summary(request, request_matchers = "")
+
+response_summary(response)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>request</code></td>
+<td>
+<p>a Request object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>request_matchers</code></td>
+<td>
+<p>(character) a vector of matchers.
+Default: <code>""</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>response</code></td>
+<td>
+<p>a VcrResponse object</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>By default, method and uri are included
+in the request summary - if body and/or headers are
+specified in <code>request_matchers</code>, then they are also
+included
+</p>
+<p>HTTP status code and response body are included in the
+response summary. The response body is truncated to a
+max of 80 characters
+</p>
+<p>In <code>response_summary()</code> we use gsub with <code>useBytes=TRUE</code> to avoid
+problems sometimes seen with multibyte strings - this shouldn't affect
+your data/etc. as this is only for printing a summary of the response
+</p>
+
+
+<h3>Value</h3>
+
+<p>character string, of either request or response
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># request
+url &lt;- "https://hb.opencpu.org"
+body &lt;- list(foo = "bar")
+headers &lt;- list(
+  `User-Agent` = "r-curl/3.2",
+  `Accept-Encoding` = "gzip, deflate",
+  Accept = "application/json"
+)
+
+(x &lt;- Request$new("POST", url, body, headers))
+request_summary(request = x)
+request_summary(request = x, c('method', 'uri'))
+request_summary(request = x, c('method', 'uri', 'body'))
+request_summary(request = x, c('method', 'uri', 'headers'))
+request_summary(request = x, c('method', 'uri', 'body', 'headers'))
+
+# response
+status &lt;- list(status_code = 200, message = "OK",
+  explanation = "Request fulfilled, document follows")
+headers &lt;- list(
+  status = "HTTP/1.1 200 OK",
+  connection = "keep-alive",
+  date = "Tue, 24 Apr 2018 04:46:56 GMT"
+)
+response_body &lt;- 
+"{\"args\": {\"q\": \"stuff\"}, \"headers\": {\"Accept\": \"text/html\"}}\n"
+(x &lt;- VcrResponse$new(status, headers,
+   response_body, "HTTP/1.1 200 OK"))
+response_summary(x)
+
+## with binary body
+# path &lt;- "tests/testthat/png_eg.rda"
+# load(path)
+# (x &lt;- VcrResponse$new(status, headers, png_eg, "HTTP/1.1 200 OK"))
+# response_summary(x)
+</code></pre>
+
+
+</div>

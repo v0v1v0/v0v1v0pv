@@ -1,0 +1,188 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.spwkm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plots from a "spwkm" object</h2>
+
+<h3>Description</h3>
+
+<p>Produces several graphics to help interpreting a <code>spwkm</code> object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'spwkm'
+plot(
+  x,
+  what = "weights.features",
+  Which = NULL,
+  xtitle = NULL,
+  ytitle = NULL,
+  title = NULL,
+  showlegend = NULL,
+  legendtitle = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class <code>spwkm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>what</code></td>
+<td>
+<p>A character string indicating which element of <code>x</code> to be plotted. See section
+"Details" below for further information.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Which</code></td>
+<td>
+<p>A numerical vector indexing the groups or the variables to be displayed. See section
+"Details" below for further information.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xtitle</code></td>
+<td>
+<p>The title of the x-axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ytitle</code></td>
+<td>
+<p>The title of the y-axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>The title of the graphic.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showlegend</code></td>
+<td>
+<p>A boolean. If <code>showlegend=NULL</code> (default value), the legend is displayed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legendtitle</code></td>
+<td>
+<p>The title of the legend.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments to the <code>plot</code> function.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>plot</code> function allows to represent the regularization paths for a grid of values of <code>lambda</code>, as well as several quality criteria associated to the 
+clustering. 
+</p>
+<p>For both <code>groupsparsewkm</code> and <code>sparsewkm</code> functions, the following options are available:
+</p>
+<p>If <code>what=weights.features</code>, the regularization paths for the weights associated to the variables are displayed. 
+</p>
+<p>If <code>what=sel.features</code>, the graph represents the number of selected variables for each value of the regularization parameter <code>lambda</code>. In the case of 
+sparse weighted k-means for mixed data, categorical variables are represented with dotted lines so that one easily identifies them. 
+</p>
+<p>If <code>what=expl.var</code>, the explained variance (computed as the contribution of the between-class variance to the global variance) is displayed. This criterion is 
+computed for all variables in the data set, without taking into account the weights of the group or of the variables. 
+</p>
+<p>If <code>what=w.expl.var</code>, the explained weighted variance is computed. The difference with the criterion above is that the weights of the variables are
+taken into account in the computation. This leads to a criterion which, for large regularization parameters <code>lambda</code>, may be computed on one variable only, if 
+its weight becomes equal to 1 and all the others are discarded. 
+</p>
+<p>If <code>what=pen.crit</code>, the graph displays the evolution of the penalized criterion, maximized by the algorithm. This criterion writes as 
+the between-class weighted sum-of-squares, penalized by a group L1-norm. For more details on the mathematical expressions, one may refer to Chavel et al. (2020). 
+</p>
+<p>For the outcome of the <code>groupsparsewkm</code> function trained on numerical data only, two more options are available:
+</p>
+<p>If <code>what=weights.groups</code>, the regularization paths for the weights associated to the groups of variables are displayed.
+</p>
+<p>If <code>what=sel.groups</code>, the graph represents the number of selected groups for each value of the regularization parameter <code>lambda</code>.
+</p>
+<p>For the outcome of the <code>sparsewkm</code> function trained on mixed data, two more options are also available:
+</p>
+<p>If <code>what=weights.levels</code>, the regularization paths for the weights associated to the levels of the categorical variables are displayed. 
+</p>
+<p>If <code>what=sel.levels</code>, the graph represents the number of selected levels associated to the categorical variables plus the number of selected 
+numerical variables, for each value of the regularization parameter <code>lambda</code>.
+</p>
+<p>If the number of groups in <code>groupsparsewkm</code> or if the number of features in <code>sparsewkm</code> are too large to have easily interpretable graphics, one may select 
+some groups or some variables using the argument <code>Which</code>. Note that when training <code>sparsewkm</code> on mixed data, the initial order of the variables is changed:
+after the processing step, numerical variables are displayed first, and categorical second. The indexing provided in <code>Which</code> should take this into account (see the
+Examples section).
+</p>
+
+
+<h3>Value</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>an object of class <code>ggplot</code>.</p>
+</td>
+</tr></table>
+<h3>References</h3>
+
+<p>M., Chavent, J. Lacaille, A. Mourer, and M. Olteanu (2020). 
+Sparse k-means for mixed data via group-sparse clustering. To appear in ESANN proceedings.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>sparsewkm</code>, <code>groupsparsewkm</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># sparse weighted k-means on mixed data
+
+data(HDdata)
+out &lt;- sparsewkm(X = HDdata[,-14], centers = 2)
+plot(out, what = "weights.features")
+plot(out, what = "weights.levels")
+plot(out, what = "sel.features")
+plot(out, what = "sel.levels")
+plot(out, what = "expl.var")
+plot(out, what = "w.expl.var")
+plot(out, what = "pen.crit")
+# plot the regularization paths for first three variables only 
+plot(out, what = "weights.features", Which=1:3)
+ 
+# group sparse weighted k-means on numerical data
+data(iris)
+index &lt;- c(1, 2, 1, 2)
+out &lt;- groupsparsewkm(X = iris[,-5], centers = 3, index = index)
+plot(out, what = "weights.groups")
+plot(out, what = "weights.features")
+plot(out, what = "sel.groups")
+plot(out, what = "sel.features")
+plot(out, what = "expl.var")
+plot(out, what = "w.expl.var")
+plot(out, what = "pen.crit")
+# plot the regularization paths for the variables in the first group only
+plot(out, what = "weights.features", Which=1)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,77 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>money.ball</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>$1,000,000 Money Ball</h2>
+
+<h3>Description</h3>
+
+<p>Historical data for the $1,000,000 Money Ball game. Game Play: pick five numbers
+1 - 35, the Lottery then selects five numbered balls. If the Gold Million Dollar
+Money Ball is drawn before all five numbers have been selected, the top prize
+jumps to $1,000,000. Note: This game was discontinued 8/29/15.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">money.ball
+</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 100 rows and 7 variables:
+</p>
+
+<dl>
+<dt>date</dt>
+<dd>
+<p>date of draw</p>
+</dd>
+<dt>moneyball</dt>
+<dd>
+<p>money ball result: yes or no</p>
+</dd>
+<dt>N1</dt>
+<dd>
+<p>1st number in order</p>
+</dd>
+<dt>N2</dt>
+<dd>
+<p>2nd number in order</p>
+</dd>
+<dt>N3</dt>
+<dd>
+<p>3rd number in order</p>
+</dd>
+<dt>N4</dt>
+<dd>
+<p>4th number in order</p>
+</dd>
+<dt>N5</dt>
+<dd>
+<p>5th number in order</p>
+</dd>
+</dl>
+<h3>Source</h3>
+
+<p><a href="https://www.valottery.com">https://www.valottery.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## probability of drawing money ball before first 5 balls
+(1/36) + (1/35) + (1/34) + (1/33) + (1/32)
+## observed money ball results
+prop.table(table(money.ball$moneyball))
+## simulate money ball draws before first 5 draws
+set.seed(123)
+mean(replicate(1000, any(sample(c(1:35,"mb"),5)=="mb")))
+</code></pre>
+
+
+</div>

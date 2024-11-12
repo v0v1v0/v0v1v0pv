@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVinePar2Beta</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Blomqvist's Beta Values of an R-Vine Copula Model</h2>
+
+<h3>Description</h3>
+
+<p>This function computes the values of Blomqvist's beta corresponding to the
+parameters of an R-vine copula model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVinePar2Beta(RVM, check.pars = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p>An <code>RVineMatrix()</code> object. <br> Note that the Student's
+t-copula is not allowed since the CDF of the t-copula is not implemented
+(see <code>BiCopCDF()</code> and <code>BiCopPar2Beta()</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.pars</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>; if <code>FALSE</code>, checks
+for family/parameter-consistency are omitted (should only be used with care).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Matrix with the same structure as the family and parameter matrices
+of the <code>RVineMatrix()</code> object <code>RVM</code> where the entries are
+values of Blomqvist's beta corresponding to the families and parameters of
+the R-vine copula model given by <code>RVM</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineMatrix()</code>, <code>BiCopPar2Beta()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># define 5-dimensional R-vine tree structure matrix
+Matrix &lt;- c(5, 2, 3, 1, 4,
+            0, 2, 3, 4, 1,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 1)
+Matrix &lt;- matrix(Matrix, 5, 5)
+
+# define R-vine pair-copula family matrix
+family &lt;- c(0, 1, 3, 4, 4,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 3,
+            0, 0, 0, 0, 0)
+family &lt;- matrix(family, 5, 5)
+
+# define R-vine pair-copula parameter matrix
+par &lt;- c(0, 0.2, 0.9, 1.5, 3.9,
+         0, 0, 1.1, 1.6, 0.9,
+         0, 0, 0, 1.9, 0.5,
+         0, 0, 0, 0, 4.8,
+         0, 0, 0, 0, 0)
+par &lt;- matrix(par, 5, 5)
+
+# define second R-vine pair-copula parameter matrix
+par2 &lt;- matrix(0, 5, 5)
+
+# define RVineMatrix object
+RVM &lt;- RVineMatrix(Matrix = Matrix, family = family,
+                   par = par, par2 = par2,
+                   names = c("V1", "V2", "V3", "V4", "V5"))
+
+# compute the Blomqvist's beta values
+BlomBeta &lt;- RVinePar2Beta(RVM)
+
+</code></pre>
+
+
+</div>

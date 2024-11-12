@@ -1,0 +1,152 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotComponentMatrix</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>General plotting function for multiple 24-2 or 30-2 visual field measurements together:</h2>
+
+<h3>Description</h3>
+
+<p><code>plotComponentMatrix</code> plots the following 24-2 or 30-2 visual field measurement: sensitivity, TD, TD prob, PD, and PD prob:
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotComponentMatrix(componentmatrix, ncomp = ncol(componentmatrix),
+  plot.ncols = 5, plot.nrows = NULL,
+  plot.annot.topleft.function = toString,
+  plot.annot.bottomleft.function = function(i) NULL,
+  globaltitle = sprintf("k = %i", ncol(componentmatrix)),
+  globalannotright = NULL,
+  zmin = -ceiling(max(abs(c(min(componentmatrix),
+  max(componentmatrix))))), zmax = -zmin,
+  color.pal = colorRampPalette(c("red", "white", "blue"), space =
+  "Lab")(256), td.probabilities = FALSE,
+  show.colorbar = !td.probabilities, titleheight = 0.2, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>componentmatrix</code></td>
+<td>
+<p>a matrix or data frame, column represents different eyes and rows are the VF measurements of the same type (sensitivity, TD, TD prob, PD, or PD prob).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncomp</code></td>
+<td>
+<p>a numeric variable defines the number of components to be plotted (default: all).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.ncols</code></td>
+<td>
+<p>a numeric variable defines the number of columns to be plotted (default: 5).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.nrows</code></td>
+<td>
+<p>a numeric variable defines the number of rows to be plotted (default: NULL (automatically calculated)).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.annot.topleft.function</code></td>
+<td>
+<p>a function(i) that is given to any subplot i to create its top left annotation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.annot.bottomleft.function</code></td>
+<td>
+<p>a function(i) that is given to any subplot i to create its bottom left annotation (default: returns NULL).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>globaltitle</code></td>
+<td>
+<p>a string for global title (default: k = ncomp; set to NULL to suppress global title).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>globalannotright</code></td>
+<td>
+<p>a string annotation to the right of the global title (default: NULL).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zmin</code></td>
+<td>
+<p>minimum value of the color scale (default: auto defined).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zmax</code></td>
+<td>
+<p>maximum value of the color scale (default: auto defined).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color.pal</code></td>
+<td>
+<p>an object that defines color scale theme (default: colorRampPalette(c("red", "white", "blue"), space = "Lab")(256)).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>td.probabilities</code></td>
+<td>
+<p>a logic variable indicates whether to plot TD probability symbols instead of TD colors (default: FALSE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.colorbar</code></td>
+<td>
+<p>a logic variable indicates whether to show a global colorbar (default: !td.probabilities).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>titleheight</code></td>
+<td>
+<p>a numeric variable defines the height of the title relative to height of row one.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other variables to be added.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>heatmap for sensitivity, TD and PD input. Value plot for TD prob and PD prob input.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vfseries)
+componentmatrix = t(vfseries[1:10, grepl('^s[0-9]+', colnames(vfseries))])
+globaltitle = paste("Sensitivities, k = ", ncol(componentmatrix), sep = '')
+plotComponentMatrix(componentmatrix, globaltitle = globaltitle)
+componentmatrix = t(vfseries[1:10, grepl('^td[0-9]+', colnames(vfseries))])
+globaltitle = paste("TDs, k = ", ncol(componentmatrix), sep = '')
+plotComponentMatrix(componentmatrix, globaltitle = globaltitle)
+componentmatrix = t(vfseries[1:10, grepl('^pd[0-9]+', colnames(vfseries))])
+globaltitle = paste("PDs, k = ", ncol(componentmatrix), sep = '')
+plotComponentMatrix(componentmatrix, globaltitle = globaltitle)
+componentmatrix = t(vfseries[1:10, grepl('^tdp[0-9]+', colnames(vfseries))])
+globaltitle = paste("TD Probs, k = ", ncol(componentmatrix), sep = '')
+plotComponentMatrix(componentmatrix, globaltitle = globaltitle, td.probabilities = TRUE)
+componentmatrix = t(vfseries[1:10, grepl('^pdp[0-9]+', colnames(vfseries))])
+globaltitle = paste("PD Probs, k = ", ncol(componentmatrix), sep = '')
+plotComponentMatrix(componentmatrix, globaltitle = globaltitle, td.probabilities = TRUE)
+</code></pre>
+
+
+</div>

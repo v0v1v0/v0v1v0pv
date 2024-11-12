@@ -1,0 +1,356 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>varSelRFBoot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Bootstrap the variable selection procedure in varSelRF</h2>
+
+<h3>Description</h3>
+
+<p>Use the bootstrap to estimate the prediction error rate (wuth the
+.632+ rule) and the
+stability of the variable selection procedure implemented in <code>varSelRF</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">varSelRFBoot(xdata, Class, c.sd = 1,
+             mtryFactor = 1, ntree = 5000, ntreeIterat = 2000,
+             vars.drop.frac = 0.2, bootnumber = 200,
+             whole.range = TRUE,
+             recompute.var.imp = FALSE,
+             usingCluster = TRUE,
+             TheCluster = NULL, srf = NULL, verbose = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<p>Most arguments are the same as for <code>varSelRFBoot</code>.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>xdata</code></td>
+<td>
+<p>A data frame or matrix, with subjects/cases in rows and
+variables in columns. NAs not allowed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Class</code></td>
+<td>
+<p>The dependent variable; must be a factor.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>c.sd</code></td>
+<td>
+<p>The factor that multiplies the sd. to decide on stopping
+the tierations or choosing the final solution. See reference for details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mtryFactor</code></td>
+<td>
+<p>The multiplication factor of
+<code class="reqn">\sqrt{number.of.variables}</code> for the number of variables to use for
+the ntry argument of randomForest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ntree</code></td>
+<td>
+<p>The number of trees to use for the first forest;
+same as ntree for randomForest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ntreeIterat</code></td>
+<td>
+<p>The number of trees to use (ntree of randomForest)
+for all additional forests.</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>vars.drop.frac</code></td>
+<td>
+<p>The fraction of variables, from those
+in the previous forest, to exclude at each iteration.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>whole.range</code></td>
+<td>
+<p>If TRUE continue dropping variables until a forest
+with only two variables is built, and choose the best model from the
+complete series of models. If
+FALSE, stop the iterations if the current OOB error becomes larger
+than the initial OOB error (plus c.sd*OOB standard error) or
+if the current OOB error becoems larger than the
+previous OOB error (plus c.sd*OOB standard error).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>recompute.var.imp</code></td>
+<td>
+<p>If TRUE recompute variable importances at
+each new iteration.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bootnumber</code></td>
+<td>
+<p>The number of bootstrap samples to draw.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>usingCluster</code></td>
+<td>
+<p>If TRUE use a cluster to parallelize the calculations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>TheCluster</code></td>
+<td>
+<p>The name of the cluster, if one is used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>srf</code></td>
+<td>
+<p>An object of class varSelRF. If used, the ntree and
+mtryFactor parameters are taken from this object, not from the
+arguments to this function. If used, it allows to skip carrying out
+a first iteration to build the random forest to the complete,
+original data set.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Give more information about what is being done.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If a cluster is used for the calculations, it will be used for the
+embarrisingly parallelizable task of building as many random forests
+as bootstrap samples. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class varSelRFBoot, which is a list with components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>number.of.bootsamples</code></td>
+<td>
+<p>The number of bootstrap replicates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bootstrap.pred.error</code></td>
+<td>
+<p>The .632+ estimate of the prediction
+error.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>leave.one.out.bootstrap</code></td>
+<td>
+<p>The leave-one-out estimate of the error
+rate (used when computing the .632+ estimate).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.data.randomForest</code></td>
+<td>
+<p>A random forest built from all the data,
+but after the variable selection. Thus, beware because the OOB error
+rate is severely biased down.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.data.vars</code></td>
+<td>
+<p>The variables selected in the run with all the
+data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.data.run</code></td>
+<td>
+<p>An object of class varSelRF; the one obtained from
+a run of varSelRF on the original, complete, data set. See
+<code>varSelRF</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>class.predictions</code></td>
+<td>
+<p>The out-of-bag predictions from the
+bootstrap, of type "response".See
+<code>predict.randomForest</code>. This is an array, with
+dimensions number of cases by number of bootstrap replicates. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prob.predictions</code></td>
+<td>
+<p>The out-of-bag predictions from the bootstrap,
+of type "class probability". See
+<code>predict.randomForest</code>. This is a 3-way array; the last
+dimension is the bootstrap replication; for each bootstrap
+replication, the 2D array
+has dimensions case by number of classes, and each value is the
+probability of belonging to that class.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>number.of.vars</code></td>
+<td>
+<p>A vector with the number of variables selected
+for each bootstrap sample.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overlap</code></td>
+<td>
+<p>The "overlap" between the variables selected from the
+run in original sample and the variables returned from a bootstrap
+sample.  Overlap between the sets of variables A and B is defined as
+</p>
+<p style="text-align: center;"><code class="reqn">\frac{|variables.in.A \cap variables.in.B|}{\sqrt{|variables.in.A|
+	 |variables.in.B|}}</code>
+</p>
+<p> or size (cardinality) of
+intersection between the two sets / sqrt(product of size of each
+set).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.vars.in.solutions</code></td>
+<td>
+<p>A vector with all the genes selected in
+the runs on all the bootstrap samples. If the same gene is selected in several
+bootstrap runs, it appears multiple times in this vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.solutions</code></td>
+<td>
+<p>Each solutions is a character vector with all
+the variables in a particular solution concatenated by a "+". Thus,
+all.solutions is a vector, with length equal to
+<code>number.of.bootsamples</code>, of the solution from each bootstrap
+run.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Class</code></td>
+<td>
+<p>The original class argument.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allBootRuns</code></td>
+<td>
+<p>A list of length <code>number.of.bootsamples</code>. Each
+component of this list is an element of class <code>varSelRF</code>
+and stores the results from the runs on each bootstrap sample.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>The out-of-bag predictions stored in <code>class.predictions</code> and
+<code>prob.predictions</code> are NOT the OOB votes from random
+forest itself for a given run. These are predictions from the
+out-of-bag samples for each  bootstrap replication. Thus, these are
+samples that have not been used at all in any of the variable selection
+procedures in the given bootstrap replication.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ramon Diaz-Uriarte  <a href="mailto:rdiaz02@gmail.com">rdiaz02@gmail.com</a></p>
+
+
+<h3>References</h3>
+
+<p>Breiman, L. (2001) Random forests.
+<em>Machine Learning</em>, <b>45</b>, 5–32.
+</p>
+<p>Diaz-Uriarte, R. and Alvarez de Andres,
+S. (2005) Variable selection from random forests: application to gene
+expression
+data. Tech. report.
+<a href="http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html">http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html</a>
+</p>
+<p>Efron, B. &amp; Tibshirani, R. J. (1997) Improvements on cross-validation: the .632+ bootstrap method.
+<em>J. American Statistical Association</em>, <b>92</b>, 548–560.  
+</p>
+<p>Svetnik, V., Liaw, A. , Tong, C &amp; Wang, T. (2004) Application of
+Breiman's random forest to modeling structure-activity relationships of
+pharmaceutical molecules.  Pp. 334-343 in <em>F. Roli, J. Kittler, and T. Windeatt</em>
+(eds.). <em>Multiple Classier Systems, Fifth International Workshop</em>, MCS
+2004, Proceedings, 9-11 June 2004, Cagliari, Italy. Lecture Notes in
+Computer Science, vol. 3077.  Berlin: Springer.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>randomForest</code>,
+<code>varSelRF</code>,
+<code>summary.varSelRFBoot</code>,
+<code>plot.varSelRFBoot</code>,
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+## This is a small example, but can take some time.
+
+## make a small cluster, for the sake of illustration
+forkCL &lt;- makeForkCluster(2)
+clusterSetRNGStream(forkCL, iseed = 123)
+clusterEvalQ(forkCL, library(varSelRF))
+
+
+x &lt;- matrix(rnorm(25 * 30), ncol = 30)
+x[1:10, 1:2] &lt;- x[1:10, 1:2] + 2
+cl &lt;- factor(c(rep("A", 10), rep("B", 15)))  
+
+rf.vs1 &lt;- varSelRF(x, cl, ntree = 200, ntreeIterat = 100,
+                   vars.drop.frac = 0.2)
+rf.vsb &lt;- varSelRFBoot(x, cl,
+                       bootnumber = 10,
+                       usingCluster = TRUE,
+                       srf = rf.vs1,
+                       TheCluster = forkCL)
+rf.vsb
+summary(rf.vsb)
+plot(rf.vsb)
+stopCluster(forkCL)
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

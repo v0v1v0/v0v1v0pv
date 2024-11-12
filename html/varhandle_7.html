@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>to.dummy</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Convert categorical vector into dummy binary dataframe</h2>
+
+<h3>Description</h3>
+
+
+<p>This function gets a vector that contains some categories and convert it to dummy columns (also known as binary columns). The number of output columns is equal to the input categories.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    to.dummy(v, prefix)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+
+
+<p>A character, numeric or factor vector that contains the categories. (Mandatory)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prefix</code></td>
+<td>
+
+
+<p>A character string to attach to the beginning of the column names to prevent confusion or conflicts. (Mandatory)
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<p>This function simplifies the procedure of making data ready for those learning algorithms or methods that cannot handle categorical columns. It works by getting a character, numeric or factor vector and convert it to some columns that each of which represent a category from the input vector. For example a vector of eye color with different categories like Black, Brown, Blue, Green will be transformed into a dataframe with 4 columns and each column has value of 1 for samples that have that specific eye color.
+</p>
+
+
+<h3>Value</h3>
+
+
+
+
+
+
+<p>A data.frame is returned which only contains 0 and 1 as values. Number of this data.frame columns is equal to number of categories in the original input vector.
+</p>
+
+
+<h3>Author(s)</h3>
+
+
+<p>Mehrad Mahmoudian
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    # load a dataframe (from base package)
+    data(iris)
+    
+    # see the actual values of the categorical column
+    print(iris$Species)
+    
+    # convert to dummy
+    binary_species &lt;- to.dummy(iris$Species, "species")
+    # view the first few lines of the binary_species data.frame
+    head(binary_species)
+</code></pre>
+
+
+</div>

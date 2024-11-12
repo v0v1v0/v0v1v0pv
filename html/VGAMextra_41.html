@@ -1,0 +1,144 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dmultinorm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Density for the multivariate Normal distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density for the multivariate Normal distribution
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">      dmultinorm(vec.x, vec.mean = c(0, 0),
+                 mat.cov = c(1, 1, 0),
+                 log = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vec.x</code></td>
+<td>
+
+<p>For the <code class="reqn">R</code>–multivariate Normal, an <code class="reqn">R</code>–vector of 
+quantiles.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vec.mean</code></td>
+<td>
+
+<p>The vector of means. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mat.cov</code></td>
+<td>
+
+<p>The vector of variances and covariances, arranged in that order.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, the logged values are returned.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This implementation of the multivariate (say
+<code class="reqn">R</code>–dimensional) Normal density 
+handles the variances and covariances, instead of 
+correlation parameters. 
+</p>
+<p>For more than one observation, arrange all entries in
+matrices accordingly.
+</p>
+<p>For each observation, <code>mat.cov</code> is a vector of
+length <code class="reqn">R \times (R + 1) / 2</code>,
+where the first <code class="reqn">R</code> entries are the variances
+<code class="reqn">\sigma^2{i}</code>, <code class="reqn">i = 1, \ldots, R</code>, and 
+then the covariances arranged as per rows, that is,
+<code class="reqn">cov_{ij}</code> <code class="reqn">i = 1, \ldots, R,
+  j = i + 1, \ldots, R</code>. 
+</p>
+<p>By default, it returns the density of two independent
+standard Normal distributions. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>The density of the multivariate Normal distribution.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>For observations whose covariance matrix is not positive definite,
+<code>NaN</code> will be returned.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>binormal</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">###
+### Two - dimensional Normal density.
+###
+set.seed(180228)
+nn  &lt;- 25
+mean1 &lt;- 1; mean2 &lt;- 1.5; mean3 = 2
+var1 &lt;- exp(1.5); var2 &lt;- exp(-1.5); var3 &lt;- exp(1); cov12 = 0.75
+dmvndata &lt;- rbinorm(nn, mean1 = 1, mean2 = 1.5, var1 = var1, var2 = var2,
+                    cov12 = cov12)
+
+## Using dbinorm() from VGAM.
+d2norm.data &lt;- dbinorm(x1 = dmvndata[, 1], x2 = dmvndata[, 2],
+                        mean1 = mean1, mean2 = mean2, var1 = var1, var2 = var2,
+                        cov12 = cov12)
+## Using dmultinorm().
+d2norm.data2 &lt;- dmultinorm(vec.x = dmvndata, vec.mean = c(mean1, mean2),
+                        mat.cov = c(var1, var2, cov12))
+summary(d2norm.data)
+summary(d2norm.data2)
+##
+## 3--dimensional Normal.
+##
+dmvndata &lt;- cbind(dmvndata, rnorm(nn, mean3, sqrt(var3)))
+
+d2norm.data3 &lt;- dmultinorm(dmvndata, vec.mean = c(mean1, mean2, mean3),
+                       mat.cov = c(var1, var2, var3, cov12, 0, 0))
+
+hist(d2norm.data3)
+summary(d2norm.data3)
+
+</code></pre>
+
+
+</div>

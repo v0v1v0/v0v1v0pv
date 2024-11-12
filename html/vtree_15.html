@@ -1,0 +1,1037 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vtree</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Draw a variable tree</h2>
+
+<h3>Description</h3>
+
+<p>Variable trees display information about nested subsets of a data frame,
+in which the subsetting is defined by the values of categorical variables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vtree(data = NULL, vars, showuniform = TRUE, hideconstant = NULL,
+  words = NULL, horiz = TRUE, title = "", sameline = FALSE,
+  vp = TRUE, prune = list(), tprune = list(), keep = list(),
+  tkeep = list(), prunebelow = list(), tprunebelow = list(),
+  follow = list(), tfollow = list(), prunesmaller = NULL,
+  prunebigger = NULL, summary = NULL, tsummary = NULL,
+  shownodelabels = TRUE, showvarnames = TRUE, showpct = TRUE,
+  showlpct = TRUE, showcount = TRUE, prefixcount = "",
+  showrootcount = TRUE, showlegend = FALSE, showroot = TRUE,
+  showvarinnode = FALSE, showlegendsum = FALSE, labelvar = NULL,
+  labelnode = list(), tlabelnode = NULL, digits = 0, cdigits = 1,
+  fillcolor = NULL, specfill = NULL, fillnodes = TRUE,
+  NAfillcolor = "white", rootfillcolor = "#EFF3FF", palette = NULL,
+  gradient = TRUE, revgradient = FALSE, sortfill = FALSE,
+  singlecolor = 2, colorvarlabels = TRUE, color = c("blue",
+  "forestgreen", "red", "orange", "pink"), colornodes = FALSE,
+  plain = FALSE, Venn = FALSE, check.is.na = FALSE, seq = FALSE,
+  pattern = FALSE, ptable = FALSE, text = list(), ttext = list(),
+  varlabelloc = NULL, font = "Arial", varnamepointsize = 24,
+  varnamebold = FALSE, legendpointsize = 14, HTMLtext = FALSE,
+  splitwidth = 20, vsplitwidth = 8, splitspaces = TRUE,
+  getscript = FALSE, mincount = 1, maxcount, showempty = FALSE,
+  choicechecklist = TRUE, just = "c", justtext = NULL, thousands = "",
+  folder = NULL, format = "", imageFileOnly = FALSE, pngknit = TRUE,
+  pxwidth = NULL, pxheight = NULL, imagewidth = "", imageheight = "",
+  width = NULL, height = NULL, maxNodes = 1000, unchecked = c("0",
+  "FALSE", "No", "no"), checked = c("1", "TRUE", "Yes", "yes"),
+  trim = NULL, rounded = TRUE, varminwidth = NULL, varminheight = NULL,
+  squeeze = 1, arrowhead = "normal", nodesep = 0.5, ranksep = 0.5,
+  margin = 0.2, graphattr = "", nodeattr = "", edgeattr = "",
+  nodefunc = NULL, nodeargs = NULL, verbose = FALSE, runsummary = NULL,
+  retain = NULL, auto = FALSE, parent = 1, last = 1, root = TRUE,
+  subset = 1:nrow(z), numsmallernodes = 0, sumsmallernodes = 0,
+  numbiggernodes = 0, sumbiggernodes = 0, as.if.knit = FALSE,
+  prunelone = NULL, pruneNA = FALSE, lsplitwidth = 15,
+  showlevels = TRUE, z = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Required: Data frame, or a single vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vars</code></td>
+<td>
+<p>Required (unless <code>data</code> is a single vector):
+Variables to use for the tree. Can be 
+(1) a character string of whitespace-separated variable names,
+(2) a vector of variable names,
+(3) a formula without a left-hand side,
+e.g. <code>~ Age + Sex</code>,
+but note that extended variable specifications cannot be used in this case.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showuniform</code></td>
+<td>
+<p>Show a variable even when it only has one value?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hideconstant</code></td>
+<td>
+<p>Hide a variable if its only value is one of the specified strings.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>words</code></td>
+<td>
+<p>A list of named vectors of values.
+Used to build a variable tree 
+representing all permutations of these values.
+No counts will be shown.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>horiz</code></td>
+<td>
+<p>Should the tree be drawn horizontally?
+(i.e. root node on the left, with the tree growing to the right)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>Label for the root node of the tree.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sameline</code></td>
+<td>
+<p>Display node label on the same line as the count and percentage?
+A single value (with no names) specifies the setting for all variables.
+A logical vector of <code>TRUE</code> for named variables is interpreted as
+A logical vector of <code>FALSE</code> for named variables is interpreted as
+<code>FALSE</code> for those variables and <code>TRUE</code> for all others.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vp</code></td>
+<td>
+<p>Use <em>valid percentages</em>?
+Valid percentages are computed by first excluding any missing values,
+i.e. restricting attention to the set of "valid" observations.
+The denominator is thus the number of non-missing observations.
+When <code>vp=TRUE</code>, nodes for missing values show the number of missing values
+but do not show a percentage;
+all the other nodes show valid percentages.
+When <code>vp=FALSE</code>, all nodes (including nodes for missing values)
+show percentages of the total number of observations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prune, keep, prunebelow, follow</code></td>
+<td>
+<p>List of named vectors that specify pruning.
+(see <strong>Pruning</strong> below)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tprune, tkeep, tprunebelow, tfollow</code></td>
+<td>
+<p>List of lists of named vectors that specify "targeted" pruning.
+(see <strong>Pruning</strong> below)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prunesmaller</code></td>
+<td>
+<p>Prune any nodes with count less than specified number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prunebigger</code></td>
+<td>
+<p>Prune any nodes with count greater than specified number.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>summary</code></td>
+<td>
+<p>A character string used to specify summary statistics to display in the nodes.
+See <strong>Displaying summary information</strong> below for details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tsummary</code></td>
+<td>
+<p>A list of character-string vectors.
+The initial elements of each character string vector point to a specific node.
+The final element of each character string vector is a summary string,
+with the same structure as <code>summary</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shownodelabels</code></td>
+<td>
+<p>Show node labels?
+A single value (with no names) specifies the setting for all variables.
+Otherwise, a named logical vector indicates which variables should have their
+node labels shown.
+If the vector consists of only <code>TRUE</code> values,
+it is interpreted as <code>TRUE</code> for those variables and <code>FALSE</code> for all others.
+Similarly, if the vector consists of only <code>FALSE</code> values, 
+it is interpreted as <code>FALSE</code> for those variables and <code>TRUE</code> for all others.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showvarnames</code></td>
+<td>
+<p>Show the name of the variable next to each layer of the tree?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showpct, showlpct</code></td>
+<td>
+<p>Show percentage? <code>showpct</code> is for nodes, <code>showlpct</code> is for legends.
+A single value (with no names) specifies the setting for all variables.
+A logical vector of <code>TRUE</code> for named variables is interpreted as
+A logical vector of <code>FALSE</code> for named variables is interpreted as
+<code>FALSE</code> for those variables and TRUE for all others.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showcount</code></td>
+<td>
+<p>Show count in each node?
+A single value (with no names) specifies the setting for all variables.
+A logical vector of <code>TRUE</code> for named variables is interpreted as
+A logical vector of <code>FALSE</code> for named variables is interpreted as
+<code>FALSE</code> for those variables and <code>TRUE</code> for all others.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prefixcount</code></td>
+<td>
+<p>Text that will precede each count.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showrootcount</code></td>
+<td>
+<p>Should count in root node?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showlegend</code></td>
+<td>
+<p>Show legend (including marginal frequencies) for each variable?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showroot</code></td>
+<td>
+<p>Show the root node?
+When <code>seq=TRUE</code>, it may be useful to set <code>showroot=FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showvarinnode</code></td>
+<td>
+<p>Show the variable name in each node?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showlegendsum</code></td>
+<td>
+<p>Show summary information in the legend?
+(Provided <code>summary</code> has been specified).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labelvar</code></td>
+<td>
+<p>A named vector of labels for variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labelnode</code></td>
+<td>
+<p>List of vectors used to change how values of variables are displayed.
+The name of each element of the
+list is one of the variable names in <code>vars</code>.
+Each element of the list is a vector of character strings,
+representing the values of the variable.
+The names of the vector represent the labels to be used in place of the values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tlabelnode</code></td>
+<td>
+<p>A list of vectors, each of which specifies a particular node,
+as well as a label for that node (a "targeted" label).
+The names of each vector specify variable names,
+except for an element named <code>label</code>, which specifies the label to use.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits, cdigits</code></td>
+<td>
+<p>Number of decimal digits to show in percentages (<code>digits</code>)
+and in continuous values displayed via the summary parameter (<code>cdigits</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fillcolor</code></td>
+<td>
+<p>[Color] A named vector of colors for filling the nodes of each variable.
+If an unnamed, scalar color is specified,
+all nodes will have this color.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>specfill</code></td>
+<td>
+<p>[Color] A list with specified color values for specified variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fillnodes</code></td>
+<td>
+<p>[Color] Fill the nodes with color?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NAfillcolor</code></td>
+<td>
+<p>[Color] Fill-color for missing-value nodes.
+If <code>NULL</code>, fill colors of missing value nodes will be consistent
+with the fill colors in the rest of the tree.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rootfillcolor</code></td>
+<td>
+<p>[Color] Fill-color for the root node.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>palette</code></td>
+<td>
+<p>[Color] A vector of palette numbers (which can range between 1 and 14).
+The names of the vector indicate the corresponding variable.
+See <strong>Palettes</strong> below for more information.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gradient</code></td>
+<td>
+<p>[Color] Use gradients of fill color across the values of each variable?
+A single value (with no names) specifies the setting for all variables.
+A logical vector of <code>TRUE</code> values for named variables is interpreted as
+<code>TRUE</code> for those variables and <code>FALSE</code> for all others.
+A logical vector of <code>FALSE</code> values for named variables is interpreted as
+<code>FALSE</code> for those variables and <code>TRUE</code> for all others.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>revgradient</code></td>
+<td>
+<p>[Color] Should the gradient be reversed (i.e. dark to light instead of light to dark)?
+A single value (with no names) specifies the setting for all variables.
+A logical vector of <code>TRUE</code> values for named variables is interpreted as
+A logical vector of <code>FALSE</code> values for named variables is interpreted as
+<code>FALSE</code> for those variables and <code>TRUE</code> for all others.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sortfill</code></td>
+<td>
+<p>[Color] Sort colors in order of node count?
+When a <code>gradient</code> fill is used, this results in
+the nodes with the smallest counts having the lightest shades
+and the nodes with the largest counts having the darkest shades.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>singlecolor</code></td>
+<td>
+<p>[Color] When a variable has a single value,
+this parameter is used to specify whether nodes should have a
+(1) light shade, (2) a medium shade, or (3) a dark shade.
+specify <code>singlecolor=1</code> to assign a light shade.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colorvarlabels</code></td>
+<td>
+<p>[Color] Color the variable labels?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color</code></td>
+<td>
+<p>[Color] A vector of color names for the <em>outline</em> of the nodes in each layer.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colornodes</code></td>
+<td>
+<p>[Color] Color the node outlines?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plain</code></td>
+<td>
+<p>[Color] Use "plain" settings?
+These settings are as follows: for each variable all nodes are the same color,
+namely a shade of blue (with each successive variable using a darker shade);
+all variable labels are black; and the <code>squeeze</code> parameter is set to 0.6.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Venn</code></td>
+<td>
+<p>Display multi-way set membership information?
+This provides an alternative to a Venn diagram.
+This sets <code>showpct=FALSE</code> and <code>shownodelabels=FALSE</code>.
+Assumption: all of the specified variables are logicals or 0/1 numeric variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.is.na</code></td>
+<td>
+<p>Replace each variable named in <code>vars</code> with a logical vector indicating
+whether or not each of its values is missing?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seq</code></td>
+<td>
+<p>Display the variable tree using <em>sequences</em>?
+Each unique sequence (i.e. pattern) of values will be shown separately.
+The sequences are sorted from least frequent to most frequent.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pattern</code></td>
+<td>
+<p>Display the variable tree using <em>patterns</em>?
+These are the same as <code>seq</code>, but lines without arrows are drawn,
+and instead of a sequence variable, a pattern variable is shown.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ptable</code></td>
+<td>
+<p>Generate a pattern table instead of a variable tree? 
+Only applies when <code>pattern=TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>text</code></td>
+<td>
+<p>A list of vectors containing extra text to add to
+nodes corresponding to specified values of a specified variable.
+The name of each element of the list
+must be one of the variable names in <code>vars</code>.
+Each element is a vector of character strings.
+The names of the vector identify the nodes to which the text should be added.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ttext</code></td>
+<td>
+<p>A list of vectors, each of which specifies a particular node,
+as well as text to add to that node ("targeted" text).
+The names of each vector specify variable names,
+except for an element named <code>text</code>, which specifies the text to add.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varlabelloc</code></td>
+<td>
+<p>A named vector of vertical label locations
+("t", "c", or "b" for top, center, or bottom, respectively)
+for nodes of each variable.
+(Sets the Graphviz <code>labelloc</code> attribute.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>font</code></td>
+<td>
+<p>Font.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varnamepointsize</code></td>
+<td>
+<p>Font size (in points) to use when displaying variable names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varnamebold</code></td>
+<td>
+<p>Show the variable name in bold?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legendpointsize</code></td>
+<td>
+<p>Font size (in points) to use when displaying legend.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>HTMLtext</code></td>
+<td>
+<p>Is the text formatted in HTML?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>splitwidth, vsplitwidth</code></td>
+<td>
+<p>The minimum number of characters before an automatic
+linebreak is inserted.
+<code>splitwidth</code> is for node labels, <code>vsplitwidth</code> is for variable names.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>splitspaces</code></td>
+<td>
+<p>When <code>vars</code> is a character string,
+split it by spaces to get variable names?
+It is only rarely necessary to use this parameter.
+This should only be <code>FALSE</code> when a single variable name
+that contains spaces is specified.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>getscript</code></td>
+<td>
+<p>Instead of displaying the variable tree,
+return the DOT script as a character string?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mincount, maxcount</code></td>
+<td>
+<p>Minimum or maximum count to include in a pattern tree or pattern table.
+(<code>maxcount</code> overrides <code>mincount</code>.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showempty</code></td>
+<td>
+<p>Show nodes that do not contain any observations?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>choicechecklist</code></td>
+<td>
+<p>When REDCap checklists are specified using the <code>stem:</code> syntax,
+automatically extract the names of choices and use them as variable names?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>just</code></td>
+<td>
+<p>Text justification ("l"=left, "c"=center, "r"=right).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>justtext</code></td>
+<td>
+<p>Like <code>just</code>, but only for extra text, like summaries.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>thousands</code></td>
+<td>
+<p>Thousands separator for big numbers.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>folder, format, imageFileOnly, pngknit</code></td>
+<td>
+<p>Control image file generation.
+<code>folder</code>: a path to a folder where image file will be stored.
+<code>format</code>: "png" or "pdf" format.
+<code>imageFileOnly</code>: should an image file should be produced but not displayed?
+<code>pngknit</code>: generate a PNG file when called during knit?
+(See <strong>Knitr, R Markdown, Sweave</strong> below for more information.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pxwidth, pxheight</code></td>
+<td>
+<p>Width and height of the PNG bitmap to be rendered
+when <code>vtree</code> is called from R Markdown.
+If neither <code>pxwidth</code> nor <code>pxheight</code> is specified,
+<code>pxwidth</code> is automatically set to 2000 pixels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imagewidth, imageheight</code></td>
+<td>
+<p>Character strings representing width and height of the PNG image
+to be rendered when <code>vtree</code> is called from R Markdown,
+e.g. <code>"4in"</code>
+If neither <code>imageheight</code> nor <code>imagewidth</code> is specified,
+<code>imageheight</code> is set to 3 inches.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>width, height</code></td>
+<td>
+<p>Width and height (in pixels) to be passed to <code>DiagrammeR::grViz</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxNodes</code></td>
+<td>
+<p>An error occurs if the number of nodes exceeds <code>maxNodes</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>unchecked, checked</code></td>
+<td>
+<p>Vector of character strings interpreted as "unchecked" and "checked" respectively.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trim</code></td>
+<td>
+<p>(LaTeX Sweave only.) Crop the image using a feature
+of <code>\includegraphics</code>.
+Vector of bp (big points) to trim in the order
+left, lower, right, upper.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rounded</code></td>
+<td>
+<p>[Graphviz] Use rounded boxes for nodes?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varminwidth, varminheight</code></td>
+<td>
+<p>[Graphviz] Named vector of minimum initial widths or heights for nodes of each variable.
+</p>
+<p><code>varminwidth</code> sets the Graphviz <code>width</code> attribute.
+<code>varminheight</code> sets the Graphviz <code>height</code> attribute.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>squeeze</code></td>
+<td>
+<p>[GraphViz] The degree (between 0 and 1) to which the tree will be "squeezed".
+This controls two Graphviz parameters: <code>margin</code> and <code>nodesep</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>arrowhead</code></td>
+<td>
+<p>[Graphviz] arrowhead style. Defaults to <code>"normal"</code>.
+Other choices include <code>"none"</code>, <code>"vee"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodesep, ranksep, margin</code></td>
+<td>
+<p>[Graphviz] attributes for node separation amount,
+rank separation amount, and node margin.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>graphattr, nodeattr, edgeattr</code></td>
+<td>
+<p>[Graphviz] Character string: Graphviz attributes for the graph, node, and edge respectively.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodefunc, nodeargs</code></td>
+<td>
+<p>Node function and node arguments (see <strong>Node functions</strong> below).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Report additional details?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>runsummary</code></td>
+<td>
+<p>A list of functions, with the same length as <code>summary</code>.
+Each function must take a data frame as its sole argument,
+and return a logical value.
+Each string in <code>summary</code> will only be interpreted if
+the corresponding logical value is <code>TRUE</code>.
+the corresponding string in <code>summary</code> will be evaluated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>retain</code></td>
+<td>
+<p>Vector of names of additional variables in the data frame that need to be
+available to execute the functions in <code>runsummary</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>auto</code></td>
+<td>
+<p>Automatically choose variables? (<code>vars</code> should not be specified)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parent, last</code></td>
+<td>
+<p>[Internal use only.] Node number of parent and last node.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>root</code></td>
+<td>
+<p>[Internal use only.] Is this the root node of the tree?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subset</code></td>
+<td>
+<p>[Internal use only.] A vector representing the subset of observations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numsmallernodes</code></td>
+<td>
+<p>[Internal use only.] Counting nodes that were suppressed by prunesmaller.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sumsmallernodes</code></td>
+<td>
+<p>[Internal use only.] Summing nodes that were suppress by prunesmaller.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numbiggernodes</code></td>
+<td>
+<p>[Internal use only.] Counting nodes that were suppressed by prunebigger.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sumbiggernodes</code></td>
+<td>
+<p>[Internal use only.] Summing nodes that were suppress by prunebigger.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>as.if.knit</code></td>
+<td>
+<p>(Deprecated) Behave as if called while knitting?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prunelone</code></td>
+<td>
+<p>(Deprecated) A vector of values specifying "lone nodes" (of <em>any</em> variable) to prune.
+A lone node is a node that has no siblings (an "only child").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pruneNA</code></td>
+<td>
+<p>(Deprecated) Prune all missing values?
+This is problematic because "valid" percentages
+are hard to interpret when NAs are pruned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lsplitwidth</code></td>
+<td>
+<p>(Deprecated) In legends, the minimum number of characters before an automatic
+linebreak is inserted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>showlevels</code></td>
+<td>
+<p>(Deprecated) Same as showvarnames.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z</code></td>
+<td>
+<p>(Deprecated) This was replaced by the <code>data</code> parameter</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The value returned by <code>vtree</code> varies
+depending on both the parameter values specified
+and the context in which <code>vtree</code> is called.
+</p>
+<p>First, there are two special cases where <code>vtree</code> does not show a variable tree:
+</p>
+
+<ul>
+<li>
+<p> If <code>ptable=TRUE</code>, the return value is a data frame representing a pattern table.
+</p>
+</li>
+<li>
+<p> Otherwise, if <code>getscript=TRUE</code>, the return value is a character string,
+consisting of a DOT script that describes the variable tree.
+</p>
+</li>
+</ul>
+<p>If neither of the above cases applies, the return value is as follows.
+If knitting is <em>not</em> taking place
+(such as when <code>vtree</code> is used <strong>interactively</strong>):
+</p>
+
+<ul><li>
+<p> the return value is an object of class <code>htmlwidget</code> (see DiagrammeR).
+It will intelligently print itself into HTML in a variety of contexts
+including the R console, within R Markdown documents,
+and within Shiny output bindings.
+</p>
+<p>The <code>info</code> attribute of the return object is a list whose top
+level represents the root node of the tree.
+Within this list is a list named after the first variable in the tree.
+In turn, within this list are lists named after the observed
+values of that variable.
+In turn, each of these lists is an element named after
+the next variable in the tree.
+And so on.
+The root element as well as each list element named after a value of a variable also 
+contains elements <code>.n</code> (representing the number of observations),
+<code>.pct</code> (representing the percentage), and
+<code>.txt</code> (representing additional text such as summaries).
+</p>
+</li></ul>
+<p>If knitting <em>is</em> taking place:
+</p>
+
+<ul>
+<li>
+<p> If <code>pngknit=TRUE</code> (the default),
+the return value is a character string of
+pandoc markdown code to embed a PNG file with fully-specified path.
+The character string will have class <code>knit_asis</code> so that
+knitr will treat it as is
+(the effect is the same as the chunk option results = 'asis')
+when it is written to the output. (See <code>?knitr::asis_output</code>)
+</p>
+</li>
+<li>
+<p> If <code>pngknit=FALSE</code>, the return value is the same as when knitting is not
+taking place, i.e. an object of class <code>htmlwidget</code>.
+</p>
+</li>
+</ul>
+<h3>Knitr, R Markdown, Sweave</h3>
+
+<p>If <code>folder</code> is not specified and knitting to LaTeX,
+the folder will be set to the value of <code>knitr::opts_chunk$get("fig.path")</code>.
+(If this folder does not exist, it will be created.)
+If <code>folder</code> is not specified and knitting to markdown,
+a temporary folder will be used.
+</p>
+<p>If <code>format</code> is not specified and knitting is taking place,
+then a PNG file is generated, unless a LaTeX document is 
+being generated (e.g. via Sweave), in which case a PDF file is generated.   
+PNG image files will end in <code>.png</code>.
+PDF image files will end in <code>.pdf</code>.
+</p>
+<p>As noted in the <strong>Value</strong> section above,
+<code>vtree</code> has special support for R Markdown.
+</p>
+<p>By default, when knitting an R Markdown file,
+<code>vtree</code> generates PNG files and embeds them automatically in the output document.
+This feature is needed when knitting to a <code>.docx</code> file.
+When knitting to HTML, it is not necessary to generate PNG files
+because HTML browsers can directly display htmlwidgets.
+</p>
+<p>To generate htmlwidgets instead of PNG files, specify <code>pngknit=FALSE</code>.
+(Note, however, that there are some advantages to embedding PNG files in an HTML file.
+For example,
+some browsers perform poorly when numerous htmlwidgets are included in an HTML file.)
+</p>
+<p>When PNG files are generated, they are stored by default in a temporary folder.
+The folder can also be specified using the <code>folder</code> parameter.
+(Using the base R function <code>options</code>, 
+a custom option <code>vtree_folder</code> is used to automatically keep track of this.)
+Successive PNG files generated by an R Markdown file
+are named <code>vtree001.png</code>, <code>vtree002.png</code>, etc.
+(A custom option <code>vtree_count</code> is used to automatically keep track of the number of PNG files.)
+</p>
+
+
+<h3>Pruning</h3>
+
+<p>Each of the parameters <code>prune</code>, <code>keep</code>, <code>prunebelow</code>, <code>follow</code>
+takes a named list of vectors as its argument.
+Each vector specifies nodes of a variable.
+</p>
+
+<ul>
+<li> <p><code>prune</code>: which nodes should be pruned.
+</p>
+</li>
+<li> <p><code>keep</code>: which nodes should <em>not</em> be pruned.
+</p>
+</li>
+<li> <p><code>prunebelow</code>: which nodes should have their descendants pruned.
+</p>
+</li>
+<li> <p><code>follow</code>: which nodes should <em>not</em> have their descendants pruned.
+</p>
+</li>
+</ul>
+<p>The <code>tprune</code> parameter specifies "targeted" pruning.
+Standard pruning removes all nodes with the specified value of the specified variable.
+The <code>tprune</code> parameter specifies one or more particular paths from the root of the tree
+down to a node to be pruned.
+</p>
+
+
+<h3>Displaying summary information</h3>
+
+<p>The <code>summary</code> parameter allows you to specify information to display
+in each node. The parameter can be specified as a vector of character strings,
+where each element represents a different variable to summarize.
+When an element of <code>summary</code> is specified as a single variable name, 
+the following default set of summary statistics is shown:
+the variable name, number of missing values, mean and standard deviation,
+median and interquartile range and range.
+A customized summary is shown when an element of <code>summary</code>
+is specified as a character string with the following structure:
+</p>
+
+<ul>
+<li>
+<p>First, the name of the variable for which a summary is desired.
+</p>
+</li>
+<li>
+<p>Next a space.
+</p>
+</li>
+<li>
+<p>The remainder of the string specifies what to display, with text as well as special codes (such as <code>%mean%</code>) to indicate the type of summary desired and to control which nodes display the summary, etc. See the vignette for more details.
+</p>
+</li>
+</ul>
+<h3>Palettes</h3>
+
+<p>The following palettes
+(obtained from <code>RColorBrewer</code>) are used in the order indicated:
+</p>
+
+<table>
+<tr>
+<td style="text-align: right;">
+ 1 </td>
+<td style="text-align: left;"> Reds     </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: right;"> 4 </td>
+<td style="text-align: left;"> Oranges  </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: right;"> 7  </td>
+<td style="text-align: left;"> PuBu   </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: right;"> 10 </td>
+<td style="text-align: left;"> PuBuGn </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: center;"> 13 </td>
+<td style="text-align: left;"> RdYlGn </td>
+</tr>
+<tr>
+<td style="text-align: right;">
+ 2 </td>
+<td style="text-align: left;"> Blues    </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: right;"> 5 </td>
+<td style="text-align: left;"> Purples  </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: right;"> 8  </td>
+<td style="text-align: left;"> PuRd   </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: right;"> 11 </td>
+<td style="text-align: left;"> BuPu   </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: center;"> 14 </td>
+<td style="text-align: left;"> Set1   </td>
+</tr>
+<tr>
+<td style="text-align: right;"> 
+ 3 </td>
+<td style="text-align: left;"> Greens   </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: right;"> 6 </td>
+<td style="text-align: left;"> YlGn     </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: right;"> 9  </td>
+<td style="text-align: left;"> YlOrBr </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: right;"> 12 </td>
+<td style="text-align: left;"> YlOrRd </td>
+<td style="text-align: center;"> </td>
+<td style="text-align: center;">    </td>
+<td style="text-align: left;">        </td>
+</tr>
+<tr>
+<td style="text-align: right;">
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Nick Barrowman &lt;nbarrowman@cheo.on.ca&gt;
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="../doc/vtree.html"><code>vignette("vtree")</code></a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Call vtree and give the root node a title
+vtree(FakeData,"Sex Severity",title="People")
+
+# R Markdown inline call to vtree
+# `r vtree(FakeData,"Sex Severity")`
+
+# Rename some nodes
+vtree(FakeData,"Severity Sex",labelnode=list(Sex=(c("Male"="M","Female"="F"))))
+
+# Rename a variable
+vtree(FakeData,"Severity Sex",labelvar=c(Severity="How bad?"))
+
+# Show legend. Put labels on the same line as counts and percentages
+vtree(FakeData,"Severity Sex Viral",sameline=TRUE,showlegend=TRUE)
+
+# Use the summary parameter to list ID numbers (truncated to 40 characters) in specified nodes
+vtree(FakeData,"Severity Sex",summary="id \nid = %list% %var=Severity% %trunc=40%")
+
+# Add text to specified nodes of a tree ("targeted text")
+vtree(FakeData,"Severity Sex",ttext=list(
+  c(Severity="Severe",Sex="M",text="\nMales with Severe disease"),
+  c(Severity="NA",text="\nUnknown severity")))
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,152 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>get_tableone</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate summary statistics</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#questioning"><img src="../help/figures/lifecycle-questioning.svg" alt="[Questioning]"></a>
+S3 method for creating a table of summary statistics.
+The summary statistics can be used for presentation in tables such as table one or baseline and demography tables.
+</p>
+<p>The summary statistics estimated are conditional on the variable type: continuous, binary, categorical, etc.
+</p>
+<p>By default the following summary stats are calculated:
+</p>
+
+<ul>
+<li>
+<p> Numeric variables: mean, min, 25th-percentile, median, 75th-percentile, maximum, standard deviation
+</p>
+</li>
+<li>
+<p> Factor variables: proportion of each factor level in the overall dataset
+</p>
+</li>
+<li>
+<p> Default: number of unique values and number of missing values
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">get_tableone(
+  data,
+  strata = NULL,
+  overall = TRUE,
+  summary_function = summarize_short
+)
+
+## Default S3 method:
+get_tableone(
+  data,
+  strata = NULL,
+  overall = TRUE,
+  summary_function = summarize_short
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>The dataset to summarize as dataframe or tibble</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>strata</code></td>
+<td>
+<p>Stratifying/Grouping variable name(s) as character vector. If NULL, only overall results are returned</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>overall</code></td>
+<td>
+<p>If TRUE, the summary statistics for the overall dataset are also calculated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>summary_function</code></td>
+<td>
+<p>A function defining summary statistics for numeric and categorical values</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>It is possible to provide your own summary function. Please have a loot at summary for inspiration.
+</p>
+
+
+<h3>Value</h3>
+
+<p>object of class tableone. That is a list of data specified summaries
+for all input variables.
+</p>
+
+
+<h3>Note</h3>
+
+<p>All columns in the table will be summarized. If only some columns shall be used, please select only those
+variables prior to creating the summary table by using dplyr::select()
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Example using the ovarian data set
+
+survival::ovarian %&gt;%
+  dplyr::select(-fustat) %&gt;%
+  dplyr::mutate(
+    age_group = factor(
+      dplyr::case_when(
+        age &lt;= 50 ~ "&lt;= 50 years",
+        age &lt;= 60 ~ "&lt;= 60 years",
+        age &lt;= 70 ~ "&lt;= 70 years",
+        TRUE ~ "&gt; 70 years"
+      )
+    ),
+    rx = factor(rx),
+    ecog.ps = factor(ecog.ps)
+  ) %&gt;%
+  dplyr::select(age, age_group, everything()) %&gt;%
+  visR::get_tableone()
+
+# Examples using ADaM data
+
+# display patients in an analysis set
+adtte %&gt;%
+  dplyr::filter(SAFFL == "Y") %&gt;%
+  dplyr::select(TRTA) %&gt;%
+  visR::get_tableone()
+
+## display overall summaries for demog
+adtte %&gt;%
+  dplyr::filter(SAFFL == "Y") %&gt;%
+  dplyr::select(AGE, AGEGR1, SEX, RACE) %&gt;%
+  visR::get_tableone()
+
+## By actual treatment
+adtte %&gt;%
+  dplyr::filter(SAFFL == "Y") %&gt;%
+  dplyr::select(AGE, AGEGR1, SEX, RACE, TRTA) %&gt;%
+  visR::get_tableone(strata = "TRTA")
+
+## By actual treatment, without overall
+adtte %&gt;%
+  dplyr::filter(SAFFL == "Y") %&gt;%
+  dplyr::select(AGE, AGEGR1, SEX, EVNTDESC, TRTA) %&gt;%
+  visR::get_tableone(strata = "TRTA", overall = FALSE)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,128 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vistime_data</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Standardize data to plot on a timeline plot</h2>
+
+<h3>Description</h3>
+
+<p>Standardize data to plot on a timeline plot
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vistime_data(
+  data,
+  col.event = "event",
+  col.start = "start",
+  col.end = "end",
+  col.group = "group",
+  col.color = "color",
+  col.fontcolor = "fontcolor",
+  col.tooltip = "tooltip",
+  optimize_y = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p><code>data.frame</code> that contains the data to be normalized</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.event</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> that contains event
+names. Default: <em>event</em>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.start</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> that contains start
+dates. Default: <em>start</em>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.end</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> that contains end dates.
+Default: <em>end</em>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.group</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> to be used for
+grouping. Default: <em>group</em>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.color</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> that contains colors
+for events. Default: <em>color</em>, if not present, colors are chosen via
+<code>RColorBrewer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.fontcolor</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> that contains the
+font color for event labels. Default: <em>fontcolor</em>, if not present,
+color will be black.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.tooltip</code></td>
+<td>
+<p>(optional, character) the column name in <code>data</code> that contains the
+mouseover tooltips for the events. Default: <em>tooltip</em>, if not present,
+then tooltips are built from event name and date.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optimize_y</code></td>
+<td>
+<p>(optional, logical) distribute events on y-axis by smart heuristic (default), otherwise use order of input data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>for deprecated arguments up to vistime 1.1.0 (like events, colors, ...)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>vistime_data</code> returns a data.frame with the following columns: event, start, end, group, tooltip, label, col, fontcol, subplot, y
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># presidents and vice presidents
+pres &lt;- data.frame(
+  Position = rep(c("President", "Vice"), each = 3),
+  Name = c("Washington", rep(c("Adams", "Jefferson"), 2), "Burr"),
+  start = c("1789-03-29", "1797-02-03", "1801-02-03"),
+  end = c("1797-02-03", "1801-02-03", "1809-02-03"),
+  color = c("#cbb69d", "#603913", "#c69c6e"),
+  fontcolor = c("black", "white", "black")
+)
+
+vistime_data(pres, col.event = "Position", col.group = "Name")
+</code></pre>
+
+
+</div>

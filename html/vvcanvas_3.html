@@ -1,0 +1,63 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>canvas_authenticate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Authenticate with Canvas LMS API</h2>
+
+<h3>Description</h3>
+
+<p>This function handles authentication with the Canvas LMS API.
+It uses the provided API key and base URL, or falls back to the <code>CANVAS_API_KEY</code> and <code>CANVAS_BASE_URL</code> environment variables if none are provided.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">canvas_authenticate(api_key = canvas_api_key(), base_url = canvas_base_url())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>api_key</code></td>
+<td>
+<p>The API key for authenticating with the Canvas LMS API. Defaults to the <code>CANVAS_API_KEY</code> environment variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>base_url</code></td>
+<td>
+<p>The base URL of the Canvas instance. Defaults to the <code>CANVAS_BASE_URL</code> environment variable.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing the authenticated 'api_key' and 'base_url'.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The function verifies authentication by making a test request to the <code style="white-space: pre;">⁠/api/v1/users/self⁠</code> endpoint of the Canvas instance.
+If the response status code is not 200, it throws an error message indicating that authentication failed.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Authenticate with the Canvas LMS API
+api_key &lt;- "your_api_key"
+base_url &lt;- "https://canvas.example.com"
+canvas &lt;- canvas_authenticate(api_key, base_url)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,146 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>add1.cca</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add or Drop  Single Terms to a Constrained Ordination Model </h2>
+
+<h3>Description</h3>
+
+<p>Compute all single terms that can be added to or dropped from a
+constrained ordination model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'cca'
+add1(object, scope, test = c("none", "permutation"),
+    permutations = how(nperm=199), ...)
+## S3 method for class 'cca'
+drop1(object, scope, test = c("none", "permutation"), 
+    permutations = how(nperm=199), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p> A constrained ordination object from
+<code>cca</code>, <code>rda</code>, <code>dbrda</code> or
+<code>capscale</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scope</code></td>
+<td>
+<p> A formula giving the terms to be considered for adding
+or dropping; see <code>add1</code> for details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>test</code></td>
+<td>
+<p> Should a permutation test be added using <code>anova.cca</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>permutations</code></td>
+<td>
+<p>a list of control values for the permutations
+as returned by the function <code>how</code>, or the
+number of permutations required, or a permutation matrix where each
+row gives the permuted indices.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments passed to <code>add1.default</code>,
+<code>drop1.default</code>, and <code>anova.cca</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+ 
+<p>With argument <code>test = "none"</code> the functions will only call
+<code>add1.default</code> or <code>drop1.default</code>. With
+argument <code>test = "permutation"</code> the functions will add test
+results from <code>anova.cca</code>. Function <code>drop1.cca</code> will
+call <code>anova.cca</code> with argument <code>by = "margin"</code>.
+Function <code>add1.cca</code> will implement a test for single term
+additions that is not directly available in <code>anova.cca</code>.
+</p>
+<p>Functions are used implicitly in <code>step</code>,
+<code>ordiR2step</code> and <code>ordistep</code>. The
+<code>deviance.cca</code> and <code>deviance.rda</code> used in
+<code>step</code> have no firm basis, and setting argument <code>test
+  = "permutation"</code> may help in getting useful insight into validity of
+model building. Function <code>ordistep</code> calls alternately
+<code>drop1.cca</code> and <code>add1.cca</code> with argument 
+<code>test = "permutation"</code> and selects variables by their permutation
+<code class="reqn">P</code>-values.  Meticulous use of <code>add1.cca</code> and
+<code>drop1.cca</code> will allow more judicious model building.
+</p>
+<p>The default number of <code>permutations</code> is set to a low value, because
+permutation tests can take a long time. It should be sufficient to
+give a impression on the significances of the terms, but higher
+values of <code>permutations</code> should be used if <code class="reqn">P</code> values really
+are important.  
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns a similar object as <code>add1</code> and <code>drop1</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jari Oksanen</p>
+
+
+<h3>See Also</h3>
+
+ <p><code>add1</code>, <code>drop1</code> and
+<code>anova.cca</code> for basic methods. You probably need these
+functions with <code>step</code> and <code>ordistep</code>. Functions
+<code>deviance.cca</code> and <code>extractAIC.cca</code> are used
+to produce the other arguments than test results in the
+output.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(dune)
+data(dune.env)
+## Automatic model building based on AIC but with permutation tests
+step(cca(dune ~  1, dune.env), reformulate(names(dune.env)), test="perm")
+## see ?ordistep to do the same, but based on permutation P-values
+## Not run: 
+ordistep(cca(dune ~  1, dune.env), reformulate(names(dune.env)))
+
+## End(Not run)
+## Manual model building
+## -- define the maximal model for scope
+mbig &lt;- rda(dune ~  ., dune.env)
+## -- define an empty model to start with
+m0 &lt;- rda(dune ~ 1, dune.env)
+## -- manual selection and updating
+add1(m0, scope=formula(mbig), test="perm")
+m0 &lt;- update(m0, . ~ . + Management)
+add1(m0, scope=formula(mbig), test="perm")
+m0 &lt;- update(m0, . ~ . + Moisture)
+## -- included variables still significant?
+drop1(m0, test="perm")
+add1(m0, scope=formula(mbig), test="perm")
+</code></pre>
+
+
+</div>

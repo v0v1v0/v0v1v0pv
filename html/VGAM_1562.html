@@ -1,0 +1,459 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rrvglm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fitting Reduced-Rank Vector Generalized Linear Models
+(RR-VGLMs)
+and Doubly Constrained RR-VGLMs (DRR-VGLMs)
+</h2>
+
+<h3>Description</h3>
+
+<p>A <em>reduced-rank vector generalized linear model</em> (RR-VGLM)
+is fitted.  RR-VGLMs are VGLMs but some of the constraint
+matrices are estimated.
+<em>Doubly constrained</em> RR-VGLMs (DRR-VGLMs)
+can also be fitted,
+and these provide structure for the two other 
+outer product matrices.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rrvglm(formula, family = stop("'family' is unassigned"),
+       data = list(), weights = NULL, subset = NULL,
+       na.action = na.fail, etastart = NULL, mustart = NULL,
+       coefstart = NULL, control = rrvglm.control(...),
+       offset = NULL, method = "rrvglm.fit", model = FALSE,
+       x.arg = TRUE, y.arg = TRUE, contrasts = NULL,
+       constraints = NULL, extra = NULL, qr.arg = FALSE,
+       smart = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula, family</code></td>
+<td>
+
+<p>See <code>vglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights, data</code></td>
+<td>
+
+<p>See <code>vglm</code>.
+</p>
+
+
+
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subset, na.action</code></td>
+<td>
+
+<p>See <code>vglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>etastart, mustart, coefstart</code></td>
+<td>
+
+<p>See <code>vglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+
+<p>a list of parameters for controlling
+the fitting process.
+See <code>rrvglm.control</code> for details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>offset, model, contrasts</code></td>
+<td>
+
+<p>See <code>vglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+
+<p>the method to be used in fitting the model.
+The default (and presently only)
+method <code>rrvglm.fit</code>
+uses iteratively reweighted least squares (IRLS).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x.arg, y.arg</code></td>
+<td>
+
+<p>logical values indicating whether the model matrix
+and response vector/matrix used in the fitting
+process should be assigned in the <code>x</code> and <code>y</code> slots.
+Note the model matrix is the LM model matrix; to get the VGLM
+model matrix type <code>model.matrix(vglmfit)</code> where
+<code>vglmfit</code> is a <code>vglm</code> object.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>constraints</code></td>
+<td>
+
+<p>See <code>vglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extra, smart, qr.arg</code></td>
+<td>
+
+<p>See <code>vglm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>further arguments passed into <code>rrvglm.control</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In this documentation, <code class="reqn">M</code> is the
+number of linear predictors.
+For RR-VGLMs,
+the central formula is given by
+</p>
+<p style="text-align: center;"><code class="reqn">\eta = B_1^T x_1 + A \nu</code>
+</p>
+
+<p>where <code class="reqn">x_1</code> is a vector
+(usually just a 1 for an intercept),
+<code class="reqn">x_2</code> is another vector of explanatory variables, and
+<code class="reqn">\nu = C^T x_2</code> is an <code class="reqn">R</code>-vector of
+latent variables.
+Here, <code class="reqn">\eta</code> is a vector of linear predictors,
+e.g., the <code class="reqn">m</code>th element is
+<code class="reqn">\eta_m = \log(E[Y_m])</code> for the
+<code class="reqn">m</code>th Poisson response.
+The dimension of <code class="reqn">\eta</code> is <code class="reqn">M</code> by
+definition.
+The matrices <code class="reqn">B_1</code>, <code class="reqn">A</code> and
+<code class="reqn">C</code> are estimated from the data, i.e., contain the
+regression coefficients.  For ecologists, the central
+formula represents a <em>constrained linear ordination</em>
+(CLO) since it is linear in the latent variables. It
+means that the response is a monotonically increasing or
+decreasing function of the latent variables.
+</p>
+<p>For identifiability it is common to enforce
+<em>corner constraints</em> on <b>A</b>:
+by default, for RR-VGLMs, the top <code class="reqn">R</code>
+by <code class="reqn">R</code> submatrix is fixed to be
+the order-<code class="reqn">R</code> identity matrix and
+the remainder of <b>A</b> is estimated.
+And by default, for DRR-VGLMs, there is
+also an order-<code class="reqn">R</code> identity matrix
+embedded in <b>A</b> because the RRR must
+be <em>separable</em> (this is so that any
+existing structure in <b>A</b> is preserved).
+</p>
+<p>The underlying algorithm of RR-VGLMs is
+iteratively reweighted least squares (IRLS)
+with an optimizing algorithm applied within
+each IRLS iteration (e.g., alternating
+algorithm).
+</p>
+<p>In theory, any <span class="pkg">VGAM</span> family function
+that works for <code>vglm</code>
+and <code>vgam</code> should work for
+<code>rrvglm</code> too.  The function that
+actually does the work is <code>rrvglm.fit</code>;
+it is essentially <code>vglm.fit</code> with some
+extra code.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For RR-VGLMs,
+an object of class <code>"rrvglm"</code>, which
+has the the same slots as a <code>"vglm"</code>
+object. The only difference is that the some
+of the constraint matrices are estimates
+rather than known. But <span class="pkg">VGAM</span> stores
+the models the same internally. The slots
+of <code>"vglm"</code> objects are described in
+<code>vglm-class</code>.
+</p>
+<p>For DRR-VGLMs,
+an object of class <code>"drrvglm"</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The arguments of <code>rrvglm</code> are in general the same
+as those of <code>vglm</code> but with some extras in
+<code>rrvglm.control</code>.
+</p>
+<p>The smart prediction (<code>smartpred</code>) library
+is packed with the <span class="pkg">VGAM</span> library.
+</p>
+<p>In an example below, a rank-1 <em>stereotype</em>
+(reduced-rank multinomial logit)
+model of Anderson (1984) is fitted to some car data.
+The reduced-rank regression is performed, adjusting for
+two covariates. Setting a trivial constraint matrix
+(<code>diag(M)</code>)
+for the latent variable variables in <code class="reqn">x_2</code> avoids
+a warning message when it is overwritten by a (common)
+estimated constraint matrix.  It shows that German cars
+tend to be more expensive than American cars, given a
+car of fixed weight and width.
+</p>
+<p>If <code>fit &lt;- rrvglm(..., data = mydata)</code> then
+<code>summary(fit)</code> requires corner constraints and no
+missing values in <code>mydata</code>. 
+Sometimes the estimated variance-covariance
+matrix of the parameters is not
+positive-definite; if this occurs, try
+refitting the model with a different value
+for <code>Index.corner</code>.
+</p>
+<p>For <em>constrained quadratic ordination</em> (CQO) see
+<code>cqo</code> for more details about QRR-VGLMs.
+</p>
+<p>With multiple binary responses, one must use
+<code>binomialff(multiple.responses = TRUE)</code> to indicate
+that the response is a matrix with one response per column.
+Otherwise, it is interpreted as a single binary response
+variable.
+</p>
+<p>To fit DRR-VGLMs see the arguments
+<code>H.A.thy</code> and
+<code>H.C</code> in <code>rrvglm.control</code>.
+DRR-VGLMs provide structure to the <b>A</b> and
+<b>C</b> matrices via constraint matrices.
+So instead of them being general unstructured
+matrices, one can make specified elements to
+be identically equal to 0, for example.
+This gives greater control
+over what is modelled as a latent variable,
+e.g., in a health study,
+if one subset of the covariates are physical
+variables and the remainder are psychological
+variables then a rank-2 model might have each
+latent variable a linear combination of each
+of the types of variables separately.
+</p>
+
+<p>Incidentally
+before I forget, since <code>Corner = TRUE</code>,
+then
+the differences between the <code>@H.A.thy</code> and
+<code>@H.A.alt</code> slots
+are due to <code>Index.corner</code>,
+which specifies which rows of <b>A</b>
+are not estimated.
+However,
+in the alternating algorithm,
+it is more efficient to estimate the entire
+<b>A</b>, bar (effectively) rows <code>str0</code>,
+and then normalize it.
+In contrast, optimizing over the subset of
+<b>A</b> to be estimated is slow.
+</p>
+
+<p>In the <code>@misc</code> slot are logical components
+<code>is.drrvglm</code> and
+<code>is.rrvglm</code>.
+Only one is <code>TRUE</code>.
+If <code>is.rrvglm</code> then (full) corner constraints
+are used.
+If <code>is.drrvglm</code> then
+<em>restricted corner constraints</em> (RCCs)
+are used and the reduced rank regression
+(RRR) must be <em>separable</em>.
+The case <code>is.rrvglm</code> means that
+<code>H.A.thy</code> is a <code>vector("list", Rank)</code>
+with <code>H.A.thy[[r]] &lt;- diag(M)</code> assigned
+to all <code class="reqn">r=1,\ldots,R</code>.
+Because DRR-VGLMs are implemented only for
+separable problems, this means that
+all columns of <code>H.A.thy[[s]]</code>
+are orthogonal to all columns from
+<code>H.A.try[[t]]</code>, for all <code class="reqn">s</code> and <code class="reqn">t</code>.
+DRR-VGLMs are proposed in
+Yee et al. (2024) in the context of GAITD regression
+for heaped and seeped survey data.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Hastie, T. J. (2003).
+Reduced-rank vector generalized linear models.
+<em>Statistical Modelling</em>,
+<b>3</b>, 15–41.
+</p>
+<p>Yee, T. W. (2004).
+A new technique for maximum-likelihood
+canonical Gaussian ordination.
+<em>Ecological Monographs</em>,
+<b>74</b>, 685–701.
+</p>
+<p>Anderson, J. A. (1984).
+Regression and ordered categorical variables.
+<em>Journal of the Royal Statistical Society,
+Series B, Methodological</em>,
+<b>46</b>, 1–30.
+</p>
+<p>Yee, T. W. (2014).
+Reduced-rank vector generalized linear models with
+two linear predictors.
+<em>Computational Statistics and Data Analysis</em>,
+<b>71</b>, 889–902.
+</p>
+<p>Yee, T. W., Frigau, L. and Ma, C. (2024).
+Heaping and seeping,
+GAITD regression and
+doubly constrained reduced rank vector
+generalized linear models,
+in smoking studies.
+<em>In preparation</em>.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>rrvglm.control</code>,
+<code>summary.drrvglm</code>,
+<code>lvplot.rrvglm</code>
+(same as <code>biplot.rrvglm</code>),
+<code>rrvglm-class</code>,
+<code>grc</code>,
+<code>cqo</code>,
+<code>vglmff-class</code>,
+<code>vglm</code>,
+<code>vglm-class</code>,
+<code>smartpred</code>,
+<code>rrvglm.fit</code>.
+Special family functions include
+<code>negbinomial</code>
+<code>zipoisson</code>
+and <code>zinegbinomial</code>.
+(see Yee (2014)
+and what was formerly in <span class="pkg">COZIGAM</span>).
+Methods functions include
+<code>Coef.rrvglm</code>,
+<code>calibrate.rrvglm</code>,
+etc.
+Data include
+<code>crashi</code>.
+</p>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Example 1: RR NB with Var(Y) = mu + delta1 * mu^delta2
+nn &lt;- 1000       # Number of observations
+delta1 &lt;- 3.0    # Specify this
+delta2 &lt;- 1.5    # Specify this; should be greater than 1
+a21 &lt;- 2 - delta2
+mydata &lt;- data.frame(x2 = runif(nn), x3 = runif(nn))
+mydata &lt;- transform(mydata, mu = exp(2 + 3 * x2 + 0 * x3))
+mydata &lt;- transform(mydata,
+    y2 = rnbinom(nn, mu = mu, size = (1/delta1)*mu^a21))
+plot(y2 ~ x2, mydata, pch = "+", col = 'blue', las = 1,
+  main = paste0("Var(Y) = mu + ", delta1, " * mu^", delta2))
+rrnb2 &lt;- rrvglm(y2 ~ x2 + x3, negbinomial(zero = NULL),
+                data = mydata, trace = TRUE)
+
+a21.hat &lt;- (Coef(rrnb2)@A)["loglink(size)", 1]
+beta11.hat &lt;- Coef(rrnb2)@B1["(Intercept)", "loglink(mu)"]
+beta21.hat &lt;- Coef(rrnb2)@B1["(Intercept)", "loglink(size)"]
+(delta1.hat &lt;- exp(a21.hat * beta11.hat - beta21.hat))
+(delta2.hat &lt;- 2 - a21.hat)
+# delta1.hat:
+# exp(a21.hat * predict(rrnb2)[1,1] - predict(rrnb2)[1,2])
+summary(rrnb2)
+
+# Obtain a 95 percent CI for delta2:
+se.a21.hat &lt;- sqrt(vcov(rrnb2)["I(latvar.mat)", "I(latvar.mat)"])
+ci.a21 &lt;- a21.hat +  c(-1, 1) * 1.96 * se.a21.hat
+(ci.delta2 &lt;- 2 - rev(ci.a21))  # The 95 percent CI
+
+Confint.rrnb(rrnb2)  # Quick way to get it
+
+# Plot the abundances and fitted values vs the latent variable
+plot(y2 ~ latvar(rrnb2), data = mydata, col = "blue",
+     xlab = "Latent variable", las = 1)
+ooo &lt;- order(latvar(rrnb2))
+lines(fitted(rrnb2)[ooo] ~ latvar(rrnb2)[ooo], col = "red")
+
+# Example 2: stereotype model (RR multinomial logit model)
+data(car.all)
+scar &lt;- subset(car.all,
+    is.element(Country, c("Germany", "USA", "Japan", "Korea")))
+fcols &lt;- c(13,14,18:20,22:26,29:31,33,34,36)  # These are factors
+scar[, -fcols] &lt;- scale(scar[, -fcols])  # Stdze all numerical vars
+ones &lt;- CM.ones(3)  # matrix(1, 3, 1)
+clist &lt;- list("(Intercept)" = diag(3), Width = ones, Weight = ones,
+              Disp. = diag(3), Tank = diag(3), Price = diag(3),
+              Frt.Leg.Room = diag(3))
+set.seed(111)
+fit &lt;- rrvglm(Country ~ Width + Weight + Disp. + Tank +
+              Price + Frt.Leg.Room,
+              multinomial, data = scar, Rank = 2, trace = TRUE,
+              constraints = clist, noRRR = ~ 1 + Width + Weight,
+#             Uncor = TRUE, Corner = FALSE,  # orig.
+              Index.corner = c(1, 3),  # Less correlation
+              Bestof = 3)
+fit@misc$deviance  # A history of the fits
+Coef(fit)
+biplot(fit, chull = TRUE, scores = TRUE, clty = 2, Ccex = 2,
+       ccol = "blue", scol = "orange", Ccol = "darkgreen",
+       Clwd = 2, main = "1=Germany, 2=Japan, 3=Korea, 4=USA")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

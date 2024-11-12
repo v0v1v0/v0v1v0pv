@@ -1,0 +1,138 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>profs.nz</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Professors of Statistics in New Zealand
+</h2>
+
+<h3>Description</h3>
+
+<p>This data set contains information on about 22
+past or present
+professors of statistics
+in New Zealand universities.
+</p>
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data(profs.nz)</code></pre>
+
+
+<h3>Format</h3>
+
+<p>A data frame with 22 observations on the following 7 variables.
+</p>
+
+<dl>
+<dt><code>pubtotal</code></dt>
+<dd>
+<p>a numeric vector,
+the total number of publications.
+</p>
+</dd>
+<dt><code>cites</code></dt>
+<dd>
+<p>a numeric vector, the number of citations.
+</p>
+</dd>
+<dt><code>initials</code></dt>
+<dd>
+<p>character,
+first and middle and surname initials.
+</p>
+</dd>
+<dt><code>Surname</code></dt>
+<dd>
+<p>character, the surname.
+</p>
+</dd>
+<dt><code>firstyear</code></dt>
+<dd>
+<p>a numeric vector,
+the earliest indexed publication.
+</p>
+</dd>
+<dt><code>ID</code></dt>
+<dd>
+<p>a numeric vector, the unique MR Author ID for each
+professor.
+</p>
+</dd>
+<dt><code>pub1stAuthor</code></dt>
+<dd>
+<p>a numeric vector, the total number of 
+publications which are first authored by the person.
+</p>
+</dd>
+<dt><code>ARPtotal</code></dt>
+<dd>
+<p>a numeric vector, the total number of 
+author/related publications.
+</p>
+</dd>
+<dt><code>institution</code></dt>
+<dd>
+<p>character,
+with values <code>"MU"</code>, <code>"UA"</code>, 
+<code>"UC"</code>, <code>"UO"</code>, <code>"UW"</code>, <code>"VU"</code>,
+the university affiliation.
+The abbreviations are for:
+Massey University,
+University of Auckland,
+University of Canterbury,
+University of Otago,
+University of Waikato and
+Victoria University Wellington.
+</p>
+</dd>
+</dl>
+<h3>Details</h3>
+
+<p>This data set contains information taken from the MathSciNet database on
+professors of statistics (and some related fields)
+affiliated with New Zealand universities.
+</p>
+<p>In the future the following names may be added:
+C. F. Ansley,
+P. C. B. Phillips,
+B. S. Weir,
+C. S. Withers.
+</p>
+
+
+
+<h3>Source</h3>
+
+<p>The data was compiled from
+the equivalent of
+<a href="https://mathscinet.ams.org/mathscinet/publications-search">https://mathscinet.ams.org/mathscinet/publications-search</a>
+by J. T. Gray in April 2014.
+</p>
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">profs.nz
+profs.nz[order(with(profs.nz, pubtotal), decreasing = TRUE), ]
+## Not run: 
+plot(pub1stAuthor / pubtotal ~ pubtotal,
+     main = "Professors of Statistics in NZ",
+     xlab = "Number of publications in MathSciNet",
+     ylab = "Proportion of first-authored papers",
+     data = profs.nz, col = "blue", las = 1, type = "n")
+with(profs.nz, text(pubtotal, y = pub1stAuthor / pubtotal,
+     labels = initials, col = "blue", las = 1))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

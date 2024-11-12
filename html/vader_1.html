@@ -1,0 +1,121 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>get_vader</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get a named vector of vader results for a single text document</h2>
+
+<h3>Description</h3>
+
+<p>Use get_vader() to calculate the valence of a single text document.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">get_vader(text, incl_nt = T, neu_set = T, rm_qm = T)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>text</code></td>
+<td>
+<p>to be analyzed; for get_vader(), the text should be a character string</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>incl_nt</code></td>
+<td>
+<p>defaults to T, indicates whether you wish to incl UNUSUAL n't contractions (e.g., yesn't) in negation analysis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>neu_set</code></td>
+<td>
+<p>defaults to T, indicates whether you wish to count neutral words in calculations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rm_qm</code></td>
+<td>
+<p>defaults to T, indicates whether you wish to clean quotation marks from text (setting to F may result in errors)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A named vector containing the valence score for each word; an overall, compound valence score for the text; the weighted percentage of positive, negative, and neutral words in the text; and the frequency of the word "but".
+</p>
+
+
+<h3>References</h3>
+
+<p>For the original Python Code, please see:
+</p>
+
+<ul>
+<li>
+<p> https://github.com/cjhutto/vaderSentiment
+</p>
+</li>
+<li>
+<p> https://github.com/cjhutto/vaderSentiment/blob/master/vaderSentiment/vaderSentiment.py
+</p>
+</li>
+</ul>
+<p>For the original R Code, please see:
+</p>
+
+<ul><li>
+<p> https://github.com/nrguimaraes/sentimentSetsR/blob/master/R/ruleBasedSentimentFunctions.R
+</p>
+</li></ul>
+<p>Modifications to the above scripts include, but are not limited to:
+</p>
+
+<ul>
+<li>
+<p> ALL CAPS fx: updated to account for non-alpha words; i.e. "I'M 100 PERCENT SURE" would previously have been counted as mixed case due to the use of numbers
+</p>
+</li>
+<li>
+<p> IDIOMS fx: added capacity to check for idioms that do not contain any words found in the Vader Lexicon
+</p>
+</li>
+<li>
+<p> WORDS+EMOT: strip punctuation while preserving ALL emoticons found in dictionary
+</p>
+</li>
+<li>
+<p> Option to turn on/off neutral count
+</p>
+</li>
+</ul>
+<h3>N.B.</h3>
+
+<p>In the examples below, "yesn't" is an internet neologism meaning "no", "maybe yes, maybe no", "didn't", etc.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vader_df</code> to get vader results for multiple text documents
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">get_vader("I yesn't like it")
+get_vader("I yesn't like it", incl_nt = FALSE)
+get_vader("I yesn't like it", neu_set = FALSE)
+get_vader("I said \"I'm not happy\"", rm_qm = FALSE)
+get_vader("I said \" I'm not happy \" ", rm_qm = FALSE)
+
+</code></pre>
+
+
+</div>

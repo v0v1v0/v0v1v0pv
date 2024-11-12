@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>[&lt;-,VirtualArray,ANY,ANY,logical-method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Replace layers in an object that is of a class derived from '<code>VirtualArray</code>'.</h2>
+
+<h3>Description</h3>
+
+<p>Single bracket <code>'['</code> refers to indices and names within the '<code>VirtualArray</code>'-class object. Use double brackets to replace layers based on their names (in the <code>@stack</code>).
+Object types of the same kind class can be used to replace values in '<code>XArray</code>'-class objects. '<code>SpatRaster</code>'-class objects can be used to replace values in '<code>RasterArray</code>'-class objects. Classes inheriting from '<code>sf</code>' can be used with '<code>SfArray</code>'-class objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 replacement method for signature 'VirtualArray,ANY,ANY,logical'
+x[i, j, ...] &lt;- value
+
+## S4 replacement method for signature 'RasterArray,ANY,ANY,SpatRaster'
+x[i, j, ...] &lt;- value
+
+## S4 replacement method for signature 'SfcArray,ANY,ANY,sfc'
+x[i, j, ...] &lt;- value
+
+## S4 replacement method for signature 'SfArray,ANY,ANY,sf'
+x[i, j, ...] &lt;- value
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>VirtualArray</code>-class object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>i</code></td>
+<td>
+<p>subscript of the first dimension(rows) or vector-like subsetting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>j</code></td>
+<td>
+<p>subscript of the second dimension (columns).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>subscript of additional dimensions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>A same class object as <code>x</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The function has no return value.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ex &lt;- rastex() 
+# replace third element with missing value
+ex[3] &lt;- NA
+# duplicate first element and make it the second too
+ex[2] &lt;- ex[1]
+ex
+
+</code></pre>
+
+
+</div>

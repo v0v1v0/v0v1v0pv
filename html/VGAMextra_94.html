@@ -1,0 +1,166 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>inv.chisqDist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+The Inverse Chi–squared Distribution
+
+</h2>
+
+<h3>Description</h3>
+
+<p>Density, CDF, quantile function and random number generator for the
+Inverse Chi–squared distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    dinv.chisq(x, df, log = FALSE)
+    pinv.chisq(q, df, lower.tail = TRUE, log.p = FALSE)
+    qinv.chisq(p, df, lower.tail = TRUE, log.p = FALSE)
+    rinv.chisq(n, df) 
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, p, n</code></td>
+<td>
+
+<p>Same as <code>Chisquare</code>. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df, lower.tail, log, log.p</code></td>
+<td>
+
+<p>Same as <code>Chisquare</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The inverse chi–squared distribution with non–negative
+<code>df</code> = <code class="reqn">\nu</code> degrees
+of freedom implemented here has density
+
+</p>
+<p style="text-align: center;"><code class="reqn">f(x; \nu) = \frac{ 2^{-\nu / 2} x^{-\nu/2 - 1} 
+               e^{-1 / (2x)} }{ \Gamma(\nu / 2) }, </code>
+</p>
+
+
+<p>where <code class="reqn">x &gt; 0</code>, and
+<code class="reqn">\Gamma</code> is the <code>gamma</code> function.
+</p>
+<p>The mean is <code class="reqn">1 / (\nu - 2)</code>, for <code class="reqn">\nu &gt; 2</code>, and the variance is
+given by <code class="reqn">2 / [(\nu - 2)^2 (\nu - 4)]</code>, for <code class="reqn">\nu &gt; 4</code>.
+</p>
+<p>Also, as with <code>Chisquare</code>, the degrees
+of freedom can be non–integer.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dinv.chisq</code> returns the density, <code>pinv.chisq</code> returns the 
+distribution function, <code>qinv.chisq</code> gives the quantiles, and 
+<code>rinv.chisq</code> generates random numbers from this distribution.
+</p>
+
+
+<h3>Source</h3>
+
+<p>Specifically, it is the probability distribution of a random variable
+whose reciprocal follows a chi–squared distribution, i.e.,
+</p>
+<p>If <code class="reqn">Y \sim</code> chi–squared<code class="reqn">(\nu)</code>, then <code class="reqn">1/Y \sim</code>
+Inverse chi–squared<code class="reqn">(\nu)</code>.
+</p>
+<p>As a result, <code>dinv.chisq, pinv.chisq, qinv.chisq</code> and 
+<code>rinv.chisq</code> use the functions 
+<code>Chisquare</code> as a basis. Hence,
+invalid arguments will lead these functions to return
+<code>NA</code> or <code>NaN</code> accordingly.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Yet to do: A <em>non–central</em> parameter as an argument, 
+if amenable. 
+</p>
+<p>Two similar versions of the Inverse chi–squared distribution with
+<code class="reqn">\nu</code> degrees of freedom may be found in the literature, as 
+follows:
+</p>
+<p>Let <code class="reqn">Y \sim</code> chi–squared<code class="reqn">(\nu)</code>, then
+</p>
+<p>I. <code class="reqn">1 / Y \sim</code> Inverse chi–squared<code class="reqn">(\nu)</code>, and
+II. <code class="reqn"> \nu / Y \sim</code> Inverse chi–squared<code class="reqn">(\nu)</code>.
+</p>
+<p>Here, the former, which is the popular version, has been implemented.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda</p>
+
+
+<h3>References</h3>
+
+<p>Johnson, N.L., Kotz, S. and Balakrishnan, N. (1995) 
+<em>Continuous Univariate Distributions</em>.
+Chapters 18 (volume 1) and 29 (volume 2). Wiley, New York.  
+
+
+
+
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Chisquare</code>,
+<code>gamma</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+  ##  Example 1  ## 
+  nn &lt;- 50; df &lt;- 1.4
+  data.1   &lt;- ppoints(nn)
+  data.q   &lt;- qinv.chisq(-data.1, df = df, log.p = TRUE)  
+  data.p   &lt;- -log(pinv.chisq(data.q, df = df)) 
+  max(abs(data.p - data.1))     # Should be zero
+  
+  
+  ##  Example 2  ##
+
+  xx    &lt;- seq(0, 3.0, len = 301)
+  yy    &lt;- dinv.chisq(xx, df = df)
+  qtl   &lt;- seq(0.1, 0.9, by = 0.1)
+  d.qtl &lt;- qinv.chisq(qtl, df = df)
+  plot(xx, yy, type = "l", col = "orange", 
+       main = "Orange is density, blue is cumulative distribution function",
+       sub  = "Brown dashed lines represent the 10th, ... 90th percentiles",
+       las = 1, xlab = "x", ylab = "", ylim = c(0, 1))
+  abline(h = 0, col= "navy", lty = 2)
+  lines(xx, pinv.chisq(xx, df = df), col = "blue")
+  lines(d.qtl, dinv.chisq(d.qtl, df = df), type ="h", col = "brown", lty = 3)
+  
+</code></pre>
+
+
+</div>

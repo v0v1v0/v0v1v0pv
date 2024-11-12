@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vaultr-package</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vault Client for Secrets and Sensitive Data</h2>
+
+<h3>Description</h3>
+
+<p>Vault client for secrets and sensitive data; this package provides
+wrappers for HashiCorp's <a href="https://vaultproject.io">vault server</a>.
+The package wraps most of the high-level API, and includes support
+for authentication via a number of backends (tokens, username and
+password, github, and "AppRole"), as well as a number of secrets
+engines (two key-value stores, vault's cubbyhole and the transit
+backend for encryption-as-a-service).
+</p>
+
+
+<h3>Details</h3>
+
+<p>To get started, you might want to start with the "vaultr"
+vignette, available from the package with <code>vignette("vaultr")</code>.
+</p>
+<p>The basic design of the package is that it has very few
+entrypoints - for most uses one will interact almost entirely with
+the vault_client function.  That function returns an
+R6 object with several methods (functions) but also several
+objects that themselves contain more methods and objects, creating
+a nested tree of functionality.
+</p>
+<p>From any object, online help is available via the help method, for
+example
+</p>
+<div class="sourceCode"><pre>client &lt;- vaultr::vault_client()
+client$secrets$transit$help()
+</pre></div>
+<p>For testing packages that rely on vault, there is support for
+creating temporary vault servers; see <code>vaultr::vault_test_server</code>
+and the "packages" vignette.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p><strong>Maintainer</strong>: Rich FitzJohn <a href="mailto:rich.fitzjohn@gmail.com">rich.fitzjohn@gmail.com</a>
+</p>
+<p>Authors:
+</p>
+
+<ul>
+<li>
+<p> Robert Ashton
+</p>
+</li>
+<li>
+<p> Wes Hinsley
+</p>
+</li>
+</ul>
+<p>Other contributors:
+</p>
+
+<ul><li>
+<p> Imperial College of Science, Technology and Medicine [copyright holder]
+</p>
+</li></ul>
+<h3>See Also</h3>
+
+<p>Useful links:
+</p>
+
+<ul>
+<li> <p><a href="https://github.com/vimc/vaultr">https://github.com/vimc/vaultr</a>
+</p>
+</li>
+<li> <p><a href="https://www.vaccineimpact.org/vaultr/">https://www.vaccineimpact.org/vaultr/</a>
+</p>
+</li>
+<li>
+<p> Report bugs at <a href="https://github.com/vimc/vaultr/issues">https://github.com/vimc/vaultr/issues</a>
+</p>
+</li>
+</ul>
+</div>

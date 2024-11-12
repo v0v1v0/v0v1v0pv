@@ -1,0 +1,118 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_window</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Identify intervals within a specified distance.</h2>
+
+<h3>Description</h3>
+
+<p>Identify intervals within a specified distance.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_window(x, y, genome, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>genome</code></td>
+<td>
+<p>genome_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>params for bed_slop and bed_intersect</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>input tbls are grouped by <code>chrom</code> by default, and additional
+groups can be added using <code>dplyr::group_by()</code>. For example,
+grouping by <code>strand</code> will constrain analyses to the same strand. To
+compare opposing strands across two tbls, strands on the <code>y</code> tbl can
+first be inverted using <code>flip_strands()</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/window.html">https://bedtools.readthedocs.io/en/latest/content/tools/window.html</a>
+</p>
+<p>Other multiple set operations: 
+<code>bed_closest()</code>,
+<code>bed_coverage()</code>,
+<code>bed_intersect()</code>,
+<code>bed_map()</code>,
+<code>bed_subtract()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 25,     50,
+  "chr1", 100,    125
+)
+
+y &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 60,     75
+)
+
+genome &lt;- tibble::tribble(
+  ~chrom, ~size,
+  "chr1", 125
+)
+
+bed_glyph(bed_window(x, y, genome, both = 15))
+
+x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 10, 100,
+  "chr2", 200, 400,
+  "chr2", 300, 500,
+  "chr2", 800, 900
+)
+
+y &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 150,    400,
+  "chr2", 230,    430,
+  "chr2", 350,    430
+)
+
+genome &lt;- tibble::tribble(
+  ~chrom, ~size,
+  "chr1", 500,
+  "chr2", 1000
+)
+
+bed_window(x, y, genome, both = 100)
+
+</code></pre>
+
+
+</div>

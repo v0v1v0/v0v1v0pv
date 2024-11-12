@@ -1,0 +1,85 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summarize.two.way.comparisons.percentage.overlap</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summarize Percentage Overlap for Two-Way Comparisons between Vectors</h2>
+
+<h3>Description</h3>
+
+<p>Summarize Percentage Overlap for Two-Way Comparisons between Vectors
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">
+  summarize.two.way.comparisons.percentage.overlap(named_list_of_vectors_to_compare,
+  output_type = "table", melt_table = FALSE, network_graph_minimum = 0,
+  margins_for_plot = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>named_list_of_vectors_to_compare</code></td>
+<td>
+<p>A named list of vectors to compare (see, for example, <code>example.vectors.list</code>). Duplicate values in a given vector will only be counted once (for example, c("a", "a", "b", "c") will be treated identically to c("a", "b", "c").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output_type</code></td>
+<td>
+<p>Either <code>"table"</code>, <code>"matrix_plot"</code>, or <code>"network_graph"</code>. <code>"table"</code> will return a matrix showing percentage overlap between each pair of vectors. <code>"matrix_plot"</code> will plot this table, coloring it by the amount of overlap. <code>"network_graph"</code> will return a network graph image illustrating the overlap percentages between each pair of vectors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>melt_table</code></td>
+<td>
+<p>A logical (TRUE/FALSE) indicator, when <code>output_type</code> is <code>"table"</code>, whether to print the output in <code>melted</code> form (using the <span class="pkg">reshape2</span> package).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>network_graph_minimum</code></td>
+<td>
+<p><code>minimum</code> argument from <code>qgraph</code>, for when <code>output_type</code> is <code>"network_graph"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>margins_for_plot</code></td>
+<td>
+<p>The margins for image output (if <code>output_type</code> is <code>matrix_plot</code> or <code>network_graph</code>). Specified as a vector of numbers, in the form <code>c(bottom, left, top, right)</code>. If <code>output_type</code> is <code>matrix_plot</code>, defaults to <code>c(2, 0, 1, 0)</code>; if <code>output_type</code> is <code>network_graph</code>, defaults to <code>c(3, 3, 3, 0.5)</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Either a matrix (if <code>output</code> is <code>"table"</code>), or an image (if <code>output</code> is <code>"matrix_plot"</code> or <code>"network_graph"</code>). If an image is printed, nothing is returned by the function; rather, the output is printed immediately.
+</p>
+<p>If <code>output</code> is <code>"table"</code> and <code>melt_table</code> is <code>FALSE</code>, the output will be a matrix with <code>nrow</code> and <code>ncol</code> both equal to the number of vectors in <code>named_list_of_vectors_to_compare</code>. This table shows the decimal percentage overlap (e.g., "0.20" = 20%) between each combination of vectors. <em>This table is intended to be read with row names first, in this form:</em> "[row title] overlaps with [column title] [cell value] percent."
+</p>
+<p>If <code>output</code> is <code>"table"</code> and <code>melt_table</code> is <code>TRUE</code>, the output will be a <code>melted</code> data.frame with three columns: <code>Vector_Name</code>, <code>Overlaps_With</code>, and <code>Decimal_Percentage</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">summarize.two.way.comparisons.percentage.overlap(veccompare::example.vectors.list)
+summarize.two.way.comparisons.percentage.overlap(
+	veccompare::example.vectors.list,
+	output_type = "table",
+	melt_table = TRUE
+)
+
+summarize.two.way.comparisons.percentage.overlap(
+	veccompare::example.vectors.list,
+	output_type = "matrix_plot" # You can also choose "network_graph"
+)
+
+</code></pre>
+
+
+</div>

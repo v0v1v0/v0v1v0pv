@@ -1,0 +1,98 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopCompare</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Shiny app for bivariate copula selection</h2>
+
+<h3>Description</h3>
+
+<p>The function starts a shiny app which visualizes copula data and allows to
+compare it with overlays of density contours or simulated data from different
+copula families with fitted parameters. Several specifications for the
+margins are available.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopCompare(u1, u2, familyset = NA, rotations = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>u1, u2</code></td>
+<td>
+<p>Data vectors of equal length with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>familyset</code></td>
+<td>
+<p>Vector of bivariate copula families to select from.
+The vector has to include at least one bivariate copula
+family that allows for positive and one that allows for negative dependence.
+If <code>familyset = NA</code> (default), selection among all possible families is
+performed. If a vector of negative numbers is provided, selection among all
+but <code>abs(familyset)</code> families is performed. Coding of bivariate copula
+families: <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula) <br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>7</code> = BB1 copula <br><code>8</code> = BB6 copula <br><code>9</code> = BB7 copula <br><code>10</code> = BB8 copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; <code style="white-space: pre;">⁠survival Joe'') \cr `17` = rotated BB1 copula (180 degrees; ⁠</code>survival BB1”)<br><code>18</code> = rotated BB6 copula (180 degrees; <code style="white-space: pre;">⁠survival BB6'')\cr `19` = rotated BB7 copula (180 degrees; ⁠</code>survival BB7”)<br><code>20</code> = rotated BB8 copula (180 degrees; “survival BB8”)<br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'27' = rotated BB1 copula (90 degrees) <br>
+'28' = rotated BB6 copula (90 degrees) <br>
+'29' = rotated BB7 copula (90 degrees) <br>
+'30' = rotated BB8 copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br>
+'37' = rotated BB1 copula (270 degrees) <br>
+'38' = rotated BB6 copula (270 degrees) <br>
+'39' = rotated BB7 copula (270 degrees) <br>
+'40' = rotated BB8 copula (270 degrees) <br>
+'104' = Tawn type 1 copula <br>
+'114' = rotated Tawn type 1 copula (180 degrees) <br>
+'124' = rotated Tawn type 1 copula (90 degrees) <br>
+'134' = rotated Tawn type 1 copula (270 degrees) <br>
+'204' = Tawn type 2 copula <br>
+'214' = rotated Tawn type 2 copula (180 degrees) <br>
+'224' = rotated Tawn type 2 copula (90 degrees) <br>
+'234' = rotated Tawn type 2 copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rotations</code></td>
+<td>
+<p>If <code>TRUE</code>, all rotations of the families in
+<code>familyset</code> are included (or subtracted).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>BiCop()</code> object containing the model selected by the
+user.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Matthias Killiches, Thomas Nagler
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># load data
+data(daxreturns)
+
+# find a suitable copula family for the first two stocks
+## Not run: fit &lt;- BiCopCompare(daxreturns[, 1], daxreturns[, 2])
+
+</code></pre>
+
+
+</div>

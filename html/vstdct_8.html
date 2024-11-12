@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Toep.estimator</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Toeplitz Covariance and Precision Matrix Estimator</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the Toeplitz covariance matrix, the inverse matrix and the spectral density from a sample of <code>n</code> i.i.d. <code>p</code>-dimensional vectors with mean zero.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Toep.estimator(y, Te, q, method, f.true = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p><code>nxp</code>  dimensional data matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Te</code></td>
+<td>
+<p>number of bins for data binning.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>penalization order, <code>q=1,2,3,4</code> are available</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>to select the smoothing parameter of the smoothing spline. Available methods are restricted maxmimum likelihodd "<code>ML</code>", generalized cross-validation "<code>GCV</code>" and the oracle versions "<code>ML-oracle</code>", "<code>GCV-oracle</code>".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f.true</code></td>
+<td>
+<p>Te-dimensional vector with the true spectral density function evaluated at equi-sapced points in [0,<code>pi</code>]. Only required, if an oracle method ("<code>ML-oracle</code>", "<code>GCV-oracle</code>") is chosen for <code>method</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing the following elements:
+</p>
+
+<ul>
+<li>
+<p><code>toep</code>:   <code>p</code>-dim. Toeplitz covariance matrix
+</p>
+</li>
+<li>
+<p><code>toep.inv</code>:  <code>p</code>-dim. precision matrix
+</p>
+</li>
+<li>
+<p><code>acf</code>:  <code>p</code>-dim. vector with the covariance function
+</p>
+</li>
+<li>
+<p><code>sdf</code>:  <code>p</code>-dim. vector with the spectral density in the interval [0,1]
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">#EXAMPLE 1: Simulate Gaussian ARMA(2,2)
+library(nlme)
+library(MASS)
+p=100
+n=1
+Sigma=1.44*corMatrix(Initialize(corARMA(c(0.7, -0.4,-0.2, 0.2),p=2,q=2),data=diag(1:p)))
+Y=matrix(mvrnorm(n, mu=numeric(p), Sigma=Sigma),n,p)
+fit.toep=Toep.estimator(y=Y,Te=10,q=2,method="GCV")$toep
+
+
+#EXAMPLE 2: AQUAPORIN DATA
+data(aquaporin)
+n=length(aquaporin$Y)
+y.train=aquaporin$Y[1:(0.01*n)]
+y.train=y.train-mean(y.train)
+fit.toep=Toep.estimator(y=y.train,Te=10,q=1,method="ML")$toep
+</code></pre>
+
+
+</div>

@@ -1,0 +1,134 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>inv.chisqff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Inverse Chi–squared Distribution.
+</h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the degrees of freedom for an
+inverse chi–squared distribution using Fisher scoring.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">              inv.chisqff(link = "loglink", zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>link, zero</code></td>
+<td>
+
+<p><code>link</code> is the link function applied to the degrees of freedom,
+leading to the unique linear predictor in this family function.
+By default, the link is <code>loglink</code>.
+</p>
+<p><code>zero</code>  allows to model the single linear predictor as
+intercept–only.  
+</p>
+<p>For further details, see 
+<code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The inverse chi–squared distribution 
+with <code class="reqn">df = \nu \geq 0</code> degrees of 
+freedom implemented here has density
+</p>
+
+<p style="text-align: center;"><code class="reqn">f(x; \nu) = \frac{ 2^{-\nu / 2} x^{-\nu/2 - 1} 
+               e^{-1 / (2x)} }{ \Gamma(\nu / 2) }, </code>
+</p>
+
+
+<p>where <code class="reqn">x &gt; 0</code>, and
+<code class="reqn">\Gamma</code> is the <code>gamma</code> function.
+The mean of <code class="reqn">Y</code> is <code class="reqn">1 / (\nu - 2)</code> (returned as the fitted
+values), provided <code class="reqn">\nu &gt; 2</code>.
+</p>
+<p>That is, while the expected information matrices used here are 
+valid in all regions of the parameter space, the regularity conditions 
+for maximum likelihood estimation are satisfied only if <code class="reqn">\nu &gt; 2</code>.
+To enforce this condition, choose 
+<code>link = logoff(offset = -2)</code>.
+</p>
+<p>As with, <code>chisq</code>, the degrees of freedom are
+treated as a parameter to be estimated using (by default) the
+link <code>loglink</code>. However, the mean can also
+be modelled with this family function. 
+See <code>inv.chisqMlink</code> 
+for specific details about this.
+</p>
+<p>This family <span class="pkg">VGAM</span> function handles multiple responses.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>.
+See <code>vglmff-class</code> for further details.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>By default, the single linear/additive predictor in this family 
+function, say <code class="reqn">\eta = \log dof</code>, 
+can be modeled in terms of covariates, 
+i.e., <code>zero = NULL</code>. 
+To model <code class="reqn">\eta</code> as intercept–only set <code>zero = "dof"</code>.
+</p>
+<p>See <code>zero</code> for more details about this.
+</p>
+
+
+<h3>Note</h3>
+
+<p>As with <code>chisq</code> or 
+<code>Chisquare</code>, the degrees of freedom are
+non–negative but allowed to be non–integer.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>loglink</code>,
+<code>CommonVGAMffArguments</code>,
+<code>inv.chisqMlink</code>,
+<code>zero</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">   set.seed(17010504)
+   dof   &lt;- 2.5 
+   yy    &lt;- rinv.chisq(100, df = dof)     
+   ics.d &lt;- data.frame(y = yy)             # The data.
+ 
+   
+   fit.inv &lt;- vglm(cbind(y, y) ~ 1, inv.chisqff, 
+                   data = ics.d, trace = TRUE, crit = "coef")
+   Coef(fit.inv) 
+   summary(fit.inv)
+    
+</code></pre>
+
+
+</div>

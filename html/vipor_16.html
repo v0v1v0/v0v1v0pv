@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vpPlot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot data using offsets by quasirandom noise to generate a violin point plot</h2>
+
+<h3>Description</h3>
+
+<p>Arranges data points using quasirandom noise (van der Corput sequence), pseudorandom noise or alternatively positioning extreme values within a band to the left and right to form beeswarm/one-dimensional scatter/strip chart style plots. That is a plot resembling a cross between a violin plot (showing the density distribution) and a scatter plot (showing the individual points) and so here we'll call it a violin point plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vpPlot(x = rep("Data", length(y)), y, xaxt = "y", offsetXArgs = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a grouping factor for y (optional)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>vector of data points</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xaxt</code></td>
+<td>
+<p>if 'n' then no x axis is plotted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>offsetXArgs</code></td>
+<td>
+<p>a list with arguments for offsetX</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments to plot</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>invisibly return the adjusted x positions of the points
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>offsetX</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dat&lt;-list(
+  'Mean=0'=rnorm(200),
+  'Mean=1'=rnorm(50,1),
+  'Bimodal'=c(rnorm(40,-2),rnorm(60,2)),
+  'Gamma'=rgamma(50,1)
+)
+labs&lt;-factor(rep(names(dat),sapply(dat,length)),levels=names(dat))
+vpPlot(labs,unlist(dat))
+</code></pre>
+
+
+</div>

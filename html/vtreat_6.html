@@ -1,0 +1,151 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>buildEvalSets</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Build set carve-up for out-of sample evaluation.</h2>
+
+<h3>Description</h3>
+
+<p>Return a carve-up of seq_len(nRows).  Very useful for any sort of
+nested model situation (such as data prep, stacking, or super-learning).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">buildEvalSets(
+  nRows,
+  ...,
+  dframe = NULL,
+  y = NULL,
+  splitFunction = NULL,
+  nSplits = 3
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>nRows</code></td>
+<td>
+<p>scalar, &gt;=1 number of rows to sample from.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>no additional arguments, declared to forced named binding of later arguments.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dframe</code></td>
+<td>
+<p>(optional) original data.frame, passed to user splitFunction.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>(optional) numeric vector, outcome variable (possibly to stratify on), passed to user splitFunction.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>splitFunction</code></td>
+<td>
+<p>(optional) function taking arguments nSplits,nRows,dframe, and y; returning a user desired split.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nSplits</code></td>
+<td>
+<p>integer, target number of splits.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Also sets attribute "splitmethod" on return value that describes how the split was performed.
+attr(returnValue,'splitmethod') is one of: 'notsplit' (data was not split; corner cases
+like single row data sets), 'oneway' (leave one out holdout), 'kwaycross' (a simple
+partition), 'userfunction' (user supplied function was actually used), or a user specified attribute.
+Any user
+desired properties (such as stratification on y, or preservation of groups designated by 
+original data row numbers) may not apply unless you see that 'userfunction' has been
+used.
+</p>
+<p>The intent is the user splitFunction only needs to handle "easy cases" 
+and maintain user invariants. If the user splitFunction returns NULL,
+throws, or returns an unacceptable carve-up then vtreat::buildEvalSets
+returns its own eval set plan.  The signature of splitFunction should
+be splitFunction(nRows,nSplits,dframe,y) where nSplits is the number of 
+pieces we want in the carve-up, nRows is the number of rows to split,
+dframe is the original dataframe (useful for any group control variables),
+and y is a numeric vector representing outcome (useful for outcome stratification).
+</p>
+<p>Note that buildEvalSets may not always return a partition (such
+as one row dataframes), or if the user split function chooses to make rows eligible for
+application a different number of times.
+</p>
+
+
+<h3>Value</h3>
+
+<p>list of lists where the app portion of the sub-lists is a disjoint carve-up of seq_len(nRows) and each list as a train portion disjoint from app.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>kWayCrossValidation</code>, <code>kWayStratifiedY</code>, and <code>makekWayCrossValidationGroupedByColumn</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# use
+buildEvalSets(200)
+
+# longer example
+# helper fns
+# fit models using experiment plan to estimate out of sample behavior
+fitModelAndApply &lt;- function(trainData,applicaitonData) {
+   model &lt;- lm(y~x,data=trainData)
+   predict(model,newdata=applicaitonData)
+}
+simulateOutOfSampleTrainEval &lt;- function(d,fitApplyFn) {
+   eSets &lt;- buildEvalSets(nrow(d))
+   evals &lt;- lapply(eSets, 
+      function(ei) { fitApplyFn(d[ei$train,],d[ei$app,]) })
+   pred &lt;- numeric(nrow(d))
+   for(eii in seq_len(length(eSets))) {
+     pred[eSets[[eii]]$app] &lt;- evals[[eii]]
+   }
+   pred
+}
+
+# run the experiment
+set.seed(2352356)
+# example data
+d &lt;- data.frame(x=rnorm(5),y=rnorm(5),
+        outOfSampleEst=NA,inSampleEst=NA)
+        
+# fit model on all data
+d$inSampleEst &lt;- fitModelAndApply(d,d)
+# compute in-sample R^2 (above zero, falsely shows a 
+#   relation until we adjust for degrees of freedom)
+1-sum((d$y-d$inSampleEst)^2)/sum((d$y-mean(d$y))^2)
+
+d$outOfSampleEst &lt;- simulateOutOfSampleTrainEval(d,fitModelAndApply)
+# compute out-sample R^2 (not positive, 
+#  evidence of no relation)
+1-sum((d$y-d$outOfSampleEst)^2)/sum((d$y-mean(d$y))^2)
+
+</code></pre>
+
+
+</div>

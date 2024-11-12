@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>reScale</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Re-Scale results of 'VCA' or 'VCAinference'</h2>
+
+<h3>Description</h3>
+
+<p>Function adjusts variance components (VC) and standard deviations (SD) and their respective
+confidence intervals of 'VCAinference' objects, and the 'VCAobj' sub-element. For 'VCA' objects
+the VC and SD values are adjusted as well as the fixed and random effects and the covariance-matrix
+of fixed effects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">reScale(obj, VarVC = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(object) either of class 'VCA' or 'VCAinference'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VarVC</code></td>
+<td>
+<p>(logical) TRUE = variance-covariance matrix of the fitted model 'obj'
+will be computed and automatically re-scaled, FALSE = variance-covariance
+matrix will not be computed and re-scaled. This might cause wrong results
+in downstream analyses which require this matrix on the correct scale! Only
+use this option if computation time really matters!</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>(object) either of class 'VCA' or 'VCAinference', where results have been 
+transformed back to the original scale of the response variable
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Scale</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_3)
+
+# reference values
+fit0 &lt;- anovaVCA(y~day/run, dataEP05A2_3, MME=TRUE)
+inf0 &lt;- VCAinference(fit0, VarVC=TRUE)
+
+fit1 &lt;- Scale("anovaVCA", y~day/run, dataEP05A2_3, MME=TRUE)
+inf1 &lt;- VCAinference(fit1, VarVC=TRUE)
+inf1 &lt;- reScale(inf1)
+
+# compare to reference
+print(inf0, what="VC")
+print(inf1, what="VC")
+print(inf0, what="SD")
+print(inf1, what="SD")
+print(inf0, what="CV")
+print(inf1, what="CV")
+
+# now use REML-based estimation
+fit0 &lt;- remlVCA(y~day/run, dataEP05A2_3)
+inf0 &lt;- VCAinference(fit0)
+
+fit1 &lt;- Scale("remlVCA", y~day/run, dataEP05A2_3, MME=TRUE)
+inf1 &lt;- VCAinference(fit1)
+inf1 &lt;- reScale(inf1)
+
+# compare to reference
+print(inf0, what="VC")
+print(inf1, what="VC")
+print(inf0, what="SD")
+print(inf1, what="SD")
+print(inf0, what="CV")
+print(inf1, what="CV")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

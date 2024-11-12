@@ -1,0 +1,117 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Hzeta</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Haight's Zeta Distribution  </h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random
+generation for Haight's zeta distribution with parameter
+<code>shape</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dhzeta(x, shape, log = FALSE)
+phzeta(q, shape, log.p = FALSE)
+qhzeta(p, shape)
+rhzeta(n, shape)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, p, n</code></td>
+<td>
+
+<p>Same meaning as <code>runif</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+
+<p>The positive shape parameter.
+Called <code class="reqn">\alpha</code> below.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log,log.p</code></td>
+<td>
+
+<p>Same meaning as in <code>pnorm</code>
+or <code>qnorm</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability function is
+</p>
+<p style="text-align: center;"><code class="reqn">f(x) = (2x-1)^{(-\alpha)} - (2x+1)^{(-\alpha)},</code>
+</p>
+
+<p>where <code class="reqn">\alpha&gt;0</code> and <code class="reqn">x=1,2,\ldots</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dhzeta</code> gives the density,
+<code>phzeta</code> gives the distribution function,
+<code>qhzeta</code> gives the quantile function, and
+<code>rhzeta</code> generates random deviates.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Given some response data, the <span class="pkg">VGAM</span> family function
+<code>hzeta</code> estimates the parameter <code>shape</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee and Kai Huang </p>
+
+
+<h3>See Also</h3>
+
+<p><code>hzeta</code>,
+<code>zeta</code>,
+<code>zetaff</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dhzeta(1:20, 2.1)
+rhzeta(20, 2.1)
+
+round(1000 * dhzeta(1:8, 2))
+table(rhzeta(1000, 2))
+
+## Not run:  shape &lt;- 1.1; x &lt;- 1:10
+plot(x, dhzeta(x, shape = shape), type = "h", ylim = 0:1,
+     sub = paste("shape =", shape), las = 1, col = "blue",
+     ylab = "Probability", lwd = 2,
+     main = "Haight's zeta: blue = density; orange = CDF")
+lines(x+0.1, phzeta(x, shape = shape), col = "orange", lty = 3, lwd = 2,
+      type = "h")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>life_expectancy</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute life expectancy from age-specific mortality rates</h2>
+
+<h3>Description</h3>
+
+<p>Returns remaining life expectancy at a given age (0 by default).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">life_expectancy(.data, from_age = 0, mortality)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>.data</code></td>
+<td>
+<p>A vital object including an age variable and a variable containing mortality rates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>from_age</code></td>
+<td>
+<p>Age at which life expectancy to be calculated. Either a scalar or a vector of ages.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mortality</code></td>
+<td>
+<p>Variable in <code>.data</code> containing Mortality rates (mx). If omitted, the variable with name  <code>mx</code>, <code>Mortality</code> or <code>Rate</code> will be used (not case sensitive).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>vital</code> object with life expectancy in column <code>ex</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Rob J Hyndman
+</p>
+
+
+<h3>References</h3>
+
+<p>Chiang CL. (1984) <em>The life table and its applications</em>.
+Robert E Krieger Publishing Company: Malabar.
+</p>
+<p>Keyfitz, N, and Caswell, H. (2005) <em>Applied Mathematical Demography</em>,
+Springer-Verlag: New York.
+</p>
+<p>Preston, S.H., Heuveline, P., and Guillot, M. (2001)
+<em>Demography: measuring and modeling population processes</em>. Blackwell
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>life_table()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Compute Victorian life expectancy for females over time
+aus_mortality |&gt;
+  dplyr::filter(Code == "VIC", Sex == "female") |&gt;
+  life_expectancy()
+</code></pre>
+
+
+</div>

@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ggplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a new ggplot plot with a geom_line() layer from spectra data</h2>
+
+<h3>Description</h3>
+
+<p><code>ggplot()</code> initializes a ggplot object. It can be used to
+declare the input spectra object for a graphic and to optionally specify the
+set of plot aesthetics intended to be common throughout all
+subsequent layers unless specifically overridden.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'spectra'
+ggplot(
+  data,
+  mapping = NULL,
+  ...,
+  wl = NULL,
+  w.unit = "nm",
+  environment = parent.frame()
+)
+
+## S3 method for class 'cm'
+ggplot(
+  data,
+  mapping = NULL,
+  ...,
+  show.stat = TRUE,
+  environment = parent.frame()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Default spectra database to use for plot. If not a spectra database, the
+methods used will be those defined in package <code>ggplot2</code>. See <code>ggplot</code>.
+If not specified, must be supplied in each layer added to the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mapping</code></td>
+<td>
+<p>Default list of aesthetic mappings to use for plot.
+If not specified, in the case of spectra objects, a default mapping will
+be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments passed on to methods. Not currently used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wl</code></td>
+<td>
+<p>numeric The wavelength vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w.unit</code></td>
+<td>
+<p>character The wavelength unit of the spectra.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>environment</code></td>
+<td>
+<p>If an variable defined in the aesthetic mapping is not
+found in the data, ggplot will look for it in this environment. It defaults
+to using the environment in which <code>ggplot()</code> is called.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.stat</code></td>
+<td>
+<p>A logic value. whether show the best R^2 and bands.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>ggplot()</code> is typically used to construct a plot
+incrementally, using the + operator to add layers to the
+existing ggplot object. This is advantageous in that the
+code is explicit about which layers are added and the order
+in which they are added. For complex graphics with multiple
+layers, initialization with <code>ggplot</code> is recommended.
+</p>
+
+
+<h3>Value</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>cm_plot</code></td>
+<td>
+<p>Returns a ggplot object of correlation-matrix.</p>
+</td>
+</tr></table>
+<h3>Note</h3>
+
+<p>Current implementation does not merge default mapping with user
+supplied mapping. If user supplies a mapping, it is used as is.
+To add to the default mapping, aes() can be used by itself to compose
+the ggplot.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>?ggpmisc::ggplot()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(visa)
+library(ggplot2)
+ggplot.spectra(NSpec.DF)
+
+library(visa)
+data(NSpec.DF)
+x &lt;- NSpec.DF$N # nitrogen
+S &lt;- NSpec.DF$spectra[, seq(1, ncol(NSpec.DF$spectra), 5)] # resampled to 10 nm steps
+cm &lt;- cm.sr(S, x, cm.plot = FALSE)
+ggplot.cm(cm)
+</code></pre>
+
+
+</div>

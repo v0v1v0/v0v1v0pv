@@ -1,0 +1,281 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vault_client_auth</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vault Authentication Configuration</h2>
+
+<h3>Description</h3>
+
+<p>Vault Authentication Configuration
+</p>
+<p>Vault Authentication Configuration
+</p>
+
+
+<h3>Details</h3>
+
+<p>Interact with vault's authentication backends.
+</p>
+
+
+<h3>Super class</h3>
+
+<p><code>vaultr::vault_client_object</code> -&gt; <code>vault_client_auth</code>
+</p>
+
+
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>approle</code></dt>
+<dd>
+<p>Interact with vault's AppRole authentication.  See
+<code>vault_client_auth_approle</code> for more information.</p>
+</dd>
+<dt><code>github</code></dt>
+<dd>
+<p>Interact with vault's GitHub authentication.  See
+<code>vault_client_auth_github</code> for more information.</p>
+</dd>
+<dt><code>token</code></dt>
+<dd>
+<p>Interact with vault's token authentication.  See
+<code>vault_client_token</code> for more information.</p>
+</dd>
+<dt><code>userpass</code></dt>
+<dd>
+<p>Interact with vault's username/password based
+authentication.  See <code>vault_client_auth_userpass</code> for
+more information.</p>
+</dd>
+<dt><code>ldap</code></dt>
+<dd>
+<p>Interact with vault's LDAP based
+authentication.  See <code>vault_client_auth_ldap</code> for
+more information.</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-vault_client_auth-new"><code>vault_client_auth$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth-backends"><code>vault_client_auth$backends()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth-list"><code>vault_client_auth$list()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth-enable"><code>vault_client_auth$enable()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_client_auth-disable"><code>vault_client_auth$disable()</code></a>
+</p>
+</li>
+</ul>
+<details open><summary>Inherited methods</summary><ul>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="format"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-format"><code>vaultr::vault_client_object$format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="help"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-help"><code>vaultr::vault_client_object$help()</code></a></span></li>
+</ul></details><hr>
+<a id="method-vault_client_auth-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a <code>vault_client_auth</code> object. Not typically
+called by users.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth$new(api_client)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>api_client</code></dt>
+<dd>
+<p>A vault_api_client object</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth-backends"></a>
+
+
+
+<h4>Method <code>backends()</code>
+</h4>
+
+<p>Return a character vector of supported
+authentication backends.  If a backend <code>x</code> is present, then
+you can access it with <code style="white-space: pre;">⁠$auth$x⁠</code>.  Note that vault calls
+these authentication <em>methods</em> but we use <em>backends</em> here to
+differentiate with R6 methods.  Note that these are backends
+supported by <code>vaultr</code> and not necessarily supported by the
+server - the server may not have enabled some of these
+backends, and may support other authentication backends not
+directly supported by vaultr.  See the <code style="white-space: pre;">⁠$list()⁠</code> method to
+query what the server supports.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth$backends()</pre></div>
+
+
+<hr>
+<a id="method-vault_client_auth-list"></a>
+
+
+
+<h4>Method <code>list()</code>
+</h4>
+
+<p>List authentication backends supported by the
+vault server, including information about where these
+backends are mounted.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth$list(detailed = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>detailed</code></dt>
+<dd>
+<p>Logical, indicating if detailed information
+should be returned</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth-enable"></a>
+
+
+
+<h4>Method <code>enable()</code>
+</h4>
+
+<p>Enable an authentication backend in the vault
+server.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth$enable(type, description = NULL, local = FALSE, path = NULL)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>type</code></dt>
+<dd>
+<p>The type of authentication backend (e.g.,
+<code>userpass</code>, <code>github</code>, <code>ldap</code>)</p>
+</dd>
+<dt><code>description</code></dt>
+<dd>
+<p>Human-friendly description of the backend;
+will be returned by <code style="white-space: pre;">⁠$list()⁠</code></p>
+</dd>
+<dt><code>local</code></dt>
+<dd>
+<p>Specifies if the auth method is local only. Local
+auth methods are not replicated nor (if a secondary) removed
+by replication.</p>
+</dd>
+<dt><code>path</code></dt>
+<dd>
+<p>Specifies the path in which to enable the auth
+method. Defaults to be the same as <code>type</code>.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_client_auth-disable"></a>
+
+
+
+<h4>Method <code>disable()</code>
+</h4>
+
+<p>Disable an active authentication backend.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_client_auth$disable(path)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>The path of the authentication backend to disable.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">server &lt;- vaultr::vault_test_server(if_disabled = message)
+if (!is.null(server)) {
+  client &lt;- server$client()
+
+  # List configured authentication backends
+  client$auth$list()
+
+  # cleanup
+  server$kill()
+}
+</code></pre>
+
+
+</div>

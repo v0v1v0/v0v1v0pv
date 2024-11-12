@@ -1,0 +1,165 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lerch</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Lerch Phi Function </h2>
+
+<h3>Description</h3>
+
+<p>Computes the Lerch Phi function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lerch(x, s, v, tolerance = 1.0e-10, iter = 100)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, s, v</code></td>
+<td>
+
+<p>Numeric.
+This function recyles values of <code>x</code>, <code>s</code>, and
+<code>v</code> if necessary.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tolerance</code></td>
+<td>
+
+<p>Numeric. Accuracy required, must be positive and less than 0.01.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iter</code></td>
+<td>
+
+<p>Maximum number of iterations allowed to obtain convergence.
+If <code>iter</code> is too small then a result of <code>NA</code> may occur;
+if so, try increasing its value.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Also known as
+the Lerch transcendent, it can be defined by
+an integral involving analytical continuation.
+An alternative definition is the series
+</p>
+<p style="text-align: center;"><code class="reqn">\Phi(x,s,v) = \sum_{n=0}^{\infty}  \frac{x^n}{(n+v)^s}</code>
+</p>
+
+<p>which converges for <code class="reqn">|x|&lt;1</code>
+as well as for <code class="reqn">|x|=1</code> with <code class="reqn">s&gt;1</code>.
+The series is undefined for integers <code class="reqn">v &lt;= 0</code>.
+Actually, <code class="reqn">x</code> may be complex but this function only works
+for real <code class="reqn">x</code>.
+The algorithm used is based on the relation
+</p>
+<p style="text-align: center;"><code class="reqn">\Phi(x,s,v) = x^m \Phi(x,s,v+m) + \sum_{n=0}^{m-1}
+    \frac{x^n}{(n+v)^s} .</code>
+</p>
+
+<p>See the URL below for more information.
+This function is a wrapper function for the C code described below.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns the value of the function evaluated at the values of
+<code>x</code>, <code>s</code>, <code>v</code>.
+If the above ranges of <code class="reqn">x</code> and <code class="reqn">v</code> are not satisfied,
+or some numeric problems occur, then
+this function will return an <code>NA</code> for those values.
+(The C code returns 6 possible return codes, but this is
+not passed back up to the R level.)
+</p>
+
+
+<h3>Warning </h3>
+
+<p>This function has not been thoroughly tested and contains
+limitations,
+for example,
+the zeta function cannot be computed with this function even
+though
+<code class="reqn">\zeta(s) = \Phi(x=1,s,v=1)</code>.
+Several numerical problems can arise,
+such as lack of convergence, overflow
+and underflow, especially near singularities.
+If any problems occur then an <code>NA</code> will be returned.
+For example,
+if <code class="reqn">|x|=1</code> and <code class="reqn">s&gt;1</code> then
+convergence may be so slow that
+changing <code>tolerance</code> and/or <code>iter</code> may be needed
+to get an answer (that is treated cautiously).
+</p>
+
+
+
+
+<h3>Note</h3>
+
+<p>There are a number of special cases, e.g.,
+the Riemann zeta-function is
+<code class="reqn">\zeta(s) = \Phi(x=1,s,v=1)</code>.
+Another example is the Hurwitz zeta function
+<code class="reqn">\zeta(s, v) = \Phi(x=1,s,v=v)</code>.
+The special case of <code class="reqn">s=1</code> corresponds to the hypergeometric
+2F1,
+and this is implemented in the <span class="pkg">gsl</span> package.
+The Lerch Phi function should not be confused with the
+Lerch zeta function though they are quite similar.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>S. V. Aksenov and U. D. Jentschura wrote the C code
+(called Version 1.00).
+The R wrapper function was written by T. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>Originally the code was found at
+<code>http://aksenov.freeshell.org/lerchphi/source/lerchphi.c</code>.
+</p>
+<p>Bateman, H. (1953).
+<em>Higher Transcendental Functions</em>.
+Volume 1. McGraw-Hill, NY, USA.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>zeta</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+s &lt;- 2; v &lt;- 1; x &lt;- seq(-1.1, 1.1, length = 201)
+plot(x, lerch(x, s = s, v = v), type = "l", col = "blue",
+     las = 1, main = paste0("lerch(x, s = ", s,", v = ", v, ")"))
+abline(v = 0, h = 1, lty = "dashed", col = "gray")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

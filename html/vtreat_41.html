@@ -1,0 +1,191 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>prepare.treatmentplan</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Apply treatments and restrict to useful variables.</h2>
+
+<h3>Description</h3>
+
+<p>Use a treatment plan to prepare a data frame for analysis.  The
+resulting frame will have new effective variables that are numeric
+and free of NaN/NA.  If the outcome column is present it will be copied over.
+The intent is that these frames are compatible with more machine learning
+techniques, and avoid a lot of corner cases (NA,NaN, novel levels, too many levels).
+Note: each column is processed independently of all others.  Also copies over outcome if present.
+Note: treatmentplan's are not meant for long-term storage, a warning is issued if the version of
+vtreat that produced the plan differs from the version running <code>prepare()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'treatmentplan'
+prepare(
+  treatmentplan,
+  dframe,
+  ...,
+  pruneSig = NULL,
+  scale = FALSE,
+  doCollar = FALSE,
+  varRestriction = NULL,
+  codeRestriction = NULL,
+  trackedValues = NULL,
+  extracols = NULL,
+  parallelCluster = NULL,
+  use_parallel = TRUE,
+  check_for_duplicate_frames = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>treatmentplan</code></td>
+<td>
+<p>Plan built by designTreantmentsC() or designTreatmentsN()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dframe</code></td>
+<td>
+<p>Data frame to be treated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>no additional arguments, declared to forced named binding of later arguments</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pruneSig</code></td>
+<td>
+<p>suppress variables with significance above this level</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>optional if TRUE replace numeric variables with single variable model regressions ("move to outcome-scale").  These have mean zero and (for variables with significant less than 1) slope 1 when regressed  (lm for regression problems/glm for classification problems) against outcome.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>doCollar</code></td>
+<td>
+<p>optional if TRUE collar numeric variables by cutting off after a tail-probability specified by collarProb during treatment design.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varRestriction</code></td>
+<td>
+<p>optional list of treated variable names to restrict to</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>codeRestriction</code></td>
+<td>
+<p>optional list of treated variable codes to restrict to</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trackedValues</code></td>
+<td>
+<p>optional named list mapping variables to know values, allows warnings upon novel level appearances (see <code>track_values</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extracols</code></td>
+<td>
+<p>extra columns to copy.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallelCluster</code></td>
+<td>
+<p>(optional) a cluster object created by package parallel or package snow.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use_parallel</code></td>
+<td>
+<p>logical, if TRUE use parallel methods.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check_for_duplicate_frames</code></td>
+<td>
+<p>logical, if TRUE check if we called prepare on same data.frame as design step.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>treated data frame (all columns numeric- without NA, NaN)
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>mkCrossFrameCExperiment</code>, <code>mkCrossFrameNExperiment</code>, <code>designTreatmentsC</code> <code>designTreatmentsN</code> <code>designTreatmentsZ</code>, <code>prepare</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# categorical example
+set.seed(23525)
+
+# we set up our raw training and application data
+dTrainC &lt;- data.frame(
+  x = c('a', 'a', 'a', 'b', 'b', NA, NA),
+  z = c(1, 2, 3, 4, NA, 6, NA),
+  y = c(FALSE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE))
+
+dTestC &lt;- data.frame(
+  x = c('a', 'b', 'c', NA), 
+  z = c(10, 20, 30, NA))
+
+# we perform a vtreat cross frame experiment
+# and unpack the results into treatmentsC
+# and dTrainCTreated
+unpack[
+  treatmentsC = treatments,
+  dTrainCTreated = crossFrame
+  ] &lt;- mkCrossFrameCExperiment(
+    dframe = dTrainC,
+    varlist = setdiff(colnames(dTrainC), 'y'),
+    outcomename = 'y',
+    outcometarget = TRUE,
+    verbose = FALSE)
+
+# the treatments include a score frame relating new
+# derived variables to original columns
+treatmentsC$scoreFrame[, c('origName', 'varName', 'code', 'rsq', 'sig', 'extraModelDegrees')] %.&gt;%
+  print(.)
+
+# the treated frame is a "cross frame" which
+# is a transform of the training data built 
+# as if the treatment were learned on a different
+# disjoint training set to avoid nested model
+# bias and over-fit.
+dTrainCTreated %.&gt;%
+  head(.) %.&gt;%
+  print(.)
+
+# Any future application data is prepared with
+# the prepare method.
+dTestCTreated &lt;- prepare(treatmentsC, dTestC, pruneSig=NULL)
+
+dTestCTreated %.&gt;%
+  head(.) %.&gt;%
+  print(.)
+
+</code></pre>
+
+
+</div>

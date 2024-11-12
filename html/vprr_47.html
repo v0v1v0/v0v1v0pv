@@ -1,0 +1,78 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vpr_roi_concentration</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate VPR concentrations</h2>
+
+<h3>Description</h3>
+
+<p>Calculates concentrations for each named taxa in dataframe
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vpr_roi_concentration(
+  data,
+  taxas_list,
+  station_of_interest,
+  binSize,
+  imageVolume
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a VPR dataframe as produced by <code>vpr_ctdroi_merge</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>taxas_list</code></td>
+<td>
+<p>a list of character strings representing taxa present in the station being processed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>station_of_interest</code></td>
+<td>
+<p>The station being processed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>binSize</code></td>
+<td>
+<p>passed to <code>bin_calculate</code>, determines size of depth bins over which data is averaged</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imageVolume</code></td>
+<td>
+<p>the volume of VPR images used for calculating concentrations (mm^3)</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data('ctd_roi_merge')
+ctd_roi_merge$time_hr &lt;- ctd_roi_merge$time_ms /3.6e+06
+
+taxas_list &lt;- c('Calanus', 'krill')
+binSize &lt;- 5
+station_of_interest &lt;- 'test'
+imageVolume &lt;- 83663
+
+taxa_conc_n &lt;- vpr_roi_concentration(ctd_roi_merge, taxas_list,
+station_of_interest, binSize, imageVolume)
+
+</code></pre>
+
+
+</div>

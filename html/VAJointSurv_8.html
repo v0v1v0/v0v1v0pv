@@ -1,0 +1,148 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>joint_ms_ptr</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Creates a joint_ms Object to Estimate a Joint Survival and Marker Model</h2>
+
+<h3>Description</h3>
+
+<p>Creates a joint_ms Object to Estimate a Joint Survival and Marker Model
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">joint_ms_ptr(
+  markers = list(),
+  survival_terms = list(),
+  max_threads = 1L,
+  quad_rule = NULL,
+  cache_expansions = TRUE,
+  gh_quad_rule = NULL,
+  ders = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>markers</code></td>
+<td>
+<p>either an object from <code>marker_term</code> or a list
+of such objects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>survival_terms</code></td>
+<td>
+<p>either an object from <code>surv_term</code> or a list
+of such objects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_threads</code></td>
+<td>
+<p>maximum number of threads to use.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quad_rule</code></td>
+<td>
+<p>list with nodes and weights for a quadrature rule for the
+integral from zero to one.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cache_expansions</code></td>
+<td>
+<p><code>TRUE</code> if the expansions in the numerical
+integration in the survival parts of the lower bound should be cached (not
+recomputed). This requires more memory and may be an advantage
+particularly with
+expansions that take longer to compute (like <code>ns_term</code> and
+<code>bs_term</code>). The computation time may be worse particularly if
+you use more threads as the CPU cache is not well utilized.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gh_quad_rule</code></td>
+<td>
+<p>list with two numeric vectors called node and weight
+with Gauss–Hermite quadrature nodes and weights to handle delayed entry.
+A low number of quadrature nodes and weights is used when <code>NULL</code> is
+passed.
+This seems to work well when delayed entry happens at time with large
+marginal survival probabilities. The nodes and weights can be obtained e.g.
+from <code>fastGHQuad::gaussHermiteData</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ders</code></td>
+<td>
+<p>a <code>list</code> of <code>list</code>s with
+<code>integer</code> vectors for how
+the survival outcomes are linked to the markers. 0 implies present values,
+-1 is integral of, and 1 is the derivative. <code>NULL</code> implies the present
+value of the random effect for all markers. Note that the number of integer
+vectors should be equal to the number of markers.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of <code>joint_ms</code> class with the needed C++ and R objects
+to estimate the model.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>joint_ms_opt</code>, <code>joint_ms_lb</code>,
+<code>joint_ms_hess</code>, and <code>joint_ms_start_val</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># load in the data
+library(survival)
+data(pbc, package = "survival")
+
+# re-scale by year
+pbcseq &lt;- transform(pbcseq, day_use = day / 365.25)
+pbc &lt;- transform(pbc, time_use = time / 365.25)
+
+# create the marker terms
+m1 &lt;- marker_term(
+  log(bili) ~ 1, id = id, data = pbcseq,
+  time_fixef = bs_term(day_use, df = 5L),
+  time_rng = poly_term(day_use, degree = 1L, raw = TRUE, intercept = TRUE))
+m2 &lt;- marker_term(
+  albumin ~ 1, id = id, data = pbcseq,
+  time_fixef = bs_term(day_use, df = 5L),
+  time_rng = poly_term(day_use, degree = 1L, raw = TRUE, intercept = TRUE))
+
+# base knots on observed event times
+bs_term_knots &lt;-
+  with(pbc, quantile(time_use[status == 2], probs = seq(0, 1, by = .2)))
+
+boundary &lt;- c(bs_term_knots[ c(1, length(bs_term_knots))])
+interior &lt;- c(bs_term_knots[-c(1, length(bs_term_knots))])
+
+# create the survival term
+s_term &lt;- surv_term(
+  Surv(time_use, status == 2) ~ 1, id = id, data = pbc,
+  time_fixef = bs_term(time_use, Boundary.knots = boundary, knots = interior))
+
+# create the C++ object to do the fitting
+model_ptr &lt;- joint_ms_ptr(
+  markers = list(m1, m2), survival_terms = s_term,
+  max_threads = 2L)
+</code></pre>
+
+
+</div>

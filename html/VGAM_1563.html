@@ -1,0 +1,421 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rrvglm-class</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Class “rrvglm” </h2>
+
+<h3>Description</h3>
+
+<p>Reduced-rank vector generalized linear models.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls to <code>rrvglm</code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt>
+<code>extra</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>;
+the <code>extra</code> argument on entry to <code>vglm</code>. This
+contains any extra information that might be needed
+by the family function.
+</p>
+</dd>
+<dt>
+<code>family</code>:</dt>
+<dd>
+<p>Object of class <code>"vglmff"</code>.
+The family function.  </p>
+</dd>
+<dt>
+<code>iter</code>:</dt>
+<dd>
+<p>Object of class <code>"numeric"</code>.
+The number of IRLS iterations used.
+</p>
+</dd>
+<dt>
+<code>predictors</code>:</dt>
+<dd>
+<p>Object of class <code>"matrix"</code>
+with <code class="reqn">M</code> columns which holds the <code class="reqn">M</code> linear predictors.
+</p>
+</dd>
+<dt>
+<code>assign</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>,
+from class <code> "vlm"</code>.
+This named list gives information matching the columns and the
+(LM) model matrix terms.
+</p>
+</dd>
+<dt>
+<code>call</code>:</dt>
+<dd>
+<p>Object of class <code>"call"</code>, from class <code> "vlm"</code>.
+The matched call.
+</p>
+</dd>
+<dt>
+<code>coefficients</code>:</dt>
+<dd>
+<p>Object of class
+<code>"numeric"</code>, from class <code> "vlm"</code>.
+A named vector of coefficients.
+</p>
+</dd>
+<dt>
+<code>constraints</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>, from
+class <code> "vlm"</code>.
+A named list of constraint matrices used in the fitting.
+</p>
+</dd>
+<dt>
+<code>contrasts</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>, from
+class <code> "vlm"</code>.
+The contrasts used (if any).
+</p>
+</dd>
+<dt>
+<code>control</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>, from class
+<code> "vlm"</code>.
+A list of parameters for controlling the fitting process.
+See <code>vglm.control</code> for details.
+</p>
+</dd>
+<dt>
+<code>criterion</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>, from
+class <code> "vlm"</code>.
+List of convergence criterion evaluated at the
+final IRLS iteration.
+</p>
+</dd>
+<dt>
+<code>df.residual</code>:</dt>
+<dd>
+<p>Object of class
+<code>"numeric"</code>, from class <code> "vlm"</code>.
+The residual degrees of freedom.
+</p>
+</dd>
+<dt>
+<code>df.total</code>:</dt>
+<dd>
+<p>Object of class <code>"numeric"</code>,
+from class <code> "vlm"</code>.
+The total degrees of freedom.
+</p>
+</dd>
+<dt>
+<code>dispersion</code>:</dt>
+<dd>
+<p>Object of class <code>"numeric"</code>,
+from class <code> "vlm"</code>.
+The scaling parameter.
+</p>
+</dd>
+<dt>
+<code>effects</code>:</dt>
+<dd>
+<p>Object of class <code>"numeric"</code>,
+from class <code> "vlm"</code>.
+The effects.
+</p>
+</dd>
+<dt>
+<code>fitted.values</code>:</dt>
+<dd>
+<p>Object of class
+<code>"matrix"</code>, from class <code> "vlm"</code>.
+The fitted values. This is usually the mean but may be quantiles,
+or the location parameter, e.g., in the Cauchy model.
+</p>
+</dd>
+<dt>
+<code>misc</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>,
+from class <code> "vlm"</code>.
+A named list to hold miscellaneous parameters.
+</p>
+</dd>
+<dt>
+<code>model</code>:</dt>
+<dd>
+<p>Object of class <code>"data.frame"</code>,
+from class <code> "vlm"</code>.
+The model frame.
+</p>
+</dd>
+<dt>
+<code>na.action</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>,
+from class <code> "vlm"</code>.
+A list holding information about missing values.
+</p>
+</dd>
+<dt>
+<code>offset</code>:</dt>
+<dd>
+<p>Object of class <code>"matrix"</code>,
+from class <code> "vlm"</code>.
+If non-zero, a <code class="reqn">M</code>-column matrix of offsets.
+</p>
+</dd>
+<dt>
+<code>post</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>,
+from class <code> "vlm"</code>
+where post-analysis results may be put.
+</p>
+</dd>
+<dt>
+<code>preplot</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>,
+from class <code> "vlm"</code>
+used by <code>plotvgam</code>; the plotting parameters
+may be put here.
+</p>
+</dd>
+<dt>
+<code>prior.weights</code>:</dt>
+<dd>
+<p>Object of class
+<code>"matrix"</code>, from class <code> "vlm"</code>
+holding the initially supplied weights.
+</p>
+</dd>
+<dt>
+<code>qr</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>,
+from class <code> "vlm"</code>.
+QR decomposition at the final iteration.
+</p>
+</dd>
+<dt>
+<code>R</code>:</dt>
+<dd>
+<p>Object of class <code>"matrix"</code>,
+from class <code> "vlm"</code>.
+The <b>R</b> matrix in the QR decomposition used in the fitting.
+</p>
+</dd>
+<dt>
+<code>rank</code>:</dt>
+<dd>
+<p>Object of class <code>"integer"</code>,
+from class <code> "vlm"</code>.
+Numerical rank of the fitted model.
+</p>
+</dd>
+<dt>
+<code>residuals</code>:</dt>
+<dd>
+<p>Object of class <code>"matrix"</code>,
+from class <code> "vlm"</code>.
+The <em>working</em> residuals at the final IRLS iteration.
+</p>
+</dd>
+<dt>
+<code>ResSS</code>:</dt>
+<dd>
+<p>Object of class <code>"numeric"</code>,
+from class <code> "vlm"</code>.
+Residual sum of squares at the final IRLS iteration with
+the adjusted dependent vectors and weight matrices.
+</p>
+</dd>
+<dt>
+<code>smart.prediction</code>:</dt>
+<dd>
+<p>Object of class
+<code>"list"</code>, from class <code> "vlm"</code>.
+A list of data-dependent parameters (if any)
+that are used by smart prediction.
+</p>
+</dd>
+<dt>
+<code>terms</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>,
+from class <code> "vlm"</code>.
+The <code>terms</code> object used.
+</p>
+</dd>
+<dt>
+<code>weights</code>:</dt>
+<dd>
+<p>Object of class <code>"matrix"</code>,
+from class <code> "vlm"</code>.
+The weight matrices at the final IRLS iteration.
+This is in matrix-band form.
+</p>
+</dd>
+<dt>
+<code>x</code>:</dt>
+<dd>
+<p>Object of class <code>"matrix"</code>,
+from class <code> "vlm"</code>.
+The model matrix (LM, not VGLM).
+</p>
+</dd>
+<dt>
+<code>xlevels</code>:</dt>
+<dd>
+<p>Object of class <code>"list"</code>,
+from class <code> "vlm"</code>.
+The levels of the factors, if any, used in fitting.
+</p>
+</dd>
+<dt>
+<code>y</code>:</dt>
+<dd>
+<p>Object of class <code>"matrix"</code>,
+from class <code> "vlm"</code>.
+The response, in matrix form.
+</p>
+</dd>
+<dt>
+<code>Xm2</code>:</dt>
+<dd>
+<p>Object of class <code>"matrix"</code>,
+from class <code> "vlm"</code>.
+See <code>vglm-class</code>.
+</p>
+</dd>
+<dt>
+<code>Ym2</code>:</dt>
+<dd>
+<p>Object of class <code>"matrix"</code>,
+from class <code> "vlm"</code>.
+See <code>vglm-class</code>.
+</p>
+</dd>
+<dt>
+<code>callXm2</code>:</dt>
+<dd>
+<p>Object of class <code>"call"</code>, from class <code> "vlm"</code>.
+The matched call for argument <code>form2</code>.
+</p>
+</dd>
+<dt>
+<code>A.est</code>, <code>C.est</code>:</dt>
+<dd>
+<p>Object of class <code>"matrix"</code>.
+The estimates of <b>A</b> and <b>C</b>.
+</p>
+</dd>
+</dl>
+<h3>Extends</h3>
+
+<p>Class <code>"vglm"</code>, directly.
+Class <code>"vlm"</code>, by class "vglm".
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>biplot</dt>
+<dd>
+<p><code>signature(x = "rrvglm")</code>: biplot. </p>
+</dd>
+<dt>Coef</dt>
+<dd>
+<p><code>signature(object = "rrvglm")</code>:
+more detailed coefficients giving <b>A</b>,
+<code class="reqn">\bold{B}_1</code>, <b>C</b>, etc.
+</p>
+</dd>
+<dt>biplot</dt>
+<dd>
+<p><code>signature(object = "rrvglm")</code>:
+biplot. </p>
+</dd>
+<dt>print</dt>
+<dd>
+<p><code>signature(x = "rrvglm")</code>:
+short summary of the object. </p>
+</dd>
+<dt>summary</dt>
+<dd>
+<p><code>signature(object = "rrvglm")</code>:
+a more detailed summary of the object. </p>
+</dd>
+</dl>
+<h3>Note</h3>
+
+<p>Two new slots for <code>"rrvglm"</code>
+were added compared
+to <code>"vglm"</code> objects,
+for <span class="pkg">VGAM</span> 1.1-10.
+They are <code>A.est</code> and <code>C.est</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. and Hastie, T. J. (2003).
+Reduced-rank vector generalized linear models.
+<em>Statistical Modelling</em>,
+<b>3</b>, 15–41.
+</p>
+
+
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>rrvglm</code>,
+<code>lvplot.rrvglm</code>,
+<code>vglmff-class</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  # Rank-1 stereotype model of Anderson (1984)
+pneumo &lt;- transform(pneumo, let = log(exposure.time),
+                            x3  = runif(nrow(pneumo)))  # Noise
+fit &lt;- rrvglm(cbind(normal, mild, severe) ~ let + x3,
+              multinomial, data = pneumo, Rank = 1)
+Coef(fit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

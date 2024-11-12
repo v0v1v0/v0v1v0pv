@@ -1,0 +1,119 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>formatFunctions</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Format and visualise functions used to generate virtual species with <code>generateSpFromFun</code>
+</h2>
+
+<h3>Description</h3>
+
+<p>This function is a helper function to simplify the formatting of functions
+for <code>generateSpFromFun</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">formatFunctions(x = NULL, rescale = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>NULL or a <code>RasterStack</code>. If you want to visualise the functions,
+provide your <code>RasterStack</code> here.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rescale</code></td>
+<td>
+<p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, individual response
+plots are rescaled between 0 and 1 with the formula (val - min) / (max - min).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>the parameters to be formatted. See details.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function formats the <code>parameters</code> argument of <code>generateSpFromFun</code>.  
+For each environmental variable, provide a vector containing the function name, and its arguments.  
+</p>
+<p>For example, assume we want to generate a species responding to two environmental variables bio1 and bio2.
+</p>
+
+<ul>
+<li>
+<p>The response to bio1 is a normal response (<code>dnorm</code>), of mean 1 and standard deviation 0.5.
+</p>
+</li>
+<li>
+<p>The response to bio2 is a linear response (<code>linearFun</code>), of slope (a) 2 and intercept (b) 5.
+</p>
+</li>
+</ul>
+<p>The correct writing is:
+</p>
+<p><code>formatFunctions(
+bio1 = c(fun = "dnorm", mean = 1, sd = 0.5),
+bio2 = c(fun = "linearFun", a = 2, b = 5))</code>
+</p>
+
+
+<h3>Warning</h3>
+
+<p>Do not use 'x' as a name for your environmental variables.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+</p>
+<p>with help from C. N. Meynard, C. Bellard &amp; F. Courchamp
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">my.parameters &lt;- formatFunctions(variable1 = c(fun = 'dnorm',
+                                            mean = 0.00012, sd = 0.0001),
+                              variable2 = c(fun = 'linearFun', a = 1, b = 0))
+
+
+my.parameters &lt;- formatFunctions(bio1 = c(fun = "logisticFun", 
+                                         alpha = -12.7, beta = 68),
+                                 bio2 = c(fun = "linearFun", 
+                                          a = -0.03, b = 191.2),
+                                 bio3 = c(fun = "dnorm", 
+                                          mean = 86.4, sd = 19.1),
+                                 bio4 = c(fun = "logisticFun", 
+                                          alpha = 2198.5, beta = 11381.4))
+## Not run: 
+# An example using worldclim data
+bio1.4 &lt;- getData('worldclim', var='bio', res=10)[[1:4]]
+my.parameters &lt;- formatFunctions(x = bio1.4,
+                                 bio1 = c(fun = "logisticFun", 
+                                          alpha = -12.7, beta = 68),
+                                 bio2 = c(fun = "linearFun", 
+                                          a = -0.03, b = 191.2),
+                                 bio3 = c(fun = "dnorm", 
+                                          mean = 86.4, sd = 19.1),
+                                 bio4 = c(fun = "logisticFun", 
+                                          alpha = 2198.5, beta = 11381.4))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

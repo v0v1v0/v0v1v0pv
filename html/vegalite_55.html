@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>scale_x_ordinal</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Ordinal Scale</h2>
+
+<h3>Description</h3>
+
+<p>Ordinal Scale
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">scale_x_ordinal(vl, band_size = NULL, padding = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vl</code></td>
+<td>
+<p>Vega-Lite object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>band_size</code></td>
+<td>
+<p>band size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>padding</code></td>
+<td>
+<p>padding</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p><a href="http://vega.github.io/vega-lite/docs/scale.html">Vega-Lite Scales spec</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vegalite() %&gt;%
+  add_data("https://vega.github.io/vega-editor/app/data/population.json") %&gt;%
+  add_filter("datum.year == 2000") %&gt;%
+  calculate("gender", 'datum.sex == 2 ? "Female" : "Male"') %&gt;%
+  encode_x("gender", "nominal") %&gt;%
+  encode_y("people", "quantitative", aggregate="sum") %&gt;%
+  encode_color("gender", "nominal") %&gt;%
+  scale_x_ordinal(band_size=6) %&gt;%
+  scale_color_nominal(range=c("#EA98D2", "#659CCA")) %&gt;%
+  facet_col("age", "ordinal", padding=4) %&gt;%
+  axis_x(remove=TRUE) %&gt;%
+  axis_y(title="population", grid=FALSE) %&gt;%
+  axis_facet_col(orient="bottom", axisWidth=1, offset=-8) %&gt;%
+  facet_cell(stroke_width=0) %&gt;%
+  mark_bar()
+</code></pre>
+
+
+</div>

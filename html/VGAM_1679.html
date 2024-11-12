@@ -1,0 +1,144 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>skellam</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Skellam Distribution Family Function</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the two parameters of a Skellam distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">skellam(lmu1 = "loglink", lmu2 = "loglink", imu1 = NULL, imu2 = NULL,
+        nsimEIM = 100, parallel = FALSE, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmu1, lmu2</code></td>
+<td>
+
+<p>Link functions for the <code class="reqn">\mu_1</code> and <code class="reqn">\mu_2</code> parameters.
+See <code>Links</code> for more choices and for general information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imu1, imu2</code></td>
+<td>
+
+<p>Optional initial values for the parameters.
+See <code>CommonVGAMffArguments</code> for more information.
+If convergence failure occurs (this <span class="pkg">VGAM</span> family function seems
+to require good initial values) try using these arguments.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM, parallel, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+In particular, setting <code>parallel=TRUE</code> will constrain the
+two means to be equal.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Skellam distribution models the difference between two
+independent Poisson distributions
+(with means <code class="reqn">\mu_{j}</code>, say).
+It has density function
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\mu_1,\mu_2) =
+  \left( \frac{ \mu_1 }{\mu_2} \right)^{y/2} \,
+  \exp(-\mu_1-\mu_2 ) \, I_{|y|}( 2 \sqrt{ \mu_1 \mu_2})
+  </code>
+</p>
+
+<p>where <code class="reqn">y</code> is an integer,
+<code class="reqn">\mu_1 &gt; 0</code>,
+<code class="reqn">\mu_2 &gt; 0</code>.
+Here, <code class="reqn">I_v</code> is the modified Bessel function of the
+first kind with order <code class="reqn">v</code>.
+</p>
+<p>The mean is <code class="reqn">\mu_1 - \mu_2</code>
+(returned as the fitted values),
+and the variance is <code class="reqn">\mu_1 + \mu_2</code>.
+Simulated Fisher scoring is implemented.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>This <span class="pkg">VGAM</span> family function seems fragile and very sensitive to
+the initial values.
+Use very cautiously!!
+</p>
+
+
+<h3>Note</h3>
+
+<p>Numerical problems may occur for data if <code class="reqn">\mu_1</code> and/or
+<code class="reqn">\mu_2</code> are large.
+</p>
+
+
+<h3>References</h3>
+
+<p>Skellam, J. G. (1946).
+The frequency distribution of the difference between
+two Poisson variates belonging to different populations.
+<em>Journal of the Royal Statistical Society, Series A</em>,
+<b>109</b>, 296.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>dskellam</code>,
+<code>dpois</code>,
+<code>poissonff</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+sdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))
+sdata &lt;- transform(sdata, mu1 = exp(1 + x2), mu2 = exp(1 + x2))
+sdata &lt;- transform(sdata, y = rskellam(nn, mu1, mu2))
+fit1 &lt;- vglm(y ~ x2, skellam, data = sdata, trace = TRUE, crit = "coef")
+fit2 &lt;- vglm(y ~ x2, skellam(parallel = TRUE), data = sdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+coef(fit2, matrix = TRUE)
+summary(fit1)
+# Likelihood ratio test for equal means:
+pchisq(2 * (logLik(fit1) - logLik(fit2)),
+       df = df.residual(fit2) - df.residual(fit1), lower.tail = FALSE)
+lrtest(fit1, fit2)  # Alternative
+
+## End(Not run)
+</code></pre>
+
+
+</div>

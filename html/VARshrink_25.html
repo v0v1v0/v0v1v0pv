@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simVARmodel</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generate multivariate time series data using the given VAR model</h2>
+
+<h3>Description</h3>
+
+<p>Generate a multivariate time series data set using the given VAR model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">simVARmodel(numT, model, burnin = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>numT</code></td>
+<td>
+<p>Number of observed time points, T.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>A list object with Coef, Sigma, dof;
+Coef is a list with A and c; A is a list object of K-by-K coefficient
+matrices and c is a length-K vector.
+Sigma is a K-by-K scale matrix and
+dof is a degree of freedom for multivariate t-distribution for noise.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>burnin</code></td>
+<td>
+<p>Number of initial points which are not included in the final values.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>First, it creates (p+burnin+numT x K) data, then
+it remove the first (p+burnin) vectors.
+Finally, it returns (numT x K) data.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A numT-by-K matrix
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">myCoef &lt;- list(A = list(matrix(c(0.5, 0, 0, 0.5), 2, 2)), c = c(0.2, 0.7))
+myModel &lt;- list(Coef = myCoef, Sigma = diag(0.1^2, 2), dof = Inf)
+simVARmodel(numT = 100, model = myModel, burnin = 10)
+</code></pre>
+
+
+</div>

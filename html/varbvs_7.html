@@ -1,0 +1,88 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cred</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimate credible interval.</h2>
+
+<h3>Description</h3>
+
+<p>Estimate credible interval from weighted samples.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  cred(x, x0, w = NULL, cred.int = 0.95)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Vector of random samples of variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x0</code></td>
+<td>
+<p>Mean of median of variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>w</code></td>
+<td>
+<p>Weight &gt; 0 assigned to each sample. If w = NULL, all weights
+are the same.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cred.int</code></td>
+<td>
+<p>Credible interval must contain probability mass of at
+least this amount. A number between 0 and 1.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Credible interval [a,b] is defined as smallest interval containing x0
+that contains <code>cred.int</code> of the probability mass. Note that the credible
+interval is not necessarily symmetric about x0. (Other definitions of the
+credible interval are possible.)
+</p>
+<p>The algorithm is quadratic in the length of x (and w), so should not be
+used for large numbers of samples.
+</p>
+
+
+<h3>Value</h3>
+
+<p>list(a = a,b = b).</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Peter Carbonetto <a href="mailto:peter.carbonetto@gmail.com">peter.carbonetto@gmail.com</a></p>
+
+
+<h3>References</h3>
+
+<p>P. Carbonetto and M. Stephens (2012). Scalable variational
+inference for Bayesian variable selection in regression, and its
+accuracy in genetic association studies. <em>Bayesian Analysis</em> <b>7</b>, 
+73–108.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  x   &lt;- rnorm(100)
+  out &lt;- cred(x,mean(x),cred.int = 0.68)
+</code></pre>
+
+
+</div>

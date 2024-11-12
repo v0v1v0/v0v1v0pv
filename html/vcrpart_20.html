@@ -1,0 +1,207 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>olmm-predict</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Predict outcome probabilities and responses for
+<code>olmm</code> objects</h2>
+
+<h3>Description</h3>
+
+<p><code>fitted</code> and <code>predict</code> method for
+<code>olmm</code> objects. The function implements mainly the 
+prediction methods of Skrondal and Rabe-Hesketh (2009).</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'olmm'
+fitted(object, ...)
+
+## S3 method for class 'olmm'
+predict(object, newdata = NULL,
+        type = c("link", "response", "prob", "class", "ranef"),
+        ranef = FALSE, na.action = na.pass, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a fitted <code>olmm</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>data frame for which to evaluate predictions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>character string. <code>type = "response"</code> and 
+<code>type = "prob"</code> yield response probabilities, 
+<code>type = "class"</code> the response category with highest 
+probability and <code>type = "link"</code> the linear predictor
+matrix. <code>type = "ranef"</code> yields the predicted random effects,
+see <code>ranef.olmm</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ranef</code></td>
+<td>
+<p>logical or numeric matrix. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.action</code></td>
+<td>
+<p>function determining what should be done with missing
+values for fixed effects in <code>newdata</code>. The default is to
+predict <code>NA</code>: see <code>na.pass</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>optional additional parameters. Includes <code>offset</code> and
+<code>subset</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If <code>type = "link"</code> and <code>ranef = FALSE</code>, the fixed 
+effects components are computed. The random effect components are ignored.
+</p>
+<p>If <code>type = "link"</code> and <code>ranef = TRUE</code>, the fixed effect components 
+plus the random effect components are computed. The function will look for 
+whether random coefficients are available for the subjects (i.e. clusters) 
+in <code>newdata</code>. If so, it extracts the corresponding random effects as
+obtained by <code>ranef</code>. For new subjects in <code>newdata</code> the 
+random effects are set to zero. If <code>newdata</code> does not contain a subject
+vector, the random effects are set to zero.
+</p>
+<p>If <code>type = "link"</code> and <code>ranef</code> is a matrix, the fixed effect 
+components plus the random effect components with the random coefficients 
+from the assigned matrix are computed. Notice that <code>newdata</code> should 
+contain a subject vector to assign the random coefficients. This prediction 
+method is, amongst others, proposed in Skrondal and Rabe-Hesketh (2009), 
+Sec. 7.1. 
+</p>
+<p>The two options <code>type = "response"</code> and <code>type = "prob"</code> are 
+identical and <code>type = "class"</code> extracts the response category 
+with the highest probability. Hence, the prediction mechanism is the 
+same for all three options.
+</p>
+<p>Given <code>newdata</code> contains a subject vector, <code>type = "response"</code> 
+combined with <code>ranef = FALSE</code> yields for new subjects the 
+population-averaged response probabilities (Skrondal and Rabe-Hesketh, Sec. 7.2) 
+and for existing subjects the cluster-averaged prediction (Skrondal and 
+Rabe-Hesketh 2009, Sec. 7.3). If no subject vector is assigned the function 
+assumes that all subjects are new and therefore yields the population-averaged 
+response probabilities (Skrondal and Rabe-Hesketh 2009, Sec. 7.2).
+</p>
+<p>The option <code>type = "response"</code> combined with <code>ranef = TRUE</code> 
+works equivalent to <code>type = "link"</code> combined with <code>ranef = TRUE</code>. 
+</p>
+<p>If the model does not contain random effects, the argument <code>ranef</code> is 
+ignored.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix or a vector of predicted values or response probabilities. 
+</p>
+
+
+<h3>Note</h3>
+
+<p>The method can not yet handle new categories in categorical predictors
+and will return an error. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>References</h3>
+
+<p>Skrondal, A., S. Rabe-Hesketh (2009). Prediction in Multilevel
+Generalized Linear Models. <em>Journal of the Royal Statistical
+Society A</em>, <b>172</b>(3), 659–687.   
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>olmm</code>, <code>olmm-methods</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## ------------------------------------------------------------------- #
+## Example: Schizophrenia
+## ------------------------------------------------------------------- #
+
+data(schizo)
+
+## omit subject 1103 and the last observations of 1104 and 1105 
+subs &lt;- c(1:4, 8, 11)
+
+dat.train &lt;- schizo[-subs, ] # training data
+dat.valid &lt;- schizo[ subs, ] # test data
+
+## fit the model
+model &lt;- olmm(imps79o ~ tx + sqrt(week) + tx:sqrt(week) + re(1|id), dat.train)
+
+## prediction on the predictor scale
+## ---------------------------------
+
+## random effects are set equal zero
+predict(model, newdata = dat.valid, type = "link", ranef = FALSE)
+
+## .. or equally with self-defined random effects
+ranef &lt;- matrix(0, 3, 1)
+rownames(ranef) &lt;- c("1103", "1104", "1105")
+predict(model, newdata = dat.valid, type = "link", ranef = ranef)
+
+## use random effects for the subjects 1104 and 1105. 
+predict(model, newdata = dat.valid, type = "link", ranef = TRUE)
+
+## prediction on the response scale
+## --------------------------------
+
+## use random effects for the subjects 1104 and 1105. 
+predict(model, newdata = dat.valid, type = "response", ranef = FALSE)
+predict(model, newdata = dat.valid, type = "prob", ranef = FALSE) # .. or, equally
+predict(model, newdata = dat.valid, type = "class", ranef = FALSE)
+
+## treat all individuals as new (subject vector is deleted)
+predict(model, newdata = dat.valid[,-1], type = "response", ranef = FALSE)
+
+## use random effects for the subjects 1104 and 1105. 
+predict(model, newdata = dat.valid, type = "response", ranef = TRUE)
+
+## use self defined random effects
+ranef &lt;- matrix(0, 3, 1)
+rownames(ranef) &lt;- c("1103", "1104", "1105")
+predict(model, newdata = dat.valid, type = "response", ranef = ranef)
+
+## predict random effects
+## ----------------------
+
+head(predict(model, type = "ranef"))
+head(ranef(model)) # .. or, equally
+</code></pre>
+
+
+</div>

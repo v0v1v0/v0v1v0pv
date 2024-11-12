@@ -1,0 +1,176 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.validann</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot ANN validation results.</h2>
+
+<h3>Description</h3>
+
+<p>Plot method for objects of class ‘validann’. Produces a series
+of plots used for validating and assessing ANN models based on results
+returned by <code>validann</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'validann'
+plot(x, obs, sim, gof = TRUE, resid = TRUE, sa = TRUE,
+  display = c("multi", "single"), profile = c("all", "median"), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>object of class ‘validann’ as returned
+by <code>validann</code>. This is a list comprising metrics and
+statistics that can be used for validating ANN models.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs, sim</code></td>
+<td>
+<p>vectors comprising observed (<code>obs</code>) and simulated
+(<code>sim</code>) examples of a single response variable used for computing
+<code>x</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gof</code></td>
+<td>
+<p>logical; should goodness-of-fit plots be produced?
+Default = TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>resid</code></td>
+<td>
+<p>logical; should residual analysis plots be produced?
+Default = TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sa</code></td>
+<td>
+<p>logical; should input sensitivity analysis plots be
+produced? Default = TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>display</code></td>
+<td>
+<p>character string defining how plots should be
+displayed. The default is “multi” where multiple plots are displayed
+together according to whether they are goodness-of-fit, residual analysis
+or sensitivity analysis plots. For “single”, each plot is displayed on
+its own. If the session is interactive, the user will be asked to confirm
+a new page whether <code>display</code> is “single” or “multi”.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>profile</code></td>
+<td>
+<p>character string defining which structural
+validity Profile method outputs should be plotted. The default is “all”
+where outputs corresponding to 5 summary statistics are plotted together
+with the median predicted response for each input value.
+For “median”, only the median response is plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Arguments to be passed to plot (not currently used).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function can be invoked by calling
+<code>plot(x, obs, sim)</code> for an object <code>x</code> of class
+‘validann’.
+</p>
+<p>To produce plots for all types of validation metrics and statistics,
+<code>gof</code>, <code>resid</code> and <code>sa</code> must be
+<code>TRUE</code> and corresponding results must have been successfully
+computed by <code>validann</code> and returned in object <code>x</code>.
+</p>
+<p>If <code>gof</code> is <code>TRUE</code>, a scatter plot, Q-Q plot and
+time/sample plot of observed (<code>obs</code>) versus predicted (<code>sim</code>)
+data are produced.
+</p>
+<p>If <code>resid</code> is <code>TRUE</code> and <code>x$residuals</code>
+is not <code>NULL</code>, plots of the model residuals are produced including
+histogram, Q-Q plot (standardized residuals compared to standard normal),
+autocorrelation (acf), partial autocorrelation (pacf), standardized
+residual versus predicted output (i.e. <code>sim</code>) and standardized
+residual versus time/order of the data.
+</p>
+<p>If <code>sa</code> is <code>TRUE</code> and <code>x$y_hat</code> is not
+<code>NULL</code>, model response values resulting from the Profile
+sensitivity analysis are plotted against percentiles of each
+input. If <code>x$rs</code> is not <code>NULL</code>, the relative sensitivities of
+each input, as computed by the partial derivative (PaD) sensitivity
+analysis, are plotted against predicted output.
+</p>
+<p>Setting <code>gof</code>, <code>resid</code> and/or <code>sa</code> to <code>FALSE</code>
+will ‘turn off’ the respective validation plots.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>validann</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Build ANN model and compute replicative and structural validation results
+data("ar9")
+samp &lt;- sample(1:1000, 200)
+y &lt;- ar9[samp, ncol(ar9)]
+x &lt;- ar9[samp, -ncol(ar9)]
+x &lt;- x[, c(1,4,9)]
+fit &lt;- ann(x, y, size = 1, act_hid = "tanh", act_out = "linear", rang = 0.1)
+results &lt;- validann(fit, x = x)
+obs &lt;- observed(fit)
+sim &lt;- fitted(fit)
+
+## Plot replicative and structural validation results to the current device
+## - a single page for each type of validation
+plot(results, obs, sim)
+
+## Plot results to the current device - a single page for each plot
+plot(results, obs, sim, display = "single")
+
+## Plot replicative and structural validation results to single file
+pdf("RepStructValidationPlots.pdf")
+plot(results, obs, sim)
+dev.off()
+
+## Get predictive validation results for above model based on a new sample
+## of ar9 data.
+samp &lt;- sample(1:1000, 200)
+y &lt;- ar9[samp, ncol(ar9)]
+x &lt;- ar9[samp, -ncol(ar9)]
+x &lt;- x[, c(1,4,9)]
+obs &lt;- y
+sim &lt;- predict(fit, newdata = x)
+results &lt;- validann(fit, obs = obs, sim = sim, x = x)
+
+## Plot predictive results only to file
+pdf("PredValidationPlots.pdf")
+plot(results, obs, sim, resid = FALSE, sa = FALSE)
+dev.off()
+
+</code></pre>
+
+
+</div>

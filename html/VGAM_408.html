@@ -1,0 +1,158 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dirichlet</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Fitting a Dirichlet Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Fits a Dirichlet distribution to a matrix of compositions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dirichlet(link = "loglink", parallel = FALSE, zero = NULL,
+          imethod = 1)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to each of the <code class="reqn">M</code> (positive) shape
+parameters <code class="reqn">\alpha_j</code>.
+See <code>Links</code> for more choices.
+The default gives
+<code class="reqn">\eta_j=\log(\alpha_j)</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel, zero, imethod</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In this help file the response is assumed to be a <code class="reqn">M</code>-column
+matrix with positive values and whose rows each sum to unity.
+Such data can be thought of as compositional data.  There are
+<code class="reqn">M</code> linear/additive predictors <code class="reqn">\eta_j</code>.
+</p>
+<p>The Dirichlet distribution is commonly used to model compositional
+data, including applications in genetics.
+Suppose <code class="reqn">(Y_1,\ldots,Y_{M})^T</code> is
+the response. Then it has a Dirichlet distribution if
+<code class="reqn">(Y_1,\ldots,Y_{M-1})^T</code> has density
+</p>
+<p style="text-align: center;"><code class="reqn">\frac{\Gamma(\alpha_{+})}
+           {\prod_{j=1}^{M} \Gamma(\alpha_{j})}
+           \prod_{j=1}^{M} y_j^{\alpha_{j} -1}</code>
+</p>
+
+<p>where
+<code class="reqn">\alpha_+=\alpha_1+\cdots+
+     \alpha_M</code>,
+<code class="reqn">\alpha_j &gt; 0</code>,
+and the density is defined on the unit simplex
+</p>
+<p style="text-align: center;"><code class="reqn">\Delta_{M} = \left\{
+  (y_1,\ldots,y_{M})^T :
+  y_1 &gt; 0, \ldots, y_{M} &gt; 0,
+  \sum_{j=1}^{M} y_j = 1 \right\}. </code>
+</p>
+
+<p>One has
+<code class="reqn">E(Y_j) = \alpha_j / \alpha_{+}</code>,
+which are returned as the fitted values.
+For this distribution Fisher scoring corresponds to Newton-Raphson.
+</p>
+<p>The Dirichlet distribution can be motivated by considering
+the random variables
+<code class="reqn">(G_1,\ldots,G_{M})^T</code> which are
+each independent
+and identically distributed as a gamma distribution with density
+<code class="reqn">f(g_j)=g_j^{\alpha_j - 1} e^{-g_j} / \Gamma(\alpha_j)</code>.
+Then the Dirichlet distribution arises when
+<code class="reqn">Y_j=G_j / (G_1 + \cdots + G_M)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+<p>When fitted, the <code>fitted.values</code> slot of the object
+contains the <code class="reqn">M</code>-column matrix of means.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response should be a matrix of positive values whose rows
+each sum to unity. Similar to this is count data, where probably
+a multinomial logit model (<code>multinomial</code>) may be
+appropriate.  Another similar distribution to the Dirichlet
+is the Dirichlet-multinomial (see <code>dirmultinomial</code>).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Lange, K. (2002).
+<em>Mathematical and Statistical Methods for Genetic Analysis</em>,
+2nd ed. New York: Springer-Verlag.
+</p>
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>rdiric</code>,
+<code>dirmultinomial</code>,
+<code>multinomial</code>,
+<code>simplex</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ddata &lt;- data.frame(rdiric(1000,
+                    shape = exp(c(y1 = -1, y2 = 1, y3 = 0))))
+fit &lt;- vglm(cbind(y1, y2, y3)  ~ 1, dirichlet,
+            data = ddata, trace = TRUE, crit = "coef")
+Coef(fit)
+coef(fit, matrix = TRUE)
+head(fitted(fit))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,125 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.lc.mean1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for a linear contrast of means</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and confidence interval for a
+linear contrast of means from two or more studies. This function will
+use either an unequal variance (recommended) or an equal variance method.
+A Satterthwaite adjustment to the degrees of freedom is used with the
+unequal variance method.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.lc.mean1(alpha, m, sd, n, v, eqvar = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>vector of estimated means</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd</code></td>
+<td>
+<p>vector of estimated standard deviations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>vector of sample sizes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>vector of contrast coefficients</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eqvar</code></td>
+<td>
+
+<ul>
+<li>
+<p> FALSE for unequal variance method
+</p>
+</li>
+<li>
+<p> TRUE for equal variance method
+</p>
+</li>
+</ul>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns 1-row matrix with the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated linear contrast
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the confidence interval
+</p>
+</li>
+<li>
+<p> df - degrees of freedom
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Snedecor GW, Cochran WG (1980).
+<em>Statistical methods</em>, 7th edition.
+ISU University Pres, Ames, Iowa.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">m &lt;- c(33.5, 37.9, 38.0, 44.1)
+sd &lt;- c(3.84, 3.84, 3.65, 4.98)
+n &lt;- c(10, 10, 10, 10)
+v &lt;- c(.5, .5, -.5, -.5)
+meta.lc.mean1(.05, m, sd, n, v, eqvar = FALSE)
+
+# Should return:
+#          Estimate       SE        LL        UL       df
+# Contrast    -5.35 1.300136 -7.993583 -2.706417 33.52169
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,192 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mlcc.bic</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Multiple Latent Components Clustering - Subspace clustering with automatic 
+estimation of number of clusters and their dimension</h2>
+
+<h3>Description</h3>
+
+<p>This function is an implementation of Multiple Latent Components Clustering 
+(MLCC) algorithm which clusteres quantitative variables into a number, chosen
+using mBIC, of groups. For each considered number of clusters in 
+<em>numb.clusters</em> <code>mlcc.reps</code> function is called. It invokes 
+K-means based algorithm (<code>mlcc.kmeans</code>) finding local minimum of 
+mBIC, which is run a given number of times (<em>numb.runs</em>) with different 
+initializations. The best partition is choosen with mBIC (see 
+<code>mlcc.reps</code> function).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mlcc.bic(X, numb.clusters = 1:10, numb.runs = 30, stop.criterion = 1,
+  max.iter = 30, max.dim = 4, scale = TRUE, numb.cores = NULL,
+  greedy = TRUE, estimate.dimensions = TRUE, verbose = FALSE,
+  flat.prior = FALSE, show.warnings = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>A data frame or a matrix with only continuous variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numb.clusters</code></td>
+<td>
+<p>A vector, numbers of clusters to be checked.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numb.runs</code></td>
+<td>
+<p>An integer, number of runs (initializations) of 
+<code>mlcc.kmeans</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stop.criterion</code></td>
+<td>
+<p>An integer, if an iteration of 
+<code>mlcc.kmeans</code> algorithm makes less changes in partitions than 
+<code>stop.criterion</code>, <code>mlcc.kmeans</code> stops.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.iter</code></td>
+<td>
+<p>An integer, maximum number of iterations of the loop in 
+<code>mlcc.kmeans</code> algorithm.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.dim</code></td>
+<td>
+<p>An integer, if estimate.dimensions is FALSE then max.dim is 
+dimension of each subspace. If estimate.dimensions is TRUE then subspaces 
+dimensions are estimated from the range [1, max.dim].</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>A boolean, if TRUE (value set by default) then variables in 
+dataset are scaled to zero mean and unit variance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numb.cores</code></td>
+<td>
+<p>An integer, number of cores to be used, by default all 
+cores are used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>greedy</code></td>
+<td>
+<p>A boolean, if TRUE (value set by default) the clusters are 
+estimated in a greedy way - first local minimum of mBIC is chosen.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estimate.dimensions</code></td>
+<td>
+<p>A boolean, if TRUE (value set by default) 
+subspaces dimensions are estimated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>A boolean, if TRUE plot with mBIC values for different numbers
+of clusters is produced and values of mBIC, computed for every number of 
+clusters and subspaces dimensions, are printed (value set by default is 
+FALSE).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>flat.prior</code></td>
+<td>
+<p>A boolean, if TRUE then, instead of an informative prior 
+that takes into account number of models for a given number of clusters, 
+flat prior is used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.warnings</code></td>
+<td>
+<p>A boolean, if set to TRUE all warnings are displayed, 
+default value is FALSE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class mlcc.fit consisting of </p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>segmentation</code></td>
+<td>
+<p>a 
+vector containing the partition of the variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BIC</code></td>
+<td>
+<p>numeric, value
+of mBIC</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subspacesDimensions</code></td>
+<td>
+<p>a list containing dimensions of the 
+subspaces</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nClusters</code></td>
+<td>
+<p>an integer, estimated number of clusters</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>factors</code></td>
+<td>
+<p>a list of matrices, basis for each subspace</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.fit</code></td>
+<td>
+<p>a list of segmentation, mBIC, subspaces dimension for all 
+numbers of clusters considered for an estimated subspace dimensions</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>all.fit.dims</code></td>
+<td>
+<p>a list of lists of segmentation, mBIC, subspaces 
+dimension for all numbers of clusters and subspaces dimensions considered</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+sim.data &lt;- data.simulation(n = 50, SNR = 1, K = 3, numb.vars = 50, max.dim = 3)
+mlcc.res &lt;- mlcc.bic(sim.data$X, numb.clusters = 1:5, numb.runs = 20, numb.cores = 1, verbose=TRUE)
+show.clusters(sim.data$X, mlcc.res$segmentation)
+
+</code></pre>
+
+
+</div>

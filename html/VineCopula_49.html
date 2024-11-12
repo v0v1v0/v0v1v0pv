@@ -1,0 +1,182 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopVuongClarke</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Scoring Goodness-of-Fit Test based on Vuong And Clarke Tests for Bivariate
+Copula Data</h2>
+
+<h3>Description</h3>
+
+<p>Based on the Vuong and Clarke tests this function computes a goodness-of-fit
+score for each bivariate copula family under consideration. For each
+possible pair of copula families the Vuong and the Clarke tests decides
+which of the two families fits the given data best and assigns a score—pro
+or contra a copula family—according to this decision.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopVuongClarke(
+  u1,
+  u2,
+  familyset = NA,
+  correction = FALSE,
+  level = 0.05,
+  rotations = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>u1, u2</code></td>
+<td>
+<p>Data vectors of equal length with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>familyset</code></td>
+<td>
+<p>An integer vector of bivariate copula families under
+consideration, i.e., which are compared in the goodness-of-fit test.  If
+<code>familyset = NA</code> (default), all possible families are compared.
+Possible families are: <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula) <br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>7</code> = BB1 copula <br><code>8</code> = BB6 copula <br><code>9</code> = BB7 copula <br><code>10</code> = BB8 copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; <code style="white-space: pre;">⁠survival Joe'') \cr `17` = rotated BB1 copula (180 degrees; ⁠</code>survival BB1”)<br><code>18</code> = rotated BB6 copula (180 degrees; <code style="white-space: pre;">⁠survival BB6'')\cr `19` = rotated BB7 copula (180 degrees; ⁠</code>survival BB7”)<br><code>20</code> = rotated BB8 copula (180 degrees; “survival BB8”)<br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'27' = rotated BB1 copula (90 degrees) <br>
+'28' = rotated BB6 copula (90 degrees) <br>
+'29' = rotated BB7 copula (90 degrees) <br>
+'30' = rotated BB8 copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br>
+'37' = rotated BB1 copula (270 degrees) <br>
+'38' = rotated BB6 copula (270 degrees) <br>
+'39' = rotated BB7 copula (270 degrees) <br>
+'40' = rotated BB8 copula (270 degrees) <br>
+'104' = Tawn type 1 copula <br>
+'114' = rotated Tawn type 1 copula (180 degrees) <br>
+'124' = rotated Tawn type 1 copula (90 degrees) <br>
+'134' = rotated Tawn type 1 copula (270 degrees) <br>
+'204' = Tawn type 2 copula <br>
+'214' = rotated Tawn type 2 copula (180 degrees) <br>
+'224' = rotated Tawn type 2 copula (90 degrees) <br>
+'234' = rotated Tawn type 2 copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>correction</code></td>
+<td>
+<p>Correction for the number of parameters.  Possible
+choices: <code>correction = FALSE</code> (no correction; default), <code>"Akaike"</code>
+and <code>"Schwarz"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>Numerical; significance level of the tests (default:
+<code>level = 0.05</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rotations</code></td>
+<td>
+<p>If <code>TRUE</code>, all rotations of the families in
+<code>familyset</code> are included (or subtracted).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Vuong as well as the Clarke test compare two models against each other
+and based on their null hypothesis, allow for a statistically significant
+decision among the two models (see the documentations of
+<code>RVineVuongTest()</code> and <code>RVineClarkeTest()</code> for
+descriptions of the two tests). In the goodness-of-fit test proposed by
+Belgorodski (2010) this is used for bivariate copula selection. It compares
+a model 0 to all other possible models under consideration. If model 0 is
+favored over another model, a score of "+1" is assigned and similarly a
+score of "-1" if the other model is determined to be superior. No score is
+assigned, if the respective test cannot discriminate between two models.
+Both tests can be corrected for the numbers of parameters used in the
+copulas. Either no correction (<code>correction = FALSE</code>), the Akaike
+correction (<code>correction = "Akaike"</code>) or the parsimonious Schwarz
+correction (<code>correction = "Schwarz"</code>) can be used.
+</p>
+<p>The models compared here are bivariate parametric copulas and we would like
+to determine which family fits the data better than the other families.
+E.g., if we would like to test the hypothesis that the bivariate Gaussian
+copula fits the data best, then we compare the Gaussian copula against all
+other copulas under consideration. In doing so, we investigate the null
+hypothesis "The Gaussian copula fits the data better than all other copulas
+under consideration", which corresponds to <code class="reqn">k-1</code> times the hypothesis
+"The Gaussian copula <code class="reqn">C_j</code> fits the data better than copula <code class="reqn">C_i</code>"
+for all <code class="reqn">i=1,...,k, i\neq j</code>, where <code class="reqn">k</code> is the
+number of bivariate copula families under consideration (length of
+<code>familyset</code>). This procedure is done not only for one family but for
+all families under consideration, i.e., two scores, one based on the Vuong
+and one based on the Clarke test, are returned for each bivariate copula
+family. If used as a goodness-of-fit procedure, the family with the highest
+score should be selected.
+</p>
+<p>For more and detailed information about the goodness-of-fit test see
+Belgorodski (2010).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix with Vuong test scores in the first and Clarke test scores
+in the second row. Column names correspond to bivariate copula families (see
+above).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier, Eike Brechmann, Natalia Belgorodski
+</p>
+
+
+<h3>References</h3>
+
+<p>Belgorodski, N. (2010) Selecting pair-copula families for
+regular vines with application to the multivariate analysis of European
+stock market indices Diploma thesis, Technische Universitaet Muenchen.
+<a href="https://mediatum.ub.tum.de/?id=1079284">https://mediatum.ub.tum.de/?id=1079284</a>.
+</p>
+<p>Clarke, K. A. (2007). A Simple Distribution-Free Test for Nonnested Model
+Selection. Political Analysis, 15, 347-363.
+</p>
+<p>Vuong, Q. H. (1989). Ratio tests for model selection and non-nested
+hypotheses. Econometrica 57 (2), 307-333.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopGofTest()</code>, <code>RVineVuongTest()</code>,
+<code>RVineClarkeTest()</code>, <code>BiCopSelect()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# simulate from a t-copula
+dat &lt;- BiCopSim(500, 2, 0.7, 5)
+
+
+# apply the test for families 1-6
+BiCopVuongClarke(dat[,1], dat[,2], familyset = 1:6)
+
+</code></pre>
+
+
+</div>

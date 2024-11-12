@@ -1,0 +1,266 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>SVC_mle_control</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Set Parameters for <code>SVC_mle</code>
+</h2>
+
+<h3>Description</h3>
+
+<p>Function to set up control parameters for <code>SVC_mle</code>.
+In the following, we assume the GP-based SVC model to have <code class="reqn">q</code> GPs which
+model the SVCs and <code class="reqn">p</code> fixed effects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">SVC_mle_control(...)
+
+## Default S3 method:
+SVC_mle_control(
+  cov.name = c("exp", "sph", "mat32", "mat52", "wend1", "wend2"),
+  tapering = NULL,
+  parallel = NULL,
+  init = NULL,
+  lower = NULL,
+  upper = NULL,
+  save.fitted = TRUE,
+  profileLik = FALSE,
+  mean.est = c("GLS", "OLS"),
+  pc.prior = NULL,
+  extract_fun = FALSE,
+  hessian = TRUE,
+  dist = list(method = "euclidean"),
+  parscale = TRUE,
+  ...
+)
+
+## S3 method for class 'SVC_mle'
+SVC_mle_control(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further Arguments yet to be implemented</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cov.name</code></td>
+<td>
+<p>(<code>character(1)</code>) <br>
+Name of the covariance function of the GPs. Currently, the following are
+implemented: <code>"exp"</code> for the exponential, <code>"sph"</code> for
+spherical, <code>"mat32"</code> and <code>"mat52"</code> for Matern class covariance
+functions with smoothness 3/2 or 5/2, as well as <code>"wend1"</code> and
+<code>"wend2"</code> for Wendland class covariance functions with kappa 1 or 2.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tapering</code></td>
+<td>
+<p>(<code>NULL</code> or <code>numeric(1)</code>) <br>
+If <code>NULL</code>, no tapering is applied. If a scalar is given, covariance
+tapering with this taper range is applied, for all Gaussian processes
+modeling the SVC. Only defined for Matern class covariance functions,
+i.e., set <code>cov.name</code> either to <code>"exp"</code>, <code>"mat32"</code>, or
+<code>"mat52"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+<p>(<code>NULL</code> or <code>list</code>) <br>
+If <code>NULL</code>, no parallelization is applied. If cluster has been
+established, define arguments for parallelization with a list, see
+documentation of <code>optimParallel</code>. See Examples.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>init</code></td>
+<td>
+<p>(<code>NULL</code> or <code>numeric(2q+1+p*as.numeric(profileLik))</code>) <br>
+Initial values for optimization procedure. If <code>NULL</code> is given, an
+initial vector is calculated (see Details). Otherwise, the vector is
+assumed to consist of q-times (alternating) range and variance,
+the nugget variance and if <code>profileLik = TRUE</code> p mean effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower</code></td>
+<td>
+<p>(<code>NULL</code> or <code>numeric(2q+1+p*as.numeric(profileLik))</code>) <br>
+Lower bound for <code>init</code> in <code>optim</code>. Default <code>NULL</code> calculates
+the lower bounds (see Details).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>upper</code></td>
+<td>
+<p>(<code>NULL</code> or <code>numeric(2q+1+p*as.numeric(profileLik))</code>) <br>
+Upper bound for <code>init</code> in <code>optim</code>. Default <code>NULL</code> calculates
+the upper bounds (see Details).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>save.fitted</code></td>
+<td>
+<p>(<code>logical(1)</code>) <br>
+If <code>TRUE</code>, calculates the fitted values and residuals after MLE and
+stores them. This is necessary to call <code>residuals</code> and
+<code>fitted</code> methods afterwards.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>profileLik</code></td>
+<td>
+<p>(<code>logical(1)</code>) <br>
+If <code>TRUE</code>, MLE is done over profile Likelihood of covariance
+parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean.est</code></td>
+<td>
+<p>(<code>character(1)</code>) <br>
+If <code>profileLik = TRUE</code>, the means have to be estimated seperately for
+each step. <code>"GLS"</code> uses the generalized least square estimate while
+<code>"OLS"</code> uses the ordinary least squares estimate.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pc.prior</code></td>
+<td>
+<p>(<code>NULL</code> or <code>numeric(4)</code>) <br>
+If numeric vector is given, penalized complexity priors are applied. The
+order is <code class="reqn">\rho_0, \alpha_\rho, \sigma_0, \alpha_\sigma</code> to give some
+prior believes for the range and the standard deviation of GPs, such that
+<code class="reqn">P(\rho &lt; \rho_0) = \alpha_\rho, P(\sigma &gt; \sigma_0) = \alpha_\sigma</code>.
+This regulates the optimization process. Currently, only supported for
+GPs with of Matérn class covariance functions. Based on the idea by
+Fulgstad et al. (2018) doi: <a href="https://doi.org/10.1080/01621459.2017.1415907">10.1080/01621459.2017.1415907</a>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extract_fun</code></td>
+<td>
+<p>(<code>logical(1)</code>) <br>
+If <code>TRUE</code>, the function call of <code>SVC_mle</code> stops before
+the MLE and gives back the objective function of the MLE as well as all
+used arguments. If <code>FALSE</code>, regular MLE is conducted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hessian</code></td>
+<td>
+<p>(<code>logical(1)</code>) <br>
+If <code>TRUE</code>, Hessian matrix is computed, see optim. This
+required to give the standard errors for covariance parameters and to do
+a Wald test on the variances, see <code>summary.SVC_mle</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dist</code></td>
+<td>
+<p>(<code>list</code>) <br>
+List containing the arguments of dist or
+nearest.dist. This controls
+the method of how the distances and therefore dependency structures are
+calculated. The default gives Euclidean distances in a <code class="reqn">d</code>-dimensional
+space. Further editable arguments are <code>p, miles, R</code>, see respective
+help files of dist or nearest.dist.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parscale</code></td>
+<td>
+<p>(<code>logical(1)</code>) <br>
+Triggers parameter scaling within the optimization in optim.
+If <code>TRUE</code>, the optional parameter scaling in <code>optim.control</code> in
+function <code>SVC_mle</code> is overwritten by the initial value used in
+the numeric optimization. The initial value is either computed from the
+data or provided by the user, see <code>init</code> argument above or Details
+below. Note that we check whether the initial values are unequal to zero.
+If they are zero, the corresponding scaling factor is 0.001. If
+<code>FALSE</code>, the <code>parscale</code> argument in <code>optim.control</code> is let
+unchanged.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>(<code>SVC_mle</code>) <br>
+The function then extracts the control settings from the function call
+used to compute in the given <code>SVC_mle</code> object.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If not provided, the initial values as well as the lower and upper
+bounds are calculated given the provided data. In particular, we require
+the median distance between observations, the variance of the response and,
+the ordinary least square (OLS) estimates, see <code>init_bounds_optim</code>.
+</p>
+<p>The argument <code>extract_fun</code> is useful, when one wants to modify
+the objective function. Further, when trying to parallelize the
+optimization, it is useful to check whether a single evaluation of the
+objective function takes longer than 0.05 seconds to evaluate,
+cf. Gerber and Furrer (2019) doi: <a href="https://doi.org/10.32614/RJ-2019-030">10.32614/RJ-2019-030</a>. Platform specific
+issues can be sorted out by the user by setting up their own optimization.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with which <code>SVC_mle</code> can be controlled.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jakob Dambon
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>SVC_mle</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">control &lt;- SVC_mle_control(init = rep(0.3, 10))
+# or
+control &lt;- SVC_mle_control()
+control$init &lt;- rep(0.3, 10)
+
+
+# Code for setting up parallel computing
+require(parallel)
+# exchange number of nodes (1) for detectCores()-1 or appropriate number
+cl &lt;- makeCluster(1, setup_strategy = "sequential")
+clusterEvalQ(
+  cl = cl,
+  {
+    library(spam)
+    library(varycoef)
+  })
+# use this list for parallel argument in SVC_mle_control
+parallel.control &lt;- list(cl = cl, forward = TRUE, loginfo = TRUE)
+# SVC_mle goes here ...
+# DO NOT FORGET TO STOP THE CLUSTER!
+stopCluster(cl); rm(cl)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,177 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>betaR</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> The Two-parameter Beta Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimation of the shape parameters of the two-parameter beta
+distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">betaR(lshape1 = "loglink", lshape2 = "loglink",
+      i1 = NULL, i2 = NULL, trim = 0.05,
+      A = 0, B = 1, parallel = FALSE, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lshape1, lshape2, i1, i2</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trim</code></td>
+<td>
+
+<p>An argument which is fed into <code>mean()</code>; it is the fraction
+(0 to 0.5) of observations to be trimmed from each end of the
+response <code>y</code> before the mean is computed. This is used
+when computing initial values, and guards against outliers.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>A, B</code></td>
+<td>
+
+<p>Lower and upper limits of the distribution.
+The defaults correspond to the <em>standard beta distribution</em>
+where the response lies between 0 and 1.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The two-parameter beta distribution is given by
+<code class="reqn">f(y) =</code>
+</p>
+<p style="text-align: center;"><code class="reqn">(y-A)^{shape1-1} \times
+      (B-y)^{shape2-1} / [Beta(shape1,shape2)
+      \times (B-A)^{shape1+shape2-1}]</code>
+</p>
+
+<p>for <code class="reqn">A &lt; y &lt; B</code>, and <code class="reqn">Beta(.,.)</code> is the beta function
+(see <code>beta</code>).
+The shape parameters are positive, and
+here, the limits <code class="reqn">A</code> and <code class="reqn">B</code> are known.
+The mean of <code class="reqn">Y</code> is <code class="reqn">E(Y) = A + (B-A) \times shape1 /
+  (shape1 + shape2)</code>, and these are the fitted values of the object.
+</p>
+<p>For the standard beta distribution the variance of <code class="reqn">Y</code> is
+<code class="reqn">shape1 \times
+     shape2 / [(1+shape1+shape2) \times (shape1+shape2)^2]</code>.
+If <code class="reqn">\sigma^2= 1 / (1+shape1+shape2)</code>
+then the variance of <code class="reqn">Y</code> can be written
+<code class="reqn">\sigma^2 \mu (1-\mu)</code> where
+<code class="reqn">\mu=shape1 / (shape1 + shape2)</code>
+is the mean of <code class="reqn">Y</code>.
+</p>
+<p>Another parameterization of the beta distribution involving the mean
+and a precision parameter is implemented in <code>betaff</code>.
+</p>
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must have values in the interval (<code class="reqn">A</code>,
+<code class="reqn">B</code>).  <span class="pkg">VGAM</span> 0.7-4 and prior called this function
+<code>betaff</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Johnson, N. L. and Kotz, S. and Balakrishnan, N. (1995).
+Chapter 25 of:
+<em>Continuous Univariate Distributions</em>,
+2nd edition, Volume 2, New York: Wiley.
+</p>
+<p>Gupta, A. K. and Nadarajah, S. (2004).
+<em>Handbook of Beta Distribution and Its Applications</em>,
+New York: Marcel Dekker.
+</p>
+
+
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>betaff</code>,
+
+<code>Beta</code>,
+<code>genbetaII</code>,
+<code>betaII</code>,
+<code>betabinomialff</code>,
+<code>betageometric</code>,
+<code>betaprime</code>,
+<code>rbetageom</code>,
+<code>rbetanorm</code>,
+<code>kumar</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">bdata &lt;- data.frame(y = rbeta(1000, shape1 = exp(0), shape2 = exp(1)))
+fit &lt;- vglm(y ~ 1, betaR(lshape1 = "identitylink",
+            lshape2 = "identitylink"), bdata, trace = TRUE, crit = "coef")
+fit &lt;- vglm(y ~ 1, betaR, data = bdata, trace = TRUE, crit = "coef")
+coef(fit, matrix = TRUE)
+Coef(fit)  # Useful for intercept-only models
+
+bdata &lt;- transform(bdata, Y = 5 + 8 * y)  # From 5 to 13, not 0 to 1
+fit &lt;- vglm(Y ~ 1, betaR(A = 5, B = 13), data = bdata, trace = TRUE)
+Coef(fit)
+c(meanY = with(bdata, mean(Y)), head(fitted(fit),2))
+</code></pre>
+
+
+</div>

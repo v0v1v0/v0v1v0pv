@@ -1,0 +1,58 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>s3_register</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Register an s3 method</h2>
+
+<h3>Description</h3>
+
+<p>This is a reimplementation of <code>vctrs::s3_register()</code>, implemented here
+to avoid having to take a dependency on vctrs.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">s3_register(generic, class, method = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>generic</code></td>
+<td>
+<p>Name of the generic in the form <code>pkg::generic</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>class</code></td>
+<td>
+<p>Name of the class</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>Optionally, the implementation of the method. By default,
+this will be found by looking for a function called <code>generic.class</code>
+in the package environment.
+</p>
+<p>Note that providing <code>method</code> can be dangerous if you use
+devtools. When the namespace of the method is reloaded by
+<code>devtools::load_all()</code>, the function will keep inheriting from
+the old namespace. This might cause crashes because of dangling
+<code>.Call()</code> pointers.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Invisible <code>NULL</code>, called for side effects.
+</p>
+
+
+</div>

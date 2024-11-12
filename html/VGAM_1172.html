@@ -1,0 +1,136 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotqrrvglm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Model Diagnostic Plots for QRR-VGLMs </h2>
+
+<h3>Description</h3>
+
+<p>The residuals of a QRR-VGLM are plotted for model diagnostic purposes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotqrrvglm(object, rtype = c("response", "pearson", "deviance", "working"),
+            ask = FALSE,
+            main = paste(Rtype, "residuals vs latent variable(s)"),
+            xlab = "Latent Variable",
+            I.tolerances = object@control$eq.tolerances, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p> An object of class <code>"qrrvglm"</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rtype</code></td>
+<td>
+<p> Character string giving residual type.
+By default, the first one is chosen. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ask</code></td>
+<td>
+<p> Logical. If <code>TRUE</code>, the user is asked to hit the return
+key for the next plot. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p> Character string giving the title of the plot. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p> Character string giving the x-axis caption. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>I.tolerances</code></td>
+<td>
+<p> Logical. This argument is fed into
+<code>Coef(object, I.tolerances = I.tolerances)</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Other plotting arguments (see <code>par</code>). </p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Plotting the residuals can be potentially very useful for checking
+that the model fit is adequate.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The original object.
+</p>
+
+
+<h3>Note</h3>
+
+<p>An ordination plot of a QRR-VGLM can be obtained
+by <code>lvplot.qrrvglm</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Thomas W. Yee</p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2004).
+A new technique for maximum-likelihood
+canonical Gaussian ordination.
+<em>Ecological Monographs</em>,
+<b>74</b>, 685–701.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>lvplot.qrrvglm</code>,
+<code>cqo</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# QRR-VGLM on the hunting spiders data
+# This is computationally expensive
+set.seed(111)  # This leads to the global solution
+hspider[, 1:6] &lt;- scale(hspider[, 1:6])  # Standardize environ vars
+p1 &lt;- cqo(cbind(Alopacce, Alopcune, Alopfabr, Arctlute, Arctperi,
+                Auloalbi, Pardlugu, Pardmont, Pardnigr, Pardpull,
+                Trocterr, Zoraspin) ~
+          WaterCon + BareSand + FallTwig + CoveMoss + CoveHerb + ReflLux,
+          poissonff, data = hspider, Crow1positive = FALSE)
+par(mfrow = c(3, 4))
+plot(p1, rtype = "response", col = "blue", pch = 4, las = 1, main = "")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

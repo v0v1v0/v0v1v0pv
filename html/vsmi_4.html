@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>PEE</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Penalized estimating equations for generalized linear models with multiple imputation</h2>
+
+<h3>Description</h3>
+
+<p>This is a function to impute missing data, estimate coefficients of generalized linear models and select variables for multiple imputed data sets,
+considering the correlation of multiple imputed observations.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">PEE(
+  missdata,
+  mice_time = 5,
+  penalty,
+  lamda.vec = seq(1, 4, length.out = 12),
+  Gamma = c(0.5, 1, 1.5)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>missdata</code></td>
+<td>
+<p>A Matrix,missing data with variables X in the first p columns and response Y at the last column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mice_time</code></td>
+<td>
+<p>an integer, number of imputation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>penalty</code></td>
+<td>
+<p>The method for variable selection,choose from "lasso" or "alasso".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lamda.vec</code></td>
+<td>
+<p>Optimal tuning parameter for penalty,default seq(1,4,length.out=12).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Gamma</code></td>
+<td>
+<p>Parameter for adjustment of the Adaptive Weights vector in adaptive LASSO,default c(0.5,1,1.5).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A Vsmi_est object, contians estcoef and index_sig , estcoef for estimate coefficients and index_sig for selected variable index.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(MASS)
+library(mice)
+library(qif)
+
+data_with_missing &lt;- generate_pee_missing_data(outcome="binary")
+est.alasso &lt;-PEE(data_with_missing,penalty="alasso")
+est.lasso &lt;-PEE(data_with_missing,penalty="lasso")
+
+count_data_with_missing &lt;- generate_pee_missing_data(outcome="count")
+count_est.alasso &lt;-PEE(data_with_missing,penalty="alasso")
+count_est.lasso &lt;-PEE(data_with_missing,penalty="lasso")
+
+</code></pre>
+
+
+</div>

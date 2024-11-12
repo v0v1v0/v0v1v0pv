@@ -1,0 +1,150 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_intersect</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Identify intersecting intervals.</h2>
+
+<h3>Description</h3>
+
+<p>Report intersecting intervals from <code>x</code> and <code>y</code> tbls. Book-ended intervals
+have <code>.overlap</code> values of <code>0</code> in the output.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_intersect(x, ..., invert = FALSE, suffix = c(".x", ".y"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>one or more (e.g. a list of) <code>y</code> <code>ivl_df()</code>s</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>invert</code></td>
+<td>
+<p>report <code>x</code> intervals not in <code>y</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>suffix</code></td>
+<td>
+<p>colname suffixes in output</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>input tbls are grouped by <code>chrom</code> by default, and additional
+groups can be added using <code>dplyr::group_by()</code>. For example,
+grouping by <code>strand</code> will constrain analyses to the same strand. To
+compare opposing strands across two tbls, strands on the <code>y</code> tbl can
+first be inverted using <code>flip_strands()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>ivl_df with original columns from <code>x</code> and <code>y</code> suffixed with <code>.x</code>
+and <code>.y</code>, and a new <code>.overlap</code> column with the extent of overlap for the
+intersecting intervals.
+</p>
+<p>If  multiple <code>y</code> tbls are supplied, the <code>.source</code> contains variable names
+associated with each interval. All original columns from the <code>y</code> are suffixed
+with <code>.y</code> in the output.
+</p>
+<p>If <code>...</code> contains named inputs (i.e <code style="white-space: pre;">⁠a = y, b = z⁠</code> or <code>list(a = y, b =  z)</code>),
+then <code>.source</code> will contain supplied names (see examples).
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/intersect.html">https://bedtools.readthedocs.io/en/latest/content/tools/intersect.html</a>
+</p>
+<p>Other multiple set operations: 
+<code>bed_closest()</code>,
+<code>bed_coverage()</code>,
+<code>bed_map()</code>,
+<code>bed_subtract()</code>,
+<code>bed_window()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 25, 50,
+  "chr1", 100, 125
+)
+
+y &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 30,     75
+)
+
+bed_glyph(bed_intersect(x, y))
+
+bed_glyph(bed_intersect(x, y, invert = TRUE))
+
+x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 100,    500,
+  "chr2", 200,    400,
+  "chr2", 300,    500,
+  "chr2", 800,    900
+)
+
+y &lt;- tibble::tribble(
+  ~chrom, ~start, ~end, ~value,
+  "chr1", 150,    400,  100,
+  "chr1", 500,    550,  100,
+  "chr2", 230,    430,  200,
+  "chr2", 350,    430,  300
+)
+
+bed_intersect(x, y)
+
+bed_intersect(x, y, invert = TRUE)
+
+# start and end of each overlapping interval
+res &lt;- bed_intersect(x, y)
+dplyr::mutate(res,
+  start = pmax(start.x, start.y),
+  end = pmin(end.x, end.y)
+)
+
+z &lt;- tibble::tribble(
+  ~chrom, ~start, ~end, ~value,
+  "chr1", 150,    400,  100,
+  "chr1", 500,    550,  100,
+  "chr2", 230,    430,  200,
+  "chr2", 750,    900,  400
+)
+
+bed_intersect(x, y, z)
+
+bed_intersect(x, exons = y, introns = z)
+
+# a list of tbl_intervals can also be passed
+bed_intersect(x, list(exons = y, introns = z))
+
+</code></pre>
+
+
+</div>

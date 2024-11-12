@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vwPath</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Functions to render variable-width line
+</h2>
+
+<h3>Description</h3>
+
+<p>Functions that can be used to render a variable-width line.
+All variable-width-line functions generate a polygon or path
+to represent the variable-width line and they have a
+<code>render</code> argument that specifies the rendering function.
+These two functions provide the default rendering behaviour.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vwPath(rule = "winding")
+vwPolygon(x, y, id.lengths, gp, name)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>rule</code></td>
+<td>
+
+<p>The fill rule for rendering a variable-width line as a path.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x,y,id.lengths,gp,name</code></td>
+<td>
+<p>Arguments provided by the calling
+function when rendering occurs.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>These functions are not called directly;  they are provided as
+arguments to variable-width-line functions (which then call them
+internally to render a variable-width line).
+</p>
+
+
+<h3>Value</h3>
+
+<p>These functions are used for their side-effect, which is to draw
+on the current graphics device.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Paul Murrel
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>grid.curve</code>,
+<code>grid.vwline</code>,
+<code>grid.vwcurve</code>,
+<code>grid.brushXspline</code>,
+<code>grid.vwXspline</code>  
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">grid.newpage()
+x &lt;- c(.2, .4, .2, .4)
+y &lt;- c(.2, .4, .4, .2)
+grid.vwXspline(x, y, c(0, .1, .1, 0))
+x &lt;- c(.2, .4, .2, .4) + .4
+y &lt;- c(.2, .4, .4, .2)
+grid.vwXspline(x, y, c(0, .1, .1, 0), render=vwPath("evenodd"))
+x &lt;- c(.2, .4, .2, .4) 
+y &lt;- c(.2, .4, .4, .2) + .4
+grid.brushXspline(verticalBrush, x, y, c(0, .02, .02, 0))
+x &lt;- c(.2, .4, .2, .4) + .4
+y &lt;- c(.2, .4, .4, .2) + .4
+grid.brushXspline(verticalBrush, x, y, c(0, .02, .02, 0),
+                  render=vwPolygon)
+</code></pre>
+
+
+</div>

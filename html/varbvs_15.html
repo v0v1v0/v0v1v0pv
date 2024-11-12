@@ -1,0 +1,212 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.varbvs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summarize variable selection results in a single plot.</h2>
+
+<h3>Description</h3>
+
+<p>Generate a single plot that summarizes the results of fitting the
+Bayesian variable selection model to the data. When the variables are
+genetic markers, the groups are chromosomes, and the posterior
+probabilities are plotted on the vertical axis (typically on the
+logarithmic scale), the figure resembles a "Manhattan plot" typically
+used to summarize the results of a genome-wide association study or
+quantitative trait locus (QTL) mapping study.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  ## S3 method for class 'varbvs'
+plot(x, score, groups, vars = NULL, var.labels,
+  draw.threshold = NA, gap = 0,col = "midnightblue", pch = 20,
+  scales = NULL, xlab = "variable", ylab = "posterior probability",
+  main = "fitted varbvs model: variable selection results",
+  abline.args = list(lty = "dotted",col = "orangered"),
+  vars.xyplot.args = list(pch = 20,col = "magenta"),
+  vars.ltext.args = list(col = "black",pos = 4,cex = 0.5), 
+  par.settings = list(par.main.text = list(font = 1,cex = 0.8),
+                      layout.heights = list(axis.top = 0, axis.bottom = 0)),
+  ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Output of function <code>varbvs</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>score</code></td>
+<td>
+<p>Value to plot on vertical axis. Must be a numeric vector
+with one entry for each variable. If missing, the posterior inclusion
+probability for each variable is plotted in the vertical axis, in
+which this probability is averaged over hyperparameter settings,
+treating <code>x$logw</code> as (unnormalized) log-marginal
+probabilities. As alternative, set <code>score</code> to the posterior
+inclusion probabilities that ignore correlations, using
+<code>varbvsindep</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>groups</code></td>
+<td>
+<p>Group the variables in the plot according to this
+argument. This must be a vector with one entry for each variable. If
+missing, all variables are treated as a single group. This is useful
+for grouping the genetic markers by chromosome in a genome-wide
+association study.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vars</code></td>
+<td>
+<p>Indices (type <code>integer</code>) or names (type
+<code>character</code>) of variables to highlight and label. By default,
+<code>vars = NULL</code>, meaning no variables are highlighted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>var.labels</code></td>
+<td>
+<p>Labels to accompany the highlighted variables
+only. If missing, labels are retrieved from <code>x</code>. If
+<code>var.labels = NULL</code>, no labels are plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>draw.threshold</code></td>
+<td>
+<p>Plot a horizontal line at this location on the
+vertical axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gap</code></td>
+<td>
+<p>Amount of space to leave between each group of variables in
+the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>Argument passed to <code>xyplot</code> specifying color of points.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pch</code></td>
+<td>
+<p>Argument passed to <code>xyplot</code> specifying symbol type.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scales</code></td>
+<td>
+<p>Argument passed to <code>xyplot</code> specifying how x- and
+y-axes are drawn.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>Argument passed to <code>xyplot</code> specifying horizontal
+axis title.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>Argument passed to <code>xyplot</code> specifying 
+vertical axis title.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>Argument passed to <code>xyplot</code> specifying main plot title.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>abline.args</code></td>
+<td>
+<p>Additional arguments passed to <code>panel.abline</code>
+specifying how to draw the horizontal line at the location specified
+by <code>draw.threshold</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vars.xyplot.args</code></td>
+<td>
+<p>Additional arguments passed to <code>xyplot</code>
+for drawing the highlighted variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vars.ltext.args</code></td>
+<td>
+<p>Additional arguments passed to <code>ltext</code> for
+specifying how the labels of the highlighted variables are drawn in
+the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par.settings</code></td>
+<td>
+<p>Argument passed to <code>xyplot</code> specifying
+additional adjustments to the plot settings.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments passed to <code>xyplot</code> for drawing
+the un-highlighted variables.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Note that <code>plot.varbvs</code> uses function <code>xyplot</code> from the
+<code>lattice</code> package, and <code>as.layer</code> from the
+<code>latticeExtra</code> package. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"trellis"</code> generated by functions
+<code>xyplot</code> and <code>as.layer</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Peter Carbonetto <a href="mailto:peter.carbonetto@gmail.com">peter.carbonetto@gmail.com</a></p>
+
+
+<h3>References</h3>
+
+<p>P. Carbonetto and M. Stephens (2012). Scalable variational
+inference for Bayesian variable selection in regression, and its
+accuracy in genetic association studies. <em>Bayesian Analysis</em>
+<b>7</b>, 73–108.</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xyplot</code>, <code>ltext</code>,
+<code>panel.abline</code>, <code>varbvs</code>,
+<code>summary.varbvs</code>, <code>varbvsindep</code>
+</p>
+
+
+</div>

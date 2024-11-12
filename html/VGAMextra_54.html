@@ -1,0 +1,226 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gammaRff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+2–parameter Gamma Distribution
+</h2>
+
+<h3>Description</h3>
+
+
+<p>Estimates the 2–parameter gamma distribution by maximum likelihood.
+One linear predictor models the mean.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">        gammaRff(zero = "shape", lmu = "gammaRMlink",
+                 lrate = NULL, lshape = "loglink",
+                  irate = NULL,   ishape = NULL, lss = TRUE)
+                       
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Specifies the parameters to be modelled as intercept–only.
+</p>
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lmu</code></td>
+<td>
+
+<p>The link function applied to the gamma distribution mean, i.e.,
+<code>gammaRMlink</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lrate, lshape, irate, ishape, lss</code></td>
+<td>
+
+<p>Same as <code>gammaR</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This family function slightly enlarges the functionalities of 
+<code>gammaR</code> by directly modelling the mean
+of the gamma distribution. It performs very much like
+<code>gamma2</code>, but involves the ordinary 
+(not reparametrized) density, given by
+
+</p>
+<p style="text-align: center;"><code class="reqn">f(y; \alpha, \beta) = \frac{ \beta^\alpha }{ \Gamma(\alpha) } 
+         e^{-\beta y} y^{\alpha - 1},</code>
+</p>
+
+
+<p>Here, <code class="reqn">\alpha</code> and <code class="reqn">\beta</code> are positive shape
+and rate parameters as in <code>gammaR</code>.
+
+
+The default linear predictors are 
+<code class="reqn">\eta1 = {\tt{gammaRMlink}}(\alpha; \beta) = \log \mu =
+  \log (\alpha / \beta)</code>, and
+<code class="reqn">\eta2 = \log \alpha</code>,
+unlike <code class="reqn">\eta1 = \log \beta</code> and
+<code class="reqn">\eta2 = \log \alpha</code>
+from <code>gammaR</code>.
+
+
+
+
+
+
+
+</p>
+<p><code>lmu</code> overrides <code>lrate</code> and no link other than
+<code>gammaRMlink</code> is a valid entry
+(<code>lmu</code>). To
+mimic <code>gammaR</code> simply
+set <code>lmu = NULL</code> and <code>lrate = "loglink"</code>.
+The mean (<code class="reqn">\mu</code>) is returned as the fitted values.
+</p>
+
+
+
+
+<p><code>gammaRff</code> differs from
+<code>gamma2</code>. The latter estimates a
+re-parametrization
+of the gamma distribution in terms <code class="reqn">\mu</code> and
+<code class="reqn">\alpha</code>. 
+This <b>VGAM</b> family function does not handle censored data.
+
+
+
+
+
+
+
+
+
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglm"</code>.
+See <code>vglm-class</code> for full details.
+</p>
+
+
+<h3>Note</h3>
+
+
+
+<p>The parameters <code class="reqn">\alpha</code> and <code class="reqn">\beta</code>
+match the arguments <code>shape</code> and <code class="reqn">rate</code> of
+<code>rgamma</code>.
+</p>
+<p>Multiple responses are handled.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2015)
+<em>Vector Generalized Linear and Additive Models: 
+With an Implementation in R</em>. 
+Springer, New York, USA.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gammaRMlink</code>,
+<code>CommonVGAMffArguments</code>,
+<code>gammaR</code>,
+<code>gamma2</code>,
+<code>Links</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> 
+  ### Modelling the mean in terms of x2, two responses.
+  
+    set.seed(2017022101)
+    nn &lt;- 80
+    x2 &lt;- runif(nn)
+    mu &lt;- exp(2 + 0.5 * x2)
+  
+  # Shape and rate parameters in terms of 'mu'
+    shape &lt;- rep(exp(1), nn)
+    rate &lt;- gammaRMlink(theta = log(mu), shape = shape,
+                            inverse = TRUE, deriv = 0)
+  
+  # Generating some random data
+    y1 &lt;- rgamma(n = nn, shape = shape, rate =  rate)
+    gdata &lt;- data.frame(x2 = x2, y1 = y1)
+    rm(y1)
+
+  # lmu = "gammaRMlink" replaces lshape, whilst lrate = "loglink"
+    fit1 &lt;- vglm(cbind(y1, y1) ~ x2,
+                 gammaRff(lmu = "gammaRMlink", lss = TRUE, zero = "shape"),
+                 data = gdata, trace = TRUE, crit = "log")
+     coef(fit1, matrix = TRUE)
+     summary(fit1)
+    
+  # Comparing fitted values with true values.
+    compare1 &lt;- cbind(fitted.values(fit1)[, 1, drop = FALSE], mu)
+    colnames(compare1) &lt;- c("Fitted.vM1", "mu")
+    head(compare1)
+ 
+  
+  ### Mimicking gammaR. Note that lmu = NULL.
+    fit2 &lt;- vglm(y1 ~ x2, gammaRff(lmu = NULL, lrate = "loglink",
+                            lshape = "loglink", lss = FALSE, zero = "shape"),
+                 data = gdata, trace = TRUE, crit = "log")
+ 
+  # Compare fitted values with true values.
+    compare2 &lt;- with(gdata, cbind(fitted.values(fit2), y1, mu))
+    colnames(compare2) &lt;- c("Fitted.vM2", "y", "mu")
+    head(compare2)
+ 
+    
+  ### Fitted values -- Model1 vs Fitted values -- Model2
+    fit1vsfit2 &lt;- cbind(fitted.values(fit1)[, 1, drop = FALSE], 
+                        fitted.values(fit2))
+    colnames(fit1vsfit2) &lt;- c("Fitted.vM1", "Fitted.vM2")
+    head(fit1vsfit2)
+
+  ### Use gamma2()
+     fit3 &lt;- vglm(y1 ~ x2, gamma2,
+                 data = gdata, trace = TRUE, crit = "log")
+    fit1.fit3 &lt;- cbind(fitted.values(fit1)[, 1, drop = FALSE], 
+                        fitted.values(fit2), fitted.values(fit3))
+    colnames(fit1.fit3) &lt;- c("Fitted.vM1", "Fitted.vM2", "Fitted.vM3")
+    head(fit1.fit3)
+</code></pre>
+
+
+</div>

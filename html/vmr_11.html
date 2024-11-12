@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vmrCreate</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a <strong>vmr</strong> environment class</h2>
+
+<h3>Description</h3>
+
+<p>Create a <strong>vmr</strong> object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vmrCreate(
+  name,
+  provider = "virtualbox",
+  version = "latest",
+  provider.options = virtualboxOptions(FALSE)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>a box name</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>provider</code></td>
+<td>
+<p>the box provider (default: "virtualbox")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>version</code></td>
+<td>
+<p>the box version (default : "latest")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>provider.options</code></td>
+<td>
+<p>provider options (call [<code>getProviderOptions()</code>] to get values)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Create a S3 <strong>vmr</strong> object (a simple list).
+The object contains all information needed to configure and manage a
+<strong>vmr</strong> environment (a vagrant environment).
+</p>
+<p>A <strong>vmr</strong> environment need mostly a box <em>name</em> and a <em>provider</em>.
+The environment is attached to the current working directory.
+</p>
+<p><strong>vmr</strong> object main attributs:
+</p>
+
+<ul>
+<li> <p><strong>path</strong>: working directory
+</p>
+</li>
+<li> <p><strong>org</strong>: Vagrant cloud user/organization name 'VMR'
+</p>
+</li>
+<li> <p><strong>box</strong>: the box name
+</p>
+</li>
+<li> <p><strong>version</strong>: the box version
+</p>
+</li>
+<li> <p><strong>provider</strong>: the provider
+</p>
+</li>
+<li> <p><strong>provider_options</strong>: the provider options (see [<code>getProviderOptions()</code>])
+</p>
+</li>
+<li> <p><strong>vagrantName</strong>: Vagrant environment name
+</p>
+</li>
+<li> <p><strong>ID</strong> &lt;- Vagrant environment ID
+</p>
+</li>
+<li> <p><strong>synced_folder</strong>: a list with source and destination
+</p>
+</li>
+<li> <p><strong>ssh_user</strong>: the ssh user
+</p>
+</li>
+<li> <p><strong>ssh_pwd</strong>: the ssh user password
+</p>
+</li>
+<li> <p><strong>ssh_port</strong>: the ssh port
+</p>
+</li>
+<li> <p><strong>ssh_private_key_path</strong>: the private ssh key path
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>a <strong>vmr</strong> object (see details)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# List boxes available
+boxes &lt;- vmrList()
+# Create a vmr object
+vmr &lt;- vmrCreate(boxes$Name[1])
+
+# to customize the guest machine for virtualbox
+virtualboxOpts &lt;- getProviderOptions(provider = "virtualbox")
+virtualboxOpts$modifyvm &lt;- list(cpus = 4, memory = 4096)
+virtualboxOpts$name &lt;- "My VM Cool Name"
+# To specify a provider and version
+vmr &lt;- vmrCreate(
+  name = boxes$Name[1],
+  provider = "virtualbox",
+  version = boxes$Version[1],
+  provider.options = virtualboxOpts
+)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

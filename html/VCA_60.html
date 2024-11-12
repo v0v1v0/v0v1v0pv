@@ -1,0 +1,141 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotRandVar</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot Random Variates of a Mixed Model ('VCA' Object).</h2>
+
+<h3>Description</h3>
+
+<p>Plots, possibly transformed, random variates of a linear mixed model (random effects, contitional or marginal
+residuals).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotRandVar(
+  obj,
+  term = NULL,
+  mode = c("raw", "student", "standard", "pearson"),
+  main = NULL,
+  Xlabels = list(),
+  Points = list(),
+  Vlines = list(),
+  pick = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(VCA) object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>term</code></td>
+<td>
+<p>(character, integer) specifying a type of residuals if one of c("conditional",
+"marginal"), or, the name of a random term (one of obj$re.assign$terms). If 'term'
+is a integer, it is interpreted as the i-th random term in 'obj$re.assign$terms'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mode</code></td>
+<td>
+<p>(character) string specifying a possible transformation of random effects or 
+residuals (see <code>residuals.VCA</code> and <code>ranef.VCA</code>for details)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>(character) string used as main title of the plot, if NULL, it will be automatically
+generated</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Xlabels</code></td>
+<td>
+<p>(list) passed to function <code>text</code> adding labels to the bottom margin at
+x-coordinates 1:N, where N is the number of random variates. Useful for customization.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Points</code></td>
+<td>
+<p>(list) passed to function <code>points</code> for customization of plotting symbols</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Vlines</code></td>
+<td>
+<p>(list) passed to function (abline) adding vertical lines, separating random variates
+for better visual separation, set to NULL for omitting vertical lines.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pick</code></td>
+<td>
+<p>(logical) TRUE = lets the user identify single points using the mouse, useful, when many,
+points were drawn where the X-labels are not readable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments to be passed to methods, such as graphical parameters (see <code>par</code>)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Function plots either random effects of a 'VCA' object or residuals. Parameter 'term' is used to specify either
+one. If 'term' is one of c("conditional", "marginal") corresponding residuals will be plotted 
+(see <code>resid</code> for details). If 'term' is either the name of a random term in the formula of the 'VCA'
+object or an integer specifying the i-th random term, corresponding random effects will be plotted. Both types
+of random variates (random effects, residuals) can be plotted untransformed ("raw"), "studentized" or "standardized".
+In case of residuals, one can also use the "Pearson"-type transformation.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+ ## Not run: 
+data(dataEP05A2_1)
+fit &lt;- anovaVCA(y~day/run, dataEP05A2_1)
+# solve mixed model equations including random effects
+fit &lt;- solveMME(fit)
+plotRandVar(fit, "cond", "stand")	
+plotRandVar(fit, 1, "stud")						# 1st random term 'day'
+plotRandVar(fit, "day", "stud")					# equivalent to the above
+
+# for larger datasets residuals can hardly be identified
+# pick out interesting points with the mouse
+
+plotRandVar(fit, "marg", "stud", pick=TRUE)
+
+# customize the appearance
+plotRandVar( fit, 1, "stud", Vlines=list(col=c("red", "darkgreen")), 
+	Xlabels=list(offset=.5, srt=60, cex=1, col="blue"),
+	Points=list(col=c("black", "red", rep("black", 18)),
+pch=c(3,17,rep(3,18)), cex=c(1,2,rep(1,18))))	
+
+## End(Not run) 
+</code></pre>
+
+
+</div>

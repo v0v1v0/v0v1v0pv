@@ -1,0 +1,214 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>margeff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Marginal Effects for Several Categorical Response Models </h2>
+
+<h3>Description</h3>
+
+<p>Marginal effects for the multinomial logit model and
+cumulative logit/probit/... models and
+continuation ratio models and
+stopping ratio models and
+adjacent categories models:
+the derivative of the fitted probabilities with respect to
+each explanatory variable.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">margeff(object, subset = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>A <code>vglm</code> object,
+with one of the following family functions:
+<code>multinomial</code>,
+<code>cumulative</code>,
+<code>cratio</code>,
+<code>sratio</code>,
+<code>acat</code>,
+<code>poissonff</code>,
+<code>negbinomial</code>
+or
+<code>posnegbinomial</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subset</code></td>
+<td>
+
+<p>Numerical or logical vector, denoting the required observation(s).
+Recycling is used if possible.
+The default means all observations.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>further arguments passed into the other methods functions.
+
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Computes the derivative of the fitted probabilities
+of the categorical response model
+with respect to each explanatory variable.
+Formerly one big function, this function now uses S4
+dispatch to break up the computations.
+</p>
+
+<p>The function <code>margeff()</code> is <em>not</em> generic. However, it
+calls the function <code>margeffS4VGAM()</code> which <em>is</em>.
+This is based on the class of the <code>VGAMff</code> argument, and
+it uses the S4 function <code>setMethod</code> to
+correctly dispatch to the required methods function.
+The inheritance is given by the <code>vfamily</code> slot of the
+<span class="pkg">VGAM</span> family function.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code class="reqn">p</code> by <code class="reqn">M+1</code> by <code class="reqn">n</code> array, where <code class="reqn">p</code> is the
+number of explanatory variables and the (hopefully) nominal
+response has <code class="reqn">M+1</code> levels, and there are <code class="reqn">n</code>
+observations.
+</p>
+<p>In general, if
+<code>is.numeric(subset)</code>
+and
+<code>length(subset) == 1</code> then a
+<code class="reqn">p</code> by <code class="reqn">M+1</code> matrix is returned.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Care is needed in interpretation, e.g., the change is not
+universally accurate for a unit change in each explanatory
+variable because eventually the ‘new’ probabilities may become
+negative or greater than unity. Also, the ‘new’ probabilities
+will not sum to one.
+</p>
+<p>This function is not applicable for models with
+data-dependent terms such as <code>bs</code> and
+<code>poly</code>.
+Also the function should not be applied to models with any
+terms that
+have generated more than one column of the LM model matrix,
+such as <code>bs</code> and <code>poly</code>.
+For such try using numerical methods such as finite-differences.
+The <code>formula</code> in <code>object</code> should comprise of simple terms
+of the form <code> ~ x2 + x3 + x4</code>, etc.
+</p>
+<p>Some numerical problems may occur if the fitted values are
+close to 0 or 1 for the
+<code>cratio</code> and
+<code>sratio</code> models.
+Models with offsets may result in an incorrect answer.
+</p>
+
+
+<h3>Note</h3>
+
+<p>For <code>multinomial</code>
+this function should handle any value of <code>refLevel</code> and also
+any constraint matrices.
+However, it does not currently handle
+the <code>xij</code> or <code>form2</code> arguments,
+nor <code>vgam</code> objects.
+</p>
+
+<p>If marginal effects are to be computed for some values not
+equal to those used in the training set, then
+the <code>@x</code> and the <code>@predictors</code> slots both need to be
+assigned. See Example 3 below.
+</p>
+
+
+
+
+
+
+<p>Some other limitations are imposed, e.g.,
+for <code>acat</code> models
+only a <code>loglink</code> link is allowed.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee,
+with some help and motivation from Stasha Rmandic.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>multinomial</code>,
+<code>cumulative</code>,
+<code>propodds</code>,
+<code>acat</code>,
+<code>cratio</code>,
+<code>sratio</code>,
+<code>poissonff</code>,
+<code>negbinomial</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Not a good example for multinomial() since the response is ordinal!!
+ii &lt;- 3; hh &lt;- 1/100
+pneumo &lt;- transform(pneumo, let = log(exposure.time))
+fit &lt;- vglm(cbind(normal, mild, severe) ~ let, multinomial, pneumo)
+fit &lt;- vglm(cbind(normal, mild, severe) ~ let,
+            cumulative(reverse = TRUE,  parallel = TRUE),
+            data = pneumo)
+fitted(fit)[ii, ]
+
+mynewdata &lt;- with(pneumo, data.frame(let = let[ii] + hh))
+(newp &lt;- predict(fit, newdata = mynewdata, type = "response"))
+
+# Compare the difference. Should be the same as hh --&gt; 0.
+round((newp-fitted(fit)[ii, ]) / hh, 3)  # Finite-diff approxn
+round(margeff(fit, subset = ii)["let",], 3)
+
+# Other examples
+round(margeff(fit), 3)
+round(margeff(fit, subset = 2)["let",], 3)
+round(margeff(fit, subset = c(FALSE, TRUE))["let",,], 3)  # Recycling
+round(margeff(fit, subset = c(2, 4, 6, 8))["let",,], 3)
+
+# Example 3; margeffs at a new value
+mynewdata2a &lt;- data.frame(let = 2)  # New value
+mynewdata2b &lt;- data.frame(let = 2 + hh)  # For finite-diff approxn
+(neweta2 &lt;- predict(fit, newdata = mynewdata2a))
+fit@x[1, ] &lt;- c(1, unlist(mynewdata2a))
+fit@predictors[1, ] &lt;- neweta2  # Needed
+max(abs(margeff(fit, subset = 1)["let", ] - (
+        predict(fit, newdata = mynewdata2b, type = "response") -
+        predict(fit, newdata = mynewdata2a, type = "response")) / hh
+))  # Should be 0
+</code></pre>
+
+
+</div>

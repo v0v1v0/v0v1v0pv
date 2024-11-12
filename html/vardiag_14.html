@@ -1,0 +1,181 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>interact.varobj</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Interactive Identification of Points in a Variogram Diagnostics
+Plot</h2>
+
+<h3>Description</h3>
+
+<p>Initiates selection of points in a Variogram Diagnostics Plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">interact.varobj(v, region = NULL, g = "s", pchi = 0.05, zmv = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>A variogram object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>region</code></td>
+<td>
+<p>a n by 2 matrix of vertices of a polygon,
+which represents the region of interest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>the type of interaction with the following options:
+</p>
+
+<dl>
+<dt>l</dt>
+<dd>
+<p>selection of a point in the leave-one-out plot.</p>
+</dd>
+<dt>m</dt>
+<dd>
+<p>selection of one or two points in the map view. After selection of one point the
+selection process can be stopped by a right mouse click.</p>
+</dd>
+<dt>n</dt>
+<dd>
+<p>selection of a polygon region in the map view. This can
+be done by left clicking on the vertices of the polygon and
+stopping by a right mouse click.</p>
+</dd>
+<dt>s</dt>
+<dd>
+<p>selection of a point in the studentized square root
+cloud.</p>
+</dd>
+<dt>t</dt>
+<dd>
+<p>selection of a polygon region in the studentized square root
+cloud. This can
+be done by left clicking on the vertices of the polygon and
+stopping by a right mouse click.</p>
+</dd>
+<dt>x</dt>
+<dd>
+<p>selection of all points in the studentized square root
+cloud outside an approximate confidence bound with significance level given by <code>pchi</code>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pchi</code></td>
+<td>
+<p>the significance level of the confidence bounds, if option
+<code>g="x"</code> is given.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zmv</code></td>
+<td>
+<p>the value of <code>zmv</code> determines which values will be
+ploted as third dimension (via circles with radius corresponding
+to the value) in the map view. The following values are possible:
+</p>
+
+<dl>
+<dt>0</dt>
+<dd>
+<p>no third dimension,</p>
+</dd>
+<dt>1</dt>
+<dd>
+<p>values of the original observations,</p>
+</dd>
+<dt>2</dt>
+<dd>
+<p>Cook's distances,</p>
+</dd>
+<dt>3</dt>
+<dd>
+<p>reduction in lack of fit.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Before the call of this function a diagnostic plot must be
+created by a call to the function <code>PlotDiag.varobj</code>.
+</p>
+<p>If one point in the map view is selected, this point is marked
+blue and the index of this observation is printed near the point.
+All corresponding points in the square root cloud and the
+leave-one-out plot are marked blue.
+</p>
+<p>If two points in the map view (or one point in the square root
+cloud or in the leave-one-out plot) are selected, this pair of
+points is joined by a magenta line and the corresponding point in
+the square root cloud is marked magenta. One of the selected
+points in the map view and all corresponding points in the square
+root cloud and the leave-one-out plot are marked blue. The other
+selected point in the map view and all corresponding points in the
+square root cloud and the leave-one-out plot are marked red.
+</p>
+<p>If a region is selected in the map view, all possible pairs of
+points within the region are joined by magenta lines and for each
+pair the corresponding point in the square root cloud is marked
+magenta.
+</p>
+<p>If a region in the square root cloud is selected, all points
+within that region are marked magenta and all corresponding pairs
+of points in the map view are joined by magenta lines.
+</p>
+<p>If option <code>g="x"</code> is selected, all points in the square root
+cloud outside the chosen confidence bound are marked magenta and
+all corresponding pairs of points in the map view are joined by
+magenta lines.
+</p>
+
+
+<h3>Value</h3>
+
+<p>the index of the selected pair of observations.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ernst  Glatzer</p>
+
+
+<h3>References</h3>
+
+<p> E. Glatzer, W.G. Mueller, 2004. Residual diagnostics for
+variogram fitting. Computers and Geosciences 30, pp 859-866. </p>
+
+
+<h3>See Also</h3>
+
+<p><code>PlotDiag.varobj</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(tulln)
+PlotDiag.varobj(vs50,region=tu1)
+
+</code></pre>
+
+
+</div>

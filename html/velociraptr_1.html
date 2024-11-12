@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>abundanceMatrix</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a community matrix of taxon abundances</h2>
+
+<h3>Description</h3>
+
+<p>Creates a community matrix of taxon abundances, with samples as rows and species as columns, from a data frame.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">abundanceMatrix(Data, Rows = "geoplate", Columns = "genus")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Data</code></td>
+<td>
+<p>A data.frame of taxonomic occurrences. Must have at least two columns. One column representing the samples, and one column representing the taxa.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Rows</code></td>
+<td>
+<p>A characer string</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Columns</code></td>
+<td>
+<p>A character string</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Note that older versions of this function automatically checked for and removed hanging factors. However, this is something that should really be dictated by the user, and that step is no longer a part of the function. This is unlikely to introduce any breaking changes in older scripts, but we note it here for documentation purposes..
+</p>
+
+
+<h3>Value</h3>
+
+<p>A numeric matrix of taxon abundances. Samples as the rownames and species as the column names.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andrew A. Zaffos
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Download a test dataset of pleistocene bivalves.
+# DataPBDB&lt;-downloadPBDB(Taxa="Bivalvia", StartInterval="Pleistocene", StopInterval="Pleistocene")
+
+# Clean the genus column
+# DataPBDB&lt;-cleanTaxonomy(DataPBDB,"genus")
+
+# Create a community matrix of genera by tectonic plate id#
+# CommunityMatrix&lt;-abundanceMatrix(Data=DataPBDB, Rows="geoplate", Columns="genus")
+
+</code></pre>
+
+
+</div>

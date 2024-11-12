@@ -1,0 +1,117 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>shiny-setters</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Set information in a Vega chart from Shiny</h2>
+
+<h3>Description</h3>
+
+<p>There are two ways to change a Vega chart: by setting
+a <em>signal</em> or by setting a <em>dataset</em>; you can also
+direct a Vega chart to re-run itself. Any signal or
+dataset you set must first be defined and <strong>named</strong> in the vegaspec.
+These functions are called from within
+a Shiny <code>server()</code> function, where they act like
+<code>shiny::observe()</code> or <code>shiny::observeEvent()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vw_shiny_set_signal(outputId, name, value, run = TRUE, ...)
+
+vw_shiny_set_data(outputId, name, value, run = TRUE, ...)
+
+vw_shiny_run(outputId, value, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>outputId</code></td>
+<td>
+<p><code>character</code>, shiny <code>outputId</code> for the vegawidget</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p><code>character</code>, name of the signal or dataset being set,
+as defined in the vegaspec</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>reactive expression, e.g. <code>input$slider</code> or <code>dataset()</code>,
+that returns the value to which to set the signal or dataset</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>run</code></td>
+<td>
+<p><code>logical</code> indicates if the chart is to be run immediately</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments passed on to <code>shiny::observeEvent()</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>To see these functions in action, you can run a shiny-demo:
+</p>
+
+<ul>
+<li> <p><code>vw_shiny_set_signal()</code>: call <code>vw_shiny_demo("signal-set-get")</code>
+</p>
+</li>
+<li> <p><code>vw_shiny_set_data()</code>: call <code>vw_shiny_demo("data-set-get")</code>
+</p>
+</li>
+<li> <p><code>vw_shiny_run()</code>: call <code>vw_shiny_demo("data-set-swap-run")</code>
+</p>
+</li>
+</ul>
+<p>For the signal and data setters, in addition to the chart <code>outputId</code>,
+you will need to provide:
+</p>
+
+<ul>
+<li>
+<p> the <code>name</code> of the signal or dataset you wish to keep updated
+</p>
+</li>
+<li>
+<p> the <code>value</code> to which you want to set the signal or dataset;
+this should be a reactive expression like <code>input$slider</code> or <code>rct_dataset()</code>
+</p>
+</li>
+<li>
+<p> whether or not you want to <code>run</code> the Vega view again immediately
+after setting this value
+</p>
+</li>
+</ul>
+<p>If you do not set <code>run = TRUE</code> in the setter-function,
+you can use the <code>vw_shiny_run()</code> function to control when
+the chart re-runs. One possibility is to set its <code>value</code> to a reactive
+expression that refers to, for example, a <code>shiny::actionButton()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>shiny::observeEvent()</code> function that responds to changes in the
+reactive-expression <code>value</code>
+</p>
+
+
+</div>

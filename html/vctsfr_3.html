@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pi_info</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create a prediction interval object</h2>
+
+<h3>Description</h3>
+
+<p>The object created represents a prediction interval for the forecast of the
+future values of a time series.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pi_info(level, lpi, upi)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>a number in the interval (0, 100) indicating the level of the
+prediction interval.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lpi</code></td>
+<td>
+<p>a time series of class <code>ts</code> or a vector. Lower limit of a
+prediction interval.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>upi</code></td>
+<td>
+<p>a time series of class <code>ts</code> or a vector. Upper limit of a
+prediction interval.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class <code>pi_info</code>. It is a list containing all the
+information supplied to the function.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>prediction_info()</code> which uses this function to specify prediction
+intervals.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">if (require("forecast")) {
+  time_series &lt;- ts(rnorm(40))
+  f &lt;- meanf(time_series, level = 95)
+  info &lt;- pi_info(95, f$lower, f$upper)
+}
+</code></pre>
+
+
+</div>

@@ -1,0 +1,126 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cwm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Indicate site conditions with community weighted mean values of traits or with mode of gradient classes (sum of species amplitudes).</h2>
+
+<h3>Description</h3>
+
+<p>Calculates community weighted mean trait values, like mean Ellenberg indicator values.
+Alternatively (method = 'mode') environmental conditions can be calculated according to the concept of sums of amplitudes of species along ecological gradients.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cwm(veg, refl, trait.db = 'ecodbase.dbf', ivname, keyname = 'LETTERCODE',
+      method, weight, db, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>veg</code></td>
+<td>
+<p>Vegetation matrix with plots in rows and species in columns</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>refl</code></td>
+<td>
+<p>Name of Turboveg taxonomic reference list</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trait.db</code></td>
+<td>
+<p>data frame with species trait values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ivname</code></td>
+<td>
+<p>Name of the trait in trait.db to be used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>keyname</code></td>
+<td>
+<p>Name of the column in trait dataframe to join with colnames of veg table</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>mean (weighted value of single traits, or mode (maximum) of trait classes)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weight</code></td>
+<td>
+<p>additional weight, e.g niche breath of species</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>db</code></td>
+<td>
+<p>name of Turboveg database</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Trait values of 0 will be handled as NA values because Turboveg dBase can not handle NA values properly.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Vector with the ecological classification of sites. Either mean trait values or mode of gradient classes.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Florian Jansen <a href="mailto:florian.jansen@uni-rostock.de">florian.jansen@uni-rostock.de</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">  ## Not run: 
+    db &lt;- 'elbaue'
+    veg &lt;- tv.veg(db, cover.transform='sqrt', check.critical = FALSE)
+    site &lt;- tv.site(db, verbose = FALSE)
+    #' Exclude plots with very high water level fluctuation
+    veg &lt;- veg[site$SDGL &lt; 60,]
+    veg &lt;- veg[,colSums(veg) &gt; 0]
+    site &lt;- site[site$SDGL &lt; 60,]
+    #' Load species trait value database
+    traits &lt;- tv.traits(db)
+
+    #' Mean indicator values of Ellenberg F values
+    mEIV_F &lt;- cwm(veg, trait.db = traits, ivname = 'OEK_F', method = 'mean')
+    plot(site$MGL, mEIV_F, xlab = 'Mean groundwater level')
+
+    #' Mode (most frequent level) of Ellenberg F values
+    ilevel &lt;- cwm(veg, trait.db = traitmat, ivname = as.character(1:11), method = 'mode')
+    mode &lt;- as.numeric(cwm(veg, trait.db = traits, ivname = 'OEK_F', method = 'mode'))
+    boxplot(site$MGL ~ mode)
+  
+## End(Not run)
+
+</code></pre>
+
+
+</div>

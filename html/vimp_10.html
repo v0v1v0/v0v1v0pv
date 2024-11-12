@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>estimate_eif_projection</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimate projection of EIF on fully-observed variables</h2>
+
+<h3>Description</h3>
+
+<p>Estimate projection of EIF on fully-observed variables
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">estimate_eif_projection(
+  obs_grad = NULL,
+  C = NULL,
+  Z = NULL,
+  ipc_fit_type = NULL,
+  ipc_eif_preds = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obs_grad</code></td>
+<td>
+<p>the estimated (observed) EIF</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>the indicator of coarsening (1 denotes observed, 0 denotes
+unobserved).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>either <code>NULL</code> (if no coarsening) or a matrix-like object
+containing the fully observed data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_fit_type</code></td>
+<td>
+<p>if "external", then use <code>ipc_eif_preds</code>; if "SL",
+fit a SuperLearner to determine the IPC correction to the efficient
+influence function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_eif_preds</code></td>
+<td>
+<p>if <code>ipc_fit_type = "external"</code>, the fitted values
+from a regression of the full-data EIF on the fully observed
+covariates/outcome; otherwise, not used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments to SuperLearner, if <code>ipc_fit_type = "SL"</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>the projection of the EIF onto the fully-observed variables
+</p>
+
+
+</div>

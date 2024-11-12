@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>se.ave.cor.over</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Computes the standard error for the average of two Pearson correlations with
+one variable in common that have been estimated from the same sample</h2>
+
+<h3>Description</h3>
+
+<p>In a study that reports the sample size and three correlations (cor12, cor13,
+and cor23 where variable 1 is called the "overlapping" variable), and
+variables 2 and 3 are different measurements of the same attribute, this
+function can be used to compute the average of cor12 and cor13 and its
+standard error. The average correlation and the standard error from this
+function can be used as input in the meta.ave.cor.gen function
+in a meta-analysis where some studies have reported cor12 and other studies
+have reported cor13.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">se.ave.cor.over(cor12, cor13, cor23, n)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>cor12</code></td>
+<td>
+<p>estimated correlation between variables 1 and 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor13</code></td>
+<td>
+<p>estimated correlation between variables 1 and 3</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor23</code></td>
+<td>
+<p>estimated correlation between variables 2 and 3</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>sample size</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns a two-row matrix. The first row gives results for the average
+correlation and the second row gives the results with a Fisher
+transformation. The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated average of cor12 and cor13
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> VAR(cor12) - variance of cor12
+</p>
+</li>
+<li>
+<p> VAR(cor13) - variance of cor13
+</p>
+</li>
+<li>
+<p> COV(cor12,cor13) - covariance of cor12 and cor13
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">se.ave.cor.over(.462, .518, .755, 100)
+
+# Should return:
+#                Estimate         SE  VAR(cor12) VAR(cor13) COV(cor12,cor13)
+# Correlation:  0.4900000 0.07087351 0.006378045 0.00551907      0.004097553
+# Fisher:       0.5360603 0.09326690 0.010309278 0.01030928      0.007119936
+
+
+</code></pre>
+
+
+</div>

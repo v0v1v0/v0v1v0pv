@@ -1,0 +1,359 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>MAXff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>VGLTSMs
+Family Functions: Order–q Moving Average Model with covariates </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the intercept, standard deviation (or variance) of the 
+random noise (not necessarily constant), and
+the conditional–mean model coefficients of an
+order–q moving average (MA) process with covariates (MAX(q))
+by maximum likelihood estimation using Fisher scoring.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">      MAXff(order    = 1,
+            zero     = c(if (nomean) NULL else "Mean", "MAcoeff"),
+            xLag     = 0,
+            type.EIM = c("exact", "approximate")[1],
+            var.arg  = TRUE, 
+            nomean   = FALSE,
+            noChecks = FALSE,
+            lmean    = "identitylink", 
+            lsd      = "loglink",
+            lvar     = "loglink",
+            lMAcoeff = "identitylink",
+            imean    = NULL,
+            isd      = NULL,
+            ivar     = NULL,
+            iMAcoeff = NULL)      
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>order</code></td>
+<td>
+
+<p>The order 'q' of the MA model, recycled if needed.
+By default <code>q = 1</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Integer or character–string vector.
+Same as <code>ARIMAXff</code>.
+Details at <code>zero</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xLag</code></td>
+<td>
+
+<p>Same as <code>ARIMAXff</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.EIM, var.arg</code></td>
+<td>
+
+<p>Same as <code>ARIMAXff</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nomean</code></td>
+<td>
+
+<p>Logical. <code>nomean = TRUE</code> supresses estimation of the 
+<em>mean</em> (intercept of the conditional–mean model).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>noChecks</code></td>
+<td>
+
+<p>Logical. Same as <code>ARIMAXff</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lmean, lsd, lvar, lMAcoeff</code></td>
+<td>
+
+<p>Link functions applied to the mean (intercept),
+the standard deviation or variance of the random noise, and
+the MA coefficients (conditional–mean model).
+Note, <code>lmean</code> plays the role of <code>ldrift</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imean, isd, ivar, iMAcoeff</code></td>
+<td>
+
+<p>Same as <code>ARIMAXff</code>.
+Note, <code>imean</code> plays the role of <code>idrift</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Similar to <code>ARXff</code>,
+this family function fits an order–<code class="reqn">q</code> moving average model
+with covariates (MAX(q)),
+another special case of the class VGLM–ARIMA
+(Miranda and Yee, 2018). Observations, <code class="reqn">Y_t</code>, are
+modelled as
+</p>
+<p style="text-align: center;"><code class="reqn"> Y_t | \Phi_{t - 1} = \mu_t + \phi_{1} \varepsilon_{t - 1} +
+\ldots + \phi_q \varepsilon_{t - q} + \varepsilon_t,</code>
+</p>
+
+<p>where <code class="reqn">\mu_t</code> is the (possibly time–dependent) intercept,
+modelled as
+<code class="reqn">\mu_t = \mu + \boldsymbol{\beta}^T \boldsymbol{x}_t</code>, and
+the errors are mean–zero Gaussian:
+<code class="reqn">\varepsilon_t | \Phi_{t - 1} \sim 
+  N(0, \sigma^2_{\varepsilon_t | \Phi_{t - 1}})</code>.
+The symbol
+<code class="reqn">\Phi_{t}</code> denotes the history
+of the joint process
+<code class="reqn">\left(Y_{t}, \boldsymbol{X}_{t + 1}^T \right)</code>,
+at time <code class="reqn">t</code> for a time–varying covariate 
+vector <code class="reqn">\boldsymbol{x}_t</code>.
+</p>
+<p>At each step of Fisher scoring, the <em>exact</em> log-likelihood
+based on model above 
+is computed through <code>dMAq</code>.
+</p>
+<p>The linear predictor by default is 
+</p>
+<p style="text-align: center;"><code class="reqn">\boldsymbol{\eta} = \left( 
+\mu_t, \log \sigma^{2}_{\varepsilon_{t | \Phi_{t - 1}}},
+\phi_1, \ldots, \phi_q
+\right)^T.</code>
+</p>
+ 
+<p>The unconditional mean of the process is simply
+<code class="reqn"> E(Y_{t}) = \mu</code>, provided no covariates added.
+</p>
+<p>This family function
+is not restricted to the noise to be strictly white noise
+(in the sense of <em>constant variance</em>). 
+That is, covariates may be incorporated in the linear predictor
+<code class="reqn">\log \sigma^{2}_{\varepsilon_{t | \Phi_{t - 1}}}.</code> Also, it handles
+<em>multiple responses</em> so that a matrix can be used as the response.
+For further details on VGLM/VGAM–link functions,
+such as <code>logitlink</code>, refer to 
+<code>Links</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> 
+(see <code>vglmff-class</code>) to be
+used by VGLM/VGAM modelling functions, e.g.,
+<code>vglm</code> or <code>vgam</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>By default, a moving-average model of order-<code class="reqn">1</code> is fitted.
+</p>
+<p>If different, the <code>order</code> is recycled up to the number of responses
+entered in the <code>vglm \ vgam</code> call has been matched.
+</p>
+<p>Successful convergence depends on reasonably setting initial values. If 
+initial values computed by the algorithm are not adequate, make use of 
+the the optional initial values (<code>imean</code>, <code>isd</code>, etc.)
+</p>
+<p>For constraints on the paramaters see
+<code>cm.ARMA</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Further choices for the random noise, besides Gaussian, will be
+implemented over time.
+</p>
+<p><code>zero</code> can be either an <em>integer</em> vector
+or a vector of <b>character strings</b>
+specifying either the position(s) or name(s) (partially or not) of the 
+parameter(s) modeled as intercept-only. For <code>MAXff</code>,
+the parameters are placed and named as follows (by convention):
+</p>
+<p><code>c("Mean", "noiseVar" or "noiseSD", "MAcoeff")</code>.
+</p>
+<p>Users can modify the <code>zero</code> argument accordingly.
+For simplicity, the second choice recommended.
+See <code>CommonVGAMffArguments</code> 
+for further details on <code>zero</code>.
+</p>
+<p>If <b>no</b> constraints are entered in the fitting process,
+(e.g., via <code>cm.ARMA</code>)
+this family function internally verifies by default
+whether the estimated series
+is invertible (since <code>noChecks = FALSE</code>).
+To ignore this step, set <code>noChecks = TRUE</code>.
+If the estimated MA process is non-invertible, MLE
+coefficients will conform with the corresponding
+invertible MA model.
+</p>
+<p>Further details about these checks are shown within 
+the <code>summary()</code> output.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>Miranda, V. and Yee, T.W. (2018)
+Vector Generalized Linear Time Series Models.
+<em>In preparation</em>.
+</p>
+<p>Madsen, H. (2008)
+<em>Time Series Analysis</em>
+Florida, USA: <em>Chapman &amp; Hall</em>.
+(Sections 5.3 to 5.5).
+</p>
+<p>Tsay, R. (2013) 
+An Introduction to Analysis of Financial data with <code>R</code>. 
+New Jersey, USA: <em>Wiley</em> Sections 2.2 to 2.4.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ARIMAXff</code>,
+<code>ARXff</code>,
+<code>checkTS.VGAMextra</code>,
+<code>CommonVGAMffArguments</code>,
+<code>Links</code>,
+<code>vglm</code>,
+<code>vgam</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(2)
+nn    &lt;- 130
+### Coefficients
+phi1  &lt;-  0.34; phi2 &lt;- -1.19; phi3 &lt;- 0.26
+### Intercept
+mu    &lt;- c(-1.4, 2.3)
+### Noise standar deviations (Two responses)
+sdMA  &lt;- c(sqrt(6.5), sqrt(4.0))
+### A single covariate.
+Xcov &lt;- runif(nn)
+
+# Generating two MA processes, TS1 and TS2, Gaussian noise.
+# Note, the SD noise for TS2 is function of Xcov.
+
+y1   &lt;- mu[1] + arima.sim(nn, 
+                          model = list( ma = c(phi1, phi1^2)), 
+                          rand.gen = rnorm, sd = exp(sdMA[1]) ) 
+y2   &lt;- mu[2] + arima.sim(nn, 
+                          model = list( ma = c(phi1, phi2, phi3) ), 
+                          rand.gen = rnorm, sd = exp(Xcov + sdMA[2]) )
+# OUR DATA
+tsdata &lt;- data.frame(x2 = Xcov , TS1 = y1, TS2 = y2)
+
+#------------------------------------------------------------------------#
+# 1. A simple MA(3) to compare with 'arima()'.
+
+myfit0 &lt;- vglm(TS1 ~ 1,
+               MAXff(order = 3, type.EIM = "exact",
+                    var.arg = FALSE),
+               #constraints = cm.ARMA(Model = ~ 1, 
+               #                      lags.cm = 2, 
+               #                      Resp = 1),
+               data = tsdata, trace = TRUE) 
+
+Coef(myfit0)[c(3, 4, 1)]
+fitArima &lt;- arima(tsdata$TS1, order = c(0, 0, 2)) 
+coef(fitArima)
+
+AIC(myfit0); BIC(myfit0)
+
+# ------------------------------------------------------------------------#
+# 2. Estimate an MA(3), intercept-only, using initial values.
+
+myfit &lt;- vglm(TS2 ~ 1,
+              MAXff(order = 3, type.EIM = c("exact", "approx")[1],
+                   # Optional initial values.
+                    imean = 3,
+                    iMAcoeff = c(0.3, -0.2, 0.25),
+                   var.arg = TRUE),
+              data = tsdata, trace = TRUE)
+
+Coef(myfit)
+summary(myfit)
+constraints(myfit)
+
+
+#----------------------------------------#
+# Same model fitted using arima()
+#----------------------------------------#
+
+fitArima &lt;- arima(tsdata$TS2, order = c(0, 0, 3)) 
+coef(fitArima)
+
+
+#------------------------------------------------------------------------#
+# 3. An MAX(3) with one covariate, testing its effect over the
+#    standard deviation of the Gaussian noise. Note the 'zero' argument.
+
+myfit1 &lt;- vglm(TS2 ~ x2,
+               # Or Multiple responses! 
+               # cbind(TS1, TS2) ~ 1,
+               MAXff(order = 3, type.EIM = "exact", xLag = 1,
+                    # Optional initial values:
+                    # idev.mean = 1.4, 
+                    # iMAcoeff = c(2.3, -1.2, 0.25), isd = 1.6,
+                    
+                    # NOTE THE ZERO ARGUMENT:
+                    zero = c("Mean", "MAcoeff"),
+                    
+                    var.arg = TRUE),
+               data = tsdata, trace = TRUE)
+
+coef(myfit1, matrix = TRUE) 
+summary(myfit1)
+vcov(myfit1)
+
+constraints(myfit1)
+
+#------------------------------------------------------------------------#
+# Model above CANNOT be fitted using arima()
+#------------------------------------------------------------------------#
+
+</code></pre>
+
+
+</div>

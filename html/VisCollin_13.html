@@ -1,0 +1,140 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tableplot.colldig</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Tableplot for Collinearity Diagnostics</h2>
+
+<h3>Description</h3>
+
+<p>These methods produce a tableplot of collinearity diagnostics, showing the condition indices and variance
+proportions for predictors in a linear or generalized linear regression model. This encodes the
+condition indices using <em>squares</em> whose background color is red for condition indices &gt; 10,
+green for values &gt; 5 and green otherwise, reflecting danger, warning and OK respectively.
+The value of the condition index is encoded within this using a white square proportional to the value
+(up to some maximum value, <code>cond.max</code>),
+</p>
+<p>Variance decomposition proportions are shown by filled <em>circles</em> whose radius is proportional to those values
+and are filled (by default) with shades ranging from white through pink to red. Rounded values of those diagnostics
+are printed in the cells.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'lm'
+tableplot(values, ...)
+
+## S3 method for class 'glm'
+tableplot(values, ...)
+
+## S3 method for class 'colldiag'
+tableplot(
+  values,
+  prop.col = c("white", "pink", "red"),
+  cond.col = c("#A8F48D", "#DDAB3E", "red"),
+  cond.max = 100,
+  prop.breaks = c(0, 20, 50, 100),
+  cond.breaks = c(0, 5, 10, 1000),
+  show.rows = nvar:1,
+  title = "",
+  patterns,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>values</code></td>
+<td>
+<p>A <code>"colldiag"</code>, <code>"lm"</code> or <code>"glm"</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments, for consistency with generic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prop.col</code></td>
+<td>
+<p>A vector of colors used for the variance proportions. The default is <code>c("white", "pink", "red")</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cond.col</code></td>
+<td>
+<p>A vector of colors used for the condition indices</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cond.max</code></td>
+<td>
+<p>Maximum value to scale the white squares for the condition indices</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prop.breaks</code></td>
+<td>
+<p>Scale breaks for the variance proportions</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cond.breaks</code></td>
+<td>
+<p>Scale breaks for the condition indices</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show.rows</code></td>
+<td>
+<p>Rows of the eigenvalue decompositon of the model matrix to show in the display. The default <code>nvar:1</code>
+puts the smallest dimensions at the top of the display.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>title used for the resulting graphic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>patterns</code></td>
+<td>
+<p>pattern matrix used for table plot.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>None. Used for its graphic side-effect
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Friendly
+</p>
+
+
+<h3>References</h3>
+
+<p>Friendly, M., &amp; Kwan, E. (2009).
+"Where’s Waldo: Visualizing Collinearity Diagnostics." <em>The American Statistician</em>, <b>63</b>, 56–65.
+Online: <a href="https://www.datavis.ca/papers/viscollin-tast.pdf">https://www.datavis.ca/papers/viscollin-tast.pdf</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># None yet
+
+</code></pre>
+
+
+</div>

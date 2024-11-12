@@ -1,0 +1,150 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>expect_doppelganger</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Does a figure look like its expected output?</h2>
+
+<h3>Description</h3>
+
+<p><code>expect_doppelganger()</code> is a testthat expectation for graphical
+plots. It generates SVG snapshots that you can review graphically
+with <code>testthat::snapshot_review()</code>. You will find more information
+about snapshotting in the <a href="https://testthat.r-lib.org/articles/snapshotting.html">testthat snapshots vignette</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">expect_doppelganger(
+  title,
+  fig,
+  path = deprecated(),
+  ...,
+  writer = write_svg,
+  cran = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>A brief description of what is being tested in the
+figure. For instance: "Points and lines overlap".
+</p>
+<p>If a ggplot2 figure doesn't have a title already, <code>title</code> is
+applied to the figure with <code>ggtitle()</code>.
+</p>
+<p>The title is also used as file name for storing SVG (in a
+sanitzed form, with special characters converted to <code>"-"</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fig</code></td>
+<td>
+<p>A figure to test. This can be a ggplot object, a
+recordedplot, or more generally any object with a <code>print</code> method.
+</p>
+<p>If you need to test a plot with non-printable objects (e.g. base
+plots), <code>fig</code> can be a function that generates and prints the
+plot, e.g. <code>fig = function() plot(1:3)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path, ...</code></td>
+<td>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>writer</code></td>
+<td>
+<p>A function that takes the plot, a target SVG file,
+and an optional plot title. It should transform the plot to SVG
+in a deterministic way and write it to the target file. See
+<code>write_svg()</code> (the default) for an example.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cran</code></td>
+<td>
+<p>If <code>FALSE</code> (the default), mismatched snapshots only
+cause a failure when you run tests locally or in your CI (Github
+Actions or any platform that sets the <code>CI</code> environment variable).
+If <code>TRUE</code>, failures may also occur on CRAN machines.
+</p>
+<p>Failures are disabled on CRAN by default because testing the
+appearance of a figure is inherently fragile. Changes in the R
+graphics engine or in ggplot2 may cause subtle differences in the
+aspect of a plot, such as a slightly smaller or larger margin.
+These changes will cause spurious failures because you need to
+update your snapshots to reflect the upstream changes.
+</p>
+<p>It would be distracting for both you and the CRAN maintainers if
+such changes systematically caused failures on CRAN. This is why
+snapshot expectations do not fail on CRAN by default and should
+be treated as a monitoring tool that allows you to quickly check
+how the appearance of your figures changes over time, and to
+manually assess whether changes reflect actual problems in your
+package.
+</p>
+<p>Internally, this argument is passed to
+<code>testthat::expect_snapshot_file()</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Debugging</h3>
+
+<p>It is sometimes difficult to understand the cause of a failure.
+This usually indicates that the plot is not created
+deterministically. Potential culprits are:
+</p>
+
+<ul>
+<li>
+<p> Some of the plot components depend on random variation. Try
+setting a seed.
+</p>
+</li>
+<li>
+<p> The plot depends on some system library. For instance sf plots
+depend on libraries like GEOS and GDAL. It might not be possible
+to test these plots with vdiffr.
+</p>
+</li>
+</ul>
+<p>To help you understand the causes of a failure, vdiffr
+automatically logs the SVG diff of all failures when run under R
+CMD check. The log is located in <code>tests/vdiffr.Rout.fail</code> and
+should be displayed on Travis.
+</p>
+<p>You can also set the <code>VDIFFR_LOG_PATH</code> environment variable with
+<code>Sys.setenv()</code> to unconditionally (also interactively) log failures
+in the file pointed by the variable.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">if (FALSE) {  # Not run
+
+library("ggplot2")
+
+test_that("plots have known output", {
+  disp_hist_base &lt;- function() hist(mtcars$disp)
+  expect_doppelganger("disp-histogram-base", disp_hist_base)
+
+  disp_hist_ggplot &lt;- ggplot(mtcars, aes(disp)) + geom_histogram()
+  expect_doppelganger("disp-histogram-ggplot", disp_hist_ggplot)
+})
+
+}
+</code></pre>
+
+
+</div>

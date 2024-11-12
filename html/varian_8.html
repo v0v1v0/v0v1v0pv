@@ -1,0 +1,64 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>res_gamma</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimates the parameters of a Gamma distribution from SDs</h2>
+
+<h3>Description</h3>
+
+<p>This function calcualtes the parameters of a Gamma distribution
+from the residuals from an individuals' own mean.
+That is, the distribution of (standard) deviations from individuals'
+own mean are calculated and then an estimate of the parameters of a
+Gamma distribution are calculated.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">res_gamma(x, ID)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A data vector to operate on</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ID</code></td>
+<td>
+<p>an ID variable of the same length as <code>x</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list of the shape (alpha) and rate (beta) parameters
+and the mean and variance
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Joshua F. Wiley &lt;josh@elkhartgroup.com&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(1234)
+y &lt;- rgamma(100, 3, 2)
+x &lt;- rnorm(100 * 10, mean = 0, sd = rep(y, each = 10))
+ID &lt;- rep(1:100, each = 10)
+res_gamma(x, ID)
+</code></pre>
+
+
+</div>

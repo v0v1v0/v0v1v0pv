@@ -1,0 +1,385 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>validann</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Validate Artificial Neural Networks.</h2>
+
+<h3>Description</h3>
+
+<p>Compute metrics and statistics for predictive, replicative
+and/or structural validation of artificial neural networks (ANNs).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">validann(...)
+
+## S3 method for class 'ann'
+validann(net, obs = NULL, sim = NULL, x = NULL,
+  na.rm = TRUE, ...)
+
+## S3 method for class 'nnet'
+validann(net, obs = NULL, sim = NULL, x = NULL,
+  na.rm = TRUE, ...)
+
+## Default S3 method:
+validann(obs, sim, wts = NULL, nodes = NULL,
+  na.rm = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>an object of class ‘ann’ (as returned by function
+<code>ann</code>) or ‘nnet’ (as returned using <code>nnet</code>).
+This is a list object comprising information about the fitted ANN model,
+including values of weights, fitted target values, number of layers and
+numbers of nodes in each layer, for example.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs, sim</code></td>
+<td>
+<p>vectors comprising observed (<code>obs</code>) and simulated
+(<code>sim</code>) examples of a single response variable. These vectors are
+used to compute model fit statistics. Optional if <code>net</code> is supplied
+(see ‘Details’).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>matrix, data frame or vector of input data used for
+fitting <code>net</code> object. A vector is considered to comprise examples of
+a single input or predictor variable. While <code>x</code> is optional,
+sensitivity analyses useful for structural validation cannot be performed
+if it is not supplied.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>logical; should missing values (including NaN)
+be removed from calculations? Default = TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wts</code></td>
+<td>
+<p>vector of ANN weights used to compute input
+‘relative importance’ measures if <code>net</code> object is not supplied. Must
+be supplied together with <code>nodes</code> in order to compute such metrics.
+See ‘Details’ for ordering of <code>wts</code> vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nodes</code></td>
+<td>
+<p>vector indicating the number of nodes in each layer
+of the ANN model. This vector should have 3 elements: nodes in input
+layer, nodes in hidden layer (can be 0), and nodes in output layer.
+If <code>net</code> object is not supplied, <code>nodes</code> must be supplied
+together with <code>wts</code> if any structural validation metrics are to be
+computed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be passed to different validann methods,
+see specific formulations for details.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>To compute all possible validation metrics and statistics,
+<code>net</code> must be supplied and must be of class ‘ann’ (as returned by
+<code>ann</code>) or ‘nnet’ (as returned by <code>nnet</code>).
+However, a partial derivative (PaD) sensitivity analysis (useful for
+structural validation) will only be carried out if <code>net</code> is of class
+‘ann’.
+</p>
+<p>If <code>obs</code> and <code>sim</code> data are supplied in addition to <code>net</code>,
+validation metrics are computed based on these. Otherwise, metrics and
+statistics are computed based on <code>obs</code> and <code>sim</code> datasets
+derived from the <code>net</code> object (i.e. the data used to fit <code>net</code>
+and the fitted values). As such, both <code>obs</code> and <code>sim</code> must be
+supplied if validation is to be based either on data not used for
+training or on unprocessed training data (if training data were
+preprocessed). If either <code>obs</code> or <code>sim</code> is specified but the
+other isn't, both <code>obs</code> and <code>sim</code> will be derived from
+<code>net</code> if supplied (and a warning will be given). Similarly, this
+will occur if <code>obs</code> and <code>sim</code> are of different lengths.
+</p>
+<p>If <code>net</code> is not supplied, both <code>obs</code> and <code>sim</code> are
+required. This may be necessary if validating an ANN model not built
+using either the <code>nnet</code> or <code>ann</code> functions.
+In this case, both <code>wts</code> and <code>nodes</code> are also required if any
+structural validation metrics are to be returned. If an ANN model has
+<em>K</em> input nodes, <em>J</em> hidden nodes and a single output <em>O</em>,
+with a bias node for both the hidden and output layers, the <code>wts</code> vector must be ordered
+as follows:
+</p>
+<p><code>c(Wi1h1,Wi1h2,...Wi1hJ,Wi2h1,...Wi2hJ,...,WiKh1,...,WiKhJ,Wi0h1,...,Wi0hJ,</code><br><code>  Wh1O,...,WhJO,Wh0O)</code>
+</p>
+<p>where <code>Wikhj</code> is the weight between the <em>k</em>th input and the
+<em>j</em>th hidden node and <code>WhjO</code> is the weight between the
+<em>j</em>th hidden node and the output. The bias weight on the <em>j</em>th
+hidden layer node is labelled <code>Wi0hj</code> while the bias weight on the
+output is labelled <code>Wh0O</code>. The <code>wts</code> vector assumes the network
+is fully connected; however, missing connections may be substituted by
+zero weights. Skip-layer connections are not allowed.
+</p>
+
+
+<h3>Value</h3>
+
+<p>list object of class ‘validann’ with components dependent on
+arguments passed to <code>validann</code> function:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>metrics</code></td>
+<td>
+<p>a data frame consisting of metrics:
+</p>
+<p>AME, PDIFF, MAE, ME, RMSE, R4MS4E, AIC, BIC, NSC, RAE, PEP, MARE,
+MdAPE, MRE, MSRE, RVE, RSqr, IoAd, CE, PI, MSLE, MSDE, IRMSE, VE,
+KGE, SSE and R.
+</p>
+<p>See Dawson et al. (2007) for definitions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs_stats</code></td>
+<td>
+<p>a data frame consisting of summary statistics about the
+<code>obs</code> dataset including mean, minimum, maximum, variance,
+standard deviation, skewness and kurtosis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sim_stats</code></td>
+<td>
+<p>a data frame consisting of summary statistics about the
+<code>sim</code> dataset including mean, minimum, maximum, variance,
+standard deviation, skewness and kurtosis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>residuals</code></td>
+<td>
+<p>a 1-column matrix of model residuals (<code>sim - obs</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>resid_stats</code></td>
+<td>
+<p>a data frame consisting of summary statistics about the
+model <code>residuals</code> including mean, minimum, maximum, variance,
+standard deviation, skewness and kurtosis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ri</code></td>
+<td>
+<p>a data frame consisting of ‘relative importance’ values for each
+input. Only returned if <code>net</code> or <code>wts</code> and <code>nodes</code> are
+supplied.
+</p>
+<p>If <code>net</code> is supplied, relative importance values computed using the
+following 4 methods are returned:
+</p>
+<p>Garson's (Garson); connection weight (CW); Profile sensitivity
+analysis (Profile); and partial derivative sensitivity analysis (PaD).
+</p>
+<p>In addition, if <code>net</code> is of class ‘ann’ (as returned by function
+<code>ann</code>) and the activation function used at the hidden
+layer (<code>act_hid</code>) is "tanh", relative importance
+values computed using the modified CW (MCW) are also returned.
+This method requires that the hidden layer activation function be
+symmetric about the origin.
+</p>
+<p>If <code>wts</code> and <code>nodes</code> are supplied, only relative importance
+values computed using the Garson and CW methods are returned.
+</p>
+<p>See Gevrey et al. (2003), Olden et al. (2004) and Kingston et al. (2006)
+for details of the relative importance methods.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_hat</code></td>
+<td>
+<p>a matrix of dimension <code>c(101, ncol(x) * 6)</code> of model
+response values indicating the local sensitivity of the model to each
+input in <code>x</code>. Only returned if <code>net</code> and <code>x</code> are supplied.
+</p>
+<p>The response values returned in <code>y_hat</code> are calculated using the
+‘Profile’ sensitivity analysis method described in Gevrey et al. (2003).
+Using this method, the local sensitivity of each input in <code>x</code> is
+considered successively. For each input <code>x[,i]</code>, 5 synthetic data
+sets are generated where inputs <code>x[,-i]</code> are successively fixed at
+their minimum, 1st quartile, median, 3rd quartile and maximum values
+(as calculated from <code>x</code>), while input <code>x[,i]</code> is varied between
+its minimum and maximum value, increasing in increments of 1% (giving
+101 synthetic values of <code>x[,i]</code> for each of the 5 sets of fixed
+<code>x[,-i]</code>). These data are input into <code>net</code> and model response
+values corresponding to the 5 summary statistics are computed.
+These 5 sets of response values, together with a set of computed median
+responses, are returned as y_hat[,(i - 1) * 6 + 1:6]. This process is
+repeated for each input variable in <code>x</code>. See Gevrey et al. (2003)
+for further details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>as</code></td>
+<td>
+<p>a matrix of dimension <code>dim(x)</code> of ‘absolute sensitivity’
+values for each input in <code>x</code> given the model output values
+(i.e. <code>sim</code>). Only returned if <code>net</code> and <code>x</code> are
+supplied and <code>net</code> is of class ‘ann’.
+</p>
+<p>The values in <code>as</code> are calculated according to the partial
+derivative (PaD) sensitivity analysis method described in Gevrey et al.
+(2003), which involves computing the first-order partial derivatives of
+the ANN output with respect to each input. <code>net</code> must be of class
+‘ann’ in order to access partial derivatives of the hidden layer nodes as
+returned by <code>ann</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rs</code></td>
+<td>
+<p>a matrix of dimension <code>dim(x)</code> of ‘relative sensitivity’
+values for each input in <code>x</code> given the model output values
+(i.e. <code>sim</code>). Only returned if <code>net</code> and <code>x</code> are
+supplied and <code>net</code> is of class ‘ann’.
+</p>
+<p>To compute the values in <code>rs</code>, the <code>as</code> values are normalised
+by multiplying by <code>x[,i]</code>/<code>sim</code> as described in Mount et al.
+(2013). As for <code>as</code>, <code>net</code> must be of class
+‘ann’ in order to access partial derivatives of the hidden layer nodes as
+returned by <code>ann</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Methods (by class)</h3>
+
+
+<ul>
+<li> <p><code>ann</code>: Compute validation metrics when <code>net</code>
+is of class ‘ann’.
+</p>
+</li>
+<li> <p><code>nnet</code>: Compute validation metrics when <code>net</code>
+is of class ‘nnet’.
+</p>
+</li>
+<li> <p><code>default</code>: Useful for predictive validation only or when ANN model
+has not been developed using either <code>ann</code> or
+<code>nnet</code>. Limited structural validation metrics may be
+computed and only if <code>wts</code> and <code>nodes</code> are supplied.
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Dawson, C.W., Abrahart, R.J., See, L.M., 2007. HydroTest: A web-based
+toolbox of evaluation metrics for the standardised assessment of
+hydrological forecasts. Environmental Modelling &amp; Software, 22(7),
+1034-1052. <a href="http://dx.doi.org/10.1016/j.envsoft.2006.06.008">http://dx.doi.org/10.1016/j.envsoft.2006.06.008</a>.
+</p>
+<p>Olden, J.D., Joy, M.K., Death, R.G., 2004. An accurate comparison of
+methods for quantifying variable importance in artificial neural networks
+using simulated data. Ecological Modelling 178, 389-397.
+<a href="http://dx.doi.org/10.1016/j.ecolmodel.2004.03.013">http://dx.doi.org/10.1016/j.ecolmodel.2004.03.013</a>.
+</p>
+<p>Gevrey, M., Dimopoulos, I., Lek, S., 2003. Review and comparison of methods
+to study the contribution of variables in artificial neural network
+models. Ecological Modelling 160, 249-264.
+<a href="http://dx.doi.org/10.1016/S0304-3800(02)00257-0">http://dx.doi.org/10.1016/S0304-3800(02)00257-0</a>.
+</p>
+<p>Kingston, G.B., Maier, H.R., Lambert, M.F., 2006. Forecasting cyanobacteria
+with Bayesian and deterministic artificial neural networks, in: IJCNN '06.
+International Joint Conference on Neural Networks, 2006., IEEE.
+pp. 4870-4877. <a href="http://dx.doi.org/10.1109/ijcnn.2006.247166">http://dx.doi.org/10.1109/ijcnn.2006.247166</a>.
+</p>
+<p>Mount, N.J., Dawson, C.W., Abrahart, R.J., 2013. Legitimising
+data-driven models: exemplification of a new data-driven mechanistic
+modelling framework. Hydrology and Earth System Sciences 17, 2827-2843.
+<a href="http://dx.doi.org/10.5194/hess-17-2827-2013">http://dx.doi.org/10.5194/hess-17-2827-2013</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ann</code>, <code>plot.validann</code>,
+<code>predict.ann</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># get validation results for 1-hidden node `ann' model fitted to ar9 data
+# based on training data.
+# ---
+data("ar9")
+samp &lt;- sample(1:1000, 200)
+y &lt;- ar9[samp, ncol(ar9)]
+x &lt;- ar9[samp, -ncol(ar9)]
+x &lt;- x[, c(1,4,9)]
+
+fit &lt;- ann(x, y, size = 1, act_hid = "tanh", act_out = "linear", rang = 0.1)
+results &lt;- validann(fit, x = x)
+
+# get validation results for above model based on a new sample of ar9 data.
+# ---
+samp &lt;- sample(1:1000, 200)
+y &lt;- ar9[samp, ncol(ar9)]
+x &lt;- ar9[samp, -ncol(ar9)]
+x &lt;- x[, c(1,4,9)]
+
+obs &lt;- y
+sim &lt;- predict(fit, newdata = x)
+results &lt;- validann(fit, obs = obs, sim = sim, x = x)
+
+# get validation results for `obs' and `sim' data without ANN model.
+# In this example `sim' is generated using a linear model. No structural
+# validation of the model is possible, but `wts' are provided to compute the
+# number of model parameters needed for the calculation of certain
+# goodness-of-fit metrics.
+# ---
+samp &lt;- sample(1:1000, 200)
+y &lt;- ar9[samp, ncol(ar9)]
+x &lt;- ar9[samp, -ncol(ar9)]
+x &lt;- as.matrix(x[, c(1,4,9)])
+lmfit &lt;- lm.fit(x, y)
+sim &lt;- lmfit$fitted.values
+obs &lt;- y
+results &lt;- validann(obs = obs, sim = sim, wts = lmfit$coefficients)
+
+# validann would be called in the same way if the ANN model used to generate
+# `sim' was not available or was not of class `ann' or `nnet'. Ideally in
+# this case, however, both `wts' and `nodes' should be supplied such that
+# some structural validation metrics may be computed.
+# ---
+obs &lt;- c(0.257, -0.891, -1.710, -0.575, -1.668, 0.851, -0.350, -1.313,
+         -2.469, 0.486)
+sim &lt;- c(-1.463, 0.027, -2.053, -1.091, -1.602, 2.018, 0.723, -0.776,
+         -2.351, 1.054)
+wts &lt;- c(-0.05217, 0.08363, 0.07840, -0.00753, -7.35675, -0.00066)
+nodes &lt;- c(3, 1, 1)
+results &lt;- validann(obs = obs, sim = sim, wts = wts, nodes = nodes)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,141 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_write_docker</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Write a Dockerfile for a vetiver model</h2>
+
+<h3>Description</h3>
+
+<p>After creating a Plumber file with <code>vetiver_write_plumber()</code>, use
+<code>vetiver_write_docker()</code> to create a Dockerfile plus a <code>vetiver_renv.lock</code>
+file for a pinned <code>vetiver_model()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetiver_write_docker(
+  vetiver_model,
+  plumber_file = "plumber.R",
+  path = ".",
+  ...,
+  lockfile = "vetiver_renv.lock",
+  rspm = TRUE,
+  base_image = glue::glue("FROM rocker/r-ver:{getRversion()}"),
+  port = 8000,
+  expose = TRUE,
+  additional_pkgs = character(0)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vetiver_model</code></td>
+<td>
+<p>A deployable <code>vetiver_model()</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plumber_file</code></td>
+<td>
+<p>A path for your Plumber file, created via
+<code>vetiver_write_plumber()</code>. Defaults to <code>plumber.R</code> in the working directory.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path</code></td>
+<td>
+<p>A path to write the Dockerfile and <code>lockfile</code>, capturing the
+model's package dependencies. Defaults to the working directory.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not currently used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lockfile</code></td>
+<td>
+<p>The generated lockfile in <code>path</code>. Defaults to
+<code>"vetiver_renv.lock"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rspm</code></td>
+<td>
+<p>A logical to use the
+<a href="https://packagemanager.rstudio.com/">RStudio Public Package Manager</a> for
+<code>renv::restore()</code> in the Docker image. Defaults to <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>base_image</code></td>
+<td>
+<p>The base Docker image to start with. Defaults to
+<code>rocker/r-ver</code> for the version of R you are working with, but models like
+keras will require a different base image.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>port</code></td>
+<td>
+<p>The server port for listening: a number such as 8080 or an
+expression like <code>'as.numeric(Sys.getenv("PORT"))'</code> when the port is injected
+as an environment variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>expose</code></td>
+<td>
+<p>Add <code>EXPOSE</code> to the Dockerfile? This is helpful for using
+Docker Desktop but does not work with an expression for <code>port</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>additional_pkgs</code></td>
+<td>
+<p>A character vector of additional package names to add
+to the Docker image. For example, some boards like <code>pins::board_s3()</code> require
+additional software; you can use <code>required_pkgs(board)</code> here.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The content of the Dockerfile, invisibly.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+library(pins)
+tmp_plumber &lt;- tempfile()
+b &lt;- board_temp(versioned = TRUE)
+cars_lm &lt;- lm(mpg ~ ., data = mtcars)
+v &lt;- vetiver_model(cars_lm, "cars_linear")
+vetiver_pin_write(b, v)
+vetiver_write_plumber(b, "cars_linear", file = tmp_plumber)
+
+## default port
+vetiver_write_docker(v, tmp_plumber, tempdir())
+## install more pkgs, like those required to access board
+vetiver_write_docker(v, tmp_plumber, tempdir(),
+                     additional_pkgs = required_pkgs(b))
+## port from env variable
+vetiver_write_docker(v, tmp_plumber, tempdir(),
+                     port = 'as.numeric(Sys.getenv("PORT"))',
+                     expose = FALSE)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,135 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>blogits</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Bivariate Logits and Log Odds Ratio
+</h2>
+
+<h3>Description</h3>
+
+<p>This function calculates the log odds and log odds ratio for
+two binary responses classified by one or more stratifying
+variables.
+</p>
+<p>It is useful for plotting the results of bivariate logistic regression
+models, such as those fit using <code>vglm</code> in the
+<span class="pkg">VGAM</span>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">blogits(Y, add, colnames, row.vars, rev=FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+
+<p>A four-column matrix or data frame whose columns correspond to the 2 x 2
+combinations of two binary responses. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add</code></td>
+<td>
+
+<p>Constant added to all cells to allow for zero frequencies.  The default
+is 0.5 if <code>any(Y)==0</code> and 0 otherwise.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colnames</code></td>
+<td>
+
+<p>Names for the columns of the results. The default is 
+<code>c("logit1", "logit2", "logOR")</code>.  If less than three
+names are supplied, the remaining ones are filled in from the default.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>row.vars</code></td>
+<td>
+
+<p>A data frame or matrix giving the factor levels of one or more factors
+corresponding to the rows of <code>Y</code> 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rev</code></td>
+<td>
+<p>A logical, indicating whether the order of the columns in <code>Y</code>
+should be reversed.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For two binary variables with levels 0,1 the logits are calculated 
+assuming the columns in <code>Y</code> are given in the order
+11, 10, 01, 00, so the logits give the log odds of the 1 response
+compared to 0.  
+If this is not the case, either use <code>rev=TRUE</code> or supply
+<code>Y[,4:1]</code> as the first argument.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame with <code>nrow(Y)</code> rows and <code>3 + ncol(row.vars)</code> columns
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Friendly
+</p>
+
+
+<h3>References</h3>
+
+<p>Friendly, M. and Meyer, D. (2016). 
+<em>Discrete Data Analysis with R: Visualization and Modeling Techniques for Categorical and Count Data</em>. 
+Boca Raton, FL: Chapman &amp; Hall/CRC. <a href="http://ddar.datavis.ca">http://ddar.datavis.ca</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vglm</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Toxaemia)
+tox.tab &lt;- xtabs(Freq~class + smoke + hyper + urea, Toxaemia)
+
+# reshape to 4-column matrix
+toxaemia &lt;- t(matrix(aperm(tox.tab), 4, 15))
+colnames(toxaemia) &lt;- c("hu", "hU", "Hu", "HU")
+rowlabs &lt;- expand.grid(smoke=c("0", "1-19", "20+"), class=factor(1:5))
+toxaemia &lt;- cbind(toxaemia, rowlabs)
+
+# logits for H and U
+logitsTox &lt;- blogits(toxaemia[,4:1], 
+                     add=0.5, 
+                     colnames=c("logitH", "logitW"), 
+                     row.vars=rowlabs)
+logitsTox
+
+</code></pre>
+
+
+</div>

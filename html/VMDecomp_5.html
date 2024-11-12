@@ -1,0 +1,204 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vmd</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variational Mode Decomposition (1- or 2-dimensional)</h2>
+
+<h3>Description</h3>
+
+<p>Variational Mode Decomposition (1- or 2-dimensional)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vmd(data, alpha, tau, K, DC, init, tol, verbose = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>either a vector or a matrix (of type numeric or integer)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>a numeric value specifying the balancing parameter of the data-fidelity constraint</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tau</code></td>
+<td>
+<p>a numeric value specifying the time-step of the dual ascent ( pick 0 for noise-slack )</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>K</code></td>
+<td>
+<p>a numeric value specifying the number of modes to be recovered</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>DC</code></td>
+<td>
+<p>a boolean. If true the first mode is put and kept at DC (0-freq)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>init</code></td>
+<td>
+<p>a numeric value. This parameter differs depending on the input 'data' parameter (1-dimensional and 2-dimensional). See the details section for more information</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>a numeric value specifying the tolerance of convergence criterion (typically this parameter is around 1e-6 for the 1-dimensional and 1e-7 for the 2-dimensional data)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>a boolean. If TRUE then information will be printed in the console</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The 'init' parameter takes the following values for,
+</p>
+
+<ul>
+<li>
+<p> 1-dimensional data:
+</p>
+
+<ul>
+<li>
+<p> 0 = all omegas start at 0
+</p>
+</li>
+<li>
+<p> 1 = all omegas start uniformly distributed
+</p>
+</li>
+<li>
+<p> 2 = all omegas initialized randomly
+</p>
+</li>
+</ul>
+</li>
+<li>
+<p> 2-dimensional data:
+</p>
+
+<ul>
+<li>
+<p> 0 = all omegas start at 0
+</p>
+</li>
+<li>
+<p> 1 = all omegas start initialized randomly
+</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>a list object of length three which includes the
+</p>
+
+<ul>
+<li>
+<p> 'u' (collection of decomposed modes)
+</p>
+</li>
+<li>
+<p> 'u_hat' (spectra of the modes)
+</p>
+</li>
+<li>
+<p> 'omega' (estimated mode center-frequencies)
+objects
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>https://math.montana.edu/dzosso/code/
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+require(VMDecomp)
+
+#..............
+# 1-dimensional
+#..............
+
+N = 250
+
+set.seed(1)
+rand_unif = runif(n = N, min = 0, max = 1.0)
+
+f_sig1 = 6 * rand_unif
+f_sig2 = cos(x = 8 * pi * rand_unif)
+f_sig3 = 0.5 * cos(x = 40 * pi * rand_unif)
+
+f_sig = f_sig1 + f_sig2 + f_sig3
+
+alpha = 2000
+tau = 0
+K = 3
+DC = FALSE
+init = 1
+tol = 1e-6
+
+set.seed(2)
+res_1d = vmd(data = f_sig,
+             alpha = alpha,
+             tau = tau,
+             K = K,
+             DC = DC,
+             init = init,
+             tol = tol,
+             verbose = FALSE)
+
+#..............
+# 2-dimensional
+#..............
+
+rows_cols = 10
+
+set.seed(3)
+data = matrix(runif(rows_cols^2), rows_cols, rows_cols)
+alpha = 5000
+tau = 0.25
+K = 2
+DC = TRUE
+init = 1
+tol = 1e-7
+
+set.seed(4)
+res_2d = vmd(data = data,
+             alpha = alpha,
+             tau = tau,
+             K = K,
+             DC = DC,
+             init = init,
+             tol = tol,
+             verbose = FALSE)
+</code></pre>
+
+
+</div>

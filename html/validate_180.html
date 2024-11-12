@@ -1,0 +1,148 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>variables</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get variable names</h2>
+
+<h3>Description</h3>
+
+<p>Generic function that extracts names of variables ocurring
+in R objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">variables(x, ...)
+
+## S4 method for signature 'rule'
+variables(x, ...)
+
+## S4 method for signature 'list'
+variables(x, ...)
+
+## S4 method for signature 'data.frame'
+variables(x, ...)
+
+## S4 method for signature 'environment'
+variables(x, ...)
+
+## S4 method for signature 'expressionset'
+variables(x, as = c("vector", "matrix", "list"), dummy = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An R object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Arguments to be passed to other methods.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>as</code></td>
+<td>
+<p>how to return variables: 
+</p>
+
+<ul>
+<li>
+<p><code>'vector'</code> Return the uniqe vector of variables occurring in <code>x</code>.
+</p>
+</li>
+<li>
+<p><code>'matrix'</code> Return a boolean matrix, each row representing a rule, each column representing a variable.
+</p>
+</li>
+<li>
+<p><code>'list'</code> Return a named <code>list</code>, each entry containing a character vector with variable names.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dummy</code></td>
+<td>
+<p>Also retrieve transient variables set with the <code>:=</code> operator.</p>
+</td>
+</tr>
+</table>
+<h3>Methods (by class)</h3>
+
+
+<ul>
+<li> <p><code>variables(rule)</code>: Retrieve unique variable names
+</p>
+</li>
+<li> <p><code>variables(list)</code>: Alias to <code>names.list</code>
+</p>
+</li>
+<li> <p><code>variables(data.frame)</code>: Alias to <code>names.data.frame</code>
+</p>
+</li>
+<li> <p><code>variables(environment)</code>: Alias to <code>ls</code>
+</p>
+</li>
+<li> <p><code>variables(expressionset)</code>: Variables occuring in <code>x</code> either as a single list, or per rule.
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p>Other expressionset-methods: 
+<code>as.data.frame()</code>,
+<code>as.data.frame,expressionset-method</code>,
+<code>created()</code>,
+<code>description()</code>,
+<code>label()</code>,
+<code>meta()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>origin()</code>,
+<code>plot,validator-method</code>,
+<code>summary()</code>,
+<code>voptions()</code>
+</p>
+<p>Other expressionset-methods: 
+<code>as.data.frame()</code>,
+<code>as.data.frame,expressionset-method</code>,
+<code>created()</code>,
+<code>description()</code>,
+<code>label()</code>,
+<code>meta()</code>,
+<code>names&lt;-,rule,character-method</code>,
+<code>origin()</code>,
+<code>plot,validator-method</code>,
+<code>summary()</code>,
+<code>voptions()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+v &lt;- validator(
+  root = y := sqrt(x)
+ , average = mean(x) &gt; 3
+ , sum = x + y == z
+)
+variables(v)
+variables(v,dummy=TRUE)
+variables(v,matrix=TRUE)
+variables(v,matrix=TRUE,dummy=TRUE)
+
+
+</code></pre>
+
+
+</div>

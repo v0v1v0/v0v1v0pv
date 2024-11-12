@@ -1,0 +1,129 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Summarise</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Brief Summary of Model Fit for glm and loglm Models
+</h2>
+
+<h3>Description</h3>
+
+<p>For <code>glm</code> objects, the <code>print</code> and <code>summary</code> methods give
+too much information if all one wants to see is a brief summary of model
+goodness of fit, and there is no easy way to display a compact comparison of
+model goodness of fit for a collection of models fit to the same data.
+All <code>loglm</code> models have equivalent glm forms, but the 
+<code>print</code> and <code>summary</code> methods give quite different results.
+</p>
+<p><code>Summarise</code> provides a brief summary for one or more models
+fit to the same dataset
+for which <code>logLik</code> and <code>nobs</code> methods exist
+(e.g., <code>glm</code> and <code>loglm</code> models).
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Summarise(object, ...)
+
+## S3 method for class 'glmlist'
+Summarise(object, ..., saturated = NULL, sortby = NULL)
+## S3 method for class 'loglmlist'
+Summarise(object, ..., saturated = NULL, sortby = NULL)
+## Default S3 method:
+Summarise(object, ..., saturated = NULL, sortby = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>a fitted model object for which there exists a logLik method to extract the corresponding log-likelihood</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>optionally more fitted model objects
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>saturated</code></td>
+<td>
+
+<p>saturated model log likelihood reference value (use 0 if deviance is not available)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sortby</code></td>
+<td>
+
+<p>either a numeric or character string specifying
+the column in the result by which the rows are sorted (in decreasing order)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function relies on residual degrees of freedom for the LR chisq test being available
+in the model object.  This is true for objects inheriting from 
+<code>lm</code>, <code>glm</code>, <code>loglm</code>, <code>polr</code>
+and <code>negbin</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame (also of class <code>anova</code>) with columns 
+<code>c("AIC", "BIC", "LR Chisq", "Df", "Pr(&gt;Chisq)")</code>.
+Row names are taken from the names of the model object(s).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Achim Zeileis
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>logLik</code>, <code>glm</code>, <code>loglm</code>, 
+</p>
+<p><code>logLik.loglm</code>, <code>modFit</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Mental)
+indep &lt;- glm(Freq ~ mental+ses,
+                family = poisson, data = Mental)
+Summarise(indep)
+Cscore &lt;- as.numeric(Mental$ses)
+Rscore &lt;- as.numeric(Mental$mental)
+
+coleff &lt;- glm(Freq ~ mental + ses + Rscore:ses,
+                family = poisson, data = Mental)
+roweff &lt;- glm(Freq ~ mental + ses + mental:Cscore,
+                family = poisson, data = Mental)
+linlin &lt;- glm(Freq ~ mental + ses + Rscore:Cscore,
+                family = poisson, data = Mental)
+                
+# compare models
+Summarise(indep, coleff, roweff, linlin)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,175 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vcrpart-formula</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Special terms for formulas.</h2>
+
+<h3>Description</h3>
+
+<p>Special terms for formulas assigned to <code>tvcm</code>,
+<code>fvcm</code> and <code>olmm</code>.   
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">fe(formula, intercept = TRUE)
+re(formula, intercept = TRUE)
+vc(..., by, intercept = missing(by), nuisance = character())
+ce(formula)
+ge(formula)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>a symbolic description for the corresponding component
+of the formula component. See examples.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>intercept</code></td>
+<td>
+<p>logical or character vector. <code>intercept = TRUE</code>
+(default) indicates that an intercept is incorporated.
+<code>intercept = FALSE</code> removes the random intercept from the
+formula. Note that the sometimes allowed <code>-1</code>
+term is ignored. The character strings <code>"ce"</code>
+(category-specific random intercepts) and <code>"ge"</code>
+(category-global random intercepts) may be used in connection with
+<code>olmm</code>. Intercepts have specific interpretations for
+<code>fe</code>, <code>re</code> and <code>vc</code>, see the details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>the names of variables that moderate (i.e. modify) the
+effects of the variables specified in <code>by</code>, separated by
+commas. It is also possibly to assign a vector that contains the
+variable names as characters. Note that operators like
+<code>factor(x)</code> are not allowed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>a formula of predictors the effects of which are moderated
+by the variables in <code>...</code>. See <code>tvcm</code> and the
+examples below. Note that the <code>by</code> variable must be numeric and
+factor variables must be recoded to dummy variables by hand.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nuisance</code></td>
+<td>
+<p>character vector of variables in <code>by</code> which have
+to be estimated separately for each partition but the algorithm should
+not focus on this variable when searching for splits.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Special formula terms to define fixed effects <code>fe</code>,
+varying coefficients <code>vc</code> and random effects
+<code>re</code>. The use of these formula terms ensures that
+the functions <code>fvcm</code>, <code>tvcm</code> and
+<code>olmm</code> fit the intended model. Some examples are given
+below and on the documentation pages of the fitting functions.
+</p>
+<p>For all of <code>fvcm</code>, <code>tvcm</code> and
+<code>olmm</code>, variables which are not defined with one of
+<code>fe</code>, <code>vc</code> and <code>re</code> are
+treated as fixed effects. Intercepts can be dropped from the model by
+the <code>intercept</code> argument. The terms <code>ce</code>
+(category-specific effects) and <code>ge</code> (global effect or
+proportional odds effect) are designed for the function
+<code>olmm</code>. Notice that <code>tvcm</code> may changes,
+for internal reasons, the order of the terms in the specified
+formula. Note that you can put multiple terms within
+<code>fe</code>, <code>ge</code> and <code>ce</code> terms
+(e.g., <code>fe(ce(x1 + x2 + ge(x3 + x4))</code>).
+</p>
+<p>At present, the term <code>"."</code>, which is often use to extract all
+variables of the data, is ignored. As an alternative,
+<code>vc</code> interprets character vectors, assigned as unnamed
+arguments, as lists of variables of moderators to be extracted from
+<code>data</code>. See the examples below.
+</p>
+<p>Default for intercepts in <code>fe</code> terms is <code>intercept
+    = TRUE</code>, or <code>intercept = "ce"</code> for models fitted with
+<code>olmm</code>. This means that an intercept is automatically
+attached. Alternatives are <code>intercept = FALSE</code>, which is equal to
+<code>intercept = "none"</code>, and <code>intercept = "ge"</code>, which yields a
+global-effect intercept for models fitted with <code>olmm</code>.
+</p>
+<p>Default for intercepts in <code>vc</code> is to introduce an
+intercept if the <code>by</code> argument is ignored, otherwise no intercept
+is introduced. Specifically, if input is specified for the <code>by</code>
+argument, then  <code>intercept = TRUE</code>, or <code>intercept = "ce"</code>
+for models fitted by <code>olmm</code>. Alternatives are
+<code>intercept = FALSE</code>, which is equal to <code>intercept = "none"</code>,
+and <code>intercept = "ge"</code>, which yields a global-effect varying
+intercept. 
+</p>
+<p>Default for intercepts in <code>re</code> is <code>intercept =
+  TRUE</code>, which is equal to <code>intercept = "ge"</code>. <code>intercept =
+  FALSE</code> is equal to <code>intercept = "none"</code>. For category-specific
+random intercepts, use <code>intercept = "ge"</code>. See
+<code>olmm</code>. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>a list used by <code>tvcm</code>, <code>fvcm</code> and
+<code>olmm</code> for constructing the model matrices.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>See Also</h3>
+
+<p><code>tvcm</code>, <code>fvcm</code>,
+<code>olmm</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Formula for a model with 2 fixed effects (x1 and x2) and a random
+## intercept. The 're' terms indicates that an intercept is fitted for
+## each level of 'id'.
+
+formula &lt;- y ~ fe(x1 + x2) + re(1|id)
+
+## Formula for a model with one fixed effect and one varying coefficient
+## term with 2 moderators and 2 varying coefficient predictors. 'tvcm'
+## will fit one partition to model the effects of 'x2' and 'x3' as
+## functions of 'z1' and 'z2'.
+
+formula &lt;- y ~ x1 + vc(z1, z2, by = x2 + x3, intercept = TRUE)
+
+## Similar formula as above, but the predictors 'x2' and 'x3' have
+## separate 'vc' terms. 'tvcm' will fit a separate partition for each of
+## 'x2' and 'x3' to model their effects as functions of 'z1' and 'z2'.
+
+formula &lt;- y ~ x1 + vc(z1, z2, by = x2) + vc(z1, z2, by = x3)
+
+## As an alternative to '.' you can define variables in a vector
+vars &lt;- c("x1", "x2", "x3")
+formula &lt;- y ~ x1 + vc(vars, by = x2) + vc(vars, by = x3)
+</code></pre>
+
+
+</div>

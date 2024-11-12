@@ -1,0 +1,550 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vault_api_client</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vault Low-Level Client</h2>
+
+<h3>Description</h3>
+
+<p>Vault Low-Level Client
+</p>
+<p>Vault Low-Level Client
+</p>
+
+
+<h3>Details</h3>
+
+<p>Low-level API client.  This can be used to directly communicate
+with the vault server.  This object will primarily be useful for
+debugging, testing or developing new vault methods, but is
+nonetheless described here.
+</p>
+
+
+<h3>Super class</h3>
+
+<p><code>vaultr::vault_client_object</code> -&gt; <code>vault_api_client</code>
+</p>
+
+
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>addr</code></dt>
+<dd>
+<p>The vault address (with protocol, hostname and port)</p>
+</dd>
+<dt><code>base_url</code></dt>
+<dd>
+<p>The base url (with protocol, hostname, port and
+api version path)</p>
+</dd>
+<dt><code>tls_config</code></dt>
+<dd>
+<p>Information used in TLS config, if used</p>
+</dd>
+<dt><code>namespace</code></dt>
+<dd>
+<p>The vault namespace, if used</p>
+</dd>
+<dt><code>token</code></dt>
+<dd>
+<p>The vault token, if authenticated</p>
+</dd>
+<dt><code>version</code></dt>
+<dd>
+<p>The vault server version, once queried</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-vault_api_client-new"><code>vault_api_client$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_api_client-request"><code>vault_api_client$request()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_api_client-is_authenticated"><code>vault_api_client$is_authenticated()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_api_client-set_token"><code>vault_api_client$set_token()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_api_client-verify_token"><code>vault_api_client$verify_token()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_api_client-server_version"><code>vault_api_client$server_version()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_api_client-GET"><code>vault_api_client$GET()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_api_client-LIST"><code>vault_api_client$LIST()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_api_client-POST"><code>vault_api_client$POST()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_api_client-PUT"><code>vault_api_client$PUT()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-vault_api_client-DELETE"><code>vault_api_client$DELETE()</code></a>
+</p>
+</li>
+</ul>
+<details open><summary>Inherited methods</summary><ul>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="format"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-format"><code>vaultr::vault_client_object$format()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="vaultr" data-topic="vault_client_object" data-id="help"><a href="../../vaultr/html/vault_client_object.html#method-vault_client_object-help"><code>vaultr::vault_client_object$help()</code></a></span></li>
+</ul></details><hr>
+<a id="method-vault_api_client-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a new api client
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_api_client$new(addr = NULL, tls_config = NULL, namespace = NULL)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>addr</code></dt>
+<dd>
+<p>Address of the vault server</p>
+</dd>
+<dt><code>tls_config</code></dt>
+<dd>
+<p>Optional TLS config</p>
+</dd>
+<dt><code>namespace</code></dt>
+<dd>
+<p>Optional namespace</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_api_client-request"></a>
+
+
+
+<h4>Method <code>request()</code>
+</h4>
+
+<p>Make a request to the api. Typically you should use
+one of the higher-level wrappers, such as <code style="white-space: pre;">⁠$GET⁠</code> or <code style="white-space: pre;">⁠$POST⁠</code>.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_api_client$request(verb, path, ..., token = self$token)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>verb</code></dt>
+<dd>
+<p>The HTTP verb to use, as a <code>httr</code> function (e.g.,
+pass <code>httr::GET</code> for a <code>GET</code> request).</p>
+</dd>
+<dt><code>path</code></dt>
+<dd>
+<p>The request path</p>
+</dd>
+<dt><code>...</code></dt>
+<dd>
+<p>Additional arguments passed to the <code>httr</code> function</p>
+</dd>
+<dt><code>token</code></dt>
+<dd>
+<p>Optional token, overriding the client token</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_api_client-is_authenticated"></a>
+
+
+
+<h4>Method <code>is_authenticated()</code>
+</h4>
+
+<p>Test if the vault client currently holds a vault token.
+This method does not verify the token - only test that is present.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_api_client$is_authenticated()</pre></div>
+
+
+<hr>
+<a id="method-vault_api_client-set_token"></a>
+
+
+
+<h4>Method <code>set_token()</code>
+</h4>
+
+<p>Set a token within the client
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_api_client$set_token(token, verify = FALSE, quiet = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>token</code></dt>
+<dd>
+<p>String, with the new vault client token</p>
+</dd>
+<dt><code>verify</code></dt>
+<dd>
+<p>Logical, indicating if we should test that the token
+is valid. If <code>TRUE</code>, then we use <code style="white-space: pre;">⁠$verify_token()⁠</code> to test the
+token before setting it and if it is not valid an error will be
+thrown and the token not set.</p>
+</dd>
+<dt><code>quiet</code></dt>
+<dd>
+<p>Logical, if <code>TRUE</code>, then informational messages will be
+suppressed.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_api_client-verify_token"></a>
+
+
+
+<h4>Method <code>verify_token()</code>
+</h4>
+
+<p>Test that a token is valid with the vault.
+This will call vault's <code style="white-space: pre;">⁠/sys/capabilities-self⁠</code> endpoint with the
+token provided and check the <code style="white-space: pre;">⁠/sys⁠</code> path.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_api_client$verify_token(token, quiet = TRUE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>token</code></dt>
+<dd>
+<p>String, with the vault client token to test</p>
+</dd>
+<dt><code>quiet</code></dt>
+<dd>
+<p>Logical, if <code>TRUE</code>, then informational messages will be
+suppressed</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_api_client-server_version"></a>
+
+
+
+<h4>Method <code>server_version()</code>
+</h4>
+
+<p>Retrieve the vault server version.  This is by default
+cached within the client for a session.  Will return an R
+numeric_version object.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_api_client$server_version(refresh = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>refresh</code></dt>
+<dd>
+<p>Logical, indicating if the server version information
+should be refreshed even if known.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_api_client-GET"></a>
+
+
+
+<h4>Method <code>GET()</code>
+</h4>
+
+<p>Send a <code>GET</code> request to the vault server
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_api_client$GET(path, ...)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>The server path to use.  This is the "interesting"
+part of the path only, with the server base url and api version
+information added.</p>
+</dd>
+<dt><code>...</code></dt>
+<dd>
+<p>Additional <code>httr</code>-compatible options.  These will be named
+parameters or <code>httr</code> "request" objects.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_api_client-LIST"></a>
+
+
+
+<h4>Method <code>LIST()</code>
+</h4>
+
+<p>Send a <code>LIST</code> request to the vault server
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_api_client$LIST(path, ...)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>The server path to use.  This is the "interesting"
+part of the path only, with the server base url and api version
+information added.</p>
+</dd>
+<dt><code>...</code></dt>
+<dd>
+<p>Additional <code>httr</code>-compatible options.  These will be named
+parameters or <code>httr</code> "request" objects.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_api_client-POST"></a>
+
+
+
+<h4>Method <code>POST()</code>
+</h4>
+
+<p>Send a <code>POST</code> request to the vault server
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_api_client$POST(path, ...)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>The server path to use.  This is the "interesting"
+part of the path only, with the server base url and api version
+information added.</p>
+</dd>
+<dt><code>...</code></dt>
+<dd>
+<p>Additional <code>httr</code>-compatible options.  These will be named
+parameters or <code>httr</code> "request" objects.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_api_client-PUT"></a>
+
+
+
+<h4>Method <code>PUT()</code>
+</h4>
+
+<p>Send a <code>PUT</code> request to the vault server
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_api_client$PUT(path, ...)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>The server path to use.  This is the "interesting"
+part of the path only, with the server base url and api version
+information added.</p>
+</dd>
+<dt><code>...</code></dt>
+<dd>
+<p>Additional <code>httr</code>-compatible options.  These will be named
+parameters or <code>httr</code> "request" objects.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-vault_api_client-DELETE"></a>
+
+
+
+<h4>Method <code>DELETE()</code>
+</h4>
+
+<p>Send a <code>DELETE</code> request to the vault server
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>vault_api_client$DELETE(path, ...)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>path</code></dt>
+<dd>
+<p>The server path to use.  This is the "interesting"
+part of the path only, with the server base url and api version
+information added.</p>
+</dd>
+<dt><code>...</code></dt>
+<dd>
+<p>Additional <code>httr</code>-compatible options.  These will be named
+parameters or <code>httr</code> "request" objects.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+server &lt;- vaultr::vault_test_server(if_disabled = message)
+if (!is.null(server)) {
+  # Ordinarily, we would use the "vault_client" object for
+  # high-level access to the vault server
+  client &lt;- server$client()
+  client$status()
+
+  # The api() method returns the "api client" object:
+  api &lt;- client$api()
+  api
+
+  # This allows running arbitrary HTTP requests against the server:
+  api$GET("/sys/seal-status")
+
+  # this is how vaultr is internally implemented so anything can
+  # be done here, for example following vault's API documentation
+  # https://www.vaultproject.io/api/secret/kv/kv-v1.html#sample-request-2
+  api$POST("/secret/mysecret", body = list(key = "value"))
+  api$GET("/secret/mysecret")
+  api$DELETE("/secret/mysecret")
+
+  # cleanup
+  server$kill()
+}
+</code></pre>
+
+
+</div>

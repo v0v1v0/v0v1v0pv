@@ -1,0 +1,408 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Links</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Link functions for VGLM/VGAM/etc. families</h2>
+
+<h3>Description</h3>
+
+<p>The <span class="pkg">VGAM</span> package provides a number of
+(parameter) link functions which are described
+in general here. Collectively, they offer the
+user considerable choice and flexibility for
+modelling data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">TypicalVGAMlink(theta, someParameter = 0, bvalue = NULL, inverse = FALSE,
+                deriv = 0, short = TRUE, tag = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character.
+This is usually <code class="reqn">\theta</code> (default)
+but can sometimes be <code class="reqn">\eta</code>,
+depending on the other arguments.
+If <code>theta</code> is character then <code>inverse</code> and
+<code>deriv</code> are ignored.
+The name <code>theta</code> should always be the
+name of the first argument.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>someParameter</code></td>
+<td>
+
+<p>Some parameter, e.g., an offset.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue</code></td>
+<td>
+
+<p>Boundary value, positive if given.
+If <code>0 &lt; theta</code> then
+values of <code>theta</code> which are less than
+or equal to 0 can be replaced by <code>bvalue</code>
+before computing the link function value.
+Values of <code>theta</code> which are greater than
+or equal to 1 can be
+replaced by 1 minus <code>bvalue</code>
+before computing the link function value.
+The value <code>bvalue = .Machine$double.eps</code>
+is sometimes a reasonable value, or something
+slightly higher.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>inverse</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> and <code>deriv = 0</code>  then
+the inverse link value
+<code class="reqn">\theta</code> is returned, hence the argument
+<code>theta</code> is really <code class="reqn">\eta</code>.
+In all other cases, the argument <code>theta</code> is
+really <code class="reqn">\theta</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>deriv</code></td>
+<td>
+
+<p>Integer.
+Either 0, 1, or 2, specifying the order of
+the derivative.
+Most link functions handle values up to 3 or 4.
+Some links can even handle values up to 9 but may
+suffer from catastrophic cancellation near the
+boundaries,
+be inefficient and slow because they are
+based on <code>D</code>.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>short, tag</code></td>
+<td>
+
+<p>Logical.
+These are used for labelling the <code>blurb</code>
+slot of a <code>vglmff-class</code> object.
+These arguments are used only if <code>theta</code>
+is character, and gives the formula for the
+link in character form.  If <code>tag = TRUE</code>
+then the result is preceeded by a little
+more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Almost all <span class="pkg">VGAM</span> link functions have
+something similar to the argument list as
+given above.  In this help file we have
+<code class="reqn">\eta = g(\theta)</code>
+where <code class="reqn">g</code> is the link function,
+<code class="reqn">\theta</code> is the parameter and
+<code class="reqn">\eta</code> is the linear/additive
+predictor.  The link <code class="reqn">g</code> must be strictly
+monotonic and twice-differentiable in its
+range.
+</p>
+
+
+
+<p>The following is a brief enumeration of all
+<span class="pkg">VGAM</span> link functions.
+</p>
+<p>For parameters lying between 0 and 1 (e.g.,
+probabilities):
+<code>logitlink</code>,
+<code>probitlink</code>,
+<code>clogloglink</code>,
+<code>cauchitlink</code>,
+<code>foldsqrtlink</code>,
+<code>logclink</code>.
+
+
+
+</p>
+<p>For positive parameters
+(i.e., greater than 0):
+<code>loglink</code>,
+<code>negloglink</code>,
+<code>sqrtlink</code>,
+<code>powerlink</code>.
+</p>
+<p>For parameters greater than 1:
+<code>logloglink</code>,
+<code>loglogloglink</code> (greater than <code class="reqn">e</code>).
+</p>
+<p>For parameters between <code class="reqn">-1</code> and <code class="reqn">1</code>:
+<code>fisherzlink</code>,
+<code>rhobitlink</code>.
+</p>
+<p>For parameters between finite <code class="reqn">A</code> and <code class="reqn">B</code>:
+<code>extlogitlink</code>,
+<code>logofflink</code> (<code class="reqn">B = \infty</code>).
+</p>
+<p>For unrestricted parameters (i.e., any value):
+<code>identitylink</code>,
+<code>negidentitylink</code>,
+<code>reciprocallink</code>,
+<code>negreciprocallink</code>.
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>Returns one of:
+the link function value or its first or second
+derivative, the inverse link or its first or
+second derivative, or a character description
+of the link.
+</p>
+<p>Here are the general details.
+If <code>inverse = FALSE</code> and <code>deriv = 0</code>
+(default) then the ordinary link function
+<code class="reqn">\eta = g(\theta)</code>
+is returned.
+</p>
+<p>If <code>inverse = TRUE</code> and <code>deriv =
+  0</code> then the inverse link function value
+is returned, hence <code>theta</code> is really
+<code class="reqn">\eta</code> (the only occasion this
+happens).
+</p>
+<p>If <code>inverse = FALSE</code> and <code>deriv
+  = 1</code> then it is <code class="reqn">d\eta / d\theta</code> <em>as a function of</em>
+<code class="reqn">\theta</code>.  If <code>inverse =
+  FALSE</code> and <code>deriv = 2</code> then it is
+<code class="reqn">d^2\eta / d\theta^2</code>
+<em>as a function of</em> <code class="reqn">\theta</code>.
+</p>
+<p>If <code>inverse = TRUE</code> and <code>deriv
+  = 1</code> then it is <code class="reqn">d\theta / d\eta</code> <em>as a function of</em>
+<code class="reqn">\theta</code>.  If <code>inverse = TRUE</code>
+and <code>deriv = 2</code> then it is <code class="reqn">d^2\theta
+  / d\eta^2</code> <em>as a
+function of</em> <code class="reqn">\theta</code>.
+</p>
+<p>It is only when <code>deriv = 1</code> that
+<code>linkfun(theta, deriv = 1, inverse = TRUE)</code>
+and
+<code>linkfun(theta, deriv = 1, inverse = FALSE)</code>
+are <em>reciprocals</em> of each other.
+In particular,
+<code>linkfun(theta, deriv = 2, inverse = TRUE)</code>
+and
+<code>linkfun(theta, deriv = 2, inverse = FALSE)</code>
+are <em>not</em> reciprocals of each other
+in general.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Warning </h3>
+
+<p>The output of link functions changed at
+<span class="pkg">VGAM</span> <code>0.9-9</code> (date was around
+2015-07).  Formerly, <code>linkfun(theta,
+  deriv = 1)</code> is now <code>linkfun(theta,
+  deriv = 1, inverse = TRUE)</code>, or equivalently,
+<code>1 / linkfun(theta, deriv = 1, inverse =
+  TRUE)</code>.  Also, formerly, <code>linkfun(theta,
+  deriv = 2)</code> was <code>1 / linkfun(theta,
+  deriv = 2, inverse = TRUE)</code>.  This was a bug.
+Altogether, these are big changes and the
+user should beware!
+</p>
+<p>In <span class="pkg">VGAM</span> <code>1.0-7</code> (January 2019)
+all link function names were made to
+end in the characters <code>"link"</code>,
+e.g.,
+<code>loglink</code> replaces <code>loge</code>,
+<code>logitlink</code> replaces <code>logit</code>.
+For this most of them were renamed.
+Upward compatability holds for older link
+function names, however, users should adopt
+the new names immediately.
+</p>
+
+
+
+
+<h3>Note</h3>
+
+<p><span class="pkg">VGAM</span> link functions are generally
+not compatible with other functions outside
+the package.  In particular, they won't work
+with <code>glm</code> or any other
+package for fitting GAMs.
+</p>
+<p>From October 2006 onwards,
+all <span class="pkg">VGAM</span> family functions will only
+contain one default value for each link
+argument rather than giving a vector
+of choices.  For example, rather than
+<code>binomialff(link = c("logitlink",
+  "probitlink", "clogloglink", "cauchitlink",
+  "identitylink"), ...)</code> it is now
+<code>binomialff(link = "logitlink", ...)</code>.
+No checking will be done to see if the user's
+choice is reasonable.  This means that the
+user can write his/her own <span class="pkg">VGAM</span> link
+function and use it within any <span class="pkg">VGAM</span>
+family function.  Altogether this provides
+greater flexibility.  The downside is that
+the user must specify the <em>full</em> name of
+the link function, by either assigning the
+link argument the full name as a character
+string, or just the name itself.  See the
+examples below.
+</p>
+<p>From August 2012 onwards, a major
+change in link functions occurred.
+Argument <code>esigma</code> (and the like such
+as <code>earg</code>) used to be in <span class="pkg">VGAM</span>
+prior to version 0.9-0 (released during the
+2nd half of 2012).
+The major change is that arguments such as
+<code>offset</code> that used to be passed in via
+those arguments can done directly through
+the link function. For example,
+<code>gev(lshape = "logofflink", eshape = list(offset = 0.5))</code>
+is replaced by
+<code>gev(lshape = logofflink(offset = 0.5))</code>.
+The <code>@misc</code> slot no longer
+has <code>link</code> and <code>earg</code> components,
+but two other components replace
+these. Functions such as
+<code>dtheta.deta()</code>,
+<code>d2theta.deta2()</code>,
+<code>d3theta.deta3()</code>,
+<code>eta2theta()</code>,
+<code>theta2eta()</code>
+are modified.
+</p>
+<p>From January 2019 onwards, all link function
+names ended in <code>"link"</code>. See above
+for details.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee</p>
+
+
+<h3>References</h3>
+
+<p>McCullagh, P. and Nelder, J. A. (1989).
+<em>Generalized Linear Models</em>,
+2nd ed. London: Chapman &amp; Hall.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>TypicalVGAMfamilyFunction</code>,
+<code>linkfun</code>,
+<code>vglm</code>,
+<code>vgam</code>,
+<code>rrvglm</code>.
+<code>cqo</code>,
+<code>cao</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">logitlink("a")
+logitlink("a", short = FALSE)
+logitlink("a", short = FALSE, tag = TRUE)
+
+logofflink(1:5, offset = 1)  # Same as log(1:5 + 1)
+powerlink(1:5, power = 2)  # Same as (1:5)^2
+
+## Not run:  # This is old and no longer works:
+logofflink(1:5, earg = list(offset = 1))
+powerlink(1:5, earg = list(power = 2))
+
+## End(Not run)
+
+fit1 &lt;- vgam(agaaus ~ altitude,
+             binomialff(link = "clogloglink"), hunua)  # best
+fit2 &lt;- vgam(agaaus ~ altitude,
+             binomialff(link =  clogloglink ), hunua)  # okay
+
+## Not run: 
+# This no longer works since "clog" is not a valid VGAM link function:
+fit3 &lt;- vgam(agaaus ~ altitude,
+             binomialff(link = "clog"), hunua)  # not okay
+
+
+# No matter what the link, the estimated var-cov matrix is the same
+y &lt;- rbeta(n = 1000, shape1 = exp(0), shape2 = exp(1))
+fit1 &lt;- vglm(y ~ 1, betaR(lshape1 = "identitylink",
+                          lshape2 = "identitylink"),
+             trace = TRUE, crit = "coef")
+fit2 &lt;- vglm(y ~ 1, betaR(lshape1 = logofflink(offset = 1.1),
+                          lshape2 = logofflink(offset = 1.1)), trace=TRUE)
+vcov(fit1, untransform = TRUE)
+vcov(fit1, untransform = TRUE) -
+vcov(fit2, untransform = TRUE)  # Should be all 0s
+\dontrun{ # This is old:
+fit1@misc$earg  # Some 'special' parameters
+fit2@misc$earg  # Some 'special' parameters are here
+}
+
+
+par(mfrow = c(2, 2))
+p &lt;- seq(0.05, 0.95, len = 200)  # A rather restricted range
+x &lt;- seq(-4, 4, len = 200)
+plot(p, logitlink(p), type = "l", col = "blue")
+plot(x, logitlink(x, inverse = TRUE), type = "l", col = "blue")
+plot(p, logitlink(p, deriv=1), type="l", col="blue") # 1 / (p*(1-p))
+plot(p, logitlink(p, deriv=2), type="l", col="blue") # (2*p-1)/(p*(1-p))^2
+
+## End(Not run)
+</code></pre>
+
+
+</div>

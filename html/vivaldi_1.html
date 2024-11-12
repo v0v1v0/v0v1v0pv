@@ -1,0 +1,78 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>add_metadata</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>add_metadata</h2>
+
+<h3>Description</h3>
+
+<p>Adds metadata information to the vcf dataframe
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">add_metadata(df, metadf, by_vcf, by_meta)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>A rearranged vcf dataframe (arrange_data)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metadf</code></td>
+<td>
+<p>A metadata dataframe</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by_vcf</code></td>
+<td>
+<p>A vector of column names in the vcf dataframe that should be used to merge the vcf data with the metadata</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by_meta</code></td>
+<td>
+<p>A vector of column names in the metadata dataframe that should be used to merge the metadata with the vcf data</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A vcf dataframe with metadata included
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">df &lt;- data.frame(CHROM = c("A", "B"),
+                 POS = c(234, 240),
+                 REF = c("G", "A"),
+                 ALT = c("A", "G")
+)
+
+sizes &lt;- data.frame(segment = c("A", "B"),
+                    SegmentSize = c(2280, 2274)
+)
+
+df
+
+sizes
+
+# Add a new column of sizes of the segments which are necessary for
+# downstream calculations such as transition:transversion (tstv) and dNdS.
+add_metadata(df, sizes, c('CHROM'), c('segment'))
+
+</code></pre>
+
+
+</div>

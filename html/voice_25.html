@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>splitw</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Split Wave</h2>
+
+<h3>Description</h3>
+
+<p>Split WAV files either in <code>fromWav</code> directory or using (same names) RTTM files/subdirectories as guidance.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">splitw(
+  fromWav,
+  fromRttm = NULL,
+  toSplit = NULL,
+  autoDir = FALSE,
+  subDir = FALSE,
+  output = "wave",
+  filesRange = NULL,
+  full.names = TRUE,
+  recursive = FALSE,
+  silence.gap = 0.5
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fromWav</code></td>
+<td>
+<p>Either WAV file or directory containing WAV files.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fromRttm</code></td>
+<td>
+<p>Either RTTM file or directory containing RTTM files. Default: <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>toSplit</code></td>
+<td>
+<p>A directory to write generated files. Default: <code>NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>autoDir</code></td>
+<td>
+<p>Logical. Must the directories tree be created? Default: <code>FALSE</code>. See 'Details'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subDir</code></td>
+<td>
+<p>Logical. Must the splitted files be placed in subdirectories? Default: <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output</code></td>
+<td>
+<p>Character string, the class of the object to return, either 'wave' or 'list'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filesRange</code></td>
+<td>
+<p>The desired range of directory files (default: <code>NULL</code>, i.e., all files). Must be TRUE only if <code>fromWav</code> is a directory.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>full.names</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, the directory path is prepended to the file names to give a relative file path. If <code>FALSE</code>, the file names (rather than paths) are returned. (default: <code>TRUE</code>) Used by <code>base::list.files</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>recursive</code></td>
+<td>
+<p>Logical. Should the listing recursively into directories? (default: <code>FALSE</code>) Used by <code>base::list.files</code>. Inactive if <code>fromWav</code> is a file.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>silence.gap</code></td>
+<td>
+<p>The silence gap (in seconds) between adjacent words in a keyword. Rows with <code>tdur &lt;= silence.gap</code> are removed. (default: <code>0.5</code>)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>When <code>autoDir = TRUE</code>, the following directories are created: <code>'../mp3'</code>,<code>'../rttm'</code>, <code>'../split'</code> and <code>'../musicxml'</code>. Use <code>getwd()</code> to find the parent directory <code>'../'</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Splited audio files according to the correspondent RTTM file(s). See '<code>voice::diarize</code>'.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>voice::diarize</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(voice)
+
+urlWav &lt;- 'https://raw.githubusercontent.com/filipezabala/voiceAudios/main/wav/sherlock0.wav'
+destWav &lt;- paste0(tempdir(), '/sherlock0.wav')
+download.file(urlWav, destfile = destWav)
+
+urlRttm &lt;- 'https://raw.githubusercontent.com/filipezabala/voiceAudios/main/rttm/sherlock0.rttm'
+destRttm &lt;- paste0(tempdir(), '/sherlock0.rttm')
+download.file(urlRttm, destfile = destRttm)
+
+splitDir &lt;- paste0(tempdir(), '/split')
+dir.create(splitDir)
+splitw(destWav, fromRttm = destRttm, toSplit = splitDir)
+
+dir(splitDir)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

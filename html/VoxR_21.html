@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>project_voxels</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Project a voxel cloud in a 2D plan formed by two axes of the cartesian coordiantes system.</h2>
+
+<h3>Description</h3>
+
+<p>Project a voxel cloud in a 2D plan formed by two axes of the cartesian coordiantes system.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">project_voxels(data, plan, message)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a data.frame or data.table containing the x, y, z, ... coordinates of a voxel cloud.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plan</code></td>
+<td>
+<p>character. Defines the projection plan: "xy", "xz" or "yz". Default = "xy".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>message</code></td>
+<td>
+<p>logical. If FALSE, messages are disabled. Default = TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame of a 2D point cloud containing : x, y coordinates of the pixels and the
+number of voxels (nvox), number of points (npts), ratio npts/nvox contained in each pixel.
+</p>
+
+
+<h3>References</h3>
+
+<p>Lecigne, B., Delagrange, S., &amp; Messier, C. (2018). Exploring trees in three dimensions: VoxR, a novel voxel-based R package dedicated to
+analysing the complex arrangement of tree crowns. Annals of botany, 121(4), 589-601.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#- import tls data
+tls=data.table::fread(system.file("extdata", "Tree_t0.asc", package="VoxR"))
+
+#- voxelisation
+voxels = VoxR::vox(tls,0.05)
+
+#- project into the xy plan
+project_xy = VoxR::project_voxels(voxels,"xy")
+VoxR::plot_projection(project_xy) # plot projection
+
+#- project into the xz plan
+project_xy = VoxR::project_voxels(voxels,"xz")
+VoxR::plot_projection(project_xy) # plot projection
+</code></pre>
+
+
+</div>

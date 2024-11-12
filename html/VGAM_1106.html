@@ -1,0 +1,181 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>perks</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Perks Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the 2-parameter
+Perks distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">perks(lscale = "loglink", lshape = "loglink",
+      iscale = NULL,   ishape = NULL,
+      gscale = exp(-5:5), gshape = exp(-5:5),
+      nsimEIM = 500, oim.mean = FALSE, zero = NULL,
+      nowarning = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>nowarning</code></td>
+<td>
+<p> Logical. Suppress a warning?
+Ignored for <span class="pkg">VGAM</span> 0.9-7 and higher.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lscale, lshape</code></td>
+<td>
+
+<p>Parameter link functions applied to the
+shape parameter <code>shape</code>,
+scale parameter <code>scale</code>.
+All parameters are treated as positive here
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>iscale, ishape</code></td>
+<td>
+
+<p>Optional initial values.
+A <code>NULL</code> means a value is computed internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gscale, gshape</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsimEIM, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>oim.mean</code></td>
+<td>
+
+<p>To be currently ignored.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Perks distribution
+has cumulative distribution function
+</p>
+<p style="text-align: center;"><code class="reqn">F(y; \alpha, \beta) =
+1 -
+\left\{
+\frac{1 + \alpha}{1 + \alpha e^{\beta y}}
+\right\}^{1 / \beta}
+</code>
+</p>
+
+<p>which leads to a probability density function
+</p>
+<p style="text-align: center;"><code class="reqn">f(y; \alpha, \beta) =
+\left[ 1 + \alpha \right]^{1 / \beta}
+\alpha  e^{\beta y} / (1 + \alpha e^{\beta y})^{1 + 1 / \beta}
+</code>
+</p>
+
+<p>for <code class="reqn">\alpha &gt; 0</code>,
+<code class="reqn">\beta &gt; 0</code>,
+<code class="reqn">y &gt; 0</code>.
+Here, <code class="reqn">\beta</code> is called the scale parameter <code>scale</code>,
+and <code class="reqn">\alpha</code> is called a shape parameter.
+The moments for this distribution do
+not appear to be available in closed form.
+</p>
+<p>Simulated Fisher scoring is used and multiple responses are handled.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions such as
+<code>vglm</code>, and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>A lot of care is needed because
+this is a rather difficult distribution for parameter estimation.
+If the self-starting initial values fail then try experimenting
+with the initial value arguments, especially <code>iscale</code>.
+Successful convergence depends on having very good initial values.
+Also, monitor convergence by setting <code>trace = TRUE</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Perks, W. (1932).
+On some experiments in the graduation of mortality statistics.
+<em>Journal of the Institute of Actuaries</em>,
+<b>63</b>, 12–40.
+</p>
+<p>Richards, S. J. (2012).
+A handbook of parametric survival models for actuarial use.
+<em>Scandinavian Actuarial Journal</em>.
+1–25.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>dperks</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  set.seed(123)
+pdata &lt;- data.frame(x2 = runif(nn &lt;- 1000))  # x2 unused
+pdata &lt;- transform(pdata, eta1  = -1,
+                          ceta1 =  1)
+pdata &lt;- transform(pdata, shape1 = exp(eta1),
+                          scale1 = exp(ceta1))
+pdata &lt;- transform(pdata, y1 = rperks(nn, sh = shape1, sc = scale1))
+fit1 &lt;- vglm(y1 ~ 1, perks, data = pdata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+summary(fit1)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

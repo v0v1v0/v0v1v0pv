@@ -1,0 +1,62 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_VAR.Phase.details</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Plots details related to the Phase spectrum of a bivariate VAR (Vector autoregression) model.
+</h2>
+
+<h3>Description</h3>
+
+<p>Plots in a 2x2 layout the Phase spectrum of a VAR model for a bivariate series, represented by an object of class <code>var</code>, the Phase spectrum divided by frequency -which gives the lag-/lead-structure between the two series in units of time –, the derivative of the Phase spectrum with respect to frequency -also known as the group-delay–, and the Coherency spectrum of the VAR model.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_VAR.Phase.details(a.var)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>a.var</code></td>
+<td>
+
+<p>An object of class <code>var</code> obtained from <code>calculate.VAR</code> for which details of the Phase spectrum are to be plotted.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>No return value, called for side effects.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VAR.spec-package</code>,<code>Init.var</code>, <code>calculate.VAR</code>,
+</p>
+<p><code>simulate.VAR</code>, <code>plot_VAR.spectra</code>, 
+</p>
+<p><code>calc.VAR.spec.from.coefs</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+my.var &lt;- Init.var(grid=501, order.max.init=10, inv.roots.def=NULL)
+my.var$inv.roots[2,]&lt;- c(0.98,0.017261,2,3,1,1,2, rep(0,8))
+my.var$inv.roots[3,]&lt;- c(0.92,0.897598,2,1,1,1,2, rep(0,8))
+my.var$inv.roots[4,]&lt;- c(0.98,1.795196,1,1,0,1,1, rep(0,8))
+my.var &lt;- calculate.VAR(a.var=my.var,calc.method="from.det.cross",
+                        suppr.spec.check.warn=TRUE)
+print(my.var$validity.msg)
+plot_VAR.Phase.details (a.var=my.var)
+
+</code></pre>
+
+
+</div>

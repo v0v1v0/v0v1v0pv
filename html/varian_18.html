@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vmp_plot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot the posterior distributions of the focal parameters from a VM model</h2>
+
+<h3>Description</h3>
+
+<p>This function plots the univariate and bivariate (if applicable) distributions
+of the focal (alpha) parameters from a Variability Model where the variability
+is used as a predictor in a second-stage model.  The latent variability estimates are
+referred to as “Sigma” and, if used, the latent intercepts are referred
+to as “U”.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vmp_plot(alpha, useU = TRUE, plot = TRUE, digits = 3, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>Results from running <code>varian</code> and <code>extract</code>ing the
+results.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>useU</code></td>
+<td>
+<p>Logical indicating whether to plot the latent intercepts
+(defaults to <code>TRUE</code>).  Must set to <code>FALSE</code> if not available.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p>Logical whether to plot the results or just return the grob
+for the plots.  Defaults to <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>Integer indicating how many digits should be used
+for displaying p-values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments (not currently used)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing the <code>Combined</code> and the <code>Individual</code> plot objects.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Joshua F. Wiley &lt;josh@elkhartgroup.com&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Using made up data because the real models take a long time to run
+set.seed(1234) # make reproducible
+vmp_plot(matrix(rnorm(1000), ncol = 2))
+</code></pre>
+
+
+</div>

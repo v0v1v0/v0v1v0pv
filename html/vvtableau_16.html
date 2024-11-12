@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>download_tableau_data</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Download Tableau view data as Excel</h2>
+
+<h3>Description</h3>
+
+<p>Downloads the data from a Tableau view in Excel format.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">download_tableau_data(
+  tableau,
+  view_id,
+  path_to_save,
+  api_version = 3.8,
+  filters = NULL,
+  max_age = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>tableau</code></td>
+<td>
+<p>A list containing the Tableau authentication variables: 'base_url', 'token', 'user_id', and 'site_id'.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>view_id</code></td>
+<td>
+<p>The ID of the view to download.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path_to_save</code></td>
+<td>
+<p>The directory to write the data Excel file to.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>api_version</code></td>
+<td>
+<p>The API version to use (default: 3.8).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filters</code></td>
+<td>
+<p>A named list of filters to apply to the view data. The names should be the field names, and the values should be the filter values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_age</code></td>
+<td>
+<p>The maximum number of minutes view data will be cached before being refreshed (optional).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function uses the Tableau REST API to download data from a specified view in Excel format.
+It constructs the appropriate URL, applies any specified filters, and saves the data to the specified path.
+</p>
+<p>For more information on the Tableau REST API, see the official documentation for this method:
+<a href="https://help.tableau.com/current/api/rest_api/en-us/REST/rest_api_ref.htm#query_view_data">https://help.tableau.com/current/api/rest_api/en-us/REST/rest_api_ref.htm#query_view_data</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Tableau REST API: 
+<code>add_tags_to_view()</code>,
+<code>add_tags_to_workbook()</code>,
+<code>add_user_to_group()</code>,
+<code>add_user_to_site()</code>,
+<code>authenticate_PAT()</code>,
+<code>authenticate_server()</code>,
+<code>create_group()</code>,
+<code>delete_group()</code>,
+<code>download_datasource()</code>,
+<code>download_filtered_tableau_image()</code>,
+<code>download_tableau_crosstab_excel()</code>,
+<code>download_workbooks_server()</code>,
+<code>download_workbooks_server_pdf()</code>,
+<code>download_workbooks_server_powerpoint()</code>,
+<code>get_groups_for_user()</code>,
+<code>get_mobile_security_settings()</code>,
+<code>get_server_connected_apps()</code>,
+<code>get_server_datasources()</code>,
+<code>get_server_groups()</code>,
+<code>get_server_info()</code>,
+<code>get_server_jobs()</code>,
+<code>get_server_projects()</code>,
+<code>get_server_refresh_tasks()</code>,
+<code>get_server_schedules()</code>,
+<code>get_server_user_favorites()</code>,
+<code>get_server_users()</code>,
+<code>get_server_views()</code>,
+<code>get_server_workbooks()</code>,
+<code>get_table_assets()</code>,
+<code>get_users_in_group()</code>,
+<code>query_user_on_site()</code>,
+<code>remove_user_from_group()</code>,
+<code>remove_user_from_site()</code>,
+<code>run_extract_refresh_task()</code>,
+<code>update_data_source_now()</code>,
+<code>update_group()</code>,
+<code>update_user()</code>,
+<code>update_workbook_now()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+tableau &lt;- list(
+  base_url = "https://your-tableau-server.com/",
+  token = "your-auth-token",
+  user_id = "your-user-id",
+  site_id = "your-site-id"
+)
+view_id &lt;- "your-view-id"
+path_to_save &lt;- "path/to/save/"
+filters &lt;- list("Region" = "North America", "Category" = "Technology")
+max_age &lt;- 10
+download_tableau_data(tableau, view_id, path_to_save, filters = filters, max_age = max_age)
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

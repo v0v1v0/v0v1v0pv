@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plotdgaitd.vglm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Plotting the GAITD Combo Density from a GAITD Regression Object
+</h2>
+
+<h3>Description</h3>
+
+<p>Given a GAITD regression object,
+plots the probability mass function.
+</p>
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plotdgaitd(object, ...)
+plotdgaitd.vglm(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>A fitted GAITD combo regression, e.g.,
+<code>gaitdpoisson</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Graphical arguments passed into <code>dgaitdplot</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is meant to be a more convenient function for plotting
+the PMF of the GAITD combo model from a fitted regression model.
+The fit should be intercept-only and the distribution
+should have 1 or 2 parameters.
+Currently it should work for a <code>gaitdpoisson</code> fit.
+As much information as needed
+such as the special values
+is extracted from the object
+and fed into <code>dgaitdplot</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Same as <code>dgaitdplot</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is subject to change.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>dgaitdplot</code>,
+<code>spikeplot</code>,
+<code>gaitdpoisson</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+example(gaitdpoisson)
+gaitpfit2 &lt;-
+  vglm(y1 ~ 1, crit = "coef", trace = TRUE, data = gdata,
+       gaitdpoisson(a.mix = a.mix, i.mix = i.mix,
+                    i.mlm = i.mlm, eq.ap = TRUE, eq.ip = TRUE,
+                    truncate = tvec, max.support = max.support))
+plotdgaitd(gaitpfit2)
+
+## End(Not run)</code></pre>
+
+
+</div>

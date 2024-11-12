@@ -1,0 +1,58 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>filter_with_lists</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Filter with lists</h2>
+
+<h3>Description</h3>
+
+<p>This function filters a dataframe using a list with column and one or more values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">filter_with_lists(df, filters)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>A dataframe to be filtered</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filters</code></td>
+<td>
+<p>A list of lists containing column names in the first element and a list their
+corresponding values for filtering in the second element</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A dataframe filtered based on the input filters
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">df &lt;- dplyr::tibble(
+  VIS_Groep = sample(c("Group1", "Group2", "Group3"), 100, replace = TRUE),
+  VIS_Groep_naam = sample(c("Name1", "Name2", "Name3"), 100, replace = TRUE),
+  var1 = sample(c("A", "B", "C"), 100, replace = TRUE),
+  var2 = rnorm(100),
+  color_var = sample(c("Red", "Blue", "Green"), 100, replace = TRUE)
+)
+filters = list(c("var1", c("A", "B")))
+dfFiltered &lt;- filter_with_lists(df, filters)
+</code></pre>
+
+
+</div>

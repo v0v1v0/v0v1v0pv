@@ -1,0 +1,120 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compute_AEL</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute the Adjusted Empirical Likelihood</h2>
+
+<h3>Description</h3>
+
+<p>Evaluates the AEL for a given data set, moment conditions and parameter values
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compute_AEL(th, h, lam0, a, z, iters, useR_forz, returnH)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>th</code></td>
+<td>
+<p>Vector or scalar theta</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>h</code></td>
+<td>
+<p>User-defined function, outputs array</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lam0</code></td>
+<td>
+<p>Initial vector for lambda</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a</code></td>
+<td>
+<p>Scalar constant</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z</code></td>
+<td>
+<p>n-1 by d matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iters</code></td>
+<td>
+<p>Number of iterations using Newton-Raphson for estimation of lambda (default: 500)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>useR_forz</code></td>
+<td>
+<p>Bool whether to calculate the function first in R (True) or call the function in C (False) (default: True)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>returnH</code></td>
+<td>
+<p>Whether to return calculated values of h, H matrix and lambda</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A numeric value for the Adjusted Empirical Likelihood function
+computed evaluated at a given theta value
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Wei Chang Yu, Jeremy Lim
+</p>
+
+
+<h3>References</h3>
+
+<p>Yu, W., &amp; Bondell, H. D. (2023). Variational Bayes for Fast and
+Accurate Empirical Likelihood Inference. Journal of the American Statistical
+Association, 1–13. <a href="https://doi.org/10.1080/01621459.2023.2169701">doi:10.1080/01621459.2023.2169701</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Generate toy variables
+set.seed(1)
+x     &lt;- runif(30, min = -5, max = 5)
+elip  &lt;- rnorm(30, mean = 0, sd = 1)
+y     &lt;- 0.75 - x + elip
+
+# Set initial values for AEL computation
+lam0  &lt;- matrix(c(0,0), nrow = 2)
+th    &lt;- matrix(c(0.8277, -1.0050), nrow = 2)
+a     &lt;- 0.00001
+iters &lt;- 10
+
+# Define Dataset and h-function
+z &lt;- cbind(x, y)
+h &lt;- function(z, th) {
+    xi      &lt;- z[1]
+    yi      &lt;- z[2]
+    h_zith  &lt;- c(yi - th[1] - th[2] * xi, xi*(yi - th[1] - th[2] * xi))
+    matrix(h_zith, nrow = 2)
+}
+ansAELRcpp &lt;- compute_AEL(th, h, lam0, a, z, iters, useR_forz = TRUE)
+</code></pre>
+
+
+</div>

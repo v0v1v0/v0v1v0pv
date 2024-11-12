@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vpr_save</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Save VPR data as an as.oce object</h2>
+
+<h3>Description</h3>
+
+<p>Save VPR data as an as.oce object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vpr_save(data, metadata)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>a VPR data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metadata</code></td>
+<td>
+<p>(optional) a named list of character values giving metadata
+values. If this argument is not provided user will be prompted for a few
+generic metadata requirements.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function will pass a VPR data frame object to an <code>oce</code> object.
+Using an <code>oce</code> object as the default export format for VPR data allows for
+metadata and data to be kept in the same, space efficient file, and avoid
+redundancy in the data frame. The function check for data parameters that
+may actually be metadata parameters (rows which have the same value
+repeated for every observation). These parameters will automatically be
+copied into the metadata slot of the <code>oce</code> object. The function will also
+prompt for a variety of required metadata fields. Depending on specific
+research / archiving requirements, these metadata parameters could be
+updated by providing the argument <code>metadata</code>.
+</p>
+<p>Default metadata parameters include 'deploymentType', 'waterDepth',
+'serialNumber', 'latitude', 'longitude', 'castDate', 'castStartTime',
+'castEndTime', 'processedBy', 'opticalSetting', 'imageVolume', 'comment'.
+</p>
+
+
+<h3>Value</h3>
+
+<p>an oce CTD object with all VPR data as well as metadata
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data("taxa_conc_n")
+metadata &lt;- c('deploymentType' = 'towyo', 'waterDepth' =
+max(ctd_roi_merge$pressure), 'serialNumber' = NA, 'latitude' = 47,
+'longitude' = -65, 'castDate' = '2019-08-11', 'castStartTime'= '00:00',
+'castEndTime' = '01:00', 'processedBy' = 'E. Chisholm', 'opticalSetting' =
+'S2', 'imageVolume' = 83663, 'comment' = 'test data')
+
+oce_dat &lt;- vpr_save(taxa_conc_n, metadata)
+# save(oce_dat, file = vpr_save.RData') # save data
+
+</code></pre>
+
+
+</div>

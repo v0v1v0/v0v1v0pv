@@ -1,0 +1,135 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>olmm-control</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Control parameters for <code>olmm</code>.</h2>
+
+<h3>Description</h3>
+
+<p>Various parameters that control aspects for <code>olmm</code>.  
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">olmm_control(fit = c("nlminb", "ucminf", "optim"), 
+             doFit = TRUE, numGrad = FALSE, 
+             numHess = numGrad, nGHQ = 7L,
+             start = NULL, restricted = NULL, verbose = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fit</code></td>
+<td>
+<p>character string. The name of the function to be used for the 
+optimization. Can be one of <code>"nlminb"</code>, <code>"ucminf"</code>, <code>"optim"</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>doFit</code></td>
+<td>
+<p>logical scalar. When <code>FALSE</code> an unfitted
+<code>olmm</code> object is returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numGrad</code></td>
+<td>
+<p>logical scalar indicating whether the score function
+should be retrieved numerically.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numHess</code></td>
+<td>
+<p>logical scalar. Indicates whether the Hess matrix for
+the variance-covariance matrix should be estimated numerically,
+which is an approximation of the observed Fisher information. Must
+be <code>TRUE</code> if <code>numGrad</code> is <code>TRUE</code>. See details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nGHQ</code></td>
+<td>
+<p>a positive integer specifying the number of quadrature
+points for the approximation of the marginal Likelihood by numerical
+integration.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>start</code></td>
+<td>
+<p>a named numeric vector of initial values for the
+parameters. The parameter must be named in exactly in the way as
+they appear when the model is fitted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>restricted</code></td>
+<td>
+<p>a character vector of names of coefficients to be
+restricted to the initial values. The argument is ignored in case of
+adjacent category models.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>logical scalar. If <code>TRUE</code> verbose output is
+generated during the optimization of the parameter estimates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further arguments to be passed to <code>fit</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Initial values may decrease the computation time and avoid
+divergence. The <code>start</code> argument accepts a vector with named
+elements according to the column names of the
+<code>model.matrix</code>. At the time being, initial values for
+adjacent-categories models must be transformed into the
+baseline-category model form.
+</p>
+<p>Notice that an additional argument <code>control</code>, e.g.,
+<code>control = list(trace = 1)</code>, can be passed access control
+parameters of the optimizers. For arguments, see
+<code>ucminf</code>, <code>nlminb</code> or
+<code>optim</code>.   
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list of class <code>olmm_control</code> containing
+the control parameters.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Reto Burgin</p>
+
+
+<h3>See Also</h3>
+
+<p><code>olmm</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">olmm_control(doFit = FALSE)
+</code></pre>
+
+
+</div>

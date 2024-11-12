@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>fisk</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Fisk Distribution family function </h2>
+
+<h3>Description</h3>
+
+<p>Maximum likelihood estimation of the 2-parameter
+Fisk distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">fisk(lscale = "loglink", lshape1.a = "loglink", iscale = NULL,
+    ishape1.a = NULL, imethod = 1, lss = TRUE,
+    gscale = exp(-5:5), gshape1.a = seq(0.75, 4, by = 0.25),
+    probs.y = c(0.25, 0.5, 0.75), zero = "shape")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lss</code></td>
+<td>
+<p> See <code>CommonVGAMffArguments</code> for
+important information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lshape1.a, lscale</code></td>
+<td>
+
+<p>Parameter link functions applied to the
+(positive) parameters <code class="reqn">a</code> and <code>scale</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iscale, ishape1.a, imethod, zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+For <code>imethod = 2</code> a good initial value for
+<code>iscale</code> is needed to obtain a good estimate for
+the other parameter.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gscale, gshape1.a</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>probs.y</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The 2-parameter Fisk (aka log-logistic) distribution
+is the 4-parameter
+generalized beta II distribution with
+shape parameter <code class="reqn">q=p=1</code>.
+It is also the 3-parameter Singh-Maddala distribution
+with shape parameter <code class="reqn">q=1</code>, as well as the
+Dagum distribution with <code class="reqn">p=1</code>.
+More details can be found in Kleiber and Kotz (2003).
+</p>
+<p>The Fisk distribution has density
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = a y^{a-1} / [b^a \{1 + (y/b)^a\}^2]</code>
+</p>
+
+<p>for <code class="reqn">a &gt; 0</code>, <code class="reqn">b &gt; 0</code>, <code class="reqn">y \geq 0</code>.
+Here, <code class="reqn">b</code> is the scale parameter <code>scale</code>,
+and <code class="reqn">a</code> is a shape parameter.
+The cumulative distribution function is
+</p>
+<p style="text-align: center;"><code class="reqn">F(y) = 1 - [1 + (y/b)^a]^{-1} = [1 + (y/b)^{-a}]^{-1}.</code>
+</p>
+
+<p>The mean is
+</p>
+<p style="text-align: center;"><code class="reqn">E(Y) = b \, \Gamma(1 + 1/a) \, \Gamma(1 - 1/a)</code>
+</p>
+
+<p>provided <code class="reqn">a &gt; 1</code>; these are returned as the fitted values.
+This family function handles multiple responses.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>See the notes in <code>genbetaII</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Kleiber, C. and Kotz, S. (2003).
+<em>Statistical Size Distributions in
+Economics and Actuarial Sciences</em>,
+Hoboken, NJ, USA: Wiley-Interscience.
+</p>
+
+
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>Fisk</code>,
+<code>genbetaII</code>,
+<code>betaII</code>,
+<code>dagum</code>,
+<code>sinmad</code>,
+<code>inv.lomax</code>,
+<code>lomax</code>,
+<code>paralogistic</code>,
+<code>inv.paralogistic</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fdata &lt;- data.frame(y = rfisk(200, shape = exp(1), exp(2)))
+fit &lt;- vglm(y ~ 1, fisk(lss = FALSE), data = fdata, trace = TRUE)
+fit &lt;- vglm(y ~ 1, fisk(ishape1.a = exp(2)), fdata, trace = TRUE)
+coef(fit, matrix = TRUE)
+Coef(fit)
+summary(fit)
+</code></pre>
+
+
+</div>

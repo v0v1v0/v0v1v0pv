@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_predictions</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Creates a ggplot object with a time series and some forecasts</h2>
+
+<h3>Description</h3>
+
+<p>Create a <code>ggplot</code> object with a time series and, optionally, some future
+values of the time series and several forecast for those future values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_predictions(ts, future = NULL, predictions = NULL, sdp = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ts</code></td>
+<td>
+<p>a time series of class <code>ts</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>future</code></td>
+<td>
+<p>NULL (default) or a time series of class <code>ts</code> or a vector.
+Future values of the time series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>predictions</code></td>
+<td>
+<p>NULL (default) or a named list containing the predictions
+for the future values. Each component of the list should contain a vector or
+an object of class <code>ts</code> representing a forecast, the name of the
+component should be the name of the forecasting method.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sdp</code></td>
+<td>
+<p>logical. Should data points be shown? (default value <code>TRUE</code>)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If <code>future</code> or the forecasts in the <code>prediction</code> list are vectors
+then they are supposed to start after the last data of the time series.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The <code>ggplot</code> object representing the time series and its forecast.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># plot a time series, its future values and two forecasts
+ts &lt;- window(USAccDeaths, end = c(1977, 12))
+f &lt;- window(USAccDeaths, start = c(1978, 1))
+prediction1 &lt;- rep(mean(ts), 12)
+prediction2 &lt;- as.vector(window(ts, start = c(1977, 1)))
+p &lt;- list(Mean = prediction1, Naive = prediction2)
+plot_predictions(ts, future = f, predictions = p)
+</code></pre>
+
+
+</div>

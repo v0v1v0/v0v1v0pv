@@ -1,0 +1,181 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mcaplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simple and enhanced plot of MCA solutions</h2>
+
+<h3>Description</h3>
+
+<p>This function is intended as an alternative to <code>plot.mjca</code>
+for plotting multiple correspondence analysis solutions.
+It provides more flexibility for labeling factor levels and connecting
+them with lines. It does not support some features of
+<code>plot.mjca</code> (centroids, supplementary points, arrows, etc.) 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mcaplot(obj, 
+  map = "symmetric", 
+  dim = 1:2, 
+  col = c("blue", "red", "brown", "black", "green3", "purple"), 
+  pch = 15:20, 
+  cex = 1.2, 
+  pos = 3, 
+  lines = TRUE, 
+  lwd = 2, 
+  legend = FALSE, 
+  legend.pos = "topright", 
+  xlab = "_auto_", 
+  ylab = "_auto_", 
+  rev.axes  = c(FALSE, FALSE),
+  ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>An <code>"mjca"</code> object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>map</code></td>
+<td>
+<p>Character string specifying the map type, i.e., the scaling applied to coordinates
+for different types of MCA representations.
+Allowed options include:
+<code>"symmetric"</code> (default),
+<code>"rowprincipal"</code>,   <code>"colprincipal"</code>, <code>"symbiplot"</code>,
+<code>"rowgab"</code>, <code>"colgab"</code>, <code>"rowgreen"</code>, <code>"colgreen"</code>.
+See <code>mjca</code> for details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dim</code></td>
+<td>
+<p>Dimensions to plot, an integer vector of length 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>Vector of colors, one for each factor in the MCA</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pch</code></td>
+<td>
+<p>Vector of point symbols for the category levels, one for each factor</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cex</code></td>
+<td>
+<p>Character size for points and level labels</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pos</code></td>
+<td>
+<p>Position of level labels relative to the category points; either a single number or a vector of length equal to the number of category points.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lines</code></td>
+<td>
+<p>A logical or an integer vector indicating which factors are to be
+joined with lines using <code>multilines</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwd</code></td>
+<td>
+<p>Line width(s) for the lines</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+<p>Logical; draw a legend for the factor names?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend.pos</code></td>
+<td>
+<p>Position of the legend in the plot, as in <code>legend</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab,ylab</code></td>
+<td>
+<p>Labels for horizontal and vertical axes. 
+The default, <code>"_auto_"</code> means that the function auto-generates a label of 
+the form <code>"Dimension X (xx.x %)"</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rev.axes</code></td>
+<td>
+<p>A logical vector of length 2, where TRUE reverses the direction of the
+corresponding axis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Arguments passed down to <code>plot</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns the coordinates of the category points invisibly
+
+
+
+
+
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Friendly
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>mjca</code>,
+<code>plot.mjca</code>
+</p>
+<p><code>cacoord</code> returns CA and MCA coordinates,
+<code>multilines</code> draw multiple lines according to a factor,
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">require(ca)
+data(Titanic)
+titanic.mca &lt;- mjca(Titanic)
+mcaplot(titanic.mca, legend=TRUE, legend.pos="topleft")
+
+data(HairEyeColor)
+haireye.mca &lt;- mjca(HairEyeColor)
+mcaplot(haireye.mca, legend=TRUE, cex.lab=1.3)
+
+
+</code></pre>
+
+
+</div>

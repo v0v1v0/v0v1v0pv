@@ -1,0 +1,124 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>irv_method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Instant-Runoff Voting Method</h2>
+
+<h3>Description</h3>
+
+<p>Instant-runoff voting (IRV) method is also 
+called alternative voting, 
+transferable voting, ranked-choice voting, 
+single-seat ranked-choice voting, or preferential voting.
+In the 1st round, the candidate with absolute majority (that 
+is, with more than 50 percent) wins. If no absolute winner exists, 
+the one who gets the least votes is deleted, all other 
+candidates enter into the 2nd round. Again, if no 
+absolute winner exists, let the one with the least votes go and 
+start the 3rd round... Finally, an absolute winner will 
+appear. Ties are solved with different methods in reality; however, 
+this function applies the following rules: (a) if more than 
+one candidate gets the least votes, let all of them go; (b) if 
+all the candidates get the same number of votes in a certain round, 
+then all of them are winners. Note: the function accepts 
+object of class <code>vote</code> and the method can only be 
+used when x$approval_able is TRUE, that is, there is 
+no duplicated values in the score matrix; otherwise, 
+the winner will be NULL.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">irv_method(x, min_valid = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class <code>vote</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min_valid</code></td>
+<td>
+<p>default is 1. If the number of valid entries of 
+a ballot is less than this value, the ballot will not be used.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list object.
+</p>
+
+<ul>
+<li>
+<p> (1) <code>call</code> the function call.
+</p>
+</li>
+<li>
+<p> (2) <code>method</code> the counting method.
+</p>
+</li>
+<li>
+<p> (3) <code>candidate</code> candidate names.
+</p>
+</li>
+<li>
+<p> (4) <code>candidate_num</code> number of candidate.
+</p>
+</li>
+<li>
+<p> (5) <code>ballot_num</code> number of ballots in x.
+</p>
+</li>
+<li>
+<p> (6) <code>valid_ballot_num</code> number of ballots that are 
+used to compute the result.
+</p>
+</li>
+<li>
+<p> (7) <code>winner</code> the winners, may be NULL.
+</p>
+</li>
+<li>
+<p> (8) <code>absolute</code> whether the winner wins absolute majority in the
+1st round.
+</p>
+</li>
+<li>
+<p> (9) <code>other_info</code> the IRV may run for 2 or more rounds. So here 
+the summary information of each round is recorded. The length of the list is 
+equal to the number of rounds.
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+
+<ul><li>
+<p> Reilly, B. 2004. The global spread of preferential 
+voting: Australian institutional imperialism? 
+Australian Journal of Political Science, 39(2), 253-266.
+</p>
+</li></ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">raw &lt;- c(
+   rep(c('m', 'n', 'c', 'k'), 42), rep(c('n', 'c', 'k', 'm'), 26), 
+   rep(c('c', 'k', 'n', 'm'), 15), rep(c('k', 'c', 'n', 'm'), 17)
+) 
+raw &lt;- matrix(raw, ncol = 4, byrow = TRUE)
+vote &lt;- create_vote(raw, xtype = 2, candidate = c('m', 'n', 'k', 'c'))
+y &lt;- irv_method(vote) # winner is k
+</code></pre>
+
+
+</div>

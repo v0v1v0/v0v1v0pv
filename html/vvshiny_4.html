@@ -1,0 +1,92 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bind_both</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Bind both</h2>
+
+<h3>Description</h3>
+
+<p>This function binds two dataframes row-wise and performs additional manipulations depending on the 'type'.
+The function also reorders the factor levels of the specified facet variable.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bind_both(
+  dfLeft,
+  dfRight,
+  id = "bench",
+  y_left = NULL,
+  y_right = NULL,
+  facet_var = rlang::sym("VIS_Groep"),
+  facet_name_var = rlang::sym("VIS_Groep_naam")
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dfLeft</code></td>
+<td>
+<p>A dataframe to be combined</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dfRight</code></td>
+<td>
+<p>A dataframe to be combined</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>An identifier string specifying the type of operation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_left</code></td>
+<td>
+<p>A character vector specifying the column to be used for the left dataframe</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y_right</code></td>
+<td>
+<p>A character vector specifying the column to be used for the right dataframe</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>facet_var</code></td>
+<td>
+<p>A symbol specifying the variable to be used for faceting</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>facet_name_var</code></td>
+<td>
+<p>A symbol specifying the variable to be used for the facet name</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A dataframe obtained by binding dfLeft and dfRight, with additional transformations applied
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">df1 &lt;- data.frame(x = 1:5, y = rnorm(5), VIS_Groep_naam = "One")
+df2 &lt;- data.frame(x = 6:10, y = rnorm(5), VIS_Groep_naam = "Two")
+df_both &lt;- bind_both(df1, df2, id = "test",
+                     y_left = "y", y_right = "y",
+                     facet_var = rlang::sym("x"))
+</code></pre>
+
+
+</div>

@@ -1,0 +1,59 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vec_data</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract underlying data</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+</p>
+<p>Extract the data underlying an S3 vector object, i.e. the underlying
+(named) atomic vector, data frame, or list.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vec_data(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A vector or object implementing <code>vec_proxy()</code>.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>The data underlying <code>x</code>, free from any attributes except the names.
+</p>
+
+
+<h3>Difference with <code>vec_proxy()</code>
+</h3>
+
+
+<ul>
+<li> <p><code>vec_data()</code> returns unstructured data. The only attributes
+preserved are names, dims, and dimnames.
+</p>
+<p>Currently, due to the underlying memory architecture of R, this
+creates a full copy of the data for atomic vectors.
+</p>
+</li>
+<li> <p><code>vec_proxy()</code> may return structured data. This generic is the
+main customisation point for accessing memory values in vctrs,
+along with <code>vec_restore()</code>.
+</p>
+<p>Methods must return a vector type. Records and data frames will
+be processed rowwise.
+</p>
+</li>
+</ul>
+</div>

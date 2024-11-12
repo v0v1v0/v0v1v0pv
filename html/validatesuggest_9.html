@@ -1,0 +1,81 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>write_ratio_check</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Suggest ratio checks</h2>
+
+<h3>Description</h3>
+
+<p>Suggest ratio checks
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">write_ratio_check(
+  d,
+  vars = names(d),
+  file = stdout(),
+  lin_cor = 0.95,
+  digits = 2
+)
+
+suggest_ratio_check(d, vars = names(d), lin_cor = 0.95, digits = 2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+<p><code>data.frame</code>, used to generate the checks</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vars</code></td>
+<td>
+<p><code>character</code> optionally the subset of variables to be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>file</code></td>
+<td>
+<p>file to which the checks will be written to.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lin_cor</code></td>
+<td>
+<p>threshold for abs correlation to be included (details)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>number of digits for rounding</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>suggest_ratio_check</code> returns <code>validate::validator()</code> object with the suggested rules.
+<code>write_ratio_check</code> write the rules to file and returns invisibly a named list of check for each variable.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(SBS2000, package="validate")
+
+# generates upper and lower checks for the
+# ratio of two variables if their correlation is
+# bigger then `lin_cor`
+suggest_ratio_check(SBS2000, lin_cor=0.98)
+</code></pre>
+
+
+</div>

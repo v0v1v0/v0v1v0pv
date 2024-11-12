@@ -1,0 +1,158 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>check.numeric</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Check the vector's possibility to convert to numeric</h2>
+
+<h3>Description</h3>
+
+
+<p>This function gets a character or factor vector and checks if all the value can be safely converted to numeric.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    check.numeric(v=NULL, na.rm=FALSE, only.integer=FALSE, exceptions=c(""),
+                  ignore.whitespace=TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+
+
+<p>The character vector or factor vector. (Mandatory)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+
+<p>logical. Should the function ignore NA? Default value is FALSE since NA can be converted to numeric. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>only.integer</code></td>
+<td>
+
+<p>logical. Only check for integers and do not accept floating point. Default value is FALSE. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>exceptions</code></td>
+<td>
+
+<p>A character vector containing the strings that should be considered as valid to be converted to numeric. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ignore.whitespace</code></td>
+<td>
+
+<p>logical. Ignore leading and tailing whitespace characters before assessing if the vector can be converted to numeric. Default value is TRUE. (Optional)
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<p>This function checks if it is safe to convert the vector to numeric and this conversion will not end up in producing NA. In nutshell this function tries to make sure provided vector contains numbers but in a non-numeric class. See example for better understanding.
+</p>
+<p>This function can be configured to only accept integer numbers and ignoring those with decimal point (by setting the argument 'only.integer' to 'TRUE'). It can also ignore NA values ('na.rm' argument) and ignore heading/tailing whitespaces ('ignore.whitespace' argument).
+</p>
+<p>There is also room to manually define exceptions to be considered as numbers (exceptions argument).
+</p>
+
+
+<h3>Value</h3>
+
+
+
+
+
+
+<p>The function return a logical vector. TRUE for all the elements in the given vector if they are safe to be converted into numeric in R (does not turned into NA).
+Remember that '""' and '"   "' can be converted to numeric safely (without getting the "NAs introduced by coercion" error), but their value would be NA.
+</p>
+<p>In case of a integer, numeric or logical vector, the function simply returns all TRUE logical vector.
+</p>
+
+
+<h3>Author(s)</h3>
+
+
+<p>Mehrad Mahmoudian
+</p>
+
+
+<h3>See Also</h3>
+
+
+<p><code>as.numeric</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    # Create a vector with NA
+    a &lt;- as.character(c(1:5, NA, seq(from=6, to=7, by=0.2)))
+    # see what we created
+    print(a)
+    # check if the vector is all numbers (not ignoring NAs)
+    check.numeric(a)
+    # check if the vector is all numbers (ignoring NAs)
+    check.numeric(a, na.rm=TRUE)
+    # if all the items in vector a are safe for numeric conversion
+    if(all(check.numeric(a))){
+        # convert the vector to numeric
+        a &lt;- as.numeric(a)
+    }
+
+    # create a complicated vector
+    b &lt;- c("1", "2.2", "3.", ".4", ".5.", "..6", "seven", "00008",
+       "90000", "-10", "+11", "12-", "--13", "++14", NA, "",
+       " 7 ", "   ", "8e2", "8.6e-10", "-8.6e+10", "e3")
+
+    # show in proper format
+    print(data.frame(value=b, check.numeric=check.numeric(b), converted=as.numeric(b)))
+        #       value check.numeric converted
+        # 1         1          TRUE   1.0e+00
+        # 2       2.2          TRUE   2.2e+00
+        # 3        3.          TRUE   3.0e+00
+        # 4        .4          TRUE   4.0e-01
+        # 5       .5.         FALSE        NA
+        # 6       ..6         FALSE        NA
+        # 7     seven         FALSE        NA
+        # 8     00008          TRUE   8.0e+00
+        # 9     90000          TRUE   9.0e+04
+        # 10      -10          TRUE  -1.0e+01
+        # 11      +11          TRUE   1.1e+01
+        # 12      12-         FALSE        NA
+        # 13     --13         FALSE        NA
+        # 14     ++14         FALSE        NA
+        # 15     &lt;NA&gt;          TRUE        NA
+        # 16                   TRUE        NA
+        # 17       7           TRUE   7.0e+00
+        # 18                   TRUE        NA
+        # 19      8e2          TRUE   8.0e+02
+        # 20  8.6e-10          TRUE   8.6e-10
+        # 21 -8.6e+10          TRUE  -8.6e+10
+        # 22       e3         FALSE        NA
+
+    # remember that "" and "   " can be converted to numeric safely, but their value would be NA.
+</code></pre>
+
+
+</div>

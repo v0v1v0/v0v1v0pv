@@ -1,0 +1,70 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>write_cond_rule</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Suggest a conditional rule</h2>
+
+<h3>Description</h3>
+
+<p>Suggest a conditional rule based on a association rule.
+This functions derives conditional rules based on the non-existance
+of combinations of categories in pairs of variables.
+For each numerical variable a logical variable is derived that tests for
+positivity. It generates IF THEN rules based on two variables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">write_cond_rule(d, vars = names(d), file = stdout())
+
+suggest_cond_rule(d, vars = names(d))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+<p><code>data.frame</code>, used to generate the checks</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vars</code></td>
+<td>
+<p><code>character</code> optionally the subset of variables to be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>file</code></td>
+<td>
+<p>file to which the checks will be written to.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>suggest_cond_rule</code> returns <code>validate::validator()</code> object with the suggested rules.
+<code>write_cond_rule</code> returns invisibly a named list of ranges for each variable.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(retailers, package="validate")
+
+# will generate check for all columns in retailers that are
+# complete.
+suggest_na_check(retailers)
+data("car_owner")
+
+rules &lt;- suggest_cond_rule(car_owner)
+rules$rules
+</code></pre>
+
+
+</div>

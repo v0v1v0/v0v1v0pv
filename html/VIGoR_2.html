@@ -1,0 +1,120 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predict_vigor</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Predict Y of new data using a training result with vigor
+</h2>
+
+<h3>Description</h3>
+
+<p>This function predicts Y of new data using a training result with vigor.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">predict_vigor(training_result, newX)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>training_result</code></td>
+<td>
+
+<p>Result of vigor
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newX</code></td>
+<td>
+
+<p>A list of X. newX contains X for each learner. The length and order of learners should be same as those of ETA used for training. Each element of newX is a matrix. When BLUP is used, X is an n1 x n2 relationship matrix where n1 and n2 are the numbers of samples in test and training data, respectively. When the other methods are used, X is an n1 x p matrix where p is the number of explanatory variables. p should be the same as the training data. When the intercept is added automatically, newX needs not to include the intercept.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function predict Y of new data (newX). When multiple learners are included in the model, predicted values are calculated for each element of newX, and the summation of all predicted values is returned (predicted values of each learner are not returned). When contributions of each learner (method) are of interest, add NULL to the elements of newX to be ignored (see examples).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A vector of predicted values is returned.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>vigor
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+#data
+data(sampledata)
+dim(X) #Matrix of SNP genotypes (explanatory variables)
+dim(Z) #Matrix of a fixed effect (explanatory variables)
+length(Y) #Vector of response variables
+
+#Train EBL using the first 80 percent of data
+#Then predict the remaining 20 percent data
+ETA &lt;- list(list(model = "EBL",X = X[1:400, ]))
+Train &lt;- vigor(Y[1:400], ETA)
+newX &lt;- list(X[401:500, ])
+Predict &lt;- predict_vigor(Train, newX)
+plot(Y[401:500], Predict)
+#When the intercept is automatically added when training,
+#the intercept is again automatically added to predicted values
+
+#Use multiple regression methods
+#Fit additive and dominance effects using BayesC with different shrinkage levels
+#Also fixed effects are added
+X.d &lt;- X
+X.d[X == 2] &lt;- 0 #heterozygotes are 1 and homozygotes are 0
+Z.matrix &lt;- model.matrix(~ Z)
+ETA &lt;- list(list(model = "FIXED", X = Z.matrix[1:400, ]),
+            list(model = "BayesC", X = X[1:400, ], H = c(5, 0.1, 0.01)),
+            list(model = "BayesC", X = X.d[1:400, ], H = c(5, 0.1, 0.001)))
+Train &lt;- vigor(Y[1:400], ETA)
+newX &lt;- list(Z.matrix[401:500, ], X[401:500, ], X.d[401:500, ])
+Predict &lt;- predict_vigor(Train, newX)
+plot(Y[401:500], Predict)
+
+#When fixed effects are specified using formula,
+Data &lt;- data.frame(Z = factor(Z))
+ETA &lt;- list(list(~ Z, model = "FIXED", data = Data[1:400, ,drop=FALSE]),
+            list(model = "BayesB", X = X[1:400, ], H = c(5, 0.1, 0.01)),
+            list(model = "BayesB", X = X.d[1:400, ], H = c(5, 0.1, 0.001)))
+Train &lt;- vigor(Y[1:400], ETA)
+newX &lt;- list(~ Z, data = Data[401:500, , drop=FALSE], X[401:500, ], X.d[401:500, ])
+Predict &lt;- predict_vigor(Train, newX)
+plot(Y[401:500], Predict)
+#NOTE: please confirm that levels of fixed effects are consistent
+#between the training and testing data
+
+#Contributions of each learner can be assessed by filling newX with NULL
+##Contribution of additive effect
+newX &lt;- list(NULL, X[401:500, ], NULL)
+Predict &lt;- predict_vigor(Train, newX)
+plot(Y[401:500], Predict)
+
+##Contribution of dominance effect
+newX &lt;- list(NULL, NULL, X.d[401:500, ])
+Predict &lt;- predict_vigor(Train, newX)
+plot(Y[401:500], Predict)
+
+</code></pre>
+
+
+</div>

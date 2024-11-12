@@ -1,0 +1,123 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>explogff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Exponential Logarithmic Distribution Family Function</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the two parameters of the exponential logarithmic distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">explogff(lscale = "loglink", lshape = "logitlink",
+         iscale = NULL,   ishape = NULL,
+         tol12 = 1e-05, zero = 1, nsimEIM = 400)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lscale, lshape</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol12</code></td>
+<td>
+
+<p>Numeric.
+Tolerance for testing whether a parameter has value 1 or 2.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iscale, ishape, zero, nsimEIM</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The exponential logarithmic distribution has density function
+</p>
+<p style="text-align: center;"><code class="reqn">f(y; c, s)  = 
+   (1/(-\log p ))  (((1/c)   (1 - s)   e^{-y/c}) / (1 - (1 - s)   e^{-y/c}))</code>
+</p>
+
+<p>where <code class="reqn">y &gt; 0</code>, scale parameter <code class="reqn">c &gt; 0</code>, and
+shape parameter <code class="reqn">s \in (0, 1)</code>.
+The mean, <code class="reqn">(-polylog(2, 1 - p) c) / \log(s)</code> is <em>not</em> returned as the fitted values.
+Note the median is <code class="reqn">c \log(1 + \sqrt{s})</code>
+and it is <em>currently</em> returned as the fitted values.
+Simulated Fisher scoring is implemented.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>We define <code>scale</code> as the reciprocal of the rate parameter
+used by Tahmasabi and Sadegh (2008).
+</p>
+<p>Yet to do: find a <code>polylog()</code> function.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> J. G. Lauder and T. W .Yee </p>
+
+
+<h3>References</h3>
+
+<p>Tahmasabi, R., Sadegh, R. (2008).
+A two-parameter lifetime distribution with decreasing failure rate.
+<em>Computational Statistics and Data Analysis</em>,
+<b>52</b>, 3889–3901.
+</p>
+
+
+<h3>See Also</h3>
+
+ 
+<p><code>dexplog</code>,
+<code>exponential</code>,
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  Scale &lt;- exp(2); shape &lt;- logitlink(-1, inverse = TRUE)
+edata &lt;- data.frame(y = rexplog(n = 2000, scale = Scale, shape = shape))
+fit &lt;- vglm(y ~ 1, explogff, data = edata, trace = TRUE)
+c(with(edata, median(y)), head(fitted(fit), 1))
+coef(fit, matrix = TRUE)
+Coef(fit)
+summary(fit)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

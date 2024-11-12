@@ -1,0 +1,85 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>scaling.BW</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Scaling factor between two matrices</h2>
+
+<h3>Description</h3>
+
+<p>Computes the maximum-likelihood estimate
+of the scaling factor between two proportional covariance matrices.
+Note that the scaling factor between the two matrices
+is equal to the arithmetic mean of their relative eigenvalues.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">scaling.BW(S1, S2, method = 0, pa = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>S1</code></td>
+<td>
+<p>a variance-covariance matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>S2</code></td>
+<td>
+<p>a variance-covariance matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>an integer for the method of matrix inversion (see function 'minv')</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pa</code></td>
+<td>
+<p>an integer for the parameter of matrix inversion (see function 'minv')</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The scaling factor between the two matrices.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>See <code>minv</code> for the method and the parameter used for the matrix inversion
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Data matrix of 2D landmark coordinates
+data("Tropheus.IK.coord")
+coords &lt;- which(names(Tropheus.IK.coord) == "X1"):which(names(Tropheus.IK.coord) == "Y19")
+proc.coord &lt;- as.matrix(Tropheus.IK.coord[coords])
+
+# Between-group (B) and within-group (W) covariance matrices for all populations
+B &lt;- cov.B(proc.coord, groups = Tropheus.IK.coord$POP.ID, sex = Tropheus.IK.coord$Sex)
+W &lt;- cov.W(proc.coord, groups = Tropheus.IK.coord$POP.ID, sex = Tropheus.IK.coord$Sex)
+
+# ML estimate of the scaling factor between B and W
+sc &lt;- scaling.BW(B, W)
+
+# Scaling of B to W
+Bsc &lt;- B / sc
+
+</code></pre>
+
+
+</div>

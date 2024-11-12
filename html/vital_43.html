@@ -1,0 +1,100 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>read_hmd</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Read data directly from HMD and construct a <code>vital</code> object for use in other functions</h2>
+
+<h3>Description</h3>
+
+<p><code>read_hmd</code> reads single-year and single-age data from the Human Mortality Database (HMD
+<a href="https://www.mortality.org">https://www.mortality.org</a>) and constructs a <code>vital</code> object suitable
+for use in other functions. This function uses <code>HMDHFDplus::readHMDweb()</code>
+to download the required data. It is designed to handle Deaths, Population,
+Exposure, Death Rates and Births. By default, Deaths, Population, Exposure
+and Death Rates are downloaded. It is better to handle Births separately as
+they are not age-specific.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">read_hmd(
+  country,
+  username,
+  password,
+  variables = c("Deaths", "Exposures", "Population", "Mx")
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>country</code></td>
+<td>
+<p>Directory abbreviation from the HMD. For instance, Australia = "AUS".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>username</code></td>
+<td>
+<p>HMD username (case-sensitive)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>password</code></td>
+<td>
+<p>HMD password (case-sensitive)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>variables</code></td>
+<td>
+<p>List of variables to download from the HMD. If the data
+contains a mixture of age-specific and non-age-specific variables, then
+the non-age-specific data will be repeated for each age.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>In order to read the data, users are required to create an account with the
+HMD website (<a href="https://www.mortality.org">https://www.mortality.org</a>), and obtain a valid username and password.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>read_hmd</code> returns a <code>vital</code> object combining the downloaded data.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Rob J Hyndman
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+norway &lt;- read_hmd(
+  country = "NOR",
+  username = "Nora.Weigh@mymail.com",
+  password = "FF!5xeEFa6"
+)
+norway_births &lt;- read_hmd(
+  country = "NOR",
+  username = "Nora.Weigh@mymail.com",
+  password = "FF!5xeEFa6",
+  variables = "Births"
+)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

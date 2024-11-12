@@ -1,0 +1,146 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Gensh</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Generalized Secant Hyperbolic
+Distribution
+</h2>
+
+<h3>Description</h3>
+
+<p>Density,
+distribution function,
+quantile function
+and random generation
+for the generalized secant hyperbolic
+distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dgensh(x, shape, location = 0, scale = 1, tol0 = 1e-4,
+       log = FALSE)
+pgensh(q, shape, location = 0, scale = 1, tol0 = 1e-4,
+       lower.tail = TRUE)
+qgensh(p, shape, location = 0, scale = 1, tol0 = 1e-4)
+rgensh(n, shape, location = 0, scale = 1, tol0 = 1e-4)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, p, n, log, lower.tail</code></td>
+<td>
+
+<p>Similar meaning as in <code>Normal</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+<p>Numeric.
+Shape parameter, called <code class="reqn">t</code> in
+Vaughan (2002).
+Valid values are
+<code class="reqn">-\pi/2 &lt; t</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>location, scale</code></td>
+<td>
+<p>Numeric.
+The location and (positive) scale
+parameters.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol0</code></td>
+<td>
+<p>Numeric.
+Used to test whether the shape parameter
+is close enough to be treated as 0.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is an implementation of the family of
+symmetric densities described
+by Vaughan (2002).
+By default, the mean and variance are 0
+and 1, for all <code class="reqn">t</code>.
+Some special (default) cases are:
+<code class="reqn">t=0</code>: logistic
+(which is similar to
+<code>stats:dt</code>
+with 9 degrees of freedom);
+<code class="reqn">t=-\pi/2</code>: the standard secant
+hyperbolic (whence the name);
+<code class="reqn">t=\infty</code>:
+uniform(-sqrt(3), sqrt(3)).
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dgensh</code> gives the density,
+<code>pgensh</code> gives the distribution function,
+<code>qgensh</code> gives the quantile function, and
+<code>rgensh</code> generates random deviates.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Numerical problems may occur when some
+argument values are extreme.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee. </p>
+
+
+<h3>See Also</h3>
+
+<p><code>gensh</code>,
+<code>logistic</code>,
+<code>hypersecant</code>,
+<code>Logistic</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- seq(-2, 4, by = 0.01)
+loc &lt;- 1; shape &lt;- -pi /2
+## Not run: plot(x, dgensh(x, shape, loc), type = "l",
+     main = "Blue is density, orange is the CDF",
+     ylim = 0:1, las = 1, ylab = "", 
+     sub = "Purple are 5, 10, ..., 95 percentiles",
+     col = "blue")
+abline(h = 0, col = "blue", lty = 2)
+lines(qgensh((1:19) / 20, shape, loc), type = "h",
+      dgensh(qgensh((1:19) / 20, shape, loc),
+             shape, loc), col = "purple", lty = 3)
+lines(x, pgensh(x, shape, loc), col = "orange")
+abline(h = 0, lty = 2) 
+## End(Not run)
+
+pp &lt;- (1:19) / 20  # Test two functions
+max(abs(pgensh(qgensh(pp, shape, loc),
+               shape,loc) - pp))  # Should be 0
+</code></pre>
+
+
+</div>

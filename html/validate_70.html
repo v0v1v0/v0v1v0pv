@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>export_yaml</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Export to yaml file</h2>
+
+<h3>Description</h3>
+
+<p>Translate an object to yaml format and write to file.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">export_yaml(x, file, ...)
+
+as_yaml(x, ...)
+
+## S4 method for signature 'expressionset'
+export_yaml(x, file, ...)
+
+## S4 method for signature 'expressionset'
+as_yaml(x, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An R object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>file</code></td>
+<td>
+<p>A file location or connection (passed to <code>base::write</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Options passed to <code>yaml::as.yaml</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Both <code>validator</code> and <code>indicator</code> objects can be
+exported.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+v &lt;- validator(x &gt; 0, y &gt; 0, x + y == z)
+txt &lt;- as_yaml(v)
+cat(txt)
+
+
+# NOTE: you can safely run the code below. It is enclosed in 'not run'
+# statements to prevent the code from being run at test-time on CRAN
+## Not run: 
+export_yaml(v, file="my_rules.txt")
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

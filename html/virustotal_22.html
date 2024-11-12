@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>url_report</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get URL Report</h2>
+
+<h3>Description</h3>
+
+<p>Retrieve a scan report for a given URL. If no scan report is available, set <code>scan</code> to <code>1</code> to get a new report.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">url_report(url = NULL, scan_id = NULL, scan = 1, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>url</code></td>
+<td>
+<p>URL. String. <code>url</code> or <code>scan_id</code> must be specified.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scan_id</code></td>
+<td>
+<p>scan id for a particular url scan. String. <code>url</code> or <code>scan_id</code> must be specified.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scan</code></td>
+<td>
+<p>String. Optional. Can be 0 or 1. Default is <code>1</code>. 
+When <code>1</code>, submits <code>url</code> for scanning if no existing reports are found. 
+When scan is set to <code>1</code>, the result includes a <code>scan_id</code> field, which can be used again to retrieve the report.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments passed to <code>virustotal2_GET</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>data.frame with 13 columns: 
+<code>scan_id, resource, url, response_code, scan_date, permalink, verbose_msg, positives, total, .id, detected, result, detail</code>
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://developers.virustotal.com/v2.0/reference">https://developers.virustotal.com/v2.0/reference</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>set_key</code> for setting the API key
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+
+# Before calling the function, set the API key using set_key('api_key_here')
+
+url_report("http://www.google.com")
+url_report(scan_id = "ebdd15c397d2b0c6f50c3f2df531357d1201ff5976802316405e60880d6bf5ec-1478786749")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

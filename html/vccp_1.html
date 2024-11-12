@@ -1,0 +1,58 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getTestPlot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot output from the VCCP model</h2>
+
+<h3>Description</h3>
+
+<p>This function plots the change points in the network structure between multivariate time series detected by the VCCP model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getTestPlot(vccp_result)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>vccp_result</code></td>
+<td>
+<p>A list generated from <code>vccp.fun</code>.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>No return value, called for a plotting purpose.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vccp.fun</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Simulate MVN data with 2 change points
+data = cbind(1:180, mvn.sim.2.cps(180,8,seed=101))
+## Change point detection using VCCP (it may take several minutes to complete...)
+result = vccp.fun(data, "NBS", test = "V")
+## Plot the result
+getTestPlot(result)
+
+result.2 = vccp.fun(data, "NBS", test = "B")
+## Plot the result
+getTestPlot(result.2)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,68 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary.varshrinkest</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summary method for an object of class 'varshrinkest',
+VAR parameters estimated by VARshrink()</h2>
+
+<h3>Description</h3>
+
+<p>Extend summary.varest() to class 'varshrinest' to incorporate
+adapted methods for new classes:
+summary.shrinklm(), logLik.varshrinkest(), roots.varshrinkest().
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'varshrinkest'
+summary(object, equations = NULL, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object of class "varshrinkest", usually
+a result of call to "VARshrink()".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>equations</code></td>
+<td>
+<p>Subset of names of endogenous time series variables
+to summarize.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Code is modified to avoid call to data matrices ($y, $datamat)
+and to use effective numbers of parameters of shrinkage estimates.
+</p>
+<p>Output includes the scale matrix, Sigma, and degree-of-freedom, dof,
+for multivariate t-distribution for residuals.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(Canada, package = "vars")
+y &lt;- diff(Canada)
+estim &lt;- VARshrink(y, p = 2, type = "const", method = "ridge")
+summary(estim)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,66 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>center_scale</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Center and scale a set of variables.</h2>
+
+<h3>Description</h3>
+
+<p>Center and scale a set of variables. Other columns are passed through.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">center_scale(d, center, scale)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+<p>data.frame to work with</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>center</code></td>
+<td>
+<p>named vector of variables to center</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>named vector of variables to scale</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>d with centered and scaled columns altered
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+d &lt;- data.frame(x = 1:5, 
+                y = c('a', 'a', 'b', 'b', 'b'))
+vars_to_transform = "x"
+t &lt;- base::scale(as.matrix(d[, vars_to_transform, drop = FALSE]), 
+                 center = TRUE, scale = TRUE)
+t
+
+centering &lt;- attr(t, "scaled:center")
+scaling &lt;- attr(t, "scaled:scale")
+center_scale(d, center = centering, scale = scaling)
+
+</code></pre>
+
+
+</div>

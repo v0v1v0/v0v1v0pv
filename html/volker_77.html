@@ -1,0 +1,142 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>labs_apply</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Set column and value labels</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">labs_apply(data, codes = NULL, cols = NULL, items = TRUE, values = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A tibble containing the dataset.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>codes</code></td>
+<td>
+<p>A tibble in codebook format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>A tidy column selection. Set to NULL (default) to apply to all columns
+found in the codebook.
+Restricting the columns is helpful when you  want to set value labels.
+In this case, provide a tibble with value_name and value_label columns
+and specify the columns that should be modified.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>items</code></td>
+<td>
+<p>If TRUE, column labels will be retrieved from the codes (the default).
+If FALSE, no column labels will be changed.
+Alternatively, a named list of column names with their labels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>values</code></td>
+<td>
+<p>If TRUE, value labels will be retrieved from the codes (default).
+If FALSE, no value labels will be changed.
+Alternatively, a named list of value names with their labels.
+In this case, use the cols-Parameter to define which columns should be changed.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>You can either provide a data frame in codebook format to the codes-parameter
+or provide named lists to the items- or values-parameter.
+</p>
+<p>When working with a codebook in the codes-parameter:
+</p>
+
+<ul>
+<li>
+<p> Change column labels by providing the columns item_name and item_label in the codebook.
+Set the items-parameter to TRUE (the default setting).
+</p>
+</li>
+<li>
+<p> Change value labels by providing the columns value_name and value_label in the codebook.
+To tell which columns should be changed, you can either use the item_name column in the codebook
+or use the cols-parameter.
+For factor values, the levels and their order are retrieved from the value_label column.
+For coded values, labels are retrieved from both the columns value_name and value_label.
+</p>
+</li>
+</ul>
+<p>When working with lists in the items- or values-parameter:
+</p>
+
+<ul>
+<li>
+<p> Change column labels by providing a named list to the items-parameter. The list contains labels named by the columns.
+Set the parameters codes and cols to NULL (their default value).
+</p>
+</li>
+<li>
+<p> Change value labels by providing a named list to the values-parameter. The list contains labels named by the values.
+Provide the column selection in the cols-parameter.
+Set the codes-parameter to NULL (its default value).
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>A tibble containing the dataset with new labels.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(volker)
+
+# Set column labels using the items-parameter
+volker::chatgpt %&gt;%
+  labs_apply(
+   items = list(
+     "cg_adoption_advantage_01" = "Allgemeine Vorteile",
+     "cg_adoption_advantage_02" = "Finanzielle Vorteile",
+     "cg_adoption_advantage_03" = "Vorteile bei der Arbeit",
+     "cg_adoption_advantage_04" = "Macht mehr Spaß"
+   )
+ ) %&gt;%
+ tab_metrics(starts_with("cg_adoption_advantage_"))
+
+# Set value labels using the values-parameter
+ volker::chatgpt %&gt;%
+   labs_apply(
+     cols=starts_with("cg_adoption"),
+     values = list(
+       "1" = "Stimme überhaupt nicht zu",
+       "2" = "Stimme nicht zu",
+       "3" = "Unentschieden",
+       "4" = "Stimme zu",
+       "5" =  "Stimme voll und ganz zu"
+     )
+   ) %&gt;%
+   plot_metrics(starts_with("cg_adoption"))
+
+</code></pre>
+
+
+</div>

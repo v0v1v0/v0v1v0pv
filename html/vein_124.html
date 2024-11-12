@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>to_latex</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>creates a .tex a table from a data.frame</h2>
+
+<h3>Description</h3>
+
+<p><code>to_latex</code> reads a data.frme an dgenerates a .tex
+table, aiming to replicate the method of tablegenerator.com
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">to_latex(df, file, caption = "My table", label = "tab:df")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>data.frame with three column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>file</code></td>
+<td>
+<p>Character, name of new .tex file</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>caption</code></td>
+<td>
+<p>Character caption of table</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label</code></td>
+<td>
+<p>Character,  label of table</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a text file with extension .tex.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vein_notes</code>  <code>long_to_wide</code>
+</p>
+<p>Other helpers: 
+<code>colplot()</code>,
+<code>dmonth()</code>,
+<code>wide_to_long()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+df &lt;- data.frame(pollutant = rep(c("CO", "propadiene", "NO2"), 10),
+                 emission = vein::Emissions(1:30),
+                 region = rep(letters[1:2], 15))
+df
+long_to_wide(df)
+(df2 &lt;- long_to_wide(df, column_fixed = "region"))
+to_latex(df2)
+to_latex(long_to_wide(df, column_fixed = "region"),
+file = paste0(tempfile(), ".tex"))
+
+## End(Not run)
+</code></pre>
+
+
+</div>

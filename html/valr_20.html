@@ -1,0 +1,103 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_reldist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute relative distances between intervals.</h2>
+
+<h3>Description</h3>
+
+<p>Compute relative distances between intervals.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_reldist(x, y, detail = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>detail</code></td>
+<td>
+<p>report relative distances for each <code>x</code> interval.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Interval statistics can be used in combination with
+<code>dplyr::group_by()</code> and <code>dplyr::do()</code> to calculate
+statistics for subsets of data. See <code>vignette('interval-stats')</code> for
+examples.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>detail = FALSE</code>, a ivl_df that summarizes
+calculated <code>.reldist</code> values with the following columns:
+</p>
+
+<ul>
+<li> <p><code>.reldist</code> relative distance metric
+</p>
+</li>
+<li> <p><code>.counts</code> number of metric observations
+</p>
+</li>
+<li> <p><code>.total</code> total observations
+</p>
+</li>
+<li> <p><code>.freq</code> frequency of observation
+</p>
+</li>
+</ul>
+<p>If <code>detail = TRUE</code>, the <code>.reldist</code> column reports the relative
+distance for each input <code>x</code> interval.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/reldist.html">https://bedtools.readthedocs.io/en/latest/content/tools/reldist.html</a>
+</p>
+<p>Other interval statistics: 
+<code>bed_absdist()</code>,
+<code>bed_fisher()</code>,
+<code>bed_jaccard()</code>,
+<code>bed_projection()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">genome &lt;- read_genome(valr_example("hg19.chrom.sizes.gz"))
+
+x &lt;- bed_random(genome, seed = 1010486)
+y &lt;- bed_random(genome, seed = 9203911)
+
+bed_reldist(x, y)
+
+bed_reldist(x, y, detail = TRUE)
+
+</code></pre>
+
+
+</div>

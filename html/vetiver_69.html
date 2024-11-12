@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_create_meta.train</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Metadata constructors for <code>vetiver_model()</code> object</h2>
+
+<h3>Description</h3>
+
+<p>These are developer-facing functions, useful for supporting new model types.
+The metadata stored in a <code>vetiver_model()</code> object has four elements:
+</p>
+
+<ul>
+<li> <p><code style="white-space: pre;">⁠$user⁠</code>, the metadata supplied by the user
+</p>
+</li>
+<li> <p><code style="white-space: pre;">⁠$version⁠</code>, the version of the pin (which can be <code>NULL</code> before pinning)
+</p>
+</li>
+<li> <p><code style="white-space: pre;">⁠$url⁠</code>, the URL where the pin is located, if any
+</p>
+</li>
+<li> <p><code style="white-space: pre;">⁠$required_pkgs⁠</code>, a character string of R packages required for prediction
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'train'
+vetiver_create_meta(model, metadata)
+
+## S3 method for class 'gam'
+vetiver_create_meta(model, metadata)
+
+## S3 method for class 'keras.engine.training.Model'
+vetiver_create_meta(model, metadata)
+
+## S3 method for class 'kproto'
+vetiver_create_meta(model, metadata)
+
+## S3 method for class 'luz_module_fitted'
+vetiver_create_meta(model, metadata)
+
+vetiver_meta(user = list(), version = NULL, url = NULL, required_pkgs = NULL)
+
+vetiver_create_meta(model, metadata)
+
+## Default S3 method:
+vetiver_create_meta(model, metadata)
+
+## S3 method for class 'Learner'
+vetiver_create_meta(model, metadata)
+
+## S3 method for class 'ranger'
+vetiver_create_meta(model, metadata)
+
+## S3 method for class 'recipe'
+vetiver_create_meta(model, metadata)
+
+## S3 method for class 'model_stack'
+vetiver_create_meta(model, metadata)
+
+## S3 method for class 'workflow'
+vetiver_create_meta(model, metadata)
+
+## S3 method for class 'xgb.Booster'
+vetiver_create_meta(model, metadata)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>A trained model, such as an <code>lm()</code> model or a tidymodels
+<code>workflows::workflow()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metadata</code></td>
+<td>
+<p>A list containing additional metadata to store with the pin.
+When retrieving the pin, this will be stored in the <code>user</code> key, to
+avoid potential clashes with the metadata that pins itself uses.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>user</code></td>
+<td>
+<p>Metadata supplied by the user</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>version</code></td>
+<td>
+<p>Version of the pin</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>url</code></td>
+<td>
+<p>URL for the pin, if any</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>required_pkgs</code></td>
+<td>
+<p>Character string of R packages required for prediction</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The <code>vetiver_meta()</code> constructor returns a list. The
+<code>vetiver_create_meta</code> function returns a <code>vetiver_meta()</code> list.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vetiver_meta()
+
+cars_lm &lt;- lm(mpg ~ ., data = mtcars)
+vetiver_create_meta(cars_lm, list())
+
+</code></pre>
+
+
+</div>

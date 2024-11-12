@@ -1,0 +1,123 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>expint</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+The Exponential Integral and Variants
+</h2>
+
+<h3>Description</h3>
+
+<p>Computes the exponential integral <code class="reqn">Ei(x)</code> for real values,
+as well as <code class="reqn">\exp(-x) \times Ei(x)</code> and
+<code class="reqn">E_1(x)</code> and their derivatives (up to the 3rd derivative).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">expint(x, deriv = 0)
+expexpint(x, deriv = 0)
+expint.E1(x, deriv = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>Numeric. Ideally a vector of positive reals.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>deriv</code></td>
+<td>
+<p>Integer. Either 0, 1, 2 or 3.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The exponential integral <code class="reqn">Ei(x)</code> function is the integral of
+<code class="reqn">\exp(t) / t</code>
+from 0 to <code class="reqn">x</code>, for positive real <code class="reqn">x</code>.
+The function <code class="reqn">E_1(x)</code> is the integral of
+<code class="reqn">\exp(-t) / t</code>
+from <code class="reqn">x</code> to infinity, for positive real <code class="reqn">x</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Function <code>expint(x, deriv = n)</code> returns the
+<code class="reqn">n</code>th derivative of <code class="reqn">Ei(x)</code> (up to the 3rd),
+function <code>expexpint(x, deriv = n)</code> returns the
+<code class="reqn">n</code>th derivative of
+<code class="reqn">\exp(-x) \times Ei(x)</code> (up to the 3rd),
+function <code>expint.E1(x, deriv = n)</code> returns the <code class="reqn">n</code>th
+derivative of <code class="reqn">E_1(x)</code> (up to the 3rd).
+</p>
+
+
+<h3>Warning </h3>
+
+<p>These functions have not been tested thoroughly.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee has simply written a small wrapper function to call the
+NETLIB FORTRAN code.
+Xiangjie Xue modified the functions to calculate derivatives.
+Higher derivatives can actually be calculated—please let me
+know if you need it.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://netlib.org/specfun/ei">https://netlib.org/specfun/ei</a>.
+</p>
+
+
+
+<h3>See Also</h3>
+
+<p><code>log</code>,
+<code>exp</code>.
+There is also a package called <span class="pkg">expint</span>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"> ## Not run: 
+par(mfrow = c(2, 2))
+curve(expint, 0.01, 2, xlim = c(0, 2), ylim = c(-3, 5),
+      las = 1, col = "orange")
+abline(v = (-3):5, h = (-4):5, lwd = 2, lty = "dotted", col = "gray")
+abline(h = 0, v = 0, lty = "dashed", col = "blue")
+
+curve(expexpint, 0.01, 2, xlim = c(0, 2), ylim = c(-3, 2),
+      las = 1, col = "orange")
+abline(v = (-3):2, h = (-4):5, lwd = 2, lty = "dotted", col = "gray")
+abline(h = 0, v = 0, lty = "dashed", col = "blue")
+
+curve(expint.E1, 0.01, 2, xlim = c(0, 2), ylim = c(0, 5),
+      las = 1, col = "orange")
+abline(v = (-3):2, h = (-4):5, lwd = 2, lty = "dotted", col = "gray")
+abline(h = 0, v = 0, lty = "dashed", col = "blue")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

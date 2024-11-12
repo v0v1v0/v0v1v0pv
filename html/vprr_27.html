@@ -1,0 +1,87 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vpr_ctd_read</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Read and format CTD VPR data</h2>
+
+<h3>Description</h3>
+
+<p>Acts as a wrapper for <code>ctd_df_cols</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vpr_ctd_read(ctd_files, station_of_interest, day, hour, col_list)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>ctd_files</code></td>
+<td>
+<p>full file paths to vpr ctd <code>.dat</code> files</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>station_of_interest</code></td>
+<td>
+<p>VPR station name</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>day</code></td>
+<td>
+<p>Day of interest, if not provided will be pulled from file path</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hour</code></td>
+<td>
+<p>Hour of interest, if not provided will be pulled from file path</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col_list</code></td>
+<td>
+<p>Optional list of CTD data column names</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Reads CTD data and adds day, hour, and station information.
+Calculates sigma T and depth variables from existing CTD data to supplement raw data.
+If there are multiple hours of CTD data, combines them into single dataframe.
+</p>
+<p><strong>WARNING</strong> <code>ctd_df_cols</code> is hard coded to accept a specific
+order of CTD data columns. The names and values in these columns can change
+based on the specific instrument and should be updated/confirmed before processing data
+from a new VPR.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>E. Chisholm &amp; K. Sorochan
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+station_of_interest &lt;- 'test'
+
+ctd_files &lt;- system.file("extdata/COR2019002/rois/vpr5/d222", "h03ctd.dat",
+package = "vprr", mustWork = TRUE)
+
+ctd_dat_combine &lt;- vpr_ctd_read(ctd_files, station_of_interest)
+
+</code></pre>
+
+
+</div>

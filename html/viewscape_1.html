@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>calculate_diversity</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>calculate_diversity</h2>
+
+<h3>Description</h3>
+
+<p>The calculate_diversity function is designed to calculate landscape
+diversity metrics within a viewshed. It takes as input a land cover raster,
+a viewshed object representing the observer's line of sight, and an optional
+parameter to compute class proportions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">calculate_diversity(viewshed, land, proportion = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>viewshed</code></td>
+<td>
+<p>Viewshed object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>land</code></td>
+<td>
+<p>Raster. The raster of land use/land cover representing different
+land use/cover classes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>proportion</code></td>
+<td>
+<p>logical (Optional), indicating whether to return class
+proportions along with the Shannon Diversity Index (SDI). (default is FALSE).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>List. a list containing the Shannon Diversity Index (SDI) and,
+if the proportion parameter is set to TRUE, a table of class proportions
+within the viewshed.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Load a viewpoint
+test_viewpoint &lt;- sf::read_sf(system.file("test_viewpoint.shp", package = "viewscape"))
+# load dsm raster
+dsm &lt;- terra::rast(system.file("test_dsm.tif", package ="viewscape"))
+#Compute viewshed
+output &lt;- compute_viewshed(dsm = dsm,
+                           viewpoints = test_viewpoint,
+                           offset_viewpoint = 6)
+# load landuse raster
+test_landuse &lt;- terra::rast(system.file("test_landuse.tif",
+                                        package ="viewscape"))
+diversity &lt;- calculate_diversity(output,
+                                 test_landuse)
+
+</code></pre>
+
+
+</div>

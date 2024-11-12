@@ -1,0 +1,243 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VWPre</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>VWPre: Tools for Preprocessing Visual World Data.</h2>
+
+<h3>Description</h3>
+
+<p>The VWPre package provides a set of functions for preparing Visual World data 
+collected with SR Research Eyelink eye trackers.
+</p>
+
+
+<h3>Formatting functions</h3>
+
+
+<ul>
+<li>
+<p> The function <code>create_time_series</code> returns a time columns 
+in milliseconds.
+</p>
+</li>
+<li>
+<p> The function <code>prep_data</code> returns a data table with 
+correctly assigned classes for important columns.
+</p>
+</li>
+<li>
+<p> The function <code>relabel_na</code> returns a data table with
+samples containing 'NA' relabeled as outside any interest area.
+</p>
+</li>
+<li>
+<p> The function <code>recode_ia</code> returns a data table containing
+recoded interest area IDs and/or interest area labels.
+</p>
+</li>
+<li>
+<p> The function <code>select_recorded_eye</code> returns a data table 
+with data from the the recorded eye in new columns (IA_ID and IA_LABEL).
+</p>
+</li>
+<li>
+<p> The function <code>custom_ia</code> returns a data table 
+with gaze data remapped to new interest areas.
+</p>
+</li>
+<li>
+<p> The function <code>align_msg</code> returns a data table 
+with newly aligned sample data in a new column (Align).
+</p>
+</li>
+<li>
+<p> The function <code>rm_extra_DVcols</code> removed DataViewer coumns
+that are not necessary for preprocessing with this package.
+</p>
+</li>
+</ul>
+<h3>Calculation functions</h3>
+
+
+<ul>
+<li>
+<p> The function <code>bin_prop</code> returns a downsampled data table
+containing proportion of looks (samples) to each interest area in a 
+particular window of time (bin size). 
+</p>
+</li>
+<li>
+<p> The function <code>transform_to_elogit</code> returns a data table 
+with proportion looks transformed to empirical logits with weights.
+</p>
+</li>
+<li>
+<p> The function <code>create_binomial</code> returns a data table with
+a new success/failure column for each IA which is suitable for logistic 
+regression. 
+</p>
+</li>
+</ul>
+<h3>Trackloss functions</h3>
+
+
+<ul>
+<li>
+<p> The function <code>mark_trackloss</code> returns a data table
+with data information regarding trackloss of the sample. 
+</p>
+</li>
+<li>
+<p> The function <code>rm_trackloss_events</code> returns a data table 
+from which events without the minimum amount of quality data have been
+removed.
+</p>
+</li>
+</ul>
+<h3>Fasttrack formatting function</h3>
+
+
+<ul><li>
+<p> The function <code>fasttrack</code> a meta-function that returns a 
+data table of processed data containing the result of the series of 
+necessary subroutines. This is intended for experienced users doing basic
+preprocessing.
+</p>
+</li></ul>
+<h3>Data-checking functions</h3>
+
+
+<ul>
+<li>
+<p> The function <code>check_eye_recording</code> returns a summary 
+of whether or not the dataset contains gaze data in both the Right and 
+Left interest area columns.  
+</p>
+</li>
+<li>
+<p> The function <code>check_time_series</code> returns the first value 
+in the Time column for each event. 
+</p>
+</li>
+<li>
+<p> The function <code>check_samples_per_bin</code> returns the number 
+of samples in each bin.
+</p>
+</li>
+<li>
+<p> The function <code>check_samplingrate</code> returns the value 
+corresponding to the sampling rate in the data. 
+</p>
+</li>
+<li>
+<p> The function <code>ds_options</code> returns the binning 
+(downsampling) options possible for the given sampling rate.
+</p>
+</li>
+<li>
+<p> The function <code>check_ia</code> returns a summary of the 
+interest area IDs and Labels present in the data.
+</p>
+</li>
+<li>
+<p> The function <code>check_msg_time</code> returns a summary of the 
+the time value at a given sample message for each recording event.
+</p>
+</li>
+<li>
+<p> The function <code>check_all_msgs</code> returns all messages
+in the data and their time stamp.
+</p>
+</li>
+</ul>
+<h3>Plotting functions</h3>
+
+
+<ul>
+<li>
+<p> The function <code>plot_avg</code> returns a plot of the grand 
+or conditional averages of proportion (or empirical logit) looks to each 
+interest area along with error bars.
+</p>
+</li>
+<li>
+<p> The function <code>plot_avg_contour</code> returns a contour plot of 
+the conditional average of proportion (or empirical logit) looks to a 
+given interest area over Time and a specified continuous variable. 
+</p>
+</li>
+<li>
+<p> The function <code>plot_avg_diff</code> returns a plot of the grand 
+or conditional averages of the difference between looks to two interest 
+areas (proportions or empirical logits) with error bars.
+</p>
+</li>
+<li>
+<p> The function <code>plot_avg_cdiff</code> returns a plot of the 
+average difference between two conditions for looks to a given interest 
+area (proportions or empirical logits) with error bars.
+</p>
+</li>
+<li>
+<p> The function <code>make_pelogit_fnc</code> returns a function 
+that can backtransform predicted empirical logit to probability scale, 
+particularly (though not exclusively) useful for plotting purposes. 
+</p>
+</li>
+</ul>
+<h3>Interactive functions</h3>
+
+ 
+<ul>
+<li>
+<p> The function <code>plot_transformation_app</code> opens a Shiny app 
+for visualizing the effect of both number of observations and constant on 
+the results of the empirical logit transformation and weight calculations.
+</p>
+</li>
+<li>
+<p> The function <code>plot_indiv_app</code> opens a Shiny app for
+inspecting by-subject or by-item averages for all interest areas, alongside
+the grand average (for proportion or empirical logit looks) within a 
+specified time window. 
+</p>
+</li>
+<li>
+<p> The function <code>plot_var_app</code> opens a Shiny app for
+inspecting by-subject or by-item Z-scores with respect to the overall mean
+for a given interest area within a specified time window.
+</p>
+</li>
+</ul>
+<h3>Notes</h3>
+
+
+<ul>
+<li>
+<p> The vignettes are available via <code>browseVignettes(package = "VWPre")</code>. 
+</p>
+</li>
+<li>
+<p> A list of all available functions is provided in 
+<code>help(package = "VWPre")</code>.
+</p>
+</li>
+<li>
+<p> This package can be cited using the information obtained from 
+<code>citation("VWPre") or print(citation("VWPre"), bibtex = TRUE)</code> 
+</p>
+</li>
+</ul>
+<h3>Author(s)</h3>
+
+<p>Vincent Porretta, Aki-Juhani Kyröläinen, Jacolien van Rij, Juhani Järvikivi
+</p>
+<p>Maintainer: Vincent Porretta (<a href="mailto:vincentporretta@gmail.com">vincentporretta@gmail.com</a>)
+</p>
+<p>University of Windsor, Canada
+</p>
+
+
+</div>

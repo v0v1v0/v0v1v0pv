@@ -1,0 +1,116 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>PlotDiag.varobj</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Diagnostic Plots for Variograms</h2>
+
+<h3>Description</h3>
+
+<p> Produces diagnostic plots for a variogram object. </p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R"> PlotDiag.varobj(v, region = NULL, xyi = 0, zmv = 0) </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>A variogram object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>region</code></td>
+<td>
+<p>a n by 2 matrix of vertices of a polygon,
+which represents the region of interest.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xyi</code></td>
+<td>
+<p>the index of the pair of observations, which shall be
+marked in the plots.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zmv</code></td>
+<td>
+<p>the value of <code>zmv</code>= determines which values will be
+plotted as third dimension (via circles with radius corresponding
+to the value) in the map view. The following values are possible:
+</p>
+
+<dl>
+<dt>0</dt>
+<dd>
+<p>no third dimension,</p>
+</dd>
+<dt>1</dt>
+<dd>
+<p>values of the original observations,</p>
+</dd>
+<dt>2</dt>
+<dd>
+<p>Cook's distances,</p>
+</dd>
+<dt>3</dt>
+<dd>
+<p>reduction in lack of fit.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Four plots are created on the current graphics device.
+</p>
+<p>These plots are a map
+view, a square root cloud with the fitted model, a leave-one-out plot and a plot of decorrelated residuals.
+If the argument <code>region</code> is given, this region is plotted as a polygon in the map view. If the argument
+<code>xyi</code> is given, the corresponding pair of observations is marked as a blue and a red point in the map view and
+connected by a magenta line. Furthermore all the points in the square root cloud, which contain the first (second)
+observation in the pair are marked blue (red). The one point that contains both observations of the selected pair
+is marked magenta. The points in the leave-one-out plot are marked analogously.
+</p>
+
+
+<h3>Value</h3>
+
+<p>No value is returned. The function is called for its side
+effects, i.e. creating plots.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ernst  Glatzer</p>
+
+
+<h3>References</h3>
+
+<p> E. Glatzer, W.G. Mueller, 2004. Residual diagnostics for
+variogram fitting. Computers and Geosciences 30, pp 859-866. </p>
+
+
+<h3>See Also</h3>
+
+<p><code>interact.varobj</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(tulln)
+PlotDiag.varobj(vs50,region=tu1)
+PlotDiag.varobj(vs50,region=tu1,xyi=144)
+</code></pre>
+
+
+</div>

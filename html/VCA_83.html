@@ -1,0 +1,190 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>test.fixef</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Perform t-Tests for Linear Contrasts on Fixed Effects</h2>
+
+<h3>Description</h3>
+
+<p>This function performs t-Tests for one or multiple linear combinations (contrasts) of estimated 
+fixed effects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">test.fixef(
+  obj,
+  L,
+  ddfm = c("contain", "residual", "satterthwaite"),
+  method.grad = "simple",
+  tol = 1e-12,
+  quiet = FALSE,
+  opt = TRUE,
+  onlyDF = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(VCA) object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>L</code></td>
+<td>
+<p>(numeric) vector or matrix, specifying linear combinations of the fixed effects, in the latter case,
+each line represents a disctinct linear contrast</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ddfm</code></td>
+<td>
+<p>(character) string specifying the method used for computing the denominator
+degrees of freedom for tests of fixed effects or LS Means. Available methods are
+"contain", "residual", and "satterthwaite".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method.grad</code></td>
+<td>
+<p>(character) string specifying the method to be used for approximating the gradient
+of the variance-covariance matrix of fixed effects at the estimated covariance parameter
+estimates (see function 'grad' (numDeriv) for details)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>(numeric) value specifying the numeric tolerance for testing equality to zero</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = suppress warning messages, e.g. for non-estimable contrasts</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>opt</code></td>
+<td>
+<p>(logical) TRUE = tries to optimize computation time by avoiding unnecessary computations
+for balanced datasets (see details).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>onlyDF</code></td>
+<td>
+<p>(logical) TRUE = only the specified type of degrees of freedom are determined without carrying out
+the actual hypothesis test(s)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further parameters (for internal use actually)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Here, the same procedure as in <code>SAS PROC MIXED ddfm=satterthwaite</code> (sat) is implemented. 
+This implementation was inspired by the code of function 'calcSatterth' of R-package 'lmerTest'. 
+Thanks to the authors for this nice implementation. <br>
+Note, that approximated Satterthwaite degrees of freedom might differ from 'lmerTest' and SAS PROC MIXED.
+Both use the inverse Fisher-information matrix as approximation of the variance-covariance matrix
+of variance components (covariance parameters). Here, either the exact algorithm for ANOVA-estimators of
+variance components, described in Searle et. al (1992) p. 176, or the approximation presented in Giesbrecht and 
+Burns (19985) are used. For balanced designs their will be no differences, usually. 
+In case of balanced designs, the Satterthwaite approximation is equal to the degrees of freedom of the highest
+order random term in the model (see examples).
+</p>
+
+
+<h3>Value</h3>
+
+<p>(numeric) vector or matrix with 4 elements/columns corresponding to "Estimate", "t Value", "DF", and
+"Pr &gt; |t|".
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a> inspired by authors of R-package 'lmerTest'
+</p>
+
+
+<h3>References</h3>
+
+<p>Searle, S.R, Casella, G., McCulloch, C.E. (1992), Variance Components, Wiley New York	
+</p>
+<p>Giesbrecht, F.G. and Burns, J.C. (1985), Two-Stage Analysis Based on a Mixed Model: Large-Sample
+Asymptotic Theory and Small-Sample Simulation Results, Biometrics 41, p. 477-486
+</p>
+<p>SAS Help and Documentation PROC MIXED (MODEL-statement, Option 'ddfm'), SAS Institute Inc., Cary, NC, USA
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>test.lsmeans</code>, <code>getL</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(dataEP05A2_2)
+ub.dat &lt;- dataEP05A2_2[-c(11,12,23,32,40,41,42),]
+fit1 &lt;- anovaMM(y~day/(run), ub.dat)
+fit2 &lt;- remlMM(y~day/(run), ub.dat)
+fe1 &lt;- fixef(fit1)
+fe1
+fe2 &lt;- fixef(fit2)
+fe2
+lc.mat &lt;- getL( fit1, c("day1-day2", "day3-day6"))
+lc.mat
+test.fixef(fit1, lc.mat, ddfm="satt") 
+test.fixef(fit2, lc.mat, ddfm="satt")
+
+# some inferential statistics about fixed effects estimates
+L &lt;- diag(nrow(fe1))
+rownames(L) &lt;- colnames(L) &lt;- rownames(fe1)
+test.fixef(fit1, L)
+test.fixef(fit2, L)
+
+# using different "residual" method determining DFs
+test.fixef(fit1, L, ddfm="res")
+test.fixef(fit2, L, ddfm="res")  
+
+# having 'opt=TRUE' is a good idea to save time 
+# (in case of balanced designs)
+data(VCAdata1)
+datS3 &lt;- VCAdata1[VCAdata1$sample==3,]
+fit3 &lt;- anovaMM(y~(lot+device)/(day)/run, datS3)
+fit4 &lt;- remlMM(y~(lot+device)/(day)/run, datS3)  
+fit3$VarCov &lt;- vcovVC(fit3)
+fe3 &lt;- fixef(fit3)
+fe4 &lt;- fixef(fit4)
+L &lt;- diag(nrow(fe3))
+rownames(L) &lt;- colnames(L) &lt;- rownames(fe3)
+system.time(tst1 &lt;- test.fixef(fit3, L))
+system.time(tst2 &lt;- test.fixef(fit3, L, opt=FALSE))
+system.time(tst3 &lt;- test.fixef(fit4, L, opt=FALSE))
+tst1
+tst2
+tst3
+
+## End(Not run)
+</code></pre>
+
+
+</div>

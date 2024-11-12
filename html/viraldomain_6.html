@@ -1,0 +1,100 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rf_domain_score</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate the Random Forest Model Domain Applicability Score</h2>
+
+<h3>Description</h3>
+
+<p>This function fits a Random Forest model to the provided data and computes a domain applicability score based on PCA distances.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rf_domain_score(
+  featured_col,
+  train_data,
+  rf_hyperparameters,
+  test_data,
+  threshold_value
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>featured_col</code></td>
+<td>
+<p>A character string specifying the name of the response variable to predict.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>train_data</code></td>
+<td>
+<p>A data frame containing predictor variables and the response variable for training the model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rf_hyperparameters</code></td>
+<td>
+<p>A list of hyperparameters for the Random Forest model, including:
+</p>
+
+<ul>
+<li> <p><code>mtry</code>: Number of predictors sampled at each split.
+</p>
+</li>
+<li> <p><code>min_n</code>: Minimum number of data points in a node for further splitting.
+</p>
+</li>
+<li> <p><code>trees</code>: Number of trees in the ensemble.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>test_data</code></td>
+<td>
+<p>A data frame for making predictions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threshold_value</code></td>
+<td>
+<p>A numeric threshold value used for computing domain applicability scores.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Random Forest creates a large number of decision trees, each independent of the others. The final prediction combines the predictions from all individual trees. This function uses the <code>ranger</code> engine for fitting regression models.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame containing the computed domain applicability scores for each observation in the test dataset.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(123)
+library(dplyr)
+featured_col &lt;- "cd_2022"
+train_data &lt;- viral %&gt;%
+  dplyr::select(cd_2022, vl_2022)
+test_data &lt;- sero
+rf_hyperparameters &lt;- list(mtry = 2, min_n = 5, trees = 500)
+threshold_value &lt;- 0.99
+# Call the function
+</code></pre>
+
+
+</div>

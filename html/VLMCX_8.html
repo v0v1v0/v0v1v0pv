@@ -1,0 +1,119 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>maximum.context</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Maximum Context Tree
+</h2>
+
+<h3>Description</h3>
+
+<p>Build the largest context tree, which is the biggest context tree such that all elements in it have been observed at least <code>n.min</code> times.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">maximum.context(y, X, max.depth = 5, n.min = 5)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+
+<p>a "time series" vector (numeric, charachter, or factor)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+
+<p>Numeric matrix of predictors with rows corresponding to the y observations (over time) and columns corresponding to covariates.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.depth</code></td>
+<td>
+
+<p>Maximum depth of the desired tree.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.min</code></td>
+<td>
+
+<p>Minimum number of observations per coefficient to be estimated.
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p> maximum.context returns an object of class <code>"VLMCX"</code>. The generic functions <code>coef</code>, <code>AIC</code>,<code>BIC</code>, <code>draw</code>, and <code>LogLik</code> extract various useful features of the value returned by <em>VLMCX</em>.
+</p>
+<p>An object of class <code>"VLMCX"</code> is a list containing at least the following components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>the time series data corresponding to the states inputed by the user.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>the time series covariates data inputed by the user.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tree</code></td>
+<td>
+<p>the estimated rooted tree estimated by the algorithm. Each node contains the <code>context</code>, the intercept (<code>alpha</code>) and regression parameters (<code>beta</code>) corresponding to the covariates of that regression and a list <code>child</code>, whose entries are <code>nodes</code> with the same structure.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>LogLik</code></td>
+<td>
+<p>the log-likelihood of the data using the estimated context tree.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>baseline.state</code></td>
+<td>
+<p>the state used as a baseline fore the multinomial regression.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Adriano Zanin Zambom &lt;adriano.zambom@csun.edu&gt; 
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+
+n = 1000
+d = 2
+
+X = cbind(rnorm(n), rnorm(n))
+
+y = rbinom(n,1,.5)
+fit = maximum.context(y, X)
+
+</code></pre>
+
+
+</div>

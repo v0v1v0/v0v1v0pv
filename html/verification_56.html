@@ -1,0 +1,118 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>rps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Ranked Probability Score</h2>
+
+<h3>Description</h3>
+
+<p>Calculates the ranked probability score (rps) and
+ranked probability skill score (rpss) for probabilistic
+forecasts of ordered events.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R"> rps(obs, pred, baseline=NULL) </code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>A vector of observed outcomes.  These values correspond to
+columns of prediction probabilities.   </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pred</code></td>
+<td>
+<p>A matrix of probabilities for each outcome
+occurring.  Each column represents a category of prediction.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>baseline</code></td>
+<td>
+<p>If NULL (default) the probability based on the
+sample data of each event to occur.    Alternatively,  a
+vector the same length of the as the number categories  can be
+entered. </p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>rps</code></td>
+<td>
+<p>Ranked probability scores</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rpss</code></td>
+<td>
+<p>Ranked probability skill score.  Uses baseline or
+sample climatology as a references score.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rps.clim</code></td>
+<td>
+<p>Ranked probability score for baseline forecast.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p> Perhaps the format of the data is best understood in the
+context of an example.  Consider a probability of
+precipitation forecast of "none", "light" or  "heavy".  This
+could be [0.5, 0.3, 0.2].  If heavy rain occurred, the observed
+value would be 3, indicating event summarized in the third column
+occurred.
+</p>
+<p><b>The RPS value is scaled to a [0,1 ] interval by dividing by (number
+of categories -1 .  There is a discrepancy in the way this is
+explained in Wilks (2005) and the WWRF web page. </b> </p>
+
+
+<h3>Author(s)</h3>
+
+<p>Matt Pocernich</p>
+
+
+<h3>References</h3>
+
+<p>WWRP/WGNE Joint Working Group on Verification - Forecast Verification - Issues, Methods and FAQ
+<a href="http://www.cawcr.gov.au/projects/verification/verif_web_page.html#RPS">http://www.cawcr.gov.au/projects/verification/verif_web_page.html#RPS</a>
+</p>
+<p>Wilks, D. S. (2005) <em>Statistical Methods in the Atmospheric Sciences </em>
+Chapter 7, San Diego: Academic Press.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>crps</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+###  Example from Wilks, note without a baseline and only one
+### forecast, the rpss and ss are not too meaningfull.
+
+
+
+rps( obs = c(1), pred = matrix(c(0.2, 0.5, 0.3), nrow = 1))
+
+</code></pre>
+
+
+</div>

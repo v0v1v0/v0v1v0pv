@@ -1,0 +1,78 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>downsample</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Occurrence downsampling</h2>
+
+<h3>Description</h3>
+
+<p>Reduces number of occurrences to resolution of input raster
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">downsample(occs, rasterTemplate, verbose = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>occs</code></td>
+<td>
+<p>A <code>data.frame</code> with at least two columns
+named "longitude" and "latitude" or that
+can be coerced into this format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rasterTemplate</code></td>
+<td>
+<p>A <code>SpatRaster</code> object to serve
+as a template for the resolution at which <code>occs</code> should be
+downsampled.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p><code>logical</code>. Switching to <code>FALSE</code> mutes message describing
+which columns in <code>occs</code> are interpreted as x and y coordinates.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>data.frame</code> with two columns named "longitude"
+and "latitude" or with names that were used when coercing
+input data into this format.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(terra)
+# Create sample raster
+r &lt;- rast(ncol=10, nrow=10)
+values(r) &lt;- 1:100
+
+# Create test occurrences
+set.seed(0)
+longitude &lt;- sample(ext(r)[1]:ext(r)[2],
+                    size = 10, replace = FALSE)
+set.seed(0)
+latitude &lt;- sample(ext(r)[3]:ext(r)[4],
+                   size = 10, replace = FALSE)
+occurrences &lt;- as.data.frame(cbind(longitude,latitude))
+
+# Here's the function
+result &lt;- downsample(occs = occurrences, rasterTemplate = r)
+
+</code></pre>
+
+
+</div>

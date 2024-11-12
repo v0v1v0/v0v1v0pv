@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VWRfirstrun</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>VertexWiseR system requirements installation</h2>
+
+<h3>Description</h3>
+
+<p>Helps the user verify if VertexWisrR's system requirements are present and install them ('Miniconda', 'BrainStat' toolbox and libraries). If they are installed already, nothing will be overwritten.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">VWRfirstrun(requirement = "any", n_vert = 0, promptless = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>requirement</code></td>
+<td>
+<p>String that specifies a requirement to enquire about:
+</p>
+
+<ul>
+<li>
+<p> For only Python/Conda installation: 'python/conda only'
+</p>
+</li>
+<li>
+<p> For Python/Conda and Brainstat installation: 'conda/brainstat'
+</p>
+</li>
+<li>
+<p> For specific 'BrainStat' libraries: 'fsaverage5', 'fsaverage6', 'fslr32k', 'yeo_parcels'
+</p>
+</li>
+<li>
+<p> For the neurosynth database: 'neurosynth'.
+Default is 'any' and checks everything.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_vert</code></td>
+<td>
+<p>Numeric vector indicating the number of vertices of a given surface data so that only the required templates are asked for. It will modify the requirement argument accordingly.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>promptless</code></td>
+<td>
+<p>A boolean object specifying whether to prompt the user for action when system requirements are missing. If TRUE, VWRfirstrun() will simply inform of what is missing and will not prompt for action. Default is FALSE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>VertexWiseR imports and makes use of the R package 'reticulate.' 'reticulate' is a package that allows R to borrow or translate Python functions into R. Using 'reticulate', the package calls functions from the 'BrainStat' Python module. For 'reticulate' to work properly with VertexWiseR, 'Miniconda' needs to be installed with it — 'Miniconda' is a lightweight version of Python, specifically for use within 'RStudio'. If for a reason Miniconda cannot be installed, the function gives the choice to install a reticulate-suitable Python environment.
+Vertex-wise statistical analyses of cortical surface require fsaverage and parcellation templates as imported by default in 'BrainStat'.
+The decode_surf_data() function also requires the 'Neurosynth' database to be downloaded.
+</p>
+
+
+<h3>Value</h3>
+
+<p>No returned value in interactive session. In non-interactive sessions, a string object informing that system requirements are missing.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">VWRfirstrun()
+</code></pre>
+
+
+</div>

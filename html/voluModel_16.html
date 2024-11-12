@@ -1,0 +1,122 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pointMap</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Point mapping</h2>
+
+<h3>Description</h3>
+
+<p>A convenient wrapper around ggplot
+to generate formatted occurrence point plots.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pointMap(
+  occs,
+  spName,
+  land = NA,
+  ptCol = "#bd0026",
+  landCol = "gray",
+  waterCol = "steelblue",
+  ptSize = 1,
+  verbose = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>occs</code></td>
+<td>
+<p>A <code>data.frame</code> with at least two columns
+named "longitude" and "latitude" or that
+can be coerced into this format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>spName</code></td>
+<td>
+<p>A character string with the species
+name to be used in the plot title.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>land</code></td>
+<td>
+<p>An optional coastline polygon shapefile
+of types <code>sf</code> or <code>SpatRaster</code> to provide geographic
+context for the occurrence points.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ptCol</code></td>
+<td>
+<p>Color for occurrence points on map</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>landCol</code></td>
+<td>
+<p>Color for land on map</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>waterCol</code></td>
+<td>
+<p>Color for water on map</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ptSize</code></td>
+<td>
+<p><code>numeric</code> value for <code>cex</code>;
+size of occurrence points on map.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p><code>logical</code>. Switching to <code>FALSE</code> mutes message describing
+which columns in <code>occs</code> are interpreted as x and y coordinates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional optional arguments to pass to
+<code>ggplot</code> initial plot object.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>ggplot</code> plot object.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ggplot</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">occs &lt;- read.csv(system.file("extdata/Steindachneria_argentea.csv",
+                             package='voluModel'))
+spName &lt;- "Steindachneria argentea"
+pointMap(occs = occs, spName = spName,
+         land = rnaturalearth::ne_countries(scale = "small",
+                                            returnclass = "sf")[1])
+
+</code></pre>
+
+
+</div>

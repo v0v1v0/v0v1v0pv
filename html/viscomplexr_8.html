@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vector2String</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Convert a vector into a comma-separated string</h2>
+
+<h3>Description</h3>
+
+<p>A simple utility function that transforms any vector into a single character
+string, where the former vector elements are separated by commas. This is can
+be useful, in some circumstances, for feeding a series of constant numeric
+values to <code>phasePortrait</code> (see examples). For most applications
+we recommend, however, to use <code>phasePortrait</code>'s parameter
+<code>moreArgs</code> instead.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vector2String(vec)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>vec</code></td>
+<td>
+<p>The (usually real or complex valued) vector to be converted.</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>A string, where the former vector elements are separated by commas,
+enclosed between "c(" and ")".
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other helpers: 
+<code>xlimFromYlim()</code>,
+<code>ylimFromXlim()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Make a vector of 77 complex random numbers inside the unit circle
+n &lt;- 77
+a &lt;- complex(n, modulus = runif(n), argument = 2*pi*runif(n))
+a &lt;- vector2String(a)
+print(a)
+
+
+# Use this for portraying a Blaschke product
+
+# x11(width = 9.45, height = 6.30) # Screen device commented out
+                                   # due to CRAN test requirements.
+                                   # Use it when trying this example
+op &lt;- par(mar = c(1, 1, 1, 1), bg = "black")
+n &lt;- 77
+a &lt;- complex(n, modulus = runif(n), argument = 2*pi*runif(n))
+a &lt;- vector2String(a)
+FUN &lt;- paste("vapply(z, function(z, a){
+                    return(prod(abs(a)/a * (a-z)/(1-Conj(a)*z)))
+                   }, a =", a,
+             ", FUN.VALUE = complex(1))", sep = "")
+phasePortrait(FUN, pType = "p", axes = FALSE,
+              xlim = c(-3, 3), ylim = c(-2.0, 2.0),
+              nCores = 2) # Max. two cores allowed on CRAN
+                          # not a limit for your own use
+par(op)
+  
+
+
+
+</code></pre>
+
+
+</div>

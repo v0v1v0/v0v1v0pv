@@ -1,0 +1,186 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>incr.vegclust</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Noise clustering with increasing number of clusters
+</h2>
+
+<h3>Description</h3>
+
+<p>Performs several runs of function 'vegclust' on a community data matrix using an increasing number of clusters until some conditions are met.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">incr.vegclust(x, method="NC", ini.fixed.centers = NULL, 
+              min.size = 10, max.var=NULL, alpha = 0.5, 
+              nstart=100, fix.previous = TRUE, dnoise=0.75, m=1.0,...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>Community data table. A site (rows) by species (columns) matrix or data frame.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+
+<p>A clustering model. Current accepted models are of the noise clustering family: 
+</p>
+
+<ul>
+<li>
+<p><code>"NC"</code>: Noise clustering (Dave and Krishnapuram 1997)
+</p>
+</li>
+<li>
+<p><code>"NCdd"</code>: Noise clustering with medoids
+</p>
+</li>
+<li>
+<p><code>"HNC"</code>: Hard noise clustering
+</p>
+</li>
+<li>
+<p><code>"HNCdd"</code>: Hard noise clustering with medoids
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ini.fixed.centers</code></td>
+<td>
+
+<p>The coordinates of initial fixed cluster centers. These will be used as <code>fixedCenters</code> in all calls to <code>vegclust</code>. If <code>method="NCdd"</code> or <code>method="HNCdd"</code> then <code>ini.fixed.centers</code> can be specified as a vector of indices for medoids.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min.size</code></td>
+<td>
+
+<p>The minimum size (cardinality) of clusters. If any of the current k clusters does not have enough members the algorithm will stop and return the solution with k-1 clusters.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.var</code></td>
+<td>
+
+<p>The maximum variance allowed for clusters (see function <code>clustvar</code>). If specified, the algorithm will stop when any of the clusters is at the same time small and has large variance. If <code>max.var = NULL</code> then this criterion is not used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+
+<p>Criterion to choose cluster seeds from the noise class. Specifically, an object is considered as cluster seed if the membership to the noise class is larger than <code>alpha</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nstart</code></td>
+<td>
+
+<p>A number indicating how many random trials should be performed for number of groups. Each random trial uses the k-1 cluster centers plus the coordinates of the current cluster seed as initial solution for <code>vegclust</code>. Thus, if there are less cluster seed candidates than <code>nstart</code>, then not all runs are conducted.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fix.previous</code></td>
+<td>
+
+<p>Flag used to indicate that the cluster centers found when determining k-1 clusters are fixed when determining k clusters.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+
+<p>The fuzziness exponent.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dnoise</code></td>
+<td>
+
+<p>The distance to the noise cluster. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Additional parameters for function <code>vegclust</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Function <code>hier.vegclust</code> takes starting cluster configurations from cuts of a dendrogram given by object <code>hclust</code>. Function <code>random.vegclust</code> chooses random objects as cluster centroids and for each number of clusters performs <code>nstart</code> trials.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns an object of class <code>vegclust</code>; or <code>NULL</code> if the initial cluster does not contain enough members.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miquel De Cáceres, CREAF
+</p>
+
+
+<h3>References</h3>
+
+<p>Davé, R. N. and R. Krishnapuram (1997) Robust clustering methods: a unified view. IEEE Transactions on Fuzzy Systems 5, 270-293.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vegclust</code>,<code>hier.vegclust</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Loads data  
+data(wetland)
+  
+## This equals the chord transformation 
+## (see also \code{\link{decostand}} in package 'vegan')
+wetland.chord = as.data.frame(sweep(as.matrix(wetland), 1,
+                              sqrt(rowSums(as.matrix(wetland)^2)), "/"))
+
+## Call incremental noise clustering 
+wetland.nc = incr.vegclust(wetland.chord, method="NC", m = 1.2, dnoise=0.75, 
+                           min.size=5)
+
+## Inspect cluster sizes
+print(wetland.nc$size)
+
+</code></pre>
+
+
+</div>

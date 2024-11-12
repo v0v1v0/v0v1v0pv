@@ -1,0 +1,557 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>agent_manager</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>agent Manager</h2>
+
+<h3>Description</h3>
+
+<p>A class that abstracts the management of aggregations of agent classes. Each village should have
+an instance of a agent_manager to interface the agents inside.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt><code>add_agent()</code></dt>
+<dd>
+<p>Adds a single agent to the manager.</p>
+</dd>
+<dt><code>get_average_age()</code></dt>
+<dd>
+<p>Returns the average age, in years, of all the agents.</p>
+</dd>
+<dt><code>get_living_agents()</code></dt>
+<dd>
+<p>Gets a list of all the agents that are currently alive.</p>
+</dd>
+<dt><code>get_states()</code></dt>
+<dd>
+<p>Returns a data.frame consisting of all of the managed agents.</p>
+</dd>
+<dt><code>get_agent()</code></dt>
+<dd>
+<p>Retrieves a particular agent from the manager.</p>
+</dd>
+<dt><code>get_agent_index()</code></dt>
+<dd>
+<p>Retrieves the index of a agent.</p>
+</dd>
+<dt><code>initialize()</code></dt>
+<dd>
+<p>Creates a new manager instance.</p>
+</dd>
+<dt><code>load()</code></dt>
+<dd>
+<p>Loads a csv file defining a population of agents and places them in the manager.</p>
+</dd>
+<dt><code>remove_agent()</code></dt>
+<dd>
+<p>Removes a agent from the manager</p>
+</dd>
+</dl>
+<p>Creates a new agent manager instance.
+</p>
+
+
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>agents</code></dt>
+<dd>
+<p>A list of agents objects that the agent manager manages.</p>
+</dd>
+<dt><code>agent_class</code></dt>
+<dd>
+<p>A class describing agents. This is usually the default villager supplied 'agent' class</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-agent_manager-new"><code>agent_manager$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-get_agent"><code>agent_manager$get_agent()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-get_living_agents"><code>agent_manager$get_living_agents()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-add_agent"><code>agent_manager$add_agent()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-remove_agent"><code>agent_manager$remove_agent()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-get_states"><code>agent_manager$get_states()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-get_agent_index"><code>agent_manager$get_agent_index()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-connect_agents"><code>agent_manager$connect_agents()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-get_living_population"><code>agent_manager$get_living_population()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-get_average_age"><code>agent_manager$get_average_age()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-add_children"><code>agent_manager$add_children()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-load"><code>agent_manager$load()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-agent_manager-clone"><code>agent_manager$clone()</code></a>
+</p>
+</li>
+</ul>
+<hr>
+<a id="method-agent_manager-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$new(agent_class = villager::agent)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>agent_class</code></dt>
+<dd>
+<p>The class that's being used to represent agents being managed
+Given the identifier of a agent, sort through all of the managed agents and return it
+if it exists.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-agent_manager-get_agent"></a>
+
+
+
+<h4>Method <code>get_agent()</code>
+</h4>
+
+<p>Return the R6 instance of a agent with identifier 'agent_identifier'.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$get_agent(agent_identifier)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>agent_identifier</code></dt>
+<dd>
+<p>The identifier of the requested agent.</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>An R6 agent object
+Returns a list of all the agents that are currently alive.
+</p>
+
+
+<hr>
+<a id="method-agent_manager-get_living_agents"></a>
+
+
+
+<h4>Method <code>get_living_agents()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$get_living_agents()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>A list of living agents
+Adds a agent to the manager.
+</p>
+
+
+<hr>
+<a id="method-agent_manager-add_agent"></a>
+
+
+
+<h4>Method <code>add_agent()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$add_agent(...)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>...</code></dt>
+<dd>
+<p>One or more agents</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>None
+Removes a agent from the manager
+</p>
+
+
+<hr>
+<a id="method-agent_manager-remove_agent"></a>
+
+
+
+<h4>Method <code>remove_agent()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$remove_agent(agent_identifier)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>agent_identifier</code></dt>
+<dd>
+<p>The identifier of the agent being removed</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>None
+Returns a data.frame of agents
+</p>
+
+
+<hr>
+<a id="method-agent_manager-get_states"></a>
+
+
+
+<h4>Method <code>get_states()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$get_states()</pre></div>
+
+
+
+<h5>Details</h5>
+
+<p>Each row of the data.frame represents a agent object
+</p>
+
+
+
+<h5>Returns</h5>
+
+<p>A single data.frame of all agents
+Returns the index of a agent in the internal agent list
+</p>
+
+
+<hr>
+<a id="method-agent_manager-get_agent_index"></a>
+
+
+
+<h4>Method <code>get_agent_index()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$get_agent_index(agent_identifier)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>agent_identifier</code></dt>
+<dd>
+<p>The identifier of the agent being located</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>The index in the list, or R's default return value
+Connects two agents together as mates
+</p>
+
+
+<hr>
+<a id="method-agent_manager-connect_agents"></a>
+
+
+
+<h4>Method <code>connect_agents()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$connect_agents(agent_a, agent_b)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>agent_a</code></dt>
+<dd>
+<p>A agent that will be connected to agent_b</p>
+</dd>
+<dt><code>agent_b</code></dt>
+<dd>
+<p>A agent that will be connected to agent_a
+Returns the total number of agents that are alive</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-agent_manager-get_living_population"></a>
+
+
+
+<h4>Method <code>get_living_population()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$get_living_population()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>The number of living agents
+Returns the average age, in years, of all of the agents
+</p>
+
+
+<hr>
+<a id="method-agent_manager-get_average_age"></a>
+
+
+
+<h4>Method <code>get_average_age()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$get_average_age()</pre></div>
+
+
+
+<h5>Details</h5>
+
+<p>This is an <em>example</em> of the kind of logic that the manager might handle. In this case,
+the manager is performing calculations about its aggregation (agents). Note that the 364 days needs to
+work better
+</p>
+
+
+
+<h5>Returns</h5>
+
+<p>The average age in years
+Takes all of the agents in the manager and reconstructs the children
+</p>
+
+
+<hr>
+<a id="method-agent_manager-add_children"></a>
+
+
+
+<h4>Method <code>add_children()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$add_children()</pre></div>
+
+
+
+<h5>Details</h5>
+
+<p>This is typically called when loading agents from disk for the first time.
+When children are created during the simulation, the family connections are made
+through the agent class and added to the manager via add_agent.
+</p>
+
+
+
+<h5>Returns</h5>
+
+<p>None
+Loads agents from disk.
+</p>
+
+
+<hr>
+<a id="method-agent_manager-load"></a>
+
+
+
+<h4>Method <code>load()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$load(file_name)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>file_name</code></dt>
+<dd>
+<p>The location of the file holding the agents.</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Details</h5>
+
+<p>Populates the agent manager with a set of agents defined in a csv file.
+</p>
+
+
+
+<h5>Returns</h5>
+
+<p>None
+</p>
+
+
+<hr>
+<a id="method-agent_manager-clone"></a>
+
+
+
+<h4>Method <code>clone()</code>
+</h4>
+
+<p>The objects of this class are cloneable with this method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>agent_manager$clone(deep = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>deep</code></dt>
+<dd>
+<p>Whether to make a deep clone.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+</div>

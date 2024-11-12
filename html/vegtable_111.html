@@ -1,0 +1,117 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>taxa2samples</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Insert taxon information into samples</h2>
+
+<h3>Description</h3>
+
+<p>For statistical purposes it may be necessary to insert information on
+recorded taxa into the slot samples, which contain the records of taxa in
+sampling plots.
+This can be also done selectivelly for specific taxonomic ranks and lower
+ranks can be aggregated to their parental ones.
+</p>
+<p>If column <strong>TaxonConceptID</strong> is already existing in <code>'objec@samples'</code>,
+this column will get overwritten, retrieving a warning message.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">taxa2samples(object, ...)
+
+## S3 method for class 'vegtable'
+taxa2samples(
+  object,
+  merge_to,
+  include_levels,
+  add_relations = FALSE,
+  add_traits = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>A vegtable object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Further arguments passed among methods.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>merge_to</code></td>
+<td>
+<p>Character value indicating the level (taxonomic rank) to
+which taxa of lower rank have to be merged.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>include_levels</code></td>
+<td>
+<p>Character vector indicating the levels to be considered
+in the output object. This will set the values of <strong>TaxonConceptID</strong> and
+any respective values inserted from slots <strong>taxonRelations</strong> and
+<strong>taxonTraits</strong> as NA.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add_relations</code></td>
+<td>
+<p>A logical value indicating whether the content of slot
+<strong>taxonRelations</strong> have to be inserted in slot <strong>samples</strong> or not.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>add_traits</code></td>
+<td>
+<p>A logical value indicating whether the content of slot
+<strong>taxonTraits</strong> have to be inserted in slot <strong>samples</strong> or not.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class vegtable.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miguel Alvarez <a href="mailto:kamapu78@gmail.com">kamapu78@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Add only variable TaxonConceptID
+veg &lt;- taxa2samples(Kenya_veg)
+head(veg@samples)
+
+## Add also information from slots taxonRelations and taxonTraits
+veg &lt;- taxa2samples(Kenya_veg, add_relations = TRUE, add_traits = TRUE)
+head(veg@samples)
+
+## Different ranks recorded at samples
+veg &lt;- taxa2samples(Kenya_veg, add_relations = TRUE)
+summary(veg@samples$Level)
+
+## Aggregate taxa to family level
+veg &lt;- taxa2samples(Kenya_veg, add_relations = TRUE, merge_to = "family")
+summary(veg@samples$Level)
+
+</code></pre>
+
+
+</div>

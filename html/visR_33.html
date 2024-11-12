@@ -1,0 +1,93 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>get_quantile</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Wrapper around quantile methods</h2>
+
+<h3>Description</h3>
+
+<p>S3 method for extracting quantiles.
+No default method is available at the moment.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">get_quantile(x, ...)
+
+## S3 method for class 'survfit'
+get_quantile(
+  x,
+  ...,
+  probs = c(0.25, 0.5, 0.75),
+  conf.int = TRUE,
+  tolerance = sqrt(.Machine$double.eps)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class <code>survfit</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments passed on to the method</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>probs</code></td>
+<td>
+<p>probabilities Default = c(0.25,0.50,0.75)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>conf.int</code></td>
+<td>
+<p>should lower and upper confidence limits be returned?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tolerance</code></td>
+<td>
+<p>tolerance for checking that the survival curve exactly
+equals one of the quantiles</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame with quantiles of the object
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>quantile.survfit</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Kaplan-Meier estimates
+survfit_object &lt;- visR::estimate_KM(data = adtte, strata = c("TRTP"))
+
+## visR quantiles
+visR::get_quantile(survfit_object)
+
+## survival quantiles
+quantile(survfit_object)
+
+</code></pre>
+
+
+</div>

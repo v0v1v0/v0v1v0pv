@@ -1,0 +1,233 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>polar_coords_2x3</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Coordinates for three way polar plot from 2x3 factor analysis</h2>
+
+<h3>Description</h3>
+
+<p>This function creates a 'volc3d' object of S4 class for downstream plots
+containing the p-values from a 2x3 factor analysis, expression data
+sample data and polar coordinates. For RNA-Seq count data, two functions
+<code>deseq_2x3</code> followed by <code>deseq_2x3_polar()</code> can be used instead.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">polar_coords_2x3(
+  data,
+  metadata = NULL,
+  outcome,
+  group,
+  pvals = NULL,
+  padj = pvals,
+  pcutoff = 0.05,
+  fc_cutoff = NULL,
+  padj.method = "BH",
+  process = c("positive", "negative", "two.sided"),
+  scheme = c("grey60", "red", "gold2", "green3", "cyan", "blue", "purple", "black"),
+  labs = NULL,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>Dataframe or matrix with variables in columns and samples in rows</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metadata</code></td>
+<td>
+<p>Dataframe of sample information with samples in rows</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>outcome</code></td>
+<td>
+<p>Either the name of column in <code>metadata</code> containing the binary
+outcome data. Or a vector with 2 groups, ideally a factor. If it is not a
+factor, this will be coerced to a factor. This must have exactly 2 levels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>Either the name of column in <code>metadata</code> containing the 3-way
+grouping data. Or a vector with 3 groups, ideally a factor. If it is not a
+factor, this will be coerced to a factor. This must have exactly 3 levels.
+NOTE: if <code>pvals</code> is given, the order of the levels in <code>group</code> must
+correspond to the order of columns in <code>pvals</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pvals</code></td>
+<td>
+<p>Optional matrix or dataframe with p-values in 3 columns. If
+<code>pvals</code> is not given, it is calculated using the function
+<code>calc_stats_2x3</code>. The p-values in 3 columns represent the
+comparison between the binary outcome with each column for the 3 groups as
+specified in <code>group</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>padj</code></td>
+<td>
+<p>Matrix or dataframe with adjusted p-values. If not supplied,
+defaults to use nominal p-values from <code>pvals</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pcutoff</code></td>
+<td>
+<p>Cut-off for p-value significance</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fc_cutoff</code></td>
+<td>
+<p>Cut-off for fold change on radial axis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>padj.method</code></td>
+<td>
+<p>Can be <code>"qvalue"</code> or any method available in <code>p.adjust</code>.
+The option <code>"none"</code> is a pass-through.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>process</code></td>
+<td>
+<p>Character value specifying colour process for statistical
+significant genes: "positive" specifies genes are coloured if fold change
+is &gt;0; "negative" for genes with fold change &lt;0 (note that for clarity the
+polar position is altered so that genes along each axis have the most
+strongly negative fold change values); or "two.sided" which is a compromise
+in which positive genes are labelled as before but genes with negative fold
+changes and significant p-values have an inverted colour scheme.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scheme</code></td>
+<td>
+<p>Vector of colours starting with non-significant variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labs</code></td>
+<td>
+<p>Optional character vector for labelling groups. Default <code>NULL</code>
+leads to abbreviated labels based on levels in <code>outcome</code> using
+<code>abbreviate()</code>. A vector of length 3 with custom abbreviated names for the
+outcome levels can be supplied. Otherwise a vector length 8 is expected, of
+the form "ns", "A+", "A+B+", "B+", "B+C+", "C+", "A+C+", "A+B+C+", where
+"ns" means non-significant and A, B, C refer to levels 1, 2, 3 in
+<code>outcome</code>, and must be in the correct order.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Optional arguments passed to <code>calc_stats_2x3</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is designed for manually generating a 'volc3d' class object for
+visualising a 2x3 way analysis comparing a large number of attributes such as
+genes. For RNA-Seq data we suggest using <code>deseq_2x3()</code> and
+<code>deseq_2x3_polar()</code> functions in sequence instead.
+</p>
+<p>Scaled polar coordinates are generated using the t-score for each group
+comparison. Unscaled polar coordinates are generated as difference between
+means for each group comparison. If p-values are not supplied they are
+calculated by <code>calc_stats_2x3()</code> using either t-tests or wilcoxon tests.
+</p>
+<p>The z axis for 3d volcano plots does not have as clear a corollary in 2x3
+analysis as for the standard 3-way analysis (which uses the likelihood ratio
+test for the 3 groups). For 2x3 polar analysis the smallest p-value from the
+3 group pairwise comparisons for each gene is used to generate a z coordinate
+as -log10(p-value).
+</p>
+<p>The colour scheme is not as straightforward as for the standard polar plot
+and volcano3D plot since genes (or attributes) can be significantly up or
+downregulated in the response comparison for each of the 3 groups.
+<code>process = "positive"</code> means that genes are labelled with colours if a gene
+is significantly upregulated in the response for that group. This uses the
+primary colours (RGB) so that if a gene is upregulated in both red and blue
+group it becomes purple etc with secondary colours. If the gene is
+upregulated in all 3 groups it is labelled black. Non-significant genes are
+in grey.
+</p>
+<p>With <code>process = "negative"</code> genes are coloured when they are significantly
+downregulated. With <code>process = "two.sided"</code> the colour scheme means that both
+significantly up- and down-regulated genes are coloured with downregulated
+genes labelled with inverted colours (i.e. cyan is the inverse of red etc).
+However, significant upregulation in a group takes precedence.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns an S4 'volc3d' object containing:
+</p>
+
+<ul>
+<li>
+<p>'df' A list of 2 dataframes. Each dataframe contains both x,y,z
+coordinates as well as polar coordinates r, angle. The first dataframe has
+coordinates on scaled data. The 2nd dataframe has unscaled data (e.g. log2
+fold change for gene expression). The <code>type</code> argument in
+<code>volcano3D</code>, <code>radial_plotly</code> and
+<code>radial_ggplot</code> corresponds to these dataframes.
+</p>
+</li>
+<li>
+<p>'outcome' The three-group contrast factor used for comparisons,
+linked to the <code>group</code> column
+</p>
+</li>
+<li>
+<p>'data' Dataframe or matrix containing the expression data
+</p>
+</li>
+<li>
+<p>'pvals' A dataframe containing p-values in 3 columns representing
+the binary comparison for the outcome for each of the 3 groups.
+</p>
+</li>
+<li>
+<p>'padj' A dataframe containing p-values adjusted for multiple testing
+</p>
+</li>
+<li>
+<p>'pcutoff Numeric value for cut-off for p-value significance
+</p>
+</li>
+<li>
+<p>'scheme' Character vector with colour scheme for plotting
+</p>
+</li>
+<li>
+<p>'labs' Character vector with labels for colour groups
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><code>deseq_2x3</code>, <code>deseq_2x3_polar</code>,
+<code>calc_stats_2x3</code>
+</p>
+
+
+</div>

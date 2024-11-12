@@ -1,0 +1,140 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>replicate.oddsratio</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compares and combines odds ratios in original and follow-up studies</h2>
+
+<h3>Description</h3>
+
+<p>This function computes confidence intervals for an odds ratio from an
+original study and a follow-up study. Confidence intervals for the
+ratio of odds ratios and geometric average odds ratio are also
+computed. The confidence level for the ratio of ratios is 1 – 2*alpha, which
+is recommended for equivalence testing.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">replicate.oddsratio(alpha, est1, se1, est2, se2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>est1</code></td>
+<td>
+<p>estimate of log odds ratio in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se1</code></td>
+<td>
+<p>standard error of log odds ratio in original study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>est2</code></td>
+<td>
+<p>estimate of log odds ratio in follow-up study</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se2</code></td>
+<td>
+<p>standard error of log odds ratio in follow-up study</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A 4-row matrix. The rows are:
+</p>
+
+<ul>
+<li>
+<p> Row 1 summarizes the original study
+</p>
+</li>
+<li>
+<p> Row 2 summarizes the follow-up study
+</p>
+</li>
+<li>
+<p> Row 3 estimates the ratio of odds ratios
+</p>
+</li>
+<li>
+<p> Row 4 estimates the geometric average odds ratio
+</p>
+</li>
+</ul>
+<p>The columns are:
+</p>
+
+<ul>
+<li>
+<p> Estimate - odds ratio estimate (single study, ratio, average)
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> z - z-value
+</p>
+</li>
+<li>
+<p> p - p-value
+</p>
+</li>
+<li>
+<p> LL - exponentiated lower limit of the confidence interval
+</p>
+</li>
+<li>
+<p> UL - exponentiated upper limit of the confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG (2021).
+“Design and analysis of replication studies.”
+<em>Organizational Research Methods</em>, <b>24</b>(3), 513–529.
+ISSN 1094-4281, <a href="https://doi.org/10.1177/1094428120911088">doi:10.1177/1094428120911088</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">replicate.oddsratio(.05, 1.39, .302, 1.48, .206)
+
+# Should return:
+#                          Estimate        SE          z            p
+# Original:              1.39000000 0.3020000  4.6026490 4.171509e-06
+# Follow-up:             1.48000000 0.2060000  7.1844660 6.747936e-13
+# Original/Follow-up:   -0.06273834 0.3655681 -0.1716188 8.637372e-01
+# Average:               0.36067292 0.1827840  1.9732190 4.847061e-02
+#                         exp(LL)  exp(UL)
+# Original:             2.2212961 7.256583
+# Follow-up:            2.9336501 6.578144
+# Original/Fllow-up:    0.5147653 1.713551
+# Average:              1.0024257 2.052222
+
+
+</code></pre>
+
+
+</div>

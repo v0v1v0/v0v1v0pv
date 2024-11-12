@@ -1,0 +1,152 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>08. Modular-arithmetic</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Basic Modular-Arithmetic Operators for vli Objects</h2>
+
+<h3>Description</h3>
+
+<p>Basic modular-arithmetic operators for vli (Very Large Integers) objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">summod(x, y, mod)
+
+## Default S3 method:
+summod(x, y, mod)
+
+## S3 method for class 'numeric'
+summod(x, y, mod)
+
+## S3 method for class 'vli'
+summod(x, y, mod)
+
+submod(x, y, mod)
+
+## Default S3 method:
+submod(x, y, mod)
+
+## S3 method for class 'numeric'
+submod(x, y, mod)
+
+## S3 method for class 'vli'
+submod(x, y, mod)
+
+mulmod(x, y, mod)
+
+## Default S3 method:
+mulmod(x, y, mod)
+
+## S3 method for class 'numeric'
+mulmod(x, y, mod)
+
+## S3 method for class 'vli'
+mulmod(x, y, mod)
+
+powmod(x, n, mod)
+
+## Default S3 method:
+powmod(x, n, mod)
+
+## S3 method for class 'numeric'
+powmod(x, n, mod)
+
+## S3 method for class 'vli'
+powmod(x, n, mod)
+
+invmod(x, n)
+
+## Default S3 method:
+invmod(x, n)
+
+## S3 method for class 'numeric'
+invmod(x, n)
+
+## S3 method for class 'vli'
+invmod(x, n)
+
+divmod(x, y, mod)
+
+## Default S3 method:
+divmod(x, y, mod)
+
+## S3 method for class 'numeric'
+divmod(x, y, mod)
+
+## S3 method for class 'vli'
+divmod(x, y, mod)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>vli class object or 32 bits integer</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>vli class object or 32 bits integer</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mod</code></td>
+<td>
+<p>vli class object or 32 bits integer</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>vli class object or 32 bits integer</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The functions <code>summod</code>, <code>submod</code> and <code>mulmod</code> compute respectively the sum, the substraction and the multiplication of <code>x</code> and <code>y</code> under modulo <code>mod</code>.
+</p>
+<p>The function <code>powmod</code> computes the <code>n</code>-th power of <code>x</code> under modulo <code>mod</code>.
+</p>
+<p>The function <code>invmod</code> returns the modular multiplicative inverse of <code>x</code> in Z<code>n</code>; that is,  <code>y = x^(-1)</code> such that <code> x * y = 1 (</code>mod<code> n)</code>.
+</p>
+<p>The function <code>divmod</code> returns the modular division of <code>x</code> over <code>y</code>; that is, <code>z</code> such that <code>y * z (</code>mod <code>mod) = x (</code>mod <code>mod)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>object of class vli
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Javier Leiva Cuadrado
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- as.vli("8925378246957826904701")
+y &lt;- as.vli("347892325634785693")
+mod &lt;- as.vli(21341)
+
+summod(x, y, mod)
+
+mulmod(x, invmod(x, n = 123), mod = 123) == 1
+
+z &lt;- divmod(x, y, mod)
+mulmod(z, y, mod) == x %% mod
+</code></pre>
+
+
+</div>

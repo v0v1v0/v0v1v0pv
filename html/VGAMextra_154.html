@@ -1,0 +1,270 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>weibullRff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Distribution–specified quantile regression: 
+2–parameter Weibull Distribution
+</h2>
+
+<h3>Description</h3>
+
+
+<p>Estimates the 2–parameter Weibull distribution by maximum likelihood.
+An extension of <code>weibullR</code> from <span class="pkg">VGAM</span>.
+Weibull quantile regression and Weibull–mean
+modelling are also handled via the first
+linear predictor.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    
+     weibullRff(link1 = c("loglink", "weibullMlink", "weibullQlink")[1],
+                lshape = "loglink", percentile = 50,
+                imu = NULL, iscale = NULL, ishape = NULL,
+                lss = TRUE, nrfs = 1, probs.y = c(0.2, 0.5, 0.8),
+                imethod = 1, zero = "shape")
+             
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link1</code></td>
+<td>
+
+<p>Link function for the first linear predictor. 
+Default
+is <code>link1 = "loglink"</code>, mimicking 
+<code>weibullR</code>. The other options
+are the 2–parameter
+<code>weibullQlink</code>, applied
+to the Weibull quantile function, and the 2–parameter
+<code>weibullMlink</code>, applied to 
+the Weibull mean function. See below for more details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percentile</code></td>
+<td>
+
+<p>Numeric. A vector with the percentiles of interest, between 0
+and 100.
+Used only in Weibull quantile regression, that is,
+when <code>link1 = "weibullQlink"</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lshape,imu, iscale, ishape, lss,
+nrfs, probs.y, imethod</code></td>
+<td>
+
+<p>Same as <code>weibullR</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Specifies the parameters to be modelled as intercept–only.
+Further details below.
+</p>
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>weibullRff</code> is a modified version of
+<code>weibullR</code> adapted to handle
+<code>weibullQlink</code>
+and <code>weibullMlink</code>,
+two 2-parameter linear predictors that model
+the Weibull mean and quantiles respectively.
+
+
+The underlying density is the ordinary 
+<code>scale</code>(<code class="reqn">\beta</code>) &amp; <code>shape</code>(<code class="reqn">\alpha</code>)
+Weibull density (see <code>weibullR</code>).
+</p>
+<p>The second linear predictor is always 
+<code class="reqn">\eta_2 = \log~\alpha</code>.
+The argument <code>link1</code> handles the first linear predictor.
+</p>
+<p><span class="pkg">** Mimicking <code>weibullR</code> **</span>
+</p>
+<p>The default is <code>link1 = "loglink"</code>, i.e., 
+<code class="reqn">\eta_1 = \log~\beta = \log~scale</code>, and 
+<code class="reqn">\eta_2 = \log~\alpha = \log~shape</code>,
+as with <code>weibullR</code>.
+The mean (<code class="reqn">\mu</code>) is returned as the fitted value.
+</p>
+<p><span class="pkg">** Weibull quantile regression **</span>
+</p>
+<p>For Weibull quantile regression set <code>link1 = "weibullQlink"</code>
+and enter a numeric vector of percentiles of interest
+via <code>percentile</code>.  
+See examples.
+</p>
+<p>NOTE: Enter the response using 
+<code>Q.reg</code>. See example below.
+The Weibull quantiles are returned as the fitted values.
+</p>
+<p><span class="pkg">** Weibull-mean modelling **</span>
+</p>
+<p>For Weibull-mean modelling (viz. mean time to failure)
+set <code>link1 = "weibullMlink"</code>. 
+The mean (<code class="reqn">\mu</code>) is returned as the fitted value.
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglm"</code>.
+See <code>vglm-class</code> for full details.
+</p>
+
+
+<h3>Note</h3>
+
+
+
+<p>The parameters <code class="reqn">\alpha</code> and <code class="reqn">\beta</code>
+match the arguments <code class="reqn">shape</code> and <code class="reqn">scale</code> from
+<code>rweibull</code>.
+</p>
+<p>Multiple responses are handled.
+</p>
+<p>This <b>VGAM</b> family function does not handle censored data.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and Thomas W. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>Miranda &amp; Yee (2021) 
+<em>Two–Parameter Link Functions,
+With Application to Negative Binomial, Weibull and
+Quantile Regression</em>. In preparation.
+</p>
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>Q.reg</code>,
+<code>weibullQlink</code>,
+<code>weibullMlink</code>,
+<code>weibullR</code>,
+<code>gamma</code>,
+
+<code>CommonVGAMffArguments</code>.
+
+
+
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+set.seed(18121)
+nn &lt;- 300
+x2 &lt;- sort(runif(nn, 0, 3))  # Predictor/covariate.
+bb &lt;- exp(1.1 + 0.2 * x2)    # Scale parameter as function of x2.
+aa &lt;- exp(1.0 - 0.35 * x2)     # Shape parameter as function of x2.
+mymu &lt;- bb * gamma(1 + 1/aa)  # The Weibull mean.
+
+## Use weibullMlink to generate appropriate scale parameter.
+newbb &lt;- weibullMlink(theta = log(mymu), shape = aa, inverse = TRUE, deriv = 0)
+
+## A single random response
+wdata &lt;- data.frame(y1 = rweibull(nn, shape = aa, scale = newbb), x2 = x2)
+
+# Plotting the data / Histogram
+plot(y1  ~ x2, xlim = c(0, 3.1), ylim = c(-1, 35),
+     pch = 20, data = wdata, col = "black", 
+     main = "Weibull Quantile regression~ x2")
+abline(h = 0, v = 0, col = "grey", lty = "dashed")
+with(wdata, hist(y1, col = "red", breaks = 15))
+
+## Weibull regression - percentile = c(25, 50, 75)
+## Note the use of Q.reg.
+fit1 &lt;- vglm(Q.reg(y1, length.arg = 3) ~ x2, 
+             weibullRff(link1 = "weibullQlink", zero = NULL,
+                                 percentile = c(25, 50, 75)), 
+             trace = TRUE, data = wdata)
+head(fitted(fit1))
+summary(fit1)
+my.coef3Q &lt;- coef(fit1, mat = TRUE)
+
+### Proportion of data below the estimated 25% Quantile line.
+100 * (1 - (sum(wdat$y1 &gt;= fitted(fit2)[, 1]) / nn))  # Around 25%
+### Proportion of data below the estimated 50% Quantile line.
+100 * (1 - (sum(wdat$y1 &gt;= fitted(fit2)[, 2]) / nn))   # Around 50%
+### Proportion of data below the estimated 75% Quantile line.
+100 * (1 - ( sum(wdat$y1 &gt;= fitted(fit2)[, 3]) / nn ))   # Around 75%
+
+## The quantile plots ##
+my.coef3Q &lt;- coef(fit2, matrix = TRUE)
+with(wdat, lines(x2, exp(my.coef3Q[1, 1] + my.coef3Q[2, 1] * x2), 
+                    col = "red", lty = "dotted", lwd = 4))
+with(wdat, lines(x2, exp(my.coef3Q[1, 3] + my.coef3Q[2, 3] * x2), 
+                 col = "orange", lty = "dotted", lwd = 4))
+with(wdat, lines(x2, exp(my.coef3Q[1, 5] + my.coef3Q[2, 5] * x2), 
+                 col = "blue", lty = "dotted", lwd = 4))
+
+## Adding the 'mean' or expected Weibull regression line.
+fit2 &lt;- vglm(y1 ~ x2, 
+             weibullRff(link1 = "weibullMlink", zero = NULL), 
+             trace = TRUE, data= wdat)
+my.coef3Q &lt;- coef(fit2, mat = TRUE)
+with(wdat, lines(x2, exp(my.coef3Q[1, 1] + my.coef3Q[2, 1] * x2), 
+                 col = "yellow", lty = "dashed", lwd = 3))
+
+
+legend("topleft", c("25h Perc", "50th Perc", "Mean", "75th Perc"),
+       col = c("red", "orange", "cyan", "blue"),
+       lty = c("dashed", "dashed", "dashed", "dashed"), lwd = rep(4, 4))
+     
+## End(Not run)
+</code></pre>
+
+
+</div>

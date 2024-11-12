@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>log_like_forces</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>create an initial configuration for the latent positions. 
+</h2>
+
+<h3>Description</h3>
+
+<p>This performs an iterative relaxation type algorithm to approximately find the
+positions of the nodes in the latent space that maximises the log-likelihood. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">log_like_forces(net, D, X, B, m ,steps)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>network object on which to perform layout. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>D</code></td>
+<td>
+<p>dimension of the latent space.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>the initial guess for X
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>B</code></td>
+<td>
+<p>the intercept term.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>usually N will suffice. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>steps</code></td>
+<td>
+<p>maximum number of iteration steps. 
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Usually only used internally in vblpcmstart()
+</p>
+
+
+<h3>Value</h3>
+
+<p>Matrix of latent positions X 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Salter-Townshend
+</p>
+
+
+<h3>See Also</h3>
+
+<p>igraph::layout.fruchterman.reingold
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(sampson)
+N=network.size(samplike)
+X=matrix(runif(N*2,-2,2),ncol=2)
+XX=vblpcmcovs(N,"plain",as.sociomatrix(samplike))
+out&lt;-log_like_forces(samplike, 2, X, 0, m=N, 1e3)
+plot(samplike,coord=out$X)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>list2ballot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Repeat ith element of list x or row of matrix/data.frames 
+for j times</h2>
+
+<h3>Description</h3>
+
+<p>Suppose you have 3 different unique ballots and the amount 
+of each ballot is 10, 20, 30. Now you want to create raw 
+ballots as a list. Then you can use this function. See examples
+for usage.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">list2ballot(x = NULL, n = rep(1, length(x)), m = NULL, string = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a list, each element of which should be a vector. Note: 
+only one of <code>x</code>, <code>m</code> and <code>string</code> 
+can be a non-NULL object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>how many times each element of <code>x</code> 
+or each row of <code>m</code> should be replicated.
+It should be a numeric vector of non-negative integers and the 
+length of it should be equal to that of <code>x</code> or the row number 
+of <code>m</code>. 
+The default is 1 for each element of <code>x</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>a matrix or dataframe, the number of rows should be 
+equal to the length of n.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>string</code></td>
+<td>
+<p>default is NULL. If it is not NULL,  <code>x</code>, <code>m</code> 
+and <code>n</code> are ignored. It should be a character vector. Each 
+one contains two parts, the 1st is the amount of 
+that ballot, and the 2nd part contains the names. The 1st and 
+2nd parts, as well as the names, should be split by spaces 
+or punctuations. But no space and punctuation is allowed 
+inside the names ("_" is not taken to be 
+a punctuation). See examples.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list with replicated vectors, if <code>x</code> is not NULL, 
+or a matrix/data.frame with duplicated rows, if 
+<code>m</code> is not NULL.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Use x and n
+unique_ballot &lt;- list(
+    c("A", "B", "C"), c("F", "A", "B"),
+    c("E", "D", "C", "B", "F", "A"), c("x","x", "A")
+)
+r &lt;- c(1, 2, 3, 0)
+y &lt;- list2ballot(unique_ballot, r)
+
+# Use string, x and n will be ignored.
+# The characters can be written in a very loose way as follows, 
+# for the function will automatically delete unwanted parts.
+# But do make sure there is no space or punctuation
+# inside the names.
+unique_ballot &lt;- c(
+	"2, Bob, Mike Jane", 	"3: barack_obama;;Bob&gt;Jane", 
+	"0 Smith   Jane", "  1 Mike???!!!"
+)
+y &lt;- list2ballot(string = unique_ballot)
+# Use a matrix.
+m &lt;- matrix(c(1, 2, 3, 3, 1, 2), nrow = 2, byrow = TRUE)
+colnames(m) &lt;- c("p1", "p2", "p3")
+r &lt;- c(3, 5)
+y &lt;- list2ballot(m = m, n = r)
+</code></pre>
+
+
+</div>

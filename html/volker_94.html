@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_counts_one_grouped</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot frequencies cross tabulated with a grouping column</h2>
+
+<h3>Description</h3>
+
+<p>Plot frequencies cross tabulated with a grouping column
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_counts_one_grouped(
+  data,
+  col,
+  cross,
+  category = NULL,
+  prop = "total",
+  limits = NULL,
+  ordered = NULL,
+  numbers = NULL,
+  title = TRUE,
+  labels = TRUE,
+  clean = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A tibble.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>The column holding factor values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross</code></td>
+<td>
+<p>The column holding groups to split.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>category</code></td>
+<td>
+<p>The value FALSE will force to plot all categories.
+A character value will focus a selected category.
+When NULL, in case of boolean values, only the TRUE category is plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prop</code></td>
+<td>
+<p>The basis of percent calculation: "total" (the default), "rows" or "cols".
+Plotting row or column percentages results in stacked bars that add up to 100%.
+Whether you set rows or cols determines which variable is in the legend (fill color)
+and which on the vertical scale.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>limits</code></td>
+<td>
+<p>The scale limits, autoscaled by default.
+Set to <code>c(0,100)</code> to make a 100 % plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ordered</code></td>
+<td>
+<p>The values of the cross column can be nominal (0), ordered ascending (1), or descending (-1).
+By default (NULL), the ordering is automatically detected.
+An appropriate color scale should be chosen depending on the ordering.
+For unordered values, colors from VLKR_FILLDISCRETE are used.
+For ordered values, shades of the VLKR_FILLGRADIENT option are used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numbers</code></td>
+<td>
+<p>The numbers to print on the bars: "n" (frequency), "p" (percentage) or both.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>If TRUE (default) shows a plot title derived from the column labels.
+Disable the title with FALSE or provide a custom title as character value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p>If TRUE (default) extracts labels from the attributes, see codebook.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clean</code></td>
+<td>
+<p>Prepare data by data_clean.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Placeholder to allow calling the method with unused parameters from plot_counts.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A ggplot object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(volker)
+data &lt;- volker::chatgpt
+
+plot_counts_one_grouped(data, adopter, sd_gender)
+
+</code></pre>
+
+
+</div>

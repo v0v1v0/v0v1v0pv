@@ -1,0 +1,153 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>names&lt;-,rule,character-method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract or set names</h2>
+
+<h3>Description</h3>
+
+<p>Extract or set names
+</p>
+<p>When setting names, <code>value</code>s are recycled and made unique with
+<code>make.names</code>
+</p>
+<p>Get names from <code>confrontation</code> object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 replacement method for signature 'rule,character'
+names(x) &lt;- value
+
+## S4 method for signature 'expressionset'
+names(x)
+
+## S4 replacement method for signature 'expressionset,character'
+names(x) &lt;- value
+
+## S4 method for signature 'confrontation'
+names(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An R object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>Value to set</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>character</code> vector
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other expressionset-methods: 
+<code>as.data.frame()</code>,
+<code>as.data.frame,expressionset-method</code>,
+<code>created()</code>,
+<code>description()</code>,
+<code>label()</code>,
+<code>meta()</code>,
+<code>origin()</code>,
+<code>plot,validator-method</code>,
+<code>summary()</code>,
+<code>variables()</code>,
+<code>voptions()</code>
+</p>
+<p>Other validation-methods: 
+<code>aggregate,validation-method</code>,
+<code>all,validation-method</code>,
+<code>any,validation-method</code>,
+<code>barplot,validation-method</code>,
+<code>check_that()</code>,
+<code>compare()</code>,
+<code>confront()</code>,
+<code>event()</code>,
+<code>plot,validation-method</code>,
+<code>sort,validation-method</code>,
+<code>summary()</code>,
+<code>validation-class</code>,
+<code>values()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# retrieve properties
+v &lt;- validator(turnover &gt; 0, staff.costs&gt;0)
+
+# number of rules in v:
+length(v)
+
+# per-rule
+created(v)
+origin(v)
+names(v)
+
+# set properties
+names(v)[1] &lt;- "p1"
+
+label(v)[1] &lt;- "turnover positive"
+description(v)[1] &lt;- "
+According to the official definition,
+only positive values can be considered
+valid turnovers.
+"
+
+# short description is also printed:
+v
+
+# print all info for first rule
+v[[1]]
+
+
+
+# retrieve properties
+v &lt;- validator(turnover &gt; 0, staff.costs&gt;0)
+
+# number of rules in v:
+length(v)
+
+# per-rule
+created(v)
+origin(v)
+names(v)
+
+# set properties
+names(v)[1] &lt;- "p1"
+
+label(v)[1] &lt;- "turnover positive"
+description(v)[1] &lt;- "
+According to the official definition,
+only positive values can be considered
+valid turnovers.
+"
+
+# short description is also printed:
+v
+
+# print all info for first rule
+v[[1]]
+
+
+</code></pre>
+
+
+</div>

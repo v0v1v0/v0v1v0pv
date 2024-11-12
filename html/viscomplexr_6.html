@@ -1,0 +1,437 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>phasePortraitBw</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Create two-color phase portraits of complex functions</h2>
+
+<h3>Description</h3>
+
+<p><code>phasePortraitBw</code> allows for creating two-color phase portraits of
+complex functions based on a polar chessboard grid (cf.
+Wegert (2012), p. 35). Compared to
+the full phase portraits that can be made with <code>phasePortrait</code>,
+two-color portraits omit information. Especially in combination with full
+phase portraits they can be, however, very helpful tools for interpretation.
+Besides, two-color phase portraits have a special aesthetic appeal which is
+worth exploring for itself. In its parameters and its mode of operation,
+<code>phasePortraitBw</code> is very similar to <code>phasePortrait</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">phasePortraitBw(
+  FUN,
+  moreArgs = NULL,
+  xlim,
+  ylim,
+  invertFlip = FALSE,
+  res = 150,
+  blockSizePx = 2250000,
+  tempDir = NULL,
+  nCores = max(1, parallel::detectCores() - 1),
+  bwType = "ma",
+  pi2Div = 18,
+  logBase = exp(2 * pi/pi2Div),
+  argOffset = 0,
+  bwCols = c("black", "gray95", "gray"),
+  asp = 1,
+  deleteTempFiles = TRUE,
+  noScreenDevice = FALSE,
+  autoDereg = FALSE,
+  verbose = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>FUN</code></td>
+<td>
+<p>The function to be visualized. There are two possibilities to
+provide it, a quoted character string, or a function object. The quoted
+character string must contain an expression that can be interpreted by R as
+a function of a complex number <code>z</code> (like e.g. "sin(z)", "(z^2 -
+1i)/(tan(z))", "1/4*z^2 - 10*z/(z^4+4)"). See the documentation of
+<code>phasePortrait</code> for a complete presentation of all options.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>moreArgs</code></td>
+<td>
+<p>A named list of other arguments to FUN. The names must match
+the names of the arguments in FUN's definition.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlim</code></td>
+<td>
+<p>The x limits (x1, x2) of the plot as a two-element numeric
+vector. Follows exactly the same definition as in
+<code>plot.default</code>. Here, <code>xlim</code> has to be interpreted as the
+plot limits on the real axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylim</code></td>
+<td>
+<p>The y limits of the plot (y1, y2) to be used in the same way as
+<code>xlim</code>. Evidently, <code>ylim</code> indicates the plot limits on the
+imaginary axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>invertFlip</code></td>
+<td>
+<p>If <code>TRUE</code>, the function is mapped over a z plane,
+which has been transformed to <code>1/z * exp(1i*pi)</code>. This is the
+projection required to plot the north Riemann hemisphere in the way
+proposed by Wegert (2012), p. 41.
+Defaults to <code>FALSE</code>. If this option is chosen, the numbers at the axis
+ticks have another meaning than in the normal case. Along the real axis,
+they represent the real part of <code>1/z</code>, and along the imaginary axis,
+they represent the imaginary part of <code>1/z</code>. Thus, if you want
+annotation, you should choose appropriate axis labels like <code>xlab =
+Re(1/z)</code>, and <code>ylab = Im(1/z)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>res</code></td>
+<td>
+<p>Desired resolution of the plot in dots per inch (dpi). Default is
+150 dpi. All other things being equal, <code>res</code> has a strong influence on
+computing times (double <code>res</code> means fourfold number of pixels to
+compute). A good approach could be to make a plot with low resolution (e.g.
+the default 150 dpi) first, adjust whatever required, and plot into a
+graphics file with high resolution after that.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>blockSizePx</code></td>
+<td>
+<p>Number of pixels and corresponding complex values to be
+processed at the same time (see Details). Default is 2250000. This value
+gave good performance on older systems as well as on a high-end gaming
+machine, but some tweaking for your individual system might even improve
+things.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tempDir</code></td>
+<td>
+<p><code>NULL</code> or a character string, specifying the name of the
+directory where the temporary files written by <code>phasePortrait</code> are
+stored. Default is <code>NULL</code>, which makes <code>phasePortrait</code> use the
+current R session's temporary directory. Note that if you specify another
+directory, it will be created if it does not exist already. Even though the
+temporary files are deleted after completing a phase portrait (unless the
+user specifies <code>deleteTempFiles = FALSE</code>, see below), the directory
+will remain alive even if has been created by <code>phasePortrait</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nCores</code></td>
+<td>
+<p>Number of processor cores to be used in the parallel computing
+tasks. Defaults to the maximum number of cores available minus 1. Any
+number between 1 (serial computation) and the maximum number of cores
+available as indicated by <code>parallel::detectCores()</code> is accepted. If
+<code>nCores</code> is set to a value greater than the available number of cores,
+the function will use one core less than available.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bwType</code></td>
+<td>
+<p>One of the three options for plotting, "m", "a", and "ma", to
+be provided as a character string. Defaults to "ma". This parameter has a
+comparable role to the parameter <code>pType</code> in
+<code>phasePortrait</code>. Option "m" produces a plot that colors modulus
+zones only. In more detail, for each input number's modulus, the logarithm
+with base <code>logBase</code> (see below) is calculated and cut down to the next
+lower integer value. If this is an even number, the first color given in
+<code>bwCols</code> (see below) is taken. In case of an odd number, the second
+color is used. Option "a" produces a plot that exclusively colors argument
+(phase angle) zones. To that end, the full angle (2*pi) is divided into
+<code>p2Div</code> (see below) zones, which are numbered from 0 to pi2Div - 1
+with increasing angle. Such an integer number is attributed to the complex
+number of interest according to the zone it falls into. Even and odd zone
+numbers are mapped to the first and the second color in <code>bwCols</code>,
+respectively. For normal purposes, the input parameter <code>pi2Div</code> should
+be an even number in order to avoid the first and the last zone having the
+same color. With option "ma", a chessboard-like alternation of colors is
+displayed over the tiles formed by the intersecting modulus and argument
+zones (both determined separately as with the options "m" and "a").</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pi2Div</code></td>
+<td>
+<p>Angle distance for the argument reference zones added for
+<code>pType = "pma"</code> or <code>pType = "pa"</code>. The value has to be given as
+an integer (reasonably) fraction of 2*pi (i.e. 360 degrees). Unlike with
+<code>phasePortrait</code>, the default is 18; thus, reference zones are
+delineated by default in distances of 2*pi/18, i.e. (20 degrees), starting
+with 0 if not defined otherwise with the parameter <code>argOffset</code>. While
+the default of <code>pi2Div</code> is 9 with <code>phasePortrait</code> for good
+reasons (see there), setting <code>pi2Div</code> to an odd number is usually not
+a good choice with two-color phase portraits, because the first and the
+last phase angle zone would get the same color. However, as <code>pi2Div</code>
+here defaults to double the value as with <code>phasePortrait</code>, both
+plot types can be nicely compared even when using their specific defaults
+of <code>pi2Div</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logBase</code></td>
+<td>
+<p>Modulus ratio between the edges of the modulus zones in
+<code>bwType</code> <code>"m"</code> and <code>"ma"</code>. As recommended by
+Wegert (2012), the default
+setting is <code>logBase = exp(2*pi/pi2Div)</code>. This relation between the
+parameters <code>logBase</code> and <code>pi2Div</code> ensures an analogue scaling of
+the modulus and argument reference zones (see Details section in the
+documentation of <code>phasePortrait</code>). Conveniently, for the
+default <code>pi2Div = 18</code>, we obtain <code>logBase == 1.4177...</code>, which is
+very close to the square root of 2. Thus, when crossing two modulus zones,
+the modulus at the higher edge of the second zone is almost exactly two
+times the value at the lower edge of the first zone.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>argOffset</code></td>
+<td>
+<p>The (complex number) argument in radians counterclockwise,
+at which the argument (phase angle) reference zones are fixed, i.e. the
+lower angle of the first zone. Default is 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bwCols</code></td>
+<td>
+<p>Color definition for the plot provided as a character vector of
+length 3. Each element of the vector must be either a color name R
+recognizes, or a hexadecimal color string like e.g. "#00FF11". The first
+and the second color make the appearance of two-color phase portraits (see
+<code>bwType</code> above for details), while the third color is reserved for
+special cases, where the input value cannot sufficiently evaluated (NaNs,
+partly Inf). Defaults to c("black", "gray95", "gray"), which leads to an
+alternation of black and very light gray zones or tiles, and uses a neutral
+gray in special cases.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>asp</code></td>
+<td>
+<p>Aspect ratio y/x as defined in <code>plot.window</code>. Default
+is 1, ensuring an accurate representation of distances between points on
+the screen.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>deleteTempFiles</code></td>
+<td>
+<p>If TRUE (default), all temporary files are deleted
+after the plot is completed. Set it on FALSE only, if you know exactly what
+you are doing - the temporary files can occupy large amounts of hard disk
+space (see details).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>noScreenDevice</code></td>
+<td>
+<p>Suppresses any graphical output if TRUE. This is only
+intended for test purposes and makes probably only sense together with
+<code>deleteTempFiles == FALSE</code>. For dimensioning purposes,
+<code>phasePortraitBw</code> will use a 1 x 1 inch pseudo graphics device in this
+case. The default for this parameter is <code>FALSE</code>, and you should change
+it only if you really know what you are doing.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>autoDereg</code></td>
+<td>
+<p>if TRUE, automatically register sequential backend after the
+plot is completed. Default is FALSE, because registering a parallel backend
+can be time consuming. Thus, if you want to make several phase portraits in
+succession, you should set <code>autoDereg</code> only for the last one, or
+simply type <code>foreach::registerDoSEQ</code> after you are done. In any case,
+you don't want to have an unused parallel backend lying about.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>if TRUE (default), <code>phasePortraitBw</code> will continuously
+write progress messages to the console. This is convenient for normal
+purposes, as calculating larger phase portraits in higher resolution may
+take several minutes. The setting <code>verbose = FALSE</code>, will suppress any
+output to the console.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>All parameters accepted by the <code>plot.default</code>
+function.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is intended to be used inside the framework of R base graphics.
+It plots into the active open graphics device where it will display the phase
+plot of a user defined function as a raster image. If no graphics device is
+open when called, the function will plot into the default graphics device.
+This principle allows to utilize the full functionality of R base graphics.
+All graphics parameters (<code>par</code>) can be freely set and the
+function <code>phasePortrait</code> accepts all parameters that can be passed to
+the <code>plot.default</code> function. This allows all kinds of plots -
+from scientific representations with annotated axes and auxiliary lines,
+notation, etc. to poster-like artistic pictures. The general mode of operation,
+including the usage of parallel processing is exactly the same as with
+<code>phasePortrait</code>, see details section there.
+</p>
+
+
+<h3>References</h3>
+
+<p>Wegert E (2012).
+<em>Visual Complex Functions. An Introduction with Phase Portraits</em>.
+Springer, Basel Heidelberg New York Dordrecht London.
+ISBN 978-3-0348-0179-9.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Map the complex plane on itself
+
+# x11(width = 8, height = 8)     # Screen device commented out
+                                 # due to CRAN test requirements.
+                                 # Use it when trying this example
+phasePortraitBw("z", xlim = c(-2, 2), ylim = c(-2, 2),
+                xlab = "real", ylab = "imaginary",
+                verbose = FALSE, # Suppress progress messages
+                nCores = 2)      # Max. two cores allowed on CRAN
+                                 # not a limit for your own use
+
+
+
+
+# Sinus with default colors and default bwType ("ma")
+
+# x11(width = 8, height = 8)       # Screen device commented out
+                                   # due to CRAN test requirements.
+                                   # Use it when trying this example
+phasePortraitBw("sin(z)",
+                xlim = c(-pi, pi),
+                ylim = c(-pi, pi),
+                verbose = FALSE,
+                nCores = 2)        # Max. two cores allowed on CRAN
+                                   # not a limit for your own use
+  
+
+
+
+
+# Sinus with custom colors and bwType "a"
+
+# x11(width = 8, height = 8)       # Screen device commented out
+                                   # due to CRAN test requirements.
+                                   # Use it when trying this example
+phasePortraitBw("sin(z)",
+                xlim = c(-pi, pi),
+                ylim = c(-pi, pi),
+                bwType = "a",
+                bwCols = c("darkgreen", "green", "gray"),
+                verbose = FALSE,
+                nCores = 2)        # Max. two cores allowed on CRAN
+                                   # not a limit for your own use
+  
+
+
+
+
+# Sinus with custom colors and bwType "m"
+
+# x11(width = 8, height = 8)       # Screen device commented out
+                                   # due to CRAN test requirements.
+                                   # Use it when trying this example
+phasePortraitBw("sin(z)",
+                xlim = c(-pi, pi),
+                ylim = c(-pi, pi),
+                bwType = "m",
+                bwCols = c("darkblue", "skyblue", "gray"),
+                verbose = FALSE,
+                nCores = 2)        # Max. two cores allowed on CRAN
+                                   # not a limit for your own use
+  
+
+
+
+
+# Map the complex plane on itself, show all bwType options
+
+# x11(width = 8, height = 8)       # Screen device commented out
+                                   # due to CRAN test requirements.
+                                   # Use it when trying this example
+op &lt;- par(mfrow = c(2, 2), mar = c(4.1, 4.1, 1.1, 1.1))
+for(bwType in c("ma", "a", "m")) {
+  phasePortraitBw("z", xlim = c(-2, 2), ylim = c(-2, 2),
+                  bwType = bwType,
+                  xlab = "real", ylab = "imaginary",
+                  verbose = FALSE, # Suppress progress messages
+                  nCores = 2)      # Max. two cores allowed on CRAN
+                                   # not a limit for your own use
+}
+# Add normal phase portrait for comparison
+phasePortrait("z", xlim = c(-2, 2), ylim = c(-2, 2),
+              xlab = "real", ylab = "imaginary",
+              verbose = FALSE,
+              pi2Div = 18,         # Use same angular division as default
+                                   # in phasePortraitBw
+              nCores = 2)
+par(op)
+
+  
+
+
+
+# A rational function, show all bwType options
+
+# x11(width = 8, height = 8)       # Screen device commented out
+                                   # due to CRAN test requirements.
+                                   # Use it when trying this example
+funString &lt;- "(z + 1.4i - 1.4)^2/(z^3 + 2)"
+op &lt;- par(mfrow = c(2, 2), mar = c(4.1, 4.1, 1.1, 1.1))
+for(bwType in c("ma", "a", "m")) {
+  phasePortraitBw(funString, xlim = c(-2, 2), ylim = c(-2, 2),
+                  bwType = bwType,
+                  xlab = "real", ylab = "imaginary",
+                  verbose = FALSE, # Suppress progress messages
+                  nCores = 2)      # Max. two cores allowed on CRAN
+                                   # not a limit for your own use
+}
+# Add normal phase portrait for comparison
+phasePortrait(funString, xlim = c(-2, 2), ylim = c(-2, 2),
+              xlab = "real", ylab = "imaginary",
+              verbose = FALSE,
+              pi2Div = 18,         # Use same angular division as default
+                                   # in phasePortraitBw
+              nCores = 2)
+par(op)
+
+  
+
+
+
+</code></pre>
+
+
+</div>

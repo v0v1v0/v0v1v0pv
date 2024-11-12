@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>FDM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Functional data model</h2>
+
+<h3>Description</h3>
+
+<p>Functional data model of mortality or fertility rates as a function of age.
+<code>FDM()</code> returns a functional data model applied to the formula's response
+variable as a function of age.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">FDM(formula, order = 6, ts_model_fn = fable::ARIMA, coherent = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>Model specification.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>order</code></td>
+<td>
+<p>Number of principal components to fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ts_model_fn</code></td>
+<td>
+<p>Univariate time series modelling function for the coefficients. Any
+model that works with the fable package is ok. Default is <code>fable::ARIMA()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>coherent</code></td>
+<td>
+<p>If TRUE, fitted models are stationary, other than for the case of
+a key variable taking the value <code>geometric_mean</code>. This is designed to work with
+vitals produced using <code>make_pr()</code>. Default is FALSE. It only works
+when <code>ts_model_fn</code> is <code>ARIMA()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A model specification.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Rob J Hyndman
+</p>
+
+
+<h3>References</h3>
+
+<p>Hyndman, R. J., and Ullah, S. (2007) Robust forecasting of
+mortality and fertility rates: a functional data approach.
+<em>Computational Statistics &amp; Data Analysis</em>, 5, 4942-4956.
+<a href="https://robjhyndman.com/publications/funcfor/">https://robjhyndman.com/publications/funcfor/</a>
+Hyndman, R. J., Booth, H., &amp; Yasmeen, F. (2013). Coherent mortality
+forecasting: the product-ratio method with functional time series models.
+<em>Demography</em>, 50(1), 261-283.
+<a href="https://robjhyndman.com/publications/coherentfdm/">https://robjhyndman.com/publications/coherentfdm/</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">hu &lt;- norway_mortality |&gt;
+  dplyr::filter(Sex == "Female", Year &gt; 2010) |&gt;
+  smooth_mortality(Mortality) |&gt;
+  model(hyndman_ullah = FDM(log(.smooth)))
+report(hu)
+autoplot(hu)
+</code></pre>
+
+
+</div>

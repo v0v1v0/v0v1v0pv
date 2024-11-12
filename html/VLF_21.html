@@ -1,0 +1,82 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>compare</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Compare VLFs within Species
+</h2>
+
+<h3>Description</h3>
+
+<p>Compares VLFs between specimen of the same species.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">compare(x, seqlength)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A list of sequences separated by species name.  Each entry in the list contains a matrix of sequences from the same species.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seqlength</code></td>
+<td>
+
+<p>Length of the sequences.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>List of sequences by species names, x, can be created using the separate function
+</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix containing two vectors, one with singleton VLF counts for each position of the sequence, and one with shared VLF counts for each position of the sequence.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: data(birds)
+species.names &lt;- birds[,2]
+specimen.Number &lt;- nrow(birds)
+rownames(birds) &lt;- species.names
+Nuc.count &lt;- count.function(birds, specimen.Number, 648)
+frequency.matrix &lt;- ffrequency.matrix.function(Nuc.count, 648)
+birdSpec.freq &lt;- specimen.frequencies(frequency.matrix, birds, specimen.Number, species.names, 648)
+Bird_specimen_VLFcount &lt;- VLF.count.spec(birdSpec.freq, 0.001, 648)
+bird_VLFconvert &lt;- VLF.convert.matrix(birds, birdSpec.freq, 0.001, 648)
+bird_VLFnuc &lt;- VLF.nucleotides(bird_VLFconvert, birds, 648)
+bird_VLFreduced &lt;- VLF.reduced(bird_VLFnuc, Bird_specimen_VLFcount, 648)
+bird_species &lt;- separate(bird_VLFreduced)
+
+#The compare function is called on from within the find.singles function
+birds_singleAndShared &lt;- find.singles(bird_species, 648)
+## End(Not run)
+</code></pre>
+
+
+</div>

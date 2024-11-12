@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>save.var</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Save variables separate files</h2>
+
+<h3>Description</h3>
+
+<p>This function gets a list of variables as a character vector and save each variable name in a separate file, so that they can be loaded separately.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    save.var(varlist = ls(envir = as.environment(.GlobalEnv)),
+             path = getwd(), newdir = TRUE, newdirtag = NULL, envir = .GlobalEnv)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>varlist</code></td>
+<td>
+
+<p>Character vector containing variable names. If not provided the function will use all the variables of the environment. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path</code></td>
+<td>
+
+<p>Path to folder that you want to save the files in. If not provided, the current working directory will be used. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdir</code></td>
+<td>
+
+<p>Logical vector of length 1 indicating whether you want to create a subdirectory to store your variable files in. This subdirectory will have the execution time (%Y%m%d-%H%M%S) as folder name in combination with a text tag ('newdirtag') if provided. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdirtag</code></td>
+<td>
+
+<p>Character string used in combination with 'newdir=TRUE' to tag the time based folder name with a custom name. If not provided no tag will be used and the folder name will just have the time format. (Optional)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>envir</code></td>
+<td>
+
+<p>Character string providing target environment in R session. The default is the Global Environment. (Optional)
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is used for saving variables in batch into separate files in an organized way. This specifically comes handy when you generate many variables either dynamically or manually and you want to save them for later use and empty your memory. Saving variables in separate files help finding them as a file easier and faster and also reduces the loading time of the variable since you are also loading those that you want to use.
+</p>
+<p>The save.var function has the feature to save the variables in subfolder to help user manage different version of same variable which are related to different runs.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Mehrad Mahmoudian
+</p>
+
+
+<h3>See Also</h3>
+
+
+<p><code>save.image</code>, <code>save</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># generate variables dynamically
+lapply(letters, function(x){assign(x=x, value=rnorm(1), env=globalenv())})
+
+    ## Not run: 
+        # simple usage
+        save.var()
+        # specify a list of variables with tag
+        save.var(varlist=c("a","e","i","o","u"), newdirtag="just_vowels")
+    
+## End(Not run)
+</code></pre>
+
+
+</div>

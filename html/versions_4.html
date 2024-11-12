@@ -1,0 +1,75 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>install.versions</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>install.versions</h2>
+
+<h3>Description</h3>
+
+<p>Download and install named versions of packages hosted on
+CRAN from the MRAN server.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">install.versions(pkgs, versions, lib, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>pkgs</code></td>
+<td>
+<p>character vector of the names of packages that should be
+downloaded and installed</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>versions</code></td>
+<td>
+<p>character vector of the versions of packages to be
+downloaded and installed. If this has the same length as <code>pkgs</code>
+versions will correspond to those packages. If this has length one
+the same version will be used for all packages. If it has any other
+length an error will be thrown.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lib</code></td>
+<td>
+<p>character vector giving the library directories where to
+install the packages. Recycled as needed. If missing, defaults to the
+first element of <code>.libPaths()</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments to be passed to <code>install.packages</code>.
+The arguments <code>repos</code> and <code>contriburl</code> (at least) will
+be ignored as the function uses the MRAN server to retrieve package versions.</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Not run: 
+
+# install an earlier version of checkpoint
+install.versions('checkpoint', '0.3.3')
+
+# install earlier versions of checkpoint and devtools
+install.versions(c('checkpoint', 'devtools'), c('0.3.3', '1.6.1'))
+
+
+## End(Not run)
+</code></pre>
+
+
+</div>

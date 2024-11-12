@@ -1,0 +1,132 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>gamma1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> 1-parameter Gamma Regression Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the 1-parameter gamma distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">gamma1(link = "loglink", zero = NULL, parallel = FALSE,
+       type.fitted = c("mean", "percentiles", "Qlink"),
+       percentiles = 50)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to the (positive) <em>shape</em> parameter.
+See <code>Links</code> for more choices and general information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero, parallel</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.fitted, percentiles</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code> for information.
+Using <code>"Qlink"</code> is for quantile-links in <span class="pkg">VGAMextra</span>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The density function is given by
+</p>
+<p style="text-align: center;"><code class="reqn">f(y) = \exp(-y) \times y^{shape-1} / \Gamma(shape)</code>
+</p>
+
+<p>for <code class="reqn">shape &gt; 0</code> and <code class="reqn">y &gt; 0</code>.
+Here, <code class="reqn">\Gamma(shape)</code> is the gamma
+function, as in <code>gamma</code>.
+The mean of <code class="reqn">Y</code> (returned as the default fitted values)
+is <code class="reqn">\mu=shape</code>, and the variance is
+<code class="reqn">\sigma^2 = shape</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This <span class="pkg">VGAM</span> family function can handle a multiple
+responses, which is inputted as a matrix.
+</p>
+<p>The parameter <code class="reqn">shape</code> matches with <code>shape</code> in
+<code>rgamma</code>. The argument
+<code>rate</code> in <code>rgamma</code> is assumed
+1 for this family function, so that
+<code>scale = 1</code> is used for calls to
+<code>dgamma</code>,
+<code>qgamma</code>, etc.
+</p>
+<p>If <code class="reqn">rate</code> is unknown use the family function
+<code>gammaR</code> to estimate it too.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Most standard texts on statistical distributions describe
+the 1-parameter gamma distribution, e.g.,
+</p>
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>gammaR</code> for the 2-parameter gamma distribution,
+<code>lgamma1</code>,
+<code>lindley</code>,
+<code>simulate.vlm</code>,
+<code>gammaff.mm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">gdata &lt;- data.frame(y = rgamma(n = 100, shape = exp(3)))
+fit &lt;- vglm(y ~ 1, gamma1, data = gdata, trace = TRUE, crit = "coef")
+coef(fit, matrix = TRUE)
+Coef(fit)
+summary(fit)
+</code></pre>
+
+
+</div>

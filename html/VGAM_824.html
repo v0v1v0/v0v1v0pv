@@ -1,0 +1,133 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>leipnik</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Leipnik Regression Family Function</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the two parameters of a (transformed) Leipnik
+distribution by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">leipnik(lmu = "logitlink", llambda = logofflink(offset = 1),
+        imu = NULL, ilambda = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmu, llambda</code></td>
+<td>
+
+<p>Link function for the <code class="reqn">\mu</code> and <code class="reqn">\lambda</code>
+parameters.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imu, ilambda</code></td>
+<td>
+
+<p>Numeric. Optional initial values for <code class="reqn">\mu</code> and
+<code class="reqn">\lambda</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The (transformed) Leipnik distribution has density function
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\mu,\lambda) = \frac{ \{ y(1-y) \}^{-\frac12}}{
+  \mbox{Beta}( \frac{\lambda+1}{2}, \frac12 )}
+  \left[ 1 +  \frac{(y-\mu)^2 }{y(1-y)}
+  \right]^{ -\frac{\lambda}{2}}</code>
+</p>
+
+<p>where <code class="reqn">0 &lt; y &lt; 1</code> and <code class="reqn">\lambda &gt; -1</code>.
+The mean is <code class="reqn">\mu</code> (returned as the fitted values)
+and the variance is <code class="reqn">1/\lambda</code>.
+</p>
+<p>Jorgensen (1997) calls the above the <b>transformed</b>
+Leipnik distribution, and if <code class="reqn">y = (x+1)/2</code> and <code class="reqn">\mu =
+  (\theta+1)/2</code>, then the distribution of <code class="reqn">X</code>
+as a function of <code class="reqn">x</code> and <code class="reqn">\theta</code> is known as the
+the (untransformed) Leipnik distribution.  Here, both <code class="reqn">x</code>
+and <code class="reqn">\theta</code> are in <code class="reqn">(-1, 1)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Convergence may be slow or fail.
+Until better initial value estimates are forthcoming try
+assigning the argument <code>ilambda</code> some numerical value if it
+fails to converge.  Currently, Newton-Raphson is implemented,
+not Fisher scoring.  Currently, this family function probably
+only really works for intercept-only models, i.e., <code>y ~
+  1</code> in the formula.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Jorgensen, B. (1997).
+<em>The Theory of Dispersion Models</em>.
+London: Chapman &amp; Hall
+</p>
+<p>Johnson, N. L. and Kotz, S. and Balakrishnan, N. (1995).
+<em>Continuous Univariate Distributions</em>,
+2nd edition,
+Volume 2,
+New York: Wiley.
+(pages 612–617).
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>mccullagh89</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ldata &lt;- data.frame(y = rnorm(2000, 0.5, 0.1))  # Improper data
+fit &lt;- vglm(y ~ 1, leipnik(ilambda = 1), ldata, trace = TRUE)
+head(fitted(fit))
+with(ldata, mean(y))
+summary(fit)
+coef(fit, matrix = TRUE)
+Coef(fit)
+
+sum(weights(fit))  # Sum of the prior weights
+sum(weights(fit, type = "work"))  # Sum of the working weights
+</code></pre>
+
+
+</div>

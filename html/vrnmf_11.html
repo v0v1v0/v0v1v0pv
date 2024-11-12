@@ -1,0 +1,89 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>volnmf_simplex_col</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Update of a matrix in NMF with equality contstraints on columns.</h2>
+
+<h3>Description</h3>
+
+<p><code>volnmf_simplex_col</code> finds non-negative matrix <code>C</code> that minimizes the objective <code>||X-C*R||^2</code>
+under constraints that columns of C equal to 1 using local approximation with extrapolation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">volnmf_simplex_col(
+  X,
+  R,
+  C.prev = NULL,
+  bound = 1,
+  extrapolate = TRUE,
+  err.cut = 1e-10,
+  n.iter = 10000,
+  qmax = 100
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Numeric Matrices. Matrices involved in the objective function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>R</code></td>
+<td>
+<p>Numeric Matrices. Matrices involved in the objective function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C.prev</code></td>
+<td>
+<p>Numeric Matrices. Matrices involved in the objective function. Matrix <code>C.prev</code> serves as initialization. (default=NULL)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bound</code></td>
+<td>
+<p>A numeric. Equality constraint on columns of matrix <code>C</code>. (default=1)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extrapolate</code></td>
+<td>
+<p>A boolean. Use extrapolation after local approximation. (default=TRUE)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>err.cut</code></td>
+<td>
+<p>A numeric. Stop iterations if relative error between iterations is less than <code>err.cut</code> (parameter is not active now). (default=1e-10)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.iter</code></td>
+<td>
+<p>An integer. Number of iterations. (default=1000)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>qmax</code></td>
+<td>
+<p>A numeric. Maximum asymptotic (1 - 1/qmax) of extrapolation step.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An updated matrix <code>C</code>.
+</p>
+
+
+</div>

@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_cluster</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Cluster neighboring intervals.</h2>
+
+<h3>Description</h3>
+
+<p>The output <code>.id</code> column can be used in downstream grouping operations. Default
+<code>max_dist = 0</code> means that both overlapping and book-ended intervals will be
+clustered.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_cluster(x, max_dist = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_dist</code></td>
+<td>
+<p>maximum distance between clustered intervals.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>input tbls are grouped by <code>chrom</code> by default, and additional
+groups can be added using <code>dplyr::group_by()</code>. For example,
+grouping by <code>strand</code> will constrain analyses to the same strand. To
+compare opposing strands across two tbls, strands on the <code>y</code> tbl can
+first be inverted using <code>flip_strands()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>ivl_df with <code>.id</code> column specifying sets of clustered intervals.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/cluster.html">https://bedtools.readthedocs.io/en/latest/content/tools/cluster.html</a>
+</p>
+<p>Other single set operations: 
+<code>bed_complement()</code>,
+<code>bed_flank()</code>,
+<code>bed_genomecov()</code>,
+<code>bed_merge()</code>,
+<code>bed_partition()</code>,
+<code>bed_shift()</code>,
+<code>bed_slop()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 100,    200,
+  "chr1", 180,    250,
+  "chr1", 250,    500,
+  "chr1", 501,    1000,
+  "chr2", 1,      100,
+  "chr2", 150,    200
+)
+
+bed_cluster(x)
+
+# glyph illustrating clustering of overlapping and book-ended intervals
+x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 1,      10,
+  "chr1", 5,      20,
+  "chr1", 30,     40,
+  "chr1", 40,     50,
+  "chr1", 80,     90
+)
+
+bed_glyph(bed_cluster(x), label = ".id")
+
+</code></pre>
+
+
+</div>

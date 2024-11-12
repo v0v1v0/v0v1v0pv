@@ -1,0 +1,78 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vmtable</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Rounds a contingency table of meteor magnitude frequencies</h2>
+
+<h3>Description</h3>
+
+<p>The meteor magnitude contingency table of VMDB contains half meteor counts (e.g. <code>3.5</code>).
+This function converts these frequencies to integer values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vmtable(mt)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>mt</code></td>
+<td>
+<p>table; A two-dimensional contingency table of meteor magnitude frequencies.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The contingency table of meteor magnitudes <code>mt</code> must be two-dimensional.
+The row names refer to the magnitude observations.
+Column names must be integer meteor magnitude values.
+Also, the columns must be sorted in ascending or descending order of meteor magnitude.
+</p>
+<p>A sum-preserving algorithm is used for rounding.
+It ensures that the total frequency of meteors per observation is preserved.
+The marginal frequencies of the magnitudes are also preserved with
+the restriction that the deviation is at most <code class="reqn">\pm 0.5</code>.
+If the total sum of a meteor magnitude is integer,
+then the deviation is <code class="reqn">\pm 0</code>.
+</p>
+<p>The algorithm is asymptotic. This means that the more meteors the table contains,
+the more unbiased is the result of the rounding.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A rounded contingency table of meteor magnitudes is returned.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># For example, create a contingency table of meteor magnitudes
+mt &lt;- as.table(matrix(
+    c(
+        0.0, 0.0, 2.5, 0.5, 0.0, 1.0,
+        0.0, 1.5, 2.0, 0.5, 0.0, 0.0,
+        1.0, 0.0, 0.0, 3.0, 2.5, 0.5
+    ), nrow = 3, ncol = 6, byrow = TRUE
+))
+colnames(mt) &lt;- seq(6)
+rownames(mt) &lt;- c('A', 'B', 'C')
+mt
+margin.table(mt, 1)
+margin.table(mt, 2)
+
+# contingency table with integer values
+(mt.int &lt;- vmtable(mt))
+margin.table(mt.int, 1)
+margin.table(mt.int, 2)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,106 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vblpcmcovs</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>create the design matrix for the network analysis
+</h2>
+
+<h3>Description</h3>
+
+<p>Add intercept (column of ones) and degree-based covariates (if model is for sociality effects)
+to a user-supplied (default is NULL) edge covariates matrix of size N^2 rows and C columns where
+C is the number of covariates. Node covariates may be converted to difference-between-pairs for
+edges. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vblpcmcovs(N, model, Y, edgecovs=NULL, sendcovs=NULL, receivecovs=NULL,
+                  socialcovs=NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>N</code></td>
+<td>
+<p>number of nodes
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>model; may be "plain", "rreceiver", "rsender" or "rsocial". See Details. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>adjacency matrix
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>edgecovs</code></td>
+<td>
+<p>optional additional covariate / attribute data on the edges
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sendcovs</code></td>
+<td>
+<p>optional additional covariate / attribute data on the nodes for links out
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>receivecovs</code></td>
+<td>
+<p>optional additional covariate / attribute data on the nodes for links in
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>socialcovs</code></td>
+<td>
+<p>optional additional covariate / attribute data on the nodes for links in and out
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Can be used to construct design matrices with edge covariates or node covariates 
+and / or sociality effects. "rreceiver", "rsender" and "rsocial" model random social effects. 
+Node covariates are differenced and treated as edge covariates. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>An edge design matrix that is Pe x N^2 and a node design matrix that is Pn x N
+where Pe is the number of edge covariates and Pn is the number of node covariates. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Salter-Townshend
+</p>
+
+
+<h3>See Also</h3>
+
+<p>vblpcmstart
+</p>
+
+
+</div>

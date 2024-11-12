@@ -1,0 +1,118 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>volume</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The main function for volume approximation of a convex Polytope (H-polytope, V-polytope, zonotope or intersection of two V-polytopes)</h2>
+
+<h3>Description</h3>
+
+<p>For the volume approximation can be used three algorithms. Either CoolingBodies (CB) or SequenceOfBalls (SOB) or CoolingGaussian (CG). An H-polytope with <code class="reqn">m</code> facets is described by a <code class="reqn">m\times d</code> matrix <code class="reqn">A</code> and a <code class="reqn">m</code>-dimensional vector <code class="reqn">b</code>, s.t.: <code class="reqn">P=\{x\ |\  Ax\leq b\} </code>. A V-polytope is defined as the convex hull of <code class="reqn">m</code> <code class="reqn">d</code>-dimensional points which correspond to the vertices of P. A zonotope is desrcibed by the Minkowski sum of <code class="reqn">m</code> <code class="reqn">d</code>-dimensional segments.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">volume(P, settings = NULL, rounding = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>P</code></td>
+<td>
+<p>A convex polytope. It is an object from class a) Hpolytope or b) Vpolytope or c) Zonotope or d) VpolytopeIntersection.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>settings</code></td>
+<td>
+<p>Optional. A list that declares which algorithm, random walk and values of parameters to use, as follows:
+</p>
+
+<dl>
+<dt>
+<code>algorithm</code> </dt>
+<dd>
+<p> A string to set the algorithm to use: a) <code>'CB'</code> for CB algorithm, b) <code>'SoB'</code> for SOB algorithm or b) <code>'CG'</code> for CG algorithm. The defalut algorithm is <code>'CB'</code>.</p>
+</dd>
+<dt>
+<code>error</code> </dt>
+<dd>
+<p> A numeric value to set the upper bound for the approximation error. The default value is <code class="reqn">1</code> for SOB algorithm and <code class="reqn">0.1</code> otherwise.</p>
+</dd>
+<dt>
+<code>random_walk</code> </dt>
+<dd>
+<p> A string that declares the random walk method: a) <code>'CDHR'</code> for Coordinate Directions Hit-and-Run, b) <code>'RDHR'</code> for Random Directions Hit-and-Run, c) <code>'BaW'</code> for Ball Walk, or <code>'BiW'</code> for Billiard walk. For CB and SOB algorithms the default walk is <code>'CDHR'</code> for H-polytopes and <code>'BiW'</code> for the other representations. For CG algorithm the default walk is <code>'CDHR'</code> for H-polytopes and <code>'RDHR'</code> for the other representations.</p>
+</dd>
+<dt>
+<code>walk_length</code> </dt>
+<dd>
+<p> An integer to set the number of the steps for the random walk. The default value is <code class="reqn">\lfloor 10 + d/10\rfloor</code> for <code>'SOB'</code> and <code class="reqn">1</code> otherwise.</p>
+</dd>
+<dt>
+<code>win_len</code> </dt>
+<dd>
+<p> The length of the sliding window for CB or CG algorithm. The default value is <code class="reqn">400+3d^2</code> for CB or <code class="reqn">500+4d^2</code> for CG.</p>
+</dd>
+<dt>
+<code>hpoly</code> </dt>
+<dd>
+<p> A boolean parameter to use H-polytopes in MMC of CB algorithm when the input polytope is a zonotope. The default value is <code>TRUE</code> when the order of the zonotope is <code class="reqn">&lt;5</code>, otherwise it is <code>FALSE</code>.</p>
+</dd>
+<dt>
+<code>seed</code> </dt>
+<dd>
+<p> A fixed seed for the number generator.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rounding</code></td>
+<td>
+<p>A boolean parameter for rounding. The default value is <code>FALSE</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>The approximation of the volume of a convex polytope.
+</p>
+
+
+<h3>References</h3>
+
+<p><cite>I.Z.Emiris and V. Fisikopoulos,
+“Practical polytope volume approximation,” <em>ACM Trans. Math. Soft.,</em> 2018.</cite>,
+</p>
+<p><cite>A. Chalkis and I.Z.Emiris and V. Fisikopoulos,
+“Practical Volume Estimation by a New Annealing Schedule for Cooling Convex Bodies,” <em>CoRR, abs/1905.05494,</em> 2019.</cite>,
+</p>
+<p><cite>B. Cousins and S. Vempala, “A practical volume algorithm,” <em>Springer-Verlag Berlin Heidelberg and The Mathematical Programming Society,</em> 2015.</cite>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# calling SOB algorithm for a H-polytope (3d unit simplex)
+HP = gen_cube(3,'H')
+vol = volume(HP)
+
+# calling CG algorithm for a V-polytope (2d simplex)
+VP = gen_simplex(2,'V')
+vol = volume(VP, settings = list("algorithm" = "CG"))
+
+# calling CG algorithm for a 2-dimensional zonotope defined as the Minkowski sum of 4 segments
+Z = gen_rand_zonotope(2, 4)
+vol = volume(Z, settings = list("random_walk" = "RDHR", "walk_length" = 2))
+
+</code></pre>
+
+
+</div>

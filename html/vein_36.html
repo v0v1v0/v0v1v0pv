@@ -1,0 +1,99 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ef_ldv_cold_list</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>List of cold start emission factors of Light Duty Vehicles</h2>
+
+<h3>Description</h3>
+
+<p>This function creates a list of functions of cold start emission factors
+considering different euro emission standard to the elements of the list.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ef_ldv_cold_list(df, v = "LDV", ta, cc, f, eu, p)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>Dataframe with local emission factor</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>Category vehicle: "LDV"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ta</code></td>
+<td>
+<p>ambient temperature. Montly average van be used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cc</code></td>
+<td>
+<p>Size of engine in cc: &lt;=1400", "1400_2000" and "&gt;2000"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f</code></td>
+<td>
+<p>Type of fuel: "G" or "D"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eu</code></td>
+<td>
+<p>character vector of euro standards: "PRE", "I", "II", "III", "IV",
+"V", "VI" or "VIc".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>Pollutant: "CO", "FC", "NOx", "HC" or "PM"</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of cold start emission factors  g/km
+</p>
+
+
+<h3>Note</h3>
+
+<p>The length of the list should be equal to the name of the age categories of
+a specific type of vehicle
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Do not run
+df &lt;- data.frame(age1 = c(1,1),
+                 age2 = c(2,2))
+eu = c("I", "PRE")
+l &lt;- ef_ldv_cold(t = 17, cc = "&lt;=1400", f = "G",
+eu = "I", p = "CO")
+l_cold &lt;- ef_ldv_cold_list(df, t = 17, cc = "&lt;=1400", f = "G",
+eu = eu, p = "CO")
+length(l_cold)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

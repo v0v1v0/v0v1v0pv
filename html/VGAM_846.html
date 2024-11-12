@@ -1,0 +1,333 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lms.bcn</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> LMS Quantile Regression with a Box-Cox Transformation to
+Normality </h2>
+
+<h3>Description</h3>
+
+<p>LMS quantile regression with the Box-Cox transformation to
+normality.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lms.bcn(percentiles = c(25, 50, 75), zero = c("lambda", "sigma"),
+   llambda = "identitylink", lmu = "identitylink",
+   lsigma = "loglink", idf.mu = 4, idf.sigma = 2, ilambda = 1,
+   isigma = NULL, tol0 = 0.001)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>percentiles</code></td>
+<td>
+
+<p>A numerical vector containing values between 0 and 100,
+which are the quantiles.
+They will be returned as ‘fitted values’.
+</p>
+
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Can be an integer-valued vector specifying which
+linear/additive predictors are modelled as intercepts only.
+The values must be from the set {1,2,3}.
+The default value usually increases the chance of successful
+convergence.
+Setting <code>zero = NULL</code> means they all are
+functions of the covariates.
+For more information see <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>llambda, lmu, lsigma</code></td>
+<td>
+
+<p>Parameter link functions applied to the first, second and third
+linear/additive predictors.
+See <code>Links</code> for more choices,
+and <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>idf.mu</code></td>
+<td>
+
+<p>Degrees of freedom for the cubic smoothing spline fit applied to
+get an initial estimate of mu.
+See <code>vsmooth.spline</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>idf.sigma</code></td>
+<td>
+
+<p>Degrees of freedom for the cubic smoothing spline fit applied to
+get an initial estimate of sigma.
+See <code>vsmooth.spline</code>.
+This argument may be assigned <code>NULL</code> to get an initial value
+using some other algorithm.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ilambda</code></td>
+<td>
+
+<p>Initial value for lambda.
+If necessary, it is recycled to be a vector of length <code class="reqn">n</code>
+where <code class="reqn">n</code> is the number of (independent) observations.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>isigma</code></td>
+<td>
+
+<p>Optional initial value for sigma.
+If necessary, it is recycled to be a vector of length <code class="reqn">n</code>.
+The default value, <code>NULL</code>, means an initial value is
+computed in the <code>@initialize</code> slot of the family function.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol0</code></td>
+<td>
+
+<p>Small positive number,
+the tolerance for testing if lambda is equal to zero.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Given a value of the covariate, this function applies
+a Box-Cox transformation to the response to best obtain
+normality. The parameters chosen to do this are estimated
+by maximum likelihood or penalized maximum likelihood.
+</p>
+<p>In more detail,
+the basic idea behind this method is that, for a fixed
+value of <code class="reqn">x</code>, a Box-Cox transformation of the
+response <code class="reqn">Y</code>
+is applied to obtain standard normality. The 3 parameters
+(<code class="reqn">\lambda</code>, <code class="reqn">\mu</code>, <code class="reqn">\sigma</code>,
+which start with the letters “L-M-S”
+respectively, hence its name) are chosen to maximize a penalized
+log-likelihood (with <code>vgam</code>). Then the
+appropriate quantiles of the standard normal distribution
+are back-transformed onto the original scale to get the
+desired quantiles.
+The three parameters may vary as a smooth function of <code class="reqn">x</code>.
+</p>
+<p>The Box-Cox power transformation here of the <code class="reqn">Y</code>,
+given <code class="reqn">x</code>, is
+</p>
+<p style="text-align: center;"><code class="reqn">Z = [(Y/\mu(x))^{\lambda(x)} - 1]/(\sigma(x)\,\lambda(x))</code>
+</p>
+
+<p>for <code class="reqn">\lambda(x) \neq 0</code>.
+(The singularity at <code class="reqn">\lambda(x) = 0</code>
+is handled by a simple function involving a logarithm.)
+Then <code class="reqn">Z</code> is assumed to have a standard normal distribution.
+The parameter <code class="reqn">\sigma(x)</code> must be positive, therefore
+<span class="pkg">VGAM</span> chooses
+<code class="reqn">\eta(x)^T = (\lambda(x), \mu(x),
+\log(\sigma(x)))</code>
+by default.
+The parameter <code class="reqn">\mu</code> is also positive, but while
+<code class="reqn">\log(\mu)</code> is
+available, it is not the default because <code class="reqn">\mu</code> is
+more directly interpretable.
+Given the estimated linear/additive predictors, the
+<code class="reqn">100\alpha</code> percentile can be estimated
+by inverting the Box-Cox power transformation at the
+<code class="reqn">100\alpha</code> percentile of the standard
+normal distribution.
+</p>
+<p>Of the three functions, it is often a good idea to allow
+<code class="reqn">\mu(x)</code> to be more flexible because the functions
+<code class="reqn">\lambda(x)</code> and <code class="reqn">\sigma(x)</code>
+usually vary more smoothly with <code class="reqn">x</code>. This is somewhat
+reflected in the default value for the argument <code>zero</code>,
+viz. <code>zero = c(1, 3)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>The computations are not simple, therefore convergence may
+fail.  Set <code>trace = TRUE</code> to monitor convergence if it
+isn't set already.  Convergence failure will occur if, e.g.,
+the response is bimodal at any particular value of <code class="reqn">x</code>.
+In case of convergence failure, try different starting values.
+Also, the estimate may diverge quickly near the solution, in
+which case try prematurely stopping the iterations by assigning
+<code>maxits</code> to be the iteration number corresponding to the
+highest likelihood value.
+</p>
+<p>One trick is to fit a simple model and use it to provide
+initial values for a more complex model; see in the
+examples below.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response must be positive because the Box-Cox
+transformation cannot handle negative values.
+In theory, the
+LMS-Yeo-Johnson-normal method can handle both positive
+and negative values.
+</p>
+
+
+<p>In general, the lambda and sigma functions should be more
+smoother than the mean function.
+Having <code>zero = 1</code>, <code>zero = 3</code>
+or <code>zero = c(1, 3)</code>
+is often a good idea. See the example below.
+</p>
+
+
+
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Cole, T. J. and Green, P. J. (1992).
+Smoothing Reference Centile Curves: The LMS Method and
+Penalized Likelihood.
+<em>Statistics in Medicine</em>,
+<b>11</b>, 1305–1319.
+</p>
+<p>Green, P. J. and Silverman, B. W. (1994).
+<em>Nonparametric Regression and Generalized Linear Models:
+A Roughness Penalty Approach</em>,
+London: Chapman &amp; Hall.
+</p>
+<p>Yee, T. W. (2004).
+Quantile regression via vector generalized additive models.
+<em>Statistics in Medicine</em>,
+<b>23</b>, 2295–2315.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>lms.bcg</code>,
+<code>lms.yjn</code>,
+<code>qtplot.lmscreg</code>,
+<code>deplot.lmscreg</code>,
+<code>cdf.lmscreg</code>,
+<code>eCDF</code>,
+<code>extlogF1</code>,
+<code>alaplace1</code>,
+<code>amlnormal</code>,
+<code>denorm</code>,
+<code>CommonVGAMffArguments</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  require("VGAMdata")
+mysub &lt;- subset(xs.nz, sex == "M" &amp; ethnicity == "Maori" &amp; study1)
+mysub &lt;- transform(mysub, BMI = weight / height^2)
+BMIdata &lt;- na.omit(mysub)
+BMIdata &lt;- subset(BMIdata, BMI &lt; 80 &amp; age &lt; 65,
+                   select = c(age, BMI))  # Delete an outlier
+summary(BMIdata)
+
+fit &lt;- vgam(BMI ~ s(age, df = c(4, 2)), lms.bcn(zero = 1), BMIdata)
+
+par(mfrow = c(1, 2))
+plot(fit, scol = "blue", se = TRUE)  # The two centered smooths
+
+head(predict(fit))
+head(fitted(fit))
+head(BMIdata)
+head(cdf(fit))  # Person 46 is probably overweight, given his age
+100 * colMeans(c(depvar(fit)) &lt; fitted(fit))  # Empirical proportions
+
+# Correct for "vgam" objects but not very elegant:
+fit@family@linkinv(eta = predict(fit, data.frame(age = 60)),
+   extra = list(percentiles = c(10, 50)))
+
+if (FALSE) {
+# These work for "vglm" objects:
+fit2 &lt;- vglm(BMI ~ bs(age, df = 4), lms.bcn(zero = 3), BMIdata)
+predict(fit2, percentiles = c(10, 50),
+        newdata = data.frame(age = 60), type = "response")
+head(fitted(fit2, percentiles = c(10, 50)))  # Different percentiles
+}
+
+# Convergence problems? Use fit0 for initial values for fit1
+fit0 &lt;- vgam(BMI ~ s(age, df = 4), lms.bcn(zero = c(1, 3)), BMIdata)
+fit1 &lt;- vgam(BMI ~ s(age, df = c(4, 2)), lms.bcn(zero = 1), BMIdata,
+            etastart = predict(fit0))
+
+## End(Not run)
+
+## Not run: # Quantile plot
+par(bty = "l", mar = c(5, 4, 4, 3) + 0.1, xpd = TRUE)
+qtplot(fit, percentiles = c(5, 50, 90, 99), main = "Quantiles",
+       xlim = c(15, 66), las = 1, ylab = "BMI", lwd = 2, lcol = 4)
+
+# Density plot
+ygrid &lt;- seq(15, 43, len = 100)  # BMI ranges
+par(mfrow = c(1, 1), lwd = 2)
+(aa &lt;- deplot(fit, x0 = 20, y = ygrid, xlab = "BMI", col = "black",
+  main = "PDFs at Age = 20 (black), 42 (red) and 55 (blue)"))
+aa &lt;- deplot(fit, x0 = 42, y = ygrid, add = TRUE, llty = 2, col = "red")
+aa &lt;- deplot(fit, x0 = 55, y = ygrid, add = TRUE, llty = 4, col = "blue",
+             Attach = TRUE)
+aa@post$deplot  # Contains density function values
+
+## End(Not run)
+</code></pre>
+
+
+</div>

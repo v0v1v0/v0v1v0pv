@@ -1,0 +1,257 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>evppivar</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate the expected value of partial perfect information for an estimation problem</h2>
+
+<h3>Description</h3>
+
+<p>Calculate the expected value of partial perfect information for an estimation problem.  This computes the expected reduction in variance in some quantity of interest with perfect information about a parameter or parameters of interest.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">evppivar(
+  outputs,
+  inputs,
+  pars = NULL,
+  method = NULL,
+  nsim = NULL,
+  verbose = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>outputs</code></td>
+<td>
+<p>a vector of values for the quantity of interest, sampled from the uncertainty distribution of this quantity that is induced by the uncertainty about the parameters.   This can also be a data frame with one column.
+</p>
+<p>Typically this will come from a Monte Carlo sample, where we first sample from the uncertainty distributions of the parameters, and then compute the quantity of interest as a function of the parameters.  It might also be produced by a Markov Chain Monte Carlo sample from the joint distribution of parameters and outputs.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inputs</code></td>
+<td>
+<p>Matrix or data frame of samples from the uncertainty
+distribution of the input parameters of the decision model.   The number
+of columns should equal the number of parameters, and the columns should
+be named.    This should have the same number of rows as there are samples
+in <code>outputs</code>, and each row of the samples in <code>outputs</code> should
+give the model output evaluated at the corresponding parameters.
+</p>
+<p>Users of <span class="pkg">heemod</span> can create an object of this form, given an object
+produced by <code>run_psa</code> (<code>obj</code>, say), with <code>import_heemod_inputs</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pars</code></td>
+<td>
+<p>Either a character vector, or a list of character vectors.
+</p>
+<p>If a character vector is supplied, then a single, joint EVPPI calculation is done with
+for the parameters named in this vector.
+</p>
+<p>If a list of character vectors is supplied,  then multiple EVPPI calculations are
+performed, one for each list component defined in the above
+vector form.
+</p>
+<p><code>pars</code> must be specified if <code>inputs</code> is a matrix or data frame.
+This should then correspond to particular columns of <code>inputs</code>.    If
+<code>inputs</code> is a vector, this is assumed to define the single parameter
+of interest, and then <code>pars</code> is not required.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>Character string indicating the calculation method.  If one
+string is supplied, this is used for all calculations.  A vector of different strings
+can be supplied if a different method is desired for different list components
+of <code>pars</code>.
+</p>
+<p>The default methods are based on nonparametric regression:
+</p>
+<p><code>"gam"</code> for a generalized additive model implemented in the <code>gam</code>
+function from the <span class="pkg">mgcv</span> package.  This is the default method for
+calculating the EVPPI of 4 or fewer parameters.
+</p>
+<p><code>"gp"</code> for a Gaussian process regression, as described by Strong et al.
+(2014) and implemented in the <span class="pkg">SAVI</span> package
+(<a href="https://github.com/Sheffield-Accelerated-VoI/SAVI">https://github.com/Sheffield-Accelerated-VoI/SAVI</a>).  This is the default method for calculating the EVPPI
+of more than 4 parameters.
+</p>
+<p><code>"inla"</code> for an INLA/SPDE Gaussian process regression method, from
+Heath et al. (2016).
+</p>
+<p><code>"bart"</code> for Bayesian additive regression trees, using the <span class="pkg">dbarts</span> package.
+Particularly suited for joint EVPPI of many parameters.
+</p>
+<p><code>"earth"</code> for a multivariate adaptive regression spline with the
+<span class="pkg">earth</span> package (Milborrow, 2019).
+</p>
+<p><code>"so"</code> for the method of Strong and Oakley (2013).  Only supported
+for single parameter EVPPI.
+</p>
+<p><code>"sal"</code> for the method of Sadatsafavi et al. (2013).  Only supported
+for single parameter EVPPI.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nsim</code></td>
+<td>
+<p>Number of simulations from the decision model to use
+for calculating EVPPI.  The first <code>nsim</code> rows of the
+objects in <code>inputs</code> and <code>outputs</code> are used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>If <code>TRUE</code>, then messages are printed
+describing each step of the calculation, if the method supplies
+these.  Can be useful to see the progress of slow calculations.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Other arguments to control specific methods.
+</p>
+<p>For <code>method="gam"</code>, the following arguments can be supplied:
+</p>
+
+<ul><li> <p><code>gam_formula</code>: a character string giving the right hand side of the
+formula supplied to the <code>gam()</code> function. By default, this is a tensor
+product of all the parameters of interest, e.g. if <code>pars =
+c("pi","rho")</code>, then <code>gam_formula</code> defaults to <code>t(pi, rho,
+bs="cr")</code>.  The option <code>bs="cr"</code> indicates a cubic spline regression
+basis, which is more computationally efficient than the default "thin plate"
+basis.  If there are four or more parameters of interest, then the
+additional argument <code>k=4</code> is supplied to <code>te()</code>, specifying a
+four-dimensional basis, which is currently the default in the SAVI package.
+</p>
+<p>If there are spaces in the variable names in <code>inputs</code>, then these should
+be converted to underscores before forming an explicit <code>gam_formula</code>.
+</p>
+</li></ul>
+<p>For <code>method="gp"</code>, the following arguments can be supplied:
+</p>
+
+<ul>
+<li> <p><code>gp_hyper_n</code>: number of samples to use to estimate the hyperparameters
+in the Gaussian process regression method.  By default, this is the minimum
+of the following three quantities: 30 times the number of parameters of
+interest, 250, and the number of simulations being used for calculating
+EVPPI.
+</p>
+</li>
+<li> <p><code>maxSample</code>: Maximum sample size to employ for <code>method="gp"</code>.  Only
+increase this from the default 5000 if your computer has sufficent memory to
+invert square matrices with this dimension.
+</p>
+</li>
+</ul>
+<p>For <code>method="inla"</code>, the following arguments can be supplied, as described in detail in Baio, Berardi and Heath (2017):
+</p>
+
+<ul>
+<li> <p><code>int.ord</code> (integer) maximum order of interaction terms to include in
+the regression predictor, e.g. if <code>int.ord=k</code> then all k-way
+interactions are used.  Currently this applies to both effects and costs.
+</p>
+</li>
+<li> <p><code>cutoff</code> (default 0.3) controls the
+density of the points inside the mesh in the spatial part of the mode.
+Acceptable values are typically in
+the interval (0.1,0.5), with lower values implying more points (and thus
+better approximation and greatercomputational time).
+</p>
+</li>
+<li> <p><code>convex.inner</code> (default = -0.4) and <code>convex.outer</code> (default = -0.7)
+control the boundaries for the mesh. These should be negative values and can
+be decreased (say to -0.7 and -1, respectively) to increase the distance
+between the points and the outer boundary, which also increases precision and
+computational time.
+</p>
+</li>
+<li> <p><code>robust</code>. if <code>TRUE</code> then INLA will use a t prior distribution for
+the coefficients of the linear predictor, rather than the default normal distribution.
+</p>
+</li>
+<li> <p><code>h.value</code> (default=0.00005) controls the accuracy of the INLA
+grid-search for the estimation of the hyperparameters. Lower values imply a
+more refined search (and hence better accuracy), at the expense of
+computational speed.
+</p>
+</li>
+<li> <p><code>plot_inla_mesh</code> (default <code>FALSE</code>) Produce a plot of the mesh.
+</p>
+</li>
+<li> <p><code>max.edge</code>  Largest allowed triangle edge length when constructing the
+mesh, passed to <code>inla.mesh.2d</code>.
+</p>
+</li>
+<li> <p><code>pfc_struc</code> Variance structure to pass to <code>pfc</code> in the <span class="pkg">ldr</span>
+package for principal fitted components. The default <code>"AIC"</code> selects the
+one that fits best given two basis terms.  Change this to, e.g. <code>"iso"</code>,
+<code>"aniso"</code> or <code>"unstr"</code> if an "Error in eigen..." is obtained.
+</p>
+</li>
+</ul>
+<p>For any of the nonparametric regression methods:
+</p>
+
+<ul><li> <p><code>ref</code> The reference decision option used to define the
+incremental net benefit, cost or effects before performing
+nonparametric regression.  Either an integer column number, or the
+name of the column from <code>outputs</code>.
+</p>
+</li></ul>
+<p>For <code>method="so"</code>:
+</p>
+
+<ul><li> <p><code>n.blocks</code> Number of blocks to split the sample into. Required.
+</p>
+</li></ul>
+<p>For <code>method="sal"</code>:
+</p>
+
+<ul><li> <p><code>n.seps</code> Number of separators (default 1).
+</p>
+</li></ul>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data frame with a column <code>pars</code>, indicating the parameter(s), and a column <code>evppi</code>, giving the corresponding EVPPI.
+</p>
+
+
+<h3>References</h3>
+
+<p>Jackson, C., Presanis, A., Conti, S., &amp; De Angelis, D. (2019). Value of information:
+Sensitivity analysis and research design in Bayesian evidence synthesis.
+Journal of the American Statistical Association, 114(528), 1436-1449.
+</p>
+<p>Jackson, C., Johnson, R., de Nazelle, A., Goel, R., de Sa, T. H.,
+Tainio, M., &amp; Woodcock, J. (2021). A guide to value of information
+methods for prioritising research in health impact
+modelling. Epidemiologic Methods, 10(1).
+</p>
+<p>Jackson, C. H., Baio, G., Heath, A., Strong, M., Welton, N. J., &amp;
+Wilson, E. C. (2022). Value of Information analysis in models to
+inform health policy. Annual Review of Statistics and its
+Application, 9, 95-118.
+</p>
+
+
+</div>

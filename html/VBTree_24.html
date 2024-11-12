@@ -1,0 +1,68 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vbtsub</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Using vector to generate sub tree from vector binary tree</h2>
+
+<h3>Description</h3>
+
+<p>Visit the vector binary tree and generate a sub tree from visited vector binary tree, through
+specific assigment determined by the argument <code>inq</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vbtsub(x, inq)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>The vector binary tree to be visited. Traversal is available by setting -1 in desired layer.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inq</code></td>
+<td>
+<p>An integer vector to determine the visiting location. The length of <code>inq</code> should be the same
+as the layers of visited vector binary tree. If any assignment in specificed layer exceeds its intrinsic
+length of visited vector binary tree layer, all elements will be returned in this layer.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Return a sub tree from visited vector binary tree, according to the argument <code>inq</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vbtinq</code>, <code>advbtinq</code>, <code>advbtsub</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">#Make vector binary tree:
+colnamevbt &lt;- dl2vbt(chrvec2dl(colnames(datatest)))
+
+#Generating sub tree by specific assignment:
+vbtsub(colnamevbt, c(2, 3, 1, 1))
+
+#Generating sub tree with traversal in the second layers:
+vbtsub(colnamevbt, c(2, -1, 1, 1))
+
+#Generating sub tree with invalid assignments in 1st and 3rd layers:
+vbtsub(colnamevbt, c(4, 3, 7, 1))
+</code></pre>
+
+
+</div>

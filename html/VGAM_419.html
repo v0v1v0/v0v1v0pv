@@ -1,0 +1,123 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Log</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Logarithmic Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function,
+quantile function,
+and random generation
+for the logarithmic distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dlog(x, shape, log = FALSE)
+plog(q, shape, lower.tail = TRUE, log.p = FALSE)
+qlog(p, shape)
+rlog(n, shape)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q, p, n, lower.tail</code></td>
+<td>
+
+<p>Same interpretation as in <code>runif</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>shape</code></td>
+<td>
+
+<p>The shape parameter value <code class="reqn">c</code> described in in
+<code>logff</code>.
+</p>
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log, log.p</code></td>
+<td>
+
+<p>Logical.
+If <code>log.p = TRUE</code> then all probabilities <code>p</code> are
+given as <code>log(p)</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The details are given in <code>logff</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dlog</code> gives the density,
+<code>plog</code> gives the distribution function,
+<code>qlog</code> gives the quantile function, and
+<code>rlog</code> generates random deviates.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Given some response data, the <span class="pkg">VGAM</span> family function
+<code>logff</code> estimates the parameter <code>shape</code>.
+For <code>plog()</code>, if argument <code>q</code> contains large values
+and/or <code>q</code> is long in length
+then the memory requirements may be very high.
+Very large values in <code>q</code> are handled by an approximation by
+Owen (1965).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>logff</code>,
+<code>Gaitdlog</code>,
+<code>Oilog</code>.
+<code>Otlog</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">dlog(1:20, 0.5)
+rlog(20, 0.5)
+
+## Not run:  shape &lt;- 0.8; x &lt;- 1:10
+plot(x, dlog(x, shape = shape), type = "h", ylim = 0:1,
+     sub = "shape=0.8", las = 1, col = "blue", ylab = "shape",
+     main = "Logarithmic distribution: blue=PDF; orange=CDF")
+lines(x + 0.1, plog(x, shape), col = "orange", lty = 3, type = "h") 
+## End(Not run)
+</code></pre>
+
+
+</div>

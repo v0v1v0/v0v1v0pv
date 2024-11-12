@@ -1,0 +1,352 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineGofTest</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Goodness-of-Fit Tests for R-Vine Copula Models</h2>
+
+<h3>Description</h3>
+
+<p>This function performs a goodness-of-fit test for R-vine copula models.
+There are 15 different goodness-of-fit tests implemented, described in
+Schepsmeier (2013).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineGofTest(
+  data,
+  RVM,
+  method = "White",
+  statistic = "CvM",
+  B = 200,
+  alpha = 2
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>An N x d data matrix (with uniform margins).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>RVM</code></td>
+<td>
+<p><code>RVineMatrix()</code> objects of the R-vine model under the
+null hypothesis. <br>
+Only the following copula families are allowed in
+<code>RVM$family</code> due to restrictions in <code>RVineGrad()</code> and
+<code>RVineHessian()</code> <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula)<br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; “survival Joe”) <br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>A string indicating the goodness-of-fit method:<br><code>"White"</code> = goodness-of-fit test based on White's information matrix
+equality (default) <br><code>"IR"</code> = goodness-of-fit test based on the
+information ratio <br><code>"Breymann"</code> = goodness-of-fit test based on the
+probability integral transform (PIT) and the aggregation to univariate data
+by Breymann et al. (2003). <br><code>"Berg"</code> = goodness-of-fit test based on
+the probability integral transform (PIT) and the aggregation to univariate
+data by Berg and Bakken (2007). <br><code>"Berg2"</code> = second goodness-of-fit
+test based on the probability integral transform (PIT) and the aggregation
+to univariate data by Berg and Bakken (2007). <br><code>"ECP"</code> =
+goodness-of-fit test based on the empirical copula process (ECP) <br><code>"ECP2"</code> = goodness-of-fit test based on the combination of probability
+integral transform (PIT) and empirical copula process (ECP) (Genest et al.
+2009) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>statistic</code></td>
+<td>
+<p>A string indicating the goodness-of-fit test statistic
+type:<br><code>"CvM"</code> = Cramer-von Mises test statistic (univariate for
+<code>"Breymann"</code>, <code>"Berg"</code> and <code>"Berg2"</code>, multivariate for
+<code>"ECP"</code> and <code>"ECP2"</code>) <br><code>"KS"</code> = Kolmogorov-Smirnov test
+statistic (univariate for <code>"Breymann"</code>, <code>"Berg"</code> and
+<code>"Berg2"</code>, multivariate for <code>"ECP"</code> and <code>"ECP2"</code>) <br><code>"AD"</code> = Anderson-Darling test statistic (only univariate for
+<code>"Breymann"</code>, <code>"Berg"</code> and <code>"Berg2"</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>B</code></td>
+<td>
+<p>an integer for the number of bootstrap steps (default <code>B = 200</code>)<br>
+For <code>B = 0</code> the asymptotic p-value is returned if available,
+otherwise only the test statistic is returned.<br>
+WARNING: If <code>B</code> is chosen too large, computations will take very long.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>an integer of the set <code style="white-space: pre;">⁠2,4,6,...⁠</code> for the <code>"Berg2"</code>
+goodness-of-fit test (default <code>alpha = 2</code>)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><code>method = "White"</code>: <br>
+This goodness-of fit test uses the information
+matrix equality of White (1982) and was original investigated by Huang and
+Prokhorov (2011) for copulas. <br>
+Schepsmeier (2012) enhanced their approach
+to the vine copula case. <br>
+The main contribution is that under correct
+model specification the Fisher Information can be equivalently calculated as
+minus the expected Hessian matrix or as the expected outer product of the
+score function.
+The null hypothesis is
+</p>
+<p style="text-align: center;"><code class="reqn"> H_0: \boldsymbol{H}(\theta) + \boldsymbol{C}(\theta) = 0 </code>
+</p>
+
+<p>against the alternative
+</p>
+<p style="text-align: center;"><code class="reqn"> H_1: \boldsymbol{H}(\theta) +
+\boldsymbol{C}(\theta) \neq 0 , </code>
+</p>
+
+<p>where
+<code class="reqn">\boldsymbol{H}(\theta)</code> is the expected Hessian matrix and
+<code class="reqn">\boldsymbol{C}(\theta)</code> is the expected outer product of the
+score function. <br>
+For the calculation of the test statistic we use the
+consistent maximum likelihood estimator <code class="reqn">\hat{\theta}</code> and the sample
+counter parts of <code class="reqn">\boldsymbol{H}(\theta)</code> and
+<code class="reqn">\boldsymbol{C}(\theta)</code>. <br>
+The correction of the
+Covariance-Matrix in the test statistic for the uncertainty in the margins
+is skipped. The implemented test assumes that there is no uncertainty in the
+margins. The correction can be found in Huang and Prokhorov (2011) for
+bivariate copulas and in Schepsmeier (2013) for vine copulas. It involves
+multi-dimensional integrals. <br></p>
+<p><code>method = "IR"</code>: <br>
+As the White test the information matrix ratio
+test is based on the expected Hessian matrix
+<code class="reqn">\boldsymbol{H}(\theta)</code>
+and the expected outer product of
+the score function <code class="reqn">\boldsymbol{C}(\theta)</code>. <br></p>
+<p style="text-align: center;"><code class="reqn"> H_0:-\boldsymbol{H}(\theta)^{-1}\boldsymbol{C}(\theta) = I_{p} </code>
+</p>
+
+<p>against the alternative
+</p>
+<p style="text-align: center;"><code class="reqn"> H_1:
+-\boldsymbol{H}(\theta)^{-1}\boldsymbol{C}(\theta) \neq I_{p} . </code>
+</p>
+
+<p>The test statistic can then be calculated as
+</p>
+<p style="text-align: center;"><code class="reqn"> IR_n:=tr(\Phi(\theta))/p </code>
+</p>
+<p> with
+<code class="reqn">\Phi(\theta)=-\boldsymbol{H}(\theta)^{-1}\boldsymbol{C}(\theta)</code>,
+<code class="reqn">p</code> is the number of parameters, i.e. the length of <code class="reqn">\theta</code>, and
+<code class="reqn">tr(A)</code> is the trace of the matrix <code class="reqn">A</code> <br>
+For details see Schepsmeier (2013) <br></p>
+<p><code>method = "Breymann"</code>, <code>method = "Berg"</code> and <code>method = "Berg2"</code>: <br>
+These tests are based on the multivariate probability integral
+transform (PIT) applied in <code>RVinePIT()</code>. The multivariate data
+<code class="reqn">y_{i}</code> returned form the PIT are aggregated to univariate data by
+different aggregation functions <code class="reqn">\Gamma(\cdot)</code> in the sum </p>
+<p style="text-align: center;"><code class="reqn">
+s_t=\sum_{i=1}^d \Gamma(y_{it}), t=1,...,n </code>
+</p>
+<p>.
+In Breymann et al. (2003) the weight function is suggested as
+<code class="reqn">\Gamma(\cdot)=\Phi^{-1}(\cdot)^2</code>, while in
+Berg and Bakken (2007) the weight function is either
+<code class="reqn">\Gamma(\cdot)=|\cdot-0.5|</code> (<code>method="Berg"</code>) or
+<code class="reqn">\Gamma(\cdot)=(\cdot-0.5)^{\alpha},\alpha=2,4,6,...</code>
+(<code>method="Berg2"</code>). <br> Furthermore, the <code>"Berg"</code> and
+<code>"Berg2"</code> test are based on the order statistics of the PIT returns.
+<br> See Berg and Bakken (2007) or Schepsmeier (2013) for details. <br></p>
+<p><code>method = "ECP"</code> and <code>method = "ECP2"</code>: <br>
+Both tests are test
+for <code class="reqn">H_0: C \in C_0</code> against <code class="reqn">H_1: C \notin C_0</code> where C denotes the
+(vine) copula distribution function and <code class="reqn">C_0</code> is a class of parametric
+(vine) copulas with <code class="reqn">\Theta\subseteq R^p</code> being the parameter space of
+dimension p. They are based on the empirical copula process (ECP)
+</p>
+<p style="text-align: center;"><code class="reqn">
+\hat{C}_n(u)-C_{\hat{\theta}_n}(u), </code>
+</p>
+
+<p>with
+<code class="reqn">u=(u_1,\ldots,u_d)\in[0,1]^d</code> and
+<code class="reqn">\hat{C}_n(u) =
+\frac{1}{n+1}\sum_{t=1}^n \boldsymbol{1}_{\{U_{t1}\leq u_1,\ldots,U_{td}\leq
+u_d \}} </code>.
+The ECP is utilized in a multivariate
+Cramer-von Mises (CvM) or multivariate Kolmogorov-Smirnov (KS) based test
+statistic. An extension of the ECP-test is the combination of the
+multivariate PIT approach with the ECP. The general idea is that the
+transformed data of a multivariate PIT should be "close" to the independence
+copula Genest et al. (2009). Thus a distance of CvM or KS type between them
+is considered. This approach is called ECP2. Again we refer to Schepsmeier
+(2013) for details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>method = "White"</code>:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>White</code></td>
+<td>
+<p>test statistic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value</code></td>
+<td>
+<p>p-value, either asymptotic for <code>B = 0</code> or bootstrapped
+for <code>B &gt; 0</code></p>
+</td>
+</tr>
+</table>
+<p>For <code>method = "IR"</code>:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>IR</code></td>
+<td>
+<p>test statistic (raw version as stated above)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value</code></td>
+<td>
+<p>So far no p-value is returned nigher a asymptotic nor a
+bootstrapped one. How to calculated a bootstrapped p-value is explained in
+Schepsmeier (2013). Be aware, that the test statistics than have to be adjusted
+with the empirical variance.</p>
+</td>
+</tr>
+</table>
+<p>For <code>method = "Breymann"</code>, <code>method = "Berg"</code>
+and <code>method = "Berg2"</code>:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>CvM, KS, AD</code></td>
+<td>
+<p>test statistic according to
+the choice of <code>statistic</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value</code></td>
+<td>
+<p>p-value, either asymptotic
+for <code>B = 0</code> or bootstrapped for <code>B &gt; 0</code>.  A asymptotic p-value is
+only available for the Anderson-Darling test statistic if the R-package
+<code>ADGofTest</code> is loaded. <br>
+Furthermore, a asymptotic p-value can be
+calculated for the Kolmogorov-Smirnov test statistic. For the Cramer-von
+Mises no asymptotic p-value is available so far.</p>
+</td>
+</tr>
+</table>
+<p>For <code>method = "ECP"</code> and <code>method = "ECP2"</code>:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>CvM, KS</code></td>
+<td>
+<p>test statistic according to the
+choice of <code>statistic</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value</code></td>
+<td>
+<p>bootstrapped p-value</p>
+</td>
+</tr>
+</table>
+<p><br>
+Warning: The code for all the p-values are not yet approved since some of them are
+moved from R-code to C-code. If you need p-values the best way is to write your own
+algorithm as suggested in Schepsmeier (2013) to get bootstrapped p-values.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier
+</p>
+
+
+<h3>References</h3>
+
+<p>Berg, D. and H. Bakken (2007) A copula goodness-of-fit approach
+based on the conditional probability integral transformation.
+<a href="https://www.danielberg.no/publications/Btest.pdf">https://www.danielberg.no/publications/Btest.pdf</a>
+</p>
+<p>Breymann, W., A. Dias and P. Embrechts (2003) Dependence structures for
+multivariate high-frequency data in finance. Quantitative Finance 3, 1-14
+</p>
+<p>Genest, C., B. Remillard, and D. Beaudoin (2009) Goodness-of-fit tests for
+copulas: a review and power study.  Insur. Math. Econ. 44, 199-213.
+</p>
+<p>Huang, w. and A. Prokhorov (2011). A goodness-of-fit test for copulas. to
+appear in Econometric Reviews
+</p>
+<p>Schepsmeier, U. (2013) A goodness-of-fit test for regular vine copula
+models.  Preprint <a href="https://arxiv.org/abs/1306.0818">https://arxiv.org/abs/1306.0818</a>
+</p>
+<p>Schepsmeier, U. (2015) Efficient information based goodness-of-fit tests for
+vine copula models with fixed margins. Journal of Multivariate Analysis 138,
+34-52.
+</p>
+<p>White, H. (1982) Maximum likelihood estimation of misspecified models,
+Econometrica, 50, 1-26.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopGofTest()</code>, <code>RVinePIT()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## time-consuming example
+
+# load data set
+data(daxreturns)
+
+# select the R-vine structure, families and parameters
+RVM &lt;- RVineStructureSelect(daxreturns[,1:5], c(1:6))
+
+# White test with asymptotic p-value
+RVineGofTest(daxreturns[,1:5], RVM, B = 0)
+
+# ECP2 test with Cramer-von-Mises test statistic and a bootstrap
+# with 200 replications for the calculation of the p-value
+RVineGofTest(daxreturns[,1:5], RVM, method = "ECP2",
+             statistic = "CvM", B = 200)
+
+
+</code></pre>
+
+
+</div>

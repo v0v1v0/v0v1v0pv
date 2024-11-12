@@ -1,0 +1,114 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lvplot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Latent Variable Plot </h2>
+
+<h3>Description</h3>
+
+<p>Generic function for a <em>latent variable plot</em>
+(also known as an <em>ordination diagram</em> by ecologists).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lvplot(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p> An object for a latent
+variable plot is meaningful.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p> Other arguments fed into the specific
+methods function of the model. They usually are graphical
+parameters, and sometimes they are fed
+into the methods function for <code>Coef</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Latent variables occur in reduced-rank regression models,
+as well as in
+quadratic and additive ordination. For the latter,
+latent variables are often called the <em>site scores</em>.
+Latent variable plots were coined by Yee (2004), and have
+the latent variable as at least one of its axes.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The value returned depends specifically on the methods
+function invoked.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Latent variables are not really applicable to
+<code>vglm</code>/<code>vgam</code> models.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yee, T. W. (2004).
+A new technique for maximum-likelihood
+canonical Gaussian ordination.
+<em>Ecological Monographs</em>,
+<b>74</b>, 685–701.
+</p>
+<p>Yee, T. W. (2006).
+Constrained additive ordination.
+<em>Ecology</em>, <b>87</b>, 203–213.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>lvplot.qrrvglm</code>,
+<code>lvplot.cao</code>,
+<code>latvar</code>,
+<code>trplot</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+hspider[,1:6] &lt;- scale(hspider[,1:6])  # Stdz environmental vars
+set.seed(123)
+p1 &lt;- cao(cbind(Pardlugu, Pardmont, Pardnigr, Pardpull, Zoraspin) ~
+          WaterCon + BareSand + FallTwig +
+          CoveMoss + CoveHerb + ReflLux,
+          family = poissonff, data = hspider, Bestof = 3,
+          df1.nl = c(Zoraspin = 2.5, 3), Crow1positive = TRUE)
+index &lt;- 1:ncol(depvar(p1))
+lvplot(p1, lcol = index, pcol = index, y = TRUE, las = 1)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

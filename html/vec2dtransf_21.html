@@ -1,0 +1,67 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getRMSE</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Get RMSE</h2>
+
+<h3>Description</h3>
+
+<p>Retrieves the Root Mean Square Error (RMSE)  if redundant control 
+points were provided when creating the transformation object</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getRMSE(object)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Object of the class SimilarityTransformation or 
+AffineTransformation</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>RMSE is determined only if Least Squares is applied, i.e., if more than
+the required control points were provided. The RMSE is useful when comparing
+two transformations. It measures the general deviation of transformed source
+coordinates with respect to target coordinates of control points. It has the
+same units as the coordinates, usually meters.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A number representing the RMSE
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>German Carrillo</p>
+
+
+<h3>See Also</h3>
+
+<p><code>SimilarityTransformation-class</code>,
+<code>AffineTransformation-class</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(control.points)
+at &lt;- AffineTransformation(control.points[2:5])
+calculateParameters(at)
+getRMSE(at) 
+</code></pre>
+
+
+</div>

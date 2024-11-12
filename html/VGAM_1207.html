@@ -1,0 +1,173 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ParetoIV</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Pareto(IV/III/II) Distributions</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random
+generation for the Pareto(IV/III/II) distributions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dparetoIV(x, location = 0, scale = 1, inequality = 1, shape = 1,
+          log = FALSE)
+pparetoIV(q, location = 0, scale = 1, inequality = 1, shape = 1,
+          lower.tail = TRUE, log.p = FALSE)
+qparetoIV(p, location = 0, scale = 1, inequality = 1, shape = 1,
+          lower.tail = TRUE, log.p = FALSE)
+rparetoIV(n, location = 0, scale = 1, inequality = 1, shape = 1)
+dparetoIII(x, location = 0, scale = 1, inequality = 1, log = FALSE)
+pparetoIII(q, location = 0, scale = 1, inequality = 1,
+           lower.tail = TRUE, log.p = FALSE)
+qparetoIII(p, location = 0, scale = 1, inequality = 1,
+           lower.tail = TRUE, log.p = FALSE)
+rparetoIII(n, location = 0, scale = 1, inequality = 1)
+dparetoII(x, location = 0, scale = 1, shape = 1, log = FALSE)
+pparetoII(q, location = 0, scale = 1, shape = 1,
+          lower.tail = TRUE, log.p = FALSE)
+qparetoII(p, location = 0, scale = 1, shape = 1,
+          lower.tail = TRUE, log.p = FALSE)
+rparetoII(n, location = 0, scale = 1, shape = 1)
+dparetoI(x, scale = 1, shape = 1, log = FALSE)
+pparetoI(q, scale = 1, shape = 1,
+         lower.tail = TRUE, log.p = FALSE)
+qparetoI(p, scale = 1, shape = 1,
+         lower.tail = TRUE, log.p = FALSE)
+rparetoI(n, scale = 1, shape = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+<p>vector of quantiles. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>vector of probabilities. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Same as in <code>runif</code>.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>location</code></td>
+<td>
+<p>the location parameter. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale, shape, inequality</code></td>
+<td>
+<p>the (positive) scale,
+inequality and shape parameters. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical.
+If <code>log = TRUE</code> then the logarithm of the density is returned.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lower.tail, log.p</code></td>
+<td>
+
+<p>Same meaning as in <code>pnorm</code>
+or <code>qnorm</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>For the formulas and other details
+see <code>paretoIV</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Functions beginning with the
+letters <code>d</code> give the density,
+<code>p</code> give the distribution function,
+<code>q</code> give the quantile function, and
+<code>r</code> generates random deviates.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The functions <code>[dpqr]paretoI</code> are the same as
+<code>[dpqr]pareto</code> except for a slight change in notation:
+<code class="reqn">s=k</code> and <code class="reqn">b=\alpha</code>; see <code>Pareto</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee and Kai Huang </p>
+
+
+<h3>References</h3>
+
+<p>Brazauskas, V. (2003).
+Information matrix for Pareto(IV), Burr, and related
+distributions.
+<em>Comm. Statist. Theory and Methods</em>
+<b>32</b>, 315–325.
+</p>
+<p>Arnold, B. C. (1983).
+<em>Pareto Distributions</em>.
+Fairland, Maryland: International Cooperative Publishing House.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>paretoIV</code>,
+<code>Pareto</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+x &lt;- seq(-0.2, 4, by = 0.01)
+loc &lt;- 0; Scale &lt;- 1; ineq &lt;- 1; shape &lt;- 1.0
+plot(x, dparetoIV(x, loc, Scale, ineq, shape), type = "l",
+     main = "Blue is density, orange is the CDF", col = "blue",
+     sub = "Purple are 5,10,...,95 percentiles", ylim = 0:1,
+     las = 1, ylab = "")
+abline(h = 0, col = "blue", lty = 2)
+Q &lt;- qparetoIV(seq(0.05, 0.95,by = 0.05), loc, Scale, ineq, shape)
+lines(Q, dparetoIV(Q, loc, Scale, ineq, shape), col = "purple",
+      lty = 3, type = "h")
+lines(x, pparetoIV(x, loc, Scale, ineq, shape), col = "orange")
+abline(h = 0, lty = 2)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

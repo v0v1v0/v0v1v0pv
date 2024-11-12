@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_makewindows</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Divide intervals into new sub-intervals ("windows").</h2>
+
+<h3>Description</h3>
+
+<p>Divide intervals into new sub-intervals ("windows").
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_makewindows(x, win_size = 0, step_size = 0, num_win = 0, reverse = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>win_size</code></td>
+<td>
+<p>divide intervals into fixed-size windows</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>step_size</code></td>
+<td>
+<p>size to step before next window</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>num_win</code></td>
+<td>
+<p>divide intervals to fixed number of windows</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>reverse</code></td>
+<td>
+<p>reverse window numbers</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>ivl_df with <code>.win_id</code> column that contains a numeric
+identifier for the window.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The <code>name</code> and <code>.win_id</code> columns can be used to create new
+interval names (see 'namenum' example below) or in subsequent
+<code>group_by</code> operations (see vignette).
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other utilities: 
+<code>bed12_to_exons()</code>,
+<code>bound_intervals()</code>,
+<code>flip_strands()</code>,
+<code>interval_spacing()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end, ~name, ~score, ~strand,
+  "chr1", 100,    200,  "A",   ".",    "+"
+)
+
+bed_glyph(bed_makewindows(x, num_win = 10), label = ".win_id")
+
+# Fixed number of windows
+bed_makewindows(x, num_win = 10)
+
+# Fixed window size
+bed_makewindows(x, win_size = 10)
+
+# Fixed window size with overlaps
+bed_makewindows(x, win_size = 10, step_size = 5)
+
+# reverse win_id
+bed_makewindows(x, win_size = 10, reverse = TRUE)
+
+# bedtools 'namenum'
+wins &lt;- bed_makewindows(x, win_size = 10)
+dplyr::mutate(wins, namenum = stringr::str_c(name, "_", .win_id))
+
+</code></pre>
+
+
+</div>

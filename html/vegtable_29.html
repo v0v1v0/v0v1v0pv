@@ -1,0 +1,127 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>count_taxa</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Count taxa included in vegtable objects</h2>
+
+<h3>Description</h3>
+
+<p>Counting number of taxa within taxlist objects or character vectors
+containing taxon names.
+</p>
+<p>This function provides a quick calculation of taxa in vegtable
+objects, considering only records in slot samples.
+Such records can be also merged from lower ranks.
+</p>
+<p>For the formula method, units without any requested taxa will not appear in
+the output data frame. If no taxa at all is occurring at the requested level
+in any unit, an error message will be retrieved.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S4 method for signature 'vegtable,missing'
+count_taxa(object, level, include_lower = FALSE, ...)
+
+## S4 method for signature 'formula,vegtable'
+count_taxa(
+  object,
+  data,
+  include_lower = FALSE,
+  suffix = "_count",
+  in_header = TRUE,
+  ...
+)
+
+count_taxa(data, ...) &lt;- value
+
+## S4 replacement method for signature 'vegtable,formula'
+count_taxa(data, ...) &lt;- value
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object of class vegtable or a formula.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>Character value indicating the taxonomic rank of counted taxa.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>include_lower</code></td>
+<td>
+<p>Logical value, whether lower taxonomic ranks should be
+included at the requested level.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further arguments passed among methods.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>An object of class vegtable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>suffix</code></td>
+<td>
+<p>Character value used as suffix on the calculated variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>in_header</code></td>
+<td>
+<p>Logical value, whether the result should be included in the
+slot header of the input vegtable object or not.
+A warning message is provided if the calculation is not done for every
+plot observation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>A formula passed to parameter 'object' by the replace method.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An data frame with the number of taxa from requested level at requested
+units for the formula method, or just an integer value.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Miguel Alvarez <a href="mailto:kamapu78@gmail.com">kamapu78@gmail.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Different alternatives
+count_taxa(Kenya_veg)
+head(count_taxa(~ReleveID, Kenya_veg, in_header = FALSE))
+head(count_taxa(species ~ ReleveID, Kenya_veg, in_header = FALSE))
+head(count_taxa(species ~ ReleveID, Kenya_veg, TRUE, in_header = FALSE))
+head(count_taxa(family ~ ReleveID, Kenya_veg, TRUE))
+
+</code></pre>
+
+
+</div>

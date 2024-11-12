@@ -1,0 +1,134 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>estimate_nuisances</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimate nuisance functions for average value-based VIMs</h2>
+
+<h3>Description</h3>
+
+<p>Estimate nuisance functions for average value-based VIMs
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">estimate_nuisances(
+  fit,
+  X,
+  exposure_name,
+  V = 1,
+  SL.library,
+  sample_splitting,
+  sample_splitting_folds,
+  verbose,
+  weights,
+  cross_fitted_se,
+  split = 1,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fit</code></td>
+<td>
+<p>the fitted nuisance function estimator</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>the covariates. If <code>type = "average_value"</code>, then the exposure
+variable should be part of <code>X</code>, with its name provided in <code>exposure_name</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>exposure_name</code></td>
+<td>
+<p>(only used if <code>type = "average_value"</code>) the name of
+the exposure of interest; binary, with 1 indicating presence of the exposure and
+0 indicating absence of the exposure.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>V</code></td>
+<td>
+<p>the number of folds for cross-fitting, defaults to 5. If
+<code>sample_splitting = TRUE</code>, then a special type of <code>V</code>-fold cross-fitting
+is done. See Details for a more detailed explanation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SL.library</code></td>
+<td>
+<p>a character vector of learners to pass to
+<code>SuperLearner</code>, if <code>f1</code> and <code>f2</code> are Y and X,
+respectively. Defaults to <code>SL.glmnet</code>, <code>SL.xgboost</code>,
+and <code>SL.mean</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_splitting</code></td>
+<td>
+<p>should we use sample-splitting to estimate the full and
+reduced predictiveness? Defaults to <code>TRUE</code>, since inferences made using
+<code>sample_splitting = FALSE</code> will be invalid for variables with truly zero
+importance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_splitting_folds</code></td>
+<td>
+<p>the folds used for sample-splitting;
+these identify the observations that should be used to evaluate
+predictiveness based on the full and reduced sets of covariates, respectively.
+Only used if <code>run_regression = FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>should we print progress? defaults to FALSE</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>weights to pass to estimation procedure</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross_fitted_se</code></td>
+<td>
+<p>should we use cross-fitting to estimate the standard
+errors (<code>TRUE</code>, the default) or not (<code>FALSE</code>)?</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>split</code></td>
+<td>
+<p>the sample split to use</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments to the estimation tool, see "See also".</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>nuisance function estimators for use in the average value VIM:
+the treatment assignment based on the estimated optimal rule
+(based on the estimated outcome regression); the expected outcome under the
+estimated optimal rule; and the estimated propensity score.
+</p>
+
+
+</div>

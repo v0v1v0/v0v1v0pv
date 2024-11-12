@@ -1,0 +1,250 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>DeLury</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> DeLury's Method for Population Size Estimation </h2>
+
+<h3>Description</h3>
+
+<p>Computes DeLury's method or Leslie's method for estimating a
+biological population size.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">DeLury(catch, effort, type = c("DeLury","Leslie"), ricker = FALSE)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>catch, effort</code></td>
+<td>
+
+<p>Catch and effort. These should be numeric vectors of equal length.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+
+<p>Character specifying which of the DeLury or Leslie models is to be fitted.
+The default is the first value.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ricker</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code> then the Ricker (1975) modification is computed.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This simple function implements the methods of DeLury (1947).
+These are called the DeLury and Leslie models.
+Note that there are many assumptions.
+These include: (i) Catch and effort records are available for a series
+of consecutive time intervals. The catch for a given time
+interval, specified by <code class="reqn">t</code>, is <code class="reqn">c(t)</code>, and the
+corresponding effort by <code class="reqn">e(t)</code>.
+The <em>catch per unit effort</em> (CPUE) for the time interval <code class="reqn">t</code> is
+<code class="reqn">C(t) = c(t)/e(t)</code>.
+Let <code class="reqn">d(t)</code> represent the proportion of the population
+captured during the time interval <code class="reqn">t</code>.
+Then <code class="reqn">d(t) = k(t) e(t)</code> so that <code class="reqn">k(t)</code> is the
+proportion of the population captured during interval <code class="reqn">t</code> by one unit
+of effort. Then <code class="reqn">k(t)</code> is called the <em>catchability</em>,
+and the <em>intensity</em> of effort is <code class="reqn">e(t)</code>.
+Let <code class="reqn">E(t)</code> and <code class="reqn">K(t)</code> be the total effort and total catch
+up to interval <code class="reqn">t</code>, and <code class="reqn">N(t)</code> be the number of individuals
+in the population at time <code class="reqn">t</code>.
+It is good idea to plot
+<code class="reqn">\log(C(t))</code> against <code class="reqn">E(t)</code> for <code>type = "DeLury"</code> and
+<code class="reqn">C(t)</code> versus <code class="reqn">K(t)</code> for <code>type = "Leslie"</code>.
+</p>
+<p>The other assumptions are as follows.
+
+(ii) The population is closed—the population must be closed to sources
+of animals such as recruitment and immigration and losses of animals
+due to natural mortality and emigration.
+
+(iii) Catchability is constant over the period of removals.
+
+(iv) The units of effort are independent, i.e., the individual units
+of the method of capture (i.e., nets, traps, etc) do not compete with
+each other.
+
+(v) All fish are equally vulnerable to the method of capture—source
+of error may include gear saturation and trap-happy or trap-shy
+individuals.
+
+(vi) Enough fish must be removed to substantially reduce the CPUE.
+
+(vii) The catches may remove less than 2% of the population.
+
+Also, the usual assumptions of simple regression such as
+
+(viii) random sampling,
+
+(ix) the independent variable(s) are measured without error—both
+catches and effort should be known, not estimated,
+
+(x) a line describes the data,
+
+(xi) the errors are independent and normally distributed.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with the following components.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>catch, effort </code></td>
+<td>
+
+<p>Catch and effort. Same as the original vectors.
+These correspond to <code class="reqn">c(t)</code> and <code class="reqn">e(t)</code> respectively.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type, ricker</code></td>
+<td>
+<p>Same as input.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>N0</code></td>
+<td>
+<p>an estimate of the population size at time 0.
+Only valid if the assumptions are satisfied.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CPUE</code></td>
+<td>
+<p>Catch Per Unit Effort <code class="reqn">=C(t)</code>. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>K, E</code></td>
+<td>
+
+<p><code class="reqn">K(t)</code> and <code class="reqn">E(t)</code>.
+Only one is computed depending on <code>type</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lmfit</code></td>
+<td>
+
+<p>the <code>lm</code> object from the
+fit of <code>log(CPUE)</code> on <code>K</code> (when <code>type = "Leslie"</code>).
+Note that the <code>x</code> component of the object is the model matrix.
+</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>The data in the example below comes from DeLury (1947), and
+some plots of his are reproduced.
+Note that he used log to base 10 whereas natural logs are used here.
+His plots had some observations obscured by the y-axis!
+</p>
+<p>The DeLury method is not applicable to the data frame
+<code>wffc.nc</code> since the 2008 World Fly Fishing Competition was
+strictly catch-and-release.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee. </p>
+
+
+<h3>References</h3>
+
+<p>DeLury, D. B. (1947).
+On the estimation of biological populations.
+<em>Biometrics</em>,
+<b>3</b>, 145–167.
+</p>
+<p>Ricker, W. E. (1975).
+Computation and interpretation of biological
+statistics of fish populations.
+<em>Bull. Fish. Res. Bd. Can.</em>,
+<b>191</b>, 382–
+</p>
+<p>Yee, T. W. (2010)
+VGLMs and VGAMs: an overview for applications in fisheries research.
+<em>Fisheries Research</em>,
+<b>101</b>, 116–126.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>wffc.nc</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pounds &lt;- c(  147, 2796, 6888, 7723, 5330, 8839, 6324, 3569, 8120, 8084,
+            8252, 8411, 6757, 1152, 1500, 11945, 6995, 5851, 3221, 6345,
+            3035, 6271, 5567, 3017, 4559, 4721, 3613,  473,  928, 2784,
+            2375, 2640, 3569)
+traps  &lt;- c(  200, 3780, 7174, 8850, 5793, 9504, 6655, 3685, 8202, 8585,
+            9105, 9069, 7920, 1215, 1471, 11597, 8470, 7770, 3430, 7970,
+            4740, 8144, 7965, 5198, 7115, 8585, 6935, 1060, 2070, 5725,
+            5235, 5480, 8300)
+table1 &lt;- DeLury(pounds/1000, traps/1000)
+
+## Not run: 
+with(table1, plot(1+log(CPUE) ~ E, las = 1, pch = 19, main = "DeLury method",
+     xlab = "E(t)", ylab = "1 + log(C(t))", col = "blue"))
+
+## End(Not run)
+omitIndices &lt;- -(1:16)
+table1b &lt;- DeLury(pounds[omitIndices]/1000, traps[omitIndices]/1000)
+## Not run: 
+with(table1b, plot(1+log(CPUE) ~ E, las = 1, pch = 19, main = "DeLury method",
+     xlab = "E(t)", ylab = "1 + log(C(t))", col = "blue"))
+mylmfit &lt;- with(table1b, lmfit)
+lines(mylmfit$x[, 2], 1 + predict.lm(mylmfit), col = "red", lty = "dashed")
+
+## End(Not run)
+
+
+omitIndices &lt;- -(1:16)
+table2 &lt;- DeLury(pounds[omitIndices]/1000, traps[omitIndices]/1000, type = "L")
+## Not run: 
+with(table2, plot(CPUE ~ K, las = 1, pch = 19,
+     main = "Leslie method; Fig. III",
+     xlab = "K(t)", ylab = "C(t)", col = "blue"))
+mylmfit &lt;- with(table2, lmfit)
+abline(a = coef(mylmfit)[1], b = coef(mylmfit)[2],
+       col = "orange", lty = "dashed")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>approval_method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Approval Method</h2>
+
+<h3>Description</h3>
+
+<p>In approval method, each voter is required to mention 
+one or more candidates, and the winner is the one 
+who gets the top frequency. For this function, a ballot 
+with candidates more than required and 
+different scores is also valid. For a score matrix, the function will 
+check the positions j, k...which have the 
+lowest scores (in a <code>vote</code> object, 
+the lower, the better) in the ith row. However, the function will 
+first check the <code>approval_able</code> element of 
+the <code>vote</code> object. If it is FALSE, the winner will be NULL.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">approval_method(x, min_valid = 1, n)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class <code>vote</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min_valid</code></td>
+<td>
+<p>default is 1. If the number of valid entries of 
+a ballot is less than this value, the ballot will not be used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>the number of candidates written down by a 
+voter should not larger than this value.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list object.
+</p>
+
+<ul>
+<li>
+<p> (1) <code>call</code> the function call.
+</p>
+</li>
+<li>
+<p> (2) <code>method</code> the counting method.
+</p>
+</li>
+<li>
+<p> (3) <code>candidate</code> candidate names.
+</p>
+</li>
+<li>
+<p> (4) <code>candidate_num</code> number of candidate.
+</p>
+</li>
+<li>
+<p> (5) <code>ballot_num</code> number of ballots in x.
+</p>
+</li>
+<li>
+<p> (6) <code>valid_ballot_num</code> number of ballots that are 
+used to compute the result.
+</p>
+</li>
+<li>
+<p> (7) <code>winner</code> the winners, may be one, more than one or NULL.
+</p>
+</li>
+<li>
+<p> (8) <code>n</code> equal to the argument <code>n</code>.
+</p>
+</li>
+<li>
+<p> (9) <code>other_info</code> frequencies of candidates mentioned 
+by voters.
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">raw &lt;- matrix(NA, nrow = 22, ncol = 5)
+for (i in 1: 20){
+   set.seed(i)
+   raw[i, ] &lt;- sample(c(1: 5, NA, NA, NA), 5)
+}
+raw[21, ] &lt;- c(4, 5, 3, 1, 2)
+raw[22, ] &lt;- c(3, 5, 1, 2, 4)
+vote &lt;- create_vote(raw, xtype = 1)
+y &lt;- approval_method(vote, n = 3)
+y &lt;- approval_method(vote, n = 3, min_valid = 5)
+y &lt;- approval_method(vote, n = 4, min_valid = 3)
+</code></pre>
+
+
+</div>

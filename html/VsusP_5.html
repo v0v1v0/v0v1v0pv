@@ -1,0 +1,139 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Sequential2Means</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Variable selection using shrinkage priors :: Sequential2Means</h2>
+
+<h3>Description</h3>
+
+<p>Sequential2Means function will take as input X: design matrix, Y : response vector, t: vector of tuning parameter values from Sequential 2-means (S2M) variable selection algorithm. The function will return a list S2M which will hold p: the total number of variables, b.i: the values of the tuning parameter, H.b.i : the estimated number of signals corresponding to each b.i, abs.post.median: medians of the absolute values of the posterior samples.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Sequential2Means(
+  X,
+  Y,
+  b.i,
+  prior = "horseshoe+",
+  n.samples = 5000,
+  burnin = 2000
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Design matrix of dimension n X p, where n = total data points and p = total number of features</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Response vector of dimension n X 1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b.i</code></td>
+<td>
+<p>Vector of tuning parameter values from Sequential 2-means (S2M) variable selection algorithm of dimension specified by user.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prior</code></td>
+<td>
+<p>Shrinkage prior distribution over the Beta. Available options are ridge regression: prior="rr" or prior="ridge", lasso regression: prior="lasso", horseshoe regression: prior="hs" or prior="horseshoe", and horseshoe+ regression : prior="hs+" or prior="horseshoe+" ( String data type)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.samples</code></td>
+<td>
+<p>Number of posterior samples to generate of numeric data type</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>burnin</code></td>
+<td>
+<p>Number of burn-in samples of numeric data type</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list S2M which will hold Beta, b.i, and H.b.i.
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>Beta</code></td>
+<td>
+<p>N by p matrix consisting of N posterior samples of p variables</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b.i</code></td>
+<td>
+<p>the user specified vector holding the tuning parameter values</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H.b.i</code></td>
+<td>
+<p>the estimated number of signals of numeric data type corresponding to each b.i</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Makalic, E. &amp; Schmidt, D. F.
+High-Dimensional Bayesian Regularised Regression with the BayesReg Package
+arXiv:1611.06649, 2016
+</p>
+<p>Li, H., &amp; Pati, D.
+Variable selection using shrinkage priors
+Computational Statistics &amp; Data Analysis, 107, 107-119.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># -----------------------------------------------------------------
+# Example 1: Gaussian Model and Horseshoe prior
+n &lt;- 10
+p &lt;- 5
+X &lt;- matrix(rnorm(n * p), n, p)
+beta &lt;- exp(rnorm(p))
+Y &lt;- as.vector(X %*% beta + rnorm(n, 0, 1))
+b.i &lt;- seq(0, 1, 0.05)
+
+# Sequential2Means with horseshoe+ using gibbs sampling
+# recommended n.samples is 5000 and burning is 2000
+S2M &lt;- Sequential2Means(X, Y, b.i, "horseshoe+", 110, 100)
+Beta &lt;- S2M$Beta
+H.b.i &lt;- S2M$H.b.i
+
+# -----------------------------------------------------------------
+# Example 2: Gaussian Model and ridge prior
+
+n &lt;- 10
+p &lt;- 5
+X &lt;- matrix(rnorm(n * p), n, p)
+beta &lt;- exp(rnorm(p))
+Y &lt;- as.vector(X %*% beta + rnorm(n, 0, 1))
+b.i &lt;- seq(0, 1, 0.05)
+# Sequential2Means with ridge regression using gibbs sampling
+# recommended n.samples is 5000 and burning is 2000
+S2M &lt;- Sequential2Means(X, Y, b.i, "ridge", 110, 100)
+Beta &lt;- S2M$Beta
+H.b.i &lt;- S2M$H.b.i
+
+</code></pre>
+
+
+</div>

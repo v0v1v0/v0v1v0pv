@@ -1,0 +1,163 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>24. Random generators</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Random Generators of vli Objects</h2>
+
+<h3>Description</h3>
+
+<p>Random generators of vli (Very Large Integer) objects following different probability distributions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rvlidigits(d)
+
+rvliunif(x, y)
+
+## Default S3 method:
+rvliunif(x, y)
+
+## S3 method for class 'numeric'
+rvliunif(x, y)
+
+## S3 method for class 'vli'
+rvliunif(x, y)
+
+rvlibin(n, p)
+
+## Default S3 method:
+rvlibin(n, p)
+
+## S3 method for class 'numeric'
+rvlibin(n, p)
+
+## S3 method for class 'vli'
+rvlibin(n, p)
+
+rvlinegbin(s, p)
+
+## Default S3 method:
+rvlinegbin(s, p)
+
+## S3 method for class 'numeric'
+rvlinegbin(s, p)
+
+## S3 method for class 'vli'
+rvlinegbin(s, p)
+
+rvliprime(y, iter = 10, test = "MR")
+
+## Default S3 method:
+rvliprime(y, iter = 10, test = "MR")
+
+## S3 method for class 'numeric'
+rvliprime(y, iter = 10, test = "MR")
+
+## S3 method for class 'vli'
+rvliprime(y, iter = 10, test = "MR")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>d</code></td>
+<td>
+<p>number of digits of the vli class object being generated; numeric</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>lower bound for the object of class vli being generated; object of class vli or 32 bits integer</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>upper bound for the object of class vli being generated; object of class vli or 32 bits integer</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of independent Bernoulli trials; object of class vli 32 bits integer</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>probability of success; numeric</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>s</code></td>
+<td>
+<p>number of successes; vli class object or 32 bits integer</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>iter</code></td>
+<td>
+<p>number of iterations for each number to be tested; numeric</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>test</code></td>
+<td>
+<p>chosen primality test: "F" for the Fermat Test, "SS" for the Solovay-Strassen Test or "MR" (by default) for the Miller-Rabin Test; character</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function <code>rvlidigits(d)</code> returns a vli object of <code>d</code> digits randomly generated following the uniform distribution. It is the most efficient way of generating random vli objects.
+</p>
+<p>The function <code>rvliunif(x, y)</code> returns a vli object randomly generated following the Uniform distribution with parameters <code>x</code> and <code>y</code>.
+</p>
+<p>The function <code>rvlibin(n, p)</code> returns a vli object randomly generated following the Binomial distribution with parameters <code>n</code> and <code>p</code>, where <code>n</code> is the number of Bernoulli trials and <code>p</code> the probability of success.
+</p>
+<p>The function <code>rvlinegbin(x, y)</code> returns a vli object randomly generated following the Negative Binomial distribution with parameters <code>s</code> and <code>p</code>, where <code>s</code> is the number of successes and <code>p</code> the probability of success.
+</p>
+<p>The function <code>rvliprime(y, iter, test)</code> returns a vli object randomly chosen from the set of primes up to <code>y</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>objects of class vli in all cases:
+</p>
+<p><code>rvlidigits(d)</code> returns a object of class vli belonging to the interval <code>[0, 10^d)</code>
+</p>
+<p><code>rvliunif(x, y)</code> returns a object of class vli belonging to the interval <code>[x, y)</code>
+</p>
+<p><code>rvlibin(n, p)</code> returns a object of class vli belonging to the interval <code>[0, n]</code>
+</p>
+<p><code>rvlinegbin(x, y)</code> returns a object of class vli belonging to the interval <code>[n, Inf)</code>
+</p>
+<p><code>rvliprime(y, iter, test)</code> returns a object of class vli with the value of a prime number belonging to the interval <code>[2, y)</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Javier Leiva Cuadrado
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rvlidigits(2000)
+rvliunif(3425, as.vli("2061341345304562604342"))
+rvlibin(100, 0.6)
+rvlinegbin(as.vli("1000000"), 0.5)
+rvliprime(as.vli("100000"), iter = 10, test = "MR")
+</code></pre>
+
+
+</div>

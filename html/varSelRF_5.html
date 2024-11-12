@@ -1,0 +1,193 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>selProbPlot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Selection probability plot for variable importance from random forests</h2>
+
+<h3>Description</h3>
+
+<p>Plot, for the top ranked <code class="reqn">k</code> variables from the original sample, the
+probability that each of these variables is included among the top
+ranked <code class="reqn">k</code> genes from the bootstrap samples. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">selProbPlot(object, k = c(20, 100),
+            color = TRUE,
+            legend = FALSE,
+            xlegend = 68,
+            ylegend = 0.93,
+            cexlegend = 1.4,
+            main = NULL,
+            xlab = "Rank of gene",
+            ylab = "Selection probability",
+            pch = 19, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object of class varSelRFBoot such as returned by the
+<code>varSelRFBoot</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>A two-component vector with the <code class="reqn">k</code>-th upper variables for
+which you want the plots. </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>color</code></td>
+<td>
+<p>If TRUE a color plot; if FALSE, black and white.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+<p>If TRUE, show a legend.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlegend</code></td>
+<td>
+<p>The x-coordinate for the legend.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylegend</code></td>
+<td>
+<p>The y-coordinate for the legend.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cexlegend</code></td>
+<td>
+<p>The <code>cex</code> argument for the legend.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p><code>main</code> for the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p><code>xlab</code> for the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p><code>ylab</code> for the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pch</code></td>
+<td>
+<p><code>pch</code> for the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments to plot.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><cite>Pepe et al., 2003</cite> suggested the use of selection probability
+plots to evaluate the stability and confidence on our selection of
+"relevant genes." This paper also presents several more sophisticated
+ideas not implemented here.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Used for its side effects of producing a plot. In a single plot show
+the "selection probability plot" for the upper
+(largest variable importance) <code>kt</code>th variables. By default, show
+the upper 20 and the upper 100
+colored blue and red respectively.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is in very rudimentary shape and could be used for
+more general types of data. I wrote specifically to produce Fig.\ 4 of
+the paper.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ramon Diaz-Uriarte <a href="mailto:rdiaz02@gmail.com">rdiaz02@gmail.com</a></p>
+
+
+<h3>References</h3>
+
+<p>Breiman, L. (2001) Random forests.
+<em>Machine Learning</em>, <b>45</b>, 5–32.
+</p>
+<p>Diaz-Uriarte, R. , Alvarez de Andres,
+S. (2005) Variable selection from random forests: application to gene
+expression
+data. Tech. report. <a href="http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html">http://ligarto.org/rdiaz/Papers/rfVS/randomForestVarSel.html</a>
+</p>
+<p>Pepe, M. S., Longton, G., Anderson, G. L. &amp; Schummer, M. (2003) Selecting differentially expressed genes from microarray experiments.
+<em>Biometrics</em>, <b>59</b>, 133–142. 
+</p>
+<p>Svetnik, V., Liaw, A. , Tong, C &amp; Wang, T. (2004) Application of
+Breiman's random forest to modeling structure-activity relationships of
+pharmaceutical molecules.  Pp. 334-343 in <em>F. Roli, J. Kittler, and T. Windeatt</em>
+(eds.). <em>Multiple Classier Systems, Fifth International Workshop</em>, MCS
+2004, Proceedings, 9-11 June 2004, Cagliari, Italy. Lecture Notes in
+Computer Science, vol. 3077.  Berlin: Springer.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>randomForest</code>,
+<code>varSelRF</code>,
+<code>varSelRFBoot</code>,
+<code>randomVarImpsRFplot</code>,
+<code>randomVarImpsRF</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## This is a small example, but can take some time.
+
+x &lt;- matrix(rnorm(25 * 30), ncol = 30)
+x[1:10, 1:2] &lt;- x[1:10, 1:2] + 2
+cl &lt;- factor(c(rep("A", 10), rep("B", 15)))  
+
+rf.vs1 &lt;- varSelRF(x, cl, ntree = 200, ntreeIterat = 100,
+                   vars.drop.frac = 0.2)
+rf.vsb &lt;- varSelRFBoot(x, cl,
+                       bootnumber = 10,
+                       usingCluster = FALSE,
+                       srf = rf.vs1)
+selProbPlot(rf.vsb, k = c(5, 10), legend = TRUE,
+            xlegend = 8, ylegend = 0.8)
+
+</code></pre>
+
+
+</div>

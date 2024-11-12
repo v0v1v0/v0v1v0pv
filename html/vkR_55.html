@@ -1,0 +1,588 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getUsersExecute</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Returns detailed information on arbitrary number of users</h2>
+
+<h3>Description</h3>
+
+<p>Returns detailed information on arbitrary number of users
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getUsersExecute(
+  users_ids,
+  fields = "",
+  name_case = "nom",
+  drop = FALSE,
+  flatten = FALSE,
+  use_db = FALSE,
+  db_params = list(),
+  progress_bar = FALSE,
+  v = getAPIVersion()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>users_ids</code></td>
+<td>
+<p>User IDs or screen names (screen_name). By default, current user ID</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fields</code></td>
+<td>
+<p>Profile fields to return</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name_case</code></td>
+<td>
+<p>Case for declension of user name and surname</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drop</code></td>
+<td>
+<p>Drop deleted or banned users</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>flatten</code></td>
+<td>
+<p>Automatically flatten nested data frames into a single non-nested data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>use_db</code></td>
+<td>
+<p>Use database</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>db_params</code></td>
+<td>
+<p>Collection name and suffix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>progress_bar</code></td>
+<td>
+<p>Display progress bar</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>Version of API</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p><a href="https://vk.com/dev/fields">User object</a> describes a user profile, contains the following fields:
+</p>
+
+<ul>
+<li> <p><strong>uid</strong> User ID
+</p>
+</li>
+<li> <p><strong>first_name</strong> First name
+</p>
+</li>
+<li> <p><strong>last_name</strong> Last name
+</p>
+</li>
+<li> <p><strong>deactivated</strong> Returns if a profile is deleted or blocked. Gets the value deleted or banned. Keep in mind that in this case no additional fields are returned
+</p>
+</li>
+<li> <p><strong>hidden: 1</strong> Returns while operating without access_token if a user has set the "Who can see my profile on the Internet" -&gt; "Only VK users" privacy setting. Keep in mind that in this case no additional fields are returned
+</p>
+</li>
+<li> <p><strong>verified</strong> Returns 1 if the profile is verified, 0 if not
+</p>
+</li>
+<li> <p><strong>blacklisted</strong> Returns 1 if a current user is in the requested user's blacklist
+</p>
+</li>
+<li> <p><strong>sex</strong> User sex (1 - female; 2 - male; 0 - not specified)
+</p>
+</li>
+<li> <p><strong>bdate</strong> User's date of birth.  Returned as DD.MM.YYYY or DD.MM (if birth year is hidden). If the whole date is hidden, no field is returned
+</p>
+</li>
+<li> <p><strong>city</strong> ID of the city specified on user's page in "Contacts" section.  Returns city ID that can be used to get its name using places.getCityById method. If no city is specified or main information on the page is hidden for in privacy settings, then it returns 0
+</p>
+</li>
+<li> <p><strong>country</strong> ID of the country specified on user's page in "Contacts" section.  Returns country ID that can be used to get its name using places.getCountryById method. If no country is specified or main information on the page is hidden in privacy settings, then it returns 0
+</p>
+</li>
+<li> <p><strong>home_town</strong> User's home town
+</p>
+</li>
+<li> <p><strong>photo_50</strong> Returns URL of square photo of the user with 50 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_c.gif is returned
+</p>
+</li>
+<li> <p><strong>photo_100</strong> Returns URL of square photo of the user with 100 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_b.gif is returned
+</p>
+</li>
+<li> <p><strong>photo_200_orig</strong> Returns URL of user's photo with 200 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_a.gif is returned
+</p>
+</li>
+<li> <p><strong>photo_200</strong> Returns URL of square photo of the user with 200 pixels in width.  If the photo was uploaded long time ago, there can be no image of such size and in this case the reply will not include this field
+</p>
+</li>
+<li> <p><strong>photo_400_orig</strong> Returns URL of user's photo with 400 pixels in width.  If user does not have a photo of such size, reply will not include this field
+</p>
+</li>
+<li> <p><strong>photo_max</strong> Returns URL of square photo of the user with maximum width. Can be returned a photo both 200 and 100 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_b.gif is returned
+</p>
+</li>
+<li> <p><strong>photo_max_orig</strong> Returns URL of user's photo of maximum size. Can be returned a photo both 400 and 200 pixels in width.  In case user does not have a photo, http://vk.com/images/camera_a.gif is returned
+</p>
+</li>
+<li> <p><strong>online</strong> Information whether the user is online.  Returned values: 1 - online, 0 - offline.  If user utilizes a mobile application or site mobile version, it returns online_mobile additional field that includes 1. With that, in case of application, online_app additional field is returned with application ID.
+</p>
+</li>
+<li> <p><strong>lists</strong> Information about friend lists. Returns IDs of friend lists the user is member of, separated with a comma. The field is available for friends.get method only. To get information about ID and names of friend lists use friends.getLists method. If user is not a member of any friend list, then when accepting data in XML format the respective &lt;user&gt; node does not contain &lt;lists&gt; tag
+</p>
+</li>
+<li> <p><strong>domain</strong> Page screen name.  Returns a string with a page screen name (only subdomain is returned, like andrew). If not set, "id'+uid is returned, e.g. id35828305
+</p>
+</li>
+<li> <p><strong>has_mobile</strong> Information whether the user's mobile phone number is available.  Returned values: 1 - available, 0 - not available.  We recommend you to use it prior to call of secure.sendSMSNotification method
+</p>
+</li>
+<li> <p><strong>contacts</strong> Information about user's phone numbers.  If data are available and not hidden in privacy settings, the following fields are returned (mobile_phone - user's mobile phone number (only for standalone applications); home_phone - user's additional phone number)
+</p>
+</li>
+<li> <p><strong>site</strong> Returns a website address from a user profile
+</p>
+</li>
+<li> <p><strong>education</strong> Information about user's higher education institution. The following fields are returned:
+</p>
+
+<ul>
+<li> <p><strong>university</strong> University ID
+</p>
+</li>
+<li> <p><strong>university_name</strong> University name
+</p>
+</li>
+<li> <p><strong>faculty</strong> Faculty ID
+</p>
+</li>
+<li> <p><strong>faculty_name</strong> Faculty name
+</p>
+</li>
+<li> <p><strong>graduation</strong> Graduation year
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>universities</strong> List of higher education institutions where user studied.  Returns universities array with university objects with the following fields:
+</p>
+
+<ul>
+<li> <p><strong>id</strong> University ID
+</p>
+</li>
+<li> <p><strong>country</strong> ID of the country the university is located in
+</p>
+</li>
+<li> <p><strong>city</strong> ID of the city the university is located in
+</p>
+</li>
+<li> <p><strong>name</strong> University name
+</p>
+</li>
+<li> <p><strong>faculty</strong> Faculty ID
+</p>
+</li>
+<li> <p><strong>faculty_name</strong> Faculty name
+</p>
+</li>
+<li> <p><strong>chair</strong> University chair ID
+</p>
+</li>
+<li> <p><strong>chair_name</strong> Chair name
+</p>
+</li>
+<li> <p><strong>graduation</strong> Graduation year
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>schools</strong> List of schools where user studied in.  Returns schools array with school objects with the following fields:
+</p>
+
+<ul>
+<li> <p><strong>id</strong> School ID
+</p>
+</li>
+<li> <p><strong>country</strong> ID of the country the school is located in
+</p>
+</li>
+<li> <p><strong>city</strong> ID of the city the school is located in
+</p>
+</li>
+<li> <p><strong>name</strong> School name
+</p>
+</li>
+<li> <p><strong>year_from</strong> Year the user started to study
+</p>
+</li>
+<li> <p><strong>year_to</strong> Year the user finished to study
+</p>
+</li>
+<li> <p><strong>year_graduated</strong> Graduation year
+</p>
+</li>
+<li> <p><strong>class</strong> School class letter
+</p>
+</li>
+<li> <p><strong>speciality</strong> Speciality
+</p>
+</li>
+<li> <p><strong>type</strong> Type ID
+</p>
+</li>
+<li> <p><strong>type_str</strong> Type name
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>status</strong> User status.  Returns a string with status text that is in the profile below user's name
+</p>
+</li>
+<li> <p><strong>last_seen</strong> Last visit date.  Returns last_seen object with the following fields:
+</p>
+
+<ul>
+<li> <p><strong>time</strong> Last visit date (in Unix time)
+</p>
+</li>
+<li> <p><strong>platform</strong> Type of the platform that used for the last authorization. See more at <a href="https://vk.com/dev/using_longpoll">Using LongPoll server</a>
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>followers_count</strong> Number of user's followers
+</p>
+</li>
+<li> <p><strong>common_count</strong> Number of common friends with a current user
+</p>
+</li>
+<li> <p><strong>counters</strong> Number of various objects the user has.  Can be used in users.get method only when requesting information about a user. Returns an object with fields:
+</p>
+
+<ul>
+<li> <p><strong>albums</strong> Number of photo albums
+</p>
+</li>
+<li> <p><strong>videos</strong> Number of videos
+</p>
+</li>
+<li> <p><strong>audios</strong> Number of audios
+</p>
+</li>
+<li> <p><strong>notes</strong> Number of notes
+</p>
+</li>
+<li> <p><strong>friends</strong> Number of friends
+</p>
+</li>
+<li> <p><strong>groups</strong> Number of communities
+</p>
+</li>
+<li> <p><strong>online_friends</strong> Number of online friends
+</p>
+</li>
+<li> <p><strong>mutual_friends</strong> Number of mutual friends
+</p>
+</li>
+<li> <p><strong>user_videos</strong> Number of videos the user is tagged on
+</p>
+</li>
+<li> <p><strong>followers</strong> Number of followers
+</p>
+</li>
+<li> <p><strong>user_photos</strong> Number of photos the user is tagged on
+</p>
+</li>
+<li> <p><strong>subscriptions</strong> Number of subscriptions
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>occupation</strong> Current user's occupation. Returns following fields:
+</p>
+
+<ul>
+<li> <p><strong>type</strong> Can take the values: work, school, university
+</p>
+</li>
+<li> <p><strong>id</strong> ID of school, university, company group (the one a user works in)
+</p>
+</li>
+<li> <p><strong>name</strong> Name of school, university or work place
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>nickname</strong> User nickname
+</p>
+</li>
+<li> <p><strong>relatives</strong> Current user's relatives list. Returns a list of objects with id and type fields (name instead of id if a relative is not a VK user). type - relationship type. Possible values:
+</p>
+
+<ul>
+<li> <p><em>sibling</em>
+</p>
+</li>
+<li> <p><em>parent</em>
+</p>
+</li>
+<li> <p><em>child</em>
+</p>
+</li>
+<li> <p><em>grandparent</em>
+</p>
+</li>
+<li> <p><em>grandchild</em>
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>relation</strong> User relationship status. Returned values:
+</p>
+
+<ul>
+<li> <p><strong>1</strong> - Single
+</p>
+</li>
+<li> <p><strong>2</strong> - In a relationship
+</p>
+</li>
+<li> <p><strong>3</strong> - Engaged
+</p>
+</li>
+<li> <p><strong>4</strong> - Married
+</p>
+</li>
+<li> <p><strong>5</strong> - It's complicated
+</p>
+</li>
+<li> <p><strong>6</strong> - Actively searching
+</p>
+</li>
+<li> <p><strong>7</strong> - In love
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>personal</strong> Information from the "Personal views" section
+</p>
+
+<ul>
+<li> <p><strong>political</strong> Political views:
+</p>
+
+<ul>
+<li>
+<p>1 - Communist
+</p>
+</li>
+<li>
+<p>2 - Socialist
+</p>
+</li>
+<li>
+<p>3 - Moderate
+</p>
+</li>
+<li>
+<p>4 - Liberal
+</p>
+</li>
+<li>
+<p>5 - Conservative
+</p>
+</li>
+<li>
+<p>6 - Monarchist
+</p>
+</li>
+<li>
+<p>7 - Ultraconservative
+</p>
+</li>
+<li>
+<p>8 - Apathetic
+</p>
+</li>
+<li>
+<p>9 - Libertian
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>langs</strong> Languages
+</p>
+</li>
+<li> <p><strong>religion</strong> World view
+</p>
+</li>
+<li> <p><strong>inspired_by</strong> Inspired by
+</p>
+</li>
+<li> <p><strong>people_main</strong> Improtant in others:
+</p>
+
+<ul>
+<li>
+<p>1 - Intellect and creativity
+</p>
+</li>
+<li>
+<p>2 - Kindness and honesty
+</p>
+</li>
+<li>
+<p>3 - Health and beauty
+</p>
+</li>
+<li>
+<p>4 - Wealth and power
+</p>
+</li>
+<li>
+<p>5 - Courage and persistance
+</p>
+</li>
+<li>
+<p>6 - Humor and love for life
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>life_main</strong> Personal priority:
+</p>
+
+<ul>
+<li>
+<p>1 - Family and children
+</p>
+</li>
+<li>
+<p>2 - Career and money
+</p>
+</li>
+<li>
+<p>3 - Entertainment and leisure
+</p>
+</li>
+<li>
+<p>4 - Science and research
+</p>
+</li>
+<li>
+<p>5 - Improving the world
+</p>
+</li>
+<li>
+<p>6 - Personal development
+</p>
+</li>
+<li>
+<p>7 - Beauty and art
+</p>
+</li>
+<li>
+<p>8 - Fame and influence
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>smoking</strong> Views on smoking (1 - very negative; 2 - negative; 3 - neutral; 4 - compromisable; 5 - positive)
+</p>
+</li>
+<li> <p><strong>alcohol</strong> Views on alcohol (1 - very negative; 2 - negative; 3 - neutral; 4 - compromisable; 5 - positive)
+</p>
+</li>
+</ul>
+</li>
+<li> <p><strong>connections</strong> Returns specified services such as: skype, facebook, twitter, livejournal, instagram
+</p>
+</li>
+<li> <p><strong>exports</strong> External services with export configured (twitter, facebook, livejournal, instagram)
+</p>
+</li>
+<li> <p><strong>wall_comments</strong> Wall comments allowed(1 - allowed, 0 - not allowed)
+</p>
+</li>
+<li> <p><strong>activities</strong> Activities
+</p>
+</li>
+<li> <p><strong>interests</strong> Interests
+</p>
+</li>
+<li> <p><strong>music</strong> Favorite music
+</p>
+</li>
+<li> <p><strong>movies</strong> Favorite movies
+</p>
+</li>
+<li> <p><strong>tv</strong> Favorite TV shows
+</p>
+</li>
+<li> <p><strong>books</strong> Favorite books
+</p>
+</li>
+<li> <p><strong>games</strong> Favorite games
+</p>
+</li>
+<li> <p><strong>about</strong> "About me"
+</p>
+</li>
+<li> <p><strong>quotes</strong> Favorite quotes
+</p>
+</li>
+<li> <p><strong>can_post</strong> Can post on the wall: 1 - allowed, 0 - not allowed
+</p>
+</li>
+<li> <p><strong>can_see_all_posts</strong> Can see other users' posts on the wall: 1 - allowed, 0 - not allowed
+</p>
+</li>
+<li> <p><strong>can_see_audio</strong> Can see other users' audio on the wall: 1 - allowed, 0 - not allowed
+</p>
+</li>
+<li> <p><strong>can_write_private_message</strong> Can write private messages to a current user: 1 - allowed, 0 - not allowed
+</p>
+</li>
+<li> <p><strong>timezone</strong> user time zone. Retuns only while requesting current user info
+</p>
+</li>
+<li> <p><strong>screen_name</strong> User page's screen name (subdomain)
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+random_ids &lt;- sample(x=seq(1:10000000), size=10000, replace=FALSE)
+users &lt;- getUsersExecute(random_ids, fields='sex,bdate,city')
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>make_feasible</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Make an infeasible system feasible.</h2>
+
+<h3>Description</h3>
+
+<p>Make an infeasible system feasible, by removing the minimum (weighted) number of rules, such that the remaining
+rules are not conflicting.
+This function uses <code>detect_infeasible_rules</code> for determining the rules to be removed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">make_feasible(x, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p><code>validator</code> object with the validation rules.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>passed to <code>detect_infeasible_rules</code></p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p><code>validator</code> object with feasible rules.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other feasibility: 
+<code>detect_boundary_cat()</code>,
+<code>detect_boundary_num()</code>,
+<code>detect_infeasible_rules()</code>,
+<code>is_contradicted_by()</code>,
+<code>is_infeasible()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rules &lt;- validator( x &gt; 0)
+
+is_infeasible(rules)
+
+rules &lt;- validator( rule1 = x &gt; 0
+                  , rule2 = x &lt; 0
+                  )
+
+is_infeasible(rules)
+
+detect_infeasible_rules(rules)
+make_feasible(rules)
+
+# find out the conflict with this rule
+is_contradicted_by(rules, "rule1")
+</code></pre>
+
+
+</div>

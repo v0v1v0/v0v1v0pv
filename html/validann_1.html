@@ -1,0 +1,253 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ann</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fit Artificial Neural Networks.</h2>
+
+<h3>Description</h3>
+
+<p>Fits a single hidden layer ANN model to input data <code>x</code> and output data
+<code>y</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ann(x, y, size, act_hid = c("tanh", "sigmoid", "linear", "exp"),
+  act_out = c("linear", "sigmoid", "tanh", "exp"), Wts = NULL, rang = 0.5,
+  objfn = NULL, method = "BFGS", maxit = 1000, abstol = 1e-04,
+  reltol = 1e-08, trace = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>matrix, data frame or vector of numeric input values, with
+<code>ncol(x)</code> equal to the number of inputs/predictors and <code>nrow(x)</code>
+equal to the number of examples. A vector is considered to comprise examples
+of a single input or predictor variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>matrix, data frame or vector of target values for examples.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>size</code></td>
+<td>
+<p>number of hidden layer nodes. Can be zero.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>act_hid</code></td>
+<td>
+<p>activation function to be used at the hidden layer.
+See ‘Details’.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>act_out</code></td>
+<td>
+<p>activation function to be used at the output layer.
+See ‘Details’.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Wts</code></td>
+<td>
+<p>initial weight vector. If <code>NULL</code> chosen at random.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rang</code></td>
+<td>
+<p>initial random weights on [-rang,rang].
+Default value is 0.5.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>objfn</code></td>
+<td>
+<p>objective function to be minimised when fitting
+weights. This function may be user-defined with the first two arguments
+corresponding to <code>y</code> (the observed target data) and <code>y_hat</code>
+(the ANN output). If this function has additional parameters which require
+optimizing, these must be defined in argument <code>par_of</code>
+(see AR(1) case in ‘Examples’). Default is <code>sse</code> (internal
+function to compute sum squared error, with error given by
+<code>y - y_hat</code>) when <code>objfn = NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>the method to be used by <code>optim</code>
+for minimising the objective function. May be “Nelder-Mead”, “BFGS”,
+“CG”, “L-BFGS-B”, “SANN” or “Brent”. Can be abbreviated.
+Default is “BFGS”.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxit</code></td>
+<td>
+<p>maximum number of iterations used by <code>optim</code>.
+Default value is 1000.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>abstol</code></td>
+<td>
+<p>absolute convergence tolerance (stopping criterion)
+used by <code>optim</code>. Default is <code>1e-4</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>reltol</code></td>
+<td>
+<p>relative convergence tolerance (stopping criterion)
+used by <code>optim</code>. Optimization stops if the value
+returned by <code>objfn</code> cannot be reduced by a factor of
+<code>reltol * (abs(val) + reltol)</code> at a step. Default is <code>1e-8</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trace</code></td>
+<td>
+<p>logical. Should optimization be traced?
+Default = TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be passed to user-defined <code>objfn</code>. Initial
+values of any parameters (in addition to the ANN weights) requiring
+optimization must be supplied in argument <code>par_of</code> (see AR(1) case
+in ‘Examples’).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The “linear” activation, or transfer, function is the
+identity function where the output of a node is equal to its input
+<code class="reqn">f(x) = x</code>.
+</p>
+<p>The “sigmoid” function is the standard logistic sigmoid function given
+by <code class="reqn">f(x) = \frac{1}{1+e^{-x}}</code>.
+</p>
+<p>The “tanh” function is the hyperbolic tangent function given by
+<code class="reqn">f(x) = \frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}</code>
+</p>
+<p>The “exp” function is the exponential function given by
+<code class="reqn">f(x) = e^{x}</code>
+</p>
+<p>The default configuration of activation functions is
+<code>act_hid = "tanh"</code> and <code>act_out = "linear"</code>.
+</p>
+<p>Optimization (minimization) of the objective function (<code>objfn</code>) is
+performed by <code>optim</code> using the method specified.
+</p>
+<p>Derivatives returned are first-order partial derivatives of the hidden and
+output nodes with respect to their inputs. These may be useful for
+sensitivity analyses.
+</p>
+
+
+<h3>Value</h3>
+
+<p>object of class ‘ann’ with components describing the ANN structure
+and the following output components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>wts</code></td>
+<td>
+<p>best set of weights found.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par_of</code></td>
+<td>
+<p>best values of additional <code>objfn</code> parameters. This
+component will only be returned if a user-defined <code>objfn</code> is supplied
+and argument <code>par_of</code> is included in the function call (see AR(1)
+case in ‘Examples’).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value</code></td>
+<td>
+<p>value of objective function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fitted.values</code></td>
+<td>
+<p>fitted values for the training data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>residuals</code></td>
+<td>
+<p>residuals for the training data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>convergence</code></td>
+<td>
+<p>integer code returned by <code>optim</code>.
+0 indicates successful completion, see <code>optim</code> for
+possible error codes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>derivs</code></td>
+<td>
+<p>matrix of derivatives of hidden (columns <code>1:size</code>)
+and output (final column) nodes.</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><code>predict.ann</code>, <code>validann</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## fit 1-hidden node ann model with tanh activation at the hidden layer and
+## linear activation at the output layer.
+## Use 200 random samples from ar9 dataset.
+## ---
+data("ar9")
+samp &lt;- sample(1:1000, 200)
+y &lt;- ar9[samp, ncol(ar9)]
+x &lt;- ar9[samp, -ncol(ar9)]
+x &lt;- x[, c(1,4,9)]
+fit &lt;- ann(x, y, size = 1, act_hid = "tanh", act_out = "linear", rang = 0.1)
+
+## fit 3-hidden node ann model to ar9 data with user-defined AR(1) objective
+## function
+## ---
+ar1_sse &lt;- function(y, y_hat, par_of) {
+  err &lt;- y - y_hat
+  err[-1] &lt;- err[-1] - par_of * err[-length(y)]
+  sum(err ^ 2)
+}
+fit &lt;- ann(x, y, size = 3, act_hid = "tanh", act_out = "linear", rang = 0.1,
+           objfn = ar1_sse, par_of = 0.7)
+
+</code></pre>
+
+
+</div>

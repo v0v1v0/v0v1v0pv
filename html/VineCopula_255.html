@@ -1,0 +1,264 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>RVineMatrix</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>R-Vine Copula Model in Matrix Notation</h2>
+
+<h3>Description</h3>
+
+<p>This function creates an <code>RVineMatrix()</code> object which encodes an
+R-vine copula model. It contains the matrix identifying the R-vine tree
+structure, the matrix identifying the copula families utilized and two
+matrices for corresponding parameter values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">RVineMatrix(
+  Matrix,
+  family = array(0, dim = dim(Matrix)),
+  par = array(NA, dim = dim(Matrix)),
+  par2 = array(NA, dim = dim(Matrix)),
+  names = NULL,
+  check.pars = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Matrix</code></td>
+<td>
+<p>Lower (or upper) triangular d x d matrix that defines the
+R-vine tree structure.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>Lower (or upper) triangular d x d matrix with zero diagonal
+entries that assigns the pair-copula families to each (conditional) pair
+defined by <code>Matrix</code> (default: <code>family = array(0,dim=dim(Matrix))</code>).  The bivariate copula families are defined as
+follows:<br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula) <br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>7</code> = BB1 copula <br><code>8</code> = BB6 copula <br><code>9</code> = BB7 copula <br><code>10</code> = BB8 copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; <code style="white-space: pre;">⁠survival Joe'') \cr `17` = rotated BB1 copula (180 degrees; ⁠</code>survival BB1”)<br><code>18</code> = rotated BB6 copula (180 degrees; <code style="white-space: pre;">⁠survival BB6'')\cr `19` = rotated BB7 copula (180 degrees; ⁠</code>survival BB7”)<br><code>20</code> = rotated BB8 copula (180 degrees; “survival BB8”)<br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'27' = rotated BB1 copula (90 degrees) <br>
+'28' = rotated BB6 copula (90 degrees) <br>
+'29' = rotated BB7 copula (90 degrees) <br>
+'30' = rotated BB8 copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br>
+'37' = rotated BB1 copula (270 degrees) <br>
+'38' = rotated BB6 copula (270 degrees) <br>
+'39' = rotated BB7 copula (270 degrees) <br>
+'40' = rotated BB8 copula (270 degrees) <br>
+'104' = Tawn type 1 copula <br>
+'114' = rotated Tawn type 1 copula (180 degrees) <br>
+'124' = rotated Tawn type 1 copula (90 degrees) <br>
+'134' = rotated Tawn type 1 copula (270 degrees) <br>
+'204' = Tawn type 2 copula <br>
+'214' = rotated Tawn type 2 copula (180 degrees) <br>
+'224' = rotated Tawn type 2 copula (90 degrees) <br>
+'234' = rotated Tawn type 2 copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>Lower (or upper) triangular d x d matrix with zero diagonal
+entries that assigns the (first) pair-copula parameter to each (conditional)
+pair defined by <code>Matrix</code> <br> (default: <code>par = array(NA, dim = dim(Matrix))</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>Lower (or upper) triangular d x d matrix with zero diagonal
+entries that assigns the second parameter for pair-copula families with two
+parameters to each (conditional) pair defined by <code>Matrix</code> (default:
+<code>par2 = array(NA, dim = dim(Matrix))</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>names</code></td>
+<td>
+<p>A vector of names for the d variables; default: <code>names = NULL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.pars</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>; if <code>FALSE</code>, checks
+for family/parameter-consistency are omitted (should only be used with
+care).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An object of class <code>RVineMatrix()</code>, i.e., a list with the
+following components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>Matrix</code></td>
+<td>
+<p>R-vine tree structure matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>pair-copula family matrix with values as above.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>pair-copula parameter matrix.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>second pair-copula parameter matrix with parameters necessary for
+pair-copula families with two parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>names</code></td>
+<td>
+<p>variable names (defaults to <code style="white-space: pre;">⁠V1, V2, ...⁠</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>MaxMat, CondDistr</code></td>
+<td>
+<p>additional matrices required internally for
+evaluating the density etc.,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>the type of the vine copula structure; possible types are:
+<code>"C-vine"</code>: all trees consist of a star;
+<code>"D-vine"</code>: all trees consist of a path;
+<code>"R-vine"</code>: all structures that are neither a C- nor D-vine.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tau</code></td>
+<td>
+<p>Kendall's tau matrix,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>taildep</code></td>
+<td>
+<p>matrices of lower and upper tail dependence coefficients,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>beta</code></td>
+<td>
+<p>Blomqvist's beta matrix.</p>
+</td>
+</tr>
+</table>
+<p>Objects of this class are also returned by the <code>RVineSeqEst()</code>,
+<code>RVineCopSelect()</code>, and <code>RVineStructureSelect()</code>
+functions. In this case, further information about the fit is added.
+</p>
+
+
+<h3>Note</h3>
+
+<p>For a comprehensive summary of the vine copula model, use
+<code>summary(object)</code>; to see all its contents, use <code>str(object)</code>.<br>
+The <code>RVineMatrix()</code> function automatically checks if the given
+matrix is a valid R-vine matrix (see <code>RVineMatrixCheck()</code>). <br>
+Although the function allows upper triangular matrices as its input, it will
+always store them as lower triangular matrices.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jeffrey Dissmann, Thomas Nagler
+</p>
+
+
+<h3>References</h3>
+
+<p>Dissmann, J. F., E. C. Brechmann, C. Czado, and D. Kurowicka
+(2013). Selecting and estimating regular vine copulae and application to
+financial returns. Computational Statistics &amp; Data Analysis, 59 (1), 52-69.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RVineMatrixCheck()</code>,
+<code>RVineSeqEst()</code>,
+<code>RVineCopSelect()</code>,
+<code>RVineStructureSelect()</code>,
+<code>RVineSim()</code>,
+<code>C2RVine()</code>,
+<code>D2RVine()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# define 5-dimensional R-vine tree structure matrix
+Matrix &lt;- c(5, 2, 3, 1, 4,
+            0, 2, 3, 4, 1,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 1)
+Matrix &lt;- matrix(Matrix, 5, 5)
+# define R-vine pair-copula family matrix
+family &lt;- c(0, 1, 3, 4, 4,
+            0, 0, 3, 4, 1,
+            0, 0, 0, 4, 1,
+            0, 0, 0, 0, 3,
+            0, 0, 0, 0, 0)
+family &lt;- matrix(family, 5, 5)
+# define R-vine pair-copula parameter matrix
+par &lt;- c(0, 0.2, 0.9, 1.5, 3.9,
+         0, 0, 1.1, 1.6, 0.9,
+         0, 0, 0, 1.9, 0.5,
+         0, 0, 0, 0, 4.8,
+         0, 0, 0, 0, 0)
+par &lt;- matrix(par, 5, 5)
+# define second R-vine pair-copula parameter matrix
+par2 &lt;- matrix(0, 5, 5)
+
+## define RVineMatrix object
+RVM &lt;- RVineMatrix(Matrix = Matrix, family = family,
+                   par = par, par2 = par2,
+                   names = c("V1", "V2", "V3", "V4", "V5"))
+
+## see the object's content or a summary
+str(RVM)
+summary(RVM)
+
+## inspect the model using plots
+## Not run: plot(RVM)  # tree structure
+contour(RVM)  # contour plots of all pair-copulas
+
+## simulate from the vine copula model
+plot(RVineSim(500, RVM))
+
+</code></pre>
+
+
+</div>

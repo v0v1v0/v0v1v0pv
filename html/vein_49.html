@@ -1,0 +1,113 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>emis_chem</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>(in development, needs checks) Aggregate emissions by lumped groups in chemical mechanism</h2>
+
+<h3>Description</h3>
+
+<p><code>emis_chem</code> aggregates emissions by chemical mechanism
+and convert grams to mol. This function reads all hydrocarbos and respective
+criteria polluants specified in <code>ef_ldv_speed</code> and <code>ef_hdv_speed</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">emis_chem(dfe, mechanism, colby, long = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dfe</code></td>
+<td>
+<p>data.frame with column 'emissions' in grams and 'pollutant' in long format. It is supposed
+that each line is the pollution of some region. Then the 'coldby' argument is for include the
+name of the region.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mechanism</code></td>
+<td>
+<p>Character,
+"SAPRC", "RACM", "RADM2", "CBMZ", "MOZART", "SAPRC99", "CB05",
+"CB06CMAQ", "CB05CMAQ", "RACM2CMAQ", "SAPRC99CMAQ", "SAPRC07CMAQ",
+"SAPRC07A", "RADM2_SORG", "CBMZ_MOSAIC", "CPTEC",
+"GOCART_CPTEC", "MOZEM", "MOZCEM", "CAMMAM", "MOZMEM",
+"MOZC_T1_EM", "CB05_OPT1", "CB05_OPT2", "CRIMECH"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colby</code></td>
+<td>
+<p>Character indicating column name for aggregating extra column.
+For instance, region or province.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>long</code></td>
+<td>
+<p>Logical. Do you want data in long format?</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>data.frame with lumped groups by chemical mechanism. It transform
+emissions in grams to mol.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This feature is experimental and the mapping of pollutants and lumped
+species may change in future.
+This function is converting the intial data.frame input into data.table.
+To have a comprehensive speciation is necessary enter with a data.frame
+with colum 'emission' in long format including another column named 'pollutant' with
+species of NMHC, CO, NO, NO2, NH3, SO2, PM2.5 and coarse PM10.
+</p>
+<p>Groups derived from gases has units 'mol' and from aersols 'g'. The aersol
+units for WRF-Chem are ug/m^2/s while for CMAQ and CAMx are g/s. So,
+leaving the units just in g, allow to make further change while
+providing flexibility for several models.
+TODO: Enter with wide data.frame, with each line as a each street, each column for pollutant
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ef_ldv_speed</code> <code>ef_hdv_speed</code> <code>speciate</code> <code>ef_evap</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# CO
+df &lt;- data.frame(emission = Emissions(1:10))
+df$pollutant = "CO"
+emis_chem(dfe = df, "CBMZ_MOSAIC")
+# hexanal
+df$pollutant = "hexanal"
+emis_chem(df, "CBMZ_MOSAIC")
+# propadiene and NO2
+df2 &lt;- df1 &lt;- df
+df1$pollutant = "propadiene"
+df2$pollutant = "NO2"
+(dfe &lt;- rbind(df1, df2))
+emis_chem(dfe, "CBMZ_MOSAIC")
+dfe$region &lt;- rep(letters[1:2], 10)
+emis_chem(dfe, "CBMZ_MOSAIC", "region")
+emis_chem(dfe, "CBMZ_MOSAIC", "region", TRUE)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

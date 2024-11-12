@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>downloadPlaces</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Download Shapefile of Places</h2>
+
+<h3>Description</h3>
+
+<p>Download a shapefile of a geolocation from the Macrostrat API's implementation of the Who's on First database by MapZen.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">downloadPlaces(Place = "Wisconsin", Type = "region")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Place</code></td>
+<td>
+<p>A character string; the name of a place</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Type</code></td>
+<td>
+<p>A character string; a type of place</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Download a shapefile of a geolocation from the <a href="https://macrostrat.org">Macrostrat</a> API. The Macrostrat database provides a GeoJSON of a particular location given the location's <code>name</code> and <code>type</code>. Type can be of the categories: <code>"continent"</code>, <code>"country"</code>, <code>"region"</code>, <code>"county"</code>, and <code>"locality"</code>.
+</p>
+<p>If multiple locations of the same type share the same name (e.g., Alexandria), the route will return a feature collection of all matching polygons.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An rgdal compatible shapefile
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andrew A. Zaffos
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# Download a polygon of Dane County, Wisconsin, United States, North America
+# DaneCounty&lt;-downloadPlaces(Place="Dane",Type="county")
+
+# Download a polygon of Wisconsin, United States, North America
+# Wisconsin&lt;-downloadPlaces(Place="Wisconsin",Type="region")
+
+# Download a polygon of North America
+# NorthAmerica&lt;-downloadPlaces(Place="North America",Type="continent")
+
+</code></pre>
+
+
+</div>

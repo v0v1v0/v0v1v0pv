@@ -1,0 +1,113 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>meta.lc.prop.ps</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Confidence interval for a linear contrast of proportion differences in
+paired-samples studies</h2>
+
+<h3>Description</h3>
+
+<p>Computes the estimate, standard error, and adjusted Wald confidence interval
+for a linear contrast of paired-samples proportion differences from two or
+more studies.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">meta.lc.prop.ps(alpha, f11, f12, f21, f22, v)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>alpha level for 1-alpha confidence</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f11</code></td>
+<td>
+<p>vector of frequency counts in cell 1,1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f12</code></td>
+<td>
+<p>vector of frequency counts in cell 1,2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f21</code></td>
+<td>
+<p>vector of frequency counts in cell 2,1</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f22</code></td>
+<td>
+<p>vector of frequency counts in cell 2,2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>vector of contrast coefficients</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Returns 1-row matrix with the following columns:
+</p>
+
+<ul>
+<li>
+<p> Estimate - estimated linear contrast
+</p>
+</li>
+<li>
+<p> SE - standard error
+</p>
+</li>
+<li>
+<p> LL - lower limit of the adjusted Wald confidence interval
+</p>
+</li>
+<li>
+<p> UL - upper limit of the adjusted Wald confidence interval
+</p>
+</li>
+</ul>
+<h3>References</h3>
+
+<p>Bonett DG, Price RM (2014).
+“Meta-analysis methods for risk differences.”
+<em>British Journal of Mathematical and Statistical Psychology</em>, <b>67</b>(3), 371–387.
+ISSN 00071102, <a href="https://doi.org/10.1111/bmsp.12024">doi:10.1111/bmsp.12024</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">f11 &lt;- c(17, 28, 19)
+f12 &lt;- c(43, 56, 49)
+f21 &lt;- c(3, 5, 5)
+f22 &lt;- c(37, 54, 39)
+v &lt;- c(.5, .5, -1)
+meta.lc.prop.ps(.05, f11, f12, f21, f22, v)
+
+# Should return:
+#              Estimate         SE         LL       UL
+#  Contrast -0.01436285 0.06511285 -0.1419817 0.113256
+
+
+</code></pre>
+
+
+</div>

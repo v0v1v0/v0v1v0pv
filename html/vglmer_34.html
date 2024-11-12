@@ -1,0 +1,217 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sl_vglmer</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>SuperLearner with (Variational) Hierarchical Models</h2>
+
+<h3>Description</h3>
+
+<p>These functions integrate <code>vglmer</code> (or <code>glmer</code>) into
+<code>SuperLearner</code>. Most of the arguments are standard for
+<code>SuperLearner</code> functions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">SL.vglmer(
+  Y,
+  X,
+  newX,
+  formula,
+  family,
+  id,
+  obsWeights,
+  control = vglmer_control()
+)
+
+## S3 method for class 'SL.vglmer'
+predict(object, newdata, allow_missing_levels = TRUE, ...)
+
+SL.glmer(Y, X, newX, formula, family, id, obsWeights, control = NULL)
+
+## S3 method for class 'SL.glmer'
+predict(object, newdata, allow.new.levels = TRUE, ...)
+
+add_formula_SL(learner, env = parent.frame())
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>From <code>SuperLearner</code>: The outcome in the training data set.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>From <code>SuperLearner</code>: The predictor variables in the training
+data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newX</code></td>
+<td>
+<p>From <code>SuperLearner</code>: The predictor variables in validation
+data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>The formula used for estimation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>From <code>SuperLearner</code>: Currently allows <code>gaussian</code> or
+<code>binomial</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>From <code>SuperLearner</code>: Optional cluster identification variable.
+See <code>SuperLearner</code> for more details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obsWeights</code></td>
+<td>
+<p>From <code>SuperLearner</code>: Weights for each observation. Not
+permitted for <code>SL.vglmer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>Control object for estimating <code>vglmer</code> (e.g.,
+vglmer_control) or <code>[g]lmer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Used in <code>predict</code> for <code>SL.glmer</code> and
+<code>SL.vglmer</code>. A model estimated using either <code>SL.vglmer</code> or
+<code>SL.glmer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>Dataset to use for predictions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allow_missing_levels</code></td>
+<td>
+<p>Default (<code>TRUE</code>) allows prediction for
+levels not observed in the estimation data; the value of <code>0</code> (with no
+uncertainty) is used for the corresponding random effect. <b>Note:</b> This
+default differs from <code>predict.vglmer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used; included to maintain compatibility with existing
+methods.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allow.new.levels</code></td>
+<td>
+<p>From <code>lme4</code>: Allow levels in prediction that are
+not in the training data. Default is <code>TRUE</code> for <code>SuperLearner</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>learner</code></td>
+<td>
+<p>Character name of model from <code>SuperLearner</code>. See
+"Details" for how this is used.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>env</code></td>
+<td>
+<p>Environment to assign model. See "Details" for how this is used.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This documentation describes two types of function. 
+</p>
+<p><b>Estimating Hierarchical Models in SuperLearner</b>: Two methods for
+estimating hierarchical models are provided one for variational methods
+(<code>SL.vglmer</code>) and one for non-variational methods (<code>SL.glmer</code>).
+The accompanying prediction functions are also provided.
+</p>
+<p><b>Formula with SuperLearner</b>: The <code>vglmer</code> package provides a way
+to estimate models that require or use a formula with <code>SuperLearner</code>.
+This allows for a design to be passed that contains variables that are
+<em>not</em> used in estimation. This can be used as follows (see
+"Examples"). One calls the function <code>add_formula_SL</code> around the quoted
+name of a <code>SuperLearner</code> model, e.g. <code>add_formula_SL(learner =
+  "SL.knn")</code>. This creates a new model and predict function with the suffix
+<code>"_f"</code>. This <b>requires</b> a formula to be provided for estimation.
+</p>
+<p>With this in hand, <code>"SL.knn_f"</code> can be passed to <code>SuperLearner</code> with the
+accompanying formula argument and thus one can compare models with
+different formula or design on the same ensemble. The <code>env</code> argument
+may need to be manually specified to ensure the created functions can be
+called by <code>SuperLearner</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The functions here return different types of output. <code>SL.vglmer</code>
+and <code>SL.glmer</code> return fitted models with the in-sample predictions as
+standard for <code>SuperLearner</code>. The <code>predict</code> methods return vectors
+of predicted values. <code>add_formula_SL</code> creates two objects in the
+environment (one for estimation <code>model_f</code> and one for prediction
+<code>predict.model_f</code>) used for <code>SuperLearner</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+set.seed(456)
+
+if (requireNamespace('SuperLearner', quietly = TRUE)){
+require(SuperLearner)
+sim_data &lt;- data.frame(
+  x = rnorm(100),
+  g = sample(letters, 100, replace = TRUE)
+)
+sim_data$y &lt;- rbinom(nrow(sim_data), 
+  1, plogis(runif(26)[match(sim_data$g, letters)]))
+sim_data$g &lt;- factor(sim_data$g)
+sl_vglmer &lt;- function(...){SL.vglmer(..., formula = y ~ x + (1 | g))}
+SL.glm &lt;- SuperLearner::SL.glm
+add_formula_SL('SL.glm')
+sl_glm_form &lt;- function(...){SL.glm_f(..., formula = ~ x)}
+
+   SuperLearner::SuperLearner(
+     Y = sim_data$y, family = 'binomial',
+     X = sim_data[, c('x', 'g')],
+     cvControl = list(V = 2),
+     SL.library = c('sl_vglmer', 'sl_glm_form')
+   )
+
+}
+</code></pre>
+
+
+</div>

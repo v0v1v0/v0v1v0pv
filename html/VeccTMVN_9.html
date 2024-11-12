@@ -1,0 +1,143 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pmvt</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute multivariate Student-t (MVT) probabilities that have spatial covariance
+matrices using Vecchia approximation</h2>
+
+<h3>Description</h3>
+
+<p>Compute multivariate Student-t (MVT) probabilities that have spatial covariance
+matrices using Vecchia approximation
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">pmvt(
+  lower,
+  upper,
+  delta,
+  df,
+  locs = NULL,
+  covName = "matern15_isotropic",
+  covParms = c(1, 0.1, 0),
+  m = 30,
+  sigma = NULL,
+  reorder = 0,
+  NLevel1 = 12,
+  NLevel2 = 10000,
+  verbose = FALSE,
+  retlog = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lower</code></td>
+<td>
+<p>lower bound vector for TMVT</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>upper</code></td>
+<td>
+<p>upper bound vector for TMVT</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>MVT shifting parameter</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>degrees of freedom</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>locs</code></td>
+<td>
+<p>location (feature) matrix n X d</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>covName</code></td>
+<td>
+<p>covariance function name from the 'GpGp' package</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>covParms</code></td>
+<td>
+<p>parameters for 'covName'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>m</code></td>
+<td>
+<p>Vecchia conditioning set size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma</code></td>
+<td>
+<p>dense covariance matrix, not needed when 'locs' is not null</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>reorder</code></td>
+<td>
+<p>whether to reorder integration variables. '0' for no,
+'1' for FIC-based univariate ordering, '2' for Vecchia-based univariate
+ordering, and '3' for the reordering implemented in TruncatedNormal, 
+which appeared faster than '2'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NLevel1</code></td>
+<td>
+<p>first level Monte Carlo sample size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NLevel2</code></td>
+<td>
+<p>second level Monte Carlo sample size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>verbose or not</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>retlog</code></td>
+<td>
+<p>TRUE or FALSE for whether to return loglk or not</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>could be
+m_ord for conditioning set size for reordering</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>estimated MVT probability and estimation error
+</p>
+
+
+</div>

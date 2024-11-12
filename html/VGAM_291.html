@@ -1,0 +1,126 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dAR1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The AR-1 Autoregressive Process</h2>
+
+<h3>Description</h3>
+
+<p>Density for the AR-1 model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dAR1(x, drift = 0, var.error = 1, ARcoef1 = 0.0,
+     type.likelihood = c("exact", "conditional"), log = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x,</code></td>
+<td>
+<p>vector of quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drift</code></td>
+<td>
+
+<p>the scaled mean (also known as the <em>drift</em> parameter),
+<code class="reqn">\mu^*</code>.
+Note that the mean is <code class="reqn">\mu^* /(1-\rho)</code>.
+The default corresponds to observations that have mean 0.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical.
+If <code>TRUE</code> then the logarithm of the density is returned.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type.likelihood, var.error, ARcoef1</code></td>
+<td>
+
+<p>See <code>AR1</code>.
+The argument <code>ARcoef1</code> is <code class="reqn">\rho</code>.
+The argument <code>var.error</code> is the variance of  the
+i.i.d. random noise, i.e., <code class="reqn">\sigma^2</code>.
+If <code>type.likelihood = "conditional"</code> then the
+first element or row of the result is currently
+assigned <code>NA</code>—this
+is because the density of the first observation is effectively
+ignored.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Most of the background to this function is given
+in <code>AR1</code>.
+All the arguments are converted into matrices, and then
+all their dimensions are obtained. They are then coerced
+into the same size: the number of rows is the maximum
+of all the single rows, and ditto for the number of columns.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dAR1</code> gives the density.
+</p>
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee and Victor Miranda </p>
+
+
+<h3>See Also</h3>
+
+<p><code>AR1</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+nn &lt;- 100; set.seed(1)
+tdata &lt;- data.frame(index = 1:nn,
+                    TS1 = arima.sim(nn, model = list(ar = -0.50),
+                                    sd = exp(1)))
+fit1 &lt;- vglm(TS1 ~ 1, AR1, data = tdata, trace = TRUE)
+rhobitlink(-0.5)
+coef(fit1, matrix = TRUE)
+(Cfit1 &lt;- Coef(fit1))
+summary(fit1)  # SEs are useful to know
+logLik(fit1)
+sum(dAR1(depvar(fit1), drift = Cfit1[1], var.error = (Cfit1[2])^2,
+         ARcoef1 = Cfit1[3], log = TRUE))
+
+fit2 &lt;- vglm(TS1 ~ 1, AR1(type.likelihood = "cond"), data = tdata, trace = TRUE)
+(Cfit2 &lt;- Coef(fit2))  # Okay for intercept-only models
+logLik(fit2)
+head(keep &lt;- dAR1(depvar(fit2), drift = Cfit2[1], var.error = (Cfit2[2])^2,
+                  ARcoef1 = Cfit2[3], type.likelihood = "cond", log = TRUE))
+sum(keep[-1])
+
+## End(Not run)
+</code></pre>
+
+
+</div>

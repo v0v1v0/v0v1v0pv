@@ -1,0 +1,176 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>normal1sdQlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Link functions for the quantiles of several 1–parameter continuous
+distributions.
+</h2>
+
+<h3>Description</h3>
+
+<p>Computes the <code>normal1sdQlink</code> transformation for the Univariate
+Normal Distribution, its inverse and the first two derivatives.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">   normal1sdQlink(theta,  mean = stop("Please, enter the fixed 'mean'."),
+                  p = stop(" Please, enter argument 'p'."),
+                  bvalue = NULL, inverse = FALSE, deriv = 0,
+                  short = TRUE, tag = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character. 
+This is <code class="reqn">\theta</code> by default although it could be <code class="reqn">\eta</code>
+depending upon other arguments. See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean</code></td>
+<td>
+
+<p>A numeric vector or a matrix. It is the (known) fixed mean of the 
+Normal distribution of interest. See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+
+<p>Numeric vector of <code class="reqn">p</code>–quantiles to be modelled by this link
+function.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue, inverse, deriv, short, tag</code></td>
+<td>
+
+<p>Details at <code>Links</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This link function is necessarily required by 
+<code>normal1sd</code> if quantile regression 
+is to be performed. It computes the <code>normal1sdQlink</code> 
+transformation, defined as
+
+</p>
+<p style="text-align: center;"><code class="reqn"> {\tt{mean}} + \sqrt{2}\sigma \cdot 
+            {\tt{erf^{-1}}}(2 {\tt{p}} - 1).</code>
+</p>
+
+
+<p>Here, <code class="reqn">{\tt{erf^{-1}}}</code> denotes the inverse 
+of the error function <code>erf</code>, and 
+<code class="reqn">\sigma</code> is the standard deviation (<code>theta</code>) as in
+<code>normal1sd</code>.
+Technically, <code>normal1sdQlink</code> can be used for quantile regression
+over any vector of <code class="reqn">p</code>–quantiles of Normally distributed data
+with <em>known</em> mean.
+</p>
+<p>See <code>normal1sd</code> for further details 
+about the latter.
+
+
+
+</p>
+<p>Values of <code class="reqn">p</code> out of the open interval <code class="reqn">(0, 1)</code> or non–positive
+values of <code>theta</code> will result in <code>Inf</code>, <code>-Inf</code>,
+<code>NA</code> or <code>NaN</code>. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>When <code>deriv = 0</code>, the <code>normal1sdQlink</code> transformation
+of <code>theta</code>, if <code>inverse = FALSE</code>. Conversely, if
+<code>inverse = TRUE</code>, <code>theta</code> becomes <code class="reqn">\eta</code> and
+the inverse transformation given by 
+<code>(theta -  mean)/</code><code class="reqn">\sqrt{2}</code>
+<code>erf</code><code class="reqn">^{-1}</code><code class="reqn">(2</code><code>p</code><code class="reqn"> - 1)</code>
+is returned.
+</p>
+<p>For <code>deriv = 1</code>, <code class="reqn">d</code> <code>eta</code> / <code class="reqn">d</code> <code>theta</code>
+if <code>inverse = FALSE</code>. Else, this function returns  
+<code class="reqn">d</code> <code>theta</code> / <code class="reqn">d</code> <code>eta</code> as a function of <code>theta</code>.
+</p>
+<p>For <code>deriv = 2</code>, the second order derivatives are accordingly
+returned.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>If <code>p</code> is a vector, then the recycling rule applies <em>only</em> 
+if <code>theta</code> is entered as a matrix. Else, only the first entry in 
+<code>p</code> is considered.
+</p>
+
+
+<h3>Note</h3>
+
+<p>When <code>inverse = TRUE</code>, the reciprocal of the error function,
+<code>erf</code>, evaluated at <code class="reqn">2</code><code>p</code><code class="reqn">- 1</code> 
+is required. However, the result is <code>Inf</code> for <code>p</code><code class="reqn">= 0.5</code>. 
+Here, in consequence, the limit of <code>erf</code> when
+<code>p</code> tends to <code class="reqn">0.5</code> is returned to avoid numerical issues.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>normal1sd</code>,
+<code>erf</code>,
+<code>Links</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    ###   Example 1  ###
+    theta &lt;- seq(0, 3, by = 0.1)[-1]  # This is sigma, then must be positive.
+    mean  &lt;- -2.5                     # Intentionally, a negative value for mu.
+    p     &lt;- 0.25                     # Modelling the first quartile.
+    
+    eta &lt;- normal1sdQlink(theta = theta, p = p, mean = mean) 
+    inv.eta &lt;- normal1sdQlink(theta = eta, p = p, mean = mean, inverse = TRUE)
+    summary(inv.eta - theta)          ## Should be 0
+
+    
+    ###  Example 2. Special values of theta, using argument 'bvalue'.  ###
+    
+    theta &lt;- c(-Inf, -5, -2.5, 0, 2.5, 5, Inf, NA, NaN)
+    my.matrix &lt;- rbind(theta, normal1sdQlink(theta = theta, p = p, mean = mean),
+                     normal1sdQlink(theta = theta, p = p, mean = mean, bvalue = 1e-5))
+    rownames(my.matrix) &lt;- c("theta", "No 'bvalue'", "With 'bvalue'")
+    colnames(my.matrix) &lt;- rep("", 9)
+    
+    my.matrix   # Second row has NAs, whilst third row has NO NAs except for theta = NA
+</code></pre>
+
+
+</div>

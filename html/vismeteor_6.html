@@ -1,0 +1,63 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>freq.quantile</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Quantiles with a minimum frequency</h2>
+
+<h3>Description</h3>
+
+<p>This function generates quantiles with a minimum frequency.
+These quantiles are formed from a vector <code>freq</code> of frequencies.
+Each quantile then has the minimum total frequency <code>min</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">freq.quantile(freq, min)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>freq</code></td>
+<td>
+<p>integer; A vector of frequencies.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min</code></td>
+<td>
+<p>integer; Minimum total frequency per quantile.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The frequencies <code>freq</code> are grouped in the order in which they
+are passed as a vector.
+The minimum <code>min</code> must be greater than <code>0</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A factor of indices is returned.
+The index references the corresponding passed frequency <code>freq</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">freq &lt;- c(1,2,3,4,5,6,7,8,9)
+cumsum(freq)
+(f &lt;- freq.quantile(freq, 10))
+tapply(freq, f, sum)
+</code></pre>
+
+
+</div>

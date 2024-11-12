@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Chen.Deo</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Power Transformed Joint Variance Ratio Test </h2>
+
+<h3>Description</h3>
+
+<p>See equation (15) of Chen and Deo (2006)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Chen.Deo(x, kvec)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p> a vector of time series, typically  financial return </p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kvec</code></td>
+<td>
+<p> a vector of holding periods</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Holding.Period </code></td>
+<td>
+<p>holding periods used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VRsum </code></td>
+<td>
+<p> the sum of (power transformed individual VR - 1)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>QPn </code></td>
+<td>
+<p>QPn statistic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ChiSQ.Quantiles_1_2_5_10_20_percent</code></td>
+<td>
+<p>Chi-square critical values</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p> Jae H. Kim </p>
+
+
+<h3>References</h3>
+
+<p> Chen, W. W., and Deo, R.S., 2006, The Variance Ratio Statistic at Large Horizons, Econometric Theory, 22, 206-234.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(exrates)
+y &lt;- exrates$ca                         
+nob &lt;- length(y)
+r &lt;- log(y[2:nob])-log(y[1:(nob-1)])    
+kvec &lt;- c(2,5,10)
+Chen.Deo(r,kvec)
+</code></pre>
+
+
+</div>

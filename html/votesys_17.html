@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plurality_method</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plurality Method to Find Absolute or Relative Majority</h2>
+
+<h3>Description</h3>
+
+<p>Although with plurality method each voter is required to mention 
+only one candidate, a ballot with more than one candidate and 
+different scores is also valid. For a score matrix, the function will 
+check the position j which has the lowest score (in a <code>vote</code> object, 
+the lower, the better) in the ith row. Duplicated values may or may 
+not be a problem. For instance, <code>c(2, 3, 3)</code> is valid, for the 
+lowest value is 2 and it is in the 1st position. However, 
+<code>c(2, 2, 3)</code> is a problem, for the 1st and 2nd positions 
+all have the lowest value 2. If this problem exists, the winner 
+returned by this function will be NULL.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plurality_method(x, allow_dup = TRUE, min_valid = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>an object of class <code>vote</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>allow_dup</code></td>
+<td>
+<p>whether ballots with duplicated score values 
+are taken into account. Default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min_valid</code></td>
+<td>
+<p>default is 1. If the number of valid entries of 
+a ballot is less than this value, the ballot will not be used.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list object.
+</p>
+
+<ul>
+<li>
+<p> (1) <code>call</code> the function call.
+</p>
+</li>
+<li>
+<p> (2) <code>method</code> the counting method.
+</p>
+</li>
+<li>
+<p> (3) <code>candidate</code> candidate names.
+</p>
+</li>
+<li>
+<p> (4) <code>candidate_num</code> number of candidate.
+</p>
+</li>
+<li>
+<p> (5) <code>ballot_num</code> number of ballots in x.
+</p>
+</li>
+<li>
+<p> (6) <code>valid_ballot_num</code> number of ballots that are 
+used to compute the result.
+</p>
+</li>
+<li>
+<p> (7) <code>winner</code> the winners, may be one, more than one or NULL.
+</p>
+</li>
+<li>
+<p> (8) <code>absolute</code> whether the winner is of absolute majority.
+</p>
+</li>
+<li>
+<p> (9) <code>other_info</code> a list with 2 elements, the 1st is the 
+frequencies of candidates mentioned as 1st choice; the second element is 
+the percentage. If winner is NULL, these two are NULL.
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">raw &lt;- rbind(
+    c(1, 2, 5, 3, 3), c(1, 2, 5, 3, 4), c(1, 2, 5, 3, 4), 
+    c(NA, NA, NA, NA, NA), c(NA, 3, 5, 1, 2), 
+    c(NA, NA, NA, 2, 3), c(NA, NA, 1, 2, 3), 
+    c(NA, NA, NA, NA, 2), c(NA, NA, NA, 2, 2), 
+    c(NA, NA, 1, 1, 2), c(1, 1, 5, 5, NA)
+)
+vote &lt;- create_vote(raw, xtype = 1)
+y &lt;- plurality_method(vote, allow_dup = FALSE)
+y &lt;- plurality_method(vote, allow_dup=FALSE, min_valid = 3)
+</code></pre>
+
+
+</div>

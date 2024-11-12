@@ -1,0 +1,173 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>searchVarReg</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Searches for best semi parametric mean and variance regression model</h2>
+
+<h3>Description</h3>
+
+<p><code>searchVarReg</code> performs multiple semi-parametric mean and variance regression models for a covariate of interest, in order to search for the optimal number of knots. The best model is chosen based on the information criterion of preference (<code>"selection"</code>). At the moment, this is only designed for a single covariate that is fit in both the mean and variance models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">searchVarReg(
+  y,
+  x,
+  cens.ind = NULL,
+  maxknots.m = 3,
+  maxknots.v = 3,
+  degree = 2,
+  mono.var = c("none", "inc", "dec"),
+  selection = c("AIC", "AICc", "HQC", "BIC"),
+  print.it = FALSE,
+  control = list(...),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Vector containing outcome data. Must be no missing data and any censored values must
+be set to the limits of detection.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Vector containing the covariate data. Must be no missing data and same length as <code>y</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cens.ind</code></td>
+<td>
+<p>Vector containing the censoring indicator, if applicable. There must be no missing
+data contained in the vector and this vector should be the same length as <code>y</code>.
+<code>"0"</code> values indicate uncensored data, <code>"1"</code> indicates right, or upper, censoring and
+<code>"-1"</code> indicates left, or lower, censoring. The default is <code>NULL</code> which indicates there
+is no censored data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxknots.m</code></td>
+<td>
+<p>Integer indicating the maximum number of internal knots to be fit in the mean model. Default is <code>3</code>. (Note that the knots are placed equidistantly over x.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxknots.v</code></td>
+<td>
+<p>Integer indicating the maximum number of internal knots to be fit in the variance model. Default is <code>3</code>. (Note that the knots are placed equidistantly over x.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>degree</code></td>
+<td>
+<p>The degree of the splines fit in the mean and variance. Default is <code>2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mono.var</code></td>
+<td>
+<p>Text to indicate whether the variance model is monotonic (only applied to 'linear' or
+semi-parametric variance models). Default is "<code>none</code>" (no monotonic constraints). Options are
+"<code>inc</code>" for increasing or "<code>dec</code>" for decreasing. If the variance model is linear, the
+parameter space is constrained (positive for increasing and negative for decreasing). For
+semi-parametric variance models, the appropriate monotonic B splines are fit in the
+semi-parametric variance model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selection</code></td>
+<td>
+<p>Text to indicate which information criteria is to be used for the selection of the
+best model. Choices are "<code>AIC</code>", "<code>AICc</code>", "<code>BIC</code>" and "<code>HQC</code>".
+Default is "<code>AIC</code>".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>print.it</code></td>
+<td>
+<p>Logical to indicate whether to print progress from each model as the models are
+performed. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>control</code></td>
+<td>
+<p>list of control parameters. See <code>VarReg.control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be used to form the default control argument if it is not supplied
+directly</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>A matrix of models are performed, of increasing complexity. Mean models start at a zero mean
+model, then constant mean, linear, 0 internal knots, etc, up to a maximum internal knots as specified
+in <code>maxknots.m</code>. Variance models start at constant variance, linear variance, 0 internal knots,
+etc, up to max internal knots as specified in <code>maxknots.v</code>.
+</p>
+<p>Note that this function can take some time to run, due to the number of models to be fit.
+A window will appear on windows based systems to show a progress bar for the function.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>searchVarReg</code> returns an list, with the following components:
+</p>
+
+<ul>
+<li> <p><code>ll</code>: a dataframe of the log-likelihoods from each of the models that have been fit.
+</p>
+</li>
+<li> <p><code>AIC</code>: a dataframe of the AIC from each of the models that have been fit. The parameters
+fit in the mean model are given in the columns, and the parameters in the variance are given
+in the rows.
+</p>
+</li>
+<li> <p><code>AICc</code>: a dataframe of the AIC-c from each of the models that have been fit.
+</p>
+</li>
+<li> <p><code>BIC</code>: a dataframe of the BIC from each of the models that have been fit.
+</p>
+</li>
+<li> <p><code>HQC</code>: a dataframe of the HQC from each of the models that have been fit.
+</p>
+</li>
+<li> <p><code>best.model</code>: an object of class <code>VarReg</code> (see <code>semiVarReg</code>)
+containing the output from the optimal model (that model within the specified models in
+the mean and variance with the lowest information criterion according to the criterion selected).
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><code>semiVarReg</code>, <code>VarReg.control</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(mcycle)
+### not run
+### find&lt;-searchVarReg(mcycle$accel, mcycle$times, maxknots.v=3, maxknots.m=3,
+### selection="HQC", maxit=10000)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,153 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>viralx_mars_vis</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualize SHAP Values for Multivariate Adaptive Regression Splines Model</h2>
+
+<h3>Description</h3>
+
+<p>Visualizes SHAP (Shapley Additive Explanations) values for a MARS
+(Multivariate Adaptive Regression Splines) model by employing the DALEXtra
+and DALEX packages to provide visual insights into the impact of a specified
+variable on the model's predictions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">viralx_mars_vis(
+  vip_featured,
+  hiv_data,
+  nt,
+  pd,
+  pru,
+  vip_train,
+  vip_new,
+  orderings
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>vip_featured</code></td>
+<td>
+<p>A character value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hiv_data</code></td>
+<td>
+<p>A data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nt</code></td>
+<td>
+<p>A numeric value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pd</code></td>
+<td>
+<p>A numeric value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pru</code></td>
+<td>
+<p>A character value</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vip_train</code></td>
+<td>
+<p>A data frame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vip_new</code></td>
+<td>
+<p>A numeric vector</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>orderings</code></td>
+<td>
+<p>A numeric value</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A ggplot object
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(dplyr)
+library(rsample)
+library(Formula)
+library(plotmo)
+library(plotrix)
+library(TeachingDemos)
+cd_2019 &lt;- c(824, 169, 342, 423, 441, 507, 559,
+             173, 764, 780, 244, 527, 417, 800,
+             602, 494, 345, 780, 780, 527, 556,
+             559, 238, 288, 244, 353, 169, 556,
+             824, 169, 342, 423, 441, 507, 559)
+vl_2019 &lt;- c(40, 11388, 38961, 40, 75, 4095, 103,
+             11388, 46, 103, 11388, 40, 0, 11388,
+             0,   4095,   40,  93,  49,  49,  49,
+             4095,  6837, 38961, 38961, 0, 0, 93,
+             40, 11388, 38961, 40, 75, 4095, 103)
+cd_2021 &lt;- c(992, 275, 331, 454, 479, 553,  496,
+             230, 605, 432, 170, 670, 238,  238,
+             634, 422, 429, 513, 327, 465,  479,
+             661, 382, 364, 109, 398, 209, 1960,
+             992, 275, 331, 454, 479, 553,  496)
+vl_2021 &lt;- c(80, 1690,  5113,  71,  289,  3063,  0,
+             262,  0,  15089,  13016, 1513, 60, 60,
+             49248, 159308, 56, 0, 516675, 49, 237,
+             84,  292,  414, 26176,  62,  126,  93,
+             80, 1690, 5113,    71, 289, 3063,   0)
+cd_2022 &lt;- c(700, 127, 127, 547, 547, 547, 777,
+             149, 628, 614, 253, 918, 326, 326,
+             574, 361, 253, 726, 659, 596, 427,
+             447, 326, 253, 248, 326, 260, 918,
+             700, 127, 127, 547, 547, 547, 777)
+vl_2022 &lt;- c(0,   0,   53250,   0,   40,   1901, 0,
+             955,    0,    0,    0,   0,   40,   0,
+             49248, 159308, 56, 0, 516675, 49, 237,
+             0,    23601,   0,   40,   0,   0,   0,
+             0,    0,     0,     0,    0,    0,  0)
+x &lt;- cbind(cd_2019, vl_2019, cd_2021, vl_2021, cd_2022, vl_2022) |&gt;
+as.data.frame()
+set.seed(123)
+hi_data &lt;- rsample::initial_split(x)
+set.seed(123)
+hiv_data &lt;- hi_data |&gt;
+rsample::training()
+nt &lt;- 3
+pd &lt;- 1
+pru &lt;- "none"
+vip_featured &lt;- c("cd_2022")
+vip_features &lt;- c("cd_2019", "vl_2019", "cd_2021", "vl_2021", "vl_2022")
+set.seed(123)
+vi_train &lt;- rsample::initial_split(x)
+set.seed(123)
+vip_train &lt;- vi_train |&gt;
+rsample::training() |&gt;
+dplyr::select(rsample::all_of(vip_features))
+vip_new &lt;- vip_train[1,]
+orderings &lt;- 20
+viralx_mars_vis(vip_featured, hiv_data, nt, pd, pru, vip_train, vip_new, orderings)
+</code></pre>
+
+
+</div>

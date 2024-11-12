@@ -1,0 +1,180 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vs.test</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vasicek-Song goodness-of-fit test for various distributions</h2>
+
+<h3>Description</h3>
+
+<p>Performs Vasicek-Song goodness-of-fit test to the specified distribution family.
+
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vs.test(x, densfun, param = NULL, 
+        simulate.p.value = NULL, B = 5000,
+        delta = NULL, extend = FALSE, relax = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>(<code>numeric, vector</code>) the numeric sample.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>densfun</code></td>
+<td>
+<p>A character string specifying the fitted distribution. Possible values are <code>"dunif"</code>, <code>"dnorm"</code>, <code>"dlnorm"</code>, <code>"dexp"</code>, <code>"dgamma"</code>, <code>"dweibull"</code>, <code>"dpareto"</code>, <code>"df"</code>, <code>"dlaplace"</code> and <code>"dbeta"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>param</code></td>
+<td>
+<p>(<code>numeric, vector</code>) specifies the parameter(s) of the fitted distribution. If <code>NULL</code> (default), a GOF test to the parametric family of distributions specified by densfun is performed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>simulate.p.value</code></td>
+<td>
+<p>(<code>logical, single value</code>) if <code>TRUE</code>, the p-value of the sample is estimated by means of Monte Carlo methods. If <code>NULL</code> (the default), the p-value is simulated if the sample size is smaller than 80; otherwise, an asymptotic p-value is computed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>B</code></td>
+<td>
+<p>(<code>numeric, single value</code>) a numeric value specifying the number of simulations to perform in Monte-Carlo estimation of the p-value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>(<code>numeric, single value</code>) a numeric value smaller than <code class="reqn">1/3</code> specifying the upper bound <code class="reqn">n^{1/3}-\delta</code> for window size, where <code class="reqn">n</code> is the sample size. The default depends on <code>densfun</code>; see Vignettes for details.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>extend</code></td>
+<td>
+<p>(<code>logical, single value</code>). If <code>FALSE</code> (the default), the bound  for the window is <code class="reqn">n^{1/3}-\delta</code>; if <code>TRUE</code>, the bound is <code class="reqn">n/2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>relax</code></td>
+<td>
+<p>(<code>logical, single value</code>) avoids the constraint <code class="reqn">V_{mn} \leq -\frac{1}{n} \sum_{i=1}^n \log p_0(X_i, \widehat{\theta}_n)</code> when computing the optimal window; see details. Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The test statistic is 
+</p>
+<p style="text-align: center;"><code class="reqn">I_{mn}=-V_{mn}-\frac{1}{n}\sum_{i=1}^{n}\log p_{0}(X_{i},\theta),</code>
+</p>
+
+<p>where <code class="reqn">V_{mn}</code> is the Vasicek estimator of Shannon entropy computed from the numeric sample <code>x</code> with window size <code class="reqn">m</code> and <code class="reqn">p_{0}(x,\theta)</code> is the density function of the specified distribution <code>densfun</code> to be tested, with <code class="reqn">\theta</code> the parameter of the null for a simple hypothesis or its maximum likelihood estimate for a composite null hypothesis (<code>param=NULL</code>); See Song (2002), Girardin and Lequesne (2017) and Lequesne and Regnault (2018). 
+</p>
+<p>An optimal window size <code class="reqn">m</code> is automatically computed; see Song (2002).
+</p>
+<p>An  exact p-value is computed if the sample size is less than 100. Otherwise, asymptotic distribution is used whose approximation may be inaccurate for small samples; see Lequesne and Regnault (2018).
+</p>
+
+
+<h3>Value</h3>
+
+<p> A list with class "htest" containing the following components:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>observed</code></td>
+<td>
+<p>The sample under study.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data.name</code></td>
+<td>
+<p>The name (as an R object) of the sample.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>null.value</code></td>
+<td>
+<p>A character string specifying the name of the fitted distribution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>The character string <code>"Vasicek GOF test to"</code> followed by the name of the fitted distribution.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>statistic</code></td>
+<td>
+<p>Vasicek test statistic; see Details below.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parameter</code></td>
+<td>
+<p>The optimal window for Vasicek test statistic</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>estimate</code></td>
+<td>
+<p>Parameter(s) of the fitted distribution. If <code>param</code> is <code>NULL</code>, parameters are estimated. If <code>param</code> is suitably filled out by the user, it is returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value</code></td>
+<td>
+<p>The p-value of the test.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>J. Lequesne <a href="mailto:justine.lequesne@unicaen.fr">justine.lequesne@unicaen.fr</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Vasicek, O., A test for normality based on sample entropy, <em>Journal of the Royal Statistical Society,</em> <b>38(1)</b>, 54-59 (1976).
+</p>
+<p>Song, K. S., Goodness-of-fit tests based on Kullback-Leibler discrimination information, <em>Information Theory, IEEE Transactions on,</em> <b>48(5)</b>, 1103-1117 (2002).
+</p>
+<p>Girardin, V., Lequesne, J. Entropy-based goodness-of-fit tests - a unifying framework. Application to DNA replication. <em>Communications in Statistics: Theory and Methods</em> (2017). https://doi.org/10.1080/03610926.2017.1401084
+</p>
+<p>Lequesne, J., Regnault, P. vsgoftest: An R Package for Goodness-of-Fit Testing Based on Kullback-Leibler Divergence. <em>Journal of Statistical Software</em>, <b>96</b> (2020).  doi:10.18637/jss.v096.c01 
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>entropy.estimate</code> which computes the Vasicek estimator of Shannon entropy.</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(1)
+samp &lt;- rnorm(50,2,3)
+vs.test(x = samp, densfun = 'dnorm', param = c(2,3), B = 500) #Simple null hypothesis
+vs.test(x = samp, densfun='dnorm', B = 500) #Composite null hypothesis
+## Using asymptotic distribution to compute the p-value
+vs.test(x = samp, densfun='dnorm', simulate.p.value = FALSE) #Composite null hypothesis
+
+</code></pre>
+
+
+</div>

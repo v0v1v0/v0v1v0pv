@@ -1,0 +1,155 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>TFCE_vertex_analysis</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Vertex-wise analysis with threshold-free cluster enhancement (fixed effect)</h2>
+
+<h3>Description</h3>
+
+<p>Fits a linear model with the cortical or hippocampal surface data as the predicted outcome, and returns t-stat and threshold-free cluster enhancement (TFCE) statistical maps for the selected contrast.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">TFCE_vertex_analysis(
+  model,
+  contrast,
+  formula,
+  formula_dataset,
+  surf_data,
+  nperm = 100,
+  tail = 2,
+  nthread = 10,
+  smooth_FWHM,
+  VWR_check = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>model</code></td>
+<td>
+<p>An N X P data.frame object containing N rows for each subject and P columns for each predictor included in the model</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>contrast</code></td>
+<td>
+<p>A N x 1 numeric vector or object containing the values of the predictor of interest. Its length should equal the number of subjects in model (and can be a single column from model). The t-stat and TFCE maps will be estimated only for this predictor.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula</code></td>
+<td>
+<p>An optional string or formula object describing the predictors to be fitted against the surface data, replacing the model, contrast, or random arguments. If this argument is used, the formula_dataset argument must also be provided.
+</p>
+
+<ul>
+<li>
+<p> The dependent variable is not needed, as it will always be the surface data values.
+</p>
+</li>
+<li>
+<p> The first independent variable in the formula will always be interpreted as the contrast of interest for which to estimate cluster-thresholded t-stat maps.
+</p>
+</li>
+<li>
+<p> Only one random regressor can be given and must be indicated as '(1|variable_name)'.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>formula_dataset</code></td>
+<td>
+<p>An optional data.frame object containing the independent variables to be used with the formula (the IV names in the formula must match their column names in the dataset).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>surf_data</code></td>
+<td>
+<p>A N x V matrix object containing the surface data (N row for each subject, V for each vertex), in fsaverage5 (20484 vertices), fsaverage6 (81924 vertices), fslr32k (64984 vertices) or hippocampal (14524 vertices) space. See also Hipvextract(), SURFvextract() or FSLRvextract output formats.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nperm</code></td>
+<td>
+<p>A numeric integer object specifying the number of permutations generated for the subsequent thresholding procedures (default = 100)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tail</code></td>
+<td>
+<p>A numeric integer object specifying whether to test a one-sided positive (1), one-sided negative (-1) or two-sided (2) hypothesis</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nthread</code></td>
+<td>
+<p>A numeric integer object specifying the number of CPU threads to allocate</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smooth_FWHM</code></td>
+<td>
+<p>A numeric vector object specifying the desired smoothing width in mm</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>VWR_check</code></td>
+<td>
+<p>A boolean object specifying whether to check and validate system requirements. Default is TRUE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This TFCE method is adapted from the <a href="https://github.com/nilearn/nilearn/blob/main/nilearn/mass_univariate/_utils.py#L7C8-L7C8"> 'Nilearn' Python library</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list object containing the t-stat and the TFCE statistical maps which can then be subsequently thresholded using TFCE_threshold()
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>RFT_vertex_analysis</code>, <code>TFCE_vertex_analysis_mixed</code>, <code>TFCE_threshold</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">demodata = readRDS(system.file('demo_data/SPRENG_behdata_site1.rds',
+package = 'VertexWiseR'))[1:5,]
+CTv = readRDS(file = url(paste0("https://github.com",
+"/CogBrainHealthLab/VertexWiseR/blob/main/inst/demo_data/",
+"SPRENG_CTv_site1.rds?raw=TRUE")))[1:5,]
+
+TFCEpos=TFCE_vertex_analysis(model=demodata[,c("sex","age")], 
+contrast=demodata[,"age"], surf_data=CTv, tail=1, 
+nperm=5, nthread = 2, VWR_check=FALSE)
+
+#To threshold the results, you may then run:
+#results=TFCE_threshold(TFCEpos, p=0.05, atlas=1)
+#results$cluster_level_results
+
+#Formula alternative:
+#formula= as.formula("~ age + sex")
+#TFCEpos=TFCE_vertex_analysis(formula=formula, 
+#formula_dataset=demodata, surf_data=CTv, tail=1, 
+#nperm=5, nthread = 2, VWR_check=FALSE) 
+
+</code></pre>
+
+
+</div>

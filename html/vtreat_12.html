@@ -1,0 +1,104 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>design_missingness_treatment</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Design a simple treatment plan to indicate missingingness and perform simple imputation.</h2>
+
+<h3>Description</h3>
+
+<p>Design a simple treatment plan to indicate missingingness and perform simple imputation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">design_missingness_treatment(
+  dframe,
+  ...,
+  varlist = colnames(dframe),
+  invalid_mark = "_invalid_",
+  drop_constant_columns = FALSE,
+  missingness_imputation = NULL,
+  imputation_map = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dframe</code></td>
+<td>
+<p>data.frame to drive design.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>not used, forces later arguments to bind by name.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>varlist</code></td>
+<td>
+<p>character, names of columns to process.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>invalid_mark</code></td>
+<td>
+<p>character, name to use for NA levels and novel levels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drop_constant_columns</code></td>
+<td>
+<p>logical, if TRUE drop columns that do not vary from the treatment plan.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>missingness_imputation</code></td>
+<td>
+<p>function of signature f(values: numeric), simple missing value imputer.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imputation_map</code></td>
+<td>
+<p>map from column names to functions of signature f(values: numeric), simple missing value imputers.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>simple treatment plan.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>prepare.simple_plan</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+d &lt;- wrapr::build_frame(
+  "x1", "x2", "x3" |
+  1   , 4   , "A"  |
+  NA  , 5   , "B"  |
+  3   , 6   , NA   )
+
+plan &lt;- design_missingness_treatment(d)
+prepare(plan, d)
+
+prepare(plan, data.frame(x1=NA, x2=NA, x3="E"))
+
+</code></pre>
+
+
+</div>

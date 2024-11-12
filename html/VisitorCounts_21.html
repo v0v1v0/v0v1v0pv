@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot.visitation_model</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>visitation_model Plot Methods</h2>
+
+<h3>Description</h3>
+
+<p>Methods for plotting objects of the class "decomposition".
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'visitation_model'
+plot(x, type = c("fitted"), difference = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of class "decomposition".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>A character string. One of "full","period", or "classical". If "full", the full reconstruction is plotted. If "period", the reconstruction of each period is plotted individually. If "classical", the trend and seasonality are plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>difference</code></td>
+<td>
+<p>A Boolean specifying whether to plot the original fit or differenced series. The default option is FALSE, in which case, the series is not differenced.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>No return value, called for plotting objects of the class "decomposition".
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+data("park_visitation")
+data("flickr_userdays")
+
+park &lt;- "YELL"
+pud_ts &lt;- ts(park_visitation[park_visitation$park == park,]$pud, start = 2005, freq = 12)
+pud_ts &lt;- log(pud_ts)
+
+nps_ts &lt;- ts(park_visitation[park_visitation$park == park,]$nps, start = 2005, freq = 12)
+nps_ts &lt;- log(nps_ts)
+
+nps_decomp &lt;- auto_decompose(nps_ts)
+
+trend_proxy &lt;- log(flickr_userdays)
+
+vm &lt;- visitation_model(pud_ts,trend_proxy,ref_series = nps_ts)
+plot(vm)
+</code></pre>
+
+
+</div>

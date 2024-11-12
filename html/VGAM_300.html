@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Biclaytoncop</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Clayton Copula (Bivariate) Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density and random generation
+for the (one parameter) bivariate
+Clayton copula distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dbiclaytoncop(x1, x2, apar = 0, log = FALSE)
+rbiclaytoncop(n, apar = 0)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x1, x2</code></td>
+<td>
+<p>vector of quantiles.
+The <code>x1</code> and <code>x2</code> should both be
+in the interval <code class="reqn">(0,1)</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Same as <code>rnorm</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>apar</code></td>
+<td>
+<p>the association parameter.
+Should be in the
+interval <code class="reqn">[0, \infty)</code>.
+The default corresponds to independence.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical.
+If <code>TRUE</code> then the logarithm is returned.
+</p>
+
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See <code>biclaytoncop</code>, the <span class="pkg">VGAM</span>
+family functions for estimating the
+parameter by maximum likelihood estimation,
+for the formula of the
+cumulative distribution function and other
+details.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dbiclaytoncop</code> gives the density at point
+(<code>x1</code>,<code>x2</code>),
+<code>rbiclaytoncop</code> generates random
+deviates (a two-column matrix).
+</p>
+
+
+
+<h3>Note</h3>
+
+<p><code>dbiclaytoncop()</code> does not yet handle
+<code>x1 = 0</code> and/or <code>x2 = 0</code>.
+</p>
+
+
+
+
+
+<h3>Author(s)</h3>
+
+<p> R. Feyter and T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Clayton, D. (1982).
+A model for association in bivariate survival data.
+<em>Journal of the Royal Statistical Society,
+Series B, Methodological</em>,
+<b>44</b>, 414–422.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>biclaytoncop</code>,
+<code>binormalcop</code>,
+<code>binormal</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  edge &lt;- 0.01  # A small positive value
+N &lt;- 101; x &lt;- seq(edge, 1.0 - edge, len = N); Rho &lt;- 0.7
+ox &lt;- expand.grid(x, x)
+zedd &lt;- dbiclaytoncop(ox[, 1], ox[, 2], apar = Rho, log = TRUE)
+par(mfrow = c(1, 2))
+contour(x, x, matrix(zedd, N, N), col = 4, labcex = 1.5, las = 1)
+plot(rbiclaytoncop(1000, 2), col = 4, las = 1)  
+## End(Not run)</code></pre>
+
+
+</div>

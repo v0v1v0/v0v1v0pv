@@ -1,0 +1,80 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>integration</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Computes integration and acontamination of the clustering</h2>
+
+<h3>Description</h3>
+
+<p>Integartion and acontamination are measures of the quality of a clustering 
+with a reference to a true partition. Let <code class="reqn">X = (x_1, \ldots x_p)</code> be the 
+data set, <code class="reqn">A</code> be a partition into clusters <code class="reqn">A_1, \ldots A_n</code> (true 
+partition) and <code class="reqn">B</code> be a partition into clusters <code class="reqn">B_1, \ldots, B_m</code>. 
+Then for cluster <code class="reqn">A_j</code> integration is eqaul to: </p>
+<p style="text-align: center;"><code class="reqn">Int(A_j) = 
+\frac{max_{k = 1, \ldots, m} \# \{  i \in \{ 1, \ldots p \}: x_i \in A_j 
+\wedge x_i \in B_k \}  }{\# A_j}</code>
+</p>
+<p> The <code class="reqn">B_k</code> for which the value is 
+maximized is called the integrating cluster of <code class="reqn">A_j</code>. Then the 
+integration for the whole clustering equals is <code class="reqn">Int(A,B) = \frac{1}{n} 
+\sum_{j=1}^n Int(A_j)</code> .The acontamination is defined by: </p>
+<p style="text-align: center;"><code class="reqn">Acont(A_j) = 
+\frac{ \# \{  i \in \{ 1, \ldots p \}: x_i \in A_j \wedge x_i \in B_k \} }{\#
+B_k}</code>
+</p>
+<p> where <code class="reqn">B_k</code> is the integrating cluster for <code class="reqn">A_j</code>. Then the 
+acontamination for the whole dataset is <code class="reqn">Acont(A,B) = \frac{1}{n} 
+\sum_{j=1}^n Acont(A_j)</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">integration(group, true_group)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>group</code></td>
+<td>
+<p>A vector, first partition.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>true_group</code></td>
+<td>
+<p>A vector, second (reference) partition.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>An array containing values of integration and acontamination.
+</p>
+
+
+<h3>References</h3>
+
+<p>M. Sołtys. Metody analizy skupień. Master’s thesis, Wrocław 
+University of Technology, 2010
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+sim.data &lt;- data.simulation(n = 20, SNR = 1, K = 2, numb.vars = 50, max.dim = 2)
+true_segmentation &lt;- rep(1:2, each=50)
+mlcc.fit &lt;- mlcc.reps(sim.data$X, numb.clusters = 2, max.dim = 2, numb.cores=1)
+integration(mlcc.fit$segmentation, true_segmentation)
+
+</code></pre>
+
+
+</div>

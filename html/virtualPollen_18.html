@@ -1,0 +1,223 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simulatePopulation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulates population dynamics for virtual species with different traits.</h2>
+
+<h3>Description</h3>
+
+<p>This function takes as input a dataframe of parameters defining virtual taxa produced by <code>parametersDataframe</code> and <code>fixParametersTypes</code>, a driver or drivers generated with <code>simulateDriver</code> or <code>simulateDriverS</code>, and simulates population dynamics for the given virtual taxa at yearly resolution for the time-length defined by the driver or drivers. <strong>Important</strong>: note that the variable <code>time</code> runs from left to right, with lower values representing older samples. The model relies on the following set of assumptions:
+</p>
+
+<ul>
+<li>
+<p>  The spatial structure of the population is not important to explain its pollen productivity. This is an operative assumption, to speed-up model execution.
+</p>
+</li>
+<li>
+<p>  The environmental niche of the species follows a Gaussian distribution, characterized by a mean (niche optimum, also niche position) and a standard deviation (niche breadth or tolerance).
+</p>
+</li>
+<li>
+<p>  Different drivers can have a different influence on the species dynamics, and that influence can be defined by the user by tuning the weights of each driver.
+</p>
+</li>
+<li>
+<p>  Environmental suitability, expressed in the range [0, 1], is the result of an additive function of the species niches (normal function defined by the species' mean and standard deviation for each driver), the drivers' values, and the relative influence of each driver (driver weights).
+</p>
+</li>
+<li>
+<p>  Pollen productivity is a function of the individual's biomass and environmental suitability, so under a hypothetical constant individual's biomass, its pollen production depends linearly on environmental suitability values.
+</p>
+</li>
+<li>
+<p>  Effective fecundity is limited by environmental suitability. Low environmental suitability values limit recruitment, acting as an environmental filter. Therefore, even though the fecundity of the individuals is fixed by the fecundity parameter, the overall population fecundity is limited by environmental suitability.
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">simulatePopulation(
+  parameters=NULL,
+  species="all",
+  driver.A=NULL,
+  driver.B=NULL,
+  drivers=NULL,
+  burnin=TRUE
+  )
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>parameters</code></td>
+<td>
+<p>dataframe with parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species</code></td>
+<td>
+<p>if "all" or "ALL", all species in "parameters" are simulated It also accepts a vector of numbers representing the rows of the selected species, or a vector of names of the selected species.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>driver.A</code></td>
+<td>
+<p>numeric vector with driver values. Typically produced by <code>simulateDriver</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>driver.B</code></td>
+<td>
+<p>numeric vector with driver values.  Typically produced by <code>simulateDriver</code>. Must have same length as <code>driver.A</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>drivers</code></td>
+<td>
+<p>dataframe with drivers produced by <code>simulateDriverS</code>. It should have the columns:
+</p>
+
+<ul>
+<li> <p><em>time</em> integer.
+</p>
+</li>
+<li> <p><em>driver</em> character, values are <code>A</code> and <code>B</code>
+</p>
+</li>
+<li> <p><em>autocorrelation.length</em> numeric, values are 200, 600, and 1800.
+</p>
+</li>
+<li> <p><em>value</em> numeric, value of the driver for the given <em>time</em>.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>burnin</code></td>
+<td>
+<p>boolean, generates a warming-up period for the population model of a length of five times the maximum age of the virtual taxa.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The model starts with a population of 100 individuals with random ages, in the range [1, maximum age], taken from a uniform distribution (all ages are equiprobable). For each environmental suitability value, including the burn-in period, the model performs the following operations:
+</p>
+
+<ul>
+<li> <p><strong>Aging</strong>: adds one year to the age of the individuals.
+</p>
+</li>
+<li> <p><strong>Mortality due to senescence</strong>: individuals reaching the maximum age are removed from the simulation.
+</p>
+</li>
+<li> <p><strong>Local extinction and immigration</strong>: If the number of individuals drops to zero, the population is replaced by a "seed bank" of #' 100 individuals with age zero, and the simulation jumps to step 7.. This is intended to simulate the arrival of seeds from nearby regions, and will only lead to population growth if environmental suitability is higher than zero.
+</p>
+</li>
+<li> <p><strong>Plant growth</strong>: Applies a plant growth equation to compute the biomass of every individual.
+</p>
+</li>
+<li> <p><strong>Carrying capacity</strong>: If maximum population biomass is reached, individuals are iteratively selected for removal according to a mortality risk curve computed by the equation <code class="reqn">P_{m} = 1 - sqrt(a/A)</code>, were <em>Pm</em> is the probability of mortality, <em>a</em> is the age of the given individual, and <em>A</em> is the maximum age reached by the virtual taxa. This curve gives removal preference to younger individuals, matching observed patterns in natural populations.
+</p>
+</li>
+<li> <p><strong>Pollen productivity</strong>: In each time step the model computes the pollen productivity (in relative values) of the population using the equation <code class="reqn">P_{t} = \sum x_{it} \times max(S_{t}, B)</code>, where <em>t</em> is time (a given simulation time step), <em>P</em> is the pollen productivity of the population at a given time, <em>x_i</em> represents the biomass of every adult individual, <em>S</em> is the environmental suitability at the given time, <em>B</em> is the contribution of biomass to pollen productivity regardless of environmental suitability (<em>pollen.control</em> parameter in the simulation, 0 by default). If <em>B</em> equals 1, <em>P</em> is equal to the total biomass sum of the adult population, regardless of the environmental suitability. If <em>B</em> equals 0, pollen productivity depends entirely on environmental suitability values.
+</p>
+</li>
+<li> <p><strong>Reproduction</strong>: Generates as many seeds as reproductive individuals are available multiplied by the maximum fecundity and the environmental suitability of the given time.
+</p>
+</li>
+</ul>
+<p>The model returns a table with climatic suitability, pollen production, and population size (reproductive individuals only) per simulation year. Figure 10 shows the results of the population model when applied to the example virtual species.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list of dataframes, each one of them with the results of one simulation. The dataset <code>simulation</code> exemplifies the output of this function. Each dataframe in the output list has the columns:
+</p>
+
+<ul>
+<li> <p><em>Time</em> integer, ages in years. Negative ages indicate the burn-in period.
+</p>
+</li>
+<li> <p><em>Pollen</em> numeric, pollen counts
+</p>
+</li>
+<li> <p><em>Population.mature</em> numeric, number of mature individuals.
+</p>
+</li>
+<li> <p><em>Population.immatre</em> numeric, number of immature individuals.
+</p>
+</li>
+<li> <p><em>Population.viable.seeds</em> numeric, number of viable seeds generated each year.
+</p>
+</li>
+<li> <p><em>Suitability</em> numeric, environmental suitability computed from the driver by the normal function/s defining the taxon niche.
+</p>
+</li>
+<li> <p><em>Biomass.total</em> numeric, overall biomass of the population.
+</p>
+</li>
+<li> <p><em>Biomass.mature</em> numeric, sum of biomass of mature individuals.
+</p>
+</li>
+<li> <p><em>Biomass.immature</em> numeric, sum of biomass of immature individuals.
+</p>
+</li>
+<li> <p><em>Mortality.mature</em> numeric, number of mature individuals dead each year.
+</p>
+</li>
+<li> <p><em>Mortality.immature</em> numeric, same as above for immature individuals.
+</p>
+</li>
+<li> <p><em>Driver.A</em> numeric, values of driver A.
+</p>
+</li>
+<li> <p><em>Driver.B</em> numeric, values of driver B, if available, and NA otherwise.
+</p>
+</li>
+<li> <p><em>Period</em> qualitative, with value "Burn-in" for burn-in period, and "Simulation" otherwise.
+</p>
+</li>
+</ul>
+<h3>Author(s)</h3>
+
+<p>Blas M. Benito  &lt;blasbenito@gmail.com&gt;
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>parametersDataframe</code>, <code>fixParametersTypes</code>, <code>plotSimulation</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+#getting data
+data(parameters)
+data(driverA)
+
+#simulating population dynamics
+# of first taxon in parameters
+# for first 500 values of driverA
+sim.output &lt;- simulatePopulation(
+ parameters=parameters[1,],
+ driver.A=driverA[1:500]
+ )
+
+#checking output
+str(sim.output)
+
+</code></pre>
+
+
+</div>

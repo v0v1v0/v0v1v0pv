@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_jaccard</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate the Jaccard statistic for two sets of intervals.</h2>
+
+<h3>Description</h3>
+
+<p>Quantifies the extent of overlap between to sets of intervals in terms of
+base-pairs. Groups that are shared between input are used to calculate the statistic
+for subsets of data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_jaccard(x, y)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Jaccard statistic takes values of <code style="white-space: pre;">⁠[0,1]⁠</code> and is measured as:
+</p>
+<p style="text-align: center;"><code class="reqn"> J(x,y) = \frac{\mid x \bigcap y \mid}
+                     {\mid x \bigcup y \mid} =
+                \frac{\mid x \bigcap y \mid}
+                     {\mid x \mid + \mid y \mid -
+                      \mid x \bigcap y \mid} </code>
+</p>
+
+<p>Interval statistics can be used in combination with
+<code>dplyr::group_by()</code> and <code>dplyr::do()</code> to calculate
+statistics for subsets of data. See <code>vignette('interval-stats')</code> for
+examples.
+</p>
+
+
+<h3>Value</h3>
+
+<p>tibble with the following columns:
+</p>
+
+<ul>
+<li> <p><code>len_i</code> length of the intersection in base-pairs
+</p>
+</li>
+<li> <p><code>len_u</code> length of the union in base-pairs
+</p>
+</li>
+<li> <p><code>jaccard</code> value of jaccard statistic
+</p>
+</li>
+<li> <p><code>n_int</code> number of intersecting intervals between <code>x</code> and <code>y</code>
+</p>
+</li>
+</ul>
+<p>If inputs are grouped, the return value will contain one set of values per group.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/jaccard.html">https://bedtools.readthedocs.io/en/latest/content/tools/jaccard.html</a>
+</p>
+<p>Other interval statistics: 
+<code>bed_absdist()</code>,
+<code>bed_fisher()</code>,
+<code>bed_projection()</code>,
+<code>bed_reldist()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">genome &lt;- read_genome(valr_example("hg19.chrom.sizes.gz"))
+
+x &lt;- bed_random(genome, seed = 1010486)
+y &lt;- bed_random(genome, seed = 9203911)
+
+bed_jaccard(x, y)
+
+# calculate jaccard per chromosome
+bed_jaccard(
+  dplyr::group_by(x, chrom),
+  dplyr::group_by(y, chrom)
+)
+
+</code></pre>
+
+
+</div>

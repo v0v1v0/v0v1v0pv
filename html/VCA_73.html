@@ -1,0 +1,137 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>residuals.VCA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract Residuals of a 'VCA' Object</h2>
+
+<h3>Description</h3>
+
+<p>Function extracts marginal or conditional residuals from a 'VCA' object, 
+representing a linear mixed model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VCA'
+residuals(
+  object,
+  type = c("conditional", "marginal"),
+  mode = c("raw", "student", "standard", "pearson"),
+  quiet = FALSE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>(VCA) object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>(character) string specifying the type of residuals to be returned,
+valid options are "marginal" and "conditional" or abbreviations</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mode</code></td>
+<td>
+<p>(character) string or abbreviation specifying the specific transformation
+applied to a certain type of residuals. There are "raw" (untransformed), 
+"standardized", "studentized" and "pearson" (see details) residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = will suppress any warning, which will be issued otherwise</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional parameters</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>There are two types of residuals which can be extraced from a 'VCA' object.
+Marginal residuals correspond to <code class="reqn">e_m = y - \hat{y}</code>, where <code class="reqn">\hat{y} = Xb</code> with <code class="reqn">X</code>
+being the design matrix of fixed effects and <code class="reqn">b</code> being the column vector of fixed
+effects parameter estimates. Conditional residuals are defined as <code class="reqn">e_c = y - Xb - Zg</code>,
+where <code class="reqn">Z</code> corresponds to the designs matrix of random effects <code class="reqn">g</code>. 
+Whenever 'obj' is a pure-error model, e.g. 'y~1' both options will return the same values 
+<code class="reqn">y - Xb</code> and <code class="reqn">b</code> corresponds to the intercept.
+Each type of residuals can be standardized, studentized, or transformed to pearson-type residuals. 
+The former corresponds to a transformation of residuals to have mean 0 and variance equal to 1 (<code class="reqn">(r - \bar{r})/\sigma_{r}</code>). 
+Studentized residuals emerge from dividing raw residuals by the square-root of diagonal elements of the corresponding 
+variance-covariance matrix. For conditional residuals, this is <code class="reqn">Var(c) = P = RQR</code>, with <code class="reqn">Q = V^{-1}(I - H)</code>,
+<code class="reqn">H = XT</code> being the hat-matrix, and <code class="reqn">T = (X^{T}V^{-1}X)^{-1}X^{T}V^{-1}</code>. For marginal residuals, this matrix
+is <code class="reqn">Var(m) = O = V - Q</code>. Here, &gt;<code class="reqn">^{T}</code>&lt; denotes the matrix transpose operator, 
+and &gt;<code class="reqn">^{-1}</code>&lt; the regular matrix inverse. Pearson-type residuals are computed in the same manner as studentized, only
+the variance-covariance matrices differ. For marginal residuals this is equal to <code class="reqn">Var(y) = V</code>, for conditional residuals
+this is <code class="reqn">Var(c) = R</code> (see <code>getV</code> for details).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Hilden-Minton, J. A. (1995). Multilevel diagnostics for mixed and hierarchical linear
+models. Dissertation, University of California, Los Angeles.
+</p>
+<p>Nobre, J. S. &amp; Singer, J. M. (2007). Residual analysis for linear mixed models. Biometrical
+Journal, 49, 863-875.
+</p>
+<p>Schuetzenmeister, A. and Piepho, H.P. (2012). Residual analysis of linear mixed models using a simulation approach.
+Computational Statistics and Data Analysis, 56, 1405-1416
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>ranef</code>, <code>anovaVCA</code>, <code>anovaMM</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(VCAdata1)
+datS1 &lt;- VCAdata1[VCAdata1$sample==1,]
+fit1  &lt;- anovaVCA(y~(lot+device)/(day)/(run), datS1) 
+
+# default is conditional (raw) residuals
+resid(fit1)
+resid(fit1, "m")
+
+# get standardized version
+resid(fit1, mode="stand")		# conditional residuals (default)
+resid(fit1, "marg", "stand")		# marginal residuals
+
+# get studentized version, taking their 
+# covariances into account
+resid(fit1, mode="stud")		# conditional residuals (default)
+resid(fit1, "marg", "stud")		# marginal residuals
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,234 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mosaic.glmlist</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Mosaic Displays for <code>glmlist</code> and <code>loglmlist</code> Objects
+</h2>
+
+<h3>Description</h3>
+
+<p>This function provides a convenient interface for viewing mosaic displays
+associated with a collection of glm models for frequency tables that have
+been stored in a <code>glmlist</code> or <code>loglmlist</code> object.  You can plot either selected models
+individually, or mosaics for all models in an array of viewports.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'glmlist'
+mosaic(x, selection, 
+  panel=mosaic,
+  type=c("observed", "expected"), 
+  legend=ask | !missing(selection),
+  main=NULL,
+  ask=TRUE, graphics=TRUE, rows, cols, newpage=TRUE,
+  ...)
+
+## S3 method for class 'loglmlist'
+mosaic(x, selection, 
+  panel=mosaic,
+  type=c("observed", "expected"), 
+  legend=ask | !missing(selection),
+  main=NULL,
+  ask=TRUE, graphics=TRUE, rows, cols, newpage=TRUE,
+  ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>a <code>glmlist</code> or <code>loglmlist</code> object
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selection</code></td>
+<td>
+
+<p>the index or name of one <code>glm</code> or <code>loglm</code> object in <code>x</code>.  If no selection is specified,
+a menu of models is presented or all models are plotted.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>panel</code></td>
+<td>
+
+<p>a <code>strucplot</code> panel function, typically <code>mosaic</code> or <code>sieve</code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+
+<p>a character string indicating whether the <code>"observed"</code> or the <code>"expected"</code> values of the table should be visualized
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+
+<p>logical: show a legend for residuals in the mosaic display(s)?  The default behavior is to include a legend
+when only a single plot is shown, i.e., if <code>ask</code> is <code>TRUE</code> or a <code>selection</code> has been
+specified.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+
+<p>either a logical, or a vector of character strings used for plotting the main title. 
+If main is a logical and <code>TRUE</code>, the name of the selected glm object  is used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ask</code></td>
+<td>
+
+<p>logical: should the function display a menu of models, when one is not specified in <code>selection</code>?
+If <code>selection</code> is not supplied and <code>ask</code> is <code>TRUE</code> (the default), 
+a menu of model names is presented; 
+if <code>ask</code> is <code>FALSE</code>, mosaics for all models are plotted in an array.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>graphics</code></td>
+<td>
+
+<p>logical: use a graphic dialog box when <code>ask=TRUE</code>?
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rows,cols</code></td>
+<td>
+
+<p>when <code>ask=FALSE</code>, the number of rows and columns in which to plot the mosaics.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newpage</code></td>
+<td>
+
+<p>start a new page? (only applies to <code>ask=FALSE</code>)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>other arguments passed to <code>mosaic.glm</code> and ultimately to <code>mosaic</code>. 
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Most details of the plots produced can be controlled via ... arguments
+as shown in some of the examples below.  In particular, with <code>panel=sieve</code>
+you need to also pass <code>gp=shading_Friendly</code> to get a color version.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns the result of <code>mosaic.glm</code>.
+
+
+
+
+
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Friendly
+</p>
+
+
+<h3>References</h3>
+
+<p>David Meyer, Achim Zeileis, and Kurt Hornik (2006). The Strucplot Framework: Visualizing Multi-Way
+Contingency Tables with vcd. <em>Journal of Statistical Software</em>, 17(3), 1-48. 
+
+<a href="https://doi.org/10.18637/jss.v017.i03">doi:10.18637/jss.v017.i03</a>,
+available as <code>vignette("strucplot", package="vcd")</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>glmlist</code>, <code>loglmlist</code>,
+<code>Kway</code>
+</p>
+<p><code>mosaic.glm</code>, <code>mosaic</code>,
+<code>strucplot</code>, for the many parameters that control the details of mosaic plots.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(JobSatisfaction, package="vcd")
+
+# view all pairwise mosaics
+pairs(xtabs(Freq~management+supervisor+own, data=JobSatisfaction), 
+    shade=TRUE, diag_panel=pairs_diagonal_mosaic)
+
+modSat &lt;- Kway(Freq ~ management+supervisor+own, data=JobSatisfaction, 
+               family=poisson, prefix="JobSat")
+names(modSat)
+
+## Not run: 
+mosaic(modSat)              # uses menu, if interactive()
+
+## End(Not run)
+mosaic(modSat, "JobSat.1")  # model label
+mosaic(modSat, 2)           # model index
+
+# supply a formula to determine the order of variables in the mosaic
+mosaic(modSat, 2, formula=~own+supervisor+management)
+
+mosaic(modSat, ask=FALSE)   # uses viewports 
+
+# use a different panel function, label the observed valued in the cells
+mosaic(modSat, 1, main=TRUE, panel=sieve, gp=shading_Friendly, labeling=labeling_values)
+
+data(Mental)
+indep &lt;- glm(Freq ~ mental+ses,
+                family = poisson, data = Mental)
+Cscore &lt;- as.numeric(Mental$ses)
+Rscore &lt;- as.numeric(Mental$mental)
+
+coleff &lt;- glm(Freq ~ mental + ses + Rscore:ses,
+                family = poisson, data = Mental)
+roweff &lt;- glm(Freq ~ mental + ses + mental:Cscore,
+                family = poisson, data = Mental)
+linlin &lt;- glm(Freq ~ mental + ses + Rscore:Cscore,
+                family = poisson, data = Mental)
+
+# assign names for the plot labels
+modMental &lt;- glmlist(Indep=indep, ColEff=coleff, RowEff=roweff, `Lin x Lin`=linlin)
+mosaic(modMental, ask=FALSE, margins=c(3,1,1,2), labeling_args=list(abbreviate_labs=5))
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bin_prop</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Bins the sample data and calculates proportion looks by interest area</h2>
+
+<h3>Description</h3>
+
+<p><code>bin_prop</code> calculates the proportion of looks (samples) to each 
+interest area in a particular window of time (bin size). This function first
+checks to see if the procedure is possible given the sampling rate and 
+desired bin size. It then performs the calculation and downsampling, returning
+new columns corresponding to each interest area ID (e.g., 'IA_1_C', 'IA_1_P').
+The extention '_C' indicates the count of samples in the bin and the 
+extension '_P' indicates the proportion. N.B.: This function will work for 
+data with a maximum of 8 interest areas.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bin_prop(data, NoIA = NULL, BinSize = NULL, SamplingRate = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data table object output by <code>select_recorded_eye</code>
+or <code>check_samplingrate</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NoIA</code></td>
+<td>
+<p>A positive integer indicating the number of interest areas defined 
+when creating the study.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BinSize</code></td>
+<td>
+<p>A positive integer indicating the size of the binning window 
+(in milliseconds).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SamplingRate</code></td>
+<td>
+<p>A positive integer indicating the sampling rate (in Hertz) 
+used to record the gaze data, which can be determined with the function 
+<code>check_samplingrate</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A data table with additional columns (the number of which depends on 
+the number of interest areas specified) added to <code>data</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(VWPre)
+# Bin samples and calculation proportions...
+df &lt;- bin_prop(dat, NoIA = 4, BinSize = 20, SamplingRate = 1000)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

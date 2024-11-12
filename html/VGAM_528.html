@@ -1,0 +1,309 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>extbetabinomial</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Extended
+Beta-binomial Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Fits an extended beta-binomial distribution
+by maximum
+likelihood estimation.  The two parameters
+here are the mean and correlation coefficient.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">extbetabinomial(lmu = "logitlink", lrho = "cloglink", 
+      zero = "rho", irho = 0, grho = c(0, 0.05, 0.1, 0.2),
+      vfl = FALSE, Form2 = NULL,
+      imethod = 1, ishrinkage = 0.95)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lmu, lrho</code></td>
+<td>
+
+<p>Link functions applied to the two parameters.
+See <code>Links</code> for more choices.
+The first default ensure the mean remain
+in <code class="reqn">(0, 1)</code>,
+while the second allows for a slightly negative
+correlation parameter: you could say it
+lies in
+<code class="reqn">(\max(-\mu/(N-\mu-1), -(1 - \mu)/(N-(1-\mu)-1)), 1)</code>
+where <code class="reqn">\mu</code> is the mean (probability) and
+<code class="reqn">N</code> is <code>size</code>.
+See below for details.
+For <code>lrho</code>, 
+<code>cloglink</code> is a good choice
+because it handles parameter values from 1
+downwards.
+Other good choices include
+<code>logofflink(offset = 1)</code> and
+<code>rhobitlink</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>irho, grho</code></td>
+<td>
+
+<p>The first is similar to <code>betabinomial</code>
+and it is a good idea to use this argument
+because to conduct a
+grid search based on <code>grho</code> is expensive.
+The default is effectively a binomial distribution.
+Set <code>irho = NULL</code> to perform a grid search
+which is more reliable but slow.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>imethod</code></td>
+<td>
+
+<p>Similar to <code>betabinomial</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Similar to <code>betabinomial</code>.
+Also,
+see <code>CommonVGAMffArguments</code>
+for more information.
+Modelling <code>rho</code> with covariates requires
+large samples.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishrinkage</code></td>
+<td>
+
+<p>See <code>betabinomial</code> and
+<code>CommonVGAMffArguments</code> for
+information.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vfl, Form2</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+If <code>vfl = TRUE</code> then <code>Form2</code>
+should be a formula specifying the terms
+for <code class="reqn">\eta_2</code> and all others are
+used for <code class="reqn">\mu</code>.
+It is similar to <code>uninormal</code>.
+If these arguments are used then
+<code>cbind(0, log(size1 / (size1 - 1)))</code>
+should be used as an offset, and
+set <code>zero = NULL</code> too.
+</p>
+
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <em>extended</em> beta-binomial
+distribution (EBBD) proposed
+by Prentice (1986)
+allows for a slightly negative correlation
+parameter whereas the ordinary BBD
+<code>betabinomial</code>
+only allows values in <code class="reqn">(0, 1)</code> so it
+handles overdispersion only.
+When negative, the data is underdispersed
+relative to an ordinary binomial distribution.
+</p>
+<p>Argument <code>rho</code> is used here for the
+<code class="reqn">\delta</code> used in Prentice (1986) because
+it is the correlation between the
+(almost) Bernoulli trials.
+(They are actually simple binary variates.)
+We use here  
+<code class="reqn">N</code> for the number of trials
+(e.g., litter size),
+<code class="reqn">T=NY</code> is the number of successes, and
+<code class="reqn">p</code> (or <code class="reqn">\mu</code>)
+is the probability of a success
+(e.g., a malformation).
+That is, <code class="reqn">Y</code> is the <em>proportion</em>
+of successes. Like
+<code>binomialff</code>, the fitted values
+are the
+estimated probability
+of success
+(i.e., <code class="reqn">E[Y]</code> and not <code class="reqn">E[T]</code>)
+and the prior weights <code class="reqn">N</code> are attached
+separately on the object in a slot.
+</p>
+<p>The probability function is difficult
+to write but it involves three
+series of products.
+Recall <code class="reqn">Y = T/N</code> is the real response
+being modelled, where <code class="reqn">T</code> is the
+(total) sum of <code class="reqn">N</code> correlated
+(almost) Bernoulli trials.
+</p>
+<p>The default model is
+<code class="reqn">\eta_1 = logit(\mu)</code>
+and <code class="reqn">\eta_2 = clog(\rho)</code>
+because the first
+parameter lies between 0 and 1.
+The second link is <code>cloglink</code>.
+The mean of <code class="reqn">Y</code> is
+<code class="reqn">p=\mu</code>
+and the variance of <code class="reqn">Y</code> is
+<code class="reqn">\mu(1-\mu)(1+(N-1)\rho)/N</code>.
+Here, the correlation <code class="reqn">\rho</code>
+may be slightly negative
+and is the correlation between the <code class="reqn">N</code>
+individuals within a litter.
+A <em>litter effect</em> is typically reflected
+by a positive value of <code class="reqn">\rho</code> and
+corresponds to <em>overdispersion</em> with
+respect to the binomial distribution.
+Thus an <em>exchangeable</em> error structure
+is assumed between units within a litter
+for the EBBD.
+</p>
+<p>This family function uses Fisher scoring.
+Elements of the second-order expected
+derivatives 
+are computed numerically, which may
+fail for models very near the boundary of the
+parameter space.
+Usually, the computations
+are expensive for large <code class="reqn">N</code> because of
+a <code>for</code> loop, so
+it may take a long time.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>.
+</p>
+<p>Suppose <code>fit</code> is a fitted EBB
+model. Then <code>depvar(fit)</code>
+are the sample proportions <code class="reqn">y</code>,
+<code>fitted(fit)</code> returns
+estimates of <code class="reqn">E(Y)</code>,
+and <code>weights(fit, type = "prior")</code> returns
+the number of trials <code class="reqn">N</code>.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>Modelling <code>rho</code> using covariates well
+requires much data
+so it is usually best to leave <code>zero</code>
+alone.
+It is good to set <code>trace = TRUE</code> and
+play around with <code>irho</code> if there are
+problems achieving convergence.
+Convergence problems will occur when the
+estimated <code>rho</code> is close to the
+lower bound,
+i.e., the underdispersion
+is almost too severe for the EBB to cope.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is recommended over
+<code>betabinomial</code> and
+<code>betabinomialff</code>.
+It processes the input in the
+same way as <code>binomialff</code>.
+But it does not handle the case <code class="reqn">N \leq 2</code>
+very well because there are two parameters to
+estimate, not one, for each row of the input.
+Cases where <code class="reqn">N &gt; 2</code>
+can be selected via the
+<code>subset</code> argument of <code>vglm</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Prentice, R. L. (1986).
+Binary regression using an extended beta-binomial
+distribution,
+with discussion of correlation induced by
+covariate measurement errors.
+<em>Journal of the American Statistical
+Association</em>,
+<b>81</b>, 321–327.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>Extbetabinom</code>,
+<code>betabinomial</code>,
+<code>betabinomialff</code>,
+<code>binomialff</code>,
+<code>dirmultinomial</code>,
+<code>cloglink</code>,
+<code>lirat</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Example 1
+edata &lt;- data.frame(N = 10, mu = 0.5, rho = 0.1)
+edata &lt;- transform(edata,
+      y = rextbetabinom(100, N, mu, rho = rho))
+fit1 &lt;- vglm(cbind(y, N-y) ~ 1, extbetabinomial, edata, trace = TRUE)
+coef(fit1, matrix = TRUE)
+Coef(fit1)
+head(cbind(depvar(fit1), weights(fit1, type = "prior")))
+
+# Example 2: VFL model
+## Not run: N &lt;- size1 &lt;- 10; nn &lt;- 2000; set.seed(1)
+edata &lt;-  # Generate the data set. Expensive.
+    data.frame(x2 = runif(nn),
+               ooo =  log(size1 / (size1 - 1)))
+edata &lt;- transform(edata, x1copy = 1, x2copy = x2,
+  y2 = rextbetabinom(nn, size1,  # Expensive
+         logitlink(1 + x2, inverse = TRUE),
+         cloglink(ooo + 1 - 0.5 * x2, inv = TRUE)))
+fit2 &lt;- vglm(data = edata,
+        cbind(y2, N - y2) ~ x2 + x1copy + x2copy,
+        extbetabinomial(zero = NULL, vfl = TRUE,
+                 Form2 = ~ x1copy + x2copy - 1),
+        offset = cbind(0, ooo), trace = TRUE)
+coef(fit2, matrix = TRUE)
+wald.stat(fit2, values0 = c(1, 1, -0.5))
+
+## End(Not run)</code></pre>
+
+
+</div>

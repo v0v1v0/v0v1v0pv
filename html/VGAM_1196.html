@@ -1,0 +1,216 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>posbernUC</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Positive Bernoulli Sequence Model </h2>
+
+<h3>Description</h3>
+
+<p>Density, and random generation
+for multiple Bernoulli responses where
+each row in the response matrix has at least one success.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">rposbern(n, nTimePts = 5, pvars = length(xcoeff),
+  xcoeff = c(-2, 1, 2), Xmatrix = NULL, cap.effect = 1,
+  is.popn = FALSE, link = "logitlink", earg.link = FALSE)
+dposbern(x, prob, prob0 = prob, log = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>response vector or matrix.
+Should only have 0 and 1 values, at least two columns, and each
+row should have at least one 1.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nTimePts</code></td>
+<td>
+<p>Number of sampling occasions.
+Called <code class="reqn">\tau</code> in <code>posbernoulli.b</code>
+and <code>posbernoulli.t</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Usually a single positive integer, else the length of the vector
+is used.
+See argument <code>is.popn</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>is.popn</code></td>
+<td>
+
+<p>Logical.
+If <code>TRUE</code> then argument <code>n</code> is the population size and
+what is returned may have substantially less rows than <code>n</code>.
+That is, if an animal has at least one one in its sequence
+then it is returned, else that animal is not returned because
+it never was captured.
+
+
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Xmatrix</code></td>
+<td>
+
+<p>Optional <b>X</b> matrix.
+If given, the <b>X</b> matrix is not generated internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cap.effect</code></td>
+<td>
+
+<p>Numeric, the capture effect.
+Added to the linear predictor if captured previously.
+A positive or negative value corresponds to
+a trap-happy and trap-shy effect respectively.
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>pvars</code></td>
+<td>
+<p> Number of other numeric covariates that make up
+the  linear predictor.
+Labelled <code>x1</code>, <code>x2</code>, ...,
+where the first is an intercept, and the others are
+independent standard <code>runif</code> random
+variates.  The first <code>pvars</code> elements of <code>xcoeff</code>
+are used.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xcoeff</code></td>
+<td>
+
+<p>The regression coefficients of the linear predictor.
+These correspond to <code>x1</code>, <code>x2</code>, ...,
+and the first is for the intercept.
+The length of <code>xcoeff</code> must be at least <code>pvars</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>link, earg.link</code></td>
+<td>
+
+<p>The former is used to generate the probabilities for capture
+at each occasion.
+Other details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>prob, prob0</code></td>
+<td>
+
+<p>Matrix of probabilities for the numerator and denominators
+respectively.
+The default does <em>not</em> correspond to the
+<code class="reqn">M_b</code> model since the <code class="reqn">M_b</code> model has a denominator
+which involves the capture history.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical. Return the logarithm of the answer?
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The form of the conditional likelihood is described in
+<code>posbernoulli.b</code> and/or
+<code>posbernoulli.t</code> and/or
+<code>posbernoulli.tb</code>.
+The denominator is equally shared among the elements of
+the matrix <code>x</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>rposbern</code> returns a data frame with some attributes.
+The function generates random deviates
+(<code class="reqn">\tau</code> columns labelled <code>y1</code>, <code>y2</code>, ...)
+for the response.
+Some indicator columns are also included
+(those starting with <code>ch</code> are for previous capture history).
+The default setting corresponds to a <code class="reqn">M_{bh}</code> model that
+has a single trap-happy effect.
+Covariates <code>x1</code>, <code>x2</code>, ... have the same
+affect on capture/recapture at every sampling occasion
+(see the argument <code>parallel.t</code> in, e.g.,
+<code>posbernoulli.tb</code>).
+</p>
+
+<p>The function <code>dposbern</code> gives the density,
+</p>
+
+
+<h3>Note</h3>
+
+<p>The <code>r</code>-type function is experimental only and does not
+follow the usual conventions of <code>r</code>-type R functions.
+It may change a lot in the future.
+The <code>d</code>-type function is more conventional and is less
+likely to change.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee. </p>
+
+
+<h3>See Also</h3>
+
+<p><code>posbernoulli.tb</code>,
+<code>posbernoulli.b</code>,
+<code>posbernoulli.t</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">rposbern(n = 10)
+attributes(pdata &lt;- rposbern(n = 100))
+M.bh &lt;- vglm(cbind(y1, y2, y3, y4, y5) ~ x2 + x3,
+             posbernoulli.b(I2 = FALSE), pdata, trace = TRUE)
+constraints(M.bh)
+summary(M.bh)
+</code></pre>
+
+
+</div>

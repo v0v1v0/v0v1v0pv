@@ -1,0 +1,225 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vpc_cens</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>VPC function for left- or right-censored data (e.g. BLOQ data)</h2>
+
+<h3>Description</h3>
+
+<p>Creates a VPC plot from observed and simulation data for censored data. Function can handle both left- (below lower limit of quantification) and right-censored (above upper limit of quantification) data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vpc_cens(
+  sim = NULL,
+  obs = NULL,
+  psn_folder = NULL,
+  bins = "jenks",
+  n_bins = 8,
+  bin_mid = "mean",
+  obs_cols = NULL,
+  sim_cols = NULL,
+  software = "auto",
+  show = NULL,
+  stratify = NULL,
+  stratify_color = NULL,
+  ci = c(0.05, 0.95),
+  uloq = NULL,
+  lloq = NULL,
+  plot = FALSE,
+  xlab = "Time",
+  ylab = "Probability of &lt;LOQ",
+  title = NULL,
+  smooth = TRUE,
+  vpc_theme = NULL,
+  facet = "wrap",
+  labeller = NULL,
+  vpcdb = FALSE,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>sim</code></td>
+<td>
+<p>a data.frame with observed data, containing the independent and dependent variable, a column indicating the individual, and possibly covariates. E.g. load in from NONMEM using read_table_nm</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs</code></td>
+<td>
+<p>a data.frame with observed data, containing the independent and dependent variable, a column indicating the individual, and possibly covariates. E.g. load in from NONMEM using read_table_nm</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>psn_folder</code></td>
+<td>
+<p>instead of specifying "sim" and "obs", specify a PsN-generated VPC-folder</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bins</code></td>
+<td>
+<p>either "density", "time", or "data", or a numeric vector specifying the bin separators.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n_bins</code></td>
+<td>
+<p>number of bins</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bin_mid</code></td>
+<td>
+<p>either "mean" for the mean of all timepoints (default) or "middle" to use the average of the bin boundaries.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obs_cols</code></td>
+<td>
+<p>observation dataset column names (list elements: "dv", "idv", "id", "pred")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sim_cols</code></td>
+<td>
+<p>simulation dataset column names (list elements: "dv", "idv", "id", "pred")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>software</code></td>
+<td>
+<p>name of software platform using (e.g. nonmem, phoenix)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>show</code></td>
+<td>
+<p>what to show in VPC (obs_ci, pi, pi_as_area, pi_ci, obs_median, sim_median, sim_median_ci)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stratify</code></td>
+<td>
+<p>character vector of stratification variables. Only 1 or 2 stratification variables can be supplied.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stratify_color</code></td>
+<td>
+<p>variable to stratify and color lines for observed data. Only 1 stratification variables can be supplied.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ci</code></td>
+<td>
+<p>confidence interval to plot. Default is (0.05, 0.95)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>uloq</code></td>
+<td>
+<p>Number or NULL indicating upper limit of quantification. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lloq</code></td>
+<td>
+<p>Number or NULL indicating lower limit of quantification. Default is NULL.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+<p>Boolean indicating whether to plot the ggplot2 object after creation. Default is FALSE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>ylab as numeric vector of size 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>ylab as numeric vector of size 2</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>title</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>smooth</code></td>
+<td>
+<p>"smooth" the VPC (connect bin midpoints) or show bins as rectangular boxes. Default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vpc_theme</code></td>
+<td>
+<p>theme to be used in VPC. Expects list of class vpc_theme created with function vpc_theme()</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>facet</code></td>
+<td>
+<p>either "wrap", "columns", or "rows"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labeller</code></td>
+<td>
+<p>ggplot2 labeller function to be passed to underlying ggplot object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vpcdb</code></td>
+<td>
+<p>boolean whether to return the underlying vpcdb rather than the plot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>show debugging information (TRUE or FALSE)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list containing calculated VPC information, and a ggplot2 object
+</p>
+
+
+<h3>See Also</h3>
+
+<p>sim_data, vpc, vpc_tte, vpc_cat
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## See vpc.ronkeizer.com for more documentation and examples
+library(vpc)
+
+vpc_cens(sim = simple_data$sim, obs = simple_data$obs, lloq = 30)
+vpc_cens(sim = simple_data$sim, obs = simple_data$obs, uloq = 120)
+
+</code></pre>
+
+
+</div>

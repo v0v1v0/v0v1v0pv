@@ -1,0 +1,107 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>pin.na</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Pinpoint NAs in a vector, matrix or data.frame</h2>
+
+<h3>Description</h3>
+
+
+<p>This function finds NAs (or defined missing values) in a vector, data.frame
+or matrix and returns a data.frame which contains two columns that includes
+the row number and column number of each NA.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    pin.na(x, na.value = NA)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+
+<p>A vector, data.frame or matrix which you want to pinpoint its NAs.
+(Mandatory)
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.value</code></td>
+<td>
+
+<p>A vector containing the value that should be considered as missing
+value. The default is NA, but you can add to it or change it to your
+preference. See the example. (Optional)
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<p>This function provides a quick and easy way to locate and pinpoint NAs in a given vector, data.frame or matrix.
+This function is also used in <code>inspect.na</code> function of this package.
+</p>
+
+
+<h3>Value</h3>
+
+
+
+
+
+
+<p>If a vector is given, the index of NAs will be returned in a numeric vector format. In case of a given matrix or data.frame the function will return a data.frame with two columns, one indicating the row number and one indicating the column number. Each row will represent a location of a NA.
+In case no NA is found, the function will return NULL which makes it easy to use in if conditions using <code>is.null</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+
+<p>Mehrad Mahmoudian
+</p>
+
+
+<h3>See Also</h3>
+
+
+<p><code>is.na</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    ## generate some variables
+    # create a vector
+    var1 &lt;- 1:30
+    # add NA at random places
+    var1[runif(7, 1, 30)] &lt;- NA
+    # pinpoint NAs
+    pin.na(var1)
+    
+    # create a matrix
+    var2 &lt;- matrix(runif(100, 10, 99), nrow = 10)
+    # add NA at random places
+    var2[runif(9, 1, 100)] &lt;- NA
+    # pinpoint NAs
+    pin.na(var2)
+    
+    ## define your own missing values:
+    var2[runif(5, 1, 100)] &lt;- "."
+    pin.na(var2, na.value = c(NA, "."))
+
+
+</code></pre>
+
+
+</div>

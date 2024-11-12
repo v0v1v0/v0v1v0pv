@@ -1,0 +1,77 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>aa.find.singles</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Find amino acid singles</h2>
+
+<h3>Description</h3>
+
+<p>Determines the number of shared and singleton amino acid VLFs.</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">aa.find.singles(aaSpecies, seqlength)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>aaSpecies</code></td>
+<td>
+
+<p>List of amino acid sequences separated by species name.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seqlength</code></td>
+<td>
+
+<p>Length of amino acid sequences.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The argument aaSpecies contains only amino acid VLFs, and NAs in any other position in the sequence.  The list can be created using the separate function.</p>
+
+
+<h3>Value</h3>
+
+<p>A matrix containing the number of singleton and shared aaVLFs in each position of the barcode.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Taryn B. T. Athey and Paul D. McNicholas
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: data(birds_aminoAcids)
+birds_aminoAcid_speciesNames &lt;- birds_aminoAcids[,2]
+aminoAcids_specimenNumber &lt;- nrow(birds_aminoAcids)
+birds_aminoAcid_count &lt;- aa.count.function(birds_aminoAcids, 216)
+aminoAcid_frequency.Matrix &lt;- aa.frequency.matrix.function(birds_aminoAcid_count, 216)
+bird_aminoAcid_frequencies &lt;- aa.specimen.frequencies(aminoAcid_frequency.Matrix, birds_aminoAcids,
+    birds_aminoAcid_speciesNames, 216)
+birds_aminoAcid_specimenVLFcount &lt;- aa.VLF.count.spec(bird_aminoAcid_frequencies, 0.001, 216)
+birds_aaVLFconvert &lt;- aa.VLF.convert.matrix(birds_aminoAcids, bird_aminoAcid_frequencies, 0.001, 
+    216)
+birds_aminoAcidVLFs &lt;- VLF.aminoAcids(birds_aaVLFconvert, birds_aminoAcids, 216)
+birds_aaVLFreduced &lt;- aa.VLF.reduced(birds_aminoAcidVLFs, birds_aminoAcid_specimenVLFcount, 216)
+birds_aaSpecies &lt;- separate(birds_aaVLFreduced)
+birds_aminoAcid_singleAndShared &lt;- aa.find.singles(birds_aaSpecies, 216)
+## End(Not run)
+</code></pre>
+
+
+</div>

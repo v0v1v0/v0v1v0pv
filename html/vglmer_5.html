@@ -1,0 +1,145 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vglmer-class</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Generic Functions after Running vglmer</h2>
+
+<h3>Description</h3>
+
+<p><code>vglmer</code> uses many standard methods from <code>lm</code> and <code>lme4</code> with
+limited changes. These provide summaries of the estimated variational
+distributions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vglmer'
+fixef(object, ...)
+
+## S3 method for class 'vglmer'
+sigma(object, ...)
+
+## S3 method for class 'vglmer'
+ranef(object, ...)
+
+## S3 method for class 'vglmer'
+coef(object, ...)
+
+## S3 method for class 'vglmer'
+vcov(object, ...)
+
+## S3 method for class 'vglmer'
+fitted(object, ...)
+
+## S3 method for class 'vglmer'
+print(x, ...)
+
+## S3 method for class 'vglmer'
+summary(object, display_re = TRUE, ...)
+
+## S3 method for class 'vglmer'
+formula(x, form = "original", ...)
+
+format_vglmer(object)
+
+format_glmer(object)
+
+ELBO(object, type = c("final", "trajectory"))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Model fit using <code>vglmer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Not used; included to maintain compatibility with existing
+methods.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Model fit using <code>vglmer</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>display_re</code></td>
+<td>
+<p>Default (<code>TRUE</code>) prints a summary of the
+random effects alongside the fixed effects.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>form</code></td>
+<td>
+<p>Describes the type of formula to report:
+<code>"original"</code> returns the user input, <code>"fe"</code> returns the fixed
+effects only, <code>"re"</code> returns the random effects only.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Default (<code>"final"</code>) gives the ELBO at convergence.
+<code>"trajectory"</code> gives the ELBO estimated at each iteration. This is
+used to assess model convergence.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The accompanying functions are briefly described below. 
+</p>
+<p><code>coef</code> and <code>vcov</code> return the mean and variance of the fixed effects
+(<code class="reqn">\beta</code>). <code>fixef</code> returns the mean of the fixed effects.
+</p>
+<p><code>ranef</code> extracts the random effects (<code class="reqn">\alpha</code>) in a similar,
+although slightly different format, to <code>lme4</code>. It includes the estimated
+posterior mean and variance in a list of data.frames with one entry per
+random effect <code class="reqn">j</code>.
+</p>
+<p><code>fitted</code> extracts the estimated expected <em>linear predictor</em>, i.e.
+<code class="reqn">E_{q(\theta)}[x_i^T \beta + z_i^T \alpha]</code> at convergence.
+</p>
+<p><code>summary</code> reports the estimates for all fixed effects as in <code>lm</code> as
+well as some summaries of the random effects (if <code>display_re=TRUE</code>).
+</p>
+<p><code>format_vglmer</code> collects the mean and variance of the fixed and random
+effects into a single data.frame. This is useful for examining all of the
+posterior estimates simultaneously. <code>format_glmer</code> converts an object
+estimated with <code>[g]lmer</code> into a comparable format.
+</p>
+<p><code>ELBO</code> extracts the ELBO from the estimated model. <code>type</code> can be
+set equal to <code>"trajectory"</code> to get the estimated ELBO at each iteration
+and assess convergence.
+</p>
+<p><code>sigma</code> extracts the square root of the posterior mode of
+<code class="reqn">q(\sigma^2)</code> if a linear model is used.
+</p>
+<p><code>formula</code> extracts the formula associated with the <code>vglmer</code> object.
+By default, it returns the formula provided. The fixed and random effects
+portions can be extracted separately using the <code>form</code> argument.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The functions here return a variety of different objects depending on
+the specific function. "Details" describes the behavior of each one. Their
+output is similar to the typical behavior for the corresponding generic
+functions.
+</p>
+
+
+</div>

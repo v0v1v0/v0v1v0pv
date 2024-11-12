@@ -1,0 +1,151 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>VMDELM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Variational Mode Decomposition Based Extreme Learning Machine Model
+</h2>
+
+<h3>Description</h3>
+
+<p>The VMDELM function computes forecasted value with different forecasting evaluation criteria for Variational Mode Decomposition (VMD) Based Extreme learning machine (ELM).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">VMDELM (data, stepahead=10, nIMF=4, alpha=2000, tau=0, D=FALSE)</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+
+<p>Input univariate time series (ts) data.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stepahead</code></td>
+<td>
+
+<p>The forecast horizon.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nIMF</code></td>
+<td>
+
+<p>The number of IMFs.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+
+<p>The balancing parameter.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tau</code></td>
+<td>
+
+<p>Time-step of the dual ascent.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>D</code></td>
+<td>
+
+<p>a boolean.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function decomposes a nonlinear, nonstationary time series into different IMFs using VMD (Qian et al., 2019). Extreme learning machine (ELM) is used to forecast decomposed IMFs individually. Finally, the prediction results of all three components are aggregated to formulate an ensemble output for the input time series.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>AllIMF </code></td>
+<td>
+<p>List of all IMFs with residual for input series.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data_test </code></td>
+<td>
+<p>Testing set used to measure the out of sample performance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>AllIMF_forecast </code></td>
+<td>
+<p>Forecasted value of all individual IMF</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>FinalVMDELM_forecast </code></td>
+<td>
+<p>Final forecasted value of the VMD based ELM model. It is obtained by combining the forecasted value of all individual IMF.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>MAE_VMDELM </code></td>
+<td>
+<p>Mean Absolute Error (MAE) for  VMDELM model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>MAPE_VMDELM </code></td>
+<td>
+<p>Mean Absolute Percentage Error (MAPE) for VMDELM model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rmse_VMDELM </code></td>
+<td>
+<p>Root Mean Square Error (RMSE) for VMDELM model.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>Dragomiretskiy, K.and Zosso, D. (2014). Variational mode decomposition. IEEE transactions on signal processing, 62(3), 531–544.
+</p>
+<p>Shao, Z., Chao, F., Yang, S. L., &amp; Zhou, K. L. (2017). A review of the decomposition methodology for extracting and identifying the fluctuation characteristics in electricity demand forecasting. Renewable and Sustainable Energy Reviews, 75, 123–136.
+</p>
+<p>Qian, Z., Pei, Y., Zareipour, H. andChen, N. (2019). A review and discussion of decomposition-based hybrid models for wind energy forecasting applications. Applied energy, 235, 939–953.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>VMDTDNN,VMDARIMA
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+data("Data_Maize")
+VMDELM(Data_Maize)
+
+</code></pre>
+
+
+</div>

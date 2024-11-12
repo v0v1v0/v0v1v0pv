@@ -1,0 +1,84 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>12. Perfect power</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Perfect Power Tools for vli Objects</h2>
+
+<h3>Description</h3>
+
+<p>A positive integer is a perfect power if it can be expressed as an integer power of another positive integer. That is, a positive integer <code>x</code> is a perfect power if there exist two positive integers <code>a</code> and <code>b</code> such that <code>x = a^b</code> (note that <code>a</code> and <code>b</code> might not be unique).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">perfectpow(x)
+
+## Default S3 method:
+perfectpow(x)
+
+## S3 method for class 'numeric'
+perfectpow(x)
+
+## S3 method for class 'vli'
+perfectpow(x)
+
+is.perfectpow(x)
+
+## Default S3 method:
+is.perfectpow(x)
+
+## S3 method for class 'numeric'
+is.perfectpow(x)
+
+## S3 method for class 'vli'
+is.perfectpow(x)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>object of class vli or 32 bits integer</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>The function <code>is.perfectpow(x)</code> returns <code>TRUE</code> if there exist two positive integers <code>a</code> and <code>b</code> such that <code>x = a^b</code>, and returns <code>FALSE</code> if there not exist.
+</p>
+<p>The function <code>perfectpow(x)</code> returns a list of two vli objects, <code>a</code> and <code>b</code>, such that <code>x = a^b</code>. If there not exist such numbers, the two vli objects will be equal to zero. Although the concept is usually defined only for positive integers, the function has been also programmed to work with negative integers.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>is.perfectpow(x)</code> returns a Boolean
+</p>
+<p><code>perfectpow(x)</code> returns a list of two objects of class vli
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Javier Leiva Cuadrado
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- as.vli("234925792")
+is.perfectpow(x)
+
+x &lt;- as.vli("77808066022325383192121677734375")
+is.perfectpow(x)
+res &lt;- perfectpow(x)
+res
+res[[1]]^res[[2]]
+</code></pre>
+
+
+</div>

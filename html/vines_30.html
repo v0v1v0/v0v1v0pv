@@ -1,0 +1,122 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>hinverse-methods</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Methods for the Inverse of the h-functions</h2>
+
+<h3>Description</h3>
+
+<p>The <code class="reqn">h^{-1}</code> function represents the inverse of the <code class="reqn">h</code> function with
+respect to its first argument. It should be defined for every copula used
+in a pair-copula construction (or it will be evaluated numerically).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">hinverse(copula, u, v, eps)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>copula</code></td>
+<td>
+<p>A bivariate <code>copula</code> object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>u</code></td>
+<td>
+<p>Numeric vector with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>v</code></td>
+<td>
+<p>Numeric vector with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>eps</code></td>
+<td>
+<p>To avoid numerical problems for extreme values, the values of
+<code>u</code>, <code>v</code> and return values close to <code>0</code> and <code>1</code> are
+substituted by <code>eps</code> and <code>1 - eps</code>, respectively. The default
+<code>eps</code> value for most of the copulas is <code>.Machine$double.eps^0.5</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Methods</h3>
+
+
+<dl>
+<dt><code>signature(copula = "copula")</code></dt>
+<dd>
+<p>Default definition of the <code class="reqn">h^{-1}</code> function for a bivariate copula.
+This method is used if no particular definition is given for a copula.
+The inverse is calculated numerically using the <code>uniroot</code>
+function.</p>
+</dd>
+<dt><code>signature(copula = "indepCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h^{-1}</code> function of the Independence copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h^{-1}(u, v) = u</code>
+</p>
+</dd>
+<dt><code>signature(copula = "normalCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h^{-1}</code> function of the normal copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h^{-1}(u, v; \rho) = \Phi \left( \Phi^{-1}(u) \sqrt{1-\rho^2} +
+                                           \rho\ \Phi^{-1}(v) \right)</code>
+</p>
+</dd>
+<dt><code>signature(copula = "tCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h^{-1}</code> function of the t copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h^{-1}(u, v; \rho, \nu) =
+      t_{\nu} \left( t^{-1}_{\nu+1}(u)\
+                     \sqrt{\frac{(\nu+(t^{-1}_{\nu}(v))^2)(1-\rho^2)}{\nu+1}} +
+                     \rho\ t^{-1}_{\nu}(v)
+              \right)</code>
+</p>
+</dd>
+<dt><code>signature(copula = "claytonCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h^{-1}</code> function of the Clayton copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h^{-1}(u, v; \theta) =
+      \left( \left( u\ v^{\theta+1}\right)^{-\frac{\theta}{\theta+1}} +
+                    1 - v^{-\theta} \right)^{-1/\theta}</code>
+</p>
+</dd>
+<dt><code>signature(copula = "frankCopula")</code></dt>
+<dd>
+<p>The <code class="reqn">h^{-1}</code> function of the Frank copula.
+</p>
+<p style="text-align: center;"><code class="reqn">h^{-1}(u, v; \theta) =
+      -\log \left( 1 - \frac{1-e^{-\theta}}
+                            {(u^{-1} - 1) e^{-\theta v} + 1} \right) / \theta</code>
+</p>
+</dd>
+</dl>
+<h3>References</h3>
+
+<p>Aas, K. and Czado, C. and Frigessi, A. and Bakken, H. (2009)
+Pair-copula constructions of multiple dependence.
+<em>Insurance: Mathematics and Economics</em> <b>44</b>, 182–198.
+</p>
+<p>Schirmacher, D. and Schirmacher, E. (2008)
+Multivariate dependence modeling using pair-copulas.
+<em>Enterprise Risk Management Symposium, Chicago</em>.
+</p>
+
+
+</div>

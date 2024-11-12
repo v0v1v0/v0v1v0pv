@@ -1,0 +1,114 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vars_explore</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Searchable variable explorer with labelled variables</h2>
+
+<h3>Description</h3>
+
+<p>Creates a summary dataframe that can be used in RStudio similar to the variable
+explorer in Stata, but which also includes the summary statistics. If 'viewer'
+is TRUE (default) the result is shown in RStudio's Viewer pane as a searchable
+datatable.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vars_explore(
+  df,
+  viewer = TRUE,
+  digits = 2,
+  font.size = "10pt",
+  value.labels.width = 500,
+  silent = TRUE,
+  minimal = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df</code></td>
+<td>
+<p>A data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>viewer</code></td>
+<td>
+<p>Logical. Whether to show results as a searchable datatable
+in RStudio's Viewer pane. Default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>Numeric. How many digits to show for the statistics in the Viewer Pane.
+Default is 2.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>font.size</code></td>
+<td>
+<p>String. Font size in the Viewer Pane. Default is "10pt".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>value.labels.width</code></td>
+<td>
+<p>Numeric. How many characters to include in the "Value
+labels" and "Values" columns. Default is 500.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>silent</code></td>
+<td>
+<p>Logical. If FALSE, function will return the summary dataframe. Default is TRUE.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>minimal</code></td>
+<td>
+<p>If TRUE only the number of observations and missing values are shown.
+Default is FALSE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is useful particularly if you have a large dataset with a very large number
+of labelled variables with hard to remember names. Can also be used to generate
+a table of summary statistics.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If 'silent = FALSE' the function returns the summary stats dataframe, each
+variable a row. This can be used for making summary tables, or viewed with
+the 'View()' function.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+qog &lt;- rio::import("http://www.qogdata.pol.gu.se/dataarchive/qog_bas_cs_jan18.dta")
+vars_explore(qog, silent = FALSE, viewer = FALSE)
+## Not run: 
+vars_explore(qog)
+vars_explore(qog, minimal = TRUE)
+vars_explore(qog, silent = FALSE, viewer = FALSE) %&gt;% View()
+
+## End(Not run)
+qog_summary &lt;- vars_explore(qog, silent = FALSE, viewer = FALSE)
+
+</code></pre>
+
+
+</div>

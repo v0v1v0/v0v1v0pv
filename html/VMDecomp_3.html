@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>estimate_k_modes</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimation of Intrinsic Mode Function (IMF) Number in Variational Mode Decomposition</h2>
+
+<h3>Description</h3>
+
+<p>Estimation of Intrinsic Mode Function (IMF) Number in Variational Mode Decomposition
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">estimate_k_modes(
+  signal_1d,
+  cor_thresh,
+  default_vmd_params,
+  min_K = 2,
+  seed = 1,
+  verbose = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>signal_1d</code></td>
+<td>
+<p>a numeric vector specifying the 1-dimensional input signal</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cor_thresh</code></td>
+<td>
+<p>a numeric value specifying the minimum (positive or negative) correlation coefficient threshold where decomposition will be stopped (a value between 0.0 and 1.0)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>default_vmd_params</code></td>
+<td>
+<p>a list of parameters consisting of the (remaining) Variational Mode Decomposition default parameters (except for 'data' and 'K')</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min_K</code></td>
+<td>
+<p>a numeric value specifying the minimum value of the K (modes) parameter (from which decomposition starts)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>a numeric value specifying the seed (for reproducibility purposes)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>a boolean. If TRUE then information will be printed in the console</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Correlation Coefficient Method:
+</p>
+
+<ul><li>
+<p> Correlation coefficient (CC) between the mode components and the original signal will be obtained. Decomposition will be stopped when the minimum correlation coefficient is less than the given threshold, and then the value of K will be determined
+</p>
+</li></ul>
+<h3>Value</h3>
+
+<p>a numeric value specifying the optimal K parameter
+</p>
+
+
+<h3>References</h3>
+
+<p>https://doi.org/10.1155/2020/8304903
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Not run: 
+
+require(VMDecomp)
+data(arrhythmia)
+
+default_vmd_params = list(alpha = 2000,
+                          tau = 0,
+                          DC = FALSE,
+                          init = 1,
+                          tol = 1e-6)
+
+res_k = estimate_k_modes(signal_1d = arrhythmia[['MLII']],
+                         cor_thresh = 0.1,
+                         default_vmd_params = default_vmd_params,
+                         min_K = 2,
+                         seed = 1,
+                         verbose = TRUE)
+res_k
+
+## End(Not run)
+</code></pre>
+
+
+</div>

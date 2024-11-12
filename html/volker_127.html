@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tab_metrics_items_cor_items</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Output a correlation table for item battery and item battery</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tab_metrics_items_cor_items(
+  data,
+  cols,
+  cross,
+  method = "pearson",
+  digits = 2,
+  ci = FALSE,
+  labels = TRUE,
+  clean = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A tibble.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>The source columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross</code></td>
+<td>
+<p>The target columns or NULL to calculate correlations within the source columns.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>The output metrics, pearson = Pearson's R, spearman = Spearman's rho.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>The number of digits to print.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ci</code></td>
+<td>
+<p>Whether to calculate 95% confidence intervals of the correlation coefficient.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p>If TRUE (default) extracts labels from the attributes, see codebook.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clean</code></td>
+<td>
+<p>Prepare data by data_clean.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Placeholder to allow calling the method with unused parameters from tab_metrics.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A volker tibble.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(volker)
+data &lt;- volker::chatgpt
+
+tab_metrics_items_cor_items(
+  data,
+  starts_with("cg_adoption_adv"),
+  starts_with("use"),
+  metric = TRUE
+)
+
+</code></pre>
+
+
+</div>

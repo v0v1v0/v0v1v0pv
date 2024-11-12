@@ -1,0 +1,485 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vim</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Nonparametric Intrinsic Variable Importance Estimates and Inference</h2>
+
+<h3>Description</h3>
+
+<p>Compute estimates of and confidence intervals for nonparametric intrinsic
+variable importance based on the population-level contrast between the oracle
+predictiveness using the feature(s) of interest versus not.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vim(
+  Y = NULL,
+  X = NULL,
+  f1 = NULL,
+  f2 = NULL,
+  indx = 1,
+  type = "r_squared",
+  run_regression = TRUE,
+  SL.library = c("SL.glmnet", "SL.xgboost", "SL.mean"),
+  alpha = 0.05,
+  delta = 0,
+  scale = "identity",
+  na.rm = FALSE,
+  sample_splitting = TRUE,
+  sample_splitting_folds = NULL,
+  final_point_estimate = "split",
+  stratified = FALSE,
+  C = rep(1, length(Y)),
+  Z = NULL,
+  ipc_scale = "identity",
+  ipc_weights = rep(1, length(Y)),
+  ipc_est_type = "aipw",
+  scale_est = TRUE,
+  nuisance_estimators_full = NULL,
+  nuisance_estimators_reduced = NULL,
+  exposure_name = NULL,
+  bootstrap = FALSE,
+  b = 1000,
+  boot_interval_type = "perc",
+  clustered = FALSE,
+  cluster_id = rep(NA, length(Y)),
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>the outcome.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>the covariates. If <code>type = "average_value"</code>, then the exposure
+variable should be part of <code>X</code>, with its name provided in <code>exposure_name</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f1</code></td>
+<td>
+<p>the fitted values from a flexible estimation technique
+regressing Y on X. A vector of the same length as <code>Y</code>; if sample-splitting
+is desired, then the value of <code>f1</code> at each position should be the result
+of predicting from a model trained without that observation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>f2</code></td>
+<td>
+<p>the fitted values from a flexible estimation technique
+regressing either (a) <code>f1</code> or (b) Y on X withholding the columns in
+<code>indx</code>. A vector of the same length as <code>Y</code>; if sample-splitting
+is desired, then the value of <code>f2</code> at each position should be the result
+of predicting from a model trained without that observation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>indx</code></td>
+<td>
+<p>the indices of the covariate(s) to calculate variable
+importance for; defaults to 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>the type of importance to compute; defaults to
+<code>r_squared</code>, but other supported options are <code>auc</code>,
+<code>accuracy</code>, <code>deviance</code>, and <code>anova</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>run_regression</code></td>
+<td>
+<p>if outcome Y and covariates X are passed to
+<code>vimp_accuracy</code>, and <code>run_regression</code> is <code>TRUE</code>,
+then Super Learner will be used; otherwise, variable importance
+will be computed using the inputted fitted values.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>SL.library</code></td>
+<td>
+<p>a character vector of learners to pass to
+<code>SuperLearner</code>, if <code>f1</code> and <code>f2</code> are Y and X,
+respectively. Defaults to <code>SL.glmnet</code>, <code>SL.xgboost</code>,
+and <code>SL.mean</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>the level to compute the confidence interval at.
+Defaults to 0.05, corresponding to a 95% confidence interval.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>delta</code></td>
+<td>
+<p>the value of the <code class="reqn">\delta</code>-null (i.e., testing if
+importance &lt; <code class="reqn">\delta</code>); defaults to 0.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+<p>should CIs be computed on original ("identity") or
+another scale? (options are "log" and "logit")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>na.rm</code></td>
+<td>
+<p>should we remove NAs in the outcome and fitted values
+in computation? (defaults to <code>FALSE</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_splitting</code></td>
+<td>
+<p>should we use sample-splitting to estimate the full and
+reduced predictiveness? Defaults to <code>TRUE</code>, since inferences made using
+<code>sample_splitting = FALSE</code> will be invalid for variables with truly zero
+importance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sample_splitting_folds</code></td>
+<td>
+<p>the folds used for sample-splitting;
+these identify the observations that should be used to evaluate
+predictiveness based on the full and reduced sets of covariates, respectively.
+Only used if <code>run_regression = FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>final_point_estimate</code></td>
+<td>
+<p>if sample splitting is used, should the final point estimates
+be based on only the sample-split folds used for inference (<code>"split"</code>, the default),
+or should they instead be based on the full dataset (<code>"full"</code>) or the average
+across the point estimates from each sample split (<code>"average"</code>)? All three
+options result in valid point estimates – sample-splitting is only required for valid inference.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stratified</code></td>
+<td>
+<p>if run_regression = TRUE, then should the generated
+folds be stratified based on the outcome (helps to ensure class balance
+across cross-validation folds)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>C</code></td>
+<td>
+<p>the indicator of coarsening (1 denotes observed, 0 denotes
+unobserved).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>either (i) NULL (the default, in which case the argument
+<code>C</code> above must be all ones), or (ii) a character vector
+specifying the variable(s) among Y and X that are thought to play a
+role in the coarsening mechanism. To specify the outcome, use <code>"Y"</code>; to
+specify covariates, use a character number corresponding to the desired
+position in X (e.g., <code>"1"</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_scale</code></td>
+<td>
+<p>what scale should the inverse probability weight correction be applied on (if any)?
+Defaults to "identity". (other options are "log" and "logit")</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_weights</code></td>
+<td>
+<p>weights for the computed influence curve (i.e.,
+inverse probability weights for coarsened-at-random settings).
+Assumed to be already inverted (i.e., ipc_weights = 1 / [estimated
+probability weights]).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipc_est_type</code></td>
+<td>
+<p>the type of procedure used for coarsened-at-random
+settings; options are "ipw" (for inverse probability weighting) or
+"aipw" (for augmented inverse probability weighting).
+Only used if <code>C</code> is not all equal to 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale_est</code></td>
+<td>
+<p>should the point estimate be scaled to be greater than or equal to 0?
+Defaults to <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nuisance_estimators_full</code></td>
+<td>
+<p>(only used if <code>type = "average_value"</code>)
+a list of nuisance function estimators on the
+observed data (may be within a specified fold, for cross-fitted estimates).
+Specifically: an estimator of the optimal treatment rule; an estimator of the
+propensity score under the estimated optimal treatment rule; and an estimator
+of the outcome regression when treatment is assigned according to the estimated optimal rule.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nuisance_estimators_reduced</code></td>
+<td>
+<p>(only used if <code>type = "average_value"</code>)
+a list of nuisance function estimators on the
+observed data (may be within a specified fold, for cross-fitted estimates).
+Specifically: an estimator of the optimal treatment rule; an estimator of the
+propensity score under the estimated optimal treatment rule; and an estimator
+of the outcome regression when treatment is assigned according to the estimated optimal rule.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>exposure_name</code></td>
+<td>
+<p>(only used if <code>type = "average_value"</code>) the name of
+the exposure of interest; binary, with 1 indicating presence of the exposure and
+0 indicating absence of the exposure.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bootstrap</code></td>
+<td>
+<p>should bootstrap-based standard error estimates be computed?
+Defaults to <code>FALSE</code> (and currently may only be used if
+<code>sample_splitting = FALSE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>b</code></td>
+<td>
+<p>the number of bootstrap replicates (only used if <code>bootstrap = TRUE</code>
+and <code>sample_splitting = FALSE</code>); defaults to 1000.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>boot_interval_type</code></td>
+<td>
+<p>the type of bootstrap interval (one of <code>"norm"</code>,
+<code>"basic"</code>, <code>"stud"</code>, <code>"perc"</code>, or <code>"bca"</code>, as in
+<code>boot{boot.ci}</code>) if requested. Defaults to <code>"perc"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clustered</code></td>
+<td>
+<p>should the bootstrap resamples be performed on clusters
+rather than individual observations? Defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cluster_id</code></td>
+<td>
+<p>vector of the same length as <code>Y</code> giving the cluster IDs
+used for the clustered bootstrap, if <code>clustered</code> is <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments to the estimation tool, see "See also".</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>We define the population variable importance measure (VIM) for the
+group of features (or single feature) <code class="reqn">s</code> with respect to the
+predictiveness measure <code class="reqn">V</code> by
+</p>
+<p style="text-align: center;"><code class="reqn">\psi_{0,s} := V(f_0, P_0) - V(f_{0,s}, P_0),</code>
+</p>
+<p> where <code class="reqn">f_0</code> is
+the population predictiveness maximizing function, <code class="reqn">f_{0,s}</code> is the
+population predictiveness maximizing function that is only allowed to access
+the features with index not in <code class="reqn">s</code>, and <code class="reqn">P_0</code> is the true
+data-generating distribution. VIM estimates are obtained by obtaining
+estimators <code class="reqn">f_n</code> and <code class="reqn">f_{n,s}</code> of <code class="reqn">f_0</code> and <code class="reqn">f_{0,s}</code>,
+respectively; obtaining an estimator <code class="reqn">P_n</code> of <code class="reqn">P_0</code>; and finally,
+setting <code class="reqn">\psi_{n,s} := V(f_n, P_n) - V(f_{n,s}, P_n)</code>.
+</p>
+<p>In the interest of transparency, we return most of the calculations
+within the <code>vim</code> object. This results in a list including:
+</p>
+
+<dl>
+<dt>s</dt>
+<dd>
+<p>the column(s) to calculate variable importance for</p>
+</dd>
+<dt>SL.library</dt>
+<dd>
+<p>the library of learners passed to <code>SuperLearner</code></p>
+</dd>
+<dt>type</dt>
+<dd>
+<p>the type of risk-based variable importance measured</p>
+</dd>
+<dt>full_fit</dt>
+<dd>
+<p>the fitted values of the chosen method fit to the full data</p>
+</dd>
+<dt>red_fit</dt>
+<dd>
+<p>the fitted values of the chosen method fit to the reduced data</p>
+</dd>
+<dt>est</dt>
+<dd>
+<p>the estimated variable importance</p>
+</dd>
+<dt>naive</dt>
+<dd>
+<p>the naive estimator of variable importance (only used if <code>type = "anova"</code>)</p>
+</dd>
+<dt>eif</dt>
+<dd>
+<p>the estimated efficient influence function</p>
+</dd>
+<dt>eif_full</dt>
+<dd>
+<p>the estimated efficient influence function for the full regression</p>
+</dd>
+<dt>eif_reduced</dt>
+<dd>
+<p>the estimated efficient influence function for the reduced regression</p>
+</dd>
+<dt>se</dt>
+<dd>
+<p>the standard error for the estimated variable importance</p>
+</dd>
+<dt>ci</dt>
+<dd>
+<p>the <code class="reqn">(1-\alpha) \times 100</code>% confidence interval for the variable importance estimate</p>
+</dd>
+<dt>test</dt>
+<dd>
+<p>a decision to either reject (TRUE) or not reject (FALSE) the null hypothesis, based on a conservative test</p>
+</dd>
+<dt>p_value</dt>
+<dd>
+<p>a p-value based on the same test as <code>test</code></p>
+</dd>
+<dt>full_mod</dt>
+<dd>
+<p>the object returned by the estimation procedure for the full data regression (if applicable)</p>
+</dd>
+<dt>red_mod</dt>
+<dd>
+<p>the object returned by the estimation procedure for the reduced data regression (if applicable)</p>
+</dd>
+<dt>alpha</dt>
+<dd>
+<p>the level, for confidence interval calculation</p>
+</dd>
+<dt>sample_splitting_folds</dt>
+<dd>
+<p>the folds used for sample-splitting (used for hypothesis testing)</p>
+</dd>
+<dt>y</dt>
+<dd>
+<p>the outcome</p>
+</dd>
+<dt>ipc_weights</dt>
+<dd>
+<p>the weights</p>
+</dd>
+<dt>cluster_id</dt>
+<dd>
+<p>the cluster IDs</p>
+</dd>
+<dt>mat</dt>
+<dd>
+<p>a tibble with the estimate, SE, CI, hypothesis testing decision, and p-value</p>
+</dd>
+</dl>
+<h3>Value</h3>
+
+<p>An object of classes <code>vim</code> and the type of risk-based measure.
+See Details for more information.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>SuperLearner</code> for specific usage of the
+<code>SuperLearner</code> function and package.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># generate the data
+# generate X
+p &lt;- 2
+n &lt;- 100
+x &lt;- data.frame(replicate(p, stats::runif(n, -1, 1)))
+
+# apply the function to the x's
+f &lt;- function(x) 0.5 + 0.3*x[1] + 0.2*x[2]
+smooth &lt;- apply(x, 1, function(z) f(z))
+
+# generate Y ~ Bernoulli (smooth)
+y &lt;- matrix(rbinom(n, size = 1, prob = smooth))
+
+# set up a library for SuperLearner; note simple library for speed
+library("SuperLearner")
+learners &lt;- c("SL.glm")
+
+# using Y and X; use class-balanced folds
+est_1 &lt;- vim(y, x, indx = 2, type = "accuracy",
+           alpha = 0.05, run_regression = TRUE,
+           SL.library = learners, cvControl = list(V = 2),
+           stratified = TRUE)
+
+# using pre-computed fitted values
+set.seed(4747)
+V &lt;- 2
+full_fit &lt;- SuperLearner::CV.SuperLearner(Y = y, X = x,
+                                          SL.library = learners,
+                                          cvControl = list(V = 2),
+                                          innerCvControl = list(list(V = V)))
+full_fitted &lt;- SuperLearner::predict.SuperLearner(full_fit)$pred
+# fit the data with only X1
+reduced_fit &lt;- SuperLearner::CV.SuperLearner(Y = full_fitted,
+                                             X = x[, -2, drop = FALSE],
+                                             SL.library = learners,
+                                             cvControl = list(V = 2, validRows = full_fit$folds),
+                                             innerCvControl = list(list(V = V)))
+reduced_fitted &lt;- SuperLearner::predict.SuperLearner(reduced_fit)$pred
+
+est_2 &lt;- vim(Y = y, f1 = full_fitted, f2 = reduced_fitted,
+            indx = 2, run_regression = FALSE, alpha = 0.05,
+            stratified = TRUE, type = "accuracy",
+            sample_splitting_folds = get_cv_sl_folds(full_fit$folds))
+
+</code></pre>
+
+
+</div>

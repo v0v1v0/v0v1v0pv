@@ -1,0 +1,1170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Cassette</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Cassette handler</h2>
+
+<h3>Description</h3>
+
+<p>Main R6 class that is called from the main user facing
+function <code>use_cassette()</code>
+</p>
+
+
+<h3>Value</h3>
+
+<p>an object of class <code>Cassette</code>
+</p>
+
+
+<h3>Points of webmockr integration</h3>
+
+
+<ul>
+<li> <p><code>initialize()</code>: webmockr is used in the <code>initialize()</code> method to
+create webmockr stubs. stubs are created on call to <code>Cassette$new()</code>
+within <code>insert_cassette()</code>, but then on exiting <code>use_cassette()</code>,
+or calling <code>eject()</code> on <code>Cassette</code> class from <code>insert_cassette()</code>,
+stubs are cleaned up.
+</p>
+</li>
+<li> <p><code>eject()</code> method: <code>webmockr::disable()</code> is called before exiting
+eject to disable webmock so that webmockr does not affect any HTTP
+requests that happen afterwards
+</p>
+</li>
+<li> <p><code>call_block()</code> method: call_block is used in the <code>use_cassette()</code>
+function to evaluate whatever code is passed to it; within call_block
+<code>webmockr::webmockr_allow_net_connect()</code> is run before we evaluate
+the code block to allow real HTTP requests, then
+<code>webmockr::webmockr_disable_net_connect()</code> is called after evalulating
+the code block to disallow real HTTP requests
+</p>
+</li>
+<li> <p><code>make_http_interaction()</code> method: <code>webmockr::pluck_body()</code> utility
+function is used to pull the request body out of the HTTP request
+</p>
+</li>
+<li> <p><code>serialize_to_crul()</code> method: method: webmockr::RequestSignature and
+webmockr::Response are used to build a request and response,
+respectively, then passed to <code>webmockr::build_crul_response()</code>
+to make a complete <code>crul</code> HTTP response object
+</p>
+</li>
+</ul>
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>name</code></dt>
+<dd>
+<p>(character) cassette name</p>
+</dd>
+<dt><code>record</code></dt>
+<dd>
+<p>(character) record mode</p>
+</dd>
+<dt><code>manfile</code></dt>
+<dd>
+<p>(character) cassette file path</p>
+</dd>
+<dt><code>recorded_at</code></dt>
+<dd>
+<p>(character) date/time recorded at</p>
+</dd>
+<dt><code>serialize_with</code></dt>
+<dd>
+<p>(character) serializer to use (yaml|json)</p>
+</dd>
+<dt><code>serializer</code></dt>
+<dd>
+<p>(character) serializer to use (yaml|json)</p>
+</dd>
+<dt><code>persist_with</code></dt>
+<dd>
+<p>(character) persister to use (FileSystem only)</p>
+</dd>
+<dt><code>persister</code></dt>
+<dd>
+<p>(character) persister to use (FileSystem only)</p>
+</dd>
+<dt><code>match_requests_on</code></dt>
+<dd>
+<p>(character) matchers to use
+default: method &amp; uri</p>
+</dd>
+<dt><code>re_record_interval</code></dt>
+<dd>
+<p>(numeric) the re-record interval</p>
+</dd>
+<dt><code>tag</code></dt>
+<dd>
+<p>ignored, not used right now</p>
+</dd>
+<dt><code>tags</code></dt>
+<dd>
+<p>ignored, not used right now</p>
+</dd>
+<dt><code>root_dir</code></dt>
+<dd>
+<p>root dir, gathered from <code>vcr_configuration()</code></p>
+</dd>
+<dt><code>update_content_length_header</code></dt>
+<dd>
+<p>(logical) Whether to overwrite the
+<code>Content-Length</code> header</p>
+</dd>
+<dt><code>allow_playback_repeats</code></dt>
+<dd>
+<p>(logical) Whether to allow a single HTTP
+interaction to be played back multiple times</p>
+</dd>
+<dt><code>allow_unused_http_interactions</code></dt>
+<dd>
+<p>(logical) ignored, not used right now</p>
+</dd>
+<dt><code>exclusive</code></dt>
+<dd>
+<p>(logical) ignored, not used right now</p>
+</dd>
+<dt><code>preserve_exact_body_bytes</code></dt>
+<dd>
+<p>(logical) Whether to base64 encode the
+bytes of the requests and responses</p>
+</dd>
+<dt><code>args</code></dt>
+<dd>
+<p>(list) internal use</p>
+</dd>
+<dt><code>http_interactions_</code></dt>
+<dd>
+<p>(list) internal use</p>
+</dd>
+<dt><code>new_recorded_interactions</code></dt>
+<dd>
+<p>(list) internal use</p>
+</dd>
+<dt><code>clean_outdated_http_interactions</code></dt>
+<dd>
+<p>(logical) Should outdated interactions
+be recorded back to file</p>
+</dd>
+<dt><code>to_return</code></dt>
+<dd>
+<p>(logical) internal use</p>
+</dd>
+<dt><code>cassette_opts</code></dt>
+<dd>
+<p>(list) various cassette options</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-Cassette-new"><code>Cassette$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-print"><code>Cassette$print()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-call_block"><code>Cassette$call_block()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-eject"><code>Cassette$eject()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-file"><code>Cassette$file()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-recording"><code>Cassette$recording()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-is_empty"><code>Cassette$is_empty()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-originally_recorded_at"><code>Cassette$originally_recorded_at()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-serializable_hash"><code>Cassette$serializable_hash()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-interactions_to_record"><code>Cassette$interactions_to_record()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-merged_interactions"><code>Cassette$merged_interactions()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-up_to_date_interactions"><code>Cassette$up_to_date_interactions()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-should_re_record"><code>Cassette$should_re_record()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-should_stub_requests"><code>Cassette$should_stub_requests()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-should_remove_matching_existing_interactions"><code>Cassette$should_remove_matching_existing_interactions()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-storage_key"><code>Cassette$storage_key()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-raw_cassette_bytes"><code>Cassette$raw_cassette_bytes()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-make_dir"><code>Cassette$make_dir()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-deserialized_hash"><code>Cassette$deserialized_hash()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-previously_recorded_interactions"><code>Cassette$previously_recorded_interactions()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-write_recorded_interactions_to_disk"><code>Cassette$write_recorded_interactions_to_disk()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-record_http_interaction"><code>Cassette$record_http_interaction()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-any_new_recorded_interactions"><code>Cassette$any_new_recorded_interactions()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-make_args"><code>Cassette$make_args()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-write_metadata"><code>Cassette$write_metadata()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-http_interactions"><code>Cassette$http_interactions()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-make_http_interaction"><code>Cassette$make_http_interaction()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-serialize_to_crul"><code>Cassette$serialize_to_crul()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Cassette-clone"><code>Cassette$clone()</code></a>
+</p>
+</li>
+</ul>
+<hr>
+<a id="method-Cassette-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a new <code>Cassette</code> object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$new(
+  name,
+  record,
+  serialize_with,
+  persist_with,
+  match_requests_on,
+  re_record_interval,
+  tag,
+  tags,
+  update_content_length_header,
+  allow_playback_repeats,
+  allow_unused_http_interactions,
+  exclusive,
+  preserve_exact_body_bytes,
+  clean_outdated_http_interactions
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>name</code></dt>
+<dd>
+<p>The name of the cassette. vcr will sanitize this to ensure it
+is a valid file name.</p>
+</dd>
+<dt><code>record</code></dt>
+<dd>
+<p>The record mode. Default: "once". In the future we'll support
+"once", "all", "none", "new_episodes". See recording for more information</p>
+</dd>
+<dt><code>serialize_with</code></dt>
+<dd>
+<p>(character) Which serializer to use.
+Valid values are "yaml" (default), the only one supported for now.</p>
+</dd>
+<dt><code>persist_with</code></dt>
+<dd>
+<p>(character) Which cassette persister to
+use. Default: "file_system". You can also register and use a
+custom persister.</p>
+</dd>
+<dt><code>match_requests_on</code></dt>
+<dd>
+<p>List of request matchers
+to use to determine what recorded HTTP interaction to replay. Defaults to
+<code style="white-space: pre;">⁠["method", "uri"]⁠</code>. The built-in matchers are "method", "uri",
+"headers" and "body" ("host" and "path" not supported yet, but should
+be in a future version)</p>
+</dd>
+<dt><code>re_record_interval</code></dt>
+<dd>
+<p>(numeric) When given, the cassette will be
+re-recorded at the given interval, in seconds.</p>
+</dd>
+<dt><code>tag, tags</code></dt>
+<dd>
+<p>tags ignored, not used right now</p>
+</dd>
+<dt><code>update_content_length_header</code></dt>
+<dd>
+<p>(logical) Whether or
+not to overwrite the <code>Content-Length</code> header of the responses to
+match the length of the response body. Default: <code>FALSE</code></p>
+</dd>
+<dt><code>allow_playback_repeats</code></dt>
+<dd>
+<p>(logical) Whether or not to
+allow a single HTTP interaction to be played back multiple times.
+Default: <code>FALSE</code>.</p>
+</dd>
+<dt><code>allow_unused_http_interactions</code></dt>
+<dd>
+<p>(logical) ignored, not used right now</p>
+</dd>
+<dt><code>exclusive</code></dt>
+<dd>
+<p>(logical) ignored, not used right now</p>
+</dd>
+<dt><code>preserve_exact_body_bytes</code></dt>
+<dd>
+<p>(logical) Whether or not
+to base64 encode the bytes of the requests and responses for
+this cassette when serializing it. See also <code>preserve_exact_body_bytes</code>
+in <code>vcr_configure()</code>. Default: <code>FALSE</code></p>
+</dd>
+<dt><code>clean_outdated_http_interactions</code></dt>
+<dd>
+<p>(logical) Should outdated interactions
+be recorded back to file. Default: <code>FALSE</code></p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>A new <code>Cassette</code> object
+</p>
+
+
+<hr>
+<a id="method-Cassette-print"></a>
+
+
+
+<h4>Method <code>print()</code>
+</h4>
+
+<p>print method for <code>Cassette</code> objects
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$print(x, ...)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>x</code></dt>
+<dd>
+<p>self</p>
+</dd>
+<dt><code>...</code></dt>
+<dd>
+<p>ignored</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-Cassette-call_block"></a>
+
+
+
+<h4>Method <code>call_block()</code>
+</h4>
+
+<p>run code
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$call_block(...)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>...</code></dt>
+<dd>
+<p>pass in things to be evaluated</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>various
+</p>
+
+
+<hr>
+<a id="method-Cassette-eject"></a>
+
+
+
+<h4>Method <code>eject()</code>
+</h4>
+
+<p>ejects the current cassette
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$eject()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>self
+</p>
+
+
+<hr>
+<a id="method-Cassette-file"></a>
+
+
+
+<h4>Method <code>file()</code>
+</h4>
+
+<p>get the file path for the cassette
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$file()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-Cassette-recording"></a>
+
+
+
+<h4>Method <code>recording()</code>
+</h4>
+
+<p>is the cassette in recording mode?
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$recording()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>logical
+</p>
+
+
+<hr>
+<a id="method-Cassette-is_empty"></a>
+
+
+
+<h4>Method <code>is_empty()</code>
+</h4>
+
+<p>is the cassette on disk empty
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$is_empty()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>logical
+</p>
+
+
+<hr>
+<a id="method-Cassette-originally_recorded_at"></a>
+
+
+
+<h4>Method <code>originally_recorded_at()</code>
+</h4>
+
+<p>timestamp the cassette was originally recorded at
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$originally_recorded_at()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>POSIXct date
+</p>
+
+
+<hr>
+<a id="method-Cassette-serializable_hash"></a>
+
+
+
+<h4>Method <code>serializable_hash()</code>
+</h4>
+
+<p>Get a list of the http interactions to record + recorded_with
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$serializable_hash()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>list
+</p>
+
+
+<hr>
+<a id="method-Cassette-interactions_to_record"></a>
+
+
+
+<h4>Method <code>interactions_to_record()</code>
+</h4>
+
+<p>Get the list of http interactions to record
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$interactions_to_record()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>list
+</p>
+
+
+<hr>
+<a id="method-Cassette-merged_interactions"></a>
+
+
+
+<h4>Method <code>merged_interactions()</code>
+</h4>
+
+<p>Get interactions to record
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$merged_interactions()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>list
+</p>
+
+
+<hr>
+<a id="method-Cassette-up_to_date_interactions"></a>
+
+
+
+<h4>Method <code>up_to_date_interactions()</code>
+</h4>
+
+<p>Cleans out any old interactions based on the
+re_record_interval and clean_outdated_http_interactions settings
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$up_to_date_interactions(interactions)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>interactions</code></dt>
+<dd>
+<p>list of http interactions, of class HTTPInteraction</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>list of interactions to record
+</p>
+
+
+<hr>
+<a id="method-Cassette-should_re_record"></a>
+
+
+
+<h4>Method <code>should_re_record()</code>
+</h4>
+
+<p>Should re-record interactions?
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$should_re_record()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>logical
+</p>
+
+
+<hr>
+<a id="method-Cassette-should_stub_requests"></a>
+
+
+
+<h4>Method <code>should_stub_requests()</code>
+</h4>
+
+<p>Is record mode NOT "all"?
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$should_stub_requests()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>logical
+</p>
+
+
+<hr>
+<a id="method-Cassette-should_remove_matching_existing_interactions"></a>
+
+
+
+<h4>Method <code>should_remove_matching_existing_interactions()</code>
+</h4>
+
+<p>Is record mode "all"?
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$should_remove_matching_existing_interactions()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>logical
+</p>
+
+
+<hr>
+<a id="method-Cassette-storage_key"></a>
+
+
+
+<h4>Method <code>storage_key()</code>
+</h4>
+
+<p>Get the serializer path
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$storage_key()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-Cassette-raw_cassette_bytes"></a>
+
+
+
+<h4>Method <code>raw_cassette_bytes()</code>
+</h4>
+
+<p>Get character string of entire cassette; bytes is a misnomer
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$raw_cassette_bytes()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>character
+</p>
+
+
+<hr>
+<a id="method-Cassette-make_dir"></a>
+
+
+
+<h4>Method <code>make_dir()</code>
+</h4>
+
+<p>Create the directory that holds the cassettes, if not present
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$make_dir()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>no return; creates a directory recursively, if missing
+</p>
+
+
+<hr>
+<a id="method-Cassette-deserialized_hash"></a>
+
+
+
+<h4>Method <code>deserialized_hash()</code>
+</h4>
+
+<p>get http interactions from the cassette via the serializer
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$deserialized_hash()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>list
+</p>
+
+
+<hr>
+<a id="method-Cassette-previously_recorded_interactions"></a>
+
+
+
+<h4>Method <code>previously_recorded_interactions()</code>
+</h4>
+
+<p>get all previously recorded interactions
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$previously_recorded_interactions()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>list
+</p>
+
+
+<hr>
+<a id="method-Cassette-write_recorded_interactions_to_disk"></a>
+
+
+
+<h4>Method <code>write_recorded_interactions_to_disk()</code>
+</h4>
+
+<p>write recorded interactions to disk
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$write_recorded_interactions_to_disk()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>nothing returned
+</p>
+
+
+<hr>
+<a id="method-Cassette-record_http_interaction"></a>
+
+
+
+<h4>Method <code>record_http_interaction()</code>
+</h4>
+
+<p>record an http interaction (doesn't write to disk)
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$record_http_interaction(x)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>x</code></dt>
+<dd>
+<p>a crul, httr, or httr2 response object, with the request at <code style="white-space: pre;">⁠$request⁠</code></p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>nothing returned
+</p>
+
+
+<hr>
+<a id="method-Cassette-any_new_recorded_interactions"></a>
+
+
+
+<h4>Method <code>any_new_recorded_interactions()</code>
+</h4>
+
+<p>Are there any new recorded interactions?
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$any_new_recorded_interactions()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>logical
+</p>
+
+
+<hr>
+<a id="method-Cassette-make_args"></a>
+
+
+
+<h4>Method <code>make_args()</code>
+</h4>
+
+<p>make list of all options
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$make_args()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>nothing returned
+</p>
+
+
+<hr>
+<a id="method-Cassette-write_metadata"></a>
+
+
+
+<h4>Method <code>write_metadata()</code>
+</h4>
+
+<p>write metadata to the cassette
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$write_metadata()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>nothing returned
+</p>
+
+
+<hr>
+<a id="method-Cassette-http_interactions"></a>
+
+
+
+<h4>Method <code>http_interactions()</code>
+</h4>
+
+<p>make HTTPInteractionList object, assign to http_interactions_ var
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$http_interactions()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>nothing returned
+</p>
+
+
+<hr>
+<a id="method-Cassette-make_http_interaction"></a>
+
+
+
+<h4>Method <code>make_http_interaction()</code>
+</h4>
+
+<p>Make an <code>HTTPInteraction</code> object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$make_http_interaction(x)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>x</code></dt>
+<dd>
+<p>A crul, httr, or httr2 response object, with the request at <code style="white-space: pre;">⁠$request⁠</code></p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>an object of class HTTPInteraction
+</p>
+
+
+<hr>
+<a id="method-Cassette-serialize_to_crul"></a>
+
+
+
+<h4>Method <code>serialize_to_crul()</code>
+</h4>
+
+<p>Make a crul response object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$serialize_to_crul()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>a crul response
+</p>
+
+
+<hr>
+<a id="method-Cassette-clone"></a>
+
+
+
+<h4>Method <code>clone()</code>
+</h4>
+
+<p>The objects of this class are cloneable with this method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Cassette$clone(deep = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>deep</code></dt>
+<dd>
+<p>Whether to make a deep clone.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>vcr_configure()</code>, <code>use_cassette()</code>, <code>insert_cassette()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(vcr)
+vcr_configure(dir = tempdir())
+
+res &lt;- Cassette$new(name = "bob")
+res$file()
+res$originally_recorded_at()
+res$recording()
+res$serializable_hash()
+res$eject()
+res$should_remove_matching_existing_interactions()
+res$storage_key()
+res$match_requests_on
+
+# record all requests
+res &lt;- Cassette$new("foobar", record = "all")
+res$eject()
+
+# cleanup
+unlink(file.path(tempdir(), c("bob.yml", "foobar.yml")))
+
+library(vcr)
+vcr_configure(dir = tempdir())
+res &lt;- Cassette$new(name = "jane")
+library(crul)
+# HttpClient$new("https://hb.opencpu.org")$get("get")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

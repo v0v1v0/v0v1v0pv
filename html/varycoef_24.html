@@ -1,0 +1,121 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sample_SVCdata</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Sample Function for GP-based SVC Model for Given Locations</h2>
+
+<h3>Description</h3>
+
+<p>Samples SVC data at given locations. The SVCs parameters and the
+covariance function have to be provided. The sampled model matrix can be 
+provided or it is sampled. The SVCs are sampled according to their given parametrization and at
+respective observation locations. The error vector is sampled from a nugget
+effect. Finally, the response vector is computed. Please note that the
+function is not optimized for sampling large data sets.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">sample_SVCdata(
+  df.pars,
+  nugget.sd,
+  locs,
+  cov.name = c("exp", "sph", "mat32", "mat52", "wend1", "wend2"),
+  X = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>df.pars</code></td>
+<td>
+<p>(<code>data.frame(p, 3)</code>) <br>
+Contains the mean and covariance parameters of SVCs. The three columns
+must have the names <code>"mean"</code>, <code>"var"</code>, and <code>"scale"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nugget.sd</code></td>
+<td>
+<p>(<code>numeric(1)</code>) <br>
+Standard deviation of the nugget / error term.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>locs</code></td>
+<td>
+<p>(<code>numeric(n)</code> or <code>matrix(n, d)</code>) <br>
+The numeric vector or matrix contains the observation locations and
+therefore defines the number of observations to be <code>n</code>. For a vector,
+we assume locations on the real line, i.e., <code class="reqn">d=1</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cov.name</code></td>
+<td>
+<p>(<code>character</code>(1)) <br>
+Character defining the covariance function, c.f. <code>SVC_mle_control</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>(<code>NULL</code> or <code>matrix(n, p)</code>) <br>
+If <code>NULL</code>, the covariates are sampled, where the first column contains 
+only ones to model an intercept and further columns are sampled from a 
+standard normal. If it is provided as a <code>matrix</code>, then the dimensions
+must match the number of locations in <code>locs</code> (<code>n</code>) and the number of SVCs
+defined by the number of rows in <code>df.pars</code> (<code>p</code>).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The parameters of the model can be chosen such that we obtain data
+from a not full model, i.e., not all covariates are associated with a 
+fixed and a random effect. Using <code>var = 0</code> for instance yields a 
+constant beta coefficient for respective covariate. Note that in that 
+case the <code>scale</code> value is neglected.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>list</code> <br>
+Returns a list with the response <code>y</code>, model matrix
+<code>X</code>, a matrix <code>beta</code> containing the sampled SVC at given
+locations, a vector <code>eps</code> containing the error, and a matrix
+<code>locs</code> containing the original locations. The <code>true_pars</code>
+contains the data frame of covariance parameters that were used to
+sample the GP-based SVCs. The nugget variance has been added to the 
+original argument of the function with its respective variance, but 
+<code>NA</code> for <code>"mean"</code> and <code>"scale"</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(123)
+# SVC parameters
+(df.pars &lt;- data.frame(
+   var = c(2, 1),
+   scale = c(3, 1),
+   mean = c(1, 2)))
+# nugget standard deviation
+tau &lt;- 0.5
+
+# sample locations
+s &lt;- sort(runif(500, min = 0, max = 10))
+SVCdata &lt;- sample_SVCdata(
+  df.pars = df.pars, nugget.sd = tau, locs = s, cov.name = "mat32"
+)
+</code></pre>
+
+
+</div>

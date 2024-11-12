@@ -1,0 +1,144 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vcpen</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Penalized Variance Components</h2>
+
+<h3>Description</h3>
+
+<p>Penalized Variance Component analysis
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vcpen(
+  y,
+  X,
+  Kerns,
+  frac1 = 0.8,
+  lambda_factor = NULL,
+  lambda_grid = NULL,
+  maxiter = 1000,
+  vc_init = NULL,
+  print_iter = FALSE
+)
+
+## S3 method for class 'vcpen'
+summary(object, ..., digits = 4)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Numeric vector of traits. Only continuous trait currently allowed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Matrix of covariates (columns) for subjects (rows), matching subjects in the trait (y) vector.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Kerns</code></td>
+<td>
+<p>List of kernel matrices: a kernel matrix for each  variance compenent. The last kernel matrix in the list (an identity matrix) is for the residual variance component.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>frac1</code></td>
+<td>
+<p>Fraction of penalty imposed on L1 penalty, between 0 and 1 (0 for only L2; 1 for only L1 penalty).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda_factor</code></td>
+<td>
+<p>Weight for each vc (values between 0 and 1) for how much it should be penalized: 0 means no penalty. Default value of NULL implies weight of 1 for all vc's.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lambda_grid</code></td>
+<td>
+<p>Vector of lambda penalties for fitting the penalized model. Best to order values from largest to smallest so parameter estimates from a large penalty can be used as initial values for the next smaller penalty. Default value of NULL implies initial values  of seq(from=.10, to=0, by=-0.01).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>maxiter</code></td>
+<td>
+<p>Maximum number of iterations allowed during penalized fitting.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vc_init</code></td>
+<td>
+<p>Numeric vector of initial values for variance components. Default value of NULL implies initial values determined by 2 iterations of minque estimation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>print_iter</code></td>
+<td>
+<p>Logical:  if TRUE, print the iteration results (mainly for refined checks)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>Fitted vcpen object (used in summary method)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Optional arguments for summary method</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>digits</code></td>
+<td>
+<p>Signficant digits for summary method</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>object with S3 class vcpen
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>JP Sinnwell, DJ Schaid
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(vcexample)
+nvc &lt;- 1+length(unique(doseinfo[,2]))
+id &lt;- 1:nrow(dose)
+## vcs for genetic kernel matrices
+Kerns &lt;- vector("list", length=nvc)
+for(i in 1:(nvc-1)){
+  Kerns[[i]] &lt;- kernel_linear(dose[,grep(i, doseinfo[,2])])
+  rownames(Kerns[[i]]) &lt;- id
+  colnames(Kerns[[i]]) &lt;- id
+}
+## vc for residual variance
+Kerns[[nvc]] &lt;- diag(nrow(dose))
+rownames(Kerns[[nvc]]) &lt;- id
+colnames(Kerns[[nvc]]) &lt;- id
+fit  &lt;- vcpen(response, covmat, Kerns, frac1 = .6)
+summary(fit)
+
+</code></pre>
+
+
+</div>

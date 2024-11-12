@@ -1,0 +1,255 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summaryS4VGAMextra-methods</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Summary methods for Vector Generalized Time Series Models
+</h2>
+
+<h3>Description</h3>
+
+<p> S4 summary methods for models fitted with
+time series family functions from 
+<span class="pkg">VGAMextra</span>. 
+</p>
+<p>These function are all 
+<code>methods</code> for objects of class
+<code>vglm</code> with signature 
+<code>vgltsmff-class</code>.
+</p>
+
+
+<h3>Details</h3>
+
+<p>Implementation of vector generalized time series (TS) family functions 
+(<em>vgltsmff</em>) in <span class="pkg">VGAMextra</span> is entirely based on the structure
+of family functions of class 
+<code>vglmff-class</code> 
+from <span class="pkg">VGAM</span>. More precisely, <em>vgltsmff</em> family functions
+can be created by calls of the form <code>new("vgltsmff",...)</code>,
+following the structure <code>vglmff-class</code>.
+See <code>vglmff-class</code> for 
+additional details.
+
+
+</p>
+<p>In this line, specific S4 dispatching methods are currently 
+implemented at <span class="pkg">VGAM</span> to show (or plot) essential 
+statistical information about the model fitted.
+
+
+
+
+
+</p>
+<p>For the generic <code>summary</code>, specifically, S4 methods for 
+objects with signature <code>vgtsff</code> are incorporated
+in <span class="pkg">VGAMextra</span> to display supplementary analyses commonly
+required by TS practicioners. That is, additional information
+to the default output shown by 
+<code>summaryvglm</code> for family functions
+at <span class="pkg">VGAM</span>, as follows: 
+</p>
+
+
+
+
+
+
+
+
+<p>a) The standard errors, which are computed from the 
+asymptotic distribution of the MLE estimates, unlike the asymptotic 
+approach (z-value) from <span class="pkg">VGAM</span>.
+</p>
+<p>b) Checks on stationarity and/or invertibility for autoregressive 
+(AR), moving average (MA), and autoregressive moving-average (ARMA)
+models via the polynomial roots.
+</p>
+<p>c) The AIC, AICC and BIC criteria for model identification.
+</p>
+<p>Notice that, for intercept-only models in the 'vglm' context, 
+the asypmtotic distribution of the estimates, either conditional
+or unconditional, will coincide with the theoretical distributions
+as long as <code class="reqn">n</code> increases. In particular, for the AR(<code class="reqn">p</code>)
+process, the MLEs and the Yule-Walker estimates will concur 
+asymptotically.
+</p>
+
+
+
+
+<p>Where covariates or parameter constraints are involved, 
+the standard errors for the estimates from time series 
+family functions at <span class="pkg">VGAMextra</span> are calculated from the 
+predicted values allocated in the slot <code>@predictors</code>,
+when <code>summary(...)</code> is called.
+
+
+In this case, the <em>conditional</em> mean, 
+<code class="reqn">\textrm{E}[\eta_j | \textbf{x}]</code> <b>x</b> <code class="reqn">]</code>, is considered as the estimate, where:
+</p>
+<p style="text-align: center;"><code class="reqn">\eta_j  = \sum_{k = 1}^{p} \beta_{(j)k} \times x_{k},</code>
+</p>
+
+<p>for <code class="reqn">j = 1, \ldots, M</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class 
+<code>summary.vglm</code> printed by specific methods defined
+at <span class="pkg">VGAMextra</span> for objects with signature
+vgltsff-class.
+</p>
+
+
+
+<h3>Note</h3>
+
+<p>As for the intercept, notice that this is called <em>drift-term</em>
+at <code>ARXff</code> and
+<code>ARMAXff</code>, 
+whilst it is refered as <em>intercept</em> 
+in <code>MAXff</code>. 
+This parameter is also estimated by TS family 
+functions in <span class="pkg">VGAMextra</span>. In the MA model, particularly, 
+it is the mean of the process.
+</p>
+<p>The drift-term, 
+denoted as <code class="reqn">\mu^*</code>,
+is linearly linked to the mean,
+<code class="reqn">\mu</code>,
+of the AR and ARMA processes in turn, as follows:
+</p>
+<p style="text-align: center;"><code class="reqn"> \mu \to \frac{\mu^{*} }{1 - \sum \theta_i}.  </code>
+</p>
+
+<p>Here, <code class="reqn">\theta_i</code> are the AR coefficients.
+Hence, the standard error for the <em>drift-term</em> is 
+accordingly computed based on the asymptotic distribution
+of the mean. More precisely, the relation
+</p>
+<p style="text-align: center;"><code class="reqn">V(\mu^{*}) = (1 - \sum \theta_i)^{-2} \times 
+                  \frac{\sigma_{\varepsilon}^2 }{n},</code>
+</p>
+ 
+<p>is considered, 
+where <code class="reqn">\sigma_{\varepsilon}^2</code> is the variance
+of the random errors.
+</p>
+<p>Finally, the AIC, AICC and BIC criteria are computed of the well-known
+expressions
+</p>
+<p style="text-align: center;"><code class="reqn">AIC = (-2) \times Log-likelihood + 2 \times k</code>
+</p>
+
+<p style="text-align: center;"><code class="reqn">AICC = AIC + \frac{2~k~(k + 1)}{n - k - 1}</code>
+</p>
+
+<p>and
+</p>
+<p style="text-align: center;"><code class="reqn">BIC = (-2) \times Log-likelihood + k~\times~ln(n)</code>
+</p>
+
+<p>with <code class="reqn">k</code> denoting the number of parameters.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and T.W. Yee.
+</p>
+
+
+<h3>References</h3>
+
+<p>Woodward, H., Gray, H. and Elliot A. (2012)
+<em>Applied Time Series Analysis</em>.
+Taylor &amp; Francis/CRC, Florida, USA.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vgtsff-class</code>,
+<code>summaryvlgm</code>,
+<code>ARXff</code>,
+<code>MAXff</code>,
+<code>ARMAXff</code>, 
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+
+#------------------------------------------------------------------------#
+# Fitting a simple Moving Average model to compare with arima().
+#------------------------------------------------------------------------#
+set.seed(0628)
+nn    &lt;- 300
+theta &lt;- c(0.2, -0.37)  # Autoregressive coefficients
+phi   &lt;- c(0.25)        # MA coefficients.
+mu    &lt;- c(1.5, 0.85)   # Mean (not drift) of the MA process.
+x2 &lt;- runif(nn)
+
+tsd1 &lt;- mu[1]/(1 - sum(theta)) + 
+                  arima.sim(n = nn, 
+                            model = list(order = c(2, 0, 0), 
+                                          ar = theta),
+                            sd = exp(1.5))
+tsd2 &lt;- mu[2]/(1 - sum(theta)) + 
+                  arima.sim(n = nn, 
+                            model = list(order = c(2, 0, 1),
+                                         ar = theta, ma = phi), 
+                            sd = exp(1 + 2 * x2))
+
+tsdata &lt;- data.frame(TS1 = tsd1, TS2 = tsd2, x2 = x2)
+head(tsdata)
+
+    ###    An ARIMA(2, 0, 0) model, that is an AR(2) model    ###
+    
+#fit1 &lt;- vglm(TS1 ~ 1, 
+#             ARIMAXff(order = c(2, 0, 0), var.arg = FALSE, type.EIM = "exact"), 
+#             data = tsdata,  crit = "log", trace = TRUE)
+
+fit1 &lt;- vglm(TS1 ~ 1, 
+             ARXff(order = 2, var.arg = FALSE, type.EIM = "exact"), 
+             data = tsdata,  crit = "log", trace = TRUE)
+m.coe &lt;- Coef(fit1)
+
+## Using arima to compare to summary(vgtsff)
+summary(fit1)
+arima(tsdata$TS1, order = c(2, 0, 0)) ## Similar SE's than VGAMextra.
+
+
+m.coe[1] / (1 - sum(m.coe[-(1:2)]))  # THIS IS SIMILAR TO THE INTERCEPT 
+                                     # ESTIMATED BY arima(): 1.1898
+
+    ###    An ARIMA(2, 0, 1) models, that is an ARMA(2, 1)     ###
+    ###   The errors standard deviation is a function of 'x2'  ###
+
+### NOTICE: ARIMA and ARMA use the "identitylink" for coefficients ###
+#fit2 &lt;- vglm(TS2 ~ x2, 
+#             ARMAXff(order = c(2, 1), var.arg = FALSE, type.EIM = "exact",
+#                     zero = NULL), 
+#            # constraints = list('x2' = rbind(0, 1, 0, 0, 0)),
+#             data = tsdata,  crit = "loglikelihood", trace = TRUE)
+
+#m.coe &lt;- coef(fit2)
+#coef(fit2, matrix = TRUE)
+
+## Compare summary(vglm) to arima().
+#summary(fit2)
+#arima(tsdata$TS2, order = c(2, 0, 1))
+
+
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,203 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>newtonRaphson.basic</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Newton–Raphson algorithm
+</h2>
+
+<h3>Description</h3>
+
+<p>Newton–Raphson algorithm to approximate the roots of
+univariate real–valued functions.
+</p>
+<p>This function is vectorized.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">
+newtonRaphson.basic(f, fprime, a, b, 
+                    tol = 1e-8, n.Seq = 20,
+                    nmax = 15, ...)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>f</code></td>
+<td>
+
+<p>A univariate function whose root(s) are approximated.
+This is the target function. Must return a vector.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>fprime</code></td>
+<td>
+
+<p>A function. The first derivative of <code>f</code>. Must return a vector.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>a, b</code></td>
+<td>
+
+<p>Numeric vectors.
+Upper and lower real limits of the open interval <code class="reqn">(a, b)</code> 
+where the root(s) of  <code>f</code> will be searched. Notice, entries 
+<code>Inf</code>, <code>-Inf</code>, <code>NA</code> and <code>NaN</code> are not handled.
+</p>
+<p>These vectors are subject to be recycled if <code>a</code> and <code>b</code>
+lenghts differ.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+
+<p>Numeric. A number close to zero to test whether the 
+approximate roots from iterations <code class="reqn">k</code> and <code class="reqn">(k + 1)</code>
+are close enough to stop the algorithm.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.Seq</code></td>
+<td>
+
+<p>Numeric. The number of equally spaced initial points within
+the interval (<code>a</code>, <code>b</code>) to internally set up initial 
+values for the algorithm.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nmax</code></td>
+<td>
+
+<p>Maximum number of iterations. Default is <code class="reqn">15</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Any other argument passed down to functions <code>f</code> and
+<code>fprime</code>.  
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is an implementation of the well–known Newton–Raphson 
+algorithm to find a real root, <code class="reqn">r</code>, <code class="reqn">a &lt; r &lt; b</code>,
+of the function <code class="reqn">f</code>.
+</p>
+<p>Initial values, <code class="reqn">r_0</code> say, for the algorithm are 
+internally computed by drawing '<code>n.Seq</code>' equally spaced points 
+in <code class="reqn">(a, b)</code>. Then, the function <code>f</code> is evaluated at this 
+sequence. Finally, <code class="reqn">r_0</code> results from the closest image to 
+the horizontal axis.
+</p>
+<p>At iteration <code class="reqn">k</code>, the <code class="reqn">(k + 1)^{th}</code> approximation 
+given by
+
+</p>
+<p style="text-align: center;"><code class="reqn">r^{(k + 1)} = r^{(k)} - 
+           {\tt{f}}(r^{(k), ...)} / {\tt{fprime}}(r^{(k)}, ...)</code>
+</p>
+
+
+<p>is computed, unless the approximate root from step <code class="reqn">k</code> is the 
+desired one.
+</p>
+<p><code>newtonRaphson.basic</code> approximates this root up to
+a relative error less than <code>tol</code>. That is, at each iteration, 
+the relative error between the estimated roots from iterations 
+<code class="reqn">k</code> and <code class="reqn">k + 1</code> is calculated and then compared to <code>tol</code>.
+The algorithm stops when this condition is met.
+</p>
+<p>Instead of being single real values, arguments <code>a</code> and <code>b</code> 
+can be entered as vectors of length <code class="reqn">n</code>, say
+<code class="reqn">{\tt{a}} = c(a_1, a_2, \ldots, a_n)</code> and
+<code class="reqn">{\tt{b}} = c(b_1, b_2,\ldots, b_n)</code>. 
+In such cases, this function approaches the (supposed) root(s)
+at each interval <code class="reqn">(a_j, b_j)</code>, 
+<code class="reqn">j = 1, \ldots, n</code>. Here, initial values are searched 
+for each interval <code class="reqn">(a_j, b_j)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The approximate roots in the intervals  
+<code class="reqn">(a_j, b_j)</code>.
+When <code class="reqn">j = 1</code>, then a single estimated root is returned, if any.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The explicit forms of the target function <code>f</code> and its 
+first derivative <code>fprime</code> must be available for the algorithm. 
+</p>
+<p><code>newtonRaphson.basic</code> 
+does not handle yet numerically approximated derivatives.
+</p>
+<p>A warning is displayed if no roots are found, or if more than one 
+root might be lying in
+<code class="reqn">(a_j, b_j)</code>, for any <code class="reqn">j = 1, \ldots, n</code>.
+</p>
+<p>If <code>a</code> and <code>b</code> lengths differ, then the recyling rule 
+is applied. Specifically, the vector with minimum length
+will be extended up to match the maximum length by repeating
+its values. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>bisection.basic</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Find the roots in c(-0.5, 0.8), c(0.6, 1.2) and c(1.3, 4.1) for the
+# f(x) = x * (x - 1) * (x - 2). Roots: r1 = 0, and r2 = 1, r3 = 2.
+
+f &lt;- function(x) x * (x - 1) * (x - 2)
+fprime &lt;- function(x) 3 * x^2 - 6 * x + 2
+
+# Three roots.
+newtonRaphson.basic(f = f, fprime  = fprime, 
+                    a = c(-0.5, 0.6, 1.3), 
+                    b = c(0.8, 1.2, 4.1))              ## 0.0, 1.0 and 2.0
+                    
+# Recycling rule. Intervals analysed are (-0.5, 1.2) and (0.6, 1.2)
+newtonRaphson.basic(f = f, fprime  = fprime, 
+                    a = c(-0.5, 0.6), b = c(1.2)) 
+
+## Warning: There is more than one root in (-0.5, 1.2)!
+</code></pre>
+
+
+</div>

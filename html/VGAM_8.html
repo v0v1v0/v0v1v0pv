@@ -1,0 +1,121 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>ABO</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> The ABO Blood Group System </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the two independent parameters of the
+the ABO blood group system.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">ABO(link.pA = "logitlink", link.pB = "logitlink", ipA = NULL, ipB = NULL,
+    ipO = NULL, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link.pA, link.pB</code></td>
+<td>
+
+<p>Link functions applied to <code>pA</code> and <code>pB</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ipA, ipB, ipO</code></td>
+<td>
+
+<p>Optional initial value for <code>pA</code> and <code>pB</code> and <code>pO</code>.
+A <code>NULL</code> value means values are computed internally.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>Details at <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The parameters <code>pA</code> and <code>pB</code> are probabilities, so that
+<code>pO=1-pA-pB</code> is the third probability.
+The probabilities <code>pA</code> and <code>pB</code> correspond to A and B respectively,
+so that <code>pO</code> is the probability for O.
+It is easier to make use of initial values for <code>pO</code> than for <code>pB</code>.
+In documentation elsewhere I sometimes use
+<code>pA=p</code>,
+<code>pB=q</code>,
+<code>pO=r</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The input can be a 4-column matrix of counts, where the columns
+are A, B, AB, O (in order).
+Alternatively, the input can be a 4-column matrix of
+proportions (so each row adds to 1) and the <code>weights</code>
+argument is used to specify the total number of counts for each row.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Lange, K. (2002).
+<em>Mathematical and Statistical Methods for Genetic Analysis</em>,
+2nd ed. New York: Springer-Verlag.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>AA.Aa.aa</code>,
+<code>AB.Ab.aB.ab</code>,
+<code>A1A2A3</code>,
+<code>MNSs</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">ymat &lt;- cbind(A = 725, B = 258, AB = 72, O = 1073)  # Order matters, not the name
+fit &lt;- vglm(ymat ~ 1, ABO(link.pA = "identitylink",
+                          link.pB = "identitylink"), trace = TRUE,
+            crit = "coef")
+coef(fit, matrix = TRUE)
+Coef(fit)  # Estimated pA and pB
+rbind(ymat, sum(ymat) * fitted(fit))
+sqrt(diag(vcov(fit)))
+</code></pre>
+
+
+</div>

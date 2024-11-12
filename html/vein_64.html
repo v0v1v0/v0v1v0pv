@@ -1,0 +1,176 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>emis_paved</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Estimation of resuspension emissions from paved roads</h2>
+
+<h3>Description</h3>
+
+<p><code>emis_paved</code> estimates vehicular emissions from paved roads.
+The vehicular emissions are estimated as the product of the vehicles on a
+road, length of the road, emission factor from AP42 13.2.1 Paved roads.
+It is assumed dry hours and annual aggregation should consider moisture factor.
+It depends on Average Daily Traffic (ADT)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">emis_paved(
+  veh,
+  adt,
+  lkm,
+  k = 0.62,
+  sL1 = 0.6,
+  sL2 = 0.2,
+  sL3 = 0.06,
+  sL4 = 0.03,
+  W,
+  net = net
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>veh</code></td>
+<td>
+<p>Numeric vector with length of elements equals to number of streets
+It is an array with dimenssions number of streets x hours of day x days of week</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>adt</code></td>
+<td>
+<p>Numeric vector of with Average Daily Traffic (ADT)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lkm</code></td>
+<td>
+<p>Length of each link</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>K_PM30 = 3.23 (g/vkm), K_PM15 = 0.77 (g/vkm), K_PM10 = 0.62 (g/vkm)
+and K_PM2.5 = 0.15  (g/vkm).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sL1</code></td>
+<td>
+<p>Silt loading (g/m2) for roads with ADT &lt;= 500</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sL2</code></td>
+<td>
+<p>Silt loading (g/m2) for roads with ADT &gt; 500 and &lt;= 5000</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sL3</code></td>
+<td>
+<p>Silt loading (g/m2) for roads with ADT &gt; 5000 and &lt;= 1000</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sL4</code></td>
+<td>
+<p>Silt loading (g/m2) for roads with ADT &gt; 10000</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>W</code></td>
+<td>
+<p>array of dimensions of veh. It consists in the hourly averaged
+weight of traffic fleet in each road</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>SpatialLinesDataFrame or Spatial Feature of "LINESTRING"</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>emission estimation  g/h
+</p>
+
+
+<h3>Note</h3>
+
+<p>silt values can vary a lot. For comparison:
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;">
+  ADT         </td>
+<td style="text-align: center;"> US-EPA g/m2  </td>
+<td style="text-align: center;">  CENMA (Chile) g/m2 </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  &lt; 500       </td>
+<td style="text-align: center;"> 0.6           </td>
+<td style="text-align: center;">  2.4   </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  500-5000    </td>
+<td style="text-align: center;"> 0.2           </td>
+<td style="text-align: center;">  0.7   </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  5000-1000   </td>
+<td style="text-align: center;"> 0.06          </td>
+<td style="text-align: center;">  0.6   </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+  &gt;10000      </td>
+<td style="text-align: center;">  0.03         </td>
+<td style="text-align: center;">  0.3   </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>EPA, 2016. Emission factor documentation for AP-42. Section
+13.2.1, Paved Roads. https://www3.epa.gov/ttn/chief/ap42/ch13/final/c13s0201.pdf
+</p>
+<p>CENMA Chile: Actualizacion de inventario de emisiones de contaminntes atmosfericos RM 2020
+Universidad de Chile#'
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Do not run
+veh &lt;- matrix(1000, nrow = 10,ncol = 10)
+W &lt;- veh*1.5
+lkm &lt;-  1:10
+ADT &lt;-1000:1010
+emi  &lt;- emis_paved(veh = veh, adt = ADT, lkm = lkm, k = 0.65, W = W)
+class(emi)
+head(emi)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

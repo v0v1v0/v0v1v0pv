@@ -1,0 +1,108 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getDDFM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Degrees of Freedom for Testing Linear Contrasts of Fixed Effects and Least Square Means</h2>
+
+<h3>Description</h3>
+
+<p>There are three methods implemented, which are all available in SAS PROC MIXED, namely 
+"contain", "residual", and "satterthwaite" approximations. See the documentation of SAS
+PROC MIXED for details on this topic.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getDDFM(
+  obj,
+  L,
+  ddfm = c("contain", "residual", "satterthwaite"),
+  tol = 1e-12,
+  method.grad = "simple",
+  opt = TRUE,
+  items = NULL
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(VCA) object</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>L</code></td>
+<td>
+<p>(numeric) vector specifying the linear combination of the fixed effect or
+LS Means</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ddfm</code></td>
+<td>
+<p>(character) string specifying the method used for computing the denominator
+degrees of freedom for tests of fixed effects or LS Means. Available methods are
+"contain", "residual", and "satterthwaite".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol</code></td>
+<td>
+<p>(numeric) value specifying the numeric tolerance for testing equality to zero</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method.grad</code></td>
+<td>
+<p>(character) string specifying the method to be used for approximating the gradient
+of the variance-covariance matrix of fixed effects at the estimated covariance parameter
+estimates (see function 'grad' (numDeriv) for details)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>opt</code></td>
+<td>
+<p>(logical) TRUE = tries to optimize computation time by avoiding unnecessary computations
+for balanced datasets (see <code>test.fixef</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>items</code></td>
+<td>
+<p>(list) of pre-computed values</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The implementation of the Satterthwaite approximation was inspired by the code of function 
+'calcSatterth' of R-package 'lmerTest'.
+</p>
+
+
+<h3>Value</h3>
+
+<p>(numeric) vector with the specified type of degrees of freedom
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>test.fixef</code>
+</p>
+
+
+</div>

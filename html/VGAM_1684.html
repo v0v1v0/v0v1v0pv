@@ -1,0 +1,210 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>sloglink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Square root–Log Link Mixtures</h2>
+
+<h3>Description</h3>
+
+<p>Computes some square root–log mixture link
+transformations, including their inverse and
+the first few derivatives.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">  sloglink(theta, bvalue = NULL, taumix.log = 1, tol = 1e-13,
+    nmax = 99, inverse = FALSE, deriv = 0, short = TRUE,
+    tag = FALSE, c10 = c(2, -2))
+lcsloglink(theta, bvalue = NULL, pmix.log = 0.01, tol = 1e-13,
+    nmax = 99, inverse = FALSE, deriv = 0, short = TRUE,
+    tag = FALSE, c10 = c(2, -2))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character.
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue</code></td>
+<td>
+
+<p>See <code>Links</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>taumix.log</code></td>
+<td>
+
+<p>Numeric, of length 1.
+Mixing parameter directed at
+<code>loglink</code>.  Then
+<code>1 - exp(-taumix.log * theta)</code> is
+used to weight
+<code>sqrtlink</code>.
+Thus a 0 value will result in
+<code>loglink</code>,
+and a very large numeric such as <code>1e4</code>
+should be roughly equivalent to
+<code>sqrtlink</code> over almost
+all of the parameter space.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pmix.log</code></td>
+<td>
+
+<p>Numeric, of length 1.
+Mixing probability assigned
+to <code>loglink</code>.  Then
+<code>1 - pmix.log</code> is used to weight
+<code>sqrtlink</code>.
+Thus a 0 value will result in
+<code>sqrtlink</code>
+and 1 is equivalent to <code>loglink</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tol, nmax</code></td>
+<td>
+
+<p>Arguments fed into a function implementing a
+vectorized bisection method.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inverse, deriv, short, tag</code></td>
+<td>
+
+<p>Details at <code>Links</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>c10</code></td>
+<td>
+
+<p>See <code>sqrtlink</code>
+and
+<code>loglink</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p>For general information see
+<code>alogitlink</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The following holds for the
+<em>linear combination</em> (LC)
+variant.
+For <code>deriv = 0</code>,
+<code>(1 - pmix.log) * sqrtlink(mu, c10 = c10)
+    + pmix.log * loglink(mu)</code>
+when <code>inverse = FALSE</code>,
+and if <code>inverse = TRUE</code> then a nonlinear
+equation is solved for <code>mu</code>,
+given
+<code>eta</code> passed in as <code>theta</code>.
+For <code>deriv = 1</code>, then the function
+returns <em>d</em> <code>eta</code> / <em>d</em>
+<code>theta</code> as a function of <code>theta</code> if
+<code>inverse = FALSE</code>, else if <code>inverse
+  = TRUE</code> then it returns the reciprocal.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>The default values for <code>taumix.log</code>
+and <code>pmix.log</code>
+may change in the future.
+The name and order of the arguments
+may change too.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>alogitlink</code>,
+<code>sqrtlink</code>,
+<code>loglink</code>,
+<code>Links</code>,
+<code>poissonff</code>,
+<code>hdeff</code>.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">mu  &lt;- seq(0.01, 3, length = 10)
+sloglink(mu)
+max(abs(sloglink(sloglink(mu), inv = TRUE) - mu))  # 0?
+</code></pre>
+
+
+</div>

@@ -1,0 +1,123 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predict.ann</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Predict new examples using a trained neural network.</h2>
+
+<h3>Description</h3>
+
+<p>Predict new examples using a trained neural network.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'ann'
+predict(object, newdata = NULL, derivs = FALSE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>an object of class ‘ann’ as returned by function <code>ann</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>matrix, data frame or vector of input data.
+A vector is considered to comprise examples of a single input or
+predictor variable. If <code>x</code> is <code>NULL</code>, fitted outputs derived
+from <code>object</code> will be returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>derivs</code></td>
+<td>
+<p>logical; should derivatives of hidden and output nodes be
+returned? Default is <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>additional arguments affecting the predictions produced (not
+currently used).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is a method for the generic function <code>predict()</code>
+for class ‘ann’. It can be invoked by calling <code>predict(x)</code> for an
+object <code>x</code> of class ‘ann’.
+</p>
+<p><code>predict.ann</code> produces predicted values, obtained by evaluating the
+‘ann’ model given <code>newdata</code>, which contains the inputs to be used
+for prediction. If <code>newdata</code> is omitted, the
+predictions are based on the data used for the fit.
+</p>
+<p>Derivatives may be returned for sensitivity analyses, for example.
+</p>
+
+
+<h3>Value</h3>
+
+<p>if <code>derivs = FALSE</code>, a vector of predictions is returned.
+</p>
+<p>Otherwise, a list with the following components is returned:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>values</code></td>
+<td>
+<p>matrix of values returned by the trained ANN.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>derivs</code></td>
+<td>
+<p>matrix of derivatives of hidden (columns <code>1:object$size</code>)
+and output (final column) nodes.</p>
+</td>
+</tr>
+</table>
+<h3>See Also</h3>
+
+<p><code>ann</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## fit 1-hidden node `ann' model to ar9 data
+data("ar9")
+samp &lt;- sample(1:1000, 200)
+y &lt;- ar9[samp, ncol(ar9)]
+x &lt;- ar9[samp, -ncol(ar9)]
+x &lt;- x[, c(1,4,9)]
+
+fit &lt;- ann(x, y, size = 1, act_hid = "tanh", act_out = "linear", rang = 0.1)
+
+## get model predictions based on a new sample of ar9 data.
+samp &lt;- sample(1:1000, 200)
+y &lt;- ar9[samp, ncol(ar9)]
+x &lt;- ar9[samp, -ncol(ar9)]
+x &lt;- x[, c(1,4,9)]
+
+sim &lt;- predict(fit, newdata = x)
+
+## if derivatives are required...
+tmp &lt;- predict(fit, newdata = x, derivs = TRUE)
+sim &lt;- tmp$values
+derivs &lt;- tmp$derivs
+</code></pre>
+
+
+</div>

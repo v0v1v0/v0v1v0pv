@@ -1,0 +1,106 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot_metrics_items_cor_items</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Heatmap for correlations between multiple items</h2>
+
+<h3>Description</h3>
+
+<p>Heatmap for correlations between multiple items
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">plot_metrics_items_cor_items(
+  data,
+  cols,
+  cross,
+  method = "pearson",
+  numbers = FALSE,
+  title = TRUE,
+  labels = TRUE,
+  clean = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A tibble containing item measures.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>Tidyselect item variables (e.g. starts_with...).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross</code></td>
+<td>
+<p>Tidyselect item variables to correlate (e.g. starts_with...).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>The method of correlation calculation, pearson = Pearson's R, spearman = Spearman's rho.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>numbers</code></td>
+<td>
+<p>Controls whether to display correlation coefficients on the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>If TRUE (default) shows a plot title derived from the column labels.
+Disable the title with FALSE or provide a custom title as character value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p>If TRUE (default) extracts labels from the attributes, see codebook.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clean</code></td>
+<td>
+<p>Prepare data by data_clean.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Placeholder to allow calling the method with unused parameters from plot_metrics.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A ggplot object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(volker)
+data &lt;- volker::chatgpt
+
+plot_metrics_items_cor_items(data, starts_with("cg_adoption_adv"), starts_with("use_"))
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,79 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>KdA</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Peptide Dissociation Rate Constant (Kd) Calculations
+</h2>
+
+<h3>Description</h3>
+
+<p>Calculates the Kd of each peptide using a non-linear
+single site specific binding model. A sub-function of <code>vFormat</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">KdA(x, y, z)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>An R object, generally a <code>data.frame</code>, containing peptides in the
+first column
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+
+<p>The concentrations of each column used for Kd calculations, separated by commas.
+The order must match the relative position of the columns.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z</code></td>
+<td>
+
+<p>The columns used for Kd calculations, expressed as a sequence.
+Ex: Columns 2 through 4 = 2:4
+</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>Uses the R package:
+<a href="https://cran.r-project.org/web/packages/drc/drc.pdf">drc</a>
+created by Christian Ritz and Jens C. Strebig
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Cody Moore
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">protEx &lt;- data.frame(Peptides = c("PWRGPWARVGSG","GYNRVGQGSG","PWRGPWARVGSG"),
+C_6uM = c(65011.48,47462.24,24778), C_3uM = c(62637.81,31899.85,21313.67),
+C_1.5uM = c(57893.22,25911.35,10397.99))
+
+exKdA &lt;- KdA(protEx,c(6,3,1.5),2:4)
+</code></pre>
+
+
+</div>

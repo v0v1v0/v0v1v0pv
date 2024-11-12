@@ -1,0 +1,445 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>plot</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Plot methods for objects in vars</h2>
+
+<h3>Description</h3>
+
+<p>Plot method for objects with class attribute <code>varest</code>,
+<code>vec2var</code>, <code>varcheck</code>, <code>varfevd</code>, <code>varirf</code>,
+<code>varprd</code>, <code>varstabil</code>. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'varcheck'
+plot(x, names = NULL, main.resid = NULL, main.hist =
+NULL, main.acf = NULL, main.pacf = NULL, main.acf2 = NULL, main.pacf2 =
+NULL, ylim.resid = NULL, ylim.hist = NULL, ylab.resid = NULL, xlab.resid
+= NULL, xlab.acf = NULL, lty.resid = NULL, lwd.resid = NULL, col.resid =
+NULL, col.edf = NULL, lag.acf = NULL, lag.pacf = NULL, lag.acf2 = NULL,
+lag.pacf2 = NULL, mar = par("mar"), oma = par("oma"), ...)
+## S3 method for class 'varest'
+plot(x, names = NULL, main.fit = NULL, main.acf = NULL,
+main.pacf = NULL, ylim.fit = NULL, ylim.resid = NULL, lty.fit = NULL,
+lty.resid = NULL, lwd.fit = NULL, lwd.resid = NULL, lag.acf = NULL,
+lag.pacf = NULL, col.fit = NULL, col.resid = NULL, ylab.fit = NULL,
+ylab.resid = NULL, ylab.acf = NULL, ylab.pacf = NULL, xlab.fit = NULL,
+xlab.resid = NULL, nc, mar = par("mar"), oma = par("oma"), adj.mtext =
+NA, padj.mtext = NA, col.mtext = NA, ...)
+## S3 method for class 'vec2var'
+plot(x, ...)
+## S3 method for class 'varfevd'
+plot(x, plot.type = c("multiple", "single"),
+names = NULL, main = NULL, col = NULL, ylim = NULL, ylab = NULL,
+xlab = NULL, legend = NULL, names.arg = NULL, nc,
+mar = par("mar"), oma = par("oma"), addbars = 1, ...)
+## S3 method for class 'varirf'
+plot(x, plot.type = c("multiple", "single"), names =
+NULL, main = NULL, sub = NULL, lty = NULL, lwd = NULL, col = NULL, ylim
+= NULL, ylab = NULL, xlab = NULL, nc, mar.multi = c(0, 4, 0, 4),
+oma.multi = c(6, 4, 6, 4), adj.mtext = NA, padj.mtext = NA, col.mtext =
+NA, ...)  
+## S3 method for class 'varprd'
+plot(x, plot.type = c("multiple", "single"),
+names = NULL, main = NULL, col = NULL, lty = NULL, lwd = NULL,
+ylim = NULL, ylab = NULL, xlab = NULL, nc, mar = par("mar"),
+oma = par("oma"), ...)
+## S3 method for class 'varstabil'
+plot(x, plot.type = c("multiple", "single"), names =
+NULL, main = NULL, nc, mar = par("mar"), oma = par("oma"), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>addbars</code></td>
+<td>
+<p>Integer, number of empty bars in barplot to reserve
+space for legend. If set to zero, no legend will be returned.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>adj.mtext</code></td>
+<td>
+<p>Adjustment for <code>mtext()</code>, only applicable if <code>plot.type = "multiple"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col</code></td>
+<td>
+<p>Character vector, colors to use in plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.edf</code></td>
+<td>
+<p>Character, color of residuals' EDF.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.fit</code></td>
+<td>
+<p>Character vector, colors for diagram of fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.mtext</code></td>
+<td>
+<p>Character, color for <code>mtext()</code>, only applicable
+if <code>plot.type = "multiple"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>col.resid</code></td>
+<td>
+<p>Character vector, colors for residual plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag.acf</code></td>
+<td>
+<p>Integer, lag.max for ACF of residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag.acf2</code></td>
+<td>
+<p>Integer, lag.max for ACF of squared residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag.pacf</code></td>
+<td>
+<p>Integer, lag.max for PACF of residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lag.pacf2</code></td>
+<td>
+<p>Integer, lag.max for PACF of squared residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>legend</code></td>
+<td>
+<p>Character vector of names in legend.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lty</code></td>
+<td>
+<p>Integer/Character, the line types.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lty.fit</code></td>
+<td>
+<p>Vector, lty for diagram of fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lty.resid</code></td>
+<td>
+<p>Vector, lty for residual plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwd</code></td>
+<td>
+<p>The width of the lines.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwd.fit</code></td>
+<td>
+<p>Vector, lwd for diagram of fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lwd.resid</code></td>
+<td>
+<p>Vector, lwd for residual plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+<p>Character vector, the titles of the plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main.acf</code></td>
+<td>
+<p>Character vector, main for residuals' ACF.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main.acf2</code></td>
+<td>
+<p>Character vector, main for squared residuals' ACF.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main.fit</code></td>
+<td>
+<p>Character vector, main for diagram of fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main.hist</code></td>
+<td>
+<p>Character vector, main for histogram of residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main.pacf</code></td>
+<td>
+<p>Character vector, main for residuals' PACF.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main.pacf2</code></td>
+<td>
+<p>Character vector, main for squared residuals' PACF.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main.resid</code></td>
+<td>
+<p>Character vector, main for residual plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mar</code></td>
+<td>
+<p>Setting of margins.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mar.multi</code></td>
+<td>
+<p>Setting of margins, if <code>plot.type = "multiple"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>names</code></td>
+<td>
+<p>Character vector, the variables names to be plotted. If
+left <code>NULL</code>, all variables are plotted.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>names.arg</code></td>
+<td>
+<p>Character vector, names for x-axis of barplot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nc</code></td>
+<td>
+<p>Integer, number of columns for multiple plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>oma</code></td>
+<td>
+<p>Setting of outer margins.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>oma.multi</code></td>
+<td>
+<p>Setting of margins, if <code>plot.type = "multiple"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>padj.mtext</code></td>
+<td>
+<p>Adjustment for <code>mtext()</code>, only applicable if
+<code>plot.type = "multiple"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot.type</code></td>
+<td>
+<p>Character, if <code>multiple</code> all plots are drawn in
+a single device, otherwise the plots are shown consecutively.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sub</code></td>
+<td>
+<p>Character, sub title in plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>An object of one of the above classes.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab</code></td>
+<td>
+<p>Character vector signifying the labels for the x-axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab.acf</code></td>
+<td>
+<p>Character, xlab for ACF and PACF of residuals and
+their squares in plot.varcheck.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab.fit</code></td>
+<td>
+<p>Character vector, xlab for diagram of fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xlab.resid</code></td>
+<td>
+<p>Character vector, xlab for residual plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab</code></td>
+<td>
+<p>Character vector signifying the labels for the y-axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab.acf</code></td>
+<td>
+<p>Character, ylab for ACF.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab.fit</code></td>
+<td>
+<p>Character vector, ylab for diagram of fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab.pacf</code></td>
+<td>
+<p>Character, ylab for PACF</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylab.resid</code></td>
+<td>
+<p>Character vector, ylab for residual plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylim</code></td>
+<td>
+<p>Vector, the limits of the y-axis.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylim.fit</code></td>
+<td>
+<p>Vector, ylim for diagram of fit.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylim.hist</code></td>
+<td>
+<p>Vector, ylim for histogram of residuals.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ylim.resid</code></td>
+<td>
+<p>Vector, ylim for residual plot.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Passed to internal plot function.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The plot-method for objects with class attribute <code>vec2var</code> is the
+same as for objects with class attribute <code>varest</code>. Hence, the
+same arguments can be utilised.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Bernhard Pfaff</p>
+
+
+<h3>References</h3>
+
+<p>Hamilton, J. (1994), <em>Time Series Analysis</em>, Princeton
+University Press, Princeton.
+</p>
+<p>Lütkepohl, H. (2006), <em>New Introduction to Multiple Time Series
+Analysis</em>, Springer, New York.
+</p>
+<p>Zeileis, A., F. Leisch, K. Hornik and C. Kleiber (2002), strucchange:
+An R Package for Testing for Structural Change in Linear Regression
+Models, <em>Journal of Statistical Software</em>, <b>7(2)</b>: 1-38,
+<a href="https://www.jstatsoft.org/v07/i02/">https://www.jstatsoft.org/v07/i02/</a>  
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VAR</code>, <code>vec2var</code>, <code>fevd</code>,
+<code>irf</code>, <code>predict</code>, <code>fanchart</code>,
+<code>stability</code>, <code>arch.test</code>, <code>normality.test</code>,
+<code>serial.test</code>  
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(Canada)
+var.2c &lt;- VAR(Canada, p = 2, type = "const")
+plot(var.2c)
+## Diagnostic Testing
+## ARCH test
+archtest &lt;- arch.test(var.2c)
+plot(archtest)
+## Normality test
+normalitytest &lt;- normality.test(var.2c)
+plot(normalitytest)
+## serial correlation test
+serialtest &lt;- serial.test(var.2c)
+plot(serialtest)
+## FEVD
+var.2c.fevd &lt;- fevd(var.2c, n.ahead = 5)
+plot(var.2c.fevd)
+## IRF
+var.2c.irf &lt;- irf(var.2c, impulse = "e",
+response = c("prod", "rw", "U"), boot = FALSE)
+plot(var.2c.irf)
+## Prediction
+var.2c.prd &lt;- predict(var.2c, n.ahead = 8, ci = 0.95)
+plot(var.2c.prd)
+## Stability
+var.2c.stabil &lt;- stability(var.2c, type = "Rec-CUSUM")
+plot(var.2c.stabil)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,72 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>temp_fact</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Expansion of hourly traffic data</h2>
+
+<h3>Description</h3>
+
+<p><code>temp_fact</code> is a matrix multiplication between traffic and
+hourly expansion data-frames to obtain a data-frame of traffic
+at each link to every hour
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">temp_fact(q, pro, net, time)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>q</code></td>
+<td>
+<p>Numeric; traffic data per each link</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>pro</code></td>
+<td>
+<p>Numeric; expansion factors data-frames</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>net</code></td>
+<td>
+<p>SpatialLinesDataFrame or Spatial Feature of "LINESTRING"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>time</code></td>
+<td>
+<p>Character to be the time units as denominator, eg "1/h"</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>data-frames of expanded traffic or sf.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+# Do not run
+data(net)
+data(pc_profile)
+pc_week &lt;- temp_fact(net$ldv+net$hdv, pc_profile)
+plot(pc_week)
+pc_weeksf &lt;- temp_fact(net$ldv+net$hdv, pc_profile, net = net)
+plot(pc_weeksf)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

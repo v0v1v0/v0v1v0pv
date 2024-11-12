@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>recodmix</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Recoding mixed data</h2>
+
+<h3>Description</h3>
+
+<p>This function transforms and scales a dataset with numerical and/or categorical
+variables. Numerical variables are scaled to zero mean and unit variance. Categorical variables
+are first transformed into dummy variables according to their levels, and second centered and 
+normalized with respect to the square roots of the relative frequencies of the levels. The complete 
+procedure is described in Chavent et al. (2014).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">recodmix(X, renamelevel = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>a matrix or a dataframe with numerical and/or categorical variables. Categorical variables 
+must be given as factors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>renamelevel</code></td>
+<td>
+<p>a boolean. If TRUE (default value), the levels of the categorical variables
+are renamed as <code>'variable_name=level_name'</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>a data frame or a matrix. The input data <code>X</code> with reordered columns 
+(numerical first, categorical second).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Z</code></td>
+<td>
+<p>a data frame. The transformed data matrix with scaled numerical variables
+and scaled dummy variables coding for the levels.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>index</code></td>
+<td>
+<p>a vector of integers. Contains an implicit partitioning of the transformed
+variables: each scaled numerical variable represents a group, all scaled dummy variables 
+summarizing the levels of a categorical variable represent a group. <code>index</code> allows to 
+preserve the information on the initial structure of the data, particularly for categorical variables.</p>
+</td>
+</tr>
+</table>
+<h3>References</h3>
+
+<p>M. Chavent, V. Kuentz-Simonet, A. Labenne and J. Saracco (2014).
+Multivariate analysis of mixed data: the PCAmixdata R package, arXiv:1411.4911.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">head(HDdata)
+out &lt;- recodmix(HDdata[,-14], renamelevel=TRUE)
+# reordered data (numerical/categorical)
+colnames(out$X)
+# transformed and scaled data
+colnames(out$Z)
+# transformed variables partitioning and group membership
+out$index
+</code></pre>
+
+
+</div>

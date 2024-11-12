@@ -1,0 +1,97 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>screenVCM</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Perform screening for ultrahigh-dimensional varying coefficient model</h2>
+
+<h3>Description</h3>
+
+<p>Implements a screening procedure proposed by Liu, Li and
+Wu(2014) for varying coefficient models with
+ultra-high dimensional predictors.
+</p>
+<p>The function code is adapted from the relevant authors' code. Special thanks are due to
+Jingyuan Liu for providing some of the code upon which this function is based.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">screenVCM(X, Y, U)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>Matrix of predictors to be screened. There should be one row for each
+observation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>Vector of responses.  It should have the same length as the number of
+rows of X.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>U</code></td>
+<td>
+<p>Covariate, with which coefficient functions vary.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with following components:
+CORR_sq A vector of the unconditioned squared correlation with length equal to
+the number of columns in the input matrix X. The hgh the unconditioned
+squared correlation is, the more desirable it is to retain the corresponding
+X covariate in a later predictive model.
+rank Vector for the rank of the predictors in terms of the conditional correlation
+( <code class="reqn">\hat{rho}*_j</code> in the paper). This will have length equal to the number of columns
+in the input matrix X, and will consist of a permutation of the integers 1
+through that length. A rank of 1 indicates the feature which appears to have
+the best marginal predictive performance with largest  <code class="reqn">\hat{rho}*_j</code>, 2 represents
+the second best and so forth.
+</p>
+
+
+<h3>References</h3>
+
+<p>Liu, J., Li, R., &amp; Wu, R. (2014). Feature selection for varying coefficient
+models with ultrahigh-dimensional covariates. Journal of the American Statistical
+Association, 109: 266-274. &lt;DOI:10.1080/01621459.2013.850086&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(12345678)
+results &lt;- simulateVCM(p=400,
+                       trueIdx = c(2, 100, 300),
+                       betaFun = function(U) {
+                         beta2 &lt;- 2*I(U&gt;0.4)
+                         beta100 &lt;- 1+U
+                         beta300 &lt;- (2-3*U)^2
+                         return(c(beta2,
+                                  beta100,
+                                  beta300))
+                         })
+screenResults&lt;- screenVCM(X = results$X,
+                          Y = results$Y,
+                          U = results$U)
+rank &lt;- screenResults$rank
+unlist(rank)
+trueIdx &lt;- c(2,100,400, 600, 1000)
+rank[trueIdx]
+</code></pre>
+
+
+</div>

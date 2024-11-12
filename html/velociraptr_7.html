@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>cullMatrix</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Cull rare taxa and depauperate samples</h2>
+
+<h3>Description</h3>
+
+<p>Functions for recursively culling community matrices of rare taxa and depauperate samples.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">cullMatrix(CommunityMatrix, Rarity = 2, Richness = 2, Silent = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>CommunityMatrix</code></td>
+<td>
+<p>a matrix</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Rarity</code></td>
+<td>
+<p>a whole number</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Richness</code></td>
+<td>
+<p>a whole number</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Silent</code></td>
+<td>
+<p>logical</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Takes a community matrix (see <code>presenceMatrix</code> or <code>abundanceMatrix</code>) and removes all samples with fewer than a certain number of taxa and all taxa that occur below a certain threshold of samples. The function operates recursively, and will check to see if removing a rare taxon drops a sampe below the input minimum richness and vice-versa. This means that it is possible to eliminate all taxa and samples if the rarity and richness minimums are too high. If the <code>Silent</code> argument is set to <code>FALSE</code> the function will throw an error and print a warning if no taxa or samples are left after culling. If <code>Silent</code> is set to <code>TRUE</code> the function will simply return <code>NULL</code>. The latter case is useful if many matrices are being culled as a part of a loop, and you do not want to break the loop with an error.
+</p>
+<p>These functions originally appeared in the R script appendix of Holland, S.M. and A. Zaffos (2011) "Niche conservatism along an onshore-offshore gradient". <em>Paleobiology</em> 37:270-286.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A community matrix with depauperate samples and rare taxa removed.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andrew A. Zaffos
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Download a test dataset of pleistocene bivalves.
+# DataPBDB&lt;-downloadPBDB(Taxa="Bivalvia",StartInterval="Pleistocene",StopInterval="Pleistocene")
+
+# Create a community matrix with tectonic plates as "samples".
+# CommunityMatrix&lt;-abundanceMatrix(DataPBDB,"geoplate")
+
+# Remove taxa that occur in less than 5 samples and samples with fewer than 25 taxa.
+# cullMatrix(CommunityMatrix,Rarity=5,Richness=25,Silent=FALSE)
+
+</code></pre>
+
+
+</div>

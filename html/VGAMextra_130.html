@@ -1,0 +1,131 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>trinormalCovff</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Trivariate Normal Distribution Family Function</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the means and the upper-half of the (symmetric) covariance matrix of 
+a trivariate normal distribution by maximum likelihood.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">      trinormalCovff(zero = c("var", "cov"),
+                     lmean = "identitylink",
+                     lvar  = "loglink",
+                     lcov  = "identitylink")
+                    
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>The linear predictors modelled as intercept–only.
+See <code>zero</code> for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lmean, lvar, lcov</code></td>
+<td>
+
+<p>Link functions applied to the means, variances (diagonal elements of the 
+covariance matrix), and covariances (off-diagonal elements).
+
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This family function is similar to
+<code>trinormal</code>. The only difference is
+that the variances and covariances, instead of the 
+standard deviations and correlation coefficients,
+are directly modelled and estimated.
+Similarly, <code>trinormalCovff</code>
+also fits linear models to the means of a trivariate normal distribution.
+</p>
+<p>The fitted means are returned as the fitted values in the form of a
+three–column matrix. By default, the variances and covariances 
+are modelled as intercept–only, where a
+<code>loglink</code> link is applied to the variances
+and an <code>identitylink</code> over
+the covariances.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> 
+(see <code>vglmff-class</code>) to be
+used by VGLM/VGAM modelling functions, e.g.,
+<code>vglm</code> or <code>vgam</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Victor Miranda and Thomas Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>trinormal</code>,
+<code>zero</code>,
+<code>Links</code>,
+<code>vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(123); nn &lt;- 350
+var1 &lt;- exp(1.5); var2 &lt;- exp(0.75); var3 &lt;- exp(1.0)
+
+### Artificial data, with two covariates.
+tdata &lt;- data.frame(x2 = runif(nn), x3 = runif(nn))
+tdata &lt;- transform(tdata,
+                   y1 = rnorm(nn, 1 + 2 * x2, sd = sqrt(var1)),
+                   y2 = rnorm(nn, 3 + 1 * x2, sd = sqrt(var2)),
+                   y3 = rnorm(nn, 3 - 1 * x3, sd = sqrt(var2 * var3)))
+
+### Fit the model using VGAMextra::trinormalCovff().
+fit.trinormCovff &lt;- vglm(cbind(y1, y2, y3) ~ x2 + x3,
+                         trinormalCovff,
+                         data = tdata, trace = TRUE)
+
+summary(fit.trinormCovff)
+vcov(fit.trinormCovff)
+                         
+### Fitting the model using VGAM::trinormal()
+fit.trinormVGAM &lt;- vglm(cbind(y1, y2, y3) ~ x2 + x3,
+                        trinormal,
+                        data = tdata, trace = TRUE)
+                         
+summary(fit.trinormVGAM)
+vcov(fit.trinormVGAM)
+
+                         
+#### Compare the estimated coefficients. Note that 
+#### trinormal() estimates the sd's and correlation coeffs.
+coef(fit.trinormCovff, matrix = TRUE)
+coef(fit.trinormVGAM, matrix = TRUE)
+
+
+</code></pre>
+
+
+</div>

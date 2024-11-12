@@ -1,0 +1,345 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopPar2TailDep</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Tail Dependence Coefficients of a Bivariate Copula</h2>
+
+<h3>Description</h3>
+
+<p>This function computes the theoretical tail dependence coefficients of a
+bivariate copula for given parameter values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopPar2TailDep(family, par, par2 = 0, obj = NULL, check.pars = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>integer; single number or vector of size <code>n</code>; defines the
+bivariate copula family: <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula) <br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>7</code> = BB1 copula <br><code>8</code> = BB6 copula <br><code>9</code> = BB7 copula <br><code>10</code> = BB8 copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; <code style="white-space: pre;">⁠survival Joe'') \cr `17` = rotated BB1 copula (180 degrees; ⁠</code>survival BB1”)<br><code>18</code> = rotated BB6 copula (180 degrees; <code style="white-space: pre;">⁠survival BB6'')\cr `19` = rotated BB7 copula (180 degrees; ⁠</code>survival BB7”)<br><code>20</code> = rotated BB8 copula (180 degrees; “survival BB8”)<br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'27' = rotated BB1 copula (90 degrees) <br>
+'28' = rotated BB6 copula (90 degrees) <br>
+'29' = rotated BB7 copula (90 degrees) <br>
+'30' = rotated BB8 copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br>
+'37' = rotated BB1 copula (270 degrees) <br>
+'38' = rotated BB6 copula (270 degrees) <br>
+'39' = rotated BB7 copula (270 degrees) <br>
+'40' = rotated BB8 copula (270 degrees) <br>
+'104' = Tawn type 1 copula <br>
+'114' = rotated Tawn type 1 copula (180 degrees) <br>
+'124' = rotated Tawn type 1 copula (90 degrees) <br>
+'134' = rotated Tawn type 1 copula (270 degrees) <br>
+'204' = Tawn type 2 copula <br>
+'214' = rotated Tawn type 2 copula (180 degrees) <br>
+'224' = rotated Tawn type 2 copula (90 degrees) <br>
+'234' = rotated Tawn type 2 copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par</code></td>
+<td>
+<p>numeric; single number or vector of size <code>n</code>; copula parameter.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>par2</code></td>
+<td>
+<p>numeric; single number or vector of size <code>n</code>; second
+parameter for bivariate copulas with two parameters (t, BB1, BB6, BB7, BB8,
+Tawn type 1 and type 2; default: <code>par2 = 0</code>). <code>par2</code> should be an
+positive integer for the Students's t copula <code>family = 2</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p><code>BiCop</code> object containing the family and parameter
+specification.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>check.pars</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>; if <code>FALSE</code>, checks
+for family/parameter-consistency are omitted (should only be used with
+care).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If the family and parameter specification is stored in a <code>BiCop</code> object
+<code>obj</code>, the alternative version <br></p>
+<pre>BiCopPar2TailDep(obj)</pre>
+<p>can be used.
+</p>
+
+
+<h3>Value</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lower</code></td>
+<td>
+<p>Lower tail dependence coefficient for the given
+bivariate copula <code>family</code> and parameter(s) <code>par</code>, <code>par2</code>:
+</p>
+<p style="text-align: center;"><code class="reqn"> \lambda_L = \lim_{u\searrow 0}\frac{C(u,u)}{u} </code>
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>upper</code></td>
+<td>
+<p>Upper tail dependence coefficient for the given bivariate
+copula family <code>family</code> and parameter(s) <code>par</code>, <code>par2</code>:
+</p>
+<p style="text-align: center;"><code class="reqn"> \lambda_U = \lim_{u\nearrow 1}\frac{1-2u+C(u,u)}{1-u} </code>
+</p>
+</td>
+</tr>
+</table>
+<p>Lower and upper tail dependence coefficients for bivariate copula families
+and parameters (<code class="reqn">\theta</code> for one parameter families and the first
+parameter of the t-copula with <code class="reqn">\nu</code> degrees of freedom,
+<code class="reqn">\theta</code> and <code class="reqn">\delta</code> for the two parameter BB1, BB6, BB7 and BB8 copulas)
+are given in the following table.
+</p>
+
+<table>
+<tr>
+<td style="text-align: left;"> No. </td>
+<td style="text-align: left;"> Lower tail dependence </td>
+<td style="text-align: left;"> Upper tail dependence </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>1</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>2</code> </td>
+<td style="text-align: left;">
+<code class="reqn">2t_{\nu+1}\left(-\sqrt{\nu+1}\sqrt{\frac{1-\theta}{1+\theta}}\right)</code>
+</td>
+<td style="text-align: left;">
+<code class="reqn">2t_{\nu+1}\left(-\sqrt{\nu+1}\sqrt{\frac{1-\theta}{1+\theta}}\right)</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>3</code> </td>
+<td style="text-align: left;"> <code class="reqn">2^{-1/\theta}</code> </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>4</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/\theta}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>5</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>6</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/\theta}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>7</code> </td>
+<td style="text-align: left;"> <code class="reqn">2^{-1/(\theta\delta)}</code> </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/\delta}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>8</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/(\theta\delta)}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>9</code> </td>
+<td style="text-align: left;"> <code class="reqn">2^{-1/\delta}</code> </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/\theta}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>10</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/\theta}</code> if <code class="reqn">\delta=1</code> otherwise 0 </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>13</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> <code class="reqn">2^{-1/\theta}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>14</code> </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/\theta}</code> </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>16</code> </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/\theta}</code> </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>17</code> </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/\delta}</code> </td>
+<td style="text-align: left;"> <code class="reqn">2^{-1/(\theta\delta)}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>18</code> </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/(\theta\delta)}</code> </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>19</code> </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/\theta}</code> </td>
+<td style="text-align: left;"> <code class="reqn">2^{-1/\delta}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code>20</code> </td>
+<td style="text-align: left;"> <code class="reqn">2-2^{1/\theta}</code> if <code class="reqn">\delta=1</code> otherwise 0 </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code style="white-space: pre;">⁠23, 33⁠</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;"> <code style="white-space: pre;">⁠24, 34⁠</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code style="white-space: pre;">⁠26, 36⁠</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code style="white-space: pre;">⁠27, 37⁠</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code style="white-space: pre;">⁠28, 38⁠</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code style="white-space: pre;">⁠29, 39⁠</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code style="white-space: pre;">⁠30, 40⁠</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code style="white-space: pre;">⁠104,204⁠</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> <code class="reqn">\delta+1-(\delta^{\theta}+1)^{1/\theta}</code> </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code style="white-space: pre;">⁠114, 214⁠</code> </td>
+<td style="text-align: left;"> <code class="reqn">1+\delta-(\delta^{\theta}+1)^{1/\theta}</code> </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code style="white-space: pre;">⁠124, 224⁠</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;">
+<code style="white-space: pre;">⁠134, 234⁠</code> </td>
+<td style="text-align: left;"> - </td>
+<td style="text-align: left;"> - </td>
+</tr>
+<tr>
+<td style="text-align: left;"> </td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>The number <code>n</code> can be chosen arbitrarily, but must agree across
+arguments.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Eike Brechmann
+</p>
+
+
+<h3>References</h3>
+
+<p>Joe, H. (1997). Multivariate Models and Dependence Concepts.
+Chapman and Hall, London.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCopPar2Tau()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Example 1: Gaussian copula
+BiCopPar2TailDep(1, 0.7)
+BiCop(1, 0.7)$taildep  # alternative
+
+## Example 2: Student-t copula
+BiCopPar2TailDep(2, c(0.6, 0.7, 0.8), 4)
+
+## Example 3: different copula families
+BiCopPar2TailDep(c(3, 4, 6), 2)
+
+</code></pre>
+
+
+</div>

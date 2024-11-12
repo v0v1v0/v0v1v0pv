@@ -1,0 +1,204 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>image.vhica</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Consistency matrix for a transposable element in the VHICA analysis.  
+</h2>
+
+<h3>Description</h3>
+
+<p>This function plots a composite figure summarizing the evolutionary properties of a transposable element in a group of related species. Discrepancies may indicate horizontal transfers. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vhica'
+image(x, element = "", H1.test = "bilat", treefile = NULL, 
+skip.void = FALSE, species = NULL, p.threshold = 0.05, 
+p.adjust.method = "bonferroni",  ncolors = 1024, 
+main = element, threshcol=0.1, colsqueeze=1, 
+species.font.family="mono", species.font.cex=1, 
+    max.spname.length=10, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>An object of class <code>vhica</code>, created by the function <code>read.vhica</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>element</code></td>
+<td>
+
+<p>The name of the transposable element, as specified in the data files. If the element is not present in the data, the program halts. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>H1.test</code></td>
+<td>
+
+<p>A value among <code>"bilat"</code>, <code>"lower"</code>, or <code>"greater"</code>. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>treefile</code></td>
+<td>
+
+<p>A Newick file containing a phylogenetic tree. Species names in the tree need to match the data. If absent, the figure will not display the phylogenetic relationship (which makes the interpretation impossible). 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>skip.void</code></td>
+<td>
+
+<p>Whether or not the figure should show species that do not contain the transposable element. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species</code></td>
+<td>
+
+<p>A named character vector to display pretty species names. The names of the vector are the real species names (as they will appear in the figure), the content of the vector are species codes as in the data files. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.threshold</code></td>
+<td>
+
+<p>Threshold for the p-value (above which the color gradient increases). 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.adjust.method</code></td>
+<td>
+
+<p>As documented in <code>p.adjust</code>. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncolors</code></td>
+<td>
+
+<p>Number of colors in the gradient. 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>main</code></td>
+<td>
+
+<p>Main title of the figure (default: the name of the transposable element). 
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threshcol</code></td>
+<td>
+
+<p>Part of the color spectrum devoted to non-significant values.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colsqueeze</code></td>
+<td>
+
+<p>Values larger than 1 shrink the color gradient around the threshold.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species.font.family</code></td>
+<td>
+
+<p>Font family for the species names.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>species.font.cex</code></td>
+<td>
+
+<p>Font size of the species names.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.spname.length</code></td>
+<td>
+
+<p>Maximum length of species names. Longer labels are truncated.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Further arguments to the generic function <code>image</code>. 
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The figure displays in blue TE copies that are more divergent than expected between species, and in red copies that are less divergent than expected. If several lineages of copies are present in a species, the table will be split to display both lineages. Keys for the interpretation of the pattern and the reconstruction of an evolutionary scenario are provided in the original publication. 
+</p>
+
+
+<h3>Value</h3>
+
+<p>The function returns (invisibly) a list of elements (object of class <code>vhicaimage</code>) which can be used for further analysis: <code>tree</code> contains the phylogenetic tree (object of class <code>"phylo"</code>), <code>species</code> is the vector of species, <code>stats</code> is a matrix of log10(P-values) (positive elements are minus log10(P) corresponding to positive residuals), codedS is a matrix reminding the divergence rates from the data. Calling the method <code>summary.vhicaimage</code> on this object returns a nicely formatted data frame. 
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Implementation: Arnaud Le Rouzic &lt;lerouzic@legs.cnrs-gif.fr&gt; <br>
+Scientists who designed the method: Gabriel Wallau, Aurélie Hua-Van, Arnaud Le~Rouzic.
+</p>
+
+
+<h3>References</h3>
+
+<p>Gabriel Luz Wallau, Arnaud Le Rouzic, Pierre Capy, Elgion Loreto, Aurélie Hua-Van. VHICA: A new method to discriminate between vertical and horizontal transposon transfer: application to the mariner family within Drosophila. Molecular biology and evolution 33 (4), 1094-1109.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>read.vhica</code>, <code>plot.vhica</code>, <code>summary.vhicaimage</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">file.cb &lt;- system.file("extdata", "mini-cbias.txt", package="vhica")
+file.div &lt;- system.file("extdata", "mini-div.txt", package="vhica")
+file.tree &lt;- if(require("ape")) system.file("extdata", "phylo.nwk", package="vhica") else NULL
+vc &lt;- read.vhica(cb.filename=file.cb, div.filename=file.div)
+plot(vc, "dere", "dana")
+im &lt;- image(vc, "mellifera:6", treefile=file.tree, skip.void=TRUE)
+summary(im)
+</code></pre>
+
+
+</div>

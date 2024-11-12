@@ -1,0 +1,510 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Config</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>R6 Class representing a configuration object</h2>
+
+<h3>Description</h3>
+
+<p>R6 Class representing a configuration object
+</p>
+<p>R6 Class representing a configuration object
+</p>
+
+
+<h3>Details</h3>
+
+<p>The special sublist <code>directories</code> is structured to contain three items for each
+directory name:
+</p>
+
+<ul>
+<li> <p><code>versioned</code>: a T/F value specifying whether the directory is versioned
+</p>
+</li>
+<li> <p><code>path</code>: the full path to the top level of that directory.
+</p>
+</li>
+<li> <p><code>files</code>: A named list referencing file paths within that directory.
+</p>
+</li>
+</ul>
+<p>If the directory is versioned, a version must be set in the <code>versions</code> sublist of the
+config list. <code>versions</code> is itself a named list where each key corresponds to a
+versioned folder in <code>directories</code> and the value gives the particular folder version
+(for example, a timestamp) that corresponds to the particular run.
+</p>
+
+
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>config_list</code></dt>
+<dd>
+<p>The list representation of the Config object</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-Config-new"><code>Config$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Config-print"><code>Config$print()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Config-get"><code>Config$get()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Config-get_dir_path"><code>Config$get_dir_path()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Config-get_file_path"><code>Config$get_file_path()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Config-read"><code>Config$read()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Config-write"><code>Config$write()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Config-write_self"><code>Config$write_self()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-Config-clone"><code>Config$clone()</code></a>
+</p>
+</li>
+</ul>
+<hr>
+<a id="method-Config-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a new Config object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Config$new(config_list, versions = NULL)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>config_list</code></dt>
+<dd>
+<p>either a list or a filepath to a YAML file containing that list</p>
+</dd>
+<dt><code>versions</code></dt>
+<dd>
+<p>(default NULL) A named list containing versions for versioned
+directories. If passed, used to define or update items in <code>config_list$versions</code>.</p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-Config-print"></a>
+
+
+
+<h4>Method <code>print()</code>
+</h4>
+
+<p>Print the list representation of the Config object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Config$print()</pre></div>
+
+
+<hr>
+<a id="method-Config-get"></a>
+
+
+
+<h4>Method <code>get()</code>
+</h4>
+
+<p>Get a subset of the <code>config_list</code>
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Config$get(...)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>...</code></dt>
+<dd>
+<p>Nested indices (character or numeric) down the config list</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Details</h5>
+
+<p>If no parameters are passed, returns the entire config_list
+</p>
+
+
+
+<h5>Returns</h5>
+
+<p>A subset of the list. If the item is NULL or missing, returns an error
+</p>
+
+
+<hr>
+<a id="method-Config-get_dir_path"></a>
+
+
+
+<h4>Method <code>get_dir_path()</code>
+</h4>
+
+<p>Construct a directory path from the config object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Config$get_dir_path(
+  dir_name,
+  custom_version = NULL,
+  fail_if_does_not_exist = FALSE
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>dir_name</code></dt>
+<dd>
+<p>Directory name</p>
+</dd>
+<dt><code>custom_version</code></dt>
+<dd>
+<p>(character, default NULL) A custom version that will be
+applied to this folder, rather than pulling from <code>config_list$versions[[dir]]</code>.
+Only applies to versioned folders.</p>
+</dd>
+<dt><code>fail_if_does_not_exist</code></dt>
+<dd>
+<p>(logical, default FALSE) should this method return an
+error if the directory in question does not already exist?</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Details</h5>
+
+<p>Works differently for versioned and non-versioned directories. See the class
+description for more information.
+</p>
+
+
+
+<h5>Returns</h5>
+
+<p>The full path to the directory
+</p>
+
+
+<hr>
+<a id="method-Config-get_file_path"></a>
+
+
+
+<h4>Method <code>get_file_path()</code>
+</h4>
+
+<p>Construct a file path from the config object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Config$get_file_path(
+  dir_name,
+  file_name,
+  custom_version = NULL,
+  fail_if_does_not_exist = FALSE
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>dir_name</code></dt>
+<dd>
+<p>Directory name</p>
+</dd>
+<dt><code>file_name</code></dt>
+<dd>
+<p>File name within that directory</p>
+</dd>
+<dt><code>custom_version</code></dt>
+<dd>
+<p>(character, default NULL) A custom version that will be
+applied to this folder, rather than pulling from <code>config_list$versions[[dir]]</code>.
+Only applies to versioned folders.</p>
+</dd>
+<dt><code>fail_if_does_not_exist</code></dt>
+<dd>
+<p>(logical, default FALSE) should this method return an
+error if the directory in question does not already exist?</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Details</h5>
+
+<p>Looks for the file path under:
+<code>config_list$directories[[dir_name]]$files[[file_name]]</code>
+</p>
+
+
+
+<h5>Returns</h5>
+
+<p>The full path to the file
+Read a file based on the config
+</p>
+
+
+<hr>
+<a id="method-Config-read"></a>
+
+
+
+<h4>Method <code>read()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Config$read(dir_name, file_name, ..., custom_version = NULL)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>dir_name</code></dt>
+<dd>
+<p>Directory name</p>
+</dd>
+<dt><code>file_name</code></dt>
+<dd>
+<p>File name within that directory</p>
+</dd>
+<dt><code>...</code></dt>
+<dd>
+<p>Optional file reading arguments to pass to <code>autoread()</code></p>
+</dd>
+<dt><code>custom_version</code></dt>
+<dd>
+<p>(character, default NULL) A custom version that will be
+applied to this folder, rather than pulling from <code>config_list$versions[[dir]]</code>.
+Only applies to versioned folders. If passed, this argument must always be
+explicitly named.</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>The object loaded by <code>autoread()</code>
+Write an object to file based on the config
+</p>
+
+
+<hr>
+<a id="method-Config-write"></a>
+
+
+
+<h4>Method <code>write()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Config$write(x, dir_name, file_name, ..., custom_version = NULL)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>x</code></dt>
+<dd>
+<p>Object to write</p>
+</dd>
+<dt><code>dir_name</code></dt>
+<dd>
+<p>Directory name</p>
+</dd>
+<dt><code>file_name</code></dt>
+<dd>
+<p>File name within that directory</p>
+</dd>
+<dt><code>...</code></dt>
+<dd>
+<p>Optional file writing arguments to pass to <code>autowrite()</code></p>
+</dd>
+<dt><code>custom_version</code></dt>
+<dd>
+<p>(character, default NULL) A custom version that will be
+applied to this folder, rather than pulling from <code>config_list$versions[[dir]]</code>.
+Only applies to versioned folders. If passed, this argument must always be
+explicitly named.</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>Invisibly passes TRUE if successful
+Convenience function: write the config list to a folder as 'config.yaml'
+</p>
+
+
+<hr>
+<a id="method-Config-write_self"></a>
+
+
+
+<h4>Method <code>write_self()</code>
+</h4>
+
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Config$write_self(dir_name, ..., custom_version = NULL)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>dir_name</code></dt>
+<dd>
+<p>Directory name</p>
+</dd>
+<dt><code>...</code></dt>
+<dd>
+<p>Optional file writing arguments to pass to <code>autowrite()</code></p>
+</dd>
+<dt><code>custom_version</code></dt>
+<dd>
+<p>(character, default NULL) A custom version that will be
+applied to this folder, rather than pulling from <code>config_list$versions[[dir]]</code>.
+Only applies to versioned folders. If passed, this argument must always be
+explicitly named.</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>Invisibly passes TRUE if successful
+</p>
+
+
+<hr>
+<a id="method-Config-clone"></a>
+
+
+
+<h4>Method <code>clone()</code>
+</h4>
+
+<p>The objects of this class are cloneable with this method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>Config$clone(deep = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>deep</code></dt>
+<dd>
+<p>Whether to make a deep clone.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>pull_from_list()</code>
+</p>
+
+
+</div>

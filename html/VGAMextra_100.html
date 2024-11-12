@@ -1,0 +1,236 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>posPoiMlink</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Link functions for the mean of 1–parameter 
+discrete distributions: The Positive Poisson Distribution.
+</h2>
+
+<h3>Description</h3>
+
+<p>Computes the <code>posPoiMlink</code> transformation, 
+its inverse and the first two derivatives.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">
+     posPoiMlink(theta, bvalue = NULL, 
+                 alg.roots = c("Newton-Raphson", "bisection")[1],
+                 inverse = FALSE, deriv = 0, short = TRUE, tag = FALSE)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>theta</code></td>
+<td>
+
+<p>Numeric or character. This is <code class="reqn">\theta</code> by default, although
+it becomes <code class="reqn">\eta</code> sometimes, depending on the other parameters. 
+See below for further details.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bvalue</code></td>
+<td>
+
+<p>Details at <code>Links</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alg.roots</code></td>
+<td>
+
+<p>Character. The iterative method to find the inverse of this link
+function. Same as <code>zetaffMlink</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>inverse, deriv, short, tag</code></td>
+<td>
+
+<p>Details at <code>Links</code>
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This is a link function for the mean of the 
+positive Poisson distribution. It is defined as 
+
+</p>
+<p style="text-align: center;"><code class="reqn"> \eta = \tt{posPoiMlink}(\lambda) = 
+           -\log (\lambda^{-1} - \lambda^{-1} e^{-\lambda}),</code>
+</p>
+
+
+<p>where <code class="reqn">\lambda &gt; 0</code> stands for the single parameter of
+<code>pospoisson</code>, i.e. 
+<code>theta</code> in the VGLM/VGAM context.
+</p>
+<p>Notice, the mean of the positive Poisson is given by
+
+</p>
+<p style="text-align: center;"><code class="reqn"> \frac{\lambda}{1 - e^{-\lambda}}. </code>
+</p>
+
+
+<p>This link function comes up by taking the logarithm on both
+sides of this equation.
+</p>
+<p>The domain set for <code class="reqn">\lambda</code> is <code class="reqn">(0, \infty)</code>. 
+Hence, non–positive values of <code class="reqn">\lambda</code> will result in <code>NaN</code> 
+or <code>NA</code>. Use argument <code>bvalue</code> to properly replace 
+them before computing the link function.
+</p>
+<p><code>posPoiMlink</code> tends to infinity as <code class="reqn">\lambda</code> 
+increases. Specially, its inverse grows at a higher rate. Therefore, 
+large values of <code class="reqn">\lambda</code> will result in <code>Inf</code> accordingly. 
+See example 2 below.
+</p>
+<p>If <code>theta</code> is a character, arguments <code>inverse</code> and
+<code>deriv</code> are disregarded.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>deriv = 0</code>, the <code>posPoiMlink</code> transformation of 
+<code>theta</code>, if <code>inverse = FALSE</code>. When <code>inverse = TRUE</code>,
+<code>theta</code> becomes <code class="reqn">\eta</code> and the inverse of 
+<code>posPoiMlink</code> is needed but cannot be written in 
+closed–form. Instead this link function returns the approximated 
+inverse image of <code class="reqn">\eta</code>, say <code class="reqn">\theta_\eta</code>, 
+such that 
+
+</p>
+<p style="text-align: center;"><code class="reqn">  \tt{posPoiMlink}(\theta_\eta) = \eta.</code>
+</p>
+
+
+<p>Here, <code class="reqn">\theta_\eta</code> is iteratively computed
+as the unique root of the auxiliary function
+
+</p>
+<p style="text-align: center;"><code class="reqn"> f(\theta; \eta) = \tt{posPoiMlink}(\theta) - \eta,</code>
+</p>
+
+
+<p>as a function of <code class="reqn">\theta</code>.
+This work is performed via Newton–Raphson or bisection,
+as per argument <code>alg.roots</code>. 
+</p>
+<p>For <code>deriv = 1</code>, <em>d</em> <code>eta</code> / <em>d</em> <code>theta</code> 
+as a function of <code>theta</code> if <code>inverse = FALSE</code>, else 
+the reciprocal <em>d</em> <code>theta</code> / <em>d</em> <code>eta</code>.
+</p>
+<p>Similarly, when <code>deriv = 2</code> the second order derivatives 
+are returned in terms of <code>theta</code>.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>This link function is monotonic increasing in <code class="reqn">(0, \infty)</code> so that
+the horizontal axis is an asymptote. Then, in order to assure the root 
+of the auxiliary
+
+</p>
+<p style="text-align: center;"><code class="reqn"> f(\theta; \eta) = \tt{posPoiMlink}(\theta) - \eta</code>
+</p>
+
+
+<p>to be real, <code class="reqn">\eta</code> must be positive. As a result, 
+<code>posPoiMlink</code> is <em>shited–down</em> and hence intersecting 
+the horizontal axis uniquely.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This link function is useful to model any parameter
+in <code class="reqn">(0, \infty)</code>. Some numerical issues may arise if there are 
+covariates causing negative values the parameter. 
+Try <code>identitylink</code> alternatively.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>V. Miranda and T. W. Yee.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>pospoisson</code>,
+<code>newtonRaphson.basic</code>,
+<code>bisection.basic</code>,
+<code>Links</code>,
+<code>identitylink</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Example 1. Special values for theta (or eta, accordingly)  ##
+m.lambda &lt;- c(0, 0.5, 1, 10, 20, 25, 1e2, 1e3, Inf, -Inf, NaN, NA) 
+
+# The 'posPoiMlink' transformation and the first two derivatives.
+print(rbind(m.lambda, 
+  deriv1 = posPoiMlink(theta = m.lambda, inverse = FALSE, deriv = 1),
+  deriv2 = posPoiMlink(theta = m.lambda, inverse = FALSE, deriv = 2)),
+  digits = 2)
+  
+# The inverse of 'posPoiMlink' and the first two derivatives.
+print(rbind(m.lambda, 
+  Invderiv1 = posPoiMlink(theta = m.lambda, inverse = TRUE, deriv = 1),
+  Invderiv2 = posPoiMlink(theta = m.lambda, inverse = TRUE, deriv = 2)),
+  digits = 2)
+  
+
+## Example 2. The inverse of 'posPoiMlink' ##
+m.lambda &lt;- c(0, 1, 5, 10, 1e2, 1e3) 
+posPoiMlink(theta = posPoiMlink(m.lambda, inverse = TRUE))
+pospoi.inv &lt;- posPoiMlink(posPoiMlink(m.lambda, inverse = TRUE)) - m.lambda
+                           
+summary(pospoi.inv)                      ## Should be zero.
+
+
+## Example 3. Plot of 'posPoiMlink' and its first two derivatives ##
+## inverse = FALSE, deriv = 0, 1, 2. ##
+
+
+m.lambda &lt;- seq(0, 35, by = 0.01)[-1]
+y.lambda &lt;- posPoiMlink(theta = m.lambda, deriv = 0)
+der.1 &lt;- posPoiMlink(theta = m.lambda, deriv = 1)
+der.2 &lt;- posPoiMlink(theta = m.lambda, deriv = 2)
+
+plot(y.lambda ~ m.lambda, col = "black", 
+     main = "log(mu), mu = E[Y], Y ~ pospoisson(lambda).",
+     ylim = c(-1, 10), xlim = c(-1, 26),
+     lty = 1, type = "l", lwd = 3)
+abline(v = 0, h = 0, col = "gray50", lty = "dashed")
+
+lines(m.lambda, der.1, col = "blue", lty = 5, lwd = 3)
+lines(m.lambda, der.2, col = "chocolate", lty = 4, lwd = 3)
+legend(5, 9, legend = c("posPoiMlink", "deriv = 1", "deriv = 2"),
+       col = c("black", "blue", "chocolate"), lty = c(1, 5, 4), lwd = c(3, 3, 3))
+ 
+</code></pre>
+
+
+</div>

@@ -1,0 +1,114 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_coverage</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute coverage of intervals.</h2>
+
+<h3>Description</h3>
+
+<p>Compute coverage of intervals.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_coverage(x, y, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>extra arguments (not used)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>input tbls are grouped by <code>chrom</code> by default, and additional
+groups can be added using <code>dplyr::group_by()</code>. For example,
+grouping by <code>strand</code> will constrain analyses to the same strand. To
+compare opposing strands across two tbls, strands on the <code>y</code> tbl can
+first be inverted using <code>flip_strands()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>ivl_df with the following additional columns:
+</p>
+
+<ul>
+<li> <p><code>.ints</code> number of <code>x</code> intersections
+</p>
+</li>
+<li> <p><code>.cov</code> per-base coverage of <code>x</code> intervals
+</p>
+</li>
+<li> <p><code>.len</code> total length of <code>y</code> intervals covered by <code>x</code> intervals
+</p>
+</li>
+<li> <p><code>.frac</code> <code>.len</code> scaled by the number of <code>y</code> intervals
+</p>
+</li>
+</ul>
+<h3>Note</h3>
+
+<p>Book-ended intervals are included in coverage calculations.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/coverage.html">https://bedtools.readthedocs.io/en/latest/content/tools/coverage.html</a>
+</p>
+<p>Other multiple set operations: 
+<code>bed_closest()</code>,
+<code>bed_intersect()</code>,
+<code>bed_map()</code>,
+<code>bed_subtract()</code>,
+<code>bed_window()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end, ~strand,
+  "chr1", 100,    500,  "+",
+  "chr2", 200,    400,  "+",
+  "chr2", 300,    500,  "-",
+  "chr2", 800,    900,  "-"
+)
+
+y &lt;- tibble::tribble(
+  ~chrom, ~start, ~end, ~value, ~strand,
+  "chr1", 150,    400,  100,    "+",
+  "chr1", 500,    550,  100,    "+",
+  "chr2", 230,    430,  200,    "-",
+  "chr2", 350,    430,  300,    "-"
+)
+
+bed_coverage(x, y)
+
+</code></pre>
+
+
+</div>

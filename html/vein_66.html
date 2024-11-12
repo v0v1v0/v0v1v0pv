@@ -1,0 +1,102 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>emis_to_streets</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Emis to streets distribute top-down emissions into streets</h2>
+
+<h3>Description</h3>
+
+<p><code>emis_to_streets</code> allocates emissions proportionally to
+each feature. "Spatial" objects are converter to "sf" objects. Currently,
+'LINESTRING' or 'MULTILINESTRING' supported. The emissions are distributed
+in each street.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">emis_to_streets(streets, dfemis, by = "ID", stpro, verbose = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>streets</code></td>
+<td>
+<p>sf object with geometry 'LINESTRING' or 'MULTILINESTRING'. Or
+SpatialLinesDataFrame</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dfemis</code></td>
+<td>
+<p>data.frame with emissions</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>by</code></td>
+<td>
+<p>Character indicating the columns that must be present in both
+'street' and 'dfemis'</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>stpro</code></td>
+<td>
+<p>data.frame with two columns, category of streets and value.
+The name of the first column must be "stpro" and the sf streets must also
+have a column with the nam "stpro" indicating the category of streets.
+The second column must have the name "VAL" indicating the associated values
+to each category of street</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p>Logical; to show more info.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>When spobj is a 'Spatial' object (class of sp), they are converted
+into 'sf'.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>add_polid</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+data(net)
+stpro = data.frame(stpro = as.character(unique(net$tstreet)),
+                   VAL = 1:9)
+dnet &lt;- net["ldv"]
+dnet$stpro &lt;- as.character(net$tstreet)
+dnet$ID &lt;- "A"
+df2 &lt;- data.frame(BC = 10, CO = 20, ID = "A")
+ste &lt;- emis_to_streets(streets = dnet, dfemis = df2)
+sum(ste$ldv)
+sum(net$ldv)
+sum(ste$BC)
+sum(df2$BC)
+ste2 &lt;- emis_to_streets(streets = dnet, dfemis = df2, stpro = stpro)
+sum(ste2$ldv)
+sum(net$ldv)
+sum(ste2$BC)
+sum(df2$BC)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

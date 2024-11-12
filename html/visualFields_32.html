@@ -1,0 +1,121 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>locread</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Locmap management</h2>
+
+<h3>Description</h3>
+
+<p>Functions to handle location maps, which are lists with x and y
+coordinates and other importan information about the visual field test
+locations. Check section <code>Structure of location maps</code> below for details
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">locread(file, name = "", desc = "", bs = numeric(), ...)
+
+locwrite(locmap, file, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>file</code></td>
+<td>
+<p>the name of the file which the data are to be read from</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>to give the location map</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>desc</code></td>
+<td>
+<p>brief description for the location map</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bs</code></td>
+<td>
+<p>locations that should be excluded from statistical analysis because
+of their proximity to the blind spot</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>arguments to be passed to or from methods</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>locmap</code></td>
+<td>
+<p>location map from which to get coordinates to export as csv file</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+
+<ul>
+<li>
+<p><code>locread</code> reads a csv file with location map data
+</p>
+</li>
+<li>
+<p><code>locwrite</code> writes a csv file with location map data
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p><code>locread</code> a list with information about a location map
+</p>
+<p><code>locwrite</code> No return value
+</p>
+
+
+<h3>Structure of location maps</h3>
+
+<p>Each element in the list <code>locmaps</code> is a location map that
+contains the following fields
+</p>
+
+<ul>
+<li>
+<p><code>name</code> descriptive name
+</p>
+</li>
+<li>
+<p><code>desc</code> brief description
+</p>
+</li>
+<li>
+<p><code>coord</code> coordinates of the visual field locations
+</p>
+</li>
+<li>
+<p><code>bs</code> if not empty, the locations that ought to be removed
+for statistical analysis due to their proximity to the blind spot
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R"># write and read location map
+tf &lt;- tempfile("locmap")
+locwrite(getlocmap(), file = tf) # save current locmap in a temp file
+print(locread(tf, name = "name", desc = "desc", bs = c(1, 2))) # read the temp file
+</code></pre>
+
+
+</div>

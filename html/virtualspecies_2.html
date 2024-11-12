@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>betaFun</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Beta response function</h2>
+
+<h3>Description</h3>
+
+<p>Generation of a beta response curve (see references) according to the equation:
+</p>
+<p style="text-align: center;"><code class="reqn">k * (x - p1)^{\alpha} * (p2 - x)^{\gamma}</code>
+</p>
+
+<p>k is automatically estimated to have a maximum value of P equal to 1.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">betaFun(x, p1, p2, alpha, gamma)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>a numeric value or vector. The input environmental variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p1</code></td>
+<td>
+<p>a numeric value or vector. Lower tolerance bound for the species</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p2</code></td>
+<td>
+<p>a a numeric value or vector. Upper tolerance bound for the species</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>a numeric value or vector. Parameter controlling the shape of the curve (see details)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>a numeric value or vector. Parameter controlling the shape of the curve (see details)</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>p1 and p2 can be seen as the upper and lower critical threshold of the curve.
+<code>alpha</code> and <code>gamma</code> control the shape of the curve near p1 and p2, respectively.
+When <code>alpha</code> = <code>gamma</code>, the curve is symmetric. Low values of <code>alpha</code> and <code>gamma</code> 
+result in smooth (&lt; 1) to plateau (&lt; 0.01) curves. Higher values result in 
+peak (&gt; 10) curves. 
+</p>
+<p>When <code>alpha</code> &lt; <code>gamma</code>, the curve is skewed to the right.
+When <code>gamma</code> &lt; <code>alpha</code>, the curve is skewed to the left.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a numeric value or vector resulting from the function
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+</p>
+<p>Maintainer: Boris Leroy <a href="mailto:leroy.boris@gmail.com">leroy.boris@gmail.com</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Oksanen, J. &amp; Minchin, P.R. (2002). Continuum theory revisited: what shape 
+are species responses along ecological gradients? <em>Ecological Modelling</em>
+<b>157</b>:119-129.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>linearFun</code>, <code>quadraticFun</code>, <code>custnorm</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">temp &lt;- seq(-10, 40, length = 100)
+# A curve similar to a thermal performance curve
+P &lt;- betaFun(x = temp, p1 = 0, p2 = 35, alpha = 0.9, gamma = 0.08)
+plot(P ~ temp, type = "l")
+</code></pre>
+
+
+</div>

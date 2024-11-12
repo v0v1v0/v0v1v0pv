@@ -1,0 +1,371 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vetiver_sm_build</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Deploy a vetiver model API to Amazon SageMaker with modular functions</h2>
+
+<h3>Description</h3>
+
+<p>Use the function <code>vetiver_deploy_sagemaker()</code> for basic deployment on
+SageMaker, or these three functions together for more advanced use cases:
+</p>
+
+<ul>
+<li> <p><code>vetiver_sm_build()</code> generates and builds a Docker image on SageMaker for
+a vetiver model
+</p>
+</li>
+<li> <p><code>vetiver_sm_model()</code> creates an Amazon SageMaker model
+</p>
+</li>
+<li> <p><code>vetiver_sm_endpoint()</code> deploys an Amazon SageMaker model endpoint
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">vetiver_sm_build(
+  board,
+  name,
+  version = NULL,
+  path = fs::dir_create(tempdir(), "vetiver"),
+  predict_args = list(),
+  docker_args = list(),
+  repository = NULL,
+  compute_type = c("BUILD_GENERAL1_SMALL", "BUILD_GENERAL1_MEDIUM",
+    "BUILD_GENERAL1_LARGE", "BUILD_GENERAL1_2XLARGE"),
+  role = NULL,
+  bucket = NULL,
+  vpc_id = NULL,
+  subnet_ids = list(),
+  security_group_ids = list(),
+  log = TRUE,
+  ...
+)
+
+vetiver_sm_model(
+  image_uri,
+  model_name,
+  role = NULL,
+  vpc_config = list(),
+  enable_network_isolation = FALSE,
+  tags = list()
+)
+
+vetiver_sm_endpoint(
+  model_name,
+  instance_type,
+  endpoint_name = NULL,
+  initial_instance_count = 1,
+  accelerator_type = NULL,
+  tags = list(),
+  kms_key = NULL,
+  data_capture_config = list(),
+  volume_size = NULL,
+  model_data_download_timeout = NULL,
+  wait = TRUE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>board</code></td>
+<td>
+<p>An AWS S3 board created with <code>pins::board_s3()</code>. This board
+must be in the correct region for your SageMaker instance.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p>Pin name.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>version</code></td>
+<td>
+<p>Retrieve a specific version of a pin. Use <code>pin_versions()</code> to
+find out which versions are available and when they were created.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>path</code></td>
+<td>
+<p>A path to write the Plumber file, Dockerfile, and lockfile,
+capturing the model's dependencies.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>predict_args</code></td>
+<td>
+<p>A list of optional arguments passed to <code>vetiver_api()</code>
+such as the prediction <code>type</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>docker_args</code></td>
+<td>
+<p>A list of optional arguments passed to
+<code>vetiver_write_docker()</code> such as the <code>lockfile</code> name or whether to use
+<code>rspm</code>. Do not pass <code>additional_pkgs</code> here, as this function uses
+<code>additional_pkgs = required_pkgs(board)</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>repository</code></td>
+<td>
+<p>The ECR repository and tag for the image as a character.
+Defaults to <code style="white-space: pre;">⁠sagemaker-studio-${domain_id}:latest⁠</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>compute_type</code></td>
+<td>
+<p>The <a href="https://aws.amazon.com/codebuild/">CodeBuild</a>
+compute type as a character. Defaults to <code>BUILD_GENERAL1_SMALL</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>role</code></td>
+<td>
+<p>The ARN IAM role name (as a character) to be used with:
+</p>
+
+<ul>
+<li>
+<p> CodeBuild for <code>vetiver_sm_build()</code>
+</p>
+</li>
+<li>
+<p> the SageMaker model for <code>vetiver_sm_model()</code>
+</p>
+</li>
+</ul>
+<p>Defaults to the SageMaker Studio execution role.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bucket</code></td>
+<td>
+<p>The S3 bucket to use for sending data to CodeBuild as a
+character. Defaults to the SageMaker SDK default bucket.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vpc_id</code></td>
+<td>
+<p>ID of the VPC that will host the CodeBuild project such as
+<code>"vpc-05c09f91d48831c8c"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>subnet_ids</code></td>
+<td>
+<p>List of subnet IDs for the CodeBuild project, such as
+<code>list("subnet-0b31f1863e9d31a67")</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>security_group_ids</code></td>
+<td>
+<p>List of security group IDs for the CodeBuild
+project, such as <code>list("sg-0ce4ec0d0414d2ddc")</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+<p>A logical to show the logs of the running CodeBuild build.
+Defaults to <code>TRUE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p><a href="https://docs.docker.com/engine/reference/commandline/build/#options%3E">Docker build parameters</a>
+(Use "_" instead of "-"; for example, Docker optional parameter
+<code>build-arg</code> becomes <code>build_arg</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>image_uri</code></td>
+<td>
+<p>The AWS ECR image URI for the Amazon SageMaker Model to be
+created (for example, as returned by <code>vetiver_sm_build()</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model_name</code></td>
+<td>
+<p>The Amazon SageMaker model name to be deployed.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vpc_config</code></td>
+<td>
+<p>A list containing the VPC configuration for the Amazon
+SageMaker model <a href="https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_VpcConfig.html">API VpcConfig</a>
+(optional).
+</p>
+
+<ul>
+<li> <p><code>Subnets</code>: List of subnet ids
+</p>
+</li>
+<li> <p><code>SecurityGroupIds</code>: List of security group ids
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>enable_network_isolation</code></td>
+<td>
+<p>A logical to specify whether the container
+will run in network isolation mode. Defaults to <code>FALSE</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tags</code></td>
+<td>
+<p>A named list of tags for labeling the Amazon SageMaker model or
+model endpint to be created.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>instance_type</code></td>
+<td>
+<p>Type of EC2 instance to use; see
+<a href="https://aws.amazon.com/sagemaker/pricing/">Amazon SageMaker pricing</a>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>endpoint_name</code></td>
+<td>
+<p>The name to use for the Amazon SageMaker model endpoint
+to be created, if to be different from <code>model_name</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>initial_instance_count</code></td>
+<td>
+<p>The initial number of instances to run
+in the endpoint.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>accelerator_type</code></td>
+<td>
+<p>Type of Elastic Inference accelerator to
+attach to an endpoint for model loading and inference, for
+example, <code>"ml.eia1.medium"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>kms_key</code></td>
+<td>
+<p>The ARN of the KMS key used to encrypt the data on the
+storage volume attached to the instance hosting the endpoint.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data_capture_config</code></td>
+<td>
+<p>A list for configuration to control how Amazon
+SageMaker captures inference data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>volume_size</code></td>
+<td>
+<p>The size, in GB, of the ML storage volume attached to
+the individual inference instance associated with the production variant.
+Currently only Amazon EBS gp2 storage volumes are supported.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>model_data_download_timeout</code></td>
+<td>
+<p>The timeout value, in seconds, to download
+and extract model data from Amazon S3.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>wait</code></td>
+<td>
+<p>A logical for whether to wait for the endpoint to be deployed.
+Defaults to <code>TRUE</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The function <code>vetiver_sm_build()</code> generates the files necessary to
+build a Docker container to deploy a vetiver model in SageMaker and then
+builds the image on <a href="https://aws.amazon.com/codebuild/">AWS CodeBuild</a>. The
+resulting image is stored in <a href="https://aws.amazon.com/ecr/">AWS ECR</a>.
+This function creates a Plumber file and Dockerfile appropriate for
+SageMaker, for example, with <code>path = "/invocations"</code> and <code>port = 8080</code>.
+</p>
+<p>If you run into problems with Docker rate limits, then either
+</p>
+
+<ul>
+<li>
+<p> authenticate to Docker from SageMaker, or
+</p>
+</li>
+<li>
+<p> use a <a href="https://gallery.ecr.aws/docker/library/r-base">public ECR base image</a>,
+passed through <code>docker_args</code>
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p><code>vetiver_sm_build()</code> returns the AWS ECR image URI and
+<code>vetiver_sm_model()</code> returns the model name (both as characters).
+<code>vetiver_sm_endpoint()</code> returns a new <code>vetiver_endpoint_sagemaker()</code> object.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vetiver_prepare_docker()</code>, <code>vetiver_deploy_sagemaker()</code>, <code>vetiver_endpoint_sagemaker()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">if (FALSE) {
+library(pins)
+b &lt;- board_s3(bucket = "my-existing-bucket")
+cars_lm &lt;- lm(mpg ~ ., data = mtcars)
+v &lt;- vetiver_model(cars_lm, "cars_linear")
+vetiver_pin_write(b, v)
+
+new_image_uri &lt;- vetiver_sm_build(
+    board = b,
+    name = "cars_linear",
+    predict_args = list(type = "class", debug = TRUE),
+    docker_args = list(
+        base_image = "FROM public.ecr.aws/docker/library/r-base:4.2.2"
+    )
+)
+
+model_name &lt;- vetiver_sm_model(
+    new_image_uri,
+    tags = list("my_custom_tag" = "fuel_efficiency")
+)
+
+vetiver_sm_endpoint(model_name, "ml.t2.medium")
+}
+</code></pre>
+
+
+</div>

@@ -1,0 +1,69 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>createGeneSetCollection</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Utility function to help create gene set collection list object</h2>
+
+<h3>Description</h3>
+
+<p>Utility function that creates a gene set collection list in the format required by vamForCollection() given the gene IDs measured in the expression matrix and a list of gene sets as defined by the IDs of the member genes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">    createGeneSetCollection(gene.ids, gene.set.collection, min.size=1, max.size)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>gene.ids</code></td>
+<td>
+<p>Vector of gene IDs. This should correspond to the genes measured in the gene expression data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gene.set.collection</code></td>
+<td>
+<p>List of gene sets where each element in the list corresponds to a gene set and the list element is a vector of gene IDs. List names are gene set names. Must contain at least one gene set.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>min.size</code></td>
+<td>
+<p>Minimum gene set size after filtering out genes not in the gene.ids vector. Gene sets whose post-filtering size is below this are removed from the final collection list. Default is 1 and cannot be set to less than 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.size</code></td>
+<td>
+<p>Maximum gene set size after filtering out genes not in the gene.ids vector. Gene sets whose post-filtering size is above this are removed from the final collection list. If not specified, no filtering is performed.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Version of the input gene.set.collection list where gene IDs have been replaced by position indices, genes not present in the gene.ids vector have been removed and gene sets failing the min/max size constraints have been removed.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vam</code></p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">    # Create a collection with two sets defined over 3 genes
+    createGeneSetCollection(gene.ids=c("A", "B", "C"),
+        gene.set.collection = list(set1=c("A", "B"), set2=c("B", "C")),
+        min.size=2, max.size=3)                    
+</code></pre>
+
+
+</div>

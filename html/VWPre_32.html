@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>transform_to_elogit</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Transforms proportion looks to empirical logits.</h2>
+
+<h3>Description</h3>
+
+<p><code>transform_to_elogit</code> transforms the proportion of looks for 
+each interest area to empirical logits. Proportions are inherently bound 
+between 0 and 1 and are therefore not suitable for some types of analysis. 
+Logits provide an unbounded measure, though range from negative infinity to 
+infinity, so it is important to know that this logit function adds a constant 
+(hence, empirical logit). Additionally this calculates weights which estimate 
+the variance in each bin (because the variance of the logit depends on the 
+mean). This is important for regression analyses. N.B.: This function will 
+work for data with a maximum of 8 interest areas.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">transform_to_elogit(
+  data,
+  NoIA = NULL,
+  ObsPerBin = NULL,
+  Constant = 0.5,
+  ObsOverride = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A data table object output by <code>bin_prop</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>NoIA</code></td>
+<td>
+<p>A positive integer indicating the number of interest areas defined 
+when creating the study.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ObsPerBin</code></td>
+<td>
+<p>A positive integer indicating the number of observations to
+use in the calculation. Typically, this will be the number of samples per 
+bin, which can be determined with <code>check_samples_per_bin</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Constant</code></td>
+<td>
+<p>A positive number used for the empirical logit and weights
+calculation; by default, 0.5 as in Barr (2008).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ObsOverride</code></td>
+<td>
+<p>A logical value controlling restrictions on the value
+provided to ObsPerBin. Default value is FALSE.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>These calculations were adapted from:
+Barr, D. J., (2008) Analyzing 'visual world' eyetracking data using 
+multilevel logistic regression, <em>Journal of Memory and Language</em>, 
+<em>59</em>(4), 457–474.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data table with additional columns (the number of which depends on 
+the number of interest areas specified) added to <code>data</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+library(VWPre)
+# Convert proportions to empirical logits and calculate weights...
+df &lt;- transform_to_elogit(dat, NoIA = 4, ObsPerBin = 20, Constant = 0.5)
+
+## End(Not run)
+</code></pre>
+
+
+</div>

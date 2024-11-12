@@ -1,0 +1,180 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>add1.vglm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add or Drop All Possible Single Terms to/from a Model</h2>
+
+<h3>Description</h3>
+
+<p>Compute all the single terms in the <code>scope</code> argument that
+can be
+added to or
+dropped from the model, fit those models and compute a
+table of the changes in fit.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'vglm'
+add1(object, scope, test = c("none", "LRT"), k = 2, ...)
+## S3 method for class 'vglm'
+drop1(object, scope, test = c("none", "LRT"), k = 2, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>a fitted <code>vglm</code> model object.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scope, k</code></td>
+<td>
+<p>See <code>drop1.glm</code>.</p>
+</td>
+</tr>
+</table>
+<table><tr style="vertical-align: top;">
+<td><code>test</code></td>
+<td>
+<p>Same as <code>drop1.glm</code>
+but with fewer choices.
+</p>
+</td>
+</tr></table>
+<table><tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>These functions are a direct adaptation of
+<code>add1.glm</code>
+and
+<code>drop1.glm</code>
+for <code>vglm-class</code> objects.
+For <code>drop1</code> methods, a missing <code>scope</code> is taken to
+be all terms in the model. The hierarchy is respected when
+considering terms to be added or dropped: all main effects
+contained in a second-order interaction must remain, and so on.
+In a <code>scope</code> formula <code>.</code> means ‘what is
+already there’.
+</p>
+<p>Compared to 
+<code>add1.glm</code>
+and
+<code>drop1.glm</code>
+these functions are simpler, e.g., there is no
+<em>Cp</em>, F and Rao (score) tests,
+<code>x</code> and <code>scale</code> arguments.
+Most models do not have a deviance, however twice the
+log-likelihood differences are used to test the significance
+of terms.
+</p>
+
+
+
+<p>The default output table gives AIC, defined as minus twice log
+likelihood plus <code class="reqn">2p</code> where <code class="reqn">p</code> is the rank of the model (the
+number of effective parameters).  This is only defined up to an
+additive constant (like log-likelihoods).
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"anova"</code> summarizing the differences
+in fit between the models.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>In general, the same warnings in
+<code>add1.glm</code> and
+<code>drop1.glm</code>
+apply here.
+Furthermore, these functions have not been rigorously tested
+for all models, so treat the results cautiously and please
+report any bugs.
+</p>
+<p>Care is needed to check that the constraint matrices of added
+terms are correct.
+Also, if <code>object</code> is of the form
+<code>vglm(..., constraints = list(x1 = cm1, x2 = cm2))</code>
+then <code>add1.vglm</code> may fail because the
+<code>constraints</code> argument needs to have the constaint
+matrices for <em>all</em> terms.
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Note</h3>
+
+<p>Most <span class="pkg">VGAM</span> family functions do not compute a deviance,
+but instead the likelihood function is evaluated at the MLE.
+Hence a column name <code>"Deviance"</code> only appears for a
+few models; and almost always there is a column labelled
+<code>"logLik"</code>.
+</p>
+
+
+
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>step4vglm</code>,
+<code>vglm</code>,
+<code>extractAIC.vglm</code>,
+<code>trim.constraints</code>,
+<code>anova.vglm</code>,
+<code>backPain2</code>,
+<code>update</code>.
+</p>
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data("backPain2", package = "VGAM")
+summary(backPain2)
+fit1 &lt;- vglm(pain ~ x2 + x3 + x4, propodds, data = backPain2)
+coef(fit1)
+add1(fit1, scope = ~ x2 * x3 * x4, test = "LRT")
+drop1(fit1, test = "LRT")
+fit2 &lt;- vglm(pain ~ x2 * x3 * x4, propodds, data = backPain2)
+drop1(fit2)
+</code></pre>
+
+
+</div>

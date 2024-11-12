@@ -1,0 +1,115 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mcamodelobis</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Basic MCA function for clasification</h2>
+
+<h3>Description</h3>
+
+<p>This function presents visual graphics by means of Multiple correspondence Analysis projection.
+Interval variables are categorized to bins.
+Dependent classification variable is set as supplementary variable. It is used as base for mcacontour function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mcamodelobis(dataf=dataf,listconti,listclass, vardep,bins=8,selec=1,
+Dime1="Dim.1",Dime2="Dim.2")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>dataf</code></td>
+<td>
+<p>data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>listconti</code></td>
+<td>
+<p>Interval variables to use, in format c("var1","var2",...).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>listclass</code></td>
+<td>
+<p>Class variables to use, in format c("var1","var2",...).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vardep</code></td>
+<td>
+<p>Dependent binary classification variable.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>bins</code></td>
+<td>
+<p>Number of bins for categorize interval variables .</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selec</code></td>
+<td>
+<p>1 if stepwise logistic variable selection is required, 0 if not.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Dime1, Dime2</code></td>
+<td>
+<p>MCA Dimensions to consider. Dim.1 and Dim.2 by default.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list with the following objects:</p>
+
+<dl>
+<dt>df1</dt>
+<dd>
+<p> dataset used for graph1</p>
+</dd>
+<dt>df2</dt>
+<dd>
+<p> dataset used for graph2</p>
+</dd>
+<dt>df3</dt>
+<dd>
+<p> dataset used for graph2</p>
+</dd>
+<dt>listconti</dt>
+<dd>
+<p> interval variables used</p>
+</dd>
+<dt>listclass</dt>
+<dd>
+<p> class variables used</p>
+</dd>
+<dt>axisx</dt>
+<dd>
+<p> axis definition in plot</p>
+</dd>
+<dt>axisy</dt>
+<dd>
+<p>axis definition in plot</p>
+</dd>
+</dl>
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(breastwisconsin1)
+dataf&lt;-breastwisconsin1
+listconti=c( "clump_thickness","uniformity_of_cell_shape","mitosis")
+listclass=c("")
+vardep="classes"
+result&lt;-mcacontour(dataf=dataf,listconti,listclass,vardep,bins=8,title="",selec=1)
+</code></pre>
+
+
+</div>

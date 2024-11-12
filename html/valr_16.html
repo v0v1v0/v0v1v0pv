@@ -1,0 +1,110 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_merge</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Merge overlapping intervals.</h2>
+
+<h3>Description</h3>
+
+<p>Operations can be performed on merged intervals by specifying name-value
+pairs. Default <code>max_dist</code> of <code>0</code> means book-ended intervals are
+merged.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_merge(x, max_dist = 0, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_dist</code></td>
+<td>
+<p>maximum distance between intervals to merge</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>name-value pairs that specify operations on merged intervals</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>input tbls are grouped by <code>chrom</code> by default, and additional
+groups can be added using <code>dplyr::group_by()</code>. For example,
+grouping by <code>strand</code> will constrain analyses to the same strand. To
+compare opposing strands across two tbls, strands on the <code>y</code> tbl can
+first be inverted using <code>flip_strands()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>ivl_df
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/merge.html">https://bedtools.readthedocs.io/en/latest/content/tools/merge.html</a>
+</p>
+<p>Other single set operations: 
+<code>bed_cluster()</code>,
+<code>bed_complement()</code>,
+<code>bed_flank()</code>,
+<code>bed_genomecov()</code>,
+<code>bed_partition()</code>,
+<code>bed_shift()</code>,
+<code>bed_slop()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end,
+  "chr1", 1, 50,
+  "chr1", 10, 75,
+  "chr1", 100, 120
+)
+
+bed_glyph(bed_merge(x))
+
+x &lt;- tibble::tribble(
+  ~chrom, ~start, ~end, ~value, ~strand,
+  "chr1", 1,      50,   1,      "+",
+  "chr1", 100,    200,  2,      "+",
+  "chr1", 150,    250,  3,      "-",
+  "chr2", 1,      25,   4,      "+",
+  "chr2", 200,    400,  5,      "-",
+  "chr2", 400,    500,  6,      "+",
+  "chr2", 450,    550,  7,      "+"
+)
+
+bed_merge(x)
+
+bed_merge(x, max_dist = 100)
+
+# merge intervals on same strand
+bed_merge(dplyr::group_by(x, strand))
+
+bed_merge(x, .value = sum(value))
+
+</code></pre>
+
+
+</div>

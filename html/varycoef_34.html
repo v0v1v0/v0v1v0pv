@@ -1,0 +1,170 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>SVC_selection_control</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>SVC Selection Parameters</h2>
+
+<h3>Description</h3>
+
+<p>Function to set up control parameters for
+<code>SVC_selection</code>. The underlying Gaussian Process-based
+SVC model is defined in <code>SVC_mle</code>. <code>SVC_selection</code>
+then jointly selects fixed and random effects of the GP-based
+SVC model using a penalized maximum likelihood estimation (PMLE).
+In this function, one can set the parameters for the PMLE and
+its optimization procedures (Dambon et al., 2022).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">SVC_selection_control(
+  IC.type = c("BIC", "cAIC_BW", "cAIC_VB"),
+  method = c("grid", "MBO"),
+  r.lambda = c(1e-10, 10),
+  n.lambda = 10L,
+  n.init = 10L,
+  n.iter = 10L,
+  CD.conv = list(N = 20L, delta = 1e-06, logLik = TRUE),
+  hessian = FALSE,
+  adaptive = FALSE,
+  parallel = NULL,
+  optim.args = list()
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>IC.type</code></td>
+<td>
+<p>(<code>character(1)</code>) <br>
+Select Information Criterion.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>(<code>character(1)</code>) <br>
+Select optimization method for lambdas, i.e., shrinkage parameters.
+Either model-based optimization (MBO, Bischl et al., 2017 &lt;arXiv:1703.03373&gt;) or over grid.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>r.lambda</code></td>
+<td>
+<p>(<code>numeric(2)</code>) <br>
+Range of lambdas, i.e., shrinkage parameters.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.lambda</code></td>
+<td>
+<p>(<code>numeric(1)</code>) <br>
+If grid method is selected, number of lambdas per side of grid.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.init</code></td>
+<td>
+<p>(<code>numeric(1)</code>) <br>
+If MBO method is selected, number of initial values for surrogate model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n.iter</code></td>
+<td>
+<p>(<code>numeric(1)</code>) <br>
+If MBO method is selected, number of iteration steps of surrogate models.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>CD.conv</code></td>
+<td>
+<p>(<code>list(3)</code>) <br>
+List containing the convergence conditions, i.e.,
+first entry is the maximum number of iterations,
+second value is the relative change necessary to stop iteration,
+third is logical to toggle if relative change in log likelihood
+(<code>TRUE</code>) or rather the parameters themselves (<code>FALSE</code>)
+is the criteria for convergence.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>hessian</code></td>
+<td>
+<p>(<code>logical(1)</code>) <br>
+If <code>TRUE</code>, Hessian will be computed for final model.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>adaptive</code></td>
+<td>
+<p>(<code>logical(1)</code>) <br>
+If <code>TRUE</code>, adaptive LASSO is executed, i.e.,
+the shrinkage parameter is defined as <code class="reqn">\lambda_j := \lambda / |\theta_j|</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+<p>(<code>list</code>) <br>
+List with arguments for parallelization,
+see documentation of <code>optimParallel</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>optim.args</code></td>
+<td>
+<p>(<code>list</code>) <br>
+List of further arguments of <code>optimParallel</code>,
+such as the lower bounds.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list of control parameters for SVC selection.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jakob Dambon
+</p>
+
+
+<h3>References</h3>
+
+<p>Bischl, B., Richter, J., Bossek, J., Horn, D., Thomas, J.,
+Lang, M. (2017).
+<em>mlrMBO: A Modular Framework for Model-Based Optimization of
+Expensive Black-Box Functions</em>,
+ArXiv preprint <a href="https://arxiv.org/abs/1703.03373">https://arxiv.org/abs/1703.03373</a>
+</p>
+<p>Dambon, J. A., Sigrist, F., Furrer, R. (2022).
+<em>Joint Variable Selection of both Fixed and Random Effects for
+Gaussian Process-based Spatially Varying Coefficient Models</em>,
+International Journal of Geographical Information Science
+doi: <a href="https://doi.org/10.1080/13658816.2022.2097684">10.1080/13658816.2022.2097684</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Initializing parameters and switching logLik to FALSE
+selection_control &lt;- SVC_selection_control(
+  CD.conv = list(N = 20L, delta = 1e-06, logLik = FALSE)
+)
+# or
+selection_control &lt;- SVC_selection_control()
+selection_control$CD.conv$logLik &lt;- FALSE
+
+</code></pre>
+
+
+</div>

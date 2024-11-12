@@ -1,0 +1,113 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>add_quantiles</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add quantile indicators to visR plot</h2>
+
+<h3>Description</h3>
+
+<p>Method to add quantile lines to a plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">add_quantiles(gg, ...)
+
+## S3 method for class 'ggsurvfit'
+add_quantiles(
+  gg,
+  quantiles = 0.5,
+  linetype = "dashed",
+  linecolour = "grey50",
+  alpha = 1,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>gg</code></td>
+<td>
+<p>A ggplot created with visR</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments passed on to the method to modify <code>geom_line</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quantiles</code></td>
+<td>
+<p>vector of quantiles to be displayed on the probability scale, default: 0.5</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>linetype</code></td>
+<td>
+<p>string indicating the linetype as described in the aesthetics of ggplot2 <code>geom_line</code>, default: dashed (also supports "mixed" -&gt; horizontal lines are solid, vertical ones are dashed)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>linecolour</code></td>
+<td>
+<p>string indicating the linetype as described in the aesthetics of ggplot2 <code>geom_line</code>, default: grey, (also supports "strata" -&gt; horizontal lines are grey50, vertical ones are the same colour as the respective strata)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>alpha</code></td>
+<td>
+<p>numeric value between 0 and 1 as described in the aesthetics of ggplot2 <code>geom_line</code>, default: 1</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Lines indicating the quantiles overlayed on a visR ggplot
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(visR)
+
+adtte %&gt;%
+  estimate_KM("SEX") %&gt;%
+  visr() %&gt;%
+  add_quantiles()
+
+adtte %&gt;%
+  estimate_KM("SEX") %&gt;%
+  visr() %&gt;%
+  add_quantiles(quantiles = c(0.25, 0.50))
+
+adtte %&gt;%
+  estimate_KM("SEX") %&gt;%
+  visr() %&gt;%
+  add_quantiles(
+    quantiles = c(0.25, 0.50),
+    linetype = "solid",
+    linecolour = "grey"
+  )
+
+adtte %&gt;%
+  estimate_KM("SEX") %&gt;%
+  visr() %&gt;%
+  add_quantiles(
+    quantiles = c(0.25, 0.50),
+    linetype = "mixed",
+    linecolour = "strata"
+  )
+
+</code></pre>
+
+
+</div>

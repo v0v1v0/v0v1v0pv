@@ -1,0 +1,125 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>tab_counts_items_cor</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compare the values in multiple items by a metric column that will be split into groups</h2>
+
+<h3>Description</h3>
+
+<p>Compare the values in multiple items by a metric column that will be split into groups
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">tab_counts_items_cor(
+  data,
+  cols,
+  cross,
+  category = NULL,
+  split = NULL,
+  percent = TRUE,
+  values = c("n", "p"),
+  title = TRUE,
+  labels = TRUE,
+  clean = TRUE,
+  ...
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A tibble containing item measures.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cols</code></td>
+<td>
+<p>Tidyselect item variables (e.g. starts_with...).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cross</code></td>
+<td>
+<p>A metric column that will be split into groups at the median value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>category</code></td>
+<td>
+<p>Summarizing multiple items (the cols parameter) by group requires a focus category.
+By default, for logical column types, only TRUE values are counted.
+For other column types, the first category is counted.
+Accepts both character and numeric vectors to override default counting behavior.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>split</code></td>
+<td>
+<p>Not implemented yet.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>percent</code></td>
+<td>
+<p>Proportions are formatted as percent by default. Set to FALSE to get bare proportions.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>values</code></td>
+<td>
+<p>The values to output: n (frequency) or p (percentage) or both (the default).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>title</code></td>
+<td>
+<p>If TRUE (default) shows a plot title derived from the column labels.
+Disable the title with FALSE or provide a custom title as character value.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>labels</code></td>
+<td>
+<p>If TRUE (default) extracts labels from the attributes, see codebook.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>clean</code></td>
+<td>
+<p>Prepare data by data_clean.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Placeholder to allow calling the method with unused parameters from plot_counts.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A volker tibble.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(volker)
+data &lt;- volker::chatgpt
+tab_counts_items_cor(
+  data, starts_with("cg_adoption_"), sd_age,
+  category=c("agree", "strongly agree")
+)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,218 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>trim.constraints</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Trimmed Constraint Matrices </h2>
+
+<h3>Description</h3>
+
+<p>Deletes statistically nonsignficant regression coefficients via
+their constraint matrices, for future refitting.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">trim.constraints(object, sig.level = 0.05, max.num = Inf,
+                 intercepts = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>Some <span class="pkg">VGAM</span> object, especially having
+class <code>vglmff-class</code>.
+It has not yet been tested on non-<code>"vglm"</code> objects.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sig.level</code></td>
+<td>
+
+<p>Significance levels, with values in <code class="reqn">[0, 1]</code>.
+Columns of constraint matices whose p-values are larger than
+this argument are deleted.
+With terms that generate more than one column of the
+<code>"lm"</code> model matrix, all p-values must be greater
+than this argument for deletion.
+This argument is recycled to the total number of
+regression coefficients of <code>object</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.num</code></td>
+<td>
+
+<p>Numeric, positive and integer-valued.
+Maximum number of regression coefficients allowable for deletion.
+This allows one to limit the number of deleted coefficients.
+For example,
+if <code>max.num = 1</code> then only the largest p-value is used
+for the deletion,
+provided it is larger than <code>sig.level</code>.
+The default is to delete all those coefficients whose
+p-values are greater than <code>sig.level</code>.
+With a finite value,
+this argument will probably not work properly
+when there are terms that
+generate more than one column of the LM model matrix.
+Having a value greater than unity might be unsuitable
+in the presence of multicollinearity because all
+correlated variables might be eliminated at once.
+</p>
+
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>intercepts</code></td>
+<td>
+
+<p>Logical. Trim the intercept term?
+If <code>FALSE</code> then the constraint matrix for the
+<code>"(Intercept)"</code> term is left unchanged.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Unused but for provision in the future.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This utility function is intended to simplify an existing
+<code>vglm</code> object having
+variables (terms) that affect unnecessary parameters.
+Suppose the explanatory variables in the formula
+includes a simple numeric covariate called <code>x2</code>.
+This variable will affect every linear predictor if
+<code>zero = NULL</code> in the <span class="pkg">VGAM</span> family function.
+This situation may correspond to the constraint matrices having
+unnecessary columns because their regression coefficients are
+statistically nonsignificant.
+This function attempts to delete those columns and
+return a possibly simplified list of constraint matrices
+that can make refitting a simpler model easy to do.
+P-values obtained from <code>summaryvglm</code>
+(with <code>HDEtest = FALSE</code> for increased speed)
+are compared to <code>sig.level</code> to test for
+statistical significance.
+</p>
+<p>For terms that generate more than one column of the
+<code>"lm"</code> model matrix,
+such as <code>bs</code> and <code>poly</code>,
+the column is deleted if all regression coefficients
+are statistically nonsignificant.
+Incidentally, users should instead use
+<code>sm.bs</code>,
+<code>sm.ns</code>,
+<code>sm.poly</code>,
+etc.,
+for smart and safe prediction.
+</p>
+<p>One can think of this function as facilitating
+<em>backward elimination</em> for variable selection,
+especially if <code>max.num = 1</code> and <code class="reqn">M=1</code>,
+however usually more than one regression coefficient is deleted
+here by default.
+</p>
+
+
+
+
+
+<h3>Value</h3>
+
+<p>A list of possibly simpler constraint matrices
+that can be fed back into the model using the
+<code>constraints</code> argument
+(usually <code>zero = NULL</code> is needed to avoid a warning).
+Consequently, they are required to be of the <code>"term"</code>-type.
+After the model is refitted, applying
+<code>summaryvglm</code> should result in
+regression coefficients that are ‘all’ statistically
+significant.
+</p>
+
+
+<h3>Warning </h3>
+
+<p>This function has not been tested thoroughly.
+One extreme is that a term is totally deleted because
+none of its regression coefficients are needed,
+and that situation has not yet been finalized.
+Ideally, <code>object</code> only contains terms where at least
+one regression coefficient has a p-value less than
+<code>sig.level</code>.
+For ordered factors and other situations, deleting
+certain columns may not make sense and destroy interpretability.
+</p>
+<p>As stated above, <code>max.num</code> may not work properly
+when there are terms that
+generate more than one column of the LM model matrix.
+However, this limitation may change in the future.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is experimental and may be replaced by
+some other function in the future.
+This function does not use S4 object oriented programming
+but may be converted to such in the future.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>constraints</code>,
+<code>vglm</code>,
+<code>summaryvglm</code>,
+<code>model.matrixvlm</code>,
+<code>drop1.vglm</code>,
+<code>step4vglm</code>,
+<code>sm.bs</code>,
+<code>sm.ns</code>,
+<code>sm.poly</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  data("xs.nz", package = "VGAMdata")
+fit1 &lt;-
+  vglm(cbind(worry, worrier) ~ bs(age) + sex + ethnicity + cat + dog,
+       binom2.or(zero = NULL), data = xs.nz, trace = TRUE)
+summary(fit1, HDEtest = FALSE)  # 'cat' is not significant at all
+dim(constraints(fit1, matrix = TRUE))
+(tclist1 &lt;- trim.constraints(fit1))  # No 'cat'
+fit2 &lt;-  # Delete 'cat' manually from the formula:
+  vglm(cbind(worry, worrier) ~ bs(age) + sex + ethnicity +       dog,
+       binom2.or(zero = NULL), data = xs.nz,
+       constraints = tclist1, trace = TRUE)
+summary(fit2, HDEtest = FALSE)  # A simplified model
+dim(constraints(fit2, matrix = TRUE))  # Fewer regression coefficients
+
+## End(Not run)</code></pre>
+
+
+</div>

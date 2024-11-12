@@ -1,0 +1,237 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>visreg2d</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Visualization of regression functions for two variables</h2>
+
+<h3>Description</h3>
+
+<p>A function used to visualize how two variables interact to affect the
+response in regression models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">visreg2d(fit, xvar, yvar, type=c("conditional", "contrast"), data=NULL,
+trans=I, scale=c("linear", "response"), nn=99, cond=list(), plot=TRUE,
+...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>fit</code></td>
+<td>
+
+<p>The fitted model object you wish to visualize.  Any object with 
+'predict' and 'model.frame' methods are supported, including lm,
+glm, gam, rlm, coxph, and many more.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>xvar</code></td>
+<td>
+
+<p>Character string specifying the variable to be put on the x-axis of
+your plot.  Both continuous variables and factors are supported.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>yvar</code></td>
+<td>
+
+<p>Character string specifying the variable to be put on the y-axis of
+your plot.  Both continuous variables and factors are supported.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+
+<p>The type of plot to be produced.  The following options are
+supported:
+</p>
+
+<ul>
+<li>
+<p> If 'conditional' is selected, the plot returned shows the
+value of the variable on the x-axis and the change in response on
+the y-axis, holding all other variables constant (by default,
+median for numeric variables and most common category for factors).
+</p>
+</li>
+<li>
+<p> If 'contrast' is selected, the plot returned shows the effect
+on the expected value of the response by moving the x variable away
+from a reference point on the x-axis (for numeric variables, this is
+taken to be the mean).
+</p>
+</li>
+</ul>
+<p>For more details, see references.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+
+<p>The data frame used to fit the model.  Typically, visreg() can
+figure out where the data is, so it is not necessary to provide
+this.  In some cases, however, the data set cannot be located and
+must be supplied explicitly.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>trans</code></td>
+<td>
+
+<p>(Optional) A function specifying a transformation for the vertical
+axis.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>scale</code></td>
+<td>
+
+<p>By default, the model is plotted on the scale of the linear
+predictor.  If <code>scale='response'</code> for a glm, the inverse link
+function will be applied so that the model is plotted on the scale
+of the original response.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nn</code></td>
+<td>
+
+<p>Resolution of the three dimensional plot.  Higher values will
+results in a smoother looking plot.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cond</code></td>
+<td>
+
+<p>Named list specifying conditional values of other explanatory
+variables. By default, conditional plots in visreg are constructed
+by filling in other explanatory variables with the median (for
+numeric variables) or most common category (for factors), but this
+can be overridden by specifying their values using <code>cond</code> (see
+examples).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>plot</code></td>
+<td>
+
+<p>Send the calculations to <code>plot.visreg2d</code>, producing a
+plot?  Default is TRUE.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>Graphical parameters (e.g., <code>ylab</code>) can be passed to the
+function to customize the plots.
+</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A <code>visreg2d</code> object consisting of:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Values of <code>xvar</code> to be plotted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>y</code></td>
+<td>
+<p>Values of <code>yvar</code> to be plotted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>z</code></td>
+<td>
+<p>Values of outcome to be plotted</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>meta</code></td>
+<td>
+<p>Meta-information needed to construct plots, such as the
+name of the x and y variables.</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Patrick Breheny and Woodrow Burchett
+</p>
+
+
+<h3>References</h3>
+
+
+<ul>
+<li> <p><a href="http://pbreheny.github.io/visreg">http://pbreheny.github.io/visreg</a>
+</p>
+</li>
+<li>
+<p> Breheny, P. and Burchett, W. (2017), Visualizing regression
+models using visreg.
+<a href="https://journal.r-project.org/archive/2017/RJ-2017-046/index.html">https://journal.r-project.org/archive/2017/RJ-2017-046/index.html</a>
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><a href="http://pbreheny.github.io/visreg/surface.html">http://pbreheny.github.io/visreg/surface.html</a>
+<code>visreg</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fit &lt;- lm(Ozone ~ Solar.R + Wind + Temp + I(Wind^2) + I(Temp^2) +
+I(Wind*Temp)+I(Wind*Temp^2) + I(Temp*Wind^2) + I(Temp^2*Wind^2),
+data=airquality)
+
+visreg2d(fit, x="Wind", y="Temp", plot.type="image")
+visreg2d(fit, x="Wind", y="Temp", plot.type="persp")
+
+## Requires the rgl package
+## Not run: 
+visreg2d(fit, x="Wind", y="Temp", plot.type="rgl")
+
+## End(Not run)
+
+## Requires the ggplot2 package
+## Not run: 
+visreg2d(fit, x="Wind", y="Temp", plot.type="gg")
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

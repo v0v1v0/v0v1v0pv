@@ -1,0 +1,62 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>exact_vol</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Compute the exact volume of (a) a zonotope (b) an arbitrary simplex in V-representation or (c) if the volume is known and declared by the input object.</h2>
+
+<h3>Description</h3>
+
+<p>Given a zonotope (as an object of class Zonotope), this function computes the sum of the absolute values of the determinants of all the <code class="reqn">d \times d</code> submatrices of the <code class="reqn">m\times d</code> matrix <code class="reqn">G</code> that contains row-wise the <code class="reqn">m</code> <code class="reqn">d</code>-dimensional segments that define the zonotope.
+For an arbitrary simplex that is given in V-representation this function computes the absolute value of the determinant formed by the simplex's points assuming it is shifted to the origin.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">exact_vol(P)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>P</code></td>
+<td>
+<p>A polytope</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>The exact volume of the input polytope, for zonotopes, simplices in V-representation and polytopes with known exact volume
+</p>
+
+
+<h3>References</h3>
+
+<p><cite>E. Gover and N. Krikorian,
+“Determinants and the Volumes of Parallelotopes and Zonotopes,” <em>Linear Algebra and its Applications, 433(1), 28 - 40,</em> 2010.</cite>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+# compute the exact volume of a 5-dimensional zonotope defined by the Minkowski sum of 10 segments
+Z = gen_rand_zonotope(2, 5)
+vol = exact_vol(Z)
+
+# compute the exact volume of a 2-d arbitrary simplex
+V = matrix(c(2,3,-1,7,0,0),ncol = 2, nrow = 3, byrow = TRUE)
+P = Vpolytope(V = V)
+vol = exact_vol(P)
+
+
+# compute the exact volume the 10-dimensional cross polytope
+P = gen_cross(10,'V')
+vol = exact_vol(P)
+</code></pre>
+
+
+</div>

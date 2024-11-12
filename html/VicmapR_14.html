@@ -1,0 +1,71 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>data_citation</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Layer Metadata</h2>
+
+<h3>Description</h3>
+
+<p>formatted metadata attributes of a given vicmap layer (<code>vicmap_query(layer)</code>).
+Metadata is retrieved from the Vicmap catalogue. <code>data_citation()</code> prints a BibTex style citation for a given record;
+similar to <code>base::citation()</code>. <code>data_dictionary()</code> returns a table with names, types and descriptions of the data within the
+selected layer (see details). <code>get_metdata()</code> returns a list with three elements, containing metadata, the data dictionary and the url of the
+metadata for the record.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">data_citation(x = NULL, metadataID = NULL)
+
+data_dictionary(x = NULL, metadataID = NULL)
+
+get_metadata(x = NULL, metadataID = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Object of class <code>vicmap_promise</code> (likely passed from <code>vicmap_query()</code>)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>metadataID</code></td>
+<td>
+<p>character: ID of data (useful if data is not available through WFS)</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>citation, data.frame or list
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+try(
+data_citation(vicmap_query(layer = "datavic:VMHYDRO_WATERCOURSE_DRAIN"))
+)
+
+
+try(
+data_dictionary(vicmap_query(layer = "datavic:VMHYDRO_WATERCOURSE_DRAIN"))
+)
+
+
+try(
+get_metadata(vicmap_query(layer = "datavic:VMHYDRO_WATERCOURSE_DRAIN"))
+)
+
+</code></pre>
+
+
+</div>

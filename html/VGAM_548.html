@@ -1,0 +1,265 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>fill1</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Creates a Matrix of Appropriate Dimension </h2>
+
+<h3>Description</h3>
+
+<p>A support function for the argument <code>xij</code>,
+it generates a matrix
+of an appropriate dimension.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">fill1(x, values = 0, ncolx = ncol(x))
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+
+<p>A vector or matrix which is used to determine
+the dimension of the
+answer, in particular, the number of rows.
+After converting <code>x</code>
+to a matrix if necessary, the answer is a
+matrix of <code>values</code>
+values, of dimension <code>nrow(x)</code> by <code>ncolx</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>values</code></td>
+<td>
+
+<p>Numeric.
+The answer contains these values,
+which are recycled <em>columnwise</em> if necessary, i.e.,
+as <code>matrix(values, ..., byrow=TRUE)</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ncolx</code></td>
+<td>
+
+<p>The number of columns of the returned matrix.
+The default is the number of columns of <code>x</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>xij</code> argument for <code>vglm</code> allows
+the user to input
+variables specific to each linear/additive predictor.
+For example, consider
+the bivariate logit model where the
+first/second linear/additive
+predictor is the logistic regression of the
+first/second binary response
+respectively. The third linear/additive predictor
+is <code>log(OR) =
+    eta3</code>, where <code>OR</code> is the odds ratio.
+If one has ocular pressure
+as a covariate in this model then <code>xij</code>
+is required to handle the
+ocular pressure for each eye, since these will
+be different in general.
+[This contrasts with a variable such
+as <code>age</code>, the age of the
+person, which has a common value for both eyes.]
+In order to input
+these data into <code>vglm</code> one often
+finds that functions
+<code>fill1</code>, <code>fill2</code>, etc. are useful.
+</p>
+<p>All terms in the <code>xij</code>
+and <code>formula</code> arguments in <code>vglm</code>
+must appear in the <code>form2</code> argument too.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>matrix(values, nrow=nrow(x), ncol=ncolx)</code>,
+i.e., a matrix
+consisting of values <code>values</code>,
+with the number of rows matching
+<code>x</code>, and the default number of columns
+is the number of columns
+of <code>x</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The effect of the <code>xij</code> argument is after
+other arguments such as
+<code>exchangeable</code> and <code>zero</code>.
+Hence <code>xij</code> does not affect constraint matrices.
+</p>
+<p>Additionally, there are currently 3 other
+identical <code>fill1</code>
+functions, called <code>fill2</code>, <code>fill3</code> and <code>fill4</code>;
+if you need more then assign <code>fill5 = fill6 = fill1</code> etc.
+The reason for this is that if more than
+one <code>fill1</code> function is
+needed then they must be unique.
+For example, if <code class="reqn">M=4</code> then
+<code>xij = list(op ~ lop + rop + fill1(mop) + fill1(mop))</code>
+would reduce to
+<code>xij = list(op ~ lop + rop + fill1(mop))</code>, whereas
+<code>xij = list(op ~ lop + rop + fill1(mop) + fill2(mop))</code>
+would retain
+all <code class="reqn">M</code> terms, which is needed.
+</p>
+
+
+
+<p>In Examples 1 to 3 below, the <code>xij</code> argument
+illustrates covariates
+that are specific to a linear predictor.
+Here, <code>lop</code>/<code>rop</code> are
+the ocular pressures of the left/right eye
+in an artificial dataset,
+and <code>mop</code> is their mean.
+Variables <code>leye</code> and <code>reye</code>
+might be the presence/absence of a particular
+disease on the LHS/RHS
+eye respectively.
+</p>
+
+
+
+
+
+
+<p>In Example 3, the <code>xij</code> argument illustrates fitting the
+(exchangeable) model where there is a common smooth function
+of the
+ocular pressure. One should use regression splines since
+<code>s</code> in <code>vgam</code> does not handle
+the <code>xij</code>
+argument.  However, regression splines such as
+<code>bs</code> and <code>ns</code> need
+to have
+the same basis functions here for both functions, and Example 3
+illustrates a trick involving a function <code>BS</code> to obtain this,
+e.g., same knots.  Although regression splines create more than a
+single column per term in the model matrix,
+<code>fill1(BS(lop,rop))</code>
+creates the required (same) number of columns.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>vglm.control</code>,
+<code>vglm</code>,
+<code>multinomial</code>,
+<code>Select</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">fill1(runif(5))
+fill1(runif(5), ncol = 3)
+fill1(runif(5), val = 1, ncol = 3)
+
+# Generate (independent) eyes data for the examples below; OR=1.
+## Not run:  nn &lt;- 1000  # Number of people
+eyesdata &lt;- data.frame(lop = round(runif(nn), 2),
+                       rop = round(runif(nn), 2),
+                       age = round(rnorm(nn, 40, 10)))
+eyesdata &lt;- transform(eyesdata,
+  mop = (lop + rop) / 2,        # Mean ocular pressure
+  op  = (lop + rop) / 2,        # Value unimportant unless plotting
+# op  =  lop,                   # Choose this if plotting
+  eta1 = 0 - 2*lop + 0.04*age,  # Linear predictor for left eye
+  eta2 = 0 - 2*rop + 0.04*age)  # Linear predictor for right eye
+eyesdata &lt;- transform(eyesdata,
+  leye = rbinom(nn, size=1, prob = logitlink(eta1, inverse = TRUE)),
+  reye = rbinom(nn, size=1, prob = logitlink(eta2, inverse = TRUE)))
+
+# Example 1. All effects are linear.
+fit1 &lt;- vglm(cbind(leye,reye) ~ op + age,
+             family = binom2.or(exchangeable = TRUE, zero = 3),
+             data = eyesdata, trace = TRUE,
+             xij = list(op ~ lop + rop + fill1(lop)),
+             form2 =  ~ op + lop + rop + fill1(lop) + age)
+head(model.matrix(fit1, type = "lm"))   # LM model matrix
+head(model.matrix(fit1, type = "vlm"))  # Big VLM model matrix
+coef(fit1)
+coef(fit1, matrix = TRUE)  # Unchanged with 'xij'
+constraints(fit1)
+max(abs(predict(fit1)-predict(fit1, new = eyesdata)))  # Okay
+summary(fit1)
+plotvgam(fit1,
+     se = TRUE)  # Wrong, e.g., coz it plots against op, not lop.
+# So set op = lop in the above for a correct plot.
+
+# Example 2. This uses regression splines on ocular pressure.
+# It uses a trick to ensure common basis functions.
+BS &lt;- function(x, ...)
+  sm.bs(c(x,...), df = 3)[1:length(x), , drop = FALSE]  # trick
+
+fit2 &lt;-
+  vglm(cbind(leye,reye) ~ BS(lop,rop) + age,
+       family = binom2.or(exchangeable = TRUE, zero = 3),
+       data = eyesdata, trace = TRUE,
+       xij = list(BS(lop,rop) ~ BS(lop,rop) +
+                                BS(rop,lop) +
+                                fill1(BS(lop,rop))),
+       form2 = ~  BS(lop,rop) + BS(rop,lop) + fill1(BS(lop,rop)) +
+                        lop + rop + age)
+head(model.matrix(fit2, type =  "lm"))  # LM model matrix
+head(model.matrix(fit2, type = "vlm"))  # Big VLM model matrix
+coef(fit2)
+coef(fit2, matrix = TRUE)
+summary(fit2)
+fit2@smart.prediction
+max(abs(predict(fit2) - predict(fit2, new = eyesdata)))  # Okay
+predict(fit2, new = head(eyesdata))  # OR is 'scalar' as zero=3
+max(abs(head(predict(fit2)) -
+             predict(fit2, new = head(eyesdata))))  # Should be 0
+plotvgam(fit2, se = TRUE, xlab = "lop")  # Correct
+
+# Example 3. Capture-recapture model with ephemeral and enduring
+# memory effects. Similar to Yang and Chao (2005), Biometrics.
+deermice &lt;- transform(deermice, Lag1 = y1)
+M.tbh.lag1 &lt;-
+  vglm(cbind(y1, y2, y3, y4, y5, y6) ~ sex + weight + Lag1,
+       posbernoulli.tb(parallel.t = FALSE ~ 0,
+                       parallel.b = FALSE ~ 0,
+                       drop.b = FALSE ~ 1),
+       xij = list(Lag1 ~ fill1(y1) + fill1(y2) + fill1(y3) +
+                         fill1(y4) + fill1(y5) + fill1(y6) +
+                         y1 + y2 + y3 + y4 + y5),
+       form2 = ~ sex + weight + Lag1 +
+                 fill1(y1) + fill1(y2) + fill1(y3) + fill1(y4) +
+                 fill1(y5) + fill1(y6) +
+                 y1 + y2 + y3 + y4 + y5 + y6,
+       data = deermice, trace = TRUE)
+coef(M.tbh.lag1)  
+## End(Not run)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,295 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopSelect</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Selection and Maximum Likelihood Estimation of Bivariate Copula Families</h2>
+
+<h3>Description</h3>
+
+<p>This function selects an appropriate bivariate copula family for given
+bivariate copula data using one of a range of methods. The corresponding
+parameter estimates are obtained by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopSelect(
+  u1,
+  u2,
+  familyset = NA,
+  selectioncrit = "AIC",
+  indeptest = FALSE,
+  level = 0.05,
+  weights = NA,
+  rotations = TRUE,
+  se = FALSE,
+  presel = TRUE,
+  method = "mle"
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>u1, u2</code></td>
+<td>
+<p>Data vectors of equal length with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>familyset</code></td>
+<td>
+<p>Vector of bivariate copula families to select from.
+The vector has to include at least one bivariate copula
+family that allows for positive and one that allows for negative dependence.
+If <code>familyset = NA</code> (default), selection among all possible families is
+performed. If a vector of negative numbers is provided, selection among all
+but <code>abs(familyset)</code> families is performed. Coding of bivariate copula
+families: <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula) <br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>7</code> = BB1 copula <br><code>8</code> = BB6 copula <br><code>9</code> = BB7 copula <br><code>10</code> = BB8 copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; <code style="white-space: pre;">⁠survival Joe'') \cr `17` = rotated BB1 copula (180 degrees; ⁠</code>survival BB1”)<br><code>18</code> = rotated BB6 copula (180 degrees; <code style="white-space: pre;">⁠survival BB6'')\cr `19` = rotated BB7 copula (180 degrees; ⁠</code>survival BB7”)<br><code>20</code> = rotated BB8 copula (180 degrees; “survival BB8”)<br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'27' = rotated BB1 copula (90 degrees) <br>
+'28' = rotated BB6 copula (90 degrees) <br>
+'29' = rotated BB7 copula (90 degrees) <br>
+'30' = rotated BB8 copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br>
+'37' = rotated BB1 copula (270 degrees) <br>
+'38' = rotated BB6 copula (270 degrees) <br>
+'39' = rotated BB7 copula (270 degrees) <br>
+'40' = rotated BB8 copula (270 degrees) <br>
+'104' = Tawn type 1 copula <br>
+'114' = rotated Tawn type 1 copula (180 degrees) <br>
+'124' = rotated Tawn type 1 copula (90 degrees) <br>
+'134' = rotated Tawn type 1 copula (270 degrees) <br>
+'204' = Tawn type 2 copula <br>
+'214' = rotated Tawn type 2 copula (180 degrees) <br>
+'224' = rotated Tawn type 2 copula (90 degrees) <br>
+'234' = rotated Tawn type 2 copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>selectioncrit</code></td>
+<td>
+<p>Character indicating the criterion for bivariate copula
+selection. Possible choices: <code>selectioncrit = "AIC"</code> (default),
+<code>"BIC"</code>, or <code>"logLik"</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>indeptest</code></td>
+<td>
+<p>Logical; whether a hypothesis test for the independence of
+<code>u1</code> and <code>u2</code> is performed before bivariate copula selection
+(default: <code>indeptest = FALSE</code>; see <code>BiCopIndTest()</code>).  The
+independence copula is chosen if the null hypothesis of independence cannot
+be rejected.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>level</code></td>
+<td>
+<p>Numeric; significance level of the independence test (default:
+<code>level = 0.05</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>Numerical; weights for each observation (optional).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rotations</code></td>
+<td>
+<p>If <code>TRUE</code>, all rotations of the families in
+<code>familyset</code> are included (or subtracted).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se</code></td>
+<td>
+<p>Logical; whether standard error(s) of parameter estimates is/are
+estimated (default: <code>se = FALSE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>presel</code></td>
+<td>
+<p>Logical; whether to exclude families before fitting based on
+symmetry properties of the data. Makes the selection about 30% faster
+(on average), but may yield slightly worse results in few special cases.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>indicates the estimation method: either maximum
+likelihood estimation (<code>method = "mle"</code>; default) or inversion of
+Kendall's tau (<code>method = "itau"</code>). For <code>method = "itau"</code> only
+one parameter families and the Student t copula can be used (<code style="white-space: pre;">⁠family = 1,2,3,4,5,6,13,14,16,23,24,26,33,34⁠</code> or <code>36</code>). For the t-copula,
+<code>par2</code> is found by a crude profile likelihood optimization over the
+interval (2, 10].</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Copulas can be selected according to the Akaike and Bayesian Information
+Criteria (AIC and BIC, respectively). First all available copulas are fitted
+using maximum likelihood estimation. Then the criteria are computed for all
+available copula families (e.g., if <code>u1</code> and <code>u2</code> are negatively
+dependent, Clayton, Gumbel, Joe, BB1, BB6, BB7 and BB8 and their survival
+copulas are not considered) and the family with the minimum value is chosen.
+For observations <code class="reqn">u_{i,j},\ i=1,...,N,\ j=1,2,</code> the AIC of a bivariate copula family <code class="reqn">c</code> with parameter(s)
+<code class="reqn">\boldsymbol{\theta}</code> is defined as </p>
+<p style="text-align: center;"><code class="reqn">AIC := -2 \sum_{i=1}^N
+\ln[c(u_{i,1},u_{i,2}|\boldsymbol{\theta})] + 2k, </code>
+</p>
+<p> where <code class="reqn">k=1</code> for one parameter
+copulas and <code class="reqn">k=2</code> for the two parameter t-, BB1, BB6, BB7 and BB8
+copulas. Similarly, the BIC is given by </p>
+<p style="text-align: center;"><code class="reqn">BIC := -2 \sum_{i=1}^N
+\ln[c(u_{i,1},u_{i,2}|\boldsymbol{\theta})] + \ln(N)k. </code>
+</p>
+<p> Evidently, if the BIC
+is chosen, the penalty for two parameter families is stronger than when
+using the AIC.
+</p>
+<p>Additionally a test for independence can be performed beforehand.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>BiCop()</code>, augmented with the following
+entries:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>se, se2</code></td>
+<td>
+<p>standard errors for the parameter estimates (if
+<code>se = TRUE</code>,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nobs</code></td>
+<td>
+<p>number of observations,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logLik</code></td>
+<td>
+<p>log likelihood</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>AIC</code></td>
+<td>
+<p>Aikaike's Informaton Criterion,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BIC</code></td>
+<td>
+<p>Bayesian's Informaton Criterion,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>emptau</code></td>
+<td>
+<p>empirical value of Kendall's tau,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value.indeptest</code></td>
+<td>
+<p>p-value of the independence test.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>For a comprehensive summary of the fitted model, use
+<code>summary(object)</code>; to see all its contents, use <code>str(object)</code>.
+</p>
+<p>The parameters of the Student t and BB copulas are restricted (see
+defaults in <code>BiCopEst()</code> to avoid being to close to their limiting
+cases.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Eike Brechmann, Jeffrey Dissmann, Thomas Nagler
+</p>
+
+
+<h3>References</h3>
+
+<p>Akaike, H. (1973). Information theory and an extension of the
+maximum likelihood principle. In B. N. Petrov and F. Csaki (Eds.),
+Proceedings of the Second International Symposium on Information Theory
+Budapest, Akademiai Kiado, pp. 267-281.
+</p>
+<p>Brechmann, E. C. (2010). Truncated and simplified regular vines and their
+applications. Diploma thesis, Technische Universitaet Muenchen.<br><a href="https://mediatum.ub.tum.de/?id=1079285">https://mediatum.ub.tum.de/?id=1079285</a>.
+</p>
+<p>Manner, H. (2007). Estimation and model selection of copulas with an
+application to exchange rates. METEOR research memorandum 07/056, Maastricht
+University.
+</p>
+<p>Schwarz, G. E. (1978). Estimating the dimension of a model. Annals of
+Statistics 6 (2), 461-464.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCop()</code>,
+<code>BiCopEst()</code>,
+<code>RVineStructureSelect()</code>,
+<code>RVineCopSelect()</code>,
+<code>BiCopIndTest()</code>,
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Example 1: Gaussian copula with large dependence parameter
+par &lt;- 0.7
+fam &lt;- 1
+dat1 &lt;- BiCopSim(500, fam, par)
+# select the bivariate copula family and estimate the parameter(s)
+cop1 &lt;- BiCopSelect(dat1[, 1], dat1[, 2], familyset = 1:10,
+                    indeptest = FALSE, level = 0.05)
+cop1  # short overview
+summary(cop1)  # comprehensive overview
+str(cop1)  # see all contents of the object
+
+## Example 2: Gaussian copula with small dependence parameter
+par &lt;- 0.01
+fam &lt;- 1
+dat2 &lt;- BiCopSim(500, fam, par)
+# select the bivariate copula family and estimate the parameter(s)
+cop2 &lt;- BiCopSelect(dat2[, 1], dat2[, 2], familyset = 0:10,
+                    indeptest = TRUE, level = 0.05)
+summary(cop2)
+
+## Example 3: empirical data
+data(daxreturns)
+cop3 &lt;- BiCopSelect(daxreturns[, 1], daxreturns[, 4], familyset = 0:10)
+summary(cop3)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,200 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>dirmul.old</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Fitting a Dirichlet-Multinomial Distribution </h2>
+
+<h3>Description</h3>
+
+<p>Fits a Dirichlet-multinomial distribution to a matrix of
+non-negative integers.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dirmul.old(link = "loglink", ialpha = 0.01, parallel = FALSE,
+           zero = NULL)
+
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>link</code></td>
+<td>
+
+<p>Link function applied to each of the <code class="reqn">M</code> (positive)
+shape parameters <code class="reqn">\alpha_j</code> for <code class="reqn">j=1,\ldots,M</code>.
+See <code>Links</code> for more choices.
+Here, <code class="reqn">M</code> is the number of columns of the response matrix.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ialpha</code></td>
+<td>
+
+<p>Numeric vector. Initial values for the
+<code>alpha</code> vector. Must be positive.
+Recycled to length <code class="reqn">M</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>parallel</code></td>
+<td>
+
+<p>A logical, or formula specifying which terms have equal/unequal
+coefficients.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>An integer-valued vector specifying which linear/additive
+predictors are modelled as intercepts only.  The values must
+be from the set {1,2,...,<code class="reqn">M</code>}.
+See <code>CommonVGAMffArguments</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The Dirichlet-multinomial distribution, which is somewhat
+similar to a Dirichlet distribution, has probability function
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y_1=y_1,\ldots,Y_M=y_M) =
+ {2y_{*} \choose {y_1,\ldots,y_M}}
+    \frac{\Gamma(\alpha_{+})}{\Gamma(2y_{*}+\alpha_{+})}
+\prod_{j=1}^M \frac{\Gamma(y_j+\alpha_{j})}{\Gamma(\alpha_{j})}</code>
+</p>
+
+<p>for <code class="reqn">\alpha_j &gt; 0</code>,
+<code class="reqn">\alpha_+ = \alpha_1 +
+     \cdots + \alpha_M</code>,
+and <code class="reqn">2y_{*} = y_1 + \cdots + y_M</code>.
+Here, <code class="reqn">a \choose b</code> means “<code class="reqn">a</code> choose
+<code class="reqn">b</code>” and
+refers to combinations (see <code>choose</code>).
+The (posterior) mean is
+</p>
+<p style="text-align: center;"><code class="reqn">E(Y_j) = (y_j + \alpha_j) / (2y_{*} + \alpha_{+})</code>
+</p>
+
+<p>for <code class="reqn">j=1,\ldots,M</code>, and these are returned
+as the fitted values as a <code class="reqn">M</code>-column matrix.
+</p>
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>,
+<code>rrvglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The response should be a matrix of non-negative values.
+Convergence seems to slow down if there are zero values.
+Currently, initial values can be improved upon.
+</p>
+<p>This function is almost defunct and may be withdrawn soon.
+Use <code>dirmultinomial</code> instead.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Thomas W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Lange, K. (2002).
+<em>Mathematical and Statistical Methods for Genetic Analysis</em>,
+2nd ed.  New York: Springer-Verlag.
+</p>
+<p>Forbes, C., Evans, M., Hastings, N. and Peacock, B. (2011).
+<em>Statistical Distributions</em>,
+Hoboken, NJ, USA: John Wiley and Sons, Fourth edition.
+</p>
+<p>Paul, S. R., Balasooriya, U. and Banerjee, T. (2005).
+Fisher information matrix of the Dirichlet-multinomial
+distribution.
+<em>Biometrical Journal</em>, <b>47</b>, 230–236.
+</p>
+<p>Tvedebrink, T. (2010).
+Overdispersion in allelic counts and <code class="reqn">\theta</code>-correction
+in forensic genetics.
+<em>Theoretical Population Biology</em>,
+<b>78</b>, 200–210.
+</p>
+
+
+
+
+
+<h3>See Also</h3>
+
+<p><code>dirmultinomial</code>,
+<code>dirichlet</code>,
+<code>betabinomialff</code>,
+<code>multinomial</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Data from p.50 of Lange (2002)
+alleleCounts &lt;- c(2, 84, 59, 41, 53, 131, 2, 0,
+       0, 50, 137, 78, 54, 51, 0, 0,
+       0, 80, 128, 26, 55, 95, 0, 0,
+       0, 16, 40, 8, 68, 14, 7, 1)
+dim(alleleCounts) &lt;- c(8, 4)
+alleleCounts &lt;- data.frame(t(alleleCounts))
+dimnames(alleleCounts) &lt;- list(c("White","Black","Chicano","Asian"),
+                    paste("Allele", 5:12, sep = ""))
+
+set.seed(123)  # @initialize uses random numbers
+fit &lt;- vglm(cbind(Allele5,Allele6,Allele7,Allele8,Allele9,
+                  Allele10,Allele11,Allele12) ~ 1, dirmul.old,
+             trace = TRUE, crit = "c", data = alleleCounts)
+
+(sfit &lt;- summary(fit))
+vcov(sfit)
+round(eta2theta(coef(fit),
+                fit@misc$link,
+                fit@misc$earg), digits = 2)  # not preferred
+round(Coef(fit), digits = 2)  # preferred
+round(t(fitted(fit)), digits = 4)  # 2nd row of Lange (2002, Table 3.5)
+coef(fit, matrix = TRUE)
+
+
+pfit &lt;- vglm(cbind(Allele5,Allele6,Allele7,Allele8,Allele9,
+                   Allele10,Allele11,Allele12) ~ 1,
+             dirmul.old(parallel = TRUE), trace = TRUE,
+             data = alleleCounts)
+round(eta2theta(coef(pfit, matrix = TRUE), pfit@misc$link,
+                pfit@misc$earg), digits = 2)  # 'Right' answer
+round(Coef(pfit), digits = 2)  # 'Wrong' due to parallelism constraint
+</code></pre>
+
+
+</div>

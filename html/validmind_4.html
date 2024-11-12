@@ -1,0 +1,55 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>process_result</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Process a set of ValidMind results into parseable data</h2>
+
+<h3>Description</h3>
+
+<p>Process a set of ValidMind results into parseable data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">process_result(results)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>results</code></td>
+<td>
+<p>A list of ValidMind result objects</p>
+</td>
+</tr></table>
+<h3>Value</h3>
+
+<p>A nested list of ValidMind results (dataframes, plotly plots, and
+matplotlib plots)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+vm_dataset = vm_r$init_dataset(
+  dataset=data,
+  target_column="Exited",
+  class_labels=list("0" = "Did not exit", "1" = "Exited")
+)
+
+tabular_suite_results &lt;- vm_r$run_test_suite("tabular_dataset", dataset=vm_dataset)
+
+processed_results &lt;- process_result(tabular_suite_results)
+processed_results
+
+## End(Not run)
+
+</code></pre>
+
+
+</div>

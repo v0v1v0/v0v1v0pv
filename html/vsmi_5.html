@@ -1,0 +1,82 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>PWLS</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Penalized weighted least-squares estimate for variable selection on correlated multiply imputed data</h2>
+
+<h3>Description</h3>
+
+<p>This is a functions to estimate coefficients of wighted leat-squares model and
+select variables for multiple imputed data sets
+,considering the correlation of multiple imputed observations.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">PWLS(
+  missdata,
+  mice_time = 5,
+  penalty = "alasso",
+  lamda.vec = seq(6, 24, length.out = 40),
+  Gamma = c(0.5, 1, 2)
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>missdata</code></td>
+<td>
+<p>A Matrix,missing data with variables X in the first p columns and response Y at the last column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mice_time</code></td>
+<td>
+<p>An intedevger, number of imputation.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>penalty</code></td>
+<td>
+<p>The method for variable selection,choose from "lasso" or "alasso".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lamda.vec</code></td>
+<td>
+<p>Optimal tuning parameter for penalty,default seq(1,4,length.out=12).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Gamma</code></td>
+<td>
+<p>Parameter for adjustment of the Adaptive Weights vector in adaptive LASSO,default c(0.5,1,1.5).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A Vsmi_est object, contians estcoef and index_sig , estcoef for estimate coefficients and index_sig for selected variable index.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+library(MASS)
+library(mice)
+library(qif)
+entire&lt;-generate_pwls_missing_data()
+est_lasso&lt;-PWLS(entire,penalty="lasso")
+est_alasso &lt;- PWLS(entire,penalty = "alasso")
+
+</code></pre>
+
+
+</div>

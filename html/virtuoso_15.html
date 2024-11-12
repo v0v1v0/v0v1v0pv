@@ -1,0 +1,82 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>vos_query</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Run a SPARQL query</h2>
+
+<h3>Description</h3>
+
+<p>Run a SPARQL query
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vos_query(con, query)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>con</code></td>
+<td>
+<p>a ODBC connection to Virtuoso, from <code>vos_connect()</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>query</code></td>
+<td>
+<p>a SPARQL query statement</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>SPARQL is a graph query language similar in syntax SQL,
+but allows the use of variables to walk through graph nodes.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a <code>data.frame</code> containing the results of the query
+</p>
+
+
+<h3>References</h3>
+
+
+<ul>
+<li> <p><a href="https://en.wikipedia.org/wiki/SPARQL">https://en.wikipedia.org/wiki/SPARQL</a>
+</p>
+</li>
+<li> <p><a href="https://docs.ropensci.org/rdflib/articles/rdf_intro.html">https://docs.ropensci.org/rdflib/articles/rdf_intro.html</a>
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><code>vos_start()</code>, <code>vos_connect()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">vos_status()
+
+if(has_virtuoso()){
+vos_start()
+con &lt;- vos_connect()
+
+# show first 4 triples in the database
+DBI::dbGetQuery(con, "SPARQL SELECT * WHERE { ?s ?p ?o } LIMIT 4")
+}
+
+</code></pre>
+
+
+</div>

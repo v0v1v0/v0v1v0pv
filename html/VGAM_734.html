@@ -1,0 +1,111 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Influence</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>
+Influence Function (S4 generic)
+of a Fitted Model
+</h2>
+
+<h3>Description</h3>
+
+<p>Returns a matrix containing the influence function
+of a fitted model, e.g., a "vglm" object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">Influence(object, ...)
+Influence.vglm(object, weighted = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+
+<p>an object, especially that of class <code>"vglm"</code>—see
+<code>vglm-class</code>.
+Currently other classes such as <code>"vgam"</code> are not yet
+implemented.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weighted</code></td>
+<td>
+
+<p>Logical. Include the prior weights?
+Currently only <code>TRUE</code> is accepted.
+This might change in the future and/or
+the default value might change.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+
+<p>any additional arguments such as to
+allow or disallow the prior weights.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Influence functions are useful in fields such
+as sample survey theory,
+e.g.,
+<span class="pkg">survey</span>,
+<span class="pkg">svyVGAM</span>.
+For each <code class="reqn">i=1,\ldots,n</code>,
+the formula is approximately <code class="reqn">-I U</code>
+where <code class="reqn">I</code> is the weighted Fisher
+information matrix and U is
+the <code class="reqn">i</code>th score vector.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An <code>n</code> by <code>p.vlm</code> matrix.
+</p>
+
+
+
+<h3>Warning</h3>
+
+<p>This function is currently experimental and
+defaults may change.
+Use with caution!
+The functions here should not be confused with
+<code>lm.influence</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vglm</code>,
+<code>vglm-class</code>,
+<span class="pkg">survey</span>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">pneumo &lt;- transform(pneumo, let = log(exposure.time))
+fit &lt;- vglm(cbind(normal, mild, severe) ~ let, acat, data = pneumo)
+coef(fit)  # 8-vector
+Influence(fit)  # 8 x 4
+all(abs(colSums(Influence(fit))) &lt; 1e-6)  # TRUE
+</code></pre>
+
+
+</div>

@@ -1,0 +1,107 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Bort</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Borel-Tanner Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density
+and random generation for the Borel-Tanner distribution.
+</p>
+
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dbort(x, Qsize = 1, a = 0.5, log = FALSE)
+rbort(n, Qsize = 1, a = 0.5)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>vector of quantiles.</p>
+</td>
+</tr></table>
+<table>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+Must be a positive integer of length 1.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Qsize, a</code></td>
+<td>
+
+<p>See <code>borel.tanner</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>log</code></td>
+<td>
+
+<p>Logical.
+If <code>log = TRUE</code> then the logarithm of the density is
+returned.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See <code>borel.tanner</code>, the <span class="pkg">VGAM</span> family function
+for estimating the parameter,
+for the formula of the probability density function and other
+details.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>dbort</code> gives the density,
+<code>rbort</code> generates random deviates.
+</p>
+
+
+
+
+<h3>Warning </h3>
+
+<p>Looping is used for <code>rbort</code>, therefore
+values of <code>a</code> close to 1 will result in long (or infinite!)
+computational times.
+The default value of <code>a</code> is subjective.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>borel.tanner</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run:  qsize &lt;- 1; a &lt;- 0.5; x &lt;- qsize:(qsize+10)
+plot(x, dbort(x, qsize, a), type = "h", las = 1, col = "blue",
+     ylab = paste("fbort(qsize=", qsize, ", a=", a, ")"),
+     log = "y", main = "Borel-Tanner density function") 
+## End(Not run)
+</code></pre>
+
+
+</div>

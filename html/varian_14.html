@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>simulate_gvm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Simulate a Gamma Variability Model</h2>
+
+<h3>Description</h3>
+
+<p>This function facilitates simulation of a Gamma Variability Model
+and allows the number of units and repeated measures to be varied
+as well as the degree of variability.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">simulate_gvm(n, k, mu, mu.sigma, sigma.shape, sigma.rate, seed = 5346)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>The number of repeated measures on each unit</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>The number of units</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu</code></td>
+<td>
+<p>The grand mean of the variable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mu.sigma</code></td>
+<td>
+<p>The standard deviation of the random mean of the variable</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma.shape</code></td>
+<td>
+<p>the shape (alpha) parameter of the Gamma distribution
+controlling the residual variability</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sigma.rate</code></td>
+<td>
+<p>the rate (beta) parameter of the Gamma distribution
+controlling the residual variability</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>the random seed, used to make simulations reproductible.
+Defaults to 5346 (arbitrarily).</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>a list of the data, IDs, and the parameters used for the simulation
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Joshua F. Wiley &lt;josh@elkhartgroup.com&gt;
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">raw.sim &lt;- simulate_gvm(12, 140, 0, 1, 4, .1, 94367)
+sim.data &lt;- with(raw.sim, {
+  set.seed(265393)
+  x2 &lt;- MASS::mvrnorm(k, c(0, 0), matrix(c(1, .3, .3, 1), 2))
+  y2 &lt;- rnorm(k, cbind(Int = 1, x2) %*% matrix(c(3, .5, .7)) + sigma, sd = 3)
+  data.frame(
+    y = Data$y,
+    y2 = y2[Data$ID2],
+    x1 = x2[Data$ID2, 1],
+    x2 = x2[Data$ID2, 2],
+    ID = Data$ID2)
+})
+</code></pre>
+
+
+</div>

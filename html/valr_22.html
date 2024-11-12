@@ -1,0 +1,106 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>bed_shuffle</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Shuffle input intervals.</h2>
+
+<h3>Description</h3>
+
+<p>Shuffle input intervals.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">bed_shuffle(
+  x,
+  genome,
+  incl = NULL,
+  excl = NULL,
+  max_tries = 1000,
+  within = FALSE,
+  seed = 0
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>ivl_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>genome</code></td>
+<td>
+<p>genome_df</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>incl</code></td>
+<td>
+<p>ivl_df of included intervals</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>excl</code></td>
+<td>
+<p>ivl_df of excluded intervals</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max_tries</code></td>
+<td>
+<p>maximum tries to identify a bounded interval</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>within</code></td>
+<td>
+<p>shuffle within chromosomes</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>seed</code></td>
+<td>
+<p>seed for reproducible intervals</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>ivl_df
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="https://bedtools.readthedocs.io/en/latest/content/tools/shuffle.html">https://bedtools.readthedocs.io/en/latest/content/tools/shuffle.html</a>
+</p>
+<p>Other randomizing operations: 
+<code>bed_random()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">genome &lt;- tibble::tribble(
+  ~chrom, ~size,
+  "chr1", 1e6,
+  "chr2", 2e6,
+  "chr3", 4e6
+)
+
+x &lt;- bed_random(genome, seed = 1010486)
+
+bed_shuffle(x, genome, seed = 9830491)
+
+</code></pre>
+
+
+</div>

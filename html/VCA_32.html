@@ -1,0 +1,90 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getCI</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Extract Confidence Intervals from VCA-Objects.</h2>
+
+<h3>Description</h3>
+
+<p>This utility function acutally calls function 'VCAinference' first and then extracts
+the requested confidence interval (CI) information from the resulting object. You
+can specify single variance components (VC) or multiple. Not specifying any specific
+VC will return all.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getCI(
+  obj,
+  vc = NULL,
+  type = c("vc", "sd", "cv"),
+  tail = c("one-sided", "two-sided"),
+  conf.level = 0.95,
+  quiet = FALSE
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>obj</code></td>
+<td>
+<p>(object) of class "VCA"</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>vc</code></td>
+<td>
+<p>(integer, character) specifying which variance component to extract CI for</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>(character) on which scale should results be returned</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>tail</code></td>
+<td>
+<p>(character) should one- or two-sided CI be returned</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>conf.level</code></td>
+<td>
+<p>(numeric) confidence-level to be used</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>quiet</code></td>
+<td>
+<p>(logical) TRUE = suppress additional information to be printed</p>
+</td>
+</tr>
+</table>
+<h3>Author(s)</h3>
+
+<p>Andre Schuetzenmeister <a href="mailto:andre.schuetzenmeister@roche.com">andre.schuetzenmeister@roche.com</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data(dataEP05A2_3)
+fit &lt;- remlVCA(y~day/run, dataEP05A2_3)
+getCI(fit)				# will return one-sided CI for all VC
+getCI(fit, type="cv")	# now on CV-scale
+getCI(fit, type="cv", conf.level=.9)
+# multiple row at once
+getCI(fit, vc=1:3, type="cv")
+getCI(fit, vc=c("total", "error"), type="cv")
+</code></pre>
+
+
+</div>

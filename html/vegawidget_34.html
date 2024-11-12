@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>add-listeners</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Add JavaScript listeners</h2>
+
+<h3>Description</h3>
+
+<p>Listeners are how we get information out of a Vega chart and into the
+JavaScript environment. To do this, we specify handler-functions to
+run whenever a certain signal changes or an event fires.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">vw_add_signal_listener(x, name, handler_body)
+
+vw_add_data_listener(x, name, handler_body)
+
+vw_add_event_listener(x, event, handler_body)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>vegawidget object to be monitored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>name</code></td>
+<td>
+<p><code>character</code>, name of the signal or dataset to be monitored</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>handler_body</code></td>
+<td>
+<p><code>character</code> or <code>JS_EVAL</code>, text of the body of
+the JavaScript handler-function to be called when the signal or dataset
+changes, or the event fires</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>event</code></td>
+<td>
+<p><code>character</code>, name of the type of event to be monitored,
+e.g. <code>"click"</code></p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The <code>handler_body</code> can be the text of the <em>body</em> of a JavaScript function;
+the arguments to this function will vary according to the type of listener
+you are adding:
+</p>
+
+<ul>
+<li>
+<p> signal-handler and data-handler arguments: <code>name</code>, <code>value</code>
+</p>
+</li>
+<li>
+<p> event-handler arguments: <code>event</code>, <code>item</code>
+</p>
+</li>
+</ul>
+<p>This package offers some functions to make it easier to build JavaScript
+handler functions from R: <code>vw_handler_signal()</code>, <code>vw_handler_data()</code>,
+and <code>vw_handler_event()</code>. You can pipe one of these functions to
+<code>vw_handler_add_effect()</code> to perform side-effects on the result.
+</p>
+
+
+<h3>Value</h3>
+
+<p>modified copy of vegawidget object <code>x</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>vw_handler_signal()</code>, <code>vw_handler_data()</code>, <code>vw_handler_event()</code>,
+<code>vw_handler_add_effect()</code>,
+<a href="https://vega.github.io/vega/docs/api/view/">vega-view</a>
+</p>
+
+
+</div>

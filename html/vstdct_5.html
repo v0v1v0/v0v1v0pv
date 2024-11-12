@@ -1,0 +1,100 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Data Examples</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Data Examples</h2>
+
+<h3>Description</h3>
+
+<p>example1, example2 and example3 generate i.i.d. vectors from a given distribution with different Toeplitz covariance matrices.
+The covariance function <code class="reqn">\sigma</code> of the Toeplitz covariance matrix of
+</p>
+
+<ul>
+<li>
+<p><code>example1</code>: has a polynomial decay, <code class="reqn">\sigma(\tau)= sd^2(1+|\tau|)^{-gamma}</code>,
+</p>
+</li>
+<li>
+<p><code>example2</code>: follows an <code class="reqn">ARMA(2,2)</code> model with coefficients <code class="reqn">(0.7,-0.4,-0.2,0.2)</code> and innovations variance <code class="reqn">sd^2</code>,
+</p>
+</li>
+<li>
+<p><code>example3</code>: yields a Lipschitz continuous spectral density <code class="reqn">f</code> that is not differentiable, i.e. <code class="reqn">f(x)= sd^2({|\sin(x+0.5\pi)|^{gamma}+0.45})</code>
+</p>
+</li>
+</ul>
+<h3>Usage</h3>
+
+<pre><code class="language-R">example1(p, n, sd, gamma, family = "Gaussian")
+
+example2(p, n, sd, family = "Gaussian")
+
+example3(p, n, sd, gamma, family = "Gaussian")
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>vector length</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>sample size</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>sd</code></td>
+<td>
+<p>standard deviation</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>gamma</code></td>
+<td>
+<p>polynomial decay of covariance function for <code>example1</code> resp. exponent for <code>example3</code></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>distribution of the simulated data. Available distributions are "<code>Gaussian</code>", "<code>Gamma</code>", "<code>Uniform</code>". The default is "<code>Gaussian</code>".</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing the following elements:
+</p>
+
+<ul>
+<li>
+<p><code>Y</code>:  <code>pxn</code> dimensional data matrix
+</p>
+</li>
+<li>
+<p><code>sdf</code>:   true spectral density function
+</p>
+</li>
+<li>
+<p><code>acf</code>:   true covariance function
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">example1(p=10, n=1, sd=1, gamma=1.2, family="Gaussian")
+example2(p=10,n=1,sd=1,family="Gaussian")
+example3(p=10, n=1, sd=1, gamma=2,family="Gaussian")
+</code></pre>
+
+
+</div>

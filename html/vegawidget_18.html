@@ -1,0 +1,103 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>knit_print.vegaspec</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Knit-print method</h2>
+
+<h3>Description</h3>
+
+<p>If you are knitting to an HTML-based format, the only supported options are
+<code>vega.width</code>, <code>vega.height</code> (as pixels) and <code>vega.embed</code> (as a list).
+If you are knitting to a non-HTML-based format, you additionally
+have the options <code>dev</code>, <code>out.width</code> and <code>out.height</code> available.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">knit_print.vegaspec(spec, ..., options = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>spec</code></td>
+<td>
+<p>An object to be coerced to <code>vegaspec</code>, a Vega/Vega-Lite specification</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>other arguments</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>options</code></td>
+<td>
+<p><code>list</code>, knitr options</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The biggest thing to keep in mind about a Vega visualization is that
+very often, the chart tells you how much space it needs, rather
+than than you tell it how much space it has available. In the future, it
+may reveal itself how to manage better this "conversation".
+</p>
+
+
+<h3>HTML-based</h3>
+
+<p>When knitting to an HTML-based format, the <code>spec</code> is rendered as normal,
+it calls <code>vegawidget()</code> using the options <code>vega.width</code>, <code>vega.height</code>
+and <code>vega.embed</code>:
+</p>
+
+<ul>
+<li> <p><code>vega.width</code> and <code>vega.height</code> are passed to <code>vegawidget()</code>
+as <code>width</code> and <code>height</code>, respectively. These values are coerced to numeric,
+so it is ineffective to specify a percentage. They are passed to
+<code>vw_autosize()</code> to resize the chart, if
+<a href="https://vega.github.io/vega-lite/docs/size.html#limitations">possible</a>.
+</p>
+</li>
+<li> <p><code>vega.embed</code> is passed to <code>vegawidget()</code> as <code>embed</code>. The function
+<code>vega_embed()</code> can be useful to set <code>vega.embed</code>.
+</p>
+</li>
+</ul>
+<h3>Non-HTML-based</h3>
+
+<p>When knitting to an non-HTML-based format, e.g. <code>github_document</code> or
+<code>pdf_document</code>, this function will convert the chart to an image, then knitr
+will incorporate the image into your document. You have the additional
+knitr options <code>dev</code>, <code>out.width</code>, and <code>out.height</code>:
+</p>
+
+<ul>
+<li>
+<p> The supported values of <code>dev</code> are <code>"png"</code>, <code>"svg"</code>, and <code>"pdf"</code>. If you
+are knitting to a LaTeX format (e.g. <code>pdf_document</code>) and you specify <code>dev</code>
+as <code>"svg"</code>, it will be implemented as <code>"pdf"</code>.
+</p>
+</li>
+<li>
+<p> To scale the image within your document, you can use  <code>out.width</code> or
+<code>out.height</code>. Because the image will already have an aspect ratio,
+it is recommended to specify no more than one of these.
+</p>
+</li>
+</ul>
+<h3>See Also</h3>
+
+<p><code>vw_autosize()</code>, <code>vega_embed()</code>
+</p>
+
+
+</div>

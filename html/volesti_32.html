@@ -1,0 +1,58 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>write_sdpa_format_file</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Write a SDPA format file</h2>
+
+<h3>Description</h3>
+
+<p>Outputs a spectrahedron (the matrices defining a linear matrix inequality) and a vector (the objective function)
+to a SDPA format file.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">write_sdpa_format_file(spectrahedron, objective_function, output_file)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>spectrahedron</code></td>
+<td>
+<p>A spectrahedron in n dimensions; must be an object of class Spectrahedron</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>objective_function</code></td>
+<td>
+<p>A numerical vector of length n</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>output_file</code></td>
+<td>
+<p>Name of the output file</p>
+</td>
+</tr>
+</table>
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+A0 = matrix(c(-1,0,0,0,-2,1,0,1,-2), nrow=3, ncol=3, byrow = TRUE)
+A1 = matrix(c(-1,0,0,0,0,1,0,1,0), nrow=3, ncol=3, byrow = TRUE)
+A2 = matrix(c(0,0,-1,0,0,0,-1,0,0), nrow=3, ncol=3, byrow = TRUE)
+lmi = list(A0, A1, A2)
+S = Spectrahedron(matrices = lmi)
+objFunction = c(1,1)
+write_sdpa_format_file(S, objFunction, "output.txt")
+
+</code></pre>
+
+
+</div>

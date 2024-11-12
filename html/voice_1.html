@@ -1,0 +1,63 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>audio_time</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Returns the total time of audio files in seconds</h2>
+
+<h3>Description</h3>
+
+<p>Returns the total time of audio files in seconds
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">audio_time(x, filesRange = NULL, recursive = FALSE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>Either a WAV file or a directory containing WAV files.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>filesRange</code></td>
+<td>
+<p>The desired range of directory files (default: <code>NULL</code>, i.e., all files).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>recursive</code></td>
+<td>
+<p>Logical. Should the listing recursively into directories? (default: <code>FALSE</code>) Used by <code>base::list.files</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A tibble containing file name &lt;chr&gt; and audio time &lt;dbl&gt; in seconds.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(voice)
+
+# get path to audio file
+path2wav &lt;- list.files(system.file('extdata', package = 'wrassp'),
+pattern &lt;- glob2rx('*.wav'), full.names = TRUE)
+
+# Tibble containing file name and audio time
+(at &lt;- voice::audio_time(unique(dirname(path2wav))))
+str(at)
+</code></pre>
+
+
+</div>

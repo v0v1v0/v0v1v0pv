@@ -1,0 +1,144 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>Tobit</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>The Tobit Distribution</h2>
+
+<h3>Description</h3>
+
+<p>Density, distribution function, quantile function and random
+generation for the Tobit model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">dtobit(x, mean = 0, sd = 1, Lower = 0, Upper = Inf, log = FALSE)
+ptobit(q, mean = 0, sd = 1, Lower = 0, Upper = Inf,
+       lower.tail = TRUE, log.p = FALSE)
+qtobit(p, mean = 0, sd = 1, Lower = 0, Upper = Inf,
+       lower.tail = TRUE, log.p = FALSE)
+rtobit(n, mean = 0, sd = 1, Lower = 0, Upper = Inf)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x, q</code></td>
+<td>
+<p>vector of quantiles.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p</code></td>
+<td>
+<p>vector of probabilities.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>n</code></td>
+<td>
+<p>number of observations.
+If <code>length(n) &gt; 1</code> then the length is taken to be
+the number required.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>Lower, Upper</code></td>
+<td>
+<p>vector of lower and upper
+thresholds.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mean, sd, lower.tail, log, log.p</code></td>
+<td>
+
+<p>see <code>rnorm</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>See <code>tobit</code>, the <span class="pkg">VGAM</span> family function
+for estimating the parameters,
+for details.
+Note that the density at <code>Lower</code> and <code>Upper</code> is the
+the area to the left and right of those points.
+Thus there are two spikes (but less in value);
+see the example below.
+Consequently, <code>dtobit(Lower) + dtobit(Upper) + </code> the area
+in between equals unity.
+</p>
+
+
+
+
+
+
+<h3>Value</h3>
+
+<p><code>dtobit</code> gives the density,
+<code>ptobit</code> gives the distribution function,
+<code>qtobit</code> gives the quantile function, and
+<code>rtobit</code> generates random deviates.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>See Also</h3>
+
+<p><code>tobit</code>,
+<code>rnorm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">mu &lt;- 0.5; x &lt;- seq(-2, 4, by = 0.01)
+Lower &lt;- -1; Upper &lt;- 2.0
+
+integrate(dtobit, lower = Lower, upper = Upper,
+          mean = mu, Lower = Lower, Upper = Upper)$value +
+dtobit(Lower, mean = mu, Lower = Lower, Upper = Upper) +
+dtobit(Upper, mean = mu, Lower = Lower, Upper = Upper)  # Adds to 1
+
+## Not run: 
+plot(x, ptobit(x, m = mu, Lower = Lower, Upper = Upper),
+     type = "l", ylim = 0:1, las = 1, col = "orange",
+     ylab = paste("ptobit(m = ", mu, ", sd = 1, Lower =", Lower,
+                  ", Upper =", Upper, ")"),
+     main = "Orange is the CDF; blue is density",
+     sub = "Purple lines are the 10,20,...,90 percentiles")
+abline(h = 0)
+lines(x, dtobit(x, m = mu, L = Lower, U = Upper), col = "blue")
+
+probs &lt;- seq(0.1, 0.9, by = 0.1)
+Q &lt;- qtobit(probs, m = mu, Lower = Lower, Upper = Upper)
+lines(Q, ptobit(Q, m = mu, Lower = Lower, Upper = Upper),
+      col = "purple", lty = "dashed", type = "h")
+lines(Q, dtobit(Q, m = mu, Lower = Lower, Upper = Upper),
+      col = "darkgreen", lty = "dashed", type = "h")
+abline(h = probs, col = "purple", lty = "dashed")
+max(abs(ptobit(Q, mu, L = Lower, U = Upper) - probs))  # Should be 0
+
+epts &lt;- c(Lower, Upper)  # Endpoints have a spike (not quite, actually)
+lines(epts, dtobit(epts, m = mu, Lower = Lower, Upper = Upper),
+      col = "blue", lwd = 3, type = "h")
+
+## End(Not run)
+</code></pre>
+
+
+</div>

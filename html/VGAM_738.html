@@ -1,0 +1,154 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>inv.binomial</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Inverse Binomial Distribution Family Function</h2>
+
+<h3>Description</h3>
+
+<p>Estimates the two parameters of an inverse binomial distribution
+by maximum likelihood estimation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">inv.binomial(lrho = extlogitlink(min = 0.5, max = 1),
+    llambda = "loglink", irho = NULL, ilambda = NULL, zero = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>lrho, llambda</code></td>
+<td>
+
+<p>Link function for the <code class="reqn">\rho</code> and <code class="reqn">\lambda</code>
+parameters.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>irho, ilambda</code></td>
+<td>
+
+<p>Numeric.
+Optional initial values for <code class="reqn">\rho</code> and
+<code class="reqn">\lambda</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>zero</code></td>
+<td>
+
+<p>See <code>CommonVGAMffArguments</code>.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The inverse binomial distribution of Yanagimoto (1989) has
+density function
+</p>
+<p style="text-align: center;"><code class="reqn">f(y;\rho,\lambda) =
+  \frac{ \lambda
+         \,\Gamma(2y+\lambda) }{\Gamma(y+1) \,
+         \Gamma(y+\lambda+1) }
+  \{ \rho(1-\rho) \}^y  \rho^{\lambda}</code>
+</p>
+
+<p>where <code class="reqn">y=0,1,2,\ldots</code> and
+<code class="reqn">\frac12 &lt; \rho &lt; 1</code>,
+and <code class="reqn">\lambda &gt; 0</code>.
+The first two moments exist for <code class="reqn">\rho&gt;\frac12</code>;
+then the mean
+is <code class="reqn">\lambda (1-\rho) /(2 \rho-1)</code>
+(returned as the fitted values) and the
+variance is
+<code class="reqn">\lambda \rho
+  (1-\rho) /(2 \rho-1)^3</code>.
+The inverse binomial distribution is a special
+case of the generalized negative binomial distribution of
+Jain and Consul (1971).
+It holds that <code class="reqn">Var(Y) &gt; E(Y)</code> so that the
+inverse binomial distribution
+is overdispersed compared with the Poisson distribution.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code>
+(see <code>vglmff-class</code>).
+The object is used by modelling functions
+such as <code>vglm</code>
+and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This <span class="pkg">VGAM</span> family function only works reasonably well with
+intercept-only models.
+Good initial values are needed; if convergence failure occurs
+use <code>irho</code> and/or <code>ilambda</code>.
+</p>
+<p>Some elements of the working weight matrices use the expected
+information matrix while other elements use the observed
+information matrix.
+Yet to do: using the mean and the reciprocal of
+<code class="reqn">\lambda</code> results in an EIM that is diagonal.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>Yanagimoto, T. (1989).
+The inverse binomial distribution as a statistical model.
+<em>Communications in Statistics: Theory and Methods</em>,
+<b>18</b>, 3625–3633.
+</p>
+<p>Jain, G. C. and Consul, P. C. (1971).
+A generalized negative binomial distribution.
+<em>SIAM Journal on Applied Mathematics</em>,
+<b>21</b>, 501–513.
+</p>
+<p>Jorgensen, B. (1997).
+<em>The Theory of Dispersion Models</em>.
+London: Chapman &amp; Hall
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>negbinomial</code>,
+<code>poissonff</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">idata &lt;- data.frame(y = rnbinom(n &lt;- 1000, mu = exp(3), size = exp(1)))
+fit &lt;- vglm(y ~ 1, inv.binomial, data = idata, trace = TRUE)
+with(idata, c(mean(y), head(fitted(fit), 1)))
+summary(fit)
+coef(fit, matrix = TRUE)
+Coef(fit)
+sum(weights(fit))  # Sum of the prior weights
+sum(weights(fit, type = "work"))  # Sum of the working weights
+</code></pre>
+
+
+</div>

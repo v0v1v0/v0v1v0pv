@@ -1,0 +1,96 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mars_domain_score</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate the MARS model domain applicability score</h2>
+
+<h3>Description</h3>
+
+<p>This function fits a MARS (Multivariate Adaptive Regression Splines) model to
+the provided data and computes a domain applicability score based on PCA distances.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mars_domain_score(
+  featured_col,
+  train_data,
+  mars_hyperparameters,
+  test_data,
+  threshold_value
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>featured_col</code></td>
+<td>
+<p>The name of the featured column.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>train_data</code></td>
+<td>
+<p>A data frame containing the training data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mars_hyperparameters</code></td>
+<td>
+<p>A list of hyperparameters for the MARS model, including:
+</p>
+
+<ul>
+<li> <p><code>num_terms</code>: The number of terms to include in the MARS model.
+</p>
+</li>
+<li> <p><code>prod_degree</code>: The degree of interaction terms to include.
+</p>
+</li>
+<li> <p><code>prune_method</code>: The method used for pruning the MARS model.
+</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>test_data</code></td>
+<td>
+<p>A data frame containing the test data.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>threshold_value</code></td>
+<td>
+<p>The threshold value for the domain score.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A tibble with the domain applicability scores.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">set.seed(123)
+library(dplyr)
+featured_col &lt;- "cd_2022"
+# Specifying features for training and testing procedures
+train_data = viral |&gt;
+  dplyr::select(cd_2022, vl_2022)
+test_data = sero 
+mars_hyperparameters &lt;- list(num_terms = 3, prod_degree = 1, prune_method = "none")
+threshold_value &lt;- 0.99
+# Call the function
+</code></pre>
+
+
+</div>

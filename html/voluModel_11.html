@@ -1,0 +1,101 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>mSampling2D</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>2D background sampling</h2>
+
+<h3>Description</h3>
+
+<p>Samples in 2D at resolution of raster
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">mSampling2D(occs, rasterTemplate, mShp, verbose = TRUE)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>occs</code></td>
+<td>
+<p>A dataframe with at least two columns
+named "longitude" and "latitude", or that can be
+coerced into this format.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>rasterTemplate</code></td>
+<td>
+<p>A <code>SpatRaster</code> object to serve
+as a template for generating background sampling
+coordinates.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mShp</code></td>
+<td>
+<p>A shapefile defining the area from
+which background points should be sampled.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>verbose</code></td>
+<td>
+<p><code>logical</code>. Switching to <code>FALSE</code> mutes message describing
+which columns in <code>occs</code> are interpreted as x and y coordinates.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function is designed to sample background points
+for distributional modeling in two dimensions. The returned
+<code>data.frame</code> contains all points from across the designated
+background. It is up to the user to determine how to
+appropriately sample from those background points.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code>data.frame</code> with 2D coordinates of points
+for background sampling.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(terra)
+
+# Create sample raster
+r &lt;- rast(ncol=10, nrow=10)
+values(r) &lt;- 1:100
+
+# Create test occurrences
+set.seed(0)
+longitude &lt;- sample(ext(r)[1]:ext(r)[2],
+                    size = 10, replace = FALSE)
+set.seed(0)
+latitude &lt;- sample(ext(r)[3]:ext(r)[4],
+                   size = 10, replace = FALSE)
+occurrences &lt;- data.frame(longitude,latitude)
+
+# Generate background sampling buffer
+buffPts &lt;- vect(occurrences,
+                c("longitude", "latitude"))
+crs(buffPts) &lt;- crs(r)
+mShp &lt;- aggregate(buffer(buffPts, width = 1000000))
+
+# Here's the function
+result &lt;- mSampling2D(occs = occurrences, rasterTemplate = r, mShp = mShp)
+
+</code></pre>
+
+
+</div>

@@ -1,0 +1,65 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>summary.decomposition</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Decomposition Summary Method</h2>
+
+<h3>Description</h3>
+
+<p>S3 method for summarizing objects of the class "decomposition".
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'decomposition'
+summary(object, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object of class "decomposition".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>Additional arguments.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A "decomposition" class object.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">data("park_visitation")
+
+park &lt;- "YELL"
+nps_ts &lt;- ts(park_visitation[park_visitation$park == park,]$nps, start = 2005, freq = 12)
+nps_ts &lt;- log(nps_ts)
+
+pud_ts &lt;- ts(park_visitation[park_visitation$park == park,]$pud, start = 2005, freq = 12)
+pud_ts &lt;- log(pud_ts)
+nps_ts &lt;- ts(park_visitation[park_visitation$park == park,]$nps, start = 2005, freq = 12)
+nps_ts &lt;- log(nps_ts)#'
+
+
+decomposition_pud &lt;- auto_decompose(pud_ts)
+decomposition_nps &lt;- auto_decompose(nps_ts)
+summary(decomposition_pud)
+summary(decomposition_nps)
+</code></pre>
+
+
+</div>

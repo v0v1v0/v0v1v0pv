@@ -1,0 +1,118 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>predict.VSURF</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Predict method for VSURF object</h2>
+
+<h3>Description</h3>
+
+<p>This function predicts new data with random forests, using variables selected by VSURF only.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">## S3 method for class 'VSURF'
+predict(object, newdata, step = c("interp", "pred"), ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>An object of class <code>VSURF</code>, which is the result of the
+<code>VSURF</code> function.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>newdata</code></td>
+<td>
+<p>A data frame or matrix containing new data.
+(Note: If not given, the out-of-bag predictions of the randomForest object is returned.)</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>step</code></td>
+<td>
+<p>A character string indicating which variable set must be used to train
+the <code>randomForest</code> object (default is c("interp", "pred")).
+Available choices are "thres", "interp", "pred".</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further parameters passed to <code>randomForest</code> or
+<code>predict.randomForest</code> functions (depending on their names).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This method applies for a VSURF object. VSURF selects two sets of variables during its two
+last steps. For each set of variables, a random forest object is created, by running
+<code>randomForest</code> on training data using this set of variables only. Then the
+<code>predict.randomForest</code> function is used to predict new data.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If only one step is indicated in <code>step</code>, a vector of predicted values.
+</p>
+<p>If two or more steps are indicated in <code>step</code>, a data frame of predicted values
+(each column corresponding to a variable set).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Robin Genuer, Jean-Michel Poggi and Christine Tuleau-Malot
+</p>
+
+
+<h3>References</h3>
+
+<p>Genuer, R. and Poggi, J.M. and Tuleau-Malot, C. (2010),
+<em>Variable selection using random forests</em>, Pattern Recognition Letters
+31(14), 2225-2236
+</p>
+<p>Genuer, R. and Poggi, J.M. and Tuleau-Malot, C. (2015),
+<em>VSURF: An R Package for Variable Selection Using Random Forests</em>,
+The R Journal 7(2):19-33
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>VSURF</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Not run: 
+data(iris)
+iris.learn &lt;- sample(1:nrow(iris), nrow(iris)/2)
+iris.vsurf &lt;- VSURF(iris[iris.learn, 1:4], iris[iris.learn, 5], ntree = 100, nfor.thres = 20,
+                    nfor.interp = 10, nfor.pred = 10)
+iris.predictions &lt;- predict(iris.vsurf, newdata = iris[-iris.learn, 1:4])
+
+# A more interesting example with toys data (see \code{\link{toys}})
+# (a few minutes to execute)
+data(toys)
+toys.learn &lt;- 1:(nrow(toys$x) / 2)
+toys.vsurf &lt;- VSURF(toys$x[toys.learn, ], toys$y[toys.learn])
+toys.predictions &lt;- predict(toys.vsurf, newdata = toys$x[-toys.learn, ])
+## End(Not run)
+
+</code></pre>
+
+
+</div>

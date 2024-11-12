@@ -1,0 +1,191 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>model.matrixvlm</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Construct the Design Matrix of a VLM Object</h2>
+
+<h3>Description</h3>
+
+<p>Creates a design matrix. Two types can be
+returned: a large one (class <code>"vlm"</code> or one that inherits
+from this such as <code>"vglm"</code>) or a small one
+(such as returned if it were of class <code>"lm"</code>).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">model.matrixvlm(object, type = c("vlm", "lm", "lm2", "bothlmlm2"),
+                linpred.index = NULL, label.it = TRUE, ...)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>object</code></td>
+<td>
+<p>an object of a class that inherits from the
+<em>vector linear model</em> (VLM).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>type</code></td>
+<td>
+<p>Type of design matrix returned. The first is the default.
+The value <code>"vlm"</code> is the VLM model matrix corresponding
+to the <code>formula</code> argument.
+The value <code>"lm"</code> is the LM model matrix corresponding
+to the <code>formula</code> argument.
+The value <code>"lm2"</code> is the second (LM) model matrix corresponding
+to the <code>form2</code> argument.
+The value <code>"bothlmlm2"</code> means both LM and VLM model matrices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>linpred.index</code></td>
+<td>
+
+<p>Vector of integers.
+The index for a linear/additive predictor,
+it must have values from the set <code>1:M</code>.
+Also, if <code>length(linpred.index) == 1</code>
+then <code>type = "lm"</code> must be assigned,
+whereas
+if <code>length(linpred.index) &gt; 1</code>
+then <code>type = "vlm"</code> must be assigned,
+Then it returns a subset of the VLM matrix corresponding to
+the <code>linpred.index</code>th linear/additive predictor(s);
+this is a LM-type matrix when it is of unit length.
+Currently some attributes are returned, but these may
+change in value
+in the future because of ongoing development work.
+</p>
+
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>label.it</code></td>
+<td>
+
+<p>Logical. Label the row and columns with character names?
+If <code>FALSE</code>, time and memory might be saved if
+the big model matrix is very large.
+The argument is only used when <code>type = "vlm"</code>.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.
+These include <code>data</code> (which
+is a data frame created with <code>model.framevlm</code>),
+<code>contrasts.arg</code>, and <code>xlev</code>.
+See <code>model.matrix</code> for more information.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>This function creates a design matrix from <code>object</code>.
+This can be a small LM object or a big VLM object (default).
+The latter is constructed from the former and the constraint
+matrices.
+</p>
+<p>This code implements <em>smart prediction</em>
+(see <code>smartpred</code>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>The design matrix for a regression model with the specified formula
+and data.
+If <code>type = "bothlmlm2"</code> then a list is returned with components
+<code>"X"</code> and <code>"Xm2"</code>.
+</p>
+<p>Sometimes
+(especially if <code>x = TRUE</code> when calling <code>vglm</code>)
+the model matrix has attributes:
+<code>"assign"</code> (<code>"lm"</code>-type) and
+<code>"vassign"</code> (<code>"vlm"</code>-type) and
+<code>"orig.assign.lm"</code> (<code>"lm"</code>-type).
+These are used internally a lot for bookkeeping,
+especially regarding
+the columns of both types of model matrices.
+In particular, constraint matrices and variable selection
+relies on this information a lot.
+The <code>"orig.assign.lm"</code> is the ordinary <code>"assign"</code>
+attribute for <code>lm</code>
+and <code>glm</code> objects.
+</p>
+
+
+<h3>References</h3>
+
+
+
+
+
+<p>Chambers, J. M. (1992).
+<em>Data for models.</em>
+Chapter 3 of <em>Statistical Models in S</em>
+eds J. M. Chambers and T. J. Hastie, Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>model.matrix</code>,
+<code>model.framevlm</code>,
+<code>predictvglm</code>,
+<code>smartpred</code>,
+<code>constraints.vlm</code>,
+<code>trim.constraints</code>,
+<code>add1.vglm</code>,
+<code>drop1.vglm</code>,
+<code>step4vglm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># (I) Illustrates smart prediction ,,,,,,,,,,,,,,,,,,,,,,,
+pneumo &lt;- transform(pneumo, let = log(exposure.time))
+fit &lt;- vglm(cbind(normal, mild, severe) ~
+            sm.poly(c(sm.scale(let)), 2),
+            multinomial, data = pneumo, trace = TRUE, x = FALSE)
+class(fit)
+fit@smart.prediction  # Data-dependent parameters
+fit@x # Not saved on the object
+model.matrix(fit)
+model.matrix(fit, linpred.index = 1, type = "lm")
+model.matrix(fit, linpred.index = 2, type = "lm")
+
+(Check1 &lt;- head(model.matrix(fit, type = "lm")))
+(Check2 &lt;- model.matrix(fit, data = head(pneumo), type = "lm"))
+all.equal(c(Check1), c(Check2))  # Should be TRUE
+
+q0 &lt;- head(predict(fit))
+q1 &lt;- head(predict(fit, newdata = pneumo))
+q2 &lt;- predict(fit, newdata = head(pneumo))
+all.equal(q0, q1)  # Should be TRUE
+all.equal(q1, q2)  # Should be TRUE
+
+# (II) Attributes ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+fit2 &lt;- vglm(cbind(normal, mild, severe) ~ let,  # x = TRUE
+             multinomial, data = pneumo, trace = TRUE)
+fit2@x  # "lm"-type; saved on the object; note the attributes
+model.matrix(fit2, type = "lm")  # Note the attributes
+model.matrix(fit2, type = "vlm")  # Note the attributes
+</code></pre>
+
+
+</div>

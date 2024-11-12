@@ -1,0 +1,82 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>test_multimod</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Multimodality test for post clustering variable involvement</h2>
+
+<h3>Description</h3>
+
+<p>Multimodality test for post clustering variable involvement
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">test_multimod(X, g, cl, k1, k2)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>The data matrix of size on which the clustering is applied</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>g</code></td>
+<td>
+<p>The variable on which the test is applied</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>cl</code></td>
+<td>
+<p>The labels of the data obtained thanks to a clustering algorithm</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k1</code></td>
+<td>
+<p>The first cluster of interest</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k2</code></td>
+<td>
+<p>The second cluster of interest</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>A list containing :  A list with the following elements </p>
+
+<ul>
+<li> <p><code>data_for_test</code> : The data used for the test
+</p>
+</li>
+<li> <p><code>stat_g</code> : The dip statistic
+</p>
+</li>
+<li> <p><code>pval</code> : The resulting p-values of the test computed with the <code>diptest</code> function
+</p>
+</li>
+</ul>
+<h3>Examples</h3>
+
+<pre><code class="language-R">X &lt;- matrix(rnorm(200),ncol = 2)
+hcl_fun &lt;- function(x){
+return(as.factor(cutree(hclust(dist(x), method = "ward.D2"), k=2)))}
+cl &lt;- hcl_fun(X)
+plot(X, col=cl)
+test_var1 &lt;- test_multimod(X, g=1, k1=1, k2=2, cl = cl)
+test_var2 &lt;- test_multimod(X, g=2, k1=1, k2=2, cl = cl)
+</code></pre>
+
+
+</div>

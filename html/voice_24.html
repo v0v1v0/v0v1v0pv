@@ -1,0 +1,83 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>smooth_df</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Smooth numeric variables in a data frame</h2>
+
+<h3>Description</h3>
+
+<p>Smooth numeric variables in a data frame
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">smooth_df(x, k = 11, id = colnames(x)[1], colnum = NULL, mc.cores = 1)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>x</code></td>
+<td>
+<p>A data frame.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>k</code></td>
+<td>
+<p>Integer width of the rolling window. Default: <code>11</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>id</code></td>
+<td>
+<p>The identification column. Default: <code>colname</code> of the first column of <code>x</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>colnum</code></td>
+<td>
+<p>A <code>char</code> vector indicating the numeric colnames. If <code>NULL</code>, uses the columns of the <code>numeric</code> class.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>mc.cores</code></td>
+<td>
+<p>The number of cores to mclapply. By default uses <code>1</code>.</p>
+</td>
+</tr>
+</table>
+<h3>Value</h3>
+
+<p>Vector of interpolated values with length near to <code>compact.to*length(x)</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>extract_features</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">library(voice)
+
+# get path to audio file
+path2wav &lt;- list.files(system.file('extdata', package = 'wrassp'),
+pattern = glob2rx('*.wav'), full.names = TRUE)
+
+# minimal usage
+M &lt;- extract_features(path2wav, features = c('f0', 'fmt'))
+(Ms &lt;- smooth_df(M[-(1:2)]))
+dim(M)
+dim(Ms)
+</code></pre>
+
+
+</div>

@@ -1,0 +1,95 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>lm_full_Bayes_SR</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Full Bayesian Shrinkage Estimation Method for Multivariate Regression</h2>
+
+<h3>Description</h3>
+
+<p>Estimate regression coefficients and scale matrix for noise by using
+Gibbs MCMC algorithm. The function assumes 1) multivariate t-distribution
+for noise as a sampling distribution, and 2) noninformative priors for
+regression coefficients and scale matrix for noise.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">lm_full_Bayes_SR(Y, X, dof = Inf, burnincycle = 1000,
+  mcmccycle = 2000)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>Y</code></td>
+<td>
+<p>An N x K matrix of dependent variables.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>X</code></td>
+<td>
+<p>An N x M matrix of regressors.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>dof</code></td>
+<td>
+<p>Degree of freedom for multivariate t-distribution.
+If dof = Inf (default), then multivariate normal distribution is applied and
+weight vector q is not estimated. If dof = NULL or dof &lt;= 0, then dof and q
+are estimated automatically. If dof is a positive number, q is estimated.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>burnincycle, mcmccycle</code></td>
+<td>
+<p>Number of burnin cycles is the number of
+initially generated sample values to drop. Number of MCMC cycles is the
+number of generated sample values to compute estimates.</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>Consider the multivariate regression:
+</p>
+<p style="text-align: center;"><code class="reqn">Y = X Psi + e, \quad e ~ mvt(0, dof, Sigma).</code>
+</p>
+
+<p>Psi is a M-by-K matrix of regression coefficients and
+Sigma is a K-by-K scale matrix for multivariate t-distribution for noise.
+</p>
+<p>Sampling distribution for noise e is multivariate t-distribution with
+degree of freedom dof and scale matrix Sigma: e ~ mvt(0, dof, Sigma).
+The priors are noninformative priors: 1) the shrinkage prior for regression
+coefficients Psi, and 2) the reference prior for scale matrix Sigma.
+</p>
+<p>The function implements Gibbs MCMC algorithm for estimating regression
+coefficients Psi and scale matrix Sigma.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list object with estimated parameters: Psi, Sigma, dof, delta
+(delta is the reciprocal of lambda), and lambda.
+Additional components are se.param (standard error of the parameters) and
+LINEXVARmodel (estimates under LINEX loss).
+</p>
+
+
+<h3>References</h3>
+
+<p>S. Ni and D. Sun (2005). Bayesian estimates for vector
+autoregressive models. Journal of Business &amp; Economic Statistics 23(1),
+105-117.
+</p>
+
+
+</div>

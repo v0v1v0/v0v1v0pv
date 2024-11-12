@@ -1,0 +1,86 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>multiplicativeBeta</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Multiplicative Diversity Partitioning</h2>
+
+<h3>Description</h3>
+
+<p>Calculates beta diversity under various Multiplicative Diversity Partitioning paradigms.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">multiplicativeBeta(CommunityMatrix)
+
+completeTurnovers(CommunityMatrix)
+
+notEndemic(CommunityMatrix)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>CommunityMatrix</code></td>
+<td>
+<p>a matrix</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>Takes a community matrix (see <code>presenceMatrix</code> or <code>abundanceMatrix</code>) and returns one of three types of multiplicative beta diversity.
+</p>
+<p>Refer to Tuomisto, H (2010) "A diversity of beta diversities: straightening up a concept gone awry. Part 1. Defining beta diversity as a function of alpha and gamma diversity". <em>Ecography</em> 33:2-22.
+</p>
+
+<ul>
+<li>
+<p><code>multiplicativeBeta(CommunityMatrix):</code> Calculates the original beta diversity ratio - Gamma/Alpha. It quantifies how many times as rich gamma is than alpha.
+</p>
+</li>
+<li>
+<p><code>completeTurnovers(CommunityMatrix):</code> The number of complete effective species turnovers observed among compositonal units in the dataset - (Gamma-Alpha)/Alpha.
+</p>
+</li>
+<li>
+<p><code>notEndemic(CommunityMatrix):</code> The proportion of taxa in the dataset not limited to a single sample - (Gamma-Alpha)/Gamma
+</p>
+</li>
+</ul>
+<h3>Value</h3>
+
+<p>A numeric vector
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Andrew A. Zaffos
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R"># Download a test dataset of pleistocene bivalves from the Paleobiology Database.
+# DataPBDB&lt;-downloadPBDB(Taxa="Bivalvia","Pleistocene","Pleistocene")
+
+# Create a community matrix with tectonic plates as "samples".
+# CommunityMatrix&lt;-abundanceMatrix(DataPBDB,"geoplate")
+
+# "True local diversity ratio"
+# multiplicativeBeta(CommunityMatrix)
+
+# Whittaker's effective species turnover
+# completeTurnovers(CommunityMatrix)
+
+# Proportional effective species turnover
+# notEndemic(CommunityMatrix)
+
+</code></pre>
+
+
+</div>

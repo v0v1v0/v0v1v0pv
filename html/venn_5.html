@@ -1,0 +1,76 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>getCentroid</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Calculate the centroid of a polygon.</h2>
+
+<h3>Description</h3>
+
+<p>This function takes a list of dataframes or a matrices containing x and y values,
+which define zones (polygons), and calculates their centroids.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">getCentroid(data)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table><tr style="vertical-align: top;">
+<td><code>data</code></td>
+<td>
+<p>A matrix or a dataframe with two columns, for x and y coordinates</p>
+</td>
+</tr></table>
+<h3>Details</h3>
+
+<p>Most of the coordinates for the intersection labels in this package were calculated using
+the formula for a centroid of a non-self-intersecting closed polygon, approximated by 10
+vertices.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list with x and y coordinates, for each zone in the input list.
+</p>
+
+
+<h3>References</h3>
+
+<p>Centroid. (n.d.). In Wikipedia. Retrieved January 06, 2016, from
+https://en.wikipedia.org/wiki/Centroid
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+venn("0110")
+
+# centroid for the intersection "0110" in a 4 set diagram
+centroid &lt;- getCentroid(getZones("0110"))[[1]]
+
+text(centroid[1], centroid[2], labels = "0110", cex = 0.85)
+
+
+# centroids for the two zones in the "E not A" zones
+venn(5)
+area &lt;- getZones("0---1") # list of length 2
+
+polygon(area[[1]], col="lightblue")
+
+polygon(area[[2]], col="lightblue")
+
+text(do.call("rbind", getCentroid(area)),
+     labels = c("zone 1", "zone 2"), cex = 0.85)
+
+</code></pre>
+
+
+</div>

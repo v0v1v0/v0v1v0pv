@@ -1,0 +1,130 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>zipf</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2> Zipf Distribution Family Function </h2>
+
+<h3>Description</h3>
+
+<p>Estimates the parameter of the Zipf distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">zipf(N = NULL, lshape = "loglink", ishape = NULL)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>N</code></td>
+<td>
+
+<p>Number of elements, an integer satisfying <code>1 &lt; N &lt; Inf</code>.
+The default is to use the maximum value of the response.
+If given, <code>N</code> must be no less that the largest response value.
+If <code>N = Inf</code> and <code class="reqn">s&gt;1</code> then this is the zeta
+distribution (use <code>zetaff</code> instead).
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>lshape</code></td>
+<td>
+
+<p>Parameter link function applied to the (positive) shape parameter <code class="reqn">s</code>.
+See <code>Links</code> for more choices.
+</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>ishape</code></td>
+<td>
+
+<p>Optional initial value for the parameter <code class="reqn">s</code>.
+The default is to choose an initial value internally.
+If converge failure occurs use this argument to input a value.
+</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>The probability function for a response <code class="reqn">Y</code> is
+</p>
+<p style="text-align: center;"><code class="reqn">P(Y=y) = y^{-s} / \sum_{i=1}^N i^{-s},\ \ s&gt;0,\ \ y=1,2,\ldots,N,</code>
+</p>
+
+<p>where <code class="reqn">s</code> is the exponent characterizing the distribution.
+The mean of <code class="reqn">Y</code>, which are returned as the fitted values,
+is <code class="reqn">\mu = H_{N,s-1} / H_{N,s}</code>
+where <code class="reqn">H_{n,m}= \sum_{i=1}^n i^{-m}</code>
+is the <code class="reqn">n</code>th generalized harmonic number.
+</p>
+<p>Zipf's law is an experimental law which is often applied
+to the study of the frequency of words in a corpus of
+natural language utterances. It states that the frequency
+of any word is inversely proportional to its rank in the
+frequency table. For example, <code>"the"</code> and <code>"of"</code>
+are first two most common words, and Zipf's law states
+that <code>"the"</code> is twice as common as <code>"of"</code>.
+Many other natural phenomena conform to Zipf's law.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"vglmff"</code> (see <code>vglmff-class</code>).
+The object is used by modelling functions such as
+<code>vglm</code> and <code>vgam</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Upon convergence, the <code>N</code> is stored as <code>@misc$N</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> T. W. Yee </p>
+
+
+<h3>References</h3>
+
+<p>pp.526– of Chapter 11 of
+Johnson N. L., Kemp, A. W. and Kotz S. (2005).
+<em>Univariate Discrete Distributions</em>,
+3rd edition,
+Hoboken, New Jersey, USA: Wiley.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>dzipf</code>,
+<code>zetaff</code>,
+<code>simulate.vlm</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">zdata &lt;- data.frame(y = 1:5, ofreq = c(63, 14, 5, 1, 2))
+zfit &lt;- vglm(y ~ 1, zipf, data = zdata, trace = TRUE, weight = ofreq)
+zfit &lt;- vglm(y ~ 1, zipf(lshape = "identitylink", ishape = 3.4), data = zdata,
+            trace = TRUE, weight = ofreq, crit = "coef")
+zfit@misc$N
+(shape.hat &lt;- Coef(zfit))
+with(zdata, weighted.mean(y, ofreq))
+fitted(zfit, matrix = FALSE)
+</code></pre>
+
+
+</div>

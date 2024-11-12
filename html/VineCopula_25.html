@@ -1,0 +1,265 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>BiCopEst</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>Parameter Estimation for Bivariate Copula Data</h2>
+
+<h3>Description</h3>
+
+<p>This function estimates the parameter(s) of a bivariate copula using either
+inversion of empirical Kendall's tau (for one parameter copula families only) or
+maximum likelihood estimation for implemented copula families.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre><code class="language-R">BiCopEst(
+  u1,
+  u2,
+  family,
+  method = "mle",
+  se = FALSE,
+  max.df = 30,
+  max.BB = list(BB1 = c(5, 6), BB6 = c(6, 6), BB7 = c(5, 6), BB8 = c(6, 1)),
+  weights = NA
+)
+</code></pre>
+
+
+<h3>Arguments</h3>
+
+<table>
+<tr style="vertical-align: top;">
+<td><code>u1, u2</code></td>
+<td>
+<p>Data vectors of equal length with values in <code class="reqn">[0,1]</code>.</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>family</code></td>
+<td>
+<p>An integer defining the bivariate copula family: <br><code>0</code> = independence copula <br><code>1</code> = Gaussian copula <br><code>2</code> = Student t copula (t-copula) <br><code>3</code> = Clayton copula <br><code>4</code> = Gumbel copula <br><code>5</code> = Frank copula <br><code>6</code> = Joe copula <br><code>7</code> = BB1 copula <br><code>8</code> = BB6 copula <br><code>9</code> = BB7 copula <br><code>10</code> = BB8 copula <br><code>13</code> = rotated Clayton copula (180 degrees; <code style="white-space: pre;">⁠survival Clayton'') \cr `14` = rotated Gumbel copula (180 degrees; ⁠</code>survival Gumbel”) <br><code>16</code> = rotated Joe copula (180 degrees; <code style="white-space: pre;">⁠survival Joe'') \cr `17` = rotated BB1 copula (180 degrees; ⁠</code>survival BB1”)<br><code>18</code> = rotated BB6 copula (180 degrees; <code style="white-space: pre;">⁠survival BB6'')\cr `19` = rotated BB7 copula (180 degrees; ⁠</code>survival BB7”)<br><code>20</code> = rotated BB8 copula (180 degrees; “survival BB8”)<br><code>23</code> = rotated Clayton copula (90 degrees) <br>
+'24' = rotated Gumbel copula (90 degrees) <br>
+'26' = rotated Joe copula (90 degrees) <br>
+'27' = rotated BB1 copula (90 degrees) <br>
+'28' = rotated BB6 copula (90 degrees) <br>
+'29' = rotated BB7 copula (90 degrees) <br>
+'30' = rotated BB8 copula (90 degrees) <br>
+'33' = rotated Clayton copula (270 degrees) <br>
+'34' = rotated Gumbel copula (270 degrees) <br>
+'36' = rotated Joe copula (270 degrees) <br>
+'37' = rotated BB1 copula (270 degrees) <br>
+'38' = rotated BB6 copula (270 degrees) <br>
+'39' = rotated BB7 copula (270 degrees) <br>
+'40' = rotated BB8 copula (270 degrees) <br>
+'104' = Tawn type 1 copula <br>
+'114' = rotated Tawn type 1 copula (180 degrees) <br>
+'124' = rotated Tawn type 1 copula (90 degrees) <br>
+'134' = rotated Tawn type 1 copula (270 degrees) <br>
+'204' = Tawn type 2 copula <br>
+'214' = rotated Tawn type 2 copula (180 degrees) <br>
+'224' = rotated Tawn type 2 copula (90 degrees) <br>
+'234' = rotated Tawn type 2 copula (270 degrees) <br></p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>method</code></td>
+<td>
+<p>indicates the estimation method: either maximum
+likelihood estimation (<code>method = "mle"</code>; default) or inversion of
+Kendall's tau (<code>method = "itau"</code>). For <code>method = "itau"</code> only
+one parameter families and the Student t copula can be used (<code style="white-space: pre;">⁠family = 1,2,3,4,5,6,13,14,16,23,24,26,33,34⁠</code> or <code>36</code>). For the t-copula,
+<code>par2</code> is found by a crude profile likelihood optimization over the
+interval (2, 10].</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>se</code></td>
+<td>
+<p>Logical; whether standard error(s) of parameter estimates is/are
+estimated (default: <code>se = FALSE</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.df</code></td>
+<td>
+<p>Numeric; upper bound for the estimation of the degrees of
+freedom parameter of the t-copula (default: <code>max.df = 30</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>max.BB</code></td>
+<td>
+<p>List; upper bounds for the estimation of the two parameters
+(in absolute values) of the BB1, BB6, BB7 and BB8 copulas <br> (default:
+<code>max.BB = list(BB1=c(5,6),BB6=c(6,6),BB7=c(5,6),BB8=c(6,1))</code>).</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>weights</code></td>
+<td>
+<p>Numerical; weights for each observation (optional).</p>
+</td>
+</tr>
+</table>
+<h3>Details</h3>
+
+<p>If <code>method = "itau"</code>, the function computes the empirical Kendall's tau
+of the given copula data and exploits the one-to-one relationship of copula
+parameter and Kendall's tau which is available for many one parameter
+bivariate copula families (see <code>BiCopPar2Tau()</code> and
+<code>BiCopTau2Par()</code>). The inversion of Kendall's tau is however not
+available for all bivariate copula families (see above). If a two parameter
+copula family is chosen and <code>method = "itau"</code>, a warning message is
+returned and the MLE is calculated.
+</p>
+<p>For <code>method = "mle"</code> copula parameters are estimated by maximum
+likelihood using starting values obtained by <code>method = "itau"</code>.  If no
+starting values are available by inversion of Kendall's tau, starting values
+have to be provided given expert knowledge and the boundaries <code>max.df</code>
+and <code>max.BB</code> respectively. Note: The MLE is performed via numerical
+maximization using the L_BFGS-B method. For the Gaussian, the t- and the
+one-parametric Archimedean copulas we can use the gradients, but for the BB
+copulas we have to use finite differences for the L_BFGS-B method.
+</p>
+<p>A warning message is returned if the estimate of the degrees of freedom
+parameter of the t-copula is larger than <code>max.df</code>. For high degrees of
+freedom the t-copula is almost indistinguishable from the Gaussian and it is
+advised to use the Gaussian copula in this case. As a rule of thumb
+<code>max.df = 30</code> typically is a good choice. Moreover, standard errors of
+the degrees of freedom parameter estimate cannot be estimated in this case.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>BiCop()</code>, augmented with the following
+entries:
+</p>
+<table>
+<tr style="vertical-align: top;">
+<td><code>se, se2</code></td>
+<td>
+<p>standard errors for the parameter estimates (if
+<code>se = TRUE</code>,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>nobs</code></td>
+<td>
+<p>number of observations,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>logLik</code></td>
+<td>
+<p>log likelihood</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>AIC</code></td>
+<td>
+<p>Aikaike's Informaton Criterion,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>BIC</code></td>
+<td>
+<p>Bayesian's Informaton Criterion,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>emptau</code></td>
+<td>
+<p>empirical value of Kendall's tau,</p>
+</td>
+</tr>
+<tr style="vertical-align: top;">
+<td><code>p.value.indeptest</code></td>
+<td>
+<p>p-value of the independence test.</p>
+</td>
+</tr>
+</table>
+<h3>Note</h3>
+
+<p>For a comprehensive summary of the fitted model, use <code>summary(object)</code>;
+to see all its contents, use <code>str(object)</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ulf Schepsmeier, Eike Brechmann, Jakob Stoeber, Carlos Almeida
+</p>
+
+
+<h3>References</h3>
+
+<p>Joe, H. (1997). Multivariate Models and Dependence Concepts.
+Chapman and Hall, London.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>BiCop()</code>,
+<code>BiCopPar2Tau()</code>,
+<code>BiCopTau2Par()</code>,
+<code>RVineSeqEst()</code>,
+<code>BiCopSelect()</code>,
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">
+## Example 1: bivariate Gaussian copula
+dat &lt;- BiCopSim(500, 1, 0.7)
+u1 &lt;- dat[, 1]
+v1 &lt;- dat[, 2]
+
+# estimate parameters of Gaussian copula by inversion of Kendall's tau
+est1.tau &lt;- BiCopEst(u1, v1, family = 1, method = "itau")
+est1.tau  # short overview
+summary(est1.tau)  # comprehensive overview
+str(est1.tau)  # see all contents of the object
+
+# check if parameter actually coincides with inversion of Kendall's tau
+tau1 &lt;- cor(u1, v1, method = "kendall")
+all.equal(BiCopTau2Par(1, tau1), est1.tau$par)
+
+# maximum likelihood estimate for comparison
+est1.mle &lt;- BiCopEst(u1, v1, family = 1, method = "mle")
+summary(est1.mle)
+
+
+## Example 2: bivariate Clayton and survival Gumbel copulas
+# simulate from a Clayton copula
+dat &lt;- BiCopSim(500, 3, 2.5)
+u2 &lt;- dat[, 1]
+v2 &lt;- dat[, 2]
+
+# empirical Kendall's tau
+tau2 &lt;- cor(u2, v2, method = "kendall")
+
+# inversion of empirical Kendall's tau for the Clayton copula
+BiCopTau2Par(3, tau2)
+BiCopEst(u2, v2, family = 3, method = "itau")
+
+# inversion of empirical Kendall's tau for the survival Gumbel copula
+BiCopTau2Par(14, tau2)
+BiCopEst(u2, v2, family = 14, method = "itau")
+
+# maximum likelihood estimates for comparison
+BiCopEst(u2, v2, family = 3, method = "mle")
+BiCopEst(u2, v2, family = 14, method = "mle")
+
+
+</code></pre>
+
+
+</div>

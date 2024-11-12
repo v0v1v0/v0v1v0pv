@@ -1,0 +1,415 @@
+<div class="container">
+
+<table style="width: 100%;"><tr>
+<td>HTTPInteractionList</td>
+<td style="text-align: right;">R Documentation</td>
+</tr></table>
+<h2>HTTPInteractionList class</h2>
+
+<h3>Description</h3>
+
+<p>keeps track of all HTTPInteraction objects
+</p>
+
+
+<h3>Details</h3>
+
+<p><strong>Private Methods</strong>
+</p>
+
+<dl>
+<dt><code>has_unused_interactions()</code></dt>
+<dd>
+<p>Are there any unused interactions? returns boolean
+</p>
+</dd>
+<dt><code>matching_interaction_index_for()</code></dt>
+<dd>
+<p>asdfadf
+</p>
+</dd>
+<dt><code>matching_used_interaction_for(request)</code></dt>
+<dd>
+<p>asdfadfs
+</p>
+</dd>
+<dt><code>interaction_matches_request(request, interaction)</code></dt>
+<dd>
+<p>Check if a request matches an interaction (logical)
+</p>
+</dd>
+<dt><code>from_hash()</code></dt>
+<dd>
+<p>Get a hash back.
+</p>
+</dd>
+<dt><code>request_summary(z)</code></dt>
+<dd>
+<p>Get a request summary (character)
+</p>
+</dd>
+<dt><code>response_summary(z)</code></dt>
+<dd>
+<p>Get a response summary (character)
+</p>
+</dd>
+</dl>
+<h3>Public fields</h3>
+
+<div class="r6-fields">
+
+<dl>
+<dt><code>interactions</code></dt>
+<dd>
+<p>(list) list of interaction class objects</p>
+</dd>
+<dt><code>request_matchers</code></dt>
+<dd>
+<p>(character) vector of request matchers</p>
+</dd>
+<dt><code>allow_playback_repeats</code></dt>
+<dd>
+<p>whether to allow playback repeats</p>
+</dd>
+<dt><code>parent_list</code></dt>
+<dd>
+<p>A list for empty objects, see <code>NullList</code></p>
+</dd>
+<dt><code>used_interactions</code></dt>
+<dd>
+<p>(list) Interactions that have been used</p>
+</dd>
+</dl>
+</div>
+
+
+<h3>Methods</h3>
+
+
+
+<h4>Public methods</h4>
+
+
+<ul>
+<li> <p><a href="#method-HTTPInteractionList-new"><code>HTTPInteractionList$new()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-HTTPInteractionList-response_for"><code>HTTPInteractionList$response_for()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-HTTPInteractionList-has_interaction_matching"><code>HTTPInteractionList$has_interaction_matching()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-HTTPInteractionList-has_used_interaction_matching"><code>HTTPInteractionList$has_used_interaction_matching()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-HTTPInteractionList-remaining_unused_interaction_count"><code>HTTPInteractionList$remaining_unused_interaction_count()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-HTTPInteractionList-assert_no_unused_interactions"><code>HTTPInteractionList$assert_no_unused_interactions()</code></a>
+</p>
+</li>
+<li> <p><a href="#method-HTTPInteractionList-clone"><code>HTTPInteractionList$clone()</code></a>
+</p>
+</li>
+</ul>
+<hr>
+<a id="method-HTTPInteractionList-new"></a>
+
+
+
+<h4>Method <code>new()</code>
+</h4>
+
+<p>Create a new <code>HTTPInteractionList</code> object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>HTTPInteractionList$new(
+  interactions,
+  request_matchers,
+  allow_playback_repeats = FALSE,
+  parent_list = NullList$new(),
+  used_interactions = list()
+)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>interactions</code></dt>
+<dd>
+<p>(list) list of interaction class objects</p>
+</dd>
+<dt><code>request_matchers</code></dt>
+<dd>
+<p>(character) vector of request matchers</p>
+</dd>
+<dt><code>allow_playback_repeats</code></dt>
+<dd>
+<p>whether to allow playback repeats or not</p>
+</dd>
+<dt><code>parent_list</code></dt>
+<dd>
+<p>A list for empty objects, see <code>NullList</code></p>
+</dd>
+<dt><code>used_interactions</code></dt>
+<dd>
+<p>(list) Interactions that have been used. That is,
+interactions that are on disk in the current cassette, and a
+request has been made that matches that interaction</p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>A new <code>HTTPInteractionList</code> object
+</p>
+
+
+<hr>
+<a id="method-HTTPInteractionList-response_for"></a>
+
+
+
+<h4>Method <code>response_for()</code>
+</h4>
+
+<p>Check if there's a matching interaction, returns a
+response object
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>HTTPInteractionList$response_for(request)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>request</code></dt>
+<dd>
+<p>The request from an object of class <code>HTTPInteraction</code></p>
+</dd>
+</dl>
+</div>
+
+
+<hr>
+<a id="method-HTTPInteractionList-has_interaction_matching"></a>
+
+
+
+<h4>Method <code>has_interaction_matching()</code>
+</h4>
+
+<p>Check if has a matching interaction
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>HTTPInteractionList$has_interaction_matching(request)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>request</code></dt>
+<dd>
+<p>The request from an object of class <code>HTTPInteraction</code></p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>logical
+</p>
+
+
+<hr>
+<a id="method-HTTPInteractionList-has_used_interaction_matching"></a>
+
+
+
+<h4>Method <code>has_used_interaction_matching()</code>
+</h4>
+
+<p>check if has used interactions matching a given request
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>HTTPInteractionList$has_used_interaction_matching(request)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>request</code></dt>
+<dd>
+<p>The request from an object of class <code>HTTPInteraction</code></p>
+</dd>
+</dl>
+</div>
+
+
+
+<h5>Returns</h5>
+
+<p>logical
+</p>
+
+
+<hr>
+<a id="method-HTTPInteractionList-remaining_unused_interaction_count"></a>
+
+
+
+<h4>Method <code>remaining_unused_interaction_count()</code>
+</h4>
+
+<p>Number of unused interactions
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>HTTPInteractionList$remaining_unused_interaction_count()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>integer
+</p>
+
+
+<hr>
+<a id="method-HTTPInteractionList-assert_no_unused_interactions"></a>
+
+
+
+<h4>Method <code>assert_no_unused_interactions()</code>
+</h4>
+
+<p>Checks if there are no unused interactions left.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>HTTPInteractionList$assert_no_unused_interactions()</pre></div>
+
+
+
+<h5>Returns</h5>
+
+<p>various
+</p>
+
+
+<hr>
+<a id="method-HTTPInteractionList-clone"></a>
+
+
+
+<h4>Method <code>clone()</code>
+</h4>
+
+<p>The objects of this class are cloneable with this method.
+</p>
+
+
+<h5>Usage</h5>
+
+<div class="r"><pre>HTTPInteractionList$clone(deep = FALSE)</pre></div>
+
+
+
+<h5>Arguments</h5>
+
+<div class="arguments">
+
+<dl>
+<dt><code>deep</code></dt>
+<dd>
+<p>Whether to make a deep clone.</p>
+</dd>
+</dl>
+</div>
+
+
+
+
+<h3>Examples</h3>
+
+<pre><code class="language-R">## Not run: 
+vcr_configure(
+ dir = tempdir(),
+ record = "once"
+)
+
+# make interactions
+## make the request
+### turn off mocking
+crul::mock(FALSE)
+url &lt;- "https://hb.opencpu.org/post"
+cli &lt;- crul::HttpClient$new(url = url)
+res &lt;- cli$post(body = list(a = 5))
+
+## request
+(request &lt;- Request$new("POST", url, list(a = 5), res$headers))
+## response
+(response &lt;- VcrResponse$new(
+   res$status_http(),
+   res$response_headers,
+   res$parse("UTF-8"),
+   res$response_headers$status))
+## make an interaction
+(inter &lt;- HTTPInteraction$new(request = request, response = response))
+
+# make an interactionlist
+(x &lt;- HTTPInteractionList$new(
+   interactions = list(inter),
+   request_matchers = vcr_configuration()$match_requests_on
+))
+x$interactions
+x$request_matchers
+x$parent_list
+x$parent_list$response_for()
+x$parent_list$has_interaction_matching()
+x$parent_list$has_used_interaction_matching()
+x$parent_list$remaining_unused_interaction_count()
+x$used_interactions
+x$allow_playback_repeats
+x$interactions
+x$response_for(request)
+
+## End(Not run)
+</code></pre>
+
+
+</div>
